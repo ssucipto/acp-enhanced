@@ -5,12 +5,22 @@
 
 set -e
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# Colors for output using tput (more reliable than ANSI codes)
+if command -v tput >/dev/null 2>&1 && [ -t 1 ]; then
+    RED=$(tput setaf 1)
+    GREEN=$(tput setaf 2)
+    YELLOW=$(tput setaf 3)
+    BLUE=$(tput setaf 4)
+    BOLD=$(tput bold)
+    NC=$(tput sgr0)
+else
+    RED=''
+    GREEN=''
+    YELLOW=''
+    BLUE=''
+    BOLD=''
+    NC=''
+fi
 
 # Parse arguments
 SKIP_CONFIRM=false
@@ -31,7 +41,7 @@ done
 
 # Check if repository URL provided
 if [ -z "$REPO_URL" ]; then
-    echo -e "${RED}Error: Repository URL required${NC}"
+    echo "${RED}Error: Repository URL required${NC}"
     echo "Usage: $0 [-y|--yes] <repository-url>"
     echo ""
     echo "Options:"
@@ -42,7 +52,7 @@ if [ -z "$REPO_URL" ]; then
     exit 1
 fi
 
-echo -e "${BLUE}📦 ACP Package Installer${NC}"
+echo "${BLUE}📦 ACP Package Installer${NC}"
 echo "========================================"
 echo ""
 echo "Repository: $REPO_URL"
@@ -50,7 +60,7 @@ echo ""
 
 # Validate URL format
 if [[ ! "$REPO_URL" =~ ^https?:// ]]; then
-    echo -e "${RED}Error: Invalid repository URL${NC}"
+    echo "${RED}Error: Invalid repository URL${NC}"
     echo "URL must start with http:// or https://"
     exit 1
 fi
@@ -61,17 +71,17 @@ trap "rm -rf $TEMP_DIR" EXIT
 
 echo "Cloning repository..."
 if ! git clone --depth 1 "$REPO_URL" "$TEMP_DIR" &>/dev/null; then
-    echo -e "${RED}Error: Failed to clone repository${NC}"
+    echo "${RED}Error: Failed to clone repository${NC}"
     echo "Please check the URL and your internet connection."
     exit 1
 fi
 
-echo -e "${GREEN}✓${NC} Repository cloned"
+echo "${GREEN}✓${NC} Repository cloned"
 echo ""
 
 # Check if repository has agent/ directory
 if [ ! -d "$TEMP_DIR/agent" ]; then
-    echo -e "${RED}Error: No agent/ directory found${NC}"
+    echo "${RED}Error: No agent/ directory found${NC}"
     echo "Repository must contain an 'agent/' directory with ACP files"
     exit 1
 fi
@@ -100,7 +110,7 @@ for dir in "${INSTALL_DIRS[@]}"; do
     fi
     
     FILE_COUNT=$(echo "$FILES" | wc -l)
-    echo -e "${BLUE}📁 $dir/${NC} ($FILE_COUNT file(s))"
+    echo "${BLUE}📁 $dir/${NC} ($FILE_COUNT file(s))"
     
     # Validate and list files
     while IFS= read -r file; do
@@ -110,14 +120,14 @@ for dir in "${INSTALL_DIRS[@]}"; do
         if [ "$dir" = "commands" ]; then
             # Check for reserved 'acp' namespace
             if [[ "$filename" =~ ^acp\. ]]; then
-                echo -e "  ${RED}✗${NC} $filename (reserved namespace 'acp')"
+                echo "  ${RED}✗${NC} $filename (reserved namespace 'acp')"
                 SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
                 continue
             fi
             
             # Check for agent directive
             if ! grep -q "🤖 Agent Directive" "$file"; then
-                echo -e "  ${YELLOW}⚠${NC}  $filename (missing agent directive - skipping)"
+                echo "  ${YELLOW}⚠${NC}  $filename (missing agent directive - skipping)"
                 SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
                 continue
             fi
@@ -125,9 +135,9 @@ for dir in "${INSTALL_DIRS[@]}"; do
         
         # Check for conflicts
         if [ -f "agent/$dir/$filename" ]; then
-            echo -e "  ${YELLOW}⚠${NC}  $filename (will overwrite existing)"
+            echo "  ${YELLOW}⚠${NC}  $filename (will overwrite existing)"
         else
-            echo -e "  ${GREEN}✓${NC} $filename"
+            echo "  ${GREEN}✓${NC} $filename"
         fi
         
         INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
@@ -138,7 +148,7 @@ done
 
 # Exit if nothing to install
 if [ $INSTALLED_COUNT -eq 0 ]; then
-    echo -e "${RED}Error: No valid files to install${NC}"
+    echo "${RED}Error: No valid files to install${NC}"
     if [ $SKIPPED_COUNT -gt 0 ]; then
         echo "Skipped $SKIPPED_COUNT file(s) due to validation failures"
     fi
@@ -196,12 +206,12 @@ for dir in "${INSTALL_DIRS[@]}"; do
         
         # Copy file
         cp "$file" "agent/$dir/$filename"
-        echo -e "  ${GREEN}✓${NC} Installed $dir/$filename"
+        echo "  ${GREEN}✓${NC} Installed $dir/$filename"
     done <<< "$FILES"
 done
 
 echo ""
-echo -e "${GREEN}✅ Installation complete!${NC}"
+echo "${GREEN}✅ Installation complete!${NC}"
 echo ""
 echo "Installed $INSTALLED_COUNT file(s) from:"
 echo "  $REPO_URL"
@@ -223,7 +233,7 @@ if [ -d "$TEMP_DIR/agent/commands" ]; then
     fi
 fi
 
-echo -e "${YELLOW}⚠️  Security Reminder:${NC}"
+echo "${YELLOW}⚠️  Security Reminder:${NC}"
 echo "Review installed files before using them."
 echo "Third-party files can instruct agents to modify files and execute scripts."
 echo ""
