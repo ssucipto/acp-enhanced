@@ -1,7 +1,7 @@
 # Agent Context Protocol (ACP)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 1.2.2
+**Version**: 1.3.0
 **Created**: 2026-02-11
 **Status**: Production Pattern
 
@@ -875,7 +875,17 @@ Run ./agent/scripts/uninstall.sh to remove all ACP files (agent/ directory and A
    - Update percentages
    - Add recent work notes
 
-7. **NEVER handle secrets or sensitive data**
+7. **CRITICAL: Always update CHANGELOG.md for version changes**
+   - ❌ **DO NOT** commit version changes without updating CHANGELOG.md
+   - ❌ **DO NOT** forget to update version numbers in all project files
+   - ✅ **DO** use [`@acp.commit`](agent/commands/acp.commit.md) for version-aware commits
+   - ✅ **DO** detect version impact: major (breaking), minor (features), patch (fixes)
+   - ✅ **DO** update CHANGELOG.md with clear, user-focused descriptions
+   - ✅ **DO** update all version files (package.json, AGENT.md, etc.)
+   - ✅ **DO** use Conventional Commits format for commit messages
+   - **Rationale**: CHANGELOG.md is the primary communication tool for users. Every version change must be documented with clear descriptions of what changed, why it changed, and how it affects users. Forgetting to update CHANGELOG.md breaks the project's version history and makes it impossible for users to understand what changed between versions.
+
+8. **NEVER handle secrets or sensitive data**
    - ❌ **DO NOT** read `.env` files, `.env.local`, or any environment files
    - ❌ **DO NOT** read files containing API keys, tokens, passwords, or credentials
    - ❌ **DO NOT** include secrets in messages, documentation, or code examples
