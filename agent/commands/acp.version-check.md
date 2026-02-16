@@ -29,7 +29,7 @@ Unlike `@acp-version-check-for-updates` which checks for newer versions, this co
 ## Prerequisites
 
 - [ ] ACP installed in project (AGENT.md exists)
-- [ ] `scripts/version.sh` exists (or can extract from AGENT.md directly)
+- [ ] `agent/scripts/version.sh` exists (or can extract from AGENT.md directly)
 
 ---
 
@@ -40,7 +40,7 @@ Unlike `@acp-version-check-for-updates` which checks for newer versions, this co
 Execute the version check script.
 
 **Actions**:
-- Run `./scripts/version.sh`
+- Run `./agent/scripts/version.sh`
 - Script extracts version from AGENT.md using grep
 - Displays version, created date, and status
 
