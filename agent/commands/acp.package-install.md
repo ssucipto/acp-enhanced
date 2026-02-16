@@ -47,36 +47,43 @@ Execute the package installation script with the repository URL.
 - Verify `./agent/scripts/package-install.sh` exists
 - Run the script with repository URL as argument:
   ```bash
+  # Interactive mode (asks for confirmation)
   ./agent/scripts/package-install.sh <repository-url>
+  
+  # Auto-confirm mode (skips prompts)
+  ./agent/scripts/package-install.sh -y <repository-url>
   ```
 - The script will:
   - Validate the repository URL
   - Clone the repository to a temporary location
-  - Locate and validate command files
+  - Scan agent/ directory for installable files (commands, patterns, design)
+  - Validate command files (agent directive, namespace check)
   - Check for naming conflicts
-  - Copy commands to `agent/commands/`
-  - Document the installation
+  - Ask for confirmation (unless -y flag used)
+  - Copy files to respective agent/ directories
   - Clean up temporary files
   - Report what was installed
 
-**Expected Outcome**: Script completes successfully and commands are installed
+**Expected Outcome**: Script completes successfully and files are installed
 
-### 2. Review Installed Commands
+### 2. Review Installed Files
 
-Verify the commands were installed correctly.
+Verify the files were installed correctly.
 
 **Actions**:
 - List files in `agent/commands/` to see new commands
-- Read the installed command files
-- Verify they follow ACP structure
-- Check namespace is not `acp` (reserved)
+- List files in `agent/patterns/` to see new patterns
+- List files in `agent/design/` to see new designs
+- Read the installed files
+- Verify commands have agent directives
+- Check namespace is not `acp` (reserved for commands)
 - Ensure no malicious content
 
-**Expected Outcome**: Commands verified safe and functional
+**Expected Outcome**: Files verified safe and functional
 
 ### 3. Test Installed Commands
 
-Try invoking one of the installed commands.
+Try invoking one of the installed commands (if any).
 
 **Actions**:
 - Choose a simple command to test
@@ -91,10 +98,10 @@ Try invoking one of the installed commands.
 Update progress tracking with installation notes.
 
 **Actions**:
-- Add note to `agent/progress.yaml` about installed commands
+- Add note to `agent/progress.yaml` about installed package
 - Document which package was installed
 - Note installation date
-- List installed command names
+- List installed files (commands, patterns, designs)
 
 **Expected Outcome**: Installation tracked in progress
 
@@ -104,9 +111,11 @@ Update progress tracking with installation notes.
 
 - [ ] package-install.sh script exists
 - [ ] Script executed successfully
-- [ ] Commands installed to agent/commands/
-- [ ] Installed commands reviewed for safety
-- [ ] Commands tested and working
+- [ ] Files installed to appropriate agent/ directories
+- [ ] Installed commands reviewed for safety (if any)
+- [ ] Installed patterns reviewed (if any)
+- [ ] Installed designs reviewed (if any)
+- [ ] Commands tested and working (if any)
 - [ ] Installation documented in progress.yaml
 - [ ] No errors during installation
 
@@ -115,71 +124,64 @@ Update progress tracking with installation notes.
 ## Expected Output
 
 ### Files Modified
-- `agent/commands/*.md` - Installed command files
-- `agent/commands/installed.yaml` - Installation record
+- `agent/commands/*.md` - Installed command files (if any)
+- `agent/patterns/*.md` - Installed pattern files (if any)
+- `agent/design/*.md` - Installed design files (if any)
 
 ### Console Output
 ```
-📦 Installing ACP Commands
+📦 ACP Package Installer
+========================================
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Repository: https://github.com/example/acp-deploy-commands.git
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Repository: https://github.com/example/fullstack-package.git
 
 Cloning repository...
-✓ Repository cloned to /tmp/acp-install-a1b2c3
+✓ Repository cloned
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Scanning for installable files...
 
-Locating commands...
-✓ Found 3 command files:
-  - deploy.production.md
-  - deploy.staging.md
-  - deploy.rollback.md
+📁 commands/ (3 file(s))
+  ✓ deploy.production.md
+  ✓ deploy.staging.md
+  ⚠  deploy.rollback.md (will overwrite existing)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📁 patterns/ (2 file(s))
+  ✓ api-service.md
+  ✓ error-handling.md
 
-Validating commands...
-✓ All commands have agent directives
-✓ All commands have required sections
-✓ Namespace 'deploy' is valid (not reserved)
-✓ No malicious content detected
+📁 design/ (1 file(s))
+  ✓ deployment-strategy.md
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ready to install 6 file(s)
 
-Checking for conflicts...
-✓ No naming conflicts found
+Proceed with installation? (y/N) y
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Installing files...
+  ✓ Installed commands/deploy.production.md
+  ✓ Installed commands/deploy.staging.md
+  ✓ Installed commands/deploy.rollback.md
+  ✓ Installed patterns/api-service.md
+  ✓ Installed patterns/error-handling.md
+  ✓ Installed design/deployment-strategy.md
 
-Installing commands...
-✓ Copied deploy.production.md
-✓ Copied deploy.staging.md
-✓ Copied deploy.rollback.md
+✅ Installation complete!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Installed 6 file(s) from:
+  https://github.com/example/fullstack-package.git
 
-Documenting installation...
-✓ Updated agent/commands/installed.yaml
+Installed commands:
+  - @deploy.production
+  - @deploy.staging
+  - @deploy.rollback
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️  Security Reminder:
+Review installed files before using them.
+Third-party files can instruct agents to modify files and execute scripts.
 
-Cleaning up...
-✓ Removed temporary files
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-✅ Installation Complete!
-
-Installed 3 commands from example/acp-deploy-commands:
-- @deploy.production - Deploy to production environment
-- @deploy.staging - Deploy to staging environment
-- @deploy.rollback - Rollback to previous version
-
-Repository: https://github.com/example/acp-deploy-commands.git
-Installed: 2026-02-16
+Next steps:
+  1. Review installed files in agent/ directories
+  2. Test installed commands
+  3. Update progress.yaml with installation notes
 ```
 
 ### Status Update
@@ -273,6 +275,11 @@ Installed: 2026-02-16
 
 ### ⚠️ CRITICAL SECURITY WARNING
 
+**Third-party packages can contain:**
+- **Commands** that instruct agents to modify files and execute scripts
+- **Patterns** that guide code implementation decisions
+- **Designs** that influence architecture and technical decisions
+
 **Third-party commands can:**
 - Modify any files in your project
 - Execute shell commands
@@ -280,7 +287,7 @@ Installed: 2026-02-16
 - Access environment variables
 - Read sensitive data
 
-**YOU ASSUME ALL RISK when installing third-party commands.**
+**YOU ASSUME ALL RISK when installing third-party packages.**
 
 ### Security Best Practices
 
@@ -299,9 +306,9 @@ Installed: 2026-02-16
 5. Keep installation records
 
 ### File Access
-- **Reads**: Repository files, existing commands
-- **Writes**: `agent/commands/*.md`, `agent/commands/installed.yaml`
-- **Executes**: `git clone` command
+- **Reads**: Repository files, existing files in agent/ directories
+- **Writes**: `agent/commands/*.md`, `agent/patterns/*.md`, `agent/design/*.md`
+- **Executes**: `git clone` command, `./agent/scripts/package-install.sh`
 
 ### Network Access
 - **APIs**: None directly
@@ -315,15 +322,18 @@ Installed: 2026-02-16
 
 ## Notes
 
-- Only install commands from trusted sources
-- Review command files before installation
+- Installs from all agent/ directories: commands, patterns, design
+- Only install packages from trusted sources
+- Review all files before installation (commands, patterns, designs)
 - Test in safe environment first
-- Keep record of installed commands
-- Update installed commands periodically
-- Remove unused commands
-- Report security issues to command authors
+- Keep record of installed packages
+- Update installed packages periodically
+- Remove unused files
+- Report security issues to package authors
 - Consider forking repositories for stability
 - Pin to specific versions/commits for reproducibility
+- Use `-y` flag for automated/scripted installations
+- Patterns and designs influence agent behavior just like commands
 
 ---
 
