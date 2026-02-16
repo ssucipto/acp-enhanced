@@ -1,0 +1,165 @@
+# Project Progress Tracking
+# Agent Context Protocol - Commands Feature Implementation
+
+project:
+  name: agent-context-protocol
+  version: 1.0.3
+  started: 2026-02-16
+  status: in_progress
+  current_milestone: M1
+  description: |
+    Agent Context Protocol (ACP) - A documentation-first development methodology
+    for AI agents. Currently implementing the ACP Commands system.
+
+milestones:
+  - id: M1
+    name: ACP Commands Infrastructure
+    status: in_progress
+    progress: 33
+    started: 2026-02-16
+    completed: null
+    estimated_weeks: 1
+    tasks_completed: 1
+    tasks_total: 4
+    notes: |
+      Implementing core infrastructure and workflow commands.
+      Restructured to flat directory with dot notation for better UX.
+  
+  - id: M2
+    name: Documentation & Creation Commands
+    status: not_started
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 4
+    notes: |
+      Will implement documentation management and creation commands.
+
+tasks:
+  milestone_1:
+    - id: task-1
+      name: Create Commands Directory Structure
+      status: completed
+      file: agent/tasks/task-1-commands-infrastructure.md
+      estimated_hours: 1
+      completed_date: 2026-02-16
+      notes: |
+        Created flat directory structure with dot notation.
+        Removed nested directories for better autocomplete.
+    
+    - id: task-2
+      name: Implement Core Workflow Commands
+      status: in_progress
+      file: agent/tasks/task-2-workflow-commands.md
+      estimated_hours: 3
+      completed_date: null
+      notes: |
+        Implementing init, proceed, status commands.
+        Status and proceed complete (2/3).
+    
+    - id: task-3
+      name: Implement Version Commands
+      status: not_started
+      file: agent/tasks/task-3-version-commands.md
+      estimated_hours: 2
+      completed_date: null
+      notes: |
+        Will implement version-check, version-check-for-updates, version-update.
+    
+    - id: task-4
+      name: Update Documentation
+      status: not_started
+      file: agent/tasks/task-4-update-documentation.md
+      estimated_hours: 2
+      completed_date: null
+      notes: |
+        Update AGENT.md and README.md with commands documentation.
+  
+  milestone_2:
+    - id: task-5
+      name: Implement Documentation Commands
+      status: not_started
+      file: agent/tasks/task-5-documentation-commands.md
+      estimated_hours: 3
+      completed_date: null
+      notes: |
+        Implement update, sync, validate commands.
+    
+    - id: task-6
+      name: Implement Creation Commands
+      status: not_started
+      file: agent/tasks/task-6-creation-commands.md
+      estimated_hours: 4
+      completed_date: null
+      notes: |
+        Implement milestone-create, task-create, design-create, pattern-create.
+    
+    - id: task-7
+      name: Implement Advanced Commands
+      status: not_started
+      file: agent/tasks/task-7-advanced-commands.md
+      estimated_hours: 3
+      completed_date: null
+      notes: |
+        Implement report and install commands.
+    
+    - id: task-8
+      name: Integration Testing
+      status: not_started
+      file: agent/tasks/task-8-integration-testing.md
+      estimated_hours: 2
+      completed_date: null
+      notes: |
+        Test all commands together in realistic workflows.
+
+documentation:
+  design_documents: 1
+  milestone_documents: 2
+  pattern_documents: 0
+  task_documents: 4
+  last_updated: 2026-02-16
+
+progress:
+  planning: 100
+  implementation: 13
+  testing: 0
+  documentation: 50
+  overall: 20
+
+recent_work:
+  - date: 2026-02-16
+    description: |
+      Designed and began implementing ACP Commands system.
+      Restructured to flat directory with dot notation.
+    items:
+      - ✅ Created comprehensive design document
+      - ✅ Created command template with versioning
+      - ✅ Updated install/update scripts for template-only copying
+      - ✅ Created 2 milestones and 4 tasks
+      - ✅ Restructured to flat directory (acp.status.md)
+      - ✅ Implemented @acp-status command
+      - ✅ Implemented @acp-proceed command
+      - 📋 Next: Complete workflow commands (init)
+
+next_steps:
+  - Complete task-2: Implement acp.init.md command
+  - Start task-3: Implement version commands
+  - Complete milestone-1: All 6 core commands
+  - Update AGENT.md and README.md with commands documentation
+
+notes:
+  - Using flat directory structure with dot notation (acp.status.md)
+  - Namespace prefix makes autocomplete explicit
+  - Commands are self-documenting, no central README
+  - Reserved acp namespace for core commands
+  - Template-based creation for consistency
+
+current_blockers: []
+
+team:
+  - role: Lead Developer
+    name: Agent
+    focus: |
+      Implementing ACP Commands system with flat structure and dot notation.
