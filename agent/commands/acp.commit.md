@@ -18,7 +18,9 @@
 
 ## Overview
 
-This command intelligently detects if changes represent a version change, determines the appropriate version bump (major/minor/patch), updates version identifiers across the project, updates CHANGELOG.md, and creates a properly formatted git commit.
+This command intelligently detects if changes represent a version change, determines the appropriate version bump (major/minor/patch), updates version identifiers across the project, updates CHANGELOG.md, intelligently stages relevant files, and creates a properly formatted git commit.
+
+**Key Feature**: This command automatically determines which files to stage based on the changes detected. You don't need to manually run `git add` - the command analyzes your working directory and stages the appropriate files for the commit.
 
 ## When to Use
 
@@ -26,12 +28,14 @@ This command intelligently detects if changes represent a version change, determ
 - When you want to commit changes with proper version management
 - To ensure CHANGELOG.md stays synchronized with code changes
 - To maintain consistent commit message formatting
+- When you have unstaged changes that need intelligent staging
 
 ## Prerequisites
 
-- Changes staged or ready to commit
-- Understanding of semantic versioning (major.minor.patch)
-- Project uses version identifiers (package.json, AGENT.md, etc.)
+- [ ] Working directory has changes (staged or unstaged)
+- [ ] Understanding of semantic versioning (major.minor.patch)
+- [ ] Project uses version identifiers (package.json, AGENT.md, etc.)
+- [ ] Git repository initialized
 
 ---
 
@@ -172,11 +176,16 @@ Use Conventional Commits format:
 - `perf`: Performance improvements
 - `test`: Adding or updating tests
 - `chore`: Maintenance tasks
-- `BREAKING CHANGE`: Breaking change (major version bump)
+- `agent`: Changes to agent/ directory only (designs, tasks, milestones, patterns)
+- `version`: Version bump only (no code changes, just version number updates)
+
+**Breaking Changes**:
+- Add `BREAKING CHANGE:` in the commit message footer for major version bumps
+- Use `feat!:` or `fix!:` syntax to indicate breaking changes
 
 **Template for Version Changes**:
 ```
-<type>: <short description>
+<type>(<scope>): <short description>
 
 <detailed description of changes>
 
@@ -185,13 +194,28 @@ Changes:
 - Change 2
 - Change 3
 
+Completed:
+- Task: agent/tasks/task-N-name.md
+- Milestone: M1 (if milestone completed)
+
+Tests:
+- X tests passing
+- Y% code coverage
+
+Documentation:
+- Design: <link to design doc or external resource>
+- API Docs: <link to generated docs>
+- Related: <link to related documentation>
+
 BREAKING CHANGE: <description if major version>
 Closes #<issue-number>
+Related: <PR-link or issue-link>
+Version: X.Y.Z
 ```
 
 **Example**:
 ```
-feat: add @acp.commit command for intelligent version management
+feat(commands): add @acp.commit command for intelligent version management
 
 Implemented automated version detection and changelog management:
 - Detects version impact (major/minor/patch)
@@ -204,18 +228,45 @@ Changes:
 - Updated AGENT.md with changelog emphasis
 - Enhanced version management workflow
 
+Completed:
+- Task: agent/tasks/task-1-commands-infrastructure.md
+- Milestone: M1 (ACP Commands) - 75% complete
+
+Tests:
+- All existing tests passing
+- No new tests required (documentation only)
+
 Version: 1.3.0
 ```
 
 **Action**: Generate a commit message following this template.
 
-### 7. Stage All Changes
+### 7. Intelligently Stage Changes
 
+Analyze the working directory and stage relevant files:
+
+**Actions**:
+- Review `git status` to see all changes
+- Stage version files that were updated (AGENT.md, package.json, etc.)
+- Stage CHANGELOG.md
+- Stage source files that are part of this commit
+- Optionally exclude unrelated changes (use `git add <specific-files>` instead of `git add -A`)
+
+**Decision Logic**:
+- If all changes are related to this commit: `git add -A`
+- If some changes are unrelated: `git add <file1> <file2> ...` (specific files only)
+- Always include: version files, CHANGELOG.md, and files related to the feature/fix
+
+**Example**:
 ```bash
+# If all changes are related:
 git add -A
+
+# If only specific files should be committed:
+git add AGENT.md CHANGELOG.md agent/commands/acp.commit.md
 ```
 
-**Action**: Stage all modified files including version files and CHANGELOG.md.
+**Action**: Intelligently stage files based on what's relevant to this commit.
 
 ### 8. Create Commit
 
