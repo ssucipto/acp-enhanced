@@ -5,6 +5,22 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-02-16
+
+### Added
+- **Package Installation Enhancements**:
+  - `agent/scripts/package-install.sh` script for automated package installation
+  - Support for installing patterns and design documents (not just commands)
+  - `-y` flag to skip confirmation prompts for automated installations
+  - Multi-directory installation from agent/ (commands, patterns, design)
+  - Conflict detection and resolution
+
+### Changed
+- Renamed `@acp.install` to `@acp.package-install` for clarity
+- Enhanced package installation to support all agent/ directories
+- Simplified Milestone 2 scope by removing creation commands
+- Updated package-install documentation with multi-directory examples
+
 ## [1.1.0] - 2026-02-16
 
 ### Added

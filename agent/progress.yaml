@@ -3,13 +3,13 @@
 
 project:
   name: agent-context-protocol
-  version: 1.1.0
+  version: 1.2.0
   started: 2026-02-16
   status: completed
   current_milestone: M2
   description: |
     Agent Context Protocol (ACP) - A documentation-first development methodology
-    for AI agents. ACP Commands v1.1.0 complete with 11 commands implemented.
+    for AI agents. ACP Commands v1.2.0 complete with 11 commands and package installation.
 
 milestones:
   - id: M1
