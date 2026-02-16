@@ -205,10 +205,10 @@ No status changes - read-only operation
 
 ## Related Commands
 
-- [`@acp-init`](init.md) - Use for full context initialization at session start
-- [`@acp-proceed`](proceed.md) - Use after checking status to continue with current task
-- [`@acp-update`](update.md) - Use to update progress.yaml after completing work
-- [`@acp-sync`](sync.md) - Use to sync documentation with code changes
+- [`@acp-init`](acp.init.md) - Use for full context initialization at session start
+- [`@acp-proceed`](acp.proceed.md) - Use after checking status to continue with current task
+- [`@acp-update`](acp.update.md) - Use to update progress.yaml after completing work
+- [`@acp-sync`](acp.sync.md) - Use to sync documentation with code changes
 
 ---
 
