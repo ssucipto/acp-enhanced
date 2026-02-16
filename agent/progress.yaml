@@ -14,18 +14,19 @@ project:
 milestones:
   - id: M1
     name: ACP Commands Infrastructure
-    status: in_progress
-    progress: 75
+    status: completed
+    progress: 100
     started: 2026-02-16
-    completed: null
+    completed: 2026-02-16
     estimated_weeks: 1
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 4
     notes: |
-      Implementing core infrastructure and workflow commands.
-      Restructured to flat directory with dot notation for better UX.
-      ✅ All 3 workflow commands complete (init, proceed, status).
-      Next: Version commands.
+      ✅ Milestone 1 Complete! All infrastructure and core commands implemented.
+      - Flat directory structure with dot notation
+      - 6 core commands implemented (init, proceed, status, version commands)
+      - Documentation updated in AGENT.md and README.md
+      - Ready for Milestone 2
   
   - id: M2
     name: Documentation & Creation Commands
@@ -77,12 +78,15 @@ tasks:
     
     - id: task-4
       name: Update Documentation
-      status: not_started
+      status: completed
       file: agent/tasks/task-4-update-documentation.md
       estimated_hours: 2
-      completed_date: null
+      completed_date: 2026-02-16
       notes: |
-        Update AGENT.md and README.md with commands documentation.
+        ✅ Updated AGENT.md with ACP Commands section
+        ✅ Updated README.md with command examples
+        ✅ Updated directory structure diagrams in both files
+        ✅ Documented command invocation with dot notation
   
   milestone_2:
     - id: task-5
@@ -132,28 +136,28 @@ progress:
   planning: 100
   implementation: 40
   testing: 0
-  documentation: 50
-  overall: 40
+  documentation: 100
+  overall: 50
 
 recent_work:
   - date: 2026-02-16
     description: |
-      🚀 Agent Context Initialized: Full project context loaded and documentation reviewed.
-      Milestone 1 is 75% complete with 3/4 tasks done. Ready to proceed with task-4.
+      🎉 Milestone 1 Complete! ACP Commands infrastructure fully implemented and documented.
+      All 4 tasks completed. Ready to begin Milestone 2.
     items:
-      - ✅ Checked for ACP updates - version 1.0.3 is current
-      - ✅ Read all agent documentation (9 files)
-      - ✅ Reviewed key source files (command implementations)
-      - ✅ Verified progress tracking is accurate
-      - ✅ Confirmed 6 commands implemented (init, proceed, status, version-check, version-check-for-updates, version-update)
-      - 📋 Task 4 remaining: Update AGENT.md and README.md with commands documentation
-      - 🎯 Next: Complete task-4 to finish Milestone 1
+      - ✅ Task 4 Complete: Updated AGENT.md and README.md with commands documentation
+      - ✅ Added ACP Commands section to AGENT.md with full documentation
+      - ✅ Updated README.md with command examples and usage
+      - ✅ Updated directory structure diagrams in both files
+      - ✅ Documented dot notation for command invocation (@acp.init)
+      - ✅ Milestone 1: 100% complete (4/4 tasks done)
+      - 🎯 Next: Begin Milestone 2 - Documentation & creation commands
 
 next_steps:
-  - Complete task-4: Update AGENT.md and README.md with commands documentation
-  - Complete milestone-1: Documentation task is final step
+  - Update CHANGELOG.md with version 1.1.0 release notes
+  - Update AGENT.md version from 1.0.3 to 1.1.0
   - Begin milestone-2: Documentation and creation commands (9 more commands)
-  - Consider releasing v1.1.0 after milestone-1 complete
+  - Consider git tag for v1.1.0 release
 
 notes:
   - Using flat directory structure with dot notation (acp.status.md)
