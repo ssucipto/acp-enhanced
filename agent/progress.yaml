@@ -3,13 +3,13 @@
 
 project:
   name: agent-context-protocol
-  version: 1.2.0
+  version: 1.2.1
   started: 2026-02-16
   status: completed
   current_milestone: M2
   description: |
     Agent Context Protocol (ACP) - A documentation-first development methodology
-    for AI agents. ACP Commands v1.2.0 complete with 11 commands and package installation.
+    for AI agents. ACP Commands v1.2.1 complete with 11 commands and improved installation scripts.
 
 milestones:
   - id: M1
@@ -138,6 +138,31 @@ progress:
   overall: 100
 
 recent_work:
+  - date: 2026-02-16
+    description: |
+      🔧 Updated installation scripts to show new ACP command format.
+      Scripts now display all 11 commands with descriptions.
+    items:
+      - ✅ Updated agent/scripts/install.sh with command list
+      - ✅ Updated agent/scripts/update.sh with command list
+      - ✅ Replaced old "AGENT.md: Initialize" prompt format
+      - ✅ Added @acp.init as primary command for getting started
+      - ✅ Listed all 11 ACP commands with brief descriptions
+      - ✅ Improved user experience for new installations
+  
+  - date: 2026-02-16
+    description: |
+      � Agent Context Initialized - Full project review completed.
+      All documentation and source files reviewed. Project status confirmed.
+    items:
+      - ✅ ACP version check: v1.2.0 (up to date)
+      - ✅ Read all agent documentation (9 files)
+      - ✅ Reviewed key source files (AGENT.md, README.md, CHANGELOG.md)
+      - ✅ Verified command structure (11 commands with flat dot notation)
+      - ✅ Documentation is current and accurate
+      - ✅ Progress tracking updated with initialization entry
+      - 📋 Project status: Both milestones complete (100%)
+  
   - date: 2026-02-16
     description: |
       🎉 Milestone 2 Complete! All ACP Commands implemented.

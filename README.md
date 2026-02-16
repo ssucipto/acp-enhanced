@@ -4,6 +4,23 @@ A documentation-first development methodology that enables AI agents to understa
 
 ---
 
+## Quick Start
+
+### Bootstrap a New Project
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/install.sh | bash
+```
+
+### Update an existing project
+
+You can update an existing project via `@acp.update` or by running the following shell script.
+```bash
+curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/update.sh | bash
+```
+
+---
+
 ## What is ACP?
 
 The **Agent Context Protocol** is a standardized directory structure and documentation pattern that transforms implicit project knowledge into explicit, machine-readable documentation. It provides:
@@ -17,14 +34,6 @@ The **Agent Context Protocol** is a standardized directory structure and documen
 This enables AI agents to pick up where previous agents left off, preserving all context and decisions across sessions.
 
 ---
-
-## Quick Start
-
-### Bootstrap a New Project
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/install.sh | bash
-```
 
 This will create:
 - `AGENT.md` - Complete ACP methodology documentation
