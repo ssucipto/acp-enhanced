@@ -61,7 +61,6 @@ touch "$TARGET_DIR/agent/design/.gitkeep"
 touch "$TARGET_DIR/agent/milestones/.gitkeep"
 touch "$TARGET_DIR/agent/patterns/.gitkeep"
 touch "$TARGET_DIR/agent/tasks/.gitkeep"
-touch "$TARGET_DIR/agent/commands/.gitkeep"
 
 echo -e "${GREEN}✓${NC} Directory structure created"
 echo ""
@@ -78,15 +77,10 @@ find "$TEMP_DIR/agent/tasks" -maxdepth 1 -name "*.template.md" -exec cp {} "$TAR
 # Copy command template
 cp "$TEMP_DIR/agent/commands/command.template.md" "$TARGET_DIR/agent/commands/"
 
-# Copy all command namespace subdirectories (if they exist)
+# Copy all command files (flat structure with dot notation)
+# Copies files like acp.init.md, acp.status.md, deploy.production.md, etc.
 if [ -d "$TEMP_DIR/agent/commands" ]; then
-    for namespace_dir in "$TEMP_DIR/agent/commands"/*/ ; do
-        if [ -d "$namespace_dir" ]; then
-            namespace=$(basename "$namespace_dir")
-            mkdir -p "$TARGET_DIR/agent/commands/$namespace"
-            cp -r "$namespace_dir"* "$TARGET_DIR/agent/commands/$namespace/"
-        fi
-    done
+    find "$TEMP_DIR/agent/commands" -maxdepth 1 -name "*.*.md" -exec cp {} "$TARGET_DIR/agent/commands/" \;
 fi
 
 # Copy progress template
