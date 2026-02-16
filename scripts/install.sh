@@ -53,6 +53,7 @@ mkdir -p "$TARGET_DIR/agent/design"
 mkdir -p "$TARGET_DIR/agent/milestones"
 mkdir -p "$TARGET_DIR/agent/patterns"
 mkdir -p "$TARGET_DIR/agent/tasks"
+mkdir -p "$TARGET_DIR/agent/commands"
 mkdir -p "$TARGET_DIR/agent/scripts"
 
 # Create .gitkeep files
@@ -60,6 +61,7 @@ touch "$TARGET_DIR/agent/design/.gitkeep"
 touch "$TARGET_DIR/agent/milestones/.gitkeep"
 touch "$TARGET_DIR/agent/patterns/.gitkeep"
 touch "$TARGET_DIR/agent/tasks/.gitkeep"
+touch "$TARGET_DIR/agent/commands/.gitkeep"
 
 echo -e "${GREEN}✓${NC} Directory structure created"
 echo ""
@@ -67,13 +69,27 @@ echo ""
 # Copy files
 echo "Installing ACP files..."
 
-# Copy template files
-cp "$TEMP_DIR/agent/design/design.template.md" "$TARGET_DIR/agent/design/"
-cp "$TEMP_DIR/agent/design/requirements.template.md" "$TARGET_DIR/agent/design/"
-cp "$TEMP_DIR/agent/milestones/milestone-1-{title}.template.md" "$TARGET_DIR/agent/milestones/"
-cp "$TEMP_DIR/agent/tasks/task-1-{title}.template.md" "$TARGET_DIR/agent/tasks/"
-cp "$TEMP_DIR/agent/patterns/pattern.template.md" "$TARGET_DIR/agent/patterns/"
-cp "$TEMP_DIR/agent/patterns/bootstrap.template.md" "$TARGET_DIR/agent/patterns/"
+# Copy template files (only .template.md files from these directories)
+find "$TEMP_DIR/agent/design" -maxdepth 1 -name "*.template.md" -exec cp {} "$TARGET_DIR/agent/design/" \;
+find "$TEMP_DIR/agent/milestones" -maxdepth 1 -name "*.template.md" -exec cp {} "$TARGET_DIR/agent/milestones/" \;
+find "$TEMP_DIR/agent/patterns" -maxdepth 1 -name "*.template.md" -exec cp {} "$TARGET_DIR/agent/patterns/" \;
+find "$TEMP_DIR/agent/tasks" -maxdepth 1 -name "*.template.md" -exec cp {} "$TARGET_DIR/agent/tasks/" \;
+
+# Copy command template
+cp "$TEMP_DIR/agent/commands/command.template.md" "$TARGET_DIR/agent/commands/"
+
+# Copy all command namespace subdirectories (if they exist)
+if [ -d "$TEMP_DIR/agent/commands" ]; then
+    for namespace_dir in "$TEMP_DIR/agent/commands"/*/ ; do
+        if [ -d "$namespace_dir" ]; then
+            namespace=$(basename "$namespace_dir")
+            mkdir -p "$TARGET_DIR/agent/commands/$namespace"
+            cp -r "$namespace_dir"* "$TARGET_DIR/agent/commands/$namespace/"
+        fi
+    done
+fi
+
+# Copy progress template
 cp "$TEMP_DIR/agent/progress.template.yaml" "$TARGET_DIR/agent/"
 
 # Copy AGENT.md
