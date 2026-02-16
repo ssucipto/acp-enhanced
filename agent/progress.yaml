@@ -15,15 +15,16 @@ milestones:
   - id: M1
     name: ACP Commands Infrastructure
     status: in_progress
-    progress: 33
+    progress: 50
     started: 2026-02-16
     completed: null
     estimated_weeks: 1
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 4
     notes: |
       Implementing core infrastructure and workflow commands.
       Restructured to flat directory with dot notation for better UX.
+      All 3 workflow commands complete.
   
   - id: M2
     name: Documentation & Creation Commands
@@ -51,13 +52,15 @@ tasks:
     
     - id: task-2
       name: Implement Core Workflow Commands
-      status: in_progress
+      status: completed
       file: agent/tasks/task-2-workflow-commands.md
       estimated_hours: 3
-      completed_date: null
+      completed_date: 2026-02-16
       notes: |
-        Implementing init, proceed, status commands.
-        Status and proceed complete (2/3).
+        All 3 workflow commands implemented:
+        - acp.init.md (initialize context)
+        - acp.proceed.md (execute tasks)
+        - acp.status.md (display status)
     
     - id: task-3
       name: Implement Version Commands
@@ -123,31 +126,30 @@ documentation:
 
 progress:
   planning: 100
-  implementation: 13
+  implementation: 20
   testing: 0
   documentation: 50
-  overall: 20
+  overall: 25
 
 recent_work:
   - date: 2026-02-16
     description: |
-      Designed and began implementing ACP Commands system.
+      Completed Task 2: All 3 core workflow commands implemented.
       Restructured to flat directory with dot notation.
     items:
-      - ✅ Created comprehensive design document
-      - ✅ Created command template with versioning
-      - ✅ Updated install/update scripts for template-only copying
-      - ✅ Created 2 milestones and 4 tasks
-      - ✅ Restructured to flat directory (acp.status.md)
-      - ✅ Implemented @acp-status command
-      - ✅ Implemented @acp-proceed command
-      - 📋 Next: Complete workflow commands (init)
+      - ✅ Completed task-1: Commands directory structure
+      - ✅ Completed task-2: Core workflow commands
+      - ✅ Implemented @acp-init command (context initialization)
+      - ✅ Implemented @acp-proceed command (task execution)
+      - ✅ Implemented @acp-status command (status display)
+      - ✅ Created agent/progress.yaml for tracking
+      - 📋 Next: Implement version commands (task-3)
 
 next_steps:
-  - Complete task-2: Implement acp.init.md command
-  - Start task-3: Implement version commands
+  - Start task-3: Implement version commands (version-check, version-check-for-updates, version-update)
+  - Complete task-4: Update AGENT.md and README.md documentation
   - Complete milestone-1: All 6 core commands
-  - Update AGENT.md and README.md with commands documentation
+  - Begin milestone-2: Documentation and creation commands
 
 notes:
   - Using flat directory structure with dot notation (acp.status.md)
