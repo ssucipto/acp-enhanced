@@ -53,15 +53,10 @@ find "$TEMP_DIR/agent/tasks" -maxdepth 1 -name "*.template.md" -exec cp {} "agen
 mkdir -p "agent/commands"
 cp "$TEMP_DIR/agent/commands/command.template.md" "agent/commands/"
 
-# Update all command namespace subdirectories (if they exist)
+# Update all command files (flat structure with dot notation)
+# Copies files like acp.init.md, acp.status.md, deploy.production.md, etc.
 if [ -d "$TEMP_DIR/agent/commands" ]; then
-    for namespace_dir in "$TEMP_DIR/agent/commands"/*/ ; do
-        if [ -d "$namespace_dir" ]; then
-            namespace=$(basename "$namespace_dir")
-            mkdir -p "agent/commands/$namespace"
-            cp -r "$namespace_dir"* "agent/commands/$namespace/"
-        fi
-    done
+    find "$TEMP_DIR/agent/commands" -maxdepth 1 -name "*.*.md" -exec cp {} "agent/commands/" \;
 fi
 
 # Update progress template

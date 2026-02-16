@@ -42,53 +42,60 @@ Commands are implemented as markdown files in the `agent/commands/` directory, e
 
 ### Command File System
 
-Introduce a namespace-based command directory structure where commands are organized by namespace (the prefix before the first hyphen):
+Introduce a flat command directory structure where commands use dot notation for namespaces:
 
 ```
 agent/
 ├── commands/
-│   ├── README.md                    # Command system documentation
+│   ├── command.template.md          # Command template
 │   │
-│   ├── acp/                         # ACP namespace (core commands)
-│   │   ├── init.md                  # Initialize/bootstrap command
-│   │   ├── proceed.md               # Continue with next task
-│   │   ├── update.md                # Update progress.yaml
-│   │   ├── sync.md                  # Sync code with documentation
-│   │   ├── version-check.md         # Check current version
-│   │   ├── version-check-for-updates.md  # Check for updates
-│   │   ├── version-update.md        # Update ACP to latest version
-│   │   ├── status.md                # Show current status
-│   │   ├── milestone-create.md      # Create new milestone
-│   │   ├── task-create.md           # Create new task
-│   │   ├── design-create.md         # Create new design document
-│   │   ├── install.md               # Install command namespace
-│   │   └── ...
+│   ├── acp.init.md                  # @acp-init
+│   ├── acp.proceed.md               # @acp-proceed
+│   ├── acp.status.md                # @acp-status
+│   ├── acp.update.md                # @acp-update
+│   ├── acp.sync.md                  # @acp-sync
+│   ├── acp.version-check.md         # @acp-version-check
+│   ├── acp.version-check-for-updates.md  # @acp-version-check-for-updates
+│   ├── acp.version-update.md        # @acp-version-update
+│   ├── acp.milestone-create.md      # @acp-milestone-create
+│   ├── acp.task-create.md           # @acp-task-create
+│   ├── acp.design-create.md         # @acp-design-create
+│   ├── acp.install.md               # @acp-install
 │   │
-│   └── custom/                      # Example: User's custom namespace
-│       ├── deploy.md                # Custom deployment command
-│       └── backup.md                # Custom backup command
+│   ├── custom.deploy.md             # @custom-deploy
+│   ├── custom.backup.md             # @custom-backup
+│   │
+│   ├── deploy.production.md         # @deploy-production
+│   └── deploy.staging.md            # @deploy-staging
 ```
 
-**Namespace Benefits**:
+**Flat Structure Benefits**:
+- **Explicit Autocomplete**: Type `acp.` to see all ACP commands
+- **Namespace Visible**: Namespace is part of filename
+- **Single Directory**: All commands in one place
+- **Easier Discovery**: No need to navigate subdirectories
+- **Clear Ownership**: Namespace prefix shows command source
 - **Isolation**: Commands from different sources don't conflict
-- **Extensibility**: Install third-party command packages via `@acp-install`
-- **Organization**: Related commands grouped by namespace
-- **Discovery**: Browse commands by namespace directory
 
 ### Command Invocation
 
-Users invoke commands using the namespace-action format:
-- `@acp-init` - Resolves to `agent/commands/acp/init.md`
-- `@acp-proceed` - Resolves to `agent/commands/acp/proceed.md`
-- `@acp-update` - Resolves to `agent/commands/acp/update.md`
-- `@acp-sync` - Resolves to `agent/commands/acp/sync.md`
-- `@custom-deploy` - Resolves to `agent/commands/custom/deploy.md`
+Users invoke commands using the namespace-action format with hyphens:
+- `@acp-init` - Resolves to `agent/commands/acp.init.md`
+- `@acp-proceed` - Resolves to `agent/commands/acp.proceed.md`
+- `@acp-status` - Resolves to `agent/commands/acp.status.md`
+- `@custom-deploy` - Resolves to `agent/commands/custom.deploy.md`
+- `@deploy-production` - Resolves to `agent/commands/deploy.production.md`
 
 **Resolution Rules**:
 1. Parse command as `@{namespace}-{action}`
-2. Look for file at `agent/commands/{namespace}/{action}.md`
-3. If not found, try `agent/commands/{namespace}/{action-with-hyphens}.md`
-4. If still not found, show error with available commands
+2. Convert to filename: `{namespace}.{action}.md`
+3. Look for file at `agent/commands/{namespace}.{action}.md`
+4. If not found, show error with available commands
+
+**Examples**:
+- `@acp-version-check` → `acp.version-check.md`
+- `@deploy-production` → `deploy.production.md`
+- `@custom-backup` → `custom.backup.md`
 
 ### Command Structure
 
@@ -154,7 +161,7 @@ Each command file follows a standard structure:
 
 Create essential commands that replace existing prompts. All core commands live in the `acp/` namespace directory.
 
-#### 1. `acp/init.md` - Initialize (@acp-init)
+#### 1. `acp.init.md` - Initialize (@acp-init)
 Replaces: "AGENT.md: Initialize"
 
 **Purpose**: Bootstrap agent context and prepare for work
@@ -167,7 +174,7 @@ Replaces: "AGENT.md: Initialize"
 5. Update `agent/progress.yaml`
 6. Report current status and next steps
 
-#### 2. `acp/proceed.md` - Proceed (@acp-proceed)
+#### 2. `acp.proceed.md` - Proceed (@acp-proceed)
 Replaces: "AGENT.md: Proceed"
 
 **Purpose**: Continue with current or next task
@@ -180,7 +187,7 @@ Replaces: "AGENT.md: Proceed"
 5. Update `agent/progress.yaml`
 6. Report progress
 
-#### 3. `acp/update.md` - Update Progress (@acp-update)
+#### 3. `acp.update.md` - Update Progress (@acp-update)
 New command
 
 **Purpose**: Update progress.yaml with latest status
@@ -194,7 +201,7 @@ New command
 6. Update next steps
 7. Save changes
 
-#### 4. `acp/sync.md` - Sync Documentation (@acp-sync)
+#### 4. `acp.sync.md` - Sync Documentation (@acp-sync)
 New command
 
 **Purpose**: Read code and update stale documentation
@@ -353,10 +360,10 @@ Archive completed milestones and tasks
 Commands are invoked as: `@{namespace}-{action}`
 
 **Examples**:
-- `@acp-init` → `agent/commands/acp/init.md` (reserved)
-- `@acp-milestone-create` → `agent/commands/acp/milestone-create.md` (reserved)
-- `@deploy-production` → `agent/commands/deploy/production.md`
-- `@custom-backup` → `agent/commands/custom/backup.md`
+- `@acp-init` → `agent/commands/acp.init.md` (reserved)
+- `@acp-milestone-create` → `agent/commands/acp.milestone-create.md` (reserved)
+- `@deploy-production` → `agent/commands/deploy.production.md`
+- `@custom-backup` → `agent/commands/custom.backup.md`
 
 ### File Naming Rules
 1. **Namespace directory**: Use lowercase, single word (e.g., `acp/`, `custom/`, `deploy/`)
@@ -380,123 +387,99 @@ The `acp/` namespace is **reserved for core ACP commands only**. Users and third
 ### Namespace Guidelines
 
 **For Users (Project-Specific Commands)**:
-- Use descriptive namespace: `deploy/`, `test/`, `build/`, `custom/`
+- Use descriptive namespace: `deploy`, `test`, `build`, `custom`
 - Single word, no hyphens
 - Lowercase only
 - Examples: `@deploy-production`, `@test-integration`, `@build-docker`
 
 **For Third-Party Packages**:
 - Use package/organization name as namespace
-- Examples: `github/`, `aws/`, `docker/`, `vercel/`
+- Examples: `github`, `aws`, `docker`, `vercel`
 - Document namespace in package README
 - Examples: `@github-create-pr`, `@aws-deploy`, `@docker-build`
 
 **Valid User/Third-Party Examples**:
-- ✅ `deploy/production.md` → `@deploy-production`
-- ✅ `custom/backup.md` → `@custom-backup`
-- ✅ `github/create-pr.md` → `@github-create-pr`
-- ✅ `test/e2e.md` → `@test-e2e`
+- ✅ `deploy.production.md` → `@deploy-production`
+- ✅ `custom.backup.md` → `@custom-backup`
+- ✅ `github.create-pr.md` → `@github-create-pr`
+- ✅ `test.e2e.md` → `@test-e2e`
 
 **Invalid Examples**:
-- ❌ `acp/my-command.md` → `@acp-my-command` (reserved namespace!)
-- ❌ `my-custom/deploy.md` (namespace has hyphen)
-- ❌ `Deploy/production.md` (uppercase not allowed)
-- ❌ `deploy-prod.md` (flat structure, no namespace)
+- ❌ `acp.my-command.md` → `@acp-my-command` (reserved namespace!)
+- ❌ `my-custom.deploy.md` (namespace has hyphen)
+- ❌ `Deploy.production.md` (uppercase not allowed)
+- ❌ `deploy-production.md` (missing namespace dot separator)
 
 ---
 
 ## Directory Structure
 
-### Namespace-Based Structure (Recommended)
+### Flat Structure with Dot Notation (Recommended)
 
 ```
 agent/
 ├── commands/
-│   ├── README.md                    # Command system overview
-│   ├── .gitkeep
+│   ├── command.template.md          # Command template
 │   │
-│   ├── acp/                         # ACP namespace (core commands)
-│   │   ├── .gitkeep
-│   │   ├── README.md                # ACP commands documentation
-│   │   │
-│   │   ├── init.md                  # @acp-init
-│   │   ├── proceed.md               # @acp-proceed
-│   │   ├── status.md                # @acp-status
-│   │   ├── update.md                # @acp-update
-│   │   ├── sync.md                  # @acp-sync
-│   │   ├── validate.md              # @acp-validate
-│   │   │
-│   │   ├── version-check.md         # @acp-version-check
-│   │   ├── version-check-for-updates.md  # @acp-version-check-for-updates
-│   │   ├── version-update.md        # @acp-version-update
-│   │   │
-│   │   ├── milestone-create.md      # @acp-milestone-create
-│   │   ├── task-create.md           # @acp-task-create
-│   │   ├── design-create.md         # @acp-design-create
-│   │   ├── pattern-create.md        # @acp-pattern-create
-│   │   │
-│   │   ├── report.md                # @acp-report
-│   │   └── install.md               # @acp-install
+│   ├── acp.init.md                  # @acp-init
+│   ├── acp.proceed.md               # @acp-proceed
+│   ├── acp.status.md                # @acp-status
+│   ├── acp.update.md                # @acp-update
+│   ├── acp.sync.md                  # @acp-sync
+│   ├── acp.validate.md              # @acp-validate
+│   ├── acp.version-check.md         # @acp-version-check
+│   ├── acp.version-check-for-updates.md  # @acp-version-check-for-updates
+│   ├── acp.version-update.md        # @acp-version-update
+│   ├── acp.milestone-create.md      # @acp-milestone-create
+│   ├── acp.task-create.md           # @acp-task-create
+│   ├── acp.design-create.md         # @acp-design-create
+│   ├── acp.pattern-create.md        # @acp-pattern-create
+│   ├── acp.report.md                # @acp-report
+│   ├── acp.install.md               # @acp-install
 │   │
-│   ├── custom/                      # User's custom namespace (example)
-│   │   ├── .gitkeep
-│   │   ├── README.md
-│   │   ├── deploy.md                # @custom-deploy
-│   │   └── backup.md                # @custom-backup
+│   ├── custom.deploy.md             # @custom-deploy
+│   ├── custom.backup.md             # @custom-backup
 │   │
-│   └── deploy/                      # Third-party namespace (example)
-│       ├── .gitkeep
-│       ├── README.md
-│       ├── production.md            # @deploy-production
-│       ├── staging.md               # @deploy-staging
-│       └── rollback.md              # @deploy-rollback
+│   ├── deploy.production.md         # @deploy-production
+│   ├── deploy.staging.md            # @deploy-staging
+│   └── deploy.rollback.md           # @deploy-rollback
 ```
 
-### Benefits of Namespace Structure
+### Benefits of Flat Structure with Dot Notation
 
-1. **No Conflicts**: Commands from different sources can't collide
-   - `@acp-deploy` vs `@custom-deploy` vs `@aws-deploy`
+1. **Explicit Autocomplete**: Type `acp.` to see all ACP commands immediately
+   - IDE autocomplete shows all commands with that namespace prefix
+   - No need to navigate into subdirectories
 
-2. **Clear Ownership**: Namespace indicates command source
-   - `acp/` = Core ACP commands
-   - `custom/` = Project-specific commands
-   - `deploy/` = Third-party package
+2. **Clear Namespace Separation**: Dot visually separates namespace from command
+   - `acp.status` is clearly namespace.command
+   - Follows common conventions (Java packages, npm scopes)
 
-3. **Easy Installation**: Install entire namespace at once
-   ```
-   @acp-install https://github.com/user/deploy-commands
-   # Installs all commands into deploy/ namespace
-   ```
+3. **Single Directory**: All commands visible in one place
+   - `ls agent/commands/` shows everything
+   - Easy to browse and discover
 
-4. **Organized Discovery**: Browse commands by namespace
-   - List all ACP commands: `ls agent/commands/acp/`
-   - List all deploy commands: `ls agent/commands/deploy/`
+4. **No Conflicts**: Namespace prefix prevents collisions
+   - `acp.deploy` vs `custom.deploy` vs `aws.deploy`
 
-5. **Version Management**: Each namespace can have its own version
-   - `acp/` follows ACP version
-   - `deploy/` follows deploy-commands version
+5. **Easy Parsing**: Split on dot to extract namespace
+   - `acp.status` → namespace: `acp`, command: `status`
 
-### Namespace Registry
+6. **Grep-Friendly**: Find all commands in a namespace
+   - `ls agent/commands/acp.*` shows all ACP commands
+   - `ls agent/commands/deploy.*` shows all deploy commands
 
-Each namespace should have a `README.md` documenting its commands:
+### Discovery Examples
 
-```markdown
-# ACP Commands (acp/ namespace)
+```bash
+# List all ACP commands
+ls agent/commands/acp.*
 
-Core Agent Context Protocol commands.
+# List all deploy commands
+ls agent/commands/deploy.*
 
-## Available Commands
-
-| Command | Purpose | Frequency |
-|---------|---------|-----------|
-| `@acp-init` | Initialize agent context | Once per session |
-| `@acp-proceed` | Continue with next task | As needed |
-| ... | ... | ... |
-
-## Version
-
-ACP Commands Version: 1.1.0
-Compatible with: ACP 1.0.3+
+# List all commands
+ls agent/commands/*.md | grep -v template
 ```
 
 ---
@@ -917,22 +900,30 @@ ACP supports a command system for common workflows. Commands are organized by na
 
 ### Core Commands (`acp/` namespace)
 
-Core ACP commands are available in `agent/commands/acp/`. Browse this directory to see available commands, or reference commands using `@acp-{action}` syntax (e.g., `@acp-init`, `@acp-proceed`).
+Core ACP commands are available in `agent/commands/` with the `acp.` prefix. Browse this directory or use autocomplete to see available commands by typing `@acp-` (e.g., `@acp-init`, `@acp-proceed`).
 
 ### Creating Custom Commands
 
 To create custom commands for your project:
 
-1. Choose a namespace (e.g., `deploy/`, `test/`, `custom/`)
-2. Create directory: `agent/commands/{namespace}/`
-3. Copy the command template: `cp agent/commands/command.template.md agent/commands/{namespace}/{command-name}.md`
-4. Fill in the template sections with your command details
+1. Choose a namespace (e.g., `deploy`, `test`, `custom`)
+2. Copy the command template: `cp agent/commands/command.template.md agent/commands/{namespace}.{command-name}.md`
+3. Fill in the template sections with your command details
+
+**Example**:
+```bash
+# Create a deployment command
+cp agent/commands/command.template.md agent/commands/deploy.production.md
+
+# Create a custom backup command
+cp agent/commands/command.template.md agent/commands/custom.backup.md
+```
 
 See [`agent/commands/command.template.md`](agent/commands/command.template.md) for the template.
 
 ### Installing Third-Party Commands
 
-Use `@acp-install` to install command packages from git repositories.
+Use `@acp-install` to install command packages from git repositories (copies files with namespace prefix to `agent/commands/`).
 ```
 
 **Rationale**:
@@ -948,11 +939,10 @@ Use `@acp-install` to install command packages from git repositories.
 ## Implementation Checklist
 
 ### Phase 1: Infrastructure
-- [ ] Create `agent/commands/` directory structure
-- [ ] Create `agent/commands/acp/` namespace directory
+- [ ] Create `agent/commands/` directory (flat structure)
 - [ ] Create `agent/commands/command.template.md` template file
-- [ ] Update installation scripts to include command template
-- [ ] Update `.gitkeep` files
+- [ ] Update installation scripts to copy command files with dot notation
+- [ ] Remove nested directory structure
 
 ### Phase 2: Core Commands
 - [ ] Implement `acp-init.md`
