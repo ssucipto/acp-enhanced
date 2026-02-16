@@ -1,5 +1,7 @@
 # Command: version-check
 
+> **🤖 Agent Directive**: If you are reading this file, the command `@acp-version-check` has been invoked. Follow the steps below to execute this command.
+
 **Namespace**: acp
 **Version**: 1.0.0
 **Created**: 2026-02-16

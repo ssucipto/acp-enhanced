@@ -15,11 +15,11 @@ milestones:
   - id: M1
     name: ACP Commands Infrastructure
     status: in_progress
-    progress: 50
+    progress: 75
     started: 2026-02-16
     completed: null
     estimated_weeks: 1
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 4
     notes: |
       Implementing core infrastructure and workflow commands.
@@ -65,12 +65,15 @@ tasks:
     
     - id: task-3
       name: Implement Version Commands
-      status: not_started
+      status: completed
       file: agent/tasks/task-3-version-commands.md
       estimated_hours: 2
-      completed_date: null
+      completed_date: 2026-02-16
       notes: |
-        Will implement version-check, version-check-for-updates, version-update.
+        ✅ All 3 version commands implemented:
+        - acp.version-check.md (display current version)
+        - acp.version-check-for-updates.md (check for updates)
+        - acp.version-update.md (apply updates)
     
     - id: task-4
       name: Update Documentation
@@ -127,31 +130,29 @@ documentation:
 
 progress:
   planning: 100
-  implementation: 20
+  implementation: 40
   testing: 0
   documentation: 50
-  overall: 25
+  overall: 40
 
 recent_work:
   - date: 2026-02-16
     description: |
-      ✅ Task 2 Complete: All 3 core workflow commands implemented.
-      Flat structure with dot notation provides superior UX.
+      ✅ Task 3 Complete: All 3 version commands implemented.
+      Milestone 1 now 75% complete - only documentation task remaining.
     items:
-      - ✅ Completed task-1: Commands directory structure
-      - ✅ Completed task-2: Core workflow commands (3/3)
-      - ✅ Implemented @acp-init (343 lines) - comprehensive context loading
-      - ✅ Implemented @acp-proceed (309 lines) - task execution engine
-      - ✅ Implemented @acp-status (278 lines) - status display
-      - ✅ Created agent/progress.yaml for project tracking
-      - ✅ Fixed related commands links to use flat structure
-      - 🎯 Next: Task 3 - Implement version commands
+      - ✅ Completed task-3: Version commands (3/3)
+      - ✅ Implemented @acp-version-check - display current version
+      - ✅ Implemented @acp-version-check-for-updates - check for updates
+      - ✅ Implemented @acp-version-update - apply updates
+      - ✅ Total: 6 commands implemented (40% of all commands)
+      - 🎯 Next: Task 4 - Update AGENT.md and README.md documentation
 
 next_steps:
-  - Start task-3: Implement version commands (version-check, version-check-for-updates, version-update)
-  - Complete task-4: Update AGENT.md and README.md documentation
-  - Complete milestone-1: All 6 core commands
-  - Begin milestone-2: Documentation and creation commands
+  - Complete task-4: Update AGENT.md and README.md with commands documentation
+  - Complete milestone-1: Documentation task is final step
+  - Begin milestone-2: Documentation and creation commands (9 more commands)
+  - Consider releasing v1.1.0 after milestone-1 complete
 
 notes:
   - Using flat directory structure with dot notation (acp.status.md)
