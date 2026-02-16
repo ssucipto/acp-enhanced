@@ -23,7 +23,7 @@ This enables AI agents to pick up where previous agents left off, preserving all
 ### Bootstrap a New Project
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/install.sh | bash
 ```
 
 This will create:
