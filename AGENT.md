@@ -1,7 +1,7 @@
 # Agent Context Protocol (ACP)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 1.3.0
+**Version**: 1.3.1
 **Created**: 2026-02-11
 **Status**: Production Pattern
 
@@ -895,6 +895,14 @@ Run ./agent/scripts/uninstall.sh to remove all ACP files (agent/ directory and A
    - ✅ **DO** reference environment variable names without reading their values
    - ✅ **DO** create `.env.example` files with placeholder values only
    - **Rationale**: Secrets must never be exposed in chat logs, documentation, or version control. Agents should treat all credential files as off-limits to prevent accidental exposure.
+
+9. **CRITICAL: Respect user's intentional file edits**
+   - ❌ **DO NOT** assume missing content needs to be added back
+   - ❌ **DO NOT** revert changes without confirming with user
+   - ✅ **DO** read files before editing to see current state
+   - ✅ **DO** ask user if unexpected changes were intentional
+   - ✅ **DO** confirm before reverting user's manual edits
+   - **Rationale**: If you read a file and it is missing contents or has changed contents (i.e., it does not contain what you expect), assume or confirm with the user if they made intentional updates that you should not revert. Do not assume "The file is missing <xyz>, I need to add it back". The user may have edited files manually with intention.
 
 ---
 

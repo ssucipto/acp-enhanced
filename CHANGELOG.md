@@ -5,6 +5,31 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-02-16
+
+### Added
+- **Commit Types**: New commit types for better categorization
+  - `agent`: Changes to agent/ directory only (designs, tasks, milestones, patterns)
+  - `version`: Version bump only (no code changes)
+- **Commit Template Enhancements**: Enhanced @acp.commit template with metadata
+  - Task and milestone completion tracking
+  - Test statistics section (tests passing, coverage)
+  - Documentation links section (design docs, API docs, related resources)
+  - Scope in commit type format: `<type>(<scope>)`
+
+### Changed
+- **AGENT.md**: Added rule #9 for respecting user's intentional edits
+  - Do not assume missing content needs to be added back
+  - Always confirm before reverting user's manual changes
+  - Read files to see current state before editing
+- **@acp.commit**: Clarified intelligent file staging behavior
+  - Command automatically determines which files to stage
+  - Decision logic for staging all vs specific files
+  - Removed redundant prerequisites
+
+### Fixed
+- Clarified that `BREAKING CHANGE` is a footer, not a commit type
+
 ## [1.3.0] - 2026-02-16
 
 ### Added
