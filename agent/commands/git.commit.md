@@ -1,8 +1,8 @@
 # Command: commit
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp-commit` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `@git.commit` has been invoked. Follow the steps below to execute this command.
 
-**Namespace**: acp
+**Namespace**: git
 **Version**: 1.0.0
 **Created**: 2026-02-16
 **Last Updated**: 2026-02-16
@@ -215,7 +215,7 @@ Version: X.Y.Z
 
 **Example**:
 ```
-feat(commands): add @acp.commit command for intelligent version management
+feat(commands): add @git.commit command for intelligent version management
 
 Implemented automated version detection and changelog management:
 - Detects version impact (major/minor/patch)
@@ -224,7 +224,7 @@ Implemented automated version detection and changelog management:
 - Creates properly formatted commit messages
 
 Changes:
-- Added agent/commands/acp.commit.md
+- Added agent/commands/git.commit.md
 - Updated AGENT.md with changelog emphasis
 - Enhanced version management workflow
 
@@ -263,7 +263,7 @@ Analyze the working directory and stage relevant files:
 git add -A
 
 # If only specific files should be committed:
-git add AGENT.md CHANGELOG.md agent/commands/acp.commit.md
+git add AGENT.md CHANGELOG.md agent/commands/git.commit.md
 ```
 
 **Action**: Intelligently stage files based on what's relevant to this commit.
@@ -313,7 +313,7 @@ After running this command, verify:
 
 ### Example 1: New Feature (Minor Version)
 
-**Context**: Added `@acp.commit` command
+**Context**: Added `@git.commit` command
 
 **Detection**:
 - New command file created
@@ -326,14 +326,14 @@ After running this command, verify:
 ## [1.3.0] - 2026-02-16
 
 ### Added
-- `@acp.commit` command for intelligent version management
+- `@git.commit` command for intelligent version management
 - Automated version detection and changelog updates
 - Conventional Commits format support
 ```
 
 **Commit Message**:
 ```
-feat: add @acp.commit command for intelligent version management
+feat: add @git.commit command for intelligent version management
 
 Implemented automated version detection and changelog management.
 

@@ -5,13 +5,21 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2026-02-16
+
+### Changed
+- **Command Namespace**: Renamed `@acp.commit` to `@git.commit`
+  - Better namespace organization (git-specific operations under `git` namespace)
+  - Updated all references in AGENT.md and CHANGELOG.md
+  - Command functionality unchanged, only improved organization
+
 ## [1.3.1] - 2026-02-16
 
 ### Added
 - **Commit Types**: New commit types for better categorization
   - `agent`: Changes to agent/ directory only (designs, tasks, milestones, patterns)
   - `version`: Version bump only (no code changes)
-- **Commit Template Enhancements**: Enhanced @acp.commit template with metadata
+- **Commit Template Enhancements**: Enhanced @git.commit template with metadata
   - Task and milestone completion tracking
   - Test statistics section (tests passing, coverage)
   - Documentation links section (design docs, API docs, related resources)
@@ -22,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Do not assume missing content needs to be added back
   - Always confirm before reverting user's manual changes
   - Read files to see current state before editing
-- **@acp.commit**: Clarified intelligent file staging behavior
+- **@git.commit**: Clarified intelligent file staging behavior
   - Command automatically determines which files to stage
   - Decision logic for staging all vs specific files
   - Removed redundant prerequisites
@@ -33,7 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.0] - 2026-02-16
 
 ### Added
-- **`@acp.commit` Command**: Intelligent version-aware git commit automation
+- **`@git.commit` Command**: Intelligent version-aware git commit automation
   - Automatically detects version impact (major/minor/patch)
   - Updates all version files (package.json, AGENT.md, etc.)
   - Generates CHANGELOG.md entries with proper formatting
@@ -44,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **AGENT.md**: Added critical emphasis on CHANGELOG.md updates for version changes
   - New rule #7 mandates CHANGELOG.md updates for all version changes
-  - Recommends using `@acp.commit` for version-aware commits
+  - Recommends using `@git.commit` for version-aware commits
   - Explains rationale for changelog discipline
   - Moved secrets handling to rule #8
 
