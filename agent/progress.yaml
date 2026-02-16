@@ -3,7 +3,7 @@
 
 project:
   name: agent-context-protocol
-  version: 1.2.1
+  version: 1.4.3
   started: 2026-02-16
   status: completed
   current_milestone: M2
@@ -140,6 +140,35 @@ progress:
 recent_work:
   - date: 2026-02-16
     description: |
+      🎨 Updated all shell scripts to use tput for colors.
+      More reliable color output across all shells (bash, sh, zsh).
+    items:
+      - ✅ Updated check-for-updates.sh with tput pattern
+      - ✅ Updated uninstall.sh with tput pattern
+      - ✅ Updated version.sh with tput pattern
+      - ✅ Updated package-install.sh with tput pattern
+      - ✅ Removed unreliable ANSI escape codes
+      - ✅ Added fallback for non-terminal environments
+      - ✅ All 4 scripts now use consistent color handling
+      - 📋 Matches install.sh and update.sh pattern
+  
+  - date: 2026-02-16
+    description: |
+      🚀 Agent Context Initialized - Full project review completed.
+      All documentation and source files reviewed. Project status confirmed.
+    items:
+      - ✅ ACP version check: v1.4.2 (up to date)
+      - ✅ Read all agent documentation (progress.yaml, design docs, milestones, tasks)
+      - ✅ Reviewed key source files (AGENT.md, README.md, CHANGELOG.md)
+      - ✅ Reviewed command files (acp.init.md, acp.proceed.md, acp.status.md)
+      - ✅ Reviewed installation scripts (install.sh, update.sh)
+      - ✅ Verified command structure (11 commands with flat dot notation)
+      - ✅ Documentation is current and accurate
+      - ✅ Progress tracking updated with initialization entry
+      - 📋 Project status: Both milestones complete (100%)
+  
+  - date: 2026-02-16
+    description: |
       🔧 Updated installation scripts to show new ACP command format.
       Scripts now display all 11 commands with descriptions.
     items:
@@ -149,19 +178,6 @@ recent_work:
       - ✅ Added @acp.init as primary command for getting started
       - ✅ Listed all 11 ACP commands with brief descriptions
       - ✅ Improved user experience for new installations
-  
-  - date: 2026-02-16
-    description: |
-      � Agent Context Initialized - Full project review completed.
-      All documentation and source files reviewed. Project status confirmed.
-    items:
-      - ✅ ACP version check: v1.2.0 (up to date)
-      - ✅ Read all agent documentation (9 files)
-      - ✅ Reviewed key source files (AGENT.md, README.md, CHANGELOG.md)
-      - ✅ Verified command structure (11 commands with flat dot notation)
-      - ✅ Documentation is current and accurate
-      - ✅ Progress tracking updated with initialization entry
-      - 📋 Project status: Both milestones complete (100%)
   
   - date: 2026-02-16
     description: |
