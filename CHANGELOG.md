@@ -5,6 +5,24 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-02-16
+
+### Added
+- **`@acp.commit` Command**: Intelligent version-aware git commit automation
+  - Automatically detects version impact (major/minor/patch)
+  - Updates all version files (package.json, AGENT.md, etc.)
+  - Generates CHANGELOG.md entries with proper formatting
+  - Creates Conventional Commits format messages
+  - Includes decision tree and examples for version bumping
+  - Supports semantic versioning workflow
+
+### Changed
+- **AGENT.md**: Added critical emphasis on CHANGELOG.md updates for version changes
+  - New rule #7 mandates CHANGELOG.md updates for all version changes
+  - Recommends using `@acp.commit` for version-aware commits
+  - Explains rationale for changelog discipline
+  - Moved secrets handling to rule #8
+
 ## [1.2.2] - 2026-02-16
 
 ### Added
