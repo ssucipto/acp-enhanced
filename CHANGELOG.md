@@ -5,6 +5,16 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] - 2026-02-16
+
+### Fixed
+- **Script Color Output**: Fixed color output in install.sh and update.sh
+  - Replaced unreliable ANSI escape codes with `tput` commands
+  - Colors now work correctly across all shells (bash, sh, zsh)
+  - No more literal escape character output
+  - Added fallback for non-terminal environments
+  - Removed unnecessary `-e` flag from echo commands
+
 ## [1.4.0] - 2026-02-16
 
 ### Added
