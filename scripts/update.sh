@@ -69,6 +69,7 @@ cp "$TEMP_DIR/AGENT.md" "."
 cp "$TEMP_DIR/scripts/update.sh" "agent/scripts/"
 cp "$TEMP_DIR/scripts/check-for-updates.sh" "agent/scripts/"
 cp "$TEMP_DIR/scripts/uninstall.sh" "agent/scripts/"
+cp "$TEMP_DIR/scripts/version.sh" "agent/scripts/"
 chmod +x agent/scripts/*.sh
 
 echo -e "${GREEN}✓${NC} All files updated"
