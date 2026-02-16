@@ -24,7 +24,8 @@ milestones:
     notes: |
       Implementing core infrastructure and workflow commands.
       Restructured to flat directory with dot notation for better UX.
-      All 3 workflow commands complete.
+      ✅ All 3 workflow commands complete (init, proceed, status).
+      Next: Version commands.
   
   - id: M2
     name: Documentation & Creation Commands
@@ -134,16 +135,17 @@ progress:
 recent_work:
   - date: 2026-02-16
     description: |
-      Completed Task 2: All 3 core workflow commands implemented.
-      Restructured to flat directory with dot notation.
+      ✅ Task 2 Complete: All 3 core workflow commands implemented.
+      Flat structure with dot notation provides superior UX.
     items:
       - ✅ Completed task-1: Commands directory structure
-      - ✅ Completed task-2: Core workflow commands
-      - ✅ Implemented @acp-init command (context initialization)
-      - ✅ Implemented @acp-proceed command (task execution)
-      - ✅ Implemented @acp-status command (status display)
-      - ✅ Created agent/progress.yaml for tracking
-      - 📋 Next: Implement version commands (task-3)
+      - ✅ Completed task-2: Core workflow commands (3/3)
+      - ✅ Implemented @acp-init (343 lines) - comprehensive context loading
+      - ✅ Implemented @acp-proceed (309 lines) - task execution engine
+      - ✅ Implemented @acp-status (278 lines) - status display
+      - ✅ Created agent/progress.yaml for project tracking
+      - ✅ Fixed related commands links to use flat structure
+      - 🎯 Next: Task 3 - Implement version commands
 
 next_steps:
   - Start task-3: Implement version commands (version-check, version-check-for-updates, version-update)
