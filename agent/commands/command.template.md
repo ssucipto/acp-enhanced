@@ -1,5 +1,7 @@
 # Command: {command-name}
 
+> **🤖 Agent Directive**: If you are reading this file, the command `@{namespace}-{command-name}` has been invoked. Follow the steps below to execute this command.
+
 **Namespace**: {namespace}
 **Version**: 1.0.0
 **Created**: YYYY-MM-DD
@@ -258,8 +260,6 @@ Example output message or status report
 - Reading all agent files may take 30-60 seconds for large projects
 - If source code is very large, consider specifying which files to review
 - Always review the output to ensure context was loaded correctly
-
----
 
 ---
 
