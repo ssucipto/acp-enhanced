@@ -29,16 +29,18 @@ milestones:
       - Ready for Milestone 2
   
   - id: M2
-    name: Documentation & Creation Commands
+    name: Documentation & Utility Commands
     status: not_started
     progress: 0
     started: null
     completed: null
     estimated_weeks: 1
     tasks_completed: 0
-    tasks_total: 4
+    tasks_total: 3
     notes: |
-      Will implement documentation management and creation commands.
+      Will implement documentation management and utility commands.
+      Removed creation commands (milestone-create, task-create, etc.) - natural language is sufficient.
+      Focus on: update, sync, validate, report, install (5 commands total).
 
 tasks:
   milestone_1:
@@ -99,27 +101,19 @@ tasks:
         Implement update, sync, validate commands.
     
     - id: task-6
-      name: Implement Creation Commands
+      name: Implement Utility Commands
       status: not_started
-      file: agent/tasks/task-6-creation-commands.md
-      estimated_hours: 4
-      completed_date: null
-      notes: |
-        Implement milestone-create, task-create, design-create, pattern-create.
-    
-    - id: task-7
-      name: Implement Advanced Commands
-      status: not_started
-      file: agent/tasks/task-7-advanced-commands.md
+      file: agent/tasks/task-6-utility-commands.md
       estimated_hours: 3
       completed_date: null
       notes: |
         Implement report and install commands.
+        Removed creation commands - natural language is sufficient.
     
-    - id: task-8
+    - id: task-7
       name: Integration Testing
       status: not_started
-      file: agent/tasks/task-8-integration-testing.md
+      file: agent/tasks/task-7-integration-testing.md
       estimated_hours: 2
       completed_date: null
       notes: |
@@ -154,9 +148,9 @@ recent_work:
       - 🎯 Next: Begin Milestone 2 - Documentation & creation commands
 
 next_steps:
-  - Update CHANGELOG.md with version 1.1.0 release notes
-  - Update AGENT.md version from 1.0.3 to 1.1.0
-  - Begin milestone-2: Documentation and creation commands (9 more commands)
+  - Begin milestone-2: Documentation and utility commands (5 more commands)
+  - Implement task-5: Documentation commands (update, sync, validate)
+  - Implement task-6: Utility commands (report, install)
   - Consider git tag for v1.1.0 release
 
 notes:
