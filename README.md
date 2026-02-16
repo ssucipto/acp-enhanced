@@ -35,11 +35,11 @@ This will create:
 
 ## Usage
 
-Once ACP is installed, use these trigger prompts with your AI agent:
+Once ACP is installed, use these commands with your AI agent:
 
 ### Start Working on a Project
 
-Type: **`AGENT.md: Initialize`**
+Type: **`@acp.init`** (or `AGENT.md: Initialize`)
 
 This will:
 - Check for ACP updates
@@ -50,14 +50,32 @@ This will:
 
 ### Continue Working
 
-Type: **`AGENT.md: Proceed`**
+Type: **`@acp.proceed`** (or `AGENT.md: Proceed`)
 
 This will:
 - Continue with current or next task
 - Update progress tracking
 - Maintain documentation
 
-See [AGENT.md](./AGENT.md) for complete prompt details and methodology.
+### Check Project Status
+
+Type: **`@acp.status`**
+
+This will:
+- Display current milestone and progress
+- Show current task
+- List recent work and next steps
+
+### Available Commands
+
+- **`@acp.init`** - Initialize agent context
+- **`@acp.proceed`** - Continue with next task
+- **`@acp.status`** - Display project status
+- **`@acp.version-check`** - Show current ACP version
+- **`@acp.version-check-for-updates`** - Check for updates
+- **`@acp.version-update`** - Update ACP to latest version
+
+See [AGENT.md](./AGENT.md) for complete command documentation and methodology.
 
 ---
 
@@ -82,6 +100,14 @@ See these repositories for real-world examples of ACP in action:
 project-root/
 ├── AGENT.md                        # ACP documentation (this pattern)
 ├── agent/                          # Agent directory
+│   ├── commands/                   # Command system
+│   │   ├── .gitkeep
+│   │   ├── command.template.md     # Command template
+│   │   ├── acp.init.md             # @acp.init
+│   │   ├── acp.proceed.md          # @acp.proceed
+│   │   ├── acp.status.md           # @acp.status
+│   │   └── ...                     # More commands
+│   │
 │   ├── design/                     # Design documents
 │   │   ├── .gitkeep
 │   │   ├── design.template.md      # Template for design docs

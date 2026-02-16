@@ -5,6 +5,34 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-02-16
+
+### Added
+- **ACP Commands System**: File-based command interface for ACP operations
+  - Command template for creating custom commands
+  - Flat directory structure with dot notation (acp.init.md)
+  - 6 core commands implemented:
+    - `@acp.init` - Initialize agent context (replaces "AGENT.md: Initialize")
+    - `@acp.proceed` - Continue with next task (replaces "AGENT.md: Proceed")
+    - `@acp.status` - Display project status
+    - `@acp.version-check` - Show current ACP version
+    - `@acp.version-check-for-updates` - Check for updates
+    - `@acp.version-update` - Update ACP to latest version
+  - Self-documenting commands with step-by-step instructions
+  - Autocomplete-friendly namespace system
+  - Security considerations documented
+
+- **Documentation Updates**:
+  - ACP Commands section in AGENT.md with full documentation
+  - Command examples in README.md
+  - Updated directory structure diagrams
+  - Command invocation syntax documented
+
+### Changed
+- Consolidated all scripts under `agent/scripts/` directory
+- Updated installation script path in README
+- Improved project organization with commands directory
+
 ## [1.0.3] - 2026-02-13
 
 ### Added
