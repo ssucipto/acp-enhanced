@@ -18,7 +18,7 @@
 
 ## What This Command Does
 
-This command displays the current version of ACP installed in the project by reading the version information from AGENT.md and CHANGELOG.md. It provides a quick way to check which version you're using without needing to manually open files.
+This command displays the current version of ACP installed in the project by running a simple script that extracts version information from AGENT.md. It provides a quick way to check which version you're using without needing to manually open files.
 
 Use this command when you need to verify your ACP version, check compatibility with other tools, or before reporting issues. It's a simple, read-only operation that provides version information at a glance.
 
@@ -29,58 +29,35 @@ Unlike `@acp-version-check-for-updates` which checks for newer versions, this co
 ## Prerequisites
 
 - [ ] ACP installed in project (AGENT.md exists)
+- [ ] `scripts/version.sh` exists (or can extract from AGENT.md directly)
 
 ---
 
 ## Steps
 
-### 1. Read AGENT.md Header
+### 1. Run Version Script
 
-Extract version information from AGENT.md.
-
-**Actions**:
-- Open `AGENT.md`
-- Read the header section (first ~10 lines)
-- Extract version number from `**Version**: X.X.X` line
-- Extract created date
-- Extract status
-
-**Expected Outcome**: Version information extracted
-
-### 2. Read CHANGELOG.md
-
-Get details about the current version.
+Execute the version check script.
 
 **Actions**:
-- Open `CHANGELOG.md`
-- Find the section for current version
-- Extract release date
-- Extract list of changes (Added, Changed, Removed, Fixed)
+- Run `./scripts/version.sh`
+- Script extracts version from AGENT.md using grep
+- Displays version, created date, and status
 
-**Expected Outcome**: Version details loaded
+**Expected Outcome**: Version information displayed
 
-### 3. Display Version Information
-
-Present version information in formatted output.
-
-**Actions**:
-- Display version number prominently
-- Show release date
-- Show created date
-- Show current status
-- List key features/changes in this version
-- Show compatibility information
-
-**Expected Outcome**: User sees complete version information
+**Alternative** (if script doesn't exist):
+```bash
+# Extract version directly from AGENT.md
+grep -m 1 "^\*\*Version\*\*:" AGENT.md | sed 's/.*: //'
+```
 
 ---
 
 ## Verification
 
-- [ ] AGENT.md read successfully
-- [ ] Version number extracted
-- [ ] CHANGELOG.md read successfully
-- [ ] Version details extracted
+- [ ] Version script executed successfully (or AGENT.md read directly)
+- [ ] Version number displayed
 - [ ] Output is clear and well-formatted
 - [ ] No errors encountered
 
@@ -97,41 +74,12 @@ None - this is a read-only command
 
 Version: 1.0.3
 Created: 2026-02-11
-Released: 2026-02-13
 Status: Production Pattern
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ ACP is installed
 
-📋 Version 1.0.3 Features:
-
-Added:
-  • Template files for all ACP document types
-  • Generic patterns (TypeScript service layer)
-  • Installation & update scripts
-  • Automatic update checking
-  • Command system (in development)
-
-Changed:
-  • Converted to generic templates (from project-specific)
-  • Reorganized scripts into dedicated directory
-  • Simplified installation process
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 Compatibility:
-  • Node.js: 18+
-  • Git: Required for updates
-  • Works with: All programming languages
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📚 Documentation:
-  • AGENT.md: Complete methodology
-  • README.md: Quick start guide
-  • CHANGELOG.md: Version history
-
-ℹ️  To check for updates: @acp-version-check-for-updates
-ℹ️  To update ACP: @acp-version-update
+To check for updates: ./agent/scripts/check-for-updates.sh
+To update ACP: ./agent/scripts/update.sh
 ```
 
 ### Status Update
@@ -147,7 +95,7 @@ No status changes - read-only operation
 
 **Invocation**: `@acp-version-check`
 
-**Result**: Shows version 1.0.3, released 2026-02-13, with list of features
+**Result**: Shows version 1.0.3, created 2026-02-11, status: Production Pattern
 
 ### Example 2: Before Reporting Issue
 
@@ -155,15 +103,15 @@ No status changes - read-only operation
 
 **Invocation**: `@acp-version-check`
 
-**Result**: Displays version 1.0.3, compatibility info, helps you provide accurate bug report
+**Result**: Displays version 1.0.3, helps you provide accurate bug report
 
-### Example 3: Checking Compatibility
+### Example 3: Verifying Installation
 
-**Context**: Want to verify ACP version supports a specific feature
+**Context**: Just installed ACP, want to confirm it worked
 
 **Invocation**: `@acp-version-check`
 
-**Result**: Shows version and feature list, confirms if feature is available
+**Result**: Shows version installed, confirms ACP is working
 
 ---
 
@@ -179,36 +127,36 @@ No status changes - read-only operation
 
 ### Issue 1: AGENT.md not found
 
-**Symptom**: Error message "Cannot read AGENT.md"
+**Symptom**: Error message "AGENT.md not found"
 
 **Cause**: ACP not installed or AGENT.md deleted
 
 **Solution**: Reinstall ACP using the installation script
 
-### Issue 2: Version number not found
+### Issue 2: Script not found
 
-**Symptom**: Warning "Version not found in AGENT.md"
+**Symptom**: Error "version.sh not found"
+
+**Cause**: Older ACP installation without version script
+
+**Solution**: Extract version directly from AGENT.md using grep command shown in Steps section
+
+### Issue 3: Version not found in AGENT.md
+
+**Symptom**: Grep returns no results
 
 **Cause**: AGENT.md format changed or corrupted
 
-**Solution**: Update ACP to latest version using `@acp-version-update`
-
-### Issue 3: CHANGELOG.md not found
-
-**Symptom**: Warning "Cannot read CHANGELOG.md"
-
-**Cause**: Older ACP installation or file deleted
-
-**Solution**: Non-critical, version number still displayed. Consider updating ACP.
+**Solution**: Manually open AGENT.md and check header, or update ACP to latest version
 
 ---
 
 ## Security Considerations
 
 ### File Access
-- **Reads**: `AGENT.md`, `CHANGELOG.md`
+- **Reads**: `AGENT.md`
 - **Writes**: None (read-only command)
-- **Executes**: None
+- **Executes**: `./agent/scripts/version.sh` (simple grep script)
 
 ### Network Access
 - **APIs**: None
@@ -224,10 +172,11 @@ No status changes - read-only operation
 
 - This is a read-only command with no side effects
 - No network access required
-- Fast operation (reads 2 small files)
+- Fast operation (runs simple grep command)
 - Safe to run anytime
 - Useful for troubleshooting and bug reports
 - Can be run offline
+- Script is simple and safe (just reads AGENT.md)
 
 ---
 
