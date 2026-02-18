@@ -191,6 +191,14 @@ if [ "$LIST_ONLY" = true ]; then
     exit 0
 fi
 
+# Validate project dependencies
+if [ -f "$TEMP_DIR/package.yaml" ]; then
+    if ! validate_project_dependencies "$TEMP_DIR/package.yaml"; then
+        echo "${RED}Installation cancelled due to dependency issues${NC}"
+        exit 1
+    fi
+fi
+
 # Directories to install from (based on flags)
 INSTALL_DIRS=()
 [ "$INSTALL_PATTERNS" = true ] && INSTALL_DIRS+=("patterns")
