@@ -26,6 +26,49 @@ Use this command when you want to add community-created commands and patterns, i
 
 ---
 
+## Manifest Tracking
+
+When you install a package, `@acp.package-install` creates or updates `agent/manifest.yaml` to track:
+
+- **Package metadata**:
+  - Package name and version
+  - Source URL (GitHub repository)
+  - Git commit hash
+  - Installation and update timestamps
+
+- **Installed files**:
+  - File names and individual versions
+  - File checksums (SHA-256) for modification detection
+  - Installation timestamps
+  - Modified status (detected via checksum comparison)
+
+This enables:
+- ✅ **Smart updates** - Only update changed files
+- ✅ **Conflict detection** - Detect locally modified files
+- ✅ **Team collaboration** - Commit manifest to git for reproducible setups
+- ✅ **Version tracking** - Know exactly what's installed
+- ✅ **Reproducible installs** - Install from manifest on new machines
+
+**Example manifest entry**:
+```yaml
+packages:
+  firebase:
+    source: https://github.com/prmichaelsen/acp-firebase.git
+    package_version: 1.2.0
+    commit: a1b2c3d4e5f6
+    installed_at: 2026-02-18T10:30:00Z
+    updated_at: 2026-02-18T10:30:00Z
+    installed:
+      patterns:
+        - name: user-scoped-collections.md
+          version: 1.1.0
+          installed_at: 2026-02-18T10:30:00Z
+          modified: false
+          checksum: sha256:abc123...
+```
+
+---
+
 ## Prerequisites
 
 - [ ] ACP installed in project
@@ -93,7 +136,25 @@ Try invoking one of the installed commands (if any).
 
 **Expected Outcome**: Commands work correctly
 
-### 4. Document Installation
+### 4. Verify Manifest Updated
+
+Check that the manifest was created/updated correctly.
+
+**Actions**:
+- Verify `agent/manifest.yaml` exists
+- Check package entry was added with:
+  - Package name and version
+  - Source URL
+  - Commit hash
+  - Installation timestamp
+- Verify installed files are tracked with:
+  - File names and versions
+  - Checksums (for modification detection)
+  - Installation timestamps
+
+**Expected Outcome**: Manifest accurately tracks installation
+
+### 5. Document Installation
 
 Update progress tracking with installation notes.
 

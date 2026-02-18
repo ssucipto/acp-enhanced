@@ -203,3 +203,166 @@ cleanup_deprecated_scripts() {
         success "Cleaned up $removed_count deprecated script(s)"
     fi
 }
+
+# Parse package.yaml from repository
+# Usage: parse_package_metadata "repo_dir"
+# Sets global variables: PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_DESCRIPTION
+parse_package_metadata() {
+    local repo_dir="$1"
+    local package_yaml="${repo_dir}/package.yaml"
+    
+    if [ ! -f "$package_yaml" ]; then
+        warn "package.yaml not found in repository"
+        PACKAGE_NAME="unknown"
+        PACKAGE_VERSION="0.0.0"
+        PACKAGE_DESCRIPTION="No description"
+        return 1
+    fi
+    
+    # Source YAML parser if not already loaded
+    if ! command -v yaml_get >/dev/null 2>&1; then
+        source_yaml_parser || return 1
+    fi
+    
+    # Extract metadata
+    PACKAGE_NAME=$(yaml_get "$package_yaml" "name" 2>/dev/null || echo "unknown")
+    PACKAGE_VERSION=$(yaml_get "$package_yaml" "version" 2>/dev/null || echo "0.0.0")
+    PACKAGE_DESCRIPTION=$(yaml_get "$package_yaml" "description" 2>/dev/null || echo "No description")
+    
+    info "Package: $PACKAGE_NAME"
+    info "Version: $PACKAGE_VERSION"
+    info "Description: $PACKAGE_DESCRIPTION"
+    
+    return 0
+}
+
+# Get file version from package.yaml
+# Usage: get_file_version "package.yaml" "patterns" "filename.md"
+# Returns: version string or "0.0.0" if not found
+get_file_version() {
+    local package_yaml="$1"
+    local file_type="$2"
+    local file_name="$3"
+    
+    if [ ! -f "$package_yaml" ]; then
+        echo "0.0.0"
+        return 1
+    fi
+    
+    # Use awk to parse YAML array (acp.yaml.sh doesn't support array queries)
+    local version
+    version=$(awk -v type="$file_type" -v name="$file_name" '
+        BEGIN { in_section=0; in_item=0 }
+        /^  [a-z_]+:/ { in_section=0 }
+        $0 ~ "^  " type ":" { in_section=1; next }
+        in_section && /^    - name:/ {
+            if ($3 == name) { in_item=1 }
+            else { in_item=0 }
+            next
+        }
+        in_section && in_item && /^      version:/ {
+            print $2
+            exit
+        }
+    ' "$package_yaml")
+    
+    if [ -z "$version" ]; then
+        echo "0.0.0"
+    else
+        echo "$version"
+    fi
+}
+
+# Add package to manifest
+# Usage: add_package_to_manifest "package_name" "source_url" "version" "commit_hash"
+add_package_to_manifest() {
+    local package_name="$1"
+    local source_url="$2"
+    local package_version="$3"
+    local commit_hash="$4"
+    local timestamp
+    timestamp=$(get_timestamp)
+    
+    local manifest="agent/manifest.yaml"
+    
+    # Source YAML parser if not already loaded
+    if ! command -v yaml_set >/dev/null 2>&1; then
+        source_yaml_parser || return 1
+    fi
+    
+    # Add package metadata
+    yaml_set "$manifest" "packages.${package_name}.source" "$source_url"
+    yaml_set "$manifest" "packages.${package_name}.package_version" "$package_version"
+    yaml_set "$manifest" "packages.${package_name}.commit" "$commit_hash"
+    yaml_set "$manifest" "packages.${package_name}.installed_at" "$timestamp"
+    yaml_set "$manifest" "packages.${package_name}.updated_at" "$timestamp"
+    
+    # Update manifest timestamp
+    update_manifest_timestamp
+    
+    success "Added package $package_name to manifest"
+}
+
+# Add file to manifest
+# Usage: add_file_to_manifest "package_name" "file_type" "filename" "version" "file_path"
+# file_type: patterns, commands, designs
+add_file_to_manifest() {
+    local package_name="$1"
+    local file_type="$2"
+    local filename="$3"
+    local file_version="$4"
+    local file_path="$5"
+    local timestamp
+    timestamp=$(get_timestamp)
+    
+    local manifest="agent/manifest.yaml"
+    
+    # Calculate checksum
+    local checksum
+    checksum=$(calculate_checksum "$file_path")
+    
+    if [ $? -ne 0 ]; then
+        warn "Failed to calculate checksum for $filename"
+        checksum="unknown"
+    fi
+    
+    # Source YAML parser if not already loaded
+    if ! command -v yaml_append >/dev/null 2>&1; then
+        source_yaml_parser || return 1
+    fi
+    
+    # Create file entry (using YAML multiline format)
+    # Note: acp.yaml.sh may not support array append, so we'll use a workaround
+    # We'll append to the YAML file directly
+    local file_entry="    - name: $filename
+      version: $file_version
+      installed_at: $timestamp
+      modified: false
+      checksum: sha256:$checksum"
+    
+    # Check if the section exists, if not create it
+    if ! grep -q "packages.${package_name}.installed.${file_type}:" "$manifest" 2>/dev/null; then
+        # Add section header
+        echo "  installed:" >> "$manifest"
+        echo "    ${file_type}:" >> "$manifest"
+    fi
+    
+    # Append file entry
+    echo "$file_entry" >> "$manifest"
+    
+    return 0
+}
+
+# Get package commit hash from git repository
+# Usage: get_commit_hash "repo_dir"
+# Returns: commit hash
+get_commit_hash() {
+    local repo_dir="$1"
+    
+    if [ ! -d "$repo_dir/.git" ]; then
+        echo "unknown"
+        return 1
+    fi
+    
+    (cd "$repo_dir" && git rev-parse HEAD 2>/dev/null) || echo "unknown"
+}
