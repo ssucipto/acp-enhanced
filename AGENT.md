@@ -1,7 +1,7 @@
 # Agent Context Protocol (ACP)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 1.4.3
+**Version**: 2.0.0
 **Created**: 2026-02-11
 **Status**: Production Pattern
 
@@ -653,7 +653,7 @@ Use `@acp.install` to install command packages from git repositories (available 
 Use this prompt when starting work on an ACP-structured project:
 
 ```markdown
-First, check for ACP updates by running ./agent/scripts/check-for-updates.sh (if it exists). If updates are available, report what changed and ask if I want to update.
+First, check for ACP updates by running ./agent/scripts/acp.version-check-for-updates.sh (if it exists). If updates are available, report what changed and ask if I want to update.
 
 Then read ALL files in @agent. We are going to understand this project then work on a generic task.
 
@@ -691,7 +691,7 @@ Let's proceed with implementing the current or next task. Remember to update @ag
 Updates all ACP files to the latest version:
 
 ```markdown
-Run ./agent/scripts/update.sh to update all ACP files (AGENT.md, templates, and scripts) to the latest version.
+Run ./agent/scripts/acp.version-update.sh to update all ACP files (AGENT.md, templates, and scripts) to the latest version.
 ```
 
 **Purpose**:
@@ -707,7 +707,7 @@ Run ./agent/scripts/update.sh to update all ACP files (AGENT.md, templates, and 
 Checks if updates are available without applying them:
 
 ```markdown
-Run ./agent/scripts/check-for-updates.sh to see if ACP updates are available.
+Run ./agent/scripts/acp.version-check-for-updates.sh to see if ACP updates are available.
 ```
 
 **Purpose**:
@@ -722,12 +722,12 @@ Run ./agent/scripts/check-for-updates.sh to see if ACP updates are available.
 Removes all ACP files from the project:
 
 ```markdown
-Run ./agent/scripts/uninstall.sh to remove all ACP files (agent/ directory and AGENT.md) from this project.
+Run ./agent/scripts/unacp.install.sh to remove all ACP files (agent/ directory and AGENT.md) from this project.
 ```
 
 **Note**: This script requires user confirmation. If the user confirms they want to uninstall, run:
 ```bash
-./agent/scripts/uninstall.sh -y
+./agent/scripts/unacp.install.sh -y
 ```
 
 **Purpose**:
@@ -990,10 +990,10 @@ This repository is actively maintained with improvements to the ACP methodology 
 
 ```bash
 # Run from your project root (if you have the update script installed)
-./agent/scripts/update.sh
+./agent/scripts/acp.version-update.sh
 
 # Or download and run directly
-curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/update.sh | bash
+curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.version-update.sh | bash
 ```
 
 The update script will:

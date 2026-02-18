@@ -89,13 +89,21 @@ cp "$TEMP_DIR/agent/progress.template.yaml" "agent/"
 # Update AGENT.md
 cp "$TEMP_DIR/AGENT.md" "."
 
-# Update scripts
-cp "$TEMP_DIR/agent/scripts/update.sh" "agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/check-for-updates.sh" "agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/uninstall.sh" "agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/version.sh" "agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/install.sh" "agent/scripts/"
+# Update scripts (copy common.sh first, then others)
+cp "$TEMP_DIR/agent/scripts/acp.common.sh" "agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.yaml.sh" "agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.version-update.sh" "agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.version-check-for-updates.sh" "agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.uninstall.sh" "agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.version-check.sh" "agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.install.sh" "agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.package-install.sh" "agent/scripts/"
 chmod +x agent/scripts/*.sh
+
+# Clean up deprecated scripts (from versions < 2.0.0)
+. "agent/scripts/acp.common.sh"
+init_colors
+cleanup_deprecated_scripts
 
 echo "${GREEN}✓${NC} All files updated"
 echo ""

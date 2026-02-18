@@ -18,7 +18,7 @@
 
 ## What This Command Does
 
-This command installs third-party ACP packages from git repositories by running the `agent/scripts/package-install.sh` script. The script clones the repository and installs files from the `agent/` directory, including commands, patterns, and design documents.
+This command installs third-party ACP packages from git repositories by running the `agent/scripts/package-acp.install.sh` script. The script clones the repository and installs files from the `agent/` directory, including commands, patterns, and design documents.
 
 Use this command when you want to add community-created commands and patterns, install organization-specific ACP content, or share reusable components across multiple projects. It enables extending ACP with custom functionality, patterns, and documentation.
 
@@ -31,7 +31,7 @@ Use this command when you want to add community-created commands and patterns, i
 - [ ] ACP installed in project
 - [ ] Git installed and available
 - [ ] Internet connection available
-- [ ] `agent/scripts/package-install.sh` exists
+- [ ] `agent/scripts/package-acp.install.sh` exists
 - [ ] You trust the source of the commands
 - [ ] You have reviewed the command repository
 
@@ -44,14 +44,14 @@ Use this command when you want to add community-created commands and patterns, i
 Execute the package installation script with the repository URL.
 
 **Actions**:
-- Verify `./agent/scripts/package-install.sh` exists
+- Verify `./agent/scripts/package-acp.install.sh` exists
 - Run the script with repository URL as argument:
   ```bash
   # Interactive mode (asks for confirmation)
-  ./agent/scripts/package-install.sh <repository-url>
+  ./agent/scripts/package-acp.install.sh <repository-url>
   
   # Auto-confirm mode (skips prompts)
-  ./agent/scripts/package-install.sh -y <repository-url>
+  ./agent/scripts/package-acp.install.sh -y <repository-url>
   ```
 - The script will:
   - Validate the repository URL
@@ -109,7 +109,7 @@ Update progress tracking with installation notes.
 
 ## Verification
 
-- [ ] package-install.sh script exists
+- [ ] package-acp.install.sh script exists
 - [ ] Script executed successfully
 - [ ] Files installed to appropriate agent/ directories
 - [ ] Installed commands reviewed for safety (if any)
@@ -308,7 +308,7 @@ Next steps:
 ### File Access
 - **Reads**: Repository files, existing files in agent/ directories
 - **Writes**: `agent/commands/*.md`, `agent/patterns/*.md`, `agent/design/*.md`
-- **Executes**: `git clone` command, `./agent/scripts/package-install.sh`
+- **Executes**: `git clone` command, `./agent/scripts/package-acp.install.sh`
 
 ### Network Access
 - **APIs**: None directly

@@ -2,7 +2,7 @@
 
 # Agent Context Protocol (ACP) Uninstall Script
 # This script removes all ACP files from a project
-# Usage: ./agent/scripts/uninstall.sh [-y]
+# Usage: ./agent/scripts/unacp.install.sh [-y]
 
 set -e
 
@@ -44,7 +44,7 @@ if [ "$AUTO_CONFIRM" = false ]; then
     echo "${BLUE}Note for AI Agents:${NC}"
     echo "This script requires user confirmation to prevent accidental deletion."
     echo "Please ask the user: 'Do you want to uninstall ACP from this project?'"
-    echo "If yes, rerun this script with: ./agent/scripts/uninstall.sh -y"
+    echo "If yes, rerun this script with: ./agent/scripts/unacp.install.sh -y"
     echo ""
     echo "${RED}WARNING: This will permanently delete:${NC}"
     echo "  - agent/ directory (all contents)"

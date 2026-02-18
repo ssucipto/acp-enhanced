@@ -109,13 +109,21 @@ cp "$TEMP_DIR/agent/progress.template.yaml" "$TARGET_DIR/agent/"
 # Copy AGENT.md
 cp "$TEMP_DIR/AGENT.md" "$TARGET_DIR/"
 
-# Copy scripts
-cp "$TEMP_DIR/agent/scripts/update.sh" "$TARGET_DIR/agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/check-for-updates.sh" "$TARGET_DIR/agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/uninstall.sh" "$TARGET_DIR/agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/version.sh" "$TARGET_DIR/agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/install.sh" "$TARGET_DIR/agent/scripts/"
+# Copy scripts (copy common.sh first, then others)
+cp "$TEMP_DIR/agent/scripts/acp.common.sh" "$TARGET_DIR/agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.yaml.sh" "$TARGET_DIR/agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.version-update.sh" "$TARGET_DIR/agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.version-check-for-updates.sh" "$TARGET_DIR/agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.uninstall.sh" "$TARGET_DIR/agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.version-check.sh" "$TARGET_DIR/agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.install.sh" "$TARGET_DIR/agent/scripts/"
+cp "$TEMP_DIR/agent/scripts/acp.package-install.sh" "$TARGET_DIR/agent/scripts/"
 chmod +x "$TARGET_DIR/agent/scripts"/*.sh
+
+# Clean up deprecated scripts (from versions < 2.0.0)
+. "$TARGET_DIR/agent/scripts/acp.common.sh"
+init_colors
+cleanup_deprecated_scripts
 
 echo "${GREEN}✓${NC} All files installed"
 echo ""

@@ -67,10 +67,10 @@ get_script_dir() {
 source_yaml_parser() {
     local script_dir
     script_dir=$(get_script_dir)
-    if [ -f "${script_dir}/yaml.sh" ]; then
-        . "${script_dir}/yaml.sh"
+    if [ -f "${script_dir}/acp.yaml.sh" ]; then
+        . "${script_dir}/acp.yaml.sh"
     else
-        echo "${RED}Error: yaml.sh not found${NC}" >&2
+        echo "${RED}Error: acp.yaml.sh not found${NC}" >&2
         return 1
     fi
 }
@@ -174,4 +174,32 @@ success() {
 # Usage: info "Info message"
 info() {
     echo "${BLUE}ℹ${NC} $1"
+}
+
+# Remove deprecated script files (from versions < 2.0.0)
+# Usage: cleanup_deprecated_scripts
+cleanup_deprecated_scripts() {
+    local deprecated_scripts=(
+        "check-for-updates.sh"
+        "common.sh"
+        "install.sh"
+        "package-install.sh"
+        "uninstall.sh"
+        "update.sh"
+        "version.sh"
+        "yaml.sh"
+    )
+    
+    local removed_count=0
+    for script in "${deprecated_scripts[@]}"; do
+        if [ -f "agent/scripts/$script" ]; then
+            rm "agent/scripts/$script"
+            warn "Removed deprecated script: $script"
+            removed_count=$((removed_count + 1))
+        fi
+    done
+    
+    if [ $removed_count -gt 0 ]; then
+        success "Cleaned up $removed_count deprecated script(s)"
+    fi
 }

@@ -9,14 +9,14 @@ A documentation-first development methodology that enables AI agents to understa
 ### Bootstrap a New Project
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.install.sh | bash
 ```
 
 ### Update an existing project
 
 You can update an existing project via `@acp.update` or by running the following shell script.
 ```bash
-curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/update.sh | bash
+curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.version-update.sh | bash
 ```
 
 ---
