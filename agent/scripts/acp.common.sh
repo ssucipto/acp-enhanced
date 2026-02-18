@@ -746,3 +746,38 @@ validate_project_dependencies() {
     
     return 0
 }
+
+# ============================================================================
+# Display Functions
+# ============================================================================
+
+# Display available ACP commands
+# Usage: display_available_commands
+display_available_commands() {
+    echo "${BLUE}ACP Commands Available:${NC}"
+    echo ""
+    echo "  ${GREEN}@acp.init${NC}                       - Initialize agent context (start here!)"
+    echo "  ${GREEN}@acp.proceed${NC}                    - Continue with next task"
+    echo "  ${GREEN}@acp.status${NC}                     - Display project status"
+    echo "  ${GREEN}@acp.update${NC}                     - Update progress tracking"
+    echo "  ${GREEN}@acp.sync${NC}                       - Sync documentation with code"
+    echo "  ${GREEN}@acp.validate${NC}                   - Validate ACP documents"
+    echo "  ${GREEN}@acp.report${NC}                     - Generate project report"
+    echo "  ${GREEN}@acp.version-check${NC}              - Show current ACP version"
+    echo "  ${GREEN}@acp.version-check-for-updates${NC}  - Check for ACP updates"
+    echo "  ${GREEN}@acp.version-update${NC}             - Update ACP to latest version"
+    echo ""
+    echo "${BLUE}Package Management Commands:${NC}"
+    echo ""
+    echo "  ${GREEN}@acp.package-install${NC}            - Install ACP packages from GitHub"
+    echo "  ${GREEN}@acp.package-list${NC}               - List installed packages"
+    echo "  ${GREEN}@acp.package-update${NC}             - Update installed packages"
+    echo "  ${GREEN}@acp.package-remove${NC}             - Remove installed packages"
+    echo "  ${GREEN}@acp.package-info${NC}               - Show package details"
+    echo "  ${GREEN}@acp.package-search${NC}             - Search for packages on GitHub"
+    echo ""
+    echo "${BLUE}Git Commands Available:${NC}"
+    echo ""
+    echo "  ${GREEN}@git.init${NC}                       - Initialize git repository with smart .gitignore"
+    echo "  ${GREEN}@git.commit${NC}                     - Intelligent version-aware git commit"
+}

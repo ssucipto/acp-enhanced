@@ -5,6 +5,16 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.2] - 2026-02-18
+
+### Changed
+- **Command Display**: Refactored command list display into shared `display_available_commands()` function
+  - Added new function in `acp.common.sh` for consistent command display
+  - Updated `acp.install.sh` to use shared function
+  - Updated `acp.version-update.sh` to use shared function
+  - Now displays all 19 commands including 6 package management commands
+  - Eliminates code duplication (reduced from 40+ lines to 1 function call)
+
 ## [2.1.1] - 2026-02-18
 
 ### Fixed
