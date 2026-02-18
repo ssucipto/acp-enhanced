@@ -46,17 +46,18 @@ milestones:
   - id: M3
     name: ACP Package Management System
     status: in_progress
-    progress: 11
+    progress: 22
     started: 2026-02-18
     completed: null
     estimated_weeks: 5-7
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 9
     notes: |
       Milestone 3: Comprehensive package management for ACP modules.
       ✅ Task 5 complete - Manifest system foundation implemented
+      ✅ Task 6 complete - Selective installation implemented
       - Manifest system with version tracking ✅
-      - Selective installation (by type and file) 📋
+      - Selective installation (by type and file) ✅
       - Update system with conflict detection 📋
       - Package management commands (list, remove, info, search) 📋
       - GitHub API-based package discovery 📋
@@ -157,12 +158,17 @@ tasks:
     
     - id: task-6
       name: Selective Installation
-      status: not_started
+      status: completed
       file: agent/tasks/task-6-selective-installation.md
       estimated_hours: 4-6
-      completed_date: null
+      completed_date: 2026-02-18
       notes: |
-        Implement --patterns, --commands, --designs flags and file-level selection.
+        ✅ Selective installation complete!
+        - Added command-line argument parsing for --patterns, --commands, --designs
+        - Implemented --list mode to preview available files
+        - File-level selection support (specify individual files)
+        - Automatic .md extension handling
+        - Updated acp.package-install.md with comprehensive examples
     
     - id: task-7
       name: Update System
@@ -243,6 +249,35 @@ progress:
   overall: 100
 
 recent_work:
+  - date: 2026-02-18
+    description: |
+      ✅ Task 6 Complete: Selective Installation
+      Users can now install specific types or files from packages instead of everything.
+    items:
+      - ✅ Added command-line argument parsing for selective flags:
+        - --patterns [files...] - Install patterns (all or specific)
+        - --commands [files...] - Install commands (all or specific)
+        - --designs [files...] - Install designs (all or specific)
+        - --list - Preview available files without installing
+        - -y/--yes - Skip confirmation prompts
+      - ✅ Implemented --list mode:
+        - Shows all available patterns, commands, and designs
+        - Displays file counts per category
+        - Provides usage examples
+        - No files installed, no manifest modified
+      - ✅ Implemented selective installation logic:
+        - Type-selective: Install only patterns, commands, or designs
+        - File-selective: Install specific files by name
+        - Automatic .md extension handling
+        - Same validation as full installation
+        - Manifest tracks partial installations
+      - ✅ Updated acp.package-install.md documentation:
+        - Added "Choose Installation Mode" section
+        - Documented all installation modes with examples
+        - Clear usage patterns for each mode
+      - ✅ Milestone 3 progress: 22% (2/9 tasks complete)
+      - 📋 Next: Task 7 - Update System (5-7 hours)
+  
   - date: 2026-02-18
     description: |
       ✅ Task 5 Complete: Manifest System Implementation

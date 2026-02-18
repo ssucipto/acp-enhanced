@@ -82,32 +82,71 @@ packages:
 
 ## Steps
 
-### 1. Run Package Install Script
+### 1. Choose Installation Mode
 
-Execute the package installation script with the repository URL.
+Decide what to install from the package.
+
+**Installation Modes**:
+
+**A. Full Installation** (default):
+```bash
+./agent/scripts/acp.package-install.sh <repository-url>
+```
+Installs all patterns, commands, and designs from the package.
+
+**B. List Mode** (preview files):
+```bash
+./agent/scripts/acp.package-install.sh --list <repository-url>
+```
+Shows available files without installing anything.
+
+**C. Type-Selective Installation**:
+```bash
+# Install only patterns
+./agent/scripts/acp.package-install.sh --patterns <repository-url>
+
+# Install only commands
+./agent/scripts/acp.package-install.sh --commands <repository-url>
+
+# Install patterns and commands (not designs)
+./agent/scripts/acp.package-install.sh --patterns --commands <repository-url>
+```
+
+**D. File-Selective Installation**:
+```bash
+# Install specific patterns
+./agent/scripts/acp.package-install.sh --patterns file1 file2 <repository-url>
+
+# Install specific commands
+./agent/scripts/acp.package-install.sh --commands deploy.production <repository-url>
+
+# Mix types and files
+./agent/scripts/acp.package-install.sh --patterns file1 --commands cmd1 cmd2 <repository-url>
+```
+
+**Note**: File names can be specified with or without `.md` extension.
+
+### 2. Run Package Install Script
+
+Execute the package installation script with chosen options.
 
 **Actions**:
-- Verify `./agent/scripts/package-acp.install.sh` exists
-- Run the script with repository URL as argument:
-  ```bash
-  # Interactive mode (asks for confirmation)
-  ./agent/scripts/package-acp.install.sh <repository-url>
-  
-  # Auto-confirm mode (skips prompts)
-  ./agent/scripts/package-acp.install.sh -y <repository-url>
-  ```
+- Verify `./agent/scripts/acp.package-install.sh` exists
+- Run the script with desired flags and repository URL
 - The script will:
   - Validate the repository URL
   - Clone the repository to a temporary location
   - Scan agent/ directory for installable files (commands, patterns, design)
+  - Filter files based on selective flags (if any)
   - Validate command files (agent directive, namespace check)
   - Check for naming conflicts
   - Ask for confirmation (unless -y flag used)
-  - Copy files to respective agent/ directories
+  - Copy selected files to respective agent/ directories
+  - Update manifest with installed files
   - Clean up temporary files
   - Report what was installed
 
-**Expected Outcome**: Script completes successfully and files are installed
+**Expected Outcome**: Script completes successfully and selected files are installed
 
 ### 2. Review Installed Files
 
