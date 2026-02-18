@@ -90,8 +90,8 @@ else
             wget -q "$CHANGELOG_URL" -O - 2>/dev/null | head -n 50
         fi
         echo ""
-        echo "To update, run: ./agent/scripts/update.sh"
-        echo "Or: curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainlin./agent/scripts/update.sh | bash"
+        echo "To update, run: ./agent/scripts/acp.version-update.sh"
+        echo "Or: curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainlin./agent/scripts/acp.version-update.sh | bash"
     fi
     rm -f /tmp/AGENT.md.latest
     exit 1

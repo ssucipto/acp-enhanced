@@ -24,7 +24,7 @@ Implement a complete package management system for ACP that enables distribution
 - Installation timestamp tracking
 
 ### 2. Installation System
-- Enhanced `package-install.sh` script with manifest writing
+- Enhanced `package-acp.install.sh` script with manifest writing
 - Selective installation (by type: patterns/commands/designs)
 - File-level selective installation
 - Conflict detection and resolution
@@ -101,7 +101,7 @@ agent-context-protocol/
 │   │   └── acp.package-search.md
 │   └── scripts/
 │       ├── package-list.sh
-│       ├── package-update.sh
+│       ├── package-acp.version-update.sh
 │       ├── package-remove.sh
 │       ├── package-info.sh
 │       └── package-search.sh
@@ -114,11 +114,11 @@ agent-context-protocol/
 ### Task 5: Manifest System Implementation
 **Estimated Time**: 6-8 hours  
 **Priority**: High  
-**Description**: Create manifest structure and enhance package-install.sh to write manifest
+**Description**: Create manifest structure and enhance package-acp.install.sh to write manifest
 
 **Deliverables**:
 - `agent/manifest.yaml` structure and schema
-- Enhanced `package-install.sh` with manifest writing
+- Enhanced `package-acp.install.sh` with manifest writing
 - Checksum calculation and tracking
 - Package metadata tracking
 
@@ -140,7 +140,7 @@ agent-context-protocol/
 
 **Deliverables**:
 - `@acp.package-update` command
-- `scripts/package-update.sh`
+- `scripts/package-acp.version-update.sh`
 - Version comparison logic
 - Checksum-based modification detection
 - Conflict resolution

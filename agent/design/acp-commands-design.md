@@ -167,7 +167,7 @@ Replaces: "AGENT.md: Initialize"
 **Purpose**: Bootstrap agent context and prepare for work
 
 **Steps**:
-1. Check for ACP updates (`./agent/scripts/check-for-updates.sh`)
+1. Check for ACP updates (`./agent/scripts/acp.version-check-for-updates.sh`)
 2. Read all files in `agent/` directory
 3. Read key source files based on project type
 4. Update stale documentation
@@ -220,7 +220,7 @@ Replaces: "AGENT.md: Update"
 **Purpose**: Update ACP files to latest version
 
 **Steps**:
-1. Run `./agent/scripts/update.sh`
+1. Run `./agent/scripts/acp.version-update.sh`
 2. Review changes
 3. Report what was updated
 4. Suggest next actions

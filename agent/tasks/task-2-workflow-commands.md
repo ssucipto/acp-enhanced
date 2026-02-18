@@ -37,7 +37,7 @@ Fill in:
 - **Frequency**: Once per session
 
 **Steps to document**:
-1. Check for ACP updates (`./agent/scripts/check-for-updates.sh`)
+1. Check for ACP updates (`./agent/scripts/acp.version-check-for-updates.sh`)
 2. Read all files in `agent/` directory
 3. Read key source files based on project type
 4. Update stale documentation

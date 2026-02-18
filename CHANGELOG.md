@@ -5,14 +5,51 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-02-18
+
+### Changed
+- **BREAKING**: All core ACP scripts renamed with `acp.` prefix for namespace protection
+  - `check-for-updates.sh` → `acp.version-check-for-updates.sh`
+  - `common.sh` → `acp.common.sh`
+  - `install.sh` → `acp.install.sh`
+  - `package-install.sh` → `acp.package-install.sh`
+  - `uninstall.sh` → `acp.uninstall.sh`
+  - `update.sh` → `acp.version-update.sh`
+  - `version.sh` → `acp.version-check.sh`
+  - `yaml.sh` → `acp.yaml.sh`
+- **BREAKING**: Script names now perfectly align with command names
+  - `@acp.version-check` → `acp.version-check.sh`
+  - `@acp.version-update` → `acp.version-update.sh`
+  - `@acp.package-install` → `acp.package-install.sh`
+- Installation and update scripts now automatically remove deprecated script names
+- All 84+ references updated across documentation
+
+### Added
+- `cleanup_deprecated_scripts()` function in `acp.common.sh`
+- Automatic cleanup of old script names during install/update
+
+### Migration Guide
+**For Users**: No action required if using commands (`@acp.*`)
+- Commands still work the same way
+- Scripts are called internally by ACP
+
+**For Direct Script Users**: Update script paths
+- Old: `./agent/scripts/update.sh`
+- New: `./agent/scripts/acp.version-update.sh`
+
+**Why This Change**:
+- Enables third-party packages to add their own scripts without conflicts
+- Perfect alignment between command names and script names
+- Clear namespace ownership (`acp.*` = core, `firebase.*` = firebase package)
+
 ## [1.4.3] - 2026-02-16
 
 ### Fixed
 - **Script Color Output**: Updated remaining shell scripts to use `tput` for colors
-  - Updated check-for-updates.sh to use tput pattern
-  - Updated uninstall.sh to use tput pattern
-  - Updated version.sh to use tput pattern
-  - Updated package-install.sh to use tput pattern
+  - Updated acp.version-check-for-updates.sh to use tput pattern
+  - Updated unacp.install.sh to use tput pattern
+  - Updated acp.version-check.sh to use tput pattern
+  - Updated package-acp.install.sh to use tput pattern
   - All 6 scripts now use consistent, reliable color handling
   - Removed `echo -e` flags (not needed with tput)
   - Colors work correctly across all shells (bash, sh, zsh)
@@ -20,7 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.4.2] - 2026-02-16
 
 ### Changed
-- **Script Output**: Added "Git Commands Available" section to install.sh and update.sh
+- **Script Output**: Added "Git Commands Available" section to acp.install.sh and acp.version-update.sh
   - Separate section highlighting @git.init and @git.commit commands
   - Improves discoverability of git workflow commands for new users
   - Clear separation between ACP commands and Git commands
@@ -28,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.4.1] - 2026-02-16
 
 ### Fixed
-- **Script Color Output**: Fixed color output in install.sh and update.sh
+- **Script Color Output**: Fixed color output in acp.install.sh and acp.version-update.sh
   - Replaced unreliable ANSI escape codes with `tput` commands
   - Colors now work correctly across all shells (bash, sh, zsh)
   - No more literal escape character output
@@ -107,15 +144,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reports are now generated locally but not committed to git
 
 ### Changed
-- `install.sh` now creates `agent/.gitignore` and `agent/reports/` directory
-- `update.sh` ensures `agent/.gitignore` exists for users updating from older versions
+- `acp.install.sh` now creates `agent/.gitignore` and `agent/reports/` directory
+- `acp.version-update.sh` ensures `agent/.gitignore` exists for users updating from older versions
 
 ## [1.2.1] - 2026-02-16
 
 ### Changed
 - Updated installation scripts to display new ACP command format
-- `install.sh` now shows all 11 ACP commands with descriptions
-- `update.sh` now shows all 11 ACP commands with descriptions
+- `acp.install.sh` now shows all 11 ACP commands with descriptions
+- `acp.version-update.sh` now shows all 11 ACP commands with descriptions
 - Replaced old "AGENT.md: Initialize" prompt format with `@acp.init` command
 - Improved user experience for new installations and updates
 
@@ -123,7 +160,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Package Installation Enhancements**:
-  - `agent/scripts/package-install.sh` script for automated package installation
+  - `agent/scripts/package-acp.install.sh` script for automated package installation
   - Support for installing patterns and design documents (not just commands)
   - `-y` flag to skip confirmation prompts for automated installations
   - Multi-directory installation from agent/ (commands, patterns, design)
@@ -196,9 +233,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - TypeScript service layer pattern (applicable to any TypeScript project)
 
 - **Installation & Update Scripts**:
-  - `scripts/install.sh` - Automated installation (run from project root)
-  - `scripts/update.sh` - Direct file updates (git handles diffs)
-  - `scripts/check-for-updates.sh` - Automatic update checking with changelog display
+  - `scripts/acp.install.sh` - Automated installation (run from project root)
+  - `scripts/acp.version-update.sh` - Direct file updates (git handles diffs)
+  - `scripts/acp.version-check-for-updates.sh` - Automatic update checking with changelog display
 
 - **Documentation**:
   - README with quick start guide and example projects

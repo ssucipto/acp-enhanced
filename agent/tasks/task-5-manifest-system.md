@@ -10,7 +10,7 @@
 
 ## Objective
 
-Create the `agent/manifest.yaml` structure and enhance `package-install.sh` to write manifest entries when packages are installed, including package metadata, file versions, and checksums for modification tracking.
+Create the `agent/manifest.yaml` structure and enhance `package-acp.install.sh` to write manifest entries when packages are installed, including package metadata, file versions, and checksums for modification tracking.
 
 ---
 
@@ -80,12 +80,12 @@ last_updated: null
 
 ### 3. Implement Manifest Writing Functions
 
-**✅ COMPLETED**: Created `agent/scripts/common.sh` with shared utilities.
+**✅ COMPLETED**: Created `agent/scripts/acp.common.sh` with shared utilities.
 
 **Implementation Notes**:
-- Using `yaml.sh` parser instead of `yq` (no external dependencies)
+- Using `acp.yaml.sh` parser instead of `yq` (no external dependencies)
 - Created POSIX-compliant shared library
-- Functions available in `common.sh`:
+- Functions available in `acp.common.sh`:
   - `init_manifest()` - ✅ Implemented
   - `calculate_checksum()` - ✅ Implemented
   - `validate_manifest()` - ✅ Implemented
@@ -93,15 +93,15 @@ last_updated: null
   - `package_exists()` - ✅ Implemented
 
 **Still Needed**:
-- `add_package_to_manifest()` - Uses `yaml.sh` functions
-- `add_file_to_manifest()` - Uses `yaml.sh` functions
-- `parse_package_metadata()` - Uses `yaml.sh` functions
-- `get_file_version()` - Uses `yaml.sh` functions
+- `add_package_to_manifest()` - Uses `acp.yaml.sh` functions
+- `add_file_to_manifest()` - Uses `acp.yaml.sh` functions
+- `parse_package_metadata()` - Uses `acp.yaml.sh` functions
+- `get_file_version()` - Uses `acp.yaml.sh` functions
 
-**Example using yaml.sh**:
+**Example using acp.yaml.sh**:
 ```bash
-# Source common.sh and yaml.sh
-. "$(dirname "$0")/common.sh"
+# Source acp.common.sh and acp.yaml.sh
+. "$(dirname "$0")/acp.common.sh"
 source_yaml_parser
 
 # Add package to manifest (to be implemented)
@@ -112,7 +112,7 @@ add_package_to_manifest() {
   local commit_hash=$4
   local timestamp=$(get_timestamp)
   
-  # Use yaml.sh functions instead of yq
+  # Use acp.yaml.sh functions instead of yq
   yaml_set "agent/manifest.yaml" "packages.${package_name}.source" "$source_url"
   yaml_set "agent/manifest.yaml" "packages.${package_name}.package_version" "$package_version"
   yaml_set "agent/manifest.yaml" "packages.${package_name}.commit" "$commit_hash"
@@ -124,7 +124,7 @@ add_package_to_manifest() {
 
 ### 4. Parse package.yaml from Repository
 
-**TO BE IMPLEMENTED** in `common.sh` using `yaml.sh`:
+**TO BE IMPLEMENTED** in `acp.common.sh` using `acp.yaml.sh`:
 
 ```bash
 # Parse package.yaml from cloned repository
@@ -136,7 +136,7 @@ parse_package_metadata() {
     die "package.yaml not found in repository"
   fi
   
-  # Extract metadata using yaml.sh
+  # Extract metadata using acp.yaml.sh
   PACKAGE_NAME=$(yaml_get "$package_yaml" "name")
   PACKAGE_VERSION=$(yaml_get "$package_yaml" "version")
   PACKAGE_DESCRIPTION=$(yaml_get "$package_yaml" "description")
@@ -147,13 +147,13 @@ parse_package_metadata() {
 }
 
 # Get file version from package.yaml
-# Note: yaml.sh doesn't support array queries, so we'll need to parse differently
+# Note: acp.yaml.sh doesn't support array queries, so we'll need to parse differently
 get_file_version() {
   local package_yaml=$1
   local file_type=$2  # patterns, commands, designs
   local file_name=$3
   
-  # Extract version using grep/awk since yaml.sh doesn't support array queries
+  # Extract version using grep/awk since acp.yaml.sh doesn't support array queries
   awk "/^  ${file_type}:/,/^  [a-z]/ {
     if (/- name: ${file_name}/) { found=1; next }
     if (found && /version:/) { print \$2; exit }
@@ -163,7 +163,7 @@ get_file_version() {
 
 ### 5. Integrate Manifest Writing into Installation Flow
 
-Update `package-install.sh` main flow:
+Update `package-acp.install.sh` main flow:
 
 ```bash
 # Main installation flow
@@ -241,15 +241,15 @@ Test the manifest system:
 
 ### 7. Implement Manifest Validation
 
-**✅ COMPLETED**: Implemented in `agent/scripts/common.sh`.
+**✅ COMPLETED**: Implemented in `agent/scripts/acp.common.sh`.
 
 **Implementation Notes**:
-- `validate_manifest()` function available in `common.sh`
-- Uses `yaml.sh` parser for validation
+- `validate_manifest()` function available in `acp.common.sh`
+- Uses `acp.yaml.sh` parser for validation
 - Checks required fields (manifest_version, package metadata)
 - Returns 0 if valid, 1 if invalid
 
-See [`agent/scripts/common.sh`](../scripts/common.sh) for implementation.
+See [`agent/scripts/acp.common.sh`](../scripts/acp.common.sh) for implementation.
 
 ### 8. Document Manifest Format
 
@@ -294,7 +294,7 @@ This enables:
 ## Files to Create
 
 1. `agent/manifest.template.yaml` - Manifest template
-2. Functions in `scripts/package-install.sh`:
+2. Functions in `scripts/package-acp.install.sh`:
    - `init_manifest()`
    - `calculate_checksum()`
    - `add_package_to_manifest()`
@@ -307,7 +307,7 @@ This enables:
 
 ## Files to Modify
 
-1. `scripts/package-install.sh` - Add manifest writing
+1. `scripts/package-acp.install.sh` - Add manifest writing
 2. `commands/acp.package-install.md` - Document manifest
 
 ---
@@ -328,8 +328,8 @@ This enables:
 
 ## Common Issues
 
-### Issue 1: yaml.sh limitations
-**Issue**: yaml.sh doesn't support complex array queries
+### Issue 1: acp.yaml.sh limitations
+**Issue**: acp.yaml.sh doesn't support complex array queries
 **Solution**: Use awk/grep for array parsing (see `get_file_version()` implementation)
 
 ### Issue 2: Checksum mismatch on Windows
@@ -340,9 +340,9 @@ This enables:
 **Issue**: Manual edits or script errors corrupt manifest
 **Solution**: Use `validate_manifest()` before operations, keep backups
 
-### Issue 4: common.sh not found
-**Issue**: Script can't find common.sh
-**Solution**: Ensure common.sh is in same directory, use `. "$(dirname "$0")/common.sh"`
+### Issue 4: acp.common.sh not found
+**Issue**: Script can't find acp.common.sh
+**Solution**: Ensure acp.common.sh is in same directory, use `. "$(dirname "$0")/acp.common.sh"`
 
 ---
 

@@ -183,7 +183,7 @@ validate_project_dependencies() {
 
 ### 4. Integrate into Installation Flow
 
-Update `scripts/package-install.sh`:
+Update `scripts/package-acp.install.sh`:
 
 ```bash
 # In main installation flow, after parsing package.yaml:
@@ -282,7 +282,7 @@ validate_semver() {
 
 ## Files to Modify
 
-1. `scripts/package-install.sh` - Add dependency checking
+1. `scripts/package-acp.install.sh` - Add dependency checking
 
 ---
 

@@ -63,10 +63,10 @@ Research and test these bash YAML libraries:
 
 ```bash
 # Download parse_yaml
-curl -s https://raw.githubusercontent.com/mrbaseman/parse_yaml/master/src/parse_yaml.sh > scripts/yaml-read.sh
+curl -s https://raw.githubusercontent.com/mrbaseman/parse_yaml/master/src/parse_acp.yaml.sh > scripts/acp.yaml-read.sh
 
 # Test reading
-source scripts/yaml-read.sh
+source scripts/acp.yaml-read.sh
 eval $(parse_yaml package.yaml "pkg_")
 echo $pkg_version  # Outputs version from package.yaml
 ```

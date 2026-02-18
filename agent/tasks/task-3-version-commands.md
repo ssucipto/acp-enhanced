@@ -31,7 +31,7 @@ Implement the three version management commands: `@acp-version-check`, `@acp-ver
 **Purpose**: Check if ACP updates are available without applying them
 
 **Steps to document**:
-1. Run `./agent/scripts/check-for-updates.sh`
+1. Run `./agent/scripts/acp.version-check-for-updates.sh`
 2. Report if updates are available
 3. Show what changed (from CHANGELOG)
 4. Ask if user wants to update
@@ -42,7 +42,7 @@ Implement the three version management commands: `@acp-version-check`, `@acp-ver
 **Purpose**: Update ACP files to latest version
 
 **Steps to document**:
-1. Run `./agent/scripts/update.sh`
+1. Run `./agent/scripts/acp.version-update.sh`
 2. Review changes
 3. Report what was updated
 4. Suggest next actions

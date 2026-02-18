@@ -43,7 +43,7 @@ If it doesn't exist, it should be created from the design document.
 
 ### 3. Update Installation Scripts
 
-Verify that `scripts/install.sh` and `scripts/update.sh` include logic to:
+Verify that `scripts/acp.install.sh` and `scripts/acp.version-update.sh` include logic to:
 - Copy `command.template.md`
 - Copy all files from command namespace subdirectories
 - Create `agent/commands/` directory

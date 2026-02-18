@@ -24,7 +24,7 @@ Users often only need specific patterns or commands from a package. Installing e
 
 ### 1. Add Command-Line Argument Parsing
 
-Enhance `scripts/package-install.sh` to parse flags:
+Enhance `scripts/package-acp.install.sh` to parse flags:
 
 ```bash
 #!/bin/bash
@@ -286,7 +286,7 @@ fi
 
 ## Files to Modify
 
-1. `scripts/package-install.sh` - Add argument parsing and selective installation
+1. `scripts/package-acp.install.sh` - Add argument parsing and selective installation
 2. `commands/acp.package-install.md` - Document new flags
 
 ---

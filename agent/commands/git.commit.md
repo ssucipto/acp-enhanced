@@ -342,7 +342,7 @@ Version: 1.3.0
 
 ### Example 2: Bug Fix (Patch Version)
 
-**Context**: Fixed syntax error in update.sh
+**Context**: Fixed syntax error in acp.version-update.sh
 
 **Detection**:
 - Bug fix only
@@ -355,13 +355,13 @@ Version: 1.3.0
 ## [1.2.4] - 2026-02-16
 
 ### Fixed
-- Syntax error in update.sh script
+- Syntax error in acp.version-update.sh script
 - Script now runs without errors
 ```
 
 **Commit Message**:
 ```
-fix: resolve syntax error in update.sh script
+fix: resolve syntax error in acp.version-update.sh script
 
 Fixed bash syntax error that prevented update script from running.
 

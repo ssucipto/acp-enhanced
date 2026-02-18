@@ -24,7 +24,7 @@ Packages evolve over time with bug fixes, new features, and improvements. The up
 
 ### 1. Create Update Command Script
 
-Create `scripts/package-update.sh`:
+Create `scripts/package-acp.version-update.sh`:
 
 ```bash
 #!/bin/bash

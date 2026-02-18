@@ -839,7 +839,7 @@ dependencies:
 
 **Deliverables**:
 1. Create `agent/manifest.yaml` manifest structure
-2. Enhance `package-install.sh` to write manifest
+2. Enhance `package-acp.install.sh` to write manifest
 3. Implement `@acp.package-list` command
 4. Add package metadata tracking (source, version, commit)
 5. Test basic installation and listing
@@ -849,7 +849,7 @@ dependencies:
 - `commands/acp.package-list.md`
 
 **Files to Modify**:
-- `scripts/package-install.sh` (add manifest writing)
+- `scripts/package-acp.install.sh` (add manifest writing)
 - `commands/acp.package-install.md` (document manifest)
 
 ---
@@ -865,7 +865,7 @@ dependencies:
 5. Test selective installation
 
 **Files to Modify**:
-- `scripts/package-install.sh` (add selective installation)
+- `scripts/package-acp.install.sh` (add selective installation)
 - `commands/acp.package-install.md` (document options)
 
 ---
@@ -882,7 +882,7 @@ dependencies:
 
 **Files to Create**:
 - `commands/acp.package-update.md`
-- `scripts/package-update.sh`
+- `scripts/package-acp.version-update.sh`
 
 ---
 
@@ -909,7 +909,7 @@ dependencies:
 
 ```bash
 # 1. Initialize ACP
-curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/scripts/acp.install.sh | bash
 
 # 2. Install packages
 @acp.package-install https://github.com/prmichaelsen/acp-firebase.git
