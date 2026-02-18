@@ -46,19 +46,20 @@ milestones:
   - id: M3
     name: ACP Package Management System
     status: in_progress
-    progress: 22
+    progress: 33
     started: 2026-02-18
     completed: null
     estimated_weeks: 5-7
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 9
     notes: |
       Milestone 3: Comprehensive package management for ACP modules.
       ✅ Task 5 complete - Manifest system foundation implemented
       ✅ Task 6 complete - Selective installation implemented
+      ✅ Task 7 complete - Update system with conflict detection
       - Manifest system with version tracking ✅
       - Selective installation (by type and file) ✅
-      - Update system with conflict detection 📋
+      - Update system with conflict detection ✅
       - Package management commands (list, remove, info, search) 📋
       - GitHub API-based package discovery 📋
 
@@ -172,12 +173,19 @@ tasks:
     
     - id: task-7
       name: Update System
-      status: not_started
+      status: completed
       file: agent/tasks/task-7-update-system.md
       estimated_hours: 5-7
-      completed_date: null
+      completed_date: 2026-02-18
       notes: |
-        Implement package update system with conflict detection.
+        ✅ Update system complete!
+        - Created acp.package-update.sh script with full update logic
+        - Implemented version comparison (compare_versions in acp.common.sh)
+        - Checksum-based modification detection (is_file_modified)
+        - Conflict resolution with --skip-modified and --force flags
+        - Update all packages or specific package
+        - --check mode to preview updates
+        - Created acp.package-update.md command documentation
     
     - id: task-8
       name: Package List Command
@@ -249,6 +257,36 @@ progress:
   overall: 100
 
 recent_work:
+  - date: 2026-02-18
+    description: |
+      ✅ Task 7 Complete: Update System
+      Smart package updates with version comparison and conflict detection implemented.
+    items:
+      - ✅ Implemented version comparison in acp.common.sh:
+        - compare_versions() - Semantic version comparison using sort -V
+        - is_file_modified() - Checksum-based modification detection
+        - update_file_in_manifest() - Update file metadata in manifest
+      - ✅ Created acp.package-update.sh script:
+        - Update all packages or specific package
+        - --check mode to preview updates
+        - --skip-modified to preserve local changes
+        - --force to overwrite everything
+        - -y/--yes for auto-confirmation
+      - ✅ Implemented smart update logic:
+        - Clones latest version from repository
+        - Compares current vs remote versions
+        - Detects locally modified files via checksums
+        - Prompts for conflict resolution
+        - Updates only unmodified files (or all with --force)
+        - Updates manifest with new versions and checksums
+      - ✅ Created acp.package-update.md command documentation:
+        - Documented all update modes and flags
+        - 5 usage examples covering common scenarios
+        - Troubleshooting section
+        - Security considerations
+      - ✅ Milestone 3 progress: 33% (3/9 tasks complete)
+      - 📋 Next: Task 8 - Package List Command (2-3 hours)
+  
   - date: 2026-02-18
     description: |
       ✅ Task 6 Complete: Selective Installation

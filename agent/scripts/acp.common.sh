@@ -366,3 +366,120 @@ get_commit_hash() {
     
     (cd "$repo_dir" && git rev-parse HEAD 2>/dev/null) || echo "unknown"
 }
+
+# Compare semantic versions
+# Usage: compare_versions "1.2.3" "1.3.0"
+# Returns: "newer" if remote > current, "same" if equal, "older" if remote < current
+compare_versions() {
+    local current="$1"
+    local remote="$2"
+    
+    if [ "$current" = "$remote" ]; then
+        echo "same"
+        return 0
+    fi
+    
+    # Use sort -V for version comparison
+    local older
+    older=$(printf '%s\n%s\n' "$current" "$remote" | sort -V | head -n1)
+    
+    if [ "$older" = "$current" ]; then
+        echo "newer"
+    else
+        echo "older"
+    fi
+}
+
+# Check if file was modified locally
+# Usage: is_file_modified "package_name" "file_type" "filename"
+# Returns: 0 if modified, 1 if not modified
+is_file_modified() {
+    local package_name="$1"
+    local file_type="$2"
+    local file_name="$3"
+    local manifest="agent/manifest.yaml"
+    
+    # Get stored checksum from manifest
+    local stored_checksum
+    stored_checksum=$(awk -v pkg="$package_name" -v type="$file_type" -v name="$file_name" '
+        BEGIN { in_pkg=0; in_type=0; in_file=0 }
+        $0 ~ "^  " pkg ":" { in_pkg=1; next }
+        in_pkg && /^  [a-z]/ && !/^    / { in_pkg=0 }
+        in_pkg && $0 ~ "^      " type ":" { in_type=1; next }
+        in_type && /^      [a-z]/ && !/^        / { in_type=0 }
+        in_type && /^        - name:/ {
+            if ($3 == name) { in_file=1 }
+            else { in_file=0 }
+            next
+        }
+        in_file && /^          checksum:/ {
+            gsub(/sha256:/, "", $2)
+            print $2
+            exit
+        }
+    ' "$manifest")
+    
+    if [ -z "$stored_checksum" ]; then
+        warn "No checksum found in manifest for $file_type/$file_name"
+        return 1
+    fi
+    
+    # Calculate current checksum
+    local current_checksum
+    current_checksum=$(calculate_checksum "agent/${file_type}/${file_name}")
+    
+    if [ "$stored_checksum" != "$current_checksum" ]; then
+        return 0  # Modified
+    else
+        return 1  # Not modified
+    fi
+}
+
+# Update file entry in manifest
+# Usage: update_file_in_manifest "package_name" "file_type" "filename" "new_version" "new_checksum"
+update_file_in_manifest() {
+    local package_name="$1"
+    local file_type="$2"
+    local file_name="$3"
+    local new_version="$4"
+    local new_checksum="$5"
+    local timestamp
+    timestamp=$(get_timestamp)
+    
+    local manifest="agent/manifest.yaml"
+    
+    # Update using awk to modify in place
+    # This is complex with acp.yaml.sh, so we'll use a temp file approach
+    local temp_file
+    temp_file=$(mktemp)
+    
+    awk -v pkg="$package_name" -v type="$file_type" -v name="$file_name" \
+        -v ver="$new_version" -v chk="sha256:$new_checksum" -v ts="$timestamp" '
+        BEGIN { in_pkg=0; in_type=0; in_file=0 }
+        $0 ~ "^  " pkg ":" { in_pkg=1; print; next }
+        in_pkg && /^  [a-z]/ && !/^    / { in_pkg=0; print; next }
+        in_pkg && $0 ~ "^      " type ":" { in_type=1; print; next }
+        in_type && /^      [a-z]/ && !/^        / { in_type=0; print; next }
+        in_type && /^        - name:/ {
+            if ($3 == name) { in_file=1 }
+            else { in_file=0 }
+            print
+            next
+        }
+        in_file && /^          version:/ {
+            print "          version: " ver
+            next
+        }
+        in_file && /^          checksum:/ {
+            print "          checksum: " chk
+            next
+        }
+        in_file && /^          modified:/ {
+            print "          modified: false"
+            next
+        }
+        { print }
+    ' "$manifest" > "$temp_file"
+    
+    mv "$temp_file" "$manifest"
+}
