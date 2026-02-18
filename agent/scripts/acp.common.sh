@@ -483,3 +483,266 @@ update_file_in_manifest() {
     
     mv "$temp_file" "$manifest"
 }
+
+# ============================================================================
+# Dependency Checking Functions
+# ============================================================================
+
+# Detect project package manager
+# Usage: detect_package_manager
+# Returns: npm, pip, cargo, go, or unknown
+detect_package_manager() {
+    if [ -f "package.json" ]; then
+        echo "npm"
+    elif [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
+        echo "pip"
+    elif [ -f "Cargo.toml" ]; then
+        echo "cargo"
+    elif [ -f "go.mod" ]; then
+        echo "go"
+    else
+        echo "unknown"
+    fi
+}
+
+# Check npm dependency
+# Usage: check_npm_dependency "dep_name" "required_version"
+# Returns: installed version or "not-installed"
+check_npm_dependency() {
+    local dep_name="$1"
+    local required_version="$2"
+    
+    if [ ! -f "package.json" ]; then
+        echo "not-installed"
+        return 1
+    fi
+    
+    # Check if jq is available
+    if ! command -v jq >/dev/null 2>&1; then
+        warn "jq not found, skipping npm dependency check"
+        echo "unknown"
+        return 0
+    fi
+    
+    # Get installed version
+    local installed_version
+    installed_version=$(jq -r ".dependencies.\"${dep_name}\" // .devDependencies.\"${dep_name}\" // \"not-installed\"" package.json 2>/dev/null)
+    
+    if [ "$installed_version" = "not-installed" ] || [ "$installed_version" = "null" ]; then
+        echo "not-installed"
+        return 1
+    fi
+    
+    # Remove ^ ~ >= etc for display
+    installed_version=$(echo "$installed_version" | sed 's/[\^~>=<]//g')
+    
+    echo "$installed_version"
+    return 0
+}
+
+# Check pip dependency
+# Usage: check_pip_dependency "dep_name" "required_version"
+# Returns: installed version or "not-installed"
+check_pip_dependency() {
+    local dep_name="$1"
+    local required_version="$2"
+    
+    # Check requirements.txt
+    if [ -f "requirements.txt" ]; then
+        local version
+        version=$(grep "^${dep_name}" requirements.txt 2>/dev/null | cut -d'=' -f2 | head -n1)
+        if [ -n "$version" ]; then
+            echo "$version"
+            return 0
+        fi
+    fi
+    
+    # Check pyproject.toml
+    if [ -f "pyproject.toml" ]; then
+        local version
+        version=$(grep "${dep_name}" pyproject.toml 2>/dev/null | grep -oP '\d+\.\d+\.\d+' | head -n1)
+        if [ -n "$version" ]; then
+            echo "$version"
+            return 0
+        fi
+    fi
+    
+    echo "not-installed"
+    return 1
+}
+
+# Check cargo dependency
+# Usage: check_cargo_dependency "dep_name" "required_version"
+# Returns: installed version or "not-installed"
+check_cargo_dependency() {
+    local dep_name="$1"
+    local required_version="$2"
+    
+    if [ ! -f "Cargo.toml" ]; then
+        echo "not-installed"
+        return 1
+    fi
+    
+    local version
+    version=$(grep "^${dep_name}" Cargo.toml 2>/dev/null | grep -oP '\d+\.\d+\.\d+' | head -n1)
+    
+    if [ -n "$version" ]; then
+        echo "$version"
+        return 0
+    fi
+    
+    echo "not-installed"
+    return 1
+}
+
+# Check go dependency
+# Usage: check_go_dependency "dep_name" "required_version"
+# Returns: installed version or "not-installed"
+check_go_dependency() {
+    local dep_name="$1"
+    local required_version="$2"
+    
+    if [ ! -f "go.mod" ]; then
+        echo "not-installed"
+        return 1
+    fi
+    
+    local version
+    version=$(grep "${dep_name}" go.mod 2>/dev/null | grep -oP 'v\d+\.\d+\.\d+' | sed 's/^v//' | head -n1)
+    
+    if [ -n "$version" ]; then
+        echo "$version"
+        return 0
+    fi
+    
+    echo "not-installed"
+    return 1
+}
+
+# Validate project dependencies
+# Usage: validate_project_dependencies "package_yaml_path"
+# Returns: 0 if valid or user confirms, 1 if invalid and user cancels
+validate_project_dependencies() {
+    local package_yaml="$1"
+    local package_manager
+    package_manager=$(detect_package_manager)
+    
+    if [ "$package_manager" = "unknown" ]; then
+        info "No package manager detected, skipping dependency check"
+        return 0
+    fi
+    
+    echo ""
+    echo "${BLUE}Checking project dependencies ($package_manager)...${NC}"
+    echo ""
+    
+    # Source YAML parser if not already loaded
+    if ! command -v yaml_get >/dev/null 2>&1; then
+        source_yaml_parser || return 1
+    fi
+    
+    # Check if requires section exists
+    local has_requires
+    has_requires=$(grep -c "^requires:" "$package_yaml" 2>/dev/null || echo "0")
+    
+    if [ "$has_requires" -eq 0 ]; then
+        success "No project dependencies required"
+        return 0
+    fi
+    
+    # Check if package manager section exists
+    local has_pm_section
+    has_pm_section=$(grep -c "^  ${package_manager}:" "$package_yaml" 2>/dev/null || echo "0")
+    
+    if [ "$has_pm_section" -eq 0 ]; then
+        success "No ${package_manager} dependencies required"
+        return 0
+    fi
+    
+    local has_incompatible=false
+    local dep_count=0
+    
+    # Parse dependencies using awk
+    while IFS=: read -r dep_name required_version; do
+        # Skip empty lines and section headers
+        [ -z "$dep_name" ] && continue
+        [[ "$dep_name" =~ ^[[:space:]]*$ ]] && continue
+        [[ "$dep_name" =~ ^requires ]] && continue
+        [[ "$dep_name" =~ ^[[:space:]]*${package_manager} ]] && continue
+        
+        # Clean up whitespace
+        dep_name=$(echo "$dep_name" | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+        required_version=$(echo "$required_version" | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//' | tr -d '"' | tr -d "'")
+        
+        # Skip if not a dependency line
+        [[ ! "$dep_name" =~ ^[a-zA-Z0-9@/_-]+$ ]] && continue
+        
+        dep_count=$((dep_count + 1))
+        
+        # Check if installed
+        local installed_version=""
+        case $package_manager in
+            npm)
+                installed_version=$(check_npm_dependency "$dep_name" "$required_version")
+                ;;
+            pip)
+                installed_version=$(check_pip_dependency "$dep_name" "$required_version")
+                ;;
+            cargo)
+                installed_version=$(check_cargo_dependency "$dep_name" "$required_version")
+                ;;
+            go)
+                installed_version=$(check_go_dependency "$dep_name" "$required_version")
+                ;;
+        esac
+        
+        if [ "$installed_version" = "not-installed" ]; then
+            echo "  ${RED}✗${NC} $dep_name: not installed (requires $required_version)"
+            has_incompatible=true
+        elif [ "$installed_version" = "unknown" ]; then
+            echo "  ${YELLOW}?${NC} $dep_name: unable to verify (requires $required_version)"
+        else
+            echo "  ${GREEN}✓${NC} $dep_name: $installed_version (requires $required_version)"
+        fi
+    done < <(awk -v pm="$package_manager" '
+        BEGIN { in_requires=0; in_pm=0 }
+        /^requires:/ { in_requires=1; next }
+        in_requires && /^[a-z]/ && !/^  / { in_requires=0 }
+        in_requires && $0 ~ "^  " pm ":" { in_pm=1; next }
+        in_pm && /^  [a-z]/ && !/^    / { in_pm=0 }
+        in_pm && /^    [a-zA-Z0-9@/_-]+:/ {
+            print $0
+        }
+    ' "$package_yaml")
+    
+    echo ""
+    
+    if [ "$dep_count" -eq 0 ]; then
+        success "No ${package_manager} dependencies required"
+        return 0
+    fi
+    
+    if [ "$has_incompatible" = true ]; then
+        echo "${YELLOW}⚠️  Some dependencies are missing or incompatible${NC}"
+        echo ""
+        echo "Recommendation:"
+        echo "  Install missing dependencies before using this package"
+        echo "  The package patterns may not work correctly without them"
+        echo ""
+        
+        # Only prompt if not in auto-confirm mode
+        if [ "${SKIP_CONFIRM:-false}" != "true" ]; then
+            read -p "Continue installation anyway? (y/N) " -n 1 -r
+            echo
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                return 1
+            fi
+        else
+            warn "Auto-confirm enabled, continuing despite missing dependencies"
+        fi
+    else
+        success "All dependencies satisfied"
+    fi
+    
+    return 0
+}
