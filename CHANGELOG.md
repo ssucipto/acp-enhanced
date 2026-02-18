@@ -5,6 +5,15 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.1] - 2026-02-18
+
+### Fixed
+- **Script Installation**: Install and update scripts now copy all *.sh files dynamically
+  - Previously hardcoded list was missing new package management scripts
+  - `acp.package-search.sh`, `acp.package-list.sh`, `acp.package-remove.sh`, `acp.package-info.sh`, `acp.package-update.sh` now properly installed
+  - Future-proof: any new scripts will be automatically copied
+  - Simplified code from 10 lines to 4 lines using find command
+
 ## [2.1.0] - 2026-02-18
 
 ### Added
