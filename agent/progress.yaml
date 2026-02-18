@@ -239,16 +239,31 @@ progress:
 recent_work:
   - date: 2026-02-18
     description: |
-      🚧 Task 5: Manifest System - Foundation Complete (50% progress)
+      🚨 BREAKING CHANGE: Script Namespace Refactoring (v2.0.0)
+      Renamed all core scripts with acp. prefix. Perfect command-script alignment achieved.
+    items:
+      - ✅ Renamed 8 core scripts with acp. prefix (check-for-updates → acp.version-check-for-updates, etc.)
+      - ✅ Perfect alignment: @acp.version-check → acp.version-check.sh
+      - ✅ Updated 84+ references across all documentation
+      - ✅ Added cleanup_deprecated_scripts() to acp.common.sh
+      - ✅ Updated install/update scripts to remove old script names
+      - ✅ Version bump: 1.4.3 → 2.0.0 (major - breaking change)
+      - ✅ Updated CHANGELOG.md with migration guide
+      - ✅ Enables third-party packages to add scripts without conflicts
+      - 📋 Namespace protection: acp.* = core, firebase.* = packages
+  
+  - date: 2026-02-18
+    description: |
+      � Task 5: Manifest System - Foundation Complete (50% progress)
       Created shared library and manifest template. Ready for integration phase.
     items:
       - ✅ Created agent/manifest.template.yaml for package tracking
-      - ✅ Created agent/scripts/common.sh - POSIX-compliant shared library
-      - ✅ Implemented 14 utility functions (colors, checksums, timestamps, validation)
+      - ✅ Created agent/scripts/acp.common.sh - POSIX-compliant shared library
+      - ✅ Implemented 19 utility functions (colors, checksums, timestamps, validation, cleanup)
       - ✅ Implemented 4 manifest functions (init, validate, update, package_exists)
       - ✅ Eliminated 90 lines of duplicated color code across 6 scripts
       - ✅ Foundation ready for package metadata parsing and integration
-      - 📋 Next: Add package.yaml parsing and integrate into package-install.sh
+      - 📋 Next: Add package.yaml parsing and integrate into acp.package-install.sh
       - 📋 Estimated remaining: 3-4 hours to complete Task 5
   
   - date: 2026-02-18
