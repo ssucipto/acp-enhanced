@@ -5,6 +5,33 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-02-18
+
+### Added
+- **Dependency Checking System**: Project dependency compatibility validation for npm, pip, cargo, and go packages
+  - Automatic package manager detection
+  - Version compatibility checking with color-coded output
+  - User prompts with recommendations for missing dependencies
+  - Integration with package installation flow
+  - Respects `--yes` flag for CI/CD automation
+- Added 6 dependency checking functions to `acp.common.sh`:
+  - `detect_package_manager()` - Detects npm/pip/cargo/go
+  - `check_npm_dependency()` - Validates npm packages
+  - `check_pip_dependency()` - Validates Python packages
+  - `check_cargo_dependency()` - Validates Rust packages
+  - `check_go_dependency()` - Validates Go packages
+  - `validate_project_dependencies()` - Main validation function
+
+### Changed
+- Enhanced `acp.package-install.sh` with dependency validation before installation
+- Updated project status to "completed" - all 3 milestones (16 tasks) complete
+- Milestone 3 progress: 78% → 100%
+
+### Verified
+- Pure bash YAML parser (`acp.yaml.sh`) already implemented and functional
+- Based on fiftydinar/yaml-parser (MIT license)
+- Provides yaml_get(), yaml_set(), yaml_has_key(), yaml_get_array()
+
 ## [2.0.0] - 2026-02-18
 
 ### Changed
