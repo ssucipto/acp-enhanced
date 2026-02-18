@@ -46,11 +46,11 @@ milestones:
   - id: M3
     name: ACP Package Management System
     status: in_progress
-    progress: 44
+    progress: 56
     started: 2026-02-18
     completed: null
     estimated_weeks: 5-7
-    tasks_completed: 4
+    tasks_completed: 5
     tasks_total: 9
     notes: |
       Milestone 3: Comprehensive package management for ACP modules.
@@ -58,10 +58,11 @@ milestones:
       ✅ Task 6 complete - Selective installation implemented
       ✅ Task 7 complete - Update system with conflict detection
       ✅ Task 8 complete - Package list command
+      ✅ Task 9 complete - Package remove command
       - Manifest system with version tracking ✅
       - Selective installation (by type and file) ✅
       - Update system with conflict detection ✅
-      - Package management commands (list, remove, info, search) 📋 (1/4 done)
+      - Package management commands (list, remove, info, search) 📋 (2/4 done)
       - GitHub API-based package discovery 📋
 
 tasks:
@@ -205,12 +206,18 @@ tasks:
     
     - id: task-9
       name: Package Remove Command
-      status: not_started
+      status: completed
       file: agent/tasks/task-9-package-remove-command.md
       estimated_hours: 3-4
-      completed_date: null
+      completed_date: 2026-02-18
       notes: |
-        Implement package removal command.
+        ✅ Package remove command complete!
+        - Created acp.package-remove.sh script
+        - Removes all files installed by package
+        - --keep-modified option to preserve local changes
+        - -y/--yes for auto-confirmation
+        - Updates manifest (removes package entry)
+        - Created acp.package-remove.md command documentation
     
     - id: task-10
       name: Package Info Command
@@ -264,6 +271,30 @@ progress:
   overall: 100
 
 recent_work:
+  - date: 2026-02-18
+    description: |
+      ✅ Task 9 Complete: Package Remove Command
+      Remove installed packages with option to preserve locally modified files.
+    items:
+      - ✅ Created acp.package-remove.sh script:
+        - Removes all files installed by package
+        - Detects locally modified files via checksums
+        - --keep-modified option to preserve customizations
+        - -y/--yes for auto-confirmation
+        - Prompts user before deletion
+        - Shows removal summary
+      - ✅ Implemented removal logic:
+        - Removes patterns, commands, and designs
+        - Preserves modified files if --keep-modified used
+        - Removes package entry from manifest using awk
+        - Updates manifest timestamp
+      - ✅ Created acp.package-remove.md command documentation:
+        - Documented removal modes and options
+        - 4 usage examples
+        - Security considerations and best practices
+      - ✅ Milestone 3 progress: 56% (5/9 tasks complete)
+      - 📋 Next: Task 10 - Package Info Command (2-3 hours)
+  
   - date: 2026-02-18
     description: |
       ✅ Task 8 Complete: Package List Command
