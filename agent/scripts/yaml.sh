@@ -66,3 +66,52 @@ done < "${1}"
 elif ! [ -f "${1}" ]; then
   printf "\e[1;31mERROR: YAML file that is specified is not found in the directory.\e[0m\n" 1>&2
 fi
+
+# ============================================================================
+# Helper Functions for Package Management Scripts
+# ============================================================================
+# These functions provide a simpler API when sourcing this script
+
+# Read YAML value (strips color codes)
+# Usage: yaml_get file.yaml "key"
+yaml_get() {
+  local file=$1
+  local key=$2
+  yaml_read "$file" "$key" 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g'
+}
+
+# Write YAML value (wrapper)
+# Usage: yaml_set file.yaml "key" "value"
+yaml_set() {
+  local file=$1
+  local key=$2
+  local value=$3
+  yaml_write "$file" "-w" "$key" "$value" 2>/dev/null
+}
+
+# Check if key exists
+# Usage: yaml_has_key file.yaml "key"
+yaml_has_key() {
+  local file=$1
+  local key=$2
+  local result=$(yaml_get "$file" "$key")
+  [ "$result" != "null" ] && [ -n "$result" ]
+}
+
+# Get array values (for tags, etc.)
+# Usage: yaml_get_array file.yaml "tags"
+yaml_get_array() {
+  local file=$1
+  local key=$2
+  
+  awk "/^${key}:/{flag=1; next} /^[a-zA-Z]/{flag=0} flag && /^[[:space:]]*-/{print}" "$file" | sed 's/^[[:space:]]*-[[:space:]]*//'
+}
+
+# Initialize empty YAML file
+# Usage: yaml_init file.yaml
+yaml_init() {
+  local file=$1
+  cat > "$file" << 'EOF'
+# YAML file
+EOF
+}
