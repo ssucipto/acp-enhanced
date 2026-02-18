@@ -12,11 +12,18 @@ A documentation-first development methodology that enables AI agents to understa
 curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.install.sh | bash
 ```
 
-### Update an existing project
+### Update an Existing Project
 
-You can update an existing project via `@acp.update` or by running the following shell script.
+You can update an existing project via `@acp.version-update` command or by running the update script directly:
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.version-update.sh | bash
+```
+
+Or if you have ACP already installed locally:
+
+```bash
+./agent/scripts/acp.version-update.sh
 ```
 
 ---

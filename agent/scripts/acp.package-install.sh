@@ -5,22 +5,12 @@
 
 set -e
 
-# Colors for output using tput (more reliable than ANSI codes)
-if command -v tput >/dev/null 2>&1 && [ -t 1 ]; then
-    RED=$(tput setaf 1)
-    GREEN=$(tput setaf 2)
-    YELLOW=$(tput setaf 3)
-    BLUE=$(tput setaf 4)
-    BOLD=$(tput bold)
-    NC=$(tput sgr0)
-else
-    RED=''
-    GREEN=''
-    YELLOW=''
-    BLUE=''
-    BOLD=''
-    NC=''
-fi
+# Source common utilities
+SCRIPT_DIR="$(dirname "$0")"
+. "${SCRIPT_DIR}/acp.common.sh"
+
+# Initialize colors
+init_colors
 
 # Parse arguments
 SKIP_CONFIRM=false
@@ -85,6 +75,17 @@ if [ ! -d "$TEMP_DIR/agent" ]; then
     echo "Repository must contain an 'agent/' directory with ACP files"
     exit 1
 fi
+
+# Initialize manifest
+init_manifest
+
+# Parse package metadata
+parse_package_metadata "$TEMP_DIR"
+
+# Get commit hash
+COMMIT_HASH=$(get_commit_hash "$TEMP_DIR")
+info "Commit: $COMMIT_HASH"
+echo ""
 
 # Directories to install from
 INSTALL_DIRS=("commands" "patterns" "design")
@@ -176,6 +177,9 @@ fi
 echo ""
 echo "Installing files..."
 
+# Add package to manifest
+add_package_to_manifest "$PACKAGE_NAME" "$REPO_URL" "$PACKAGE_VERSION" "$COMMIT_HASH"
+
 # Install files from each directory
 for dir in "${INSTALL_DIRS[@]}"; do
     SOURCE_DIR="$TEMP_DIR/agent/$dir"
@@ -206,7 +210,14 @@ for dir in "${INSTALL_DIRS[@]}"; do
         
         # Copy file
         cp "$file" "agent/$dir/$filename"
-        echo "  ${GREEN}✓${NC} Installed $dir/$filename"
+        
+        # Get file version from package.yaml
+        FILE_VERSION=$(get_file_version "$TEMP_DIR/package.yaml" "$dir" "$filename")
+        
+        # Add file to manifest
+        add_file_to_manifest "$PACKAGE_NAME" "$dir" "$filename" "$FILE_VERSION" "agent/$dir/$filename"
+        
+        echo "  ${GREEN}✓${NC} Installed $dir/$filename (v$FILE_VERSION)"
     done <<< "$FILES"
 done
 
@@ -215,6 +226,9 @@ echo "${GREEN}✅ Installation complete!${NC}"
 echo ""
 echo "Installed $INSTALLED_COUNT file(s) from:"
 echo "  $REPO_URL"
+echo ""
+echo "Package: $PACKAGE_NAME ($PACKAGE_VERSION)"
+echo "Manifest: agent/manifest.yaml updated"
 echo ""
 
 # List installed commands
