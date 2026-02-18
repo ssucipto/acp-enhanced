@@ -80,71 +80,51 @@ last_updated: null
 
 ### 3. Implement Manifest Writing Functions
 
-Add functions to `scripts/package-install.sh`:
+**✅ COMPLETED**: Created `agent/scripts/common.sh` with shared utilities.
 
+**Implementation Notes**:
+- Using `yaml.sh` parser instead of `yq` (no external dependencies)
+- Created POSIX-compliant shared library
+- Functions available in `common.sh`:
+  - `init_manifest()` - ✅ Implemented
+  - `calculate_checksum()` - ✅ Implemented
+  - `validate_manifest()` - ✅ Implemented
+  - `update_manifest_timestamp()` - ✅ Implemented
+  - `package_exists()` - ✅ Implemented
+
+**Still Needed**:
+- `add_package_to_manifest()` - Uses `yaml.sh` functions
+- `add_file_to_manifest()` - Uses `yaml.sh` functions
+- `parse_package_metadata()` - Uses `yaml.sh` functions
+- `get_file_version()` - Uses `yaml.sh` functions
+
+**Example using yaml.sh**:
 ```bash
-#!/bin/bash
+# Source common.sh and yaml.sh
+. "$(dirname "$0")/common.sh"
+source_yaml_parser
 
-# Initialize manifest if doesn't exist
-init_manifest() {
-  if [ ! -f "agent/manifest.yaml" ]; then
-    cat > agent/manifest.yaml << 'EOF'
-packages: {}
-manifest_version: 1.0.0
-last_updated: null
-EOF
-    echo "✓ Created agent/manifest.yaml"
-  fi
-}
-
-# Calculate file checksum
-calculate_checksum() {
-  local file=$1
-  sha256sum "$file" | cut -d' ' -f1
-}
-
-# Add package to manifest
+# Add package to manifest (to be implemented)
 add_package_to_manifest() {
   local package_name=$1
   local source_url=$2
   local package_version=$3
   local commit_hash=$4
-  local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  local timestamp=$(get_timestamp)
   
-  # Create package entry
-  yq eval -i ".packages.${package_name}.source = \"${source_url}\"" agent/manifest.yaml
-  yq eval -i ".packages.${package_name}.package_version = \"${package_version}\"" agent/manifest.yaml
-  yq eval -i ".packages.${package_name}.commit = \"${commit_hash}\"" agent/manifest.yaml
-  yq eval -i ".packages.${package_name}.installed_at = \"${timestamp}\"" agent/manifest.yaml
-  yq eval -i ".packages.${package_name}.updated_at = \"${timestamp}\"" agent/manifest.yaml
-  yq eval -i ".last_updated = \"${timestamp}\"" agent/manifest.yaml
-}
-
-# Add installed file to manifest
-add_file_to_manifest() {
-  local package_name=$1
-  local file_type=$2  # patterns, commands, designs
-  local file_name=$3
-  local file_version=$4
-  local file_path=$5
-  local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-  
-  # Calculate checksum
-  local checksum=$(calculate_checksum "$file_path")
-  
-  # Add file entry
-  local index=$(yq eval ".packages.${package_name}.installed.${file_type} | length" agent/manifest.yaml)
-  yq eval -i ".packages.${package_name}.installed.${file_type}[${index}].name = \"${file_name}\"" agent/manifest.yaml
-  yq eval -i ".packages.${package_name}.installed.${file_type}[${index}].version = \"${file_version}\"" agent/manifest.yaml
-  yq eval -i ".packages.${package_name}.installed.${file_type}[${index}].installed_at = \"${timestamp}\"" agent/manifest.yaml
-  yq eval -i ".packages.${package_name}.installed.${file_type}[${index}].modified = false" agent/manifest.yaml
-  yq eval -i ".packages.${package_name}.installed.${file_type}[${index}].checksum = \"sha256:${checksum}\"" agent/manifest.yaml
+  # Use yaml.sh functions instead of yq
+  yaml_set "agent/manifest.yaml" "packages.${package_name}.source" "$source_url"
+  yaml_set "agent/manifest.yaml" "packages.${package_name}.package_version" "$package_version"
+  yaml_set "agent/manifest.yaml" "packages.${package_name}.commit" "$commit_hash"
+  yaml_set "agent/manifest.yaml" "packages.${package_name}.installed_at" "$timestamp"
+  yaml_set "agent/manifest.yaml" "packages.${package_name}.updated_at" "$timestamp"
+  update_manifest_timestamp
 }
 ```
 
 ### 4. Parse package.yaml from Repository
 
-Add function to read package metadata:
+**TO BE IMPLEMENTED** in `common.sh` using `yaml.sh`:
 
 ```bash
 # Parse package.yaml from cloned repository
@@ -153,27 +133,31 @@ parse_package_metadata() {
   local package_yaml="${repo_dir}/package.yaml"
   
   if [ ! -f "$package_yaml" ]; then
-    echo "Error: package.yaml not found in repository"
-    return 1
+    die "package.yaml not found in repository"
   fi
   
-  # Extract metadata
-  PACKAGE_NAME=$(yq eval '.name' "$package_yaml")
-  PACKAGE_VERSION=$(yq eval '.version' "$package_yaml")
-  PACKAGE_DESCRIPTION=$(yq eval '.description' "$package_yaml")
+  # Extract metadata using yaml.sh
+  PACKAGE_NAME=$(yaml_get "$package_yaml" "name")
+  PACKAGE_VERSION=$(yaml_get "$package_yaml" "version")
+  PACKAGE_DESCRIPTION=$(yaml_get "$package_yaml" "description")
   
-  echo "Package: $PACKAGE_NAME"
-  echo "Version: $PACKAGE_VERSION"
-  echo "Description: $PACKAGE_DESCRIPTION"
+  info "Package: $PACKAGE_NAME"
+  info "Version: $PACKAGE_VERSION"
+  info "Description: $PACKAGE_DESCRIPTION"
 }
 
 # Get file version from package.yaml
+# Note: yaml.sh doesn't support array queries, so we'll need to parse differently
 get_file_version() {
   local package_yaml=$1
   local file_type=$2  # patterns, commands, designs
   local file_name=$3
   
-  yq eval ".contents.${file_type}[] | select(.name == \"${file_name}\") | .version" "$package_yaml"
+  # Extract version using grep/awk since yaml.sh doesn't support array queries
+  awk "/^  ${file_type}:/,/^  [a-z]/ {
+    if (/- name: ${file_name}/) { found=1; next }
+    if (found && /version:/) { print \$2; exit }
+  }" "$package_yaml"
 }
 ```
 
@@ -257,42 +241,15 @@ Test the manifest system:
 
 ### 7. Implement Manifest Validation
 
-Add validation function:
+**✅ COMPLETED**: Implemented in `agent/scripts/common.sh`.
 
-```bash
-# Validate manifest structure
-validate_manifest() {
-  local manifest="agent/manifest.yaml"
-  
-  if [ ! -f "$manifest" ]; then
-    echo "No manifest found"
-    return 1
-  fi
-  
-  # Check required fields
-  local manifest_version=$(yq eval '.manifest_version' "$manifest")
-  if [ -z "$manifest_version" ]; then
-    echo "Error: manifest_version missing"
-    return 1
-  fi
-  
-  # Validate each package entry
-  local packages=$(yq eval '.packages | keys | .[]' "$manifest")
-  for package in $packages; do
-    # Check required fields
-    local source=$(yq eval ".packages.${package}.source" "$manifest")
-    local version=$(yq eval ".packages.${package}.package_version" "$manifest")
-    
-    if [ -z "$source" ] || [ -z "$version" ]; then
-      echo "Error: Invalid package entry for $package"
-      return 1
-    fi
-  done
-  
-  echo "✓ Manifest valid"
-  return 0
-}
-```
+**Implementation Notes**:
+- `validate_manifest()` function available in `common.sh`
+- Uses `yaml.sh` parser for validation
+- Checks required fields (manifest_version, package metadata)
+- Returns 0 if valid, 1 if invalid
+
+See [`agent/scripts/common.sh`](../scripts/common.sh) for implementation.
 
 ### 8. Document Manifest Format
 
@@ -371,14 +328,21 @@ This enables:
 
 ## Common Issues
 
-### Issue 1: yq not installed
-**Solution**: Install yq (`brew install yq` or download from GitHub)
+### Issue 1: yaml.sh limitations
+**Issue**: yaml.sh doesn't support complex array queries
+**Solution**: Use awk/grep for array parsing (see `get_file_version()` implementation)
 
 ### Issue 2: Checksum mismatch on Windows
-**Solution**: Normalize line endings (CRLF → LF) before checksum
+**Issue**: Line ending differences (CRLF vs LF)
+**Solution**: Normalize line endings before checksum calculation
 
 ### Issue 3: Manifest becomes invalid YAML
-**Solution**: Validate before writing, create backup
+**Issue**: Manual edits or script errors corrupt manifest
+**Solution**: Use `validate_manifest()` before operations, keep backups
+
+### Issue 4: common.sh not found
+**Issue**: Script can't find common.sh
+**Solution**: Ensure common.sh is in same directory, use `. "$(dirname "$0")/common.sh"`
 
 ---
 
