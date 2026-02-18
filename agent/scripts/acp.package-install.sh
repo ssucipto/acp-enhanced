@@ -15,11 +15,49 @@ init_colors
 # Parse arguments
 SKIP_CONFIRM=false
 REPO_URL=""
+INSTALL_PATTERNS=false
+INSTALL_COMMANDS=false
+INSTALL_DESIGNS=false
+PATTERN_FILES=()
+COMMAND_FILES=()
+DESIGN_FILES=()
+LIST_ONLY=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
         -y|--yes)
             SKIP_CONFIRM=true
+            shift
+            ;;
+        --patterns)
+            INSTALL_PATTERNS=true
+            shift
+            # Collect pattern file names until next flag or end
+            while [[ $# -gt 0 && ! $1 =~ ^-- && ! $1 =~ ^-[a-z] ]]; do
+                PATTERN_FILES+=("$1")
+                shift
+            done
+            ;;
+        --commands)
+            INSTALL_COMMANDS=true
+            shift
+            # Collect command file names until next flag or end
+            while [[ $# -gt 0 && ! $1 =~ ^-- && ! $1 =~ ^-[a-z] ]]; do
+                COMMAND_FILES+=("$1")
+                shift
+            done
+            ;;
+        --designs)
+            INSTALL_DESIGNS=true
+            shift
+            # Collect design file names until next flag or end
+            while [[ $# -gt 0 && ! $1 =~ ^-- && ! $1 =~ ^-[a-z] ]]; do
+                DESIGN_FILES+=("$1")
+                shift
+            done
+            ;;
+        --list)
+            LIST_ONLY=true
             shift
             ;;
         *)
@@ -32,14 +70,28 @@ done
 # Check if repository URL provided
 if [ -z "$REPO_URL" ]; then
     echo "${RED}Error: Repository URL required${NC}"
-    echo "Usage: $0 [-y|--yes] <repository-url>"
+    echo "Usage: $0 [options] <repository-url>"
     echo ""
     echo "Options:"
-    echo "  -y, --yes    Skip confirmation prompts"
+    echo "  -y, --yes              Skip confirmation prompts"
+    echo "  --patterns [files...]  Install patterns (all if no files specified)"
+    echo "  --commands [files...]  Install commands (all if no files specified)"
+    echo "  --designs [files...]   Install designs (all if no files specified)"
+    echo "  --list                 List available files without installing"
     echo ""
-    echo "Example: $0 https://github.com/example/acp-package.git"
-    echo "Example: $0 -y https://github.com/example/acp-package.git"
+    echo "Examples:"
+    echo "  $0 https://github.com/example/acp-package.git"
+    echo "  $0 --patterns https://github.com/example/acp-package.git"
+    echo "  $0 --patterns file1 file2 https://github.com/example/acp-package.git"
+    echo "  $0 --list https://github.com/example/acp-package.git"
     exit 1
+fi
+
+# Default: install everything if no selective flags specified
+if [[ "$INSTALL_PATTERNS" == false && "$INSTALL_COMMANDS" == false && "$INSTALL_DESIGNS" == false ]]; then
+    INSTALL_PATTERNS=true
+    INSTALL_COMMANDS=true
+    INSTALL_DESIGNS=true
 fi
 
 echo "${BLUE}📦 ACP Package Installer${NC}"
@@ -87,8 +139,64 @@ COMMIT_HASH=$(get_commit_hash "$TEMP_DIR")
 info "Commit: $COMMIT_HASH"
 echo ""
 
-# Directories to install from
-INSTALL_DIRS=("commands" "patterns" "design")
+# List mode - show available files and exit
+if [ "$LIST_ONLY" = true ]; then
+    echo "${BLUE}📁 Available files in package:${NC}"
+    echo ""
+    
+    # List patterns
+    if [ -d "$TEMP_DIR/agent/patterns" ]; then
+        PATTERN_COUNT=$(find "$TEMP_DIR/agent/patterns" -maxdepth 1 -name "*.md" ! -name "*.template.md" -type f 2>/dev/null | wc -l)
+        if [ "$PATTERN_COUNT" -gt 0 ]; then
+            echo "${GREEN}Patterns ($PATTERN_COUNT):${NC}"
+            find "$TEMP_DIR/agent/patterns" -maxdepth 1 -name "*.md" ! -name "*.template.md" -type f 2>/dev/null | xargs -n1 basename | sed 's/^/  - /'
+            echo ""
+        fi
+    fi
+    
+    # List commands
+    if [ -d "$TEMP_DIR/agent/commands" ]; then
+        COMMAND_COUNT=$(find "$TEMP_DIR/agent/commands" -maxdepth 1 -name "*.*.md" ! -name "*.template.md" -type f 2>/dev/null | wc -l)
+        if [ "$COMMAND_COUNT" -gt 0 ]; then
+            echo "${GREEN}Commands ($COMMAND_COUNT):${NC}"
+            find "$TEMP_DIR/agent/commands" -maxdepth 1 -name "*.*.md" ! -name "*.template.md" -type f 2>/dev/null | xargs -n1 basename | sed 's/^/  - /'
+            echo ""
+        fi
+    fi
+    
+    # List designs
+    if [ -d "$TEMP_DIR/agent/design" ]; then
+        DESIGN_COUNT=$(find "$TEMP_DIR/agent/design" -maxdepth 1 -name "*.md" ! -name "*.template.md" -type f 2>/dev/null | wc -l)
+        if [ "$DESIGN_COUNT" -gt 0 ]; then
+            echo "${GREEN}Designs ($DESIGN_COUNT):${NC}"
+            find "$TEMP_DIR/agent/design" -maxdepth 1 -name "*.md" ! -name "*.template.md" -type f 2>/dev/null | xargs -n1 basename | sed 's/^/  - /'
+            echo ""
+        fi
+    fi
+    
+    TOTAL_COUNT=$((PATTERN_COUNT + COMMAND_COUNT + DESIGN_COUNT))
+    echo "Total: $TOTAL_COUNT file(s) available"
+    echo ""
+    echo "To install all files:"
+    echo "  $0 $REPO_URL"
+    echo ""
+    echo "To install specific types:"
+    echo "  $0 --patterns $REPO_URL"
+    echo "  $0 --commands $REPO_URL"
+    echo "  $0 --patterns --commands $REPO_URL"
+    echo ""
+    echo "To install specific files:"
+    echo "  $0 --patterns file1 file2 $REPO_URL"
+    
+    exit 0
+fi
+
+# Directories to install from (based on flags)
+INSTALL_DIRS=()
+[ "$INSTALL_PATTERNS" = true ] && INSTALL_DIRS+=("patterns")
+[ "$INSTALL_COMMANDS" = true ] && INSTALL_DIRS+=("commands")
+[ "$INSTALL_DESIGNS" = true ] && INSTALL_DIRS+=("design")
+
 INSTALLED_COUNT=0
 SKIPPED_COUNT=0
 
@@ -103,18 +211,52 @@ for dir in "${INSTALL_DIRS[@]}"; do
         continue
     fi
     
-    # Find files (exclude templates and .gitkeep)
-    FILES=$(find "$SOURCE_DIR" -maxdepth 1 -name "*.md" ! -name "*.template.md" -type f)
+    # Determine which files to process based on selective flags
+    declare -n FILE_LIST
+    case "$dir" in
+        patterns)
+            FILE_LIST=PATTERN_FILES
+            ;;
+        commands)
+            FILE_LIST=COMMAND_FILES
+            ;;
+        design)
+            FILE_LIST=DESIGN_FILES
+            ;;
+    esac
     
-    if [ -z "$FILES" ]; then
+    # If specific files requested, use those; otherwise find all
+    if [ ${#FILE_LIST[@]} -gt 0 ]; then
+        # Selective file installation
+        FILES_TO_PROCESS=()
+        for file_name in "${FILE_LIST[@]}"; do
+            # Add .md extension if not present
+            [[ "$file_name" != *.md ]] && file_name="${file_name}.md"
+            
+            file_path="$SOURCE_DIR/$file_name"
+            if [ -f "$file_path" ]; then
+                FILES_TO_PROCESS+=("$file_path")
+            else
+                echo "${YELLOW}⚠${NC}  File not found in $dir/: $file_name"
+                SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+            fi
+        done
+    else
+        # Install all files from directory
+        FILES_TO_PROCESS=()
+        while IFS= read -r file; do
+            [ -n "$file" ] && FILES_TO_PROCESS+=("$file")
+        done < <(find "$SOURCE_DIR" -maxdepth 1 -name "*.md" ! -name "*.template.md" -type f)
+    fi
+    
+    if [ ${#FILES_TO_PROCESS[@]} -eq 0 ]; then
         continue
     fi
     
-    FILE_COUNT=$(echo "$FILES" | wc -l)
-    echo "${BLUE}📁 $dir/${NC} ($FILE_COUNT file(s))"
+    echo "${BLUE}📁 $dir/${NC} (${#FILES_TO_PROCESS[@]} file(s))"
     
     # Validate and list files
-    while IFS= read -r file; do
+    for file in "${FILES_TO_PROCESS[@]}"; do
         filename=$(basename "$file")
         
         # Special validation for commands
@@ -142,8 +284,9 @@ for dir in "${INSTALL_DIRS[@]}"; do
         fi
         
         INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
-    done <<< "$FILES"
+    done
     
+    unset -n FILE_LIST
     echo ""
 done
 
@@ -191,14 +334,42 @@ for dir in "${INSTALL_DIRS[@]}"; do
     # Create target directory
     mkdir -p "agent/$dir"
     
-    # Find and copy files
-    FILES=$(find "$SOURCE_DIR" -maxdepth 1 -name "*.md" ! -name "*.template.md" -type f)
+    # Determine which files to install based on selective flags
+    declare -n FILE_LIST
+    case "$dir" in
+        patterns)
+            FILE_LIST=PATTERN_FILES
+            ;;
+        commands)
+            FILE_LIST=COMMAND_FILES
+            ;;
+        design)
+            FILE_LIST=DESIGN_FILES
+            ;;
+    esac
     
-    if [ -z "$FILES" ]; then
-        continue
+    # If specific files requested, use those; otherwise find all
+    if [ ${#FILE_LIST[@]} -gt 0 ]; then
+        # Selective file installation
+        FILES_TO_INSTALL=()
+        for file_name in "${FILE_LIST[@]}"; do
+            # Add .md extension if not present
+            [[ "$file_name" != *.md ]] && file_name="${file_name}.md"
+            
+            file_path="$SOURCE_DIR/$file_name"
+            if [ -f "$file_path" ]; then
+                FILES_TO_INSTALL+=("$file_path")
+            fi
+        done
+    else
+        # Install all files from directory
+        FILES_TO_INSTALL=()
+        while IFS= read -r file; do
+            [ -n "$file" ] && FILES_TO_INSTALL+=("$file")
+        done < <(find "$SOURCE_DIR" -maxdepth 1 -name "*.md" ! -name "*.template.md" -type f)
     fi
     
-    while IFS= read -r file; do
+    for file in "${FILES_TO_INSTALL[@]}"; do
         filename=$(basename "$file")
         
         # Skip invalid files
@@ -218,7 +389,9 @@ for dir in "${INSTALL_DIRS[@]}"; do
         add_file_to_manifest "$PACKAGE_NAME" "$dir" "$filename" "$FILE_VERSION" "agent/$dir/$filename"
         
         echo "  ${GREEN}✓${NC} Installed $dir/$filename (v$FILE_VERSION)"
-    done <<< "$FILES"
+    done
+    
+    unset -n FILE_LIST
 done
 
 echo ""
