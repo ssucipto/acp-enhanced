@@ -46,21 +46,22 @@ milestones:
   - id: M3
     name: ACP Package Management System
     status: in_progress
-    progress: 33
+    progress: 44
     started: 2026-02-18
     completed: null
     estimated_weeks: 5-7
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 9
     notes: |
       Milestone 3: Comprehensive package management for ACP modules.
       ✅ Task 5 complete - Manifest system foundation implemented
       ✅ Task 6 complete - Selective installation implemented
       ✅ Task 7 complete - Update system with conflict detection
+      ✅ Task 8 complete - Package list command
       - Manifest system with version tracking ✅
       - Selective installation (by type and file) ✅
       - Update system with conflict detection ✅
-      - Package management commands (list, remove, info, search) 📋
+      - Package management commands (list, remove, info, search) 📋 (1/4 done)
       - GitHub API-based package discovery 📋
 
 tasks:
@@ -189,12 +190,18 @@ tasks:
     
     - id: task-8
       name: Package List Command
-      status: not_started
+      status: completed
       file: agent/tasks/task-8-package-list-command.md
       estimated_hours: 2-3
-      completed_date: null
+      completed_date: 2026-02-18
       notes: |
-        Implement package listing command.
+        ✅ Package list command complete!
+        - Created acp.package-list.sh script
+        - Lists all installed packages with versions and file counts
+        - --verbose mode for detailed information
+        - --outdated filter to show packages with updates
+        - --modified filter to show packages with local changes
+        - Created acp.package-list.md command documentation
     
     - id: task-9
       name: Package Remove Command
@@ -257,6 +264,28 @@ progress:
   overall: 100
 
 recent_work:
+  - date: 2026-02-18
+    description: |
+      ✅ Task 8 Complete: Package List Command
+      Display installed packages with versions, file counts, and filtering options.
+    items:
+      - ✅ Created acp.package-list.sh script:
+        - Lists all installed packages from manifest
+        - Shows package name, version, and file count
+        - --verbose mode for detailed information
+        - --outdated filter (shows packages with updates)
+        - --modified filter (shows packages with local changes)
+      - ✅ Implemented filtering logic:
+        - Outdated detection via version comparison
+        - Modified detection via checksum comparison
+        - Displays only matching packages when filtered
+      - ✅ Created acp.package-list.md command documentation:
+        - Documented all modes and filters
+        - 4 usage examples
+        - Expected output for each mode
+      - ✅ Milestone 3 progress: 44% (4/9 tasks complete)
+      - 📋 Next: Task 9 - Package Remove Command (3-4 hours)
+  
   - date: 2026-02-18
     description: |
       ✅ Task 7 Complete: Update System
