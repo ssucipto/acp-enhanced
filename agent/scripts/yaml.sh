@@ -1,4 +1,12 @@
 #!/bin/sh
+# YAML Parser for Bash/Shell
+#
+# Source: https://github.com/fiftydinar/yaml-parser
+# License: MIT
+# Downloaded: 2026-02-18
+#
+# Original author: fiftydinar
+# Modified: Added helper functions for ACP package management
 
 yaml_help () {
   printf "\e[1;33mUsage:\e[0m \e[1;90m==================================================================\e[0m\n"
