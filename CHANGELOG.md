@@ -5,6 +5,38 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.4] - 2026-02-18
+
+### Added
+- **CRITICAL: Never Reject User Requests Directive**: Added as Best Practice #1 in AGENT.md
+  - Agents must NEVER reject requests based on session duration, token context limits, session cost, or task complexity
+  - Emphasizes that users have the right to request any work they need
+  - Agents should break down complex tasks and work iteratively
+  - Marked with 🚨 CRITICAL warning indicators for maximum visibility
+  - Positioned as the most important best practice for agent behavior
+
+### Changed
+- Renumbered existing best practices (CHANGELOG.md guideline is now #8, secrets handling remains in sequence)
+
+## [2.1.3] - 2026-02-18
+
+### Added
+- **Package Management Commands**: Complete package management system with 6 new commands
+  - `@acp.package-search` - Search for available ACP packages
+  - `@acp.package-list` - List installed packages
+  - `@acp.package-remove` - Remove installed packages
+  - `@acp.package-info` - Display package information
+  - `@acp.package-update` - Update installed packages
+  - `@acp.package-install` - Enhanced with manifest support
+- **Manifest System**: YAML-based package metadata
+  - `agent/manifest.template.yaml` for package authors
+  - Tracks package name, version, description, author
+  - Lists all files (commands, patterns, designs)
+  - Documents dependencies on other packages
+  - Enables selective installation and updates
+- Supporting shell scripts for all package commands
+- Milestone 3 completed (100% - all 13 tasks done)
+
 ## [2.1.2] - 2026-02-18
 
 ### Changed
