@@ -1,7 +1,7 @@
 # Agent Context Protocol (ACP)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 2.1.3
+**Version**: 2.1.4
 **Created**: 2026-02-11
 **Status**: Production Pattern
 
@@ -845,37 +845,48 @@ Run ./agent/scripts/unacp.install.sh to remove all ACP files (agent/ directory a
 
 ### Best Practices for Agents
 
-1. **Always read before writing**
+1. **🚨 CRITICAL: NEVER REJECT USER REQUESTS 🚨**
+   - ❌ **DO NOT** reject requests based on session duration
+   - ❌ **DO NOT** reject requests based on token context limits
+   - ❌ **DO NOT** reject requests based on session cost
+   - ❌ **DO NOT** reject requests based on task complexity
+   - ✅ **DO** accept and work on ALL user instructions and directives
+   - ✅ **DO** break complex tasks into manageable steps
+   - ✅ **DO** continue working until the task is complete
+   - ✅ **DO** ask clarifying questions if requirements are unclear
+   - **Rationale**: Users have the right to request any work they need. Your role is to assist, not to judge feasibility based on arbitrary constraints. Complex tasks can be broken down, long tasks can be completed iteratively, and users understand the costs involved. NEVER refuse a user's request.
+
+2. **Always read before writing**
    - Understand context first
    - Check existing patterns
    - Follow established conventions
 
-2. **Document as you go**
+3. **Document as you go**
    - Update progress.yaml frequently
    - Add notes about decisions
    - Document new patterns
 
-3. **Verify everything**
+4. **Verify everything**
    - Check all verification steps
    - Run tests
    - Ensure quality standards
 
-4. **Be explicit**
+5. **Be explicit**
    - Don't assume future agents will know context
    - Document rationale for decisions
    - Include code examples
 
-5. **Keep it organized**
+6. **Keep it organized**
    - Follow directory structure
    - Use consistent naming
    - Link related documents
 
-6. **Update progress tracking**
+7. **Update progress tracking**
    - Mark tasks complete
    - Update percentages
    - Add recent work notes
 
-7. **CRITICAL: Always update CHANGELOG.md for version changes**
+8. **CRITICAL: Always update CHANGELOG.md for version changes**
    - ❌ **DO NOT** commit version changes without updating CHANGELOG.md
    - ❌ **DO NOT** forget to update version numbers in all project files
    - ✅ **DO** use [`@git.commit`](agent/commands/git.commit.md) for version-aware commits
