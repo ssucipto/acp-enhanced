@@ -109,16 +109,12 @@ cp "$TEMP_DIR/agent/progress.template.yaml" "$TARGET_DIR/agent/"
 # Copy AGENT.md
 cp "$TEMP_DIR/AGENT.md" "$TARGET_DIR/"
 
-# Copy scripts (copy common.sh first, then others)
-cp "$TEMP_DIR/agent/scripts/acp.common.sh" "$TARGET_DIR/agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/acp.yaml.sh" "$TARGET_DIR/agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/acp.version-update.sh" "$TARGET_DIR/agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/acp.version-check-for-updates.sh" "$TARGET_DIR/agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/acp.uninstall.sh" "$TARGET_DIR/agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/acp.version-check.sh" "$TARGET_DIR/agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/acp.install.sh" "$TARGET_DIR/agent/scripts/"
-cp "$TEMP_DIR/agent/scripts/acp.package-install.sh" "$TARGET_DIR/agent/scripts/"
-chmod +x "$TARGET_DIR/agent/scripts"/*.sh
+# Copy all scripts (*.sh files)
+# This ensures all current and future scripts are copied
+if [ -d "$TEMP_DIR/agent/scripts" ]; then
+    find "$TEMP_DIR/agent/scripts" -maxdepth 1 -name "*.sh" -exec cp {} "$TARGET_DIR/agent/scripts/" \;
+    chmod +x "$TARGET_DIR/agent/scripts"/*.sh
+fi
 
 # Clean up deprecated scripts (from versions < 2.0.0)
 . "$TARGET_DIR/agent/scripts/acp.common.sh"
