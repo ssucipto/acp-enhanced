@@ -5,6 +5,21 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.2] - 2026-02-20
+
+### Added
+- **@acp.pattern-create Command** - LLM-based pattern creation (no shell script needed)
+  - Context-aware namespace detection
+  - Chat-based information collection
+  - Draft file support
+  - Automatic package.yaml and README.md updates
+  - Command documentation complete
+
+### Changed
+- Simplified entity creation approach: LLM handles creation directly via command directives
+- Removed unnecessary shell script (agent/scripts/acp.pattern-create.sh)
+- Entity creation commands are now pure LLM directives (more intelligent and flexible)
+
 ## [2.2.1] - 2026-02-20
 
 ### Added
