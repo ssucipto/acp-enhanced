@@ -5,6 +5,37 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-02-20
+
+### Added
+- **Milestone 4: ACP Package Development System** - Comprehensive planning complete
+  - Created design document with complete architecture and specifications
+  - Created milestone document with 11 tasks across 6 phases
+  - Created 11 task documents (task-14 through task-24)
+  - Estimated effort: 45-58 hours over 6-8 weeks
+- **Clarification System** - 4 clarification documents with 214 questions answered
+  - clarification-1: Package create enhancements (31 questions)
+  - clarification-2: Package development commands (62 questions)
+  - clarification-3: Draft files and schema validation (73 questions)
+  - clarification-4: Implementation edge cases (48 questions)
+- **Task 14 Complete: YAML Schema System** - Pure bash YAML validator
+  - Created `agent/schemas/package.schema.yaml` with comprehensive schema definition
+  - Implemented `agent/scripts/acp.yaml-validate.sh` (pure bash, zero dependencies)
+  - Validates required fields, types, patterns, lengths, reserved names
+  - Tested with valid and invalid package.yaml files
+  - Provides helpful error messages
+- **New Commands Planned** (to be implemented in M4):
+  - `@acp.pattern-create` - Create patterns with namespace enforcement
+  - `@acp.command-create` - Create commands with namespace enforcement
+  - `@acp.design-create` - Create design documents with namespace enforcement
+  - `@acp.package-validate` - Comprehensive package validation with auto-fix
+  - `@acp.package-publish` - Automated publishing workflow
+
+### Changed
+- Updated `@acp.package-create` command with chat-based collection and target directory support
+- Project status changed to in_progress with current_milestone: M4
+- Milestone 4 progress: 9% (1/11 tasks complete)
+
 ## [2.1.4] - 2026-02-18
 
 ### Added
