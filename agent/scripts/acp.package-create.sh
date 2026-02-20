@@ -65,12 +65,28 @@ read -p "Tags (comma-separated): " TAGS_INPUT
 # Convert tags to array
 IFS=',' read -ra TAGS_ARRAY <<< "$TAGS_INPUT"
 
+# Target directory (optional)
+read -p "Target directory (default: current directory): " TARGET_DIR
+
+# Expand path (handle ~, $HOME, and relative paths)
+if [ -z "$TARGET_DIR" ]; then
+    TARGET_DIR="."
+else
+    # Expand ~ to home directory
+    TARGET_DIR="${TARGET_DIR/#\~/$HOME}"
+    # Expand $HOME
+    TARGET_DIR=$(eval echo "$TARGET_DIR")
+fi
+
+# Convert to absolute path
+TARGET_DIR=$(cd "$TARGET_DIR" 2>/dev/null && pwd || echo "$TARGET_DIR")
+
 echo ""
 echo "${GREEN}✓${NC} Package information collected"
 echo ""
 
 # Step 2: Create directory structure
-PACKAGE_DIR="acp-${PACKAGE_NAME}"
+PACKAGE_DIR="${TARGET_DIR}/acp-${PACKAGE_NAME}"
 
 if [ -d "$PACKAGE_DIR" ]; then
     echo "${RED}Error: Directory $PACKAGE_DIR already exists${NC}"
@@ -463,7 +479,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 echo "${GREEN}🎉 Package Created Successfully!${NC}"
 echo ""
-echo "Your ACP package is ready at: ${BOLD}./${PACKAGE_DIR}/${NC}"
+echo "Your ACP package is ready at: ${BOLD}${PACKAGE_DIR}${NC}"
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
@@ -493,7 +509,7 @@ echo "   - Description: ${DESCRIPTION}"
 echo "   - Create repository"
 echo ""
 echo "4. ${BOLD}Push to GitHub:${NC}"
-echo "   ${YELLOW}cd ${PACKAGE_DIR}"
+echo "   ${YELLOW}cd acp-${PACKAGE_NAME}"
 echo "   git remote add origin ${REPO_URL}"
 echo "   git branch -M main"
 echo "   git push -u origin main${NC}"
