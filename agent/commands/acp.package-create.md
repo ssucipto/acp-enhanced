@@ -102,6 +102,13 @@ Use this command when starting a new ACP package that you plan to share with oth
 - If yes: Creates example pattern, command, and design files
 - If no: Creates empty structure only
 
+**Target Directory** (optional)
+- Ask: "Where would you like to create the package? (default: current directory)"
+- Supports: Absolute paths, relative paths, `~` expansion, `$HOME` expansion
+- Examples: ".", "~/projects", "$HOME/packages", "/tmp"
+- Default: Current directory if not specified
+- Note: Package will be created as `{target-dir}/acp-{name}/`
+
 **Expected Outcome**: All metadata collected and validated
 
 **Example Chat Interaction**:
@@ -206,6 +213,7 @@ cd /home/prmichaelsen/agent-context-protocol
 {repository-url}
 {tags}
 {create-examples: y or n}
+{target-directory}
 EOF
 ```
 
@@ -220,8 +228,15 @@ https://github.com/prmichaelsen/acp-firebase
 https://github.com/prmichaelsen/acp-firebase.git
 firebase, firestore, database, backend
 y
+~/projects
 EOF
 ```
+
+**Path Expansion**:
+- `~` expands to user's home directory
+- `$HOME` expands to home directory
+- Relative paths resolved from current directory
+- Absolute paths used as-is
 
 **Expected Outcome**: Script executes successfully and creates complete package structure
 
