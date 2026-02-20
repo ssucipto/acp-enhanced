@@ -5,12 +5,12 @@ project:
   name: agent-context-protocol
   version: 2.1.2
   started: 2026-02-16
-  status: completed
-  current_milestone: M3
+  status: in_progress
+  current_milestone: M4
   description: |
     Agent Context Protocol (ACP) - A documentation-first development methodology
-    for AI agents. All 3 milestones complete: Commands (11), Advanced Features (5),
-    and Package Management System (6 commands, dependency checking, YAML parser).
+    for AI agents. Milestones 1-3 complete (Commands, Advanced Features, Package Management).
+    Milestone 4 in progress: Package Development System (entity creation, validation, publishing).
 
 milestones:
   - id: M1
@@ -71,6 +71,25 @@ milestones:
       - GitHub API-based package discovery ✅
       - Project dependency compatibility checking ✅
       - Pure bash YAML parser ✅
+  
+  - id: M4
+    name: ACP Package Development System
+    status: not_started
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 6-8
+    tasks_completed: 0
+    tasks_total: 11
+    notes: |
+      Milestone 4: Package Development System
+      - Entity creation commands (pattern, command, design)
+      - Draft file support with clarification workflow
+      - YAML schema validation system (pure bash)
+      - Package validation with auto-fix
+      - Package publishing with version management
+      - Rewritten package-create with full ACP installation
+      - Pre-commit hook system
 
 tasks:
   milestone_1:
@@ -289,10 +308,110 @@ tasks:
         - Provides yaml_get(), yaml_set(), yaml_has_key(), yaml_get_array()
         - Used throughout package management system
         - No additional work needed - task was already complete
+  
+  milestone_4:
+    - id: task-14
+      name: YAML Schema System
+      status: not_started
+      file: agent/tasks/task-14-yaml-schema-system.md
+      estimated_hours: 6-8
+      completed_date: null
+      notes: |
+        Research YAML schema standards, create agent/schemas/, implement pure bash validator
+    
+    - id: task-15
+      name: Namespace Utilities
+      status: not_started
+      file: agent/tasks/task-15-namespace-utilities.md
+      estimated_hours: 3-4
+      completed_date: null
+      notes: |
+        Add namespace detection, inference, and validation to common.sh
+    
+    - id: task-16
+      name: README Update Utilities
+      status: not_started
+      file: agent/tasks/task-16-readme-update-utilities.md
+      estimated_hours: 3-4
+      completed_date: null
+      notes: |
+        Add README auto-update utilities to common.sh
+    
+    - id: task-17
+      name: "@acp.pattern-create Command"
+      status: not_started
+      file: agent/tasks/task-17-pattern-create-command.md
+      estimated_hours: 6-8
+      completed_date: null
+      notes: |
+        Create patterns with namespace, draft support, clarifications
+    
+    - id: task-18
+      name: "@acp.command-create Command"
+      status: not_started
+      file: agent/tasks/task-18-command-create-command.md
+      estimated_hours: 5-6
+      completed_date: null
+      notes: |
+        Create commands with namespace enforcement
+    
+    - id: task-19
+      name: "@acp.design-create Command"
+      status: not_started
+      file: agent/tasks/task-19-design-create-command.md
+      estimated_hours: 4-5
+      completed_date: null
+      notes: |
+        Create designs with namespace enforcement
+    
+    - id: task-20
+      name: "@acp.package-validate Command"
+      status: not_started
+      file: agent/tasks/task-20-package-validate-command.md
+      estimated_hours: 7-9
+      completed_date: null
+      notes: |
+        Comprehensive validation with shell + LLM, auto-fix, test installation
+    
+    - id: task-21
+      name: "Enhanced @acp.validate"
+      status: not_started
+      file: agent/tasks/task-21-enhanced-acp-validate.md
+      estimated_hours: 3-4
+      completed_date: null
+      notes: |
+        Add namespace checking and reserved name validation
+    
+    - id: task-22
+      name: "@acp.package-publish Command"
+      status: not_started
+      file: agent/tasks/task-22-package-publish-command.md
+      estimated_hours: 8-10
+      completed_date: null
+      notes: |
+        Automated publishing: validate, version, commit, push, test
+    
+    - id: task-23
+      name: "Rewrite @acp.package-create"
+      status: not_started
+      file: agent/tasks/task-23-package-create-rewrite.md
+      estimated_hours: 6-8
+      completed_date: null
+      notes: |
+        Full ACP installation, release branch config, pre-commit hooks
+    
+    - id: task-24
+      name: Pre-Commit Hook System
+      status: not_started
+      file: agent/tasks/task-24-precommit-hook-system.md
+      estimated_hours: 3-4
+      completed_date: null
+      notes: |
+        Create and install pre-commit hooks for validation
 
 documentation:
-  design_documents: 2
-  milestone_documents: 3
+  design_documents: 3
+  milestone_documents: 4
   pattern_documents: 1
   task_documents: 13
   command_documents: 20
