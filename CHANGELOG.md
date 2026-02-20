@@ -5,6 +5,26 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-02-20
+
+### Added
+- **Task 15: Namespace Utilities** - Context-aware namespace detection and validation
+  - Added `is_acp_package()` - Detects if directory is ACP package
+  - Added `infer_namespace()` - Infers namespace from package.yaml, directory name, or git remote
+  - Added `validate_namespace()` - Validates format and checks reserved names (acp, local, core, system, global)
+  - Added `get_namespace_for_file()` - Returns package namespace or "local" for non-packages
+  - Added `validate_namespace_consistency()` - Checks for conflicts between sources
+- **Task 16: README Update Utilities** - Automatic README.md content list generation
+  - Added `update_readme_contents()` - Updates README from package.yaml
+  - Added `generate_contents_section()` - Generates formatted markdown lists
+  - Added `add_file_to_readme()` - Convenience wrapper
+  - Uses HTML comment markers for section boundaries
+  - Extracts file names and descriptions from package.yaml
+
+### Changed
+- Enhanced `agent/scripts/acp.common.sh` with 8 new utility functions
+- Milestone 4 progress: 27% (3/11 tasks complete)
+
 ## [2.2.0] - 2026-02-20
 
 ### Added
