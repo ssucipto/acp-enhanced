@@ -3,7 +3,7 @@
 
 project:
   name: agent-context-protocol
-  version: 2.2.0
+  version: 2.2.1
   started: 2026-02-16
   status: in_progress
   current_milestone: M4
@@ -75,11 +75,11 @@ milestones:
   - id: M4
     name: ACP Package Development System
     status: in_progress
-    progress: 9
+    progress: 27
     started: 2026-02-20
     completed: null
     estimated_weeks: 6-8
-    tasks_completed: 1
+    tasks_completed: 3
     tasks_total: 11
     notes: |
       Milestone 4: Package Development System
@@ -329,21 +329,35 @@ tasks:
     
     - id: task-15
       name: Namespace Utilities
-      status: not_started
+      status: completed
       file: agent/tasks/task-15-namespace-utilities.md
       estimated_hours: 3-4
-      completed_date: null
+      completed_date: 2026-02-20
       notes: |
-        Add namespace detection, inference, and validation to common.sh
+        ✅ Namespace utilities complete!
+        - Added is_acp_package() - Detects if directory is ACP package
+        - Added infer_namespace() - Infers namespace from package.yaml, dir name, git remote
+        - Added validate_namespace() - Validates format and checks reserved names
+        - Added get_namespace_for_file() - Context-aware namespace selection
+        - Added validate_namespace_consistency() - Checks for conflicts
+        - All functions tested and working correctly
+        - Reserved names enforced: acp, local, core, system, global
     
     - id: task-16
       name: README Update Utilities
-      status: not_started
+      status: completed
       file: agent/tasks/task-16-readme-update-utilities.md
       estimated_hours: 3-4
-      completed_date: null
+      completed_date: 2026-02-20
       notes: |
-        Add README auto-update utilities to common.sh
+        ✅ README update utilities complete!
+        - Added update_readme_contents() - Updates README from package.yaml
+        - Added generate_contents_section() - Generates formatted content lists
+        - Added add_file_to_readme() - Convenience function for single file updates
+        - Uses HTML comment markers for section boundaries
+        - Extracts file names and descriptions from package.yaml
+        - Tested with sample package (commands, patterns, designs)
+        - Ready for use in entity creation commands
     
     - id: task-17
       name: "@acp.pattern-create Command"
@@ -437,6 +451,42 @@ progress:
   milestone_4: 0
 
 recent_work:
+  - date: 2026-02-20
+    description: |
+      ✅ Task 16 Complete: README Update Utilities
+      Automatic README.md content list generation from package.yaml.
+    items:
+      - ✅ Added 3 README functions to agent/scripts/acp.common.sh:
+        - update_readme_contents() - Updates README from package.yaml
+        - generate_contents_section() - Generates formatted markdown lists
+        - add_file_to_readme() - Convenience wrapper
+      - ✅ Uses HTML comment markers for section boundaries
+      - ✅ Extracts file names and descriptions from package.yaml contents
+      - ✅ Formats as brief lists: `filename` - Description
+      - ✅ Handles commands, patterns, and designs sections
+      - ✅ Tested with sample package.yaml
+      - ✅ Ready for integration in entity creation commands
+      - 📋 Milestone 4 progress: 27% (3/11 tasks complete)
+      - 📋 Next: Task 17 - @acp.pattern-create Command (6-8 hours)
+  
+  - date: 2026-02-20
+    description: |
+      ✅ Task 15 Complete: Namespace Utilities
+      Context-aware namespace detection and validation implemented.
+    items:
+      - ✅ Added 5 namespace functions to agent/scripts/acp.common.sh:
+        - is_acp_package() - Detects if directory is ACP package (checks for package.yaml)
+        - infer_namespace() - Infers namespace from package.yaml, directory name, or git remote
+        - validate_namespace() - Validates format (lowercase, alphanumeric, hyphens) and reserved names
+        - get_namespace_for_file() - Returns package namespace or "local" for non-packages
+        - validate_namespace_consistency() - Checks for conflicts between sources
+      - ✅ Reserved namespace enforcement: acp, local, core, system, global
+      - ✅ Namespace inference priority: package.yaml > directory name > git remote
+      - ✅ All functions tested and working correctly
+      - ✅ Context-aware behavior enables package vs project detection
+      - 📋 Milestone 4 progress: 18% (2/11 tasks complete)
+      - 📋 Next: Task 16 - README Update Utilities (3-4 hours)
+  
   - date: 2026-02-20
     description: |
       ✅ Task 14 Complete: YAML Schema System

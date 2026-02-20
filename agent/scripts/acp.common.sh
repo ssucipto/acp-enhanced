@@ -748,6 +748,246 @@ validate_project_dependencies() {
 }
 
 # ============================================================================
+# Namespace Utilities
+# ============================================================================
+
+# Check if current directory is an ACP package
+# Usage: if is_acp_package; then ...
+# Returns: 0 if package.yaml exists, 1 otherwise
+is_acp_package() {
+    [ -f "package.yaml" ]
+}
+
+# Infer package namespace from multiple sources
+# Usage: namespace=$(infer_namespace)
+# Returns: namespace string or empty if can't infer
+# Priority: 1) package.yaml, 2) directory name, 3) git remote
+infer_namespace() {
+    local namespace=""
+    
+    # Priority 1: Read from package.yaml
+    if [ -f "package.yaml" ]; then
+        namespace=$(yaml_get "package.yaml" "name" 2>/dev/null)
+        if [ -n "$namespace" ]; then
+            echo "$namespace"
+            return 0
+        fi
+    fi
+    
+    # Priority 2: Parse from directory name (acp-{namespace})
+    local dir_name=$(basename "$PWD")
+    if [[ "$dir_name" =~ ^acp-(.+)$ ]]; then
+        namespace="${BASH_REMATCH[1]}"
+        echo "$namespace"
+        return 0
+    fi
+    
+    # Priority 3: Parse from git remote URL
+    if git remote get-url origin >/dev/null 2>&1; then
+        local remote_url=$(git remote get-url origin)
+        if [[ "$remote_url" =~ acp-([a-z0-9-]+)(\.git)?$ ]]; then
+            namespace="${BASH_REMATCH[1]}"
+            echo "$namespace"
+            return 0
+        fi
+    fi
+    
+    # Could not infer
+    return 1
+}
+
+# Validate namespace format and check reserved names
+# Usage: if validate_namespace "firebase"; then ...
+# Returns: 0 if valid, 1 if invalid
+validate_namespace() {
+    local namespace="$1"
+    
+    if [ -z "$namespace" ]; then
+        echo "${RED}Error: Namespace cannot be empty${NC}" >&2
+        return 1
+    fi
+    
+    # Check format (lowercase, alphanumeric, hyphens)
+    if ! echo "$namespace" | grep -qE '^[a-z0-9-]+$'; then
+        echo "${RED}Error: Namespace must be lowercase, alphanumeric, and hyphens only${NC}" >&2
+        return 1
+    fi
+    
+    # Check reserved names
+    case "$namespace" in
+        acp|local|core|system|global)
+            echo "${RED}Error: Namespace '$namespace' is reserved${NC}" >&2
+            return 1
+            ;;
+    esac
+    
+    return 0
+}
+
+# Get namespace for file creation (context-aware)
+# Usage: namespace=$(get_namespace_for_file)
+# Returns: package namespace or "local" for non-packages
+get_namespace_for_file() {
+    if is_acp_package; then
+        local namespace=$(infer_namespace)
+        if [ -n "$namespace" ]; then
+            echo "$namespace"
+            return 0
+        else
+            # In package but can't infer, ask user
+            read -p "Package namespace: " namespace
+            if validate_namespace "$namespace"; then
+                echo "$namespace"
+                return 0
+            else
+                return 1
+            fi
+        fi
+    else
+        # Not a package, use local namespace
+        echo "local"
+        return 0
+    fi
+}
+
+# Validate namespace consistency across sources
+# Usage: if validate_namespace_consistency; then ...
+# Returns: 0 if consistent, 1 if conflicts found
+validate_namespace_consistency() {
+    if ! is_acp_package; then
+        return 0  # Not a package, no consistency to check
+    fi
+    
+    local from_yaml=$(yaml_get "package.yaml" "name" 2>/dev/null)
+    local from_dir=$(basename "$PWD" | sed 's/^acp-//')
+    local from_remote=""
+    
+    if git remote get-url origin >/dev/null 2>&1; then
+        local remote_url=$(git remote get-url origin)
+        if [[ "$remote_url" =~ acp-([a-z0-9-]+)(\.git)?$ ]]; then
+            from_remote="${BASH_REMATCH[1]}"
+        fi
+    fi
+    
+    # Check for conflicts
+    local has_conflict=false
+    
+    if [ -n "$from_yaml" ] && [ -n "$from_dir" ] && [ "$from_yaml" != "$from_dir" ]; then
+        echo "${YELLOW}Warning: Namespace mismatch${NC}" >&2
+        echo "  package.yaml: $from_yaml" >&2
+        echo "  directory: $from_dir" >&2
+        has_conflict=true
+    fi
+    
+    if [ -n "$from_yaml" ] && [ -n "$from_remote" ] && [ "$from_yaml" != "$from_remote" ]; then
+        echo "${YELLOW}Warning: Namespace mismatch${NC}" >&2
+        echo "  package.yaml: $from_yaml" >&2
+        echo "  git remote: $from_remote" >&2
+        has_conflict=true
+    fi
+    
+    if [ "$has_conflict" = true ]; then
+        return 1
+    fi
+    
+    return 0
+}
+
+# ============================================================================
+# README Update Utilities
+# ============================================================================
+
+# Update README.md contents section from package.yaml
+# Usage: update_readme_contents
+# Returns: 0 if successful, 1 if error
+update_readme_contents() {
+    local readme="README.md"
+    local package_yaml="package.yaml"
+    
+    if [ ! -f "$readme" ]; then
+        echo "${YELLOW}Warning: README.md not found${NC}" >&2
+        return 1
+    fi
+    
+    if [ ! -f "$package_yaml" ]; then
+        echo "${YELLOW}Warning: package.yaml not found${NC}" >&2
+        return 1
+    fi
+    
+    # Generate contents section
+    local contents=$(generate_contents_section)
+    
+    # Check if markers exist
+    if ! grep -q "<!-- ACP_AUTO_UPDATE_START:CONTENTS -->" "$readme"; then
+        echo "${YELLOW}Warning: README.md missing auto-update markers${NC}" >&2
+        return 1
+    fi
+    
+    # Replace section between markers using awk
+    awk -v contents="$contents" '
+        /<!-- ACP_AUTO_UPDATE_START:CONTENTS -->/ {
+            print
+            print contents
+            skip=1
+            next
+        }
+        /<!-- ACP_AUTO_UPDATE_END:CONTENTS -->/ {
+            skip=0
+        }
+        !skip
+    ' "$readme" > "${readme}.tmp"
+    
+    mv "${readme}.tmp" "$readme"
+    echo "${GREEN}✓${NC} Updated README.md contents section"
+    return 0
+}
+
+# Generate contents section from package.yaml
+# Usage: contents=$(generate_contents_section)
+# Returns: Formatted markdown content list
+generate_contents_section() {
+    local package_yaml="package.yaml"
+    
+    # Parse and format contents using awk
+    awk '
+        BEGIN { section="" }
+        
+        /^  commands:/ { section="commands"; print "### Commands"; next }
+        /^  patterns:/ { section="patterns"; print ""; print "### Patterns"; next }
+        /^  designs:/ { section="designs"; print ""; print "### Designs"; next }
+        
+        section != "" && /^    - name:/ {
+            gsub(/^    - name: /, "")
+            name = $0
+            getline
+            if (/^      version:/) {
+                getline
+                if (/^      description:/) {
+                    gsub(/^      description: /, "")
+                    desc = $0
+                    print "- `" name "` - " desc
+                } else {
+                    print "- `" name "`"
+                }
+            }
+        }
+        
+        /^[a-z]/ && !/^  / { section="" }
+    ' "$package_yaml"
+}
+
+# Add file to README contents (updates entire section)
+# Usage: add_file_to_readme "patterns" "firebase.my-pattern.md" "Description"
+add_file_to_readme() {
+    local type="$1"
+    local filename="$2"
+    local description="$3"
+    
+    # Simply update entire contents section
+    update_readme_contents
+}
+
+# ============================================================================
 # Display Functions
 # ============================================================================
 
