@@ -48,285 +48,270 @@ Use this command when starting a new ACP package that you plan to share with oth
 
 ## Steps
 
-### 1. Gather Package Information
+### 1. Gather Package Information via Chat
 
-Prompt the user for package metadata:
+**IMPORTANT**: Collect all information from the user via chat BEFORE executing the script. This provides maximum context and allows validation.
 
 **Actions**:
-- Ask for package name (e.g., "firebase", "mcp-integration", "oauth")
-- Ask for package description (one-line summary)
-- Ask for author name
-- Ask for license (default: MIT)
-- Ask for homepage URL (optional)
-- Ask for tags (comma-separated, for discovery)
+1. Explain what information is needed and why
+2. Ask user for each piece of information one at a time
+3. Validate each input before proceeding
+4. Summarize all collected information
+5. Ask for confirmation before proceeding
 
-**Expected Outcome**: All metadata collected for `package.yaml`
+**Information to Collect**:
 
-**Example Interaction**:
+**Package Name** (required)
+- Ask: "What would you like to name your package? (lowercase, no spaces, hyphens allowed)"
+- Validation: Must be lowercase, alphanumeric, and hyphens only
+- Examples: "firebase", "mcp-integration", "oauth-2"
+- Note: This becomes the directory name `acp-{name}/`
+
+**Description** (required)
+- Ask: "Provide a one-line description of your package:"
+- Validation: Should be clear and concise (< 100 characters recommended)
+- Examples: "Firebase patterns and utilities for ACP projects"
+
+**Author Name** (required)
+- Ask: "What is your name (package author)?"
+- Examples: "Patrick Michaelsen", "Your Name"
+
+**License** (optional, default: MIT)
+- Ask: "What license would you like to use? (default: MIT)"
+- Common options: MIT, Apache-2.0, GPL-3.0, BSD-3-Clause
+- Default: MIT if not specified
+
+**Homepage URL** (optional)
+- Ask: "What is the homepage URL for this package? (optional, press Enter to skip)"
+- Examples: "https://github.com/username/acp-firebase"
+- Note: Can be GitHub repo URL or documentation site
+
+**Repository URL** (required)
+- Ask: "What is the git repository URL? (e.g., https://github.com/username/acp-{name}.git)"
+- Validation: Should be a valid git URL
+- Examples: "https://github.com/prmichaelsen/acp-firebase.git"
+
+**Tags** (required)
+- Ask: "What tags describe your package? (comma-separated, for discovery)"
+- Validation: At least one tag recommended
+- Examples: "firebase, firestore, database, backend"
+- Note: These help users find your package via `@acp.package-search`
+
+**Create Example Files** (optional)
+- Ask: "Would you like to create example files? (yes/no)"
+- If yes: Creates example pattern, command, and design files
+- If no: Creates empty structure only
+
+**Expected Outcome**: All metadata collected and validated
+
+**Example Chat Interaction**:
 ```
-📦 Creating New ACP Package
+Agent: Let's create a new ACP package! I'll need to collect some information from you.
 
-Let's gather some information about your package:
+Agent: What would you like to name your package? (lowercase, no spaces, hyphens allowed)
+      Examples: "firebase", "mcp-integration", "oauth-2"
 
-Package name (lowercase, no spaces): firebase
+User: firebase
+
+Agent: Great! "firebase" is a valid package name. ✓
+
+Agent: Provide a one-line description of your package:
+
+User: Firebase patterns and utilities for ACP projects
+
+Agent: Perfect! ✓
+
+Agent: What is your name (package author)?
+
+User: Patrick Michaelsen
+
+Agent: ✓
+
+Agent: What license would you like to use? (default: MIT)
+
+User: [Enter]
+
+Agent: Using MIT license. ✓
+
+Agent: What is the homepage URL for this package? (optional, press Enter to skip)
+
+User: https://github.com/prmichaelsen/acp-firebase
+
+Agent: ✓
+
+Agent: What is the git repository URL?
+      Example: https://github.com/username/acp-firebase.git
+
+User: https://github.com/prmichaelsen/acp-firebase.git
+
+Agent: ✓
+
+Agent: What tags describe your package? (comma-separated, for discovery)
+      These help users find your package via @acp.package-search
+
+User: firebase, firestore, database, backend
+
+Agent: ✓
+
+Agent: Would you like to create example files? (yes/no)
+      This creates example pattern, command, and design files as templates.
+
+User: yes
+
+Agent: ✓
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Summary of collected information:
+
+Package name: firebase
 Description: Firebase patterns and utilities for ACP projects
-Author name: Patrick Michaelsen
-License [MIT]: 
-Homepage URL (optional): https://github.com/prmichaelsen/acp-firebase
-Tags (comma-separated): firebase, firestore, database, backend
+Author: Patrick Michaelsen
+License: MIT
+Homepage: https://github.com/prmichaelsen/acp-firebase
+Repository: https://github.com/prmichaelsen/acp-firebase.git
+Tags: firebase, firestore, database, backend
+Create examples: yes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Agent: Does this look correct? (yes/no)
+
+User: yes
+
+Agent: Excellent! I'll now create your package...
+```
+
+### 2. Execute Package Creation Script
+
+Once all information is collected and confirmed, execute the script with the collected arguments.
+
+**Actions**:
+1. Prepare script execution with collected values
+2. Execute `./agent/scripts/acp.package-create.sh` with heredoc input
+3. Monitor script output and report progress
+4. Verify successful completion
+
+**Script Execution**:
+
+```bash
+cd /home/prmichaelsen/agent-context-protocol
+
+./agent/scripts/acp.package-create.sh << 'EOF'
+{package-name}
+{description}
+{author}
+{license}
+{homepage}
+{repository-url}
+{tags}
+{create-examples: y or n}
+EOF
+```
+
+**Example with collected values**:
+```bash
+./agent/scripts/acp.package-create.sh << 'EOF'
+firebase
+Firebase patterns and utilities for ACP projects
+Patrick Michaelsen
+MIT
+https://github.com/prmichaelsen/acp-firebase
+https://github.com/prmichaelsen/acp-firebase.git
+firebase, firestore, database, backend
+y
+EOF
+```
+
+**Expected Outcome**: Script executes successfully and creates complete package structure
+
+**Script Output to Display**:
+```
+📦 ACP Package Creator
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Let's create a new ACP package!
+
+Package name: firebase
+Description: Firebase patterns and utilities for ACP projects
+Author: Patrick Michaelsen
+License [MIT]: MIT
+Homepage: https://github.com/prmichaelsen/acp-firebase
+Repository URL: https://github.com/prmichaelsen/acp-firebase.git
+Tags: firebase, firestore, database, backend
 
 ✓ Package information collected
+
+Creating Directory Structure
+
+✓ Created directory: acp-firebase/
+✓ Created agent/ structure
+
+Creating package.yaml
+
+✓ Created package.yaml
+
+Creating Documentation
+
+✓ Created README.md
+✓ Created LICENSE (MIT)
+✓ Created CHANGELOG.md
+✓ Created .gitignore
+
+Initializing Git Repository
+
+✓ Initialized git repository
+✓ Created initial commit
+
+Would you like to create example files? (y/N): y
+
+Creating Example Files
+
+✓ Created agent/patterns/example-pattern.md
+✓ Created agent/commands/example-command.md
+✓ Created agent/design/example-design.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎉 Package Created Successfully!
+
+Your ACP package is ready at: ./acp-firebase/
+
+[Next steps displayed...]
 ```
-
-### 2. Initialize Directory Structure
-
-Create the standard ACP package structure:
-
-**Actions**:
-- Create project directory: `acp-{package-name}/`
-- Create `agent/` directory
-- Create `agent/patterns/` directory
-- Create `agent/commands/` directory
-- Create `agent/design/` directory
-- Add `.gitkeep` files to empty directories
-- Initialize git repository: `git init`
-
-**Expected Outcome**: Complete directory structure ready for content
 
 **Directory Structure Created**:
 ```
 acp-{package-name}/
-├── README.md                    # (to be created in step 4)
-├── LICENSE                      # (to be created in step 4)
-├── CHANGELOG.md                 # (to be created in step 4)
-├── package.yaml                 # (to be created in step 3)
+├── README.md                    # Package documentation
+├── LICENSE                      # License file (MIT)
+├── CHANGELOG.md                 # Version history
+├── package.yaml                 # Package metadata
+├── .gitignore                   # Git exclusions
 └── agent/
     ├── patterns/
-    │   └── .gitkeep
+    │   ├── .gitkeep
+    │   └── example-pattern.md   # (if requested)
     ├── commands/
-    │   └── .gitkeep
+    │   ├── .gitkeep
+    │   └── example-command.md   # (if requested)
     └── design/
-        └── .gitkeep
+        ├── .gitkeep
+        └── example-design.md    # (if requested)
 ```
 
-### 3. Create package.yaml
+### 3. Display Script Output and Next Steps
 
-Generate the package metadata file:
+After script execution completes, display the next steps for the user.
 
 **Actions**:
-- Create `package.yaml` with collected information
-- Set initial version to 1.0.0
-- Add empty `contents` sections for patterns, commands, designs
-- Add empty `dependencies` section
-- Add `requires` section with ACP version
-
-**Expected Outcome**: Valid `package.yaml` file created
-
-**Template**:
-```yaml
-# package.yaml
-name: {package-name}
-version: 1.0.0
-description: {description}
-author: {author}
-license: {license}
-homepage: {homepage}
-repository: {repository-url}
-
-# Package contents
-contents:
-  patterns: []
-  commands: []
-  designs: []
-
-# Dependencies (other ACP packages required)
-dependencies: []
-
-# Compatibility
-requires:
-  acp: ">=2.0.0"
-
-# Tags for discovery
-tags:
-  {tags-as-yaml-list}
-```
-
-### 4. Create Documentation Files
-
-Generate standard documentation:
-
-**Actions**:
-- Create `README.md` with package overview
-- Create `LICENSE` file (MIT by default)
-- Create `CHANGELOG.md` with initial version
-- Create `.gitignore` for common files
-
-**Expected Outcome**: Complete documentation ready for customization
-
-**README.md Template**:
-```markdown
-# ACP Package: {package-name}
-
-{description}
-
-## Installation
-
-\`\`\`bash
-@acp.package-install https://github.com/{username}/acp-{package-name}.git
-\`\`\`
-
-## Contents
-
-### Patterns
-
-(List patterns here as you add them)
-
-### Commands
-
-(List commands here as you add them)
-
-### Designs
-
-(List design documents here as you add them)
-
-## Usage
-
-(Add usage examples here)
-
-## Dependencies
-
-(List any required packages or project dependencies)
-
-## License
-
-{license}
-
-## Author
-
-{author}
-```
-
-**CHANGELOG.md Template**:
-```markdown
-# Changelog
-
-All notable changes to this package will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [1.0.0] - {current-date}
-
-### Added
-- Initial release
-- Package structure created
-```
-
-### 5. Add Example Content (Optional)
-
-Offer to create example files:
-
-**Actions**:
-- Ask if user wants example pattern file
-- Ask if user wants example command file
-- Ask if user wants example design file
-- Create requested examples from templates
-
-**Expected Outcome**: Example files created if requested
-
-**Example Pattern** (`agent/patterns/example-pattern.md`):
-```markdown
-# Example Pattern
-
-**Version**: 1.0.0
-**Last Updated**: {date}
-
----
-
-## Overview
-
-[Describe what this pattern is and when to use it]
-
-## Problem
-
-[What problem does this pattern solve?]
-
-## Solution
-
-[How does this pattern solve the problem?]
-
-## Implementation
-
-[Code examples and implementation details]
-
-## Benefits
-
-[Why use this pattern?]
-
-## Trade-offs
-
-[What are the downsides?]
-
----
-
-**Status**: Example
-**Recommendation**: Replace with your actual pattern
-```
-
-### 6. Initialize Git Repository
-
-Set up version control:
-
-**Actions**:
-- Run `git init` (if not already done)
-- Create `.gitignore` with common exclusions
-- Stage all files: `git add .`
-- Create initial commit: `git commit -m "chore: initialize ACP package"`
-- Display git status
-
-**Expected Outcome**: Git repository initialized with initial commit
-
-**.gitignore Template**:
-```
-# OS files
-.DS_Store
-Thumbs.db
-
-# Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Temporary files
-*.tmp
-*.log
-
-# Node modules (if applicable)
-node_modules/
-
-# Python (if applicable)
-__pycache__/
-*.pyc
-.venv/
-venv/
-
-# Build artifacts
-dist/
-build/
-```
-
-### 7. Provide GitHub Publishing Instructions
-
-Guide user on publishing to GitHub:
-
-**Actions**:
-- Display instructions for creating GitHub repository
-- Show commands for pushing to GitHub
-- Explain how to add `acp-package` topic
-- Provide checklist for making package discoverable
-
-**Expected Outcome**: User knows how to publish package
+- Confirm package was created successfully
+- Show package location
+- Provide GitHub publishing instructions
+- Explain how to add content
+- Remind about package.yaml maintenance
+
+**Expected Outcome**: User knows exactly what to do next
 
 **Instructions Display**:
 ```
@@ -381,27 +366,28 @@ Your ACP package is ready at: ./acp-{package-name}/
 ✅ Package creation complete!
 ```
 
-### 8. Update package.yaml as Content is Added
+### 4. Verify Package Creation
 
-Remind user to maintain package.yaml:
+Check that all files were created correctly.
 
 **Actions**:
-- Explain that `package.yaml` must be updated when files are added
-- Show example of adding a pattern to `package.yaml`
-- Explain version numbering for files
-- Remind about updating package version
+- List created files
+- Verify directory structure
+- Check git repository status
+- Confirm package.yaml is valid
 
-**Expected Outcome**: User understands how to maintain package.yaml
+**Expected Outcome**: Package is ready for content addition
 
-**Example Update**:
-```yaml
-# When you add agent/patterns/user-scoped-collections.md:
+**Verification Commands**:
+```bash
+# List package contents
+ls -la acp-{package-name}/
 
-contents:
-  patterns:
-    - name: user-scoped-collections.md
-      version: 1.0.0
-      description: User-scoped Firestore data organization
+# Check git status
+cd acp-{package-name} && git status
+
+# Verify package.yaml
+cat acp-{package-name}/package.yaml
 ```
 
 ---
