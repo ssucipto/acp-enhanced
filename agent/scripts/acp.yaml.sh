@@ -115,6 +115,80 @@ yaml_get_array() {
   awk "/^${key}:/{flag=1; next} /^[a-zA-Z]/{flag=0} flag && /^[[:space:]]*-/{print}" "$file" | sed 's/^[[:space:]]*-[[:space:]]*//'
 }
 
+# Get value from nested object in array
+# Usage: yaml_get_nested file.yaml "contents.commands[0].name"
+# Supports: array[index].field notation
+# Returns: Field value or empty string if not found
+yaml_get_nested() {
+  local file="$1"
+  local path="$2"
+  
+  # Check if path contains array notation [index]
+  case "$path" in
+    *"["*"]"*)
+      # Extract components using sed
+      local array_path=$(echo "$path" | sed 's/\[[0-9]*\].*//')
+      local index=$(echo "$path" | sed 's/.*\[\([0-9]*\)\].*/\1/')
+      local field=$(echo "$path" | sed 's/.*\[[0-9]*\]\.//')
+      
+      # Navigate to array, find nth object, extract field
+      awk -v array_path="$array_path" -v idx="$index" -v field="$field" '
+        BEGIN {
+          split(array_path, path_parts, ".")
+          target_key = path_parts[length(path_parts)]
+          in_target_array = 0
+          object_count = -1
+          in_target_object = 0
+        }
+        
+        # Match the target array key
+        $1 == target_key ":" {
+          in_target_array = 1
+          next
+        }
+        
+        # Exit array when we hit another top-level or same-level key
+        in_target_array && /^[a-zA-Z_][a-zA-Z0-9_]*:/ && !/^[[:space:]]/ {
+          in_target_array = 0
+        }
+        
+        # Count array objects (lines starting with -)
+        in_target_array && /^[[:space:]]*-/ {
+          object_count++
+          if (object_count == idx) {
+            in_target_object = 1
+          } else if (object_count > idx) {
+            in_target_object = 0
+          }
+        }
+        
+        # Extract field from target object (inline: "- name: value")
+        in_target_object && $0 ~ "^[[:space:]]*-[[:space:]]+" field ":" {
+          sub("^[[:space:]]*-[[:space:]]+" field ":[[:space:]]*", "")
+          print $0
+          exit
+        }
+        
+        # Extract field from target object (separate line: "  name: value")
+        in_target_object && $0 ~ "^[[:space:]]+" field ":" {
+          sub("^[[:space:]]+" field ":[[:space:]]*", "")
+          print $0
+          exit
+        }
+        
+        # Exit object when we hit next dash
+        in_target_object && /^[[:space:]]*-/ && object_count > idx {
+          exit
+        }
+      ' "$file"
+      ;;
+    *)
+      # For non-array paths, use standard yaml_read
+      yaml_read "$file" "$path" 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g'
+      ;;
+  esac
+}
+
 # Initialize empty YAML file
 # Usage: yaml_init file.yaml
 yaml_init() {
