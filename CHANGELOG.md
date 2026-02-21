@@ -5,6 +5,274 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.0] - 2026-02-21
+
+### Added
+- **@acp.package-create Non-Interactive Mode** - Command-line argument support
+  - Added `--name`, `--description`, `--author`, `--repository` flags
+  - Added `--license`, `--homepage`, `--tags`, `--branch`, `--target-dir` optional flags
+  - Automatic non-interactive mode when all required args provided
+  - Removed `--yes` flag (not needed with CLI args)
+  - Script version: 2.0.0 → 2.1.0
+
+### Fixed
+- **@acp.package-create Directory Structure** - Fixed redundant nesting
+  - Changed default from `~/.acp/projects/{name}/acp-{name}/` to `~/.acp/projects/acp-{name}/`
+  - Fixed SCRIPT_DIR to use absolute path (prevents issues after cd)
+  - Fixed directory existence check (was creating before checking)
+
+### Changed
+- **Test Package Created** - Successfully tested non-interactive mode
+  - Created acp-test-package at `~/.acp/projects/acp-test-package/`
+  - Verified full ACP installation, package.yaml, git initialization
+  - Pre-commit hook installed and working
+
+## [2.10.1] - 2026-02-21
+
+### Changed
+- **Milestone 5 Planning** - Global Package Installation design completed
+  - Revised design document based on user clarification feedback
+  - Removed symlink-based architecture in favor of simple agent discovery
+  - Added `@acp.init` enhancement to automatically read and report global packages
+  - Created clarification document with 25+ architecture questions answered
+  - Updated milestone document with 4 implementation phases
+  - Global packages install to `~/.acp/packages/` only (no symlinks)
+  - Agents discover packages via `~/.acp/manifest.yaml`
+  - Local packages always take precedence over global packages
+
+## [2.10.0] - 2026-02-21
+
+### Added
+- **Milestone 4 Complete** - ACP Package Development System fully operational
+  - All 11 tasks completed (100%)
+  - Complete package development workflow from creation to publishing
+  - Entity creation commands, validation system, publishing automation
+  - Pre-commit hook system documented and integrated
+
+### Changed
+- **Task 24: Pre-Commit Hook System** - Documentation completed
+  - Hook implementation already complete from Task 23
+  - Comprehensive documentation added to task document
+  - Verification checklist completed
+  - Implementation notes and testing results documented
+- **Milestone 4 Status** - Marked as completed
+  - Progress: 91% → 100%
+  - All 6 phases complete (Infrastructure, Entity Creation, Validation, Publishing, Package Creation, Hooks)
+  - Completed date: 2026-02-21
+- **Project Progress** - Overall progress: 92% → 100%
+  - All 4 milestones complete
+  - 24/24 tasks completed
+  - Ready for Milestone 5 planning
+
+## [2.9.1] - 2026-02-21
+
+### Fixed
+- Documentation formatting in command files
+  - Fixed missing closing quote in computer roleplay directive (acp.proceed.md, command.template.md, git.commit.md)
+  - Added computer roleplay directive to acp.package-install.md and acp.report.md
+  - Fixed repository URLs in examples to include "acp-" prefix (acp.package-install.md)
+  - Added explicit confirmation requirement before invoking installed commands (acp.package-install.md)
+
+## [2.9.0] - 2026-02-21
+
+### Changed
+- **@acp.package-create Command** - Complete rewrite with full ACP installation
+  - Now runs `acp.install.sh` to install complete ACP structure (all templates, commands, scripts)
+  - Collects release branch configuration (default: main)
+  - Default directory changed to `~/.acp/packages/{package-name}` or `$HOME/.acp/packages/{package-name}`
+  - Installs pre-commit hook automatically (validates package.yaml before commits)
+  - Removed example file creation (use templates from ACP installation instead)
+  - Creates package.yaml with `release.branch` field
+  - Enhanced next steps with entity creation commands
+  - Version bump: 1.0.0 → 2.0.0 (breaking - complete rewrite)
+- **acp.install.sh** - Enhanced to copy schemas directory and manifest template
+  - Now copies `agent/schemas/*.yaml` files
+  - Now copies `agent/manifest.template.yaml`
+  - Ensures complete ACP installation for packages
+
+### Added
+- **install_precommit_hook()** - New function in `acp.common.sh`
+  - Installs pre-commit hook for package validation
+  - Validates package.yaml before allowing commits
+  - Gracefully handles missing validation scripts
+  - Documents future enhancements (namespace checking, CHANGELOG validation)
+
+## [2.8.0] - 2026-02-21
+
+### Added
+- **@acp.package-publish Command** - Automated package publishing workflow
+  - 11-step publishing workflow from validation to testing
+  - Delegates to @git.commit for version/CHANGELOG management (avoids logic duplication)
+  - Automatic version bump detection from Conventional Commits
+  - Analyzes commits for breaking changes, features, and fixes
+  - User confirmation for version number (Y/n/custom)
+  - Branch validation (main, master, mainline, release, custom)
+  - Remote status checking (prevents overwriting)
+  - Git tag creation (vX.Y.Z format)
+  - Push to remote (commits and tags)
+  - Post-publish test installation from remote
+  - Comprehensive error handling at each step
+  - Shell script: `agent/scripts/acp.package-publish.sh`
+
+### Changed
+- Milestone 4 progress: 73% → 82% (9/11 tasks complete)
+- Phase 4 (Publishing) complete
+
+## [2.7.0] - 2026-02-21
+
+### Changed
+- **Enhanced @acp.validate Command** - Added strict namespace validation
+  - STRICT enforcement: All patterns/commands/designs MUST have namespace prefix
+  - In packages: Use package namespace (e.g., firebase.pattern.md)
+  - In projects: Use local namespace (e.g., local.pattern.md)
+  - ERROR for files missing namespace prefix (not just warning)
+  - Exception: Template files (*.template.md) don't need namespace
+  - Added Step 8: Validate Namespace Conventions
+  - Context-aware validation (package vs project detection)
+  - Checks for reserved namespace violations (acp, local, core, system, global)
+  - Updated verification checklist with namespace checks
+  - Updated example output with namespace validation section
+  - Added computer roleplay directive to command header
+  - Version bump: 1.0.0 → 2.0.0 (breaking - new strict validation)
+- Milestone 4 progress: 64% → 73% (8/11 tasks complete)
+- Phase 3 (Validation) complete
+
+## [2.6.0] - 2026-02-21
+
+### Changed
+- **Enhanced @acp.validate Command** - Added namespace validation and reserved name checking
+  - Added Step 8: Validate Namespace Conventions
+  - Context-aware validation (package vs project detection)
+  - Validates command/pattern/design filenames use correct namespace
+  - Checks for reserved namespace violations (acp, local, core, system, global)
+  - Updated verification checklist with namespace checks
+  - Updated example output with namespace validation section
+  - Added computer roleplay directive to command header
+  - Version bump: 1.0.0 → 2.0.0 (breaking - new validation checks)
+- Milestone 4 progress: 64% → 73% (8/11 tasks complete)
+- Phase 3 (Validation) complete
+
+## [2.5.0] - 2026-02-21
+
+### Added
+- **@acp.package-validate Command** - Comprehensive package validation system
+  - Shell-based validation (YAML structure, file existence, namespace consistency, git setup, README)
+  - Test installation to temporary directory with automatic cleanup
+  - Remote repository availability checking via git ls-remote
+  - Unlisted files detection (finds files not in package.yaml)
+  - Validation score calculation and comprehensive reporting
+  - Fixable issues identification for LLM auto-fix
+  - Command documentation with examples and troubleshooting
+  - Shell script: `agent/scripts/acp.package-validate.sh`
+
+### Changed
+- Milestone 4 progress: 55% → 64% (7/11 tasks complete)
+- Phase 3 (Validation) started with Task 20 complete
+
+## [2.4.0] - 2026-02-21
+
+### Changed
+- Enhanced `agent/commands/command.template.md` with computer roleplay directive
+  - Clarifies that agent should execute command directives as instructions
+  - Improves command execution clarity and consistency
+
+## [2.3.0] - 2026-02-21
+
+### Added
+- **@acp.command-create Command** - LLM-based command creation
+  - Context-aware namespace detection
+  - Collects command-specific fields (category, frequency)
+  - Automatic package.yaml and README.md updates
+  - Draft file support
+- **@acp.design-create Command** - LLM-based design document creation
+  - Context-aware namespace detection
+  - Automatic package.yaml and README.md updates
+  - Draft file support
+- **Design: install-local-patterns-feature** - Proposal for --install-local flag
+  - Install local namespace patterns from source repos with namespace conversion
+  - Enable sharing of implementation patterns between packages
+
+### Changed
+- Milestone 4 progress: 55% (6/11 tasks complete)
+- Phase 2 (Entity Creation) complete - all 3 entity creation commands implemented
+
+## [2.2.3] - 2026-02-21
+
+### Added
+- **Pattern: library-services** - Service layer, database layer, and API client layer architecture
+  - Three-layer architecture for TypeScript libraries
+  - Complete implementation examples for each layer
+  - Dependency injection pattern
+  - Testing examples with mocks
+  - Benefits, trade-offs, and usage guidance
+  - Demonstrates @acp.pattern-create command in action
+
+## [2.2.2] - 2026-02-20
+
+### Added
+- **@acp.pattern-create Command** - LLM-based pattern creation (no shell script needed)
+  - Context-aware namespace detection
+  - Chat-based information collection
+  - Draft file support
+  - Automatic package.yaml and README.md updates
+  - Command documentation complete
+
+### Changed
+- Simplified entity creation approach: LLM handles creation directly via command directives
+- Removed unnecessary shell script (agent/scripts/acp.pattern-create.sh)
+- Entity creation commands are now pure LLM directives (more intelligent and flexible)
+
+## [2.2.1] - 2026-02-20
+
+### Added
+- **Task 15: Namespace Utilities** - Context-aware namespace detection and validation
+  - Added `is_acp_package()` - Detects if directory is ACP package
+  - Added `infer_namespace()` - Infers namespace from package.yaml, directory name, or git remote
+  - Added `validate_namespace()` - Validates format and checks reserved names (acp, local, core, system, global)
+  - Added `get_namespace_for_file()` - Returns package namespace or "local" for non-packages
+  - Added `validate_namespace_consistency()` - Checks for conflicts between sources
+- **Task 16: README Update Utilities** - Automatic README.md content list generation
+  - Added `update_readme_contents()` - Updates README from package.yaml
+  - Added `generate_contents_section()` - Generates formatted markdown lists
+  - Added `add_file_to_readme()` - Convenience wrapper
+  - Uses HTML comment markers for section boundaries
+  - Extracts file names and descriptions from package.yaml
+
+### Changed
+- Enhanced `agent/scripts/acp.common.sh` with 8 new utility functions
+- Milestone 4 progress: 27% (3/11 tasks complete)
+
+## [2.2.0] - 2026-02-20
+
+### Added
+- **Milestone 4: ACP Package Development System** - Comprehensive planning complete
+  - Created design document with complete architecture and specifications
+  - Created milestone document with 11 tasks across 6 phases
+  - Created 11 task documents (task-14 through task-24)
+  - Estimated effort: 45-58 hours over 6-8 weeks
+- **Clarification System** - 4 clarification documents with 214 questions answered
+  - clarification-1: Package create enhancements (31 questions)
+  - clarification-2: Package development commands (62 questions)
+  - clarification-3: Draft files and schema validation (73 questions)
+  - clarification-4: Implementation edge cases (48 questions)
+- **Task 14 Complete: YAML Schema System** - Pure bash YAML validator
+  - Created `agent/schemas/package.schema.yaml` with comprehensive schema definition
+  - Implemented `agent/scripts/acp.yaml-validate.sh` (pure bash, zero dependencies)
+  - Validates required fields, types, patterns, lengths, reserved names
+  - Tested with valid and invalid package.yaml files
+  - Provides helpful error messages
+- **New Commands Planned** (to be implemented in M4):
+  - `@acp.pattern-create` - Create patterns with namespace enforcement
+  - `@acp.command-create` - Create commands with namespace enforcement
+  - `@acp.design-create` - Create design documents with namespace enforcement
+  - `@acp.package-validate` - Comprehensive package validation with auto-fix
+  - `@acp.package-publish` - Automated publishing workflow
+
+### Changed
+- Updated `@acp.package-create` command with chat-based collection and target directory support
+- Project status changed to in_progress with current_milestone: M4
+- Milestone 4 progress: 9% (1/11 tasks complete)
+
 ## [2.1.4] - 2026-02-18
 
 ### Added
@@ -337,3 +605,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All project-specific content (remember-mcp milestones, tasks, designs)
 - Framework-specific patterns (TanStack Router, Firebase-specific examples)
 - Project-specific TypeScript patterns (Firestore users pattern)
+
