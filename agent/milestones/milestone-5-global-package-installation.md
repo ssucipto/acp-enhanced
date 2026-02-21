@@ -3,7 +3,7 @@
 **Goal**: Enable global package installation to `~/.acp/packages/` for package development and global command library
 **Duration**: 1-2 weeks
 **Dependencies**: Milestone 3 (Package Management System) complete
-**Status**: Not Started
+**Status**: Planning Complete - Ready for Implementation
 
 ---
 
@@ -114,6 +114,7 @@ AGENT.md                         # Updated with global discovery instructions
 2. [Task 26: Global Installation Implementation](../tasks/task-26-global-installation.md) - Add `--global` flag to install command (2-3 hours)
 3. [Task 27: Global Package Commands](../tasks/task-27-global-package-commands.md) - Add `--global` to list, update, remove, info (2-3 hours)
 4. [Task 28: Documentation and Agent Instructions](../tasks/task-28-global-documentation.md) - Update AGENT.md and command docs (1-2 hours)
+5. [Task 29: Global ACP Auto-Initialization](../tasks/task-29-global-acp-auto-initialization.md) - Auto-initialize ~/.acp/ on first global command use (1-2 hours)
 
 ---
 
