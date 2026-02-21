@@ -5,6 +5,30 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.0] - 2026-02-21
+
+### Added
+- **Milestone 4 Complete** - ACP Package Development System fully operational
+  - All 11 tasks completed (100%)
+  - Complete package development workflow from creation to publishing
+  - Entity creation commands, validation system, publishing automation
+  - Pre-commit hook system documented and integrated
+
+### Changed
+- **Task 24: Pre-Commit Hook System** - Documentation completed
+  - Hook implementation already complete from Task 23
+  - Comprehensive documentation added to task document
+  - Verification checklist completed
+  - Implementation notes and testing results documented
+- **Milestone 4 Status** - Marked as completed
+  - Progress: 91% → 100%
+  - All 6 phases complete (Infrastructure, Entity Creation, Validation, Publishing, Package Creation, Hooks)
+  - Completed date: 2026-02-21
+- **Project Progress** - Overall progress: 92% → 100%
+  - All 4 milestones complete
+  - 24/24 tasks completed
+  - Ready for Milestone 5 planning
+
 ## [2.9.1] - 2026-02-21
 
 ### Fixed
