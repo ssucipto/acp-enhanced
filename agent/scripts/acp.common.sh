@@ -1079,12 +1079,15 @@ if [ ! -f "agent/scripts/acp.yaml-validate.sh" ]; then
     exit 0
 fi
 
-# Source validation script
-. ./agent/scripts/acp.yaml-validate.sh
+# Check if schema exists
+if [ ! -f "agent/schemas/package.schema.yaml" ]; then
+    echo "${YELLOW}Warning: package.schema.yaml not found, skipping validation${NC}"
+    exit 0
+fi
 
-# Validate package.yaml
+# Validate package.yaml by running the script directly (not sourcing)
 echo "Validating package.yaml..."
-if ! validate_yaml_file "package.yaml" "agent/schemas/package.schema.yaml" 2>/dev/null; then
+if ! ./agent/scripts/acp.yaml-validate.sh "package.yaml" "agent/schemas/package.schema.yaml" 2>/dev/null; then
     echo ""
     echo "${RED}✗ Pre-commit validation failed${NC}"
     echo ""
