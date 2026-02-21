@@ -188,6 +188,13 @@ check_unlisted_files() {
     
     local unlisted=0
     
+    # Get files from manifest (all packages including acp-core)
+    # Use simple grep to extract all "- name: filename" entries
+    local manifest_files=""
+    if [ -f "agent/manifest.yaml" ]; then
+        manifest_files=$(grep -E "^[[:space:]]+-[[:space:]]+name:" agent/manifest.yaml | sed 's/.*name:[[:space:]]*//' || echo "")
+    fi
+    
     # Check patterns directory
     if [ -d "agent/patterns" ]; then
         for file in agent/patterns/*.md; do
@@ -197,6 +204,11 @@ check_unlisted_files() {
             # Skip templates
             [[ "$basename" == *.template.md ]] && continue
             [[ "$basename" == ".gitkeep" ]] && continue
+            
+            # Skip if in manifest (installed from another package)
+            if echo "$manifest_files" | grep -q "^${basename}$"; then
+                continue
+            fi
             
             # Check if listed in package.yaml
             if ! grep -q "name: $basename" package.yaml 2>/dev/null; then
@@ -213,10 +225,13 @@ check_unlisted_files() {
             [ -f "$file" ] || continue
             local basename=$(basename "$file")
             
-            # Skip templates and non-package commands
+            # Skip templates
             [[ "$basename" == *.template.md ]] && continue
-            [[ "$basename" == acp.* ]] && continue  # Skip core ACP commands
-            [[ "$basename" == local.* ]] && continue  # Skip local commands
+            
+            # Skip if in manifest (installed from another package, including acp-core)
+            if echo "$manifest_files" | grep -q "^${basename}$"; then
+                continue
+            fi
             
             # Check if listed in package.yaml
             if ! grep -q "name: $basename" package.yaml 2>/dev/null; then
@@ -236,6 +251,11 @@ check_unlisted_files() {
             # Skip templates and .gitkeep
             [[ "$basename" == *.template.md ]] && continue
             [[ "$basename" == ".gitkeep" ]] && continue
+            
+            # Skip if in manifest (installed from another package)
+            if echo "$manifest_files" | grep -q "^${basename}$"; then
+                continue
+            fi
             
             # Check if listed in package.yaml
             if ! grep -q "name: $basename" package.yaml 2>/dev/null; then

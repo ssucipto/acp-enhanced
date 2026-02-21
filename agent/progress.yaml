@@ -614,13 +614,16 @@ tasks:
     
     - id: task-33
       name: Track ACP Core Commands in manifest.yaml
-      status: not_started
+      status: completed
       file: agent/tasks/task-33-track-acp-core-in-manifest.md
       estimated_hours: 1-2
-      completed_date: null
+      completed_date: 2026-02-21
       notes: |
-        Update acp.install.sh to track core ACP commands in manifest.yaml as "acp-core" package.
-        Fixes false warnings about unlisted core commands in package validation.
+        ✅ ACP core installation now tracked in manifest.yaml
+        - Updated acp.install.sh to create manifest with acp-core package
+        - Updated acp.version-update.sh to update acp-core version
+        - Updated acp.package-validate.sh to check manifest for files
+        - No more false warnings about core commands
 
 documentation:
   design_documents: 6
@@ -643,6 +646,24 @@ progress:
   milestone_5: 0
 
 recent_work:
+  - date: 2026-02-21
+    description: |
+      ✅ Task 33 Complete: Track ACP Core in manifest.yaml
+      Core ACP installation now tracked in manifest.yaml as acp-core package.
+    items:
+      - ✅ Updated agent/scripts/acp.install.sh
+      - ✅ Creates manifest.yaml with acp-core package entry
+      - ✅ Lists all installed core commands, patterns, designs
+      - ✅ Tracks ACP version and installation timestamp
+      - ✅ Updated agent/scripts/acp.version-update.sh
+      - ✅ Updates acp-core version when ACP is updated
+      - ✅ Updated agent/scripts/acp.package-validate.sh
+      - ✅ Checks manifest for files before warning about unlisted
+      - ✅ Skips files tracked in manifest (from any package)
+      - 📋 No more false warnings about core commands
+      - 📋 Proper source tracking for all installed files
+      - 📋 Version tracking for core ACP installation
+  
   - date: 2026-02-21
     description: |
       ✅ Task 32 Complete: Fix package.yaml Schema Mismatch
