@@ -623,9 +623,7 @@ venv/
 dist/
 build/
 
-# ACP local files
-agent/manifest.yaml
-agent/progress.yaml
+# ACP local files (none - all ACP files should be committed)
 EOF
 
 echo "${GREEN}✓${NC} Created .gitignore"
