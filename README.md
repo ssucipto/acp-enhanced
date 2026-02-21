@@ -73,6 +73,15 @@ This will:
 - Update progress tracking
 - Maintain documentation
 
+### Resume a Previous Session
+
+Type: **`@/agent/commands/acp.init.md 'agent/reports/report-2026-02-21-session-3.md' 'agent/commands/acp.proceed.md'`**
+
+This will:
+- Load the initialization command
+- Review the previous session report
+- Load the proceed command to continue work
+
 ### Check Project Status
 
 Type: **`@acp.status`**
