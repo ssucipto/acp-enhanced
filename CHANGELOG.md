@@ -5,6 +5,23 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2026-02-21
+
+### Added
+- **@acp.package-validate Command** - Comprehensive package validation system
+  - Shell-based validation (YAML structure, file existence, namespace consistency, git setup, README)
+  - Test installation to temporary directory with automatic cleanup
+  - Remote repository availability checking via git ls-remote
+  - Unlisted files detection (finds files not in package.yaml)
+  - Validation score calculation and comprehensive reporting
+  - Fixable issues identification for LLM auto-fix
+  - Command documentation with examples and troubleshooting
+  - Shell script: `agent/scripts/acp.package-validate.sh`
+
+### Changed
+- Milestone 4 progress: 55% → 64% (7/11 tasks complete)
+- Phase 3 (Validation) started with Task 20 complete
+
 ## [2.4.0] - 2026-02-21
 
 ### Changed
