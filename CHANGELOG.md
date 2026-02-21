@@ -5,6 +5,26 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-02-21
+
+### Added
+- **@acp.command-create Command** - LLM-based command creation
+  - Context-aware namespace detection
+  - Collects command-specific fields (category, frequency)
+  - Automatic package.yaml and README.md updates
+  - Draft file support
+- **@acp.design-create Command** - LLM-based design document creation
+  - Context-aware namespace detection
+  - Automatic package.yaml and README.md updates
+  - Draft file support
+- **Design: install-local-patterns-feature** - Proposal for --install-local flag
+  - Install local namespace patterns from source repos with namespace conversion
+  - Enable sharing of implementation patterns between packages
+
+### Changed
+- Milestone 4 progress: 55% (6/11 tasks complete)
+- Phase 2 (Entity Creation) complete - all 3 entity creation commands implemented
+
 ## [2.2.3] - 2026-02-21
 
 ### Added
