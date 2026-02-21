@@ -5,6 +5,24 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-02-21
+
+### Added
+
+**Bootstrap Installation Feature**:
+- `@acp.package-create` now generates `scripts/bootstrap.sh` for one-command installation
+- Bootstrap script installs ACP (if needed) and the package in a single command
+- README.md template includes "Quick Start (Bootstrap New Project)" section
+- Users can run: `curl -fsSL {repo}/raw/{branch}/scripts/bootstrap.sh | bash`
+- Perfect for bootstrapping new projects with specific ACP packages
+- Automatic generation for every package created
+
+**Benefits**:
+- Simplifies onboarding for new users
+- One-command setup for ACP + package
+- Works whether ACP is installed or not
+- Prominently featured in package README.md
+
 ## [3.0.0] - 2026-02-21
 
 ### Summary
