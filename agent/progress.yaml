@@ -584,6 +584,17 @@ tasks:
         - Added informational output for skipped files
         - Updated documentation to explain behavior
         - manifest.yaml acts as dev dependency tracker
+    
+    - id: task-31
+      name: Add progress.yaml to Package Repositories
+      status: not_started
+      file: agent/tasks/task-31-add-progress-yaml-to-packages.md
+      estimated_hours: 1-2
+      completed_date: null
+      notes: |
+        Update @acp.package-create to initialize progress.yaml in package repositories
+        so package developers can use full ACP workflow (@acp.init, @acp.proceed, @acp.status).
+        progress.yaml is for development only (not installed to user projects).
 
 documentation:
   design_documents: 6
