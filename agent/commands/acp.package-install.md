@@ -1,6 +1,8 @@
 # Command: package-install
 
 > **🤖 Agent Directive**: If you are reading this file, the command `@acp.package-install` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `@{namespace}-{command-name} NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp
 **Version**: 1.0.0
@@ -165,7 +167,7 @@ Verify the files were installed correctly.
 
 ### 3. Test Installed Commands
 
-Try invoking one of the installed commands (if any).
+Try invoking one of the installed commands (if any). Prompt user for explicit confirmation before invoking.
 
 **Actions**:
 - Choose a simple command to test
@@ -305,7 +307,7 @@ Next steps:
 
 **Context**: Want to add TypeScript patterns from organization
 
-**Invocation**: `@acp.package-install https://github.com/myorg/typescript-patterns.git`
+**Invocation**: `@acp.package-install https://github.com/myorg/acp-typescript-patterns.git`
 
 **Result**: Script installs 5 pattern files to agent/patterns/, now have reusable TypeScript patterns
 
@@ -313,7 +315,7 @@ Next steps:
 
 **Context**: Installing package with commands, patterns, and designs
 
-**Invocation**: `@acp.package-install https://github.com/example/fullstack-package.git`
+**Invocation**: `@acp.package-install https://github.com/example/acp-fullstack-package.git`
 
 **Result**: Script installs 3 commands, 4 patterns, 2 design docs across agent/ directories
 
@@ -321,7 +323,7 @@ Next steps:
 
 **Context**: Installing package that conflicts with existing files
 
-**Invocation**: `@acp.package-install https://github.com/example/package.git`
+**Invocation**: `@acp.package-install https://github.com/example/acp-package.git`
 
 **Result**: Script detects conflicts, asks for confirmation, overwrites if approved
 
