@@ -1,7 +1,7 @@
 # Agent Context Protocol (ACP)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 2.1.4
+**Version**: 2.11.0
 **Created**: 2026-02-11
 **Status**: Production Pattern
 
@@ -915,9 +915,16 @@ Run ./agent/scripts/unacp.install.sh to remove all ACP files (agent/ directory a
    - ✅ **DO** confirm before reverting user's manual edits
    - **Rationale**: If you read a file and it is missing contents or has changed contents (i.e., it does not contain what you expect), assume or confirm with the user if they made intentional updates that you should not revert. Do not assume "The file is missing <xyz>, I need to add it back". The user may have edited files manually with intention.
 
----
+10. **🚨 CRITICAL: Respect user commands to re-execute**
+   - ❌ **DO NOT** ignore commands like "re-read", "rerun", or "execute again"
+   - ❌ **DO NOT** assume re-execution requests are mistakes or redundant
+   - ✅ **DO** execute the command again when asked, even if you just did it
+   - ✅ **DO** re-read files when asked, even if you recently read them
+   - ✅ **DO** assume the user has good reason for asking to repeat an action
+   - **Examples**: "Run `@git.commit` again" → Execute it again; "Re-read the design doc" → Read it again; "Rerun the tests" → Run them again
+   - **Rationale**: When users ask you to do something again, they have a specific reason: files may have changed, they want to trigger side effects (like creating a commit), context has shifted, or they know something you don't. Always respect these requests and execute them with intention.
 
-## Best Practices
+---
 
 ### Documentation
 
