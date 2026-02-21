@@ -75,11 +75,11 @@ milestones:
   - id: M4
     name: ACP Package Development System
     status: in_progress
-    progress: 27
+    progress: 55
     started: 2026-02-20
     completed: null
     estimated_weeks: 6-8
-    tasks_completed: 3
+    tasks_completed: 6
     tasks_total: 11
     notes: |
       Milestone 4: Package Development System
@@ -370,21 +370,30 @@ tasks:
     
     - id: task-18
       name: "@acp.command-create Command"
-      status: not_started
+      status: completed
       file: agent/tasks/task-18-command-create-command.md
       estimated_hours: 5-6
-      completed_date: null
+      completed_date: 2026-02-21
       notes: |
-        Create commands with namespace enforcement
+        ✅ @acp.command-create complete!
+        - Created agent/commands/acp.command-create.md
+        - LLM-based command creation (no script needed)
+        - Collects command-specific fields (category, frequency)
+        - Context-aware namespace enforcement
+        - Auto-updates package.yaml and README.md
     
     - id: task-19
       name: "@acp.design-create Command"
-      status: not_started
+      status: completed
       file: agent/tasks/task-19-design-create-command.md
       estimated_hours: 4-5
-      completed_date: null
+      completed_date: 2026-02-21
       notes: |
-        Create designs with namespace enforcement
+        ✅ @acp.design-create complete!
+        - Created agent/commands/acp.design-create.md
+        - LLM-based design creation (no script needed)
+        - Context-aware namespace enforcement
+        - Auto-updates package.yaml and README.md
     
     - id: task-20
       name: "@acp.package-validate Command"
