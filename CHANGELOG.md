@@ -5,6 +5,17 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.1] - 2026-02-21
+
+### Fixed
+
+**Package .gitignore Correction**:
+- Removed `agent/progress.yaml` and `agent/manifest.yaml` from package .gitignore
+- Both files should be committed in package repositories (just like in ACP projects)
+- manifest.yaml tracks installed dependencies for package development
+- progress.yaml tracks package development progress
+- All ACP files should be version controlled in packages
+
 ## [3.2.0] - 2026-02-21
 
 ### Added
@@ -14,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minimal structure with no predefined milestones or tasks
 - Enables full ACP workflow in package repositories (@acp.init, @acp.proceed, @acp.status)
 - Package developers can create milestones and tasks as needed
-- progress.yaml is for development only (excluded via .gitignore, not installed to users)
+- All ACP files are version controlled (manifest.yaml and progress.yaml committed)
 
 **Benefits**:
 - Consistent experience between projects and packages
