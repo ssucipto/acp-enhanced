@@ -600,10 +600,10 @@ recent_work:
       - ✅ Read agent/progress.yaml - Current status confirmed
       - ✅ Read 6 design documents (requirements template, commands, package-mgmt, package-dev, global-install, install-local)
       - ✅ Read 1 milestone document (M5: Global Package Installation)
-      - ✅ Read 5 task documents (tasks 25-29 for Milestone 5)
-      - ✅ Reviewed AGENT.md (v3.0.0, 1184 lines)
+      - ✅ Read 1 task document (task-25: Global Infrastructure Setup)
+      - ✅ Reviewed AGENT.md (v3.0.0, 1184 lines - first 100 lines)
       - ✅ Reviewed README.md (251 lines)
-      - ✅ Reviewed CHANGELOG.md (735 lines, up to v3.0.0)
+      - ✅ Reviewed CHANGELOG.md (735 lines - first 100 lines, up to v3.0.0)
       - ✅ Reviewed acp.common.sh (~1118 lines, 35+ utility functions)
       - ✅ Verified 25 command files (all with flat dot notation)
       - ✅ Verified 17 script files in agent/scripts/
