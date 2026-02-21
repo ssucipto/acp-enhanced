@@ -5,6 +5,27 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.1] - 2026-02-21
+
+### Changed
+
+**Package File Validation Strictness**:
+- Changed from warning to error for package files not in contents
+- Files matching package namespace MUST be in package.yaml contents
+- Prevents accidental omissions
+- Provides clear guidance on how to fix
+
+## [3.4.0] - 2026-02-21
+
+### Added
+
+**Smart Package File Detection in Validation**:
+- `@acp.package-validate` detects package files not in contents
+- Files matching package namespace but excluded from package.yaml
+- Shows error with list of affected files
+- Provides guidance on how to add them (@acp.command-create, @acp.pattern-create)
+- Helps catch forgotten files
+
 ## [3.3.2] - 2026-02-21
 
 ### Added
