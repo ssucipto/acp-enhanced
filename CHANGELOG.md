@@ -5,6 +5,15 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.1] - 2026-02-21
+
+### Fixed
+- Documentation formatting in command files
+  - Fixed missing closing quote in computer roleplay directive (acp.proceed.md, command.template.md, git.commit.md)
+  - Added computer roleplay directive to acp.package-install.md and acp.report.md
+  - Fixed repository URLs in examples to include "acp-" prefix (acp.package-install.md)
+  - Added explicit confirmation requirement before invoking installed commands (acp.package-install.md)
+
 ## [2.9.0] - 2026-02-21
 
 ### Changed
