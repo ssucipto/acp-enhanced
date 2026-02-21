@@ -255,6 +255,7 @@ fi
 ### 6. Update Commands
 
 **Commands to enhance**:
+- [`@acp.init`](../commands/acp.init.md) - Add step to read `~/.acp/manifest.yaml` and report globally installed packages
 - [`@acp.package-install`](../commands/acp.package-install.md) - Add `--global` flag (installs to `~/.acp/packages/`)
 - [`@acp.package-list`](../commands/acp.package-list.md) - Add `--global` flag to list global packages
 - [`@acp.package-update`](../commands/acp.package-update.md) - Add `--global` flag to update global packages
@@ -334,11 +335,12 @@ fi
 3. Update global manifest after installation
 4. Test global installation workflow
 
-### Phase 3: Update Commands (1-2 hours)
-1. Update `@acp.package-list --global` to read global manifest
-2. Update `@acp.package-update --global` to update in `~/.acp/packages/`
-3. Update `@acp.package-remove --global` to remove from global location
-4. Update `@acp.package-info --global` to show global package details
+### Phase 3: Update Commands (2-3 hours)
+1. Update `@acp.init` to read and report global packages from `~/.acp/manifest.yaml`
+2. Update `@acp.package-list --global` to read global manifest
+3. Update `@acp.package-update --global` to update in `~/.acp/packages/`
+4. Update `@acp.package-remove --global` to remove from global location
+5. Update `@acp.package-info --global` to show global package details
 
 ### Phase 4: Documentation (1-2 hours)
 1. Update AGENT.md with global package discovery instructions
@@ -386,6 +388,13 @@ fi
 ```markdown
 # Agent working in /home/user/my-project/
 
+# Automatic discovery via @acp.init:
+1. User runs: @acp.init
+2. Agent reads: ~/.acp/manifest.yaml (if exists)
+3. Agent reports: "Global packages available: @prmichaelsen/acp-git (2 commands), @prmichaelsen/acp-firebase (3 patterns, 2 commands)"
+4. Agent loads context from both local and global packages
+
+# Manual command invocation:
 1. User types: @git.commit
 2. Agent checks: ./agent/commands/git.commit.md (not found locally)
 3. Agent reads: ~/.acp/manifest.yaml (discovers acp-git package)
