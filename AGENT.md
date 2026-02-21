@@ -739,27 +739,6 @@ Run ./agent/scripts/unacp.install.sh to remove all ACP files (agent/ directory a
 
 ## Instructions for Future Agents
 
-### 🚨 CRITICAL: Respect User Commands
-
-**DO NOT IGNORE COMMANDS LIKE RE-READ, RERUN, OR RE-EXECUTE!**
-
-When a user asks you to do something again (e.g., "rerun git.commit.md", "re-read this file", "execute this command again"), they want you to **DO IT AGAIN WITH INTENTION**. This is not a mistake or redundancy - they have a specific reason for the request.
-
-**Examples:**
-- "Run `@git.commit` again" → Execute the git.commit command again
-- "Re-read the design doc" → Read the design document again, even if you just read it
-- "Rerun the tests" → Run the tests again, don't just report previous results
-
-**Why this matters:**
-- Files may have changed since you last read them
-- The user may want to trigger side effects (like creating a commit)
-- Context may have shifted requiring fresh execution
-- The user knows something you don't
-
-**Always assume the user has good reason for asking you to repeat an action.**
-
----
-
 ### When You First Encounter ACP
 
 1. **Read progress.yaml**
@@ -936,9 +915,16 @@ When a user asks you to do something again (e.g., "rerun git.commit.md", "re-rea
    - ✅ **DO** confirm before reverting user's manual edits
    - **Rationale**: If you read a file and it is missing contents or has changed contents (i.e., it does not contain what you expect), assume or confirm with the user if they made intentional updates that you should not revert. Do not assume "The file is missing <xyz>, I need to add it back". The user may have edited files manually with intention.
 
----
+10. **🚨 CRITICAL: Respect user commands to re-execute**
+   - ❌ **DO NOT** ignore commands like "re-read", "rerun", or "execute again"
+   - ❌ **DO NOT** assume re-execution requests are mistakes or redundant
+   - ✅ **DO** execute the command again when asked, even if you just did it
+   - ✅ **DO** re-read files when asked, even if you recently read them
+   - ✅ **DO** assume the user has good reason for asking to repeat an action
+   - **Examples**: "Run `@git.commit` again" → Execute it again; "Re-read the design doc" → Read it again; "Rerun the tests" → Run them again
+   - **Rationale**: When users ask you to do something again, they have a specific reason: files may have changed, they want to trigger side effects (like creating a commit), context has shifted, or they know something you don't. Always respect these requests and execute them with intention.
 
-## Best Practices
+---
 
 ### Documentation
 
