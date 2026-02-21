@@ -262,6 +262,12 @@ validate_namespace_consistency() {
     
     local namespace="$PACKAGE_NAME"
     local inconsistent=0
+    local skipped=0
+    
+    # Read package.yaml contents to know which files should be validated
+    local package_commands=$(./agent/scripts/acp.yaml.sh package.yaml "contents.commands" 2>/dev/null || echo "")
+    local package_patterns=$(./agent/scripts/acp.yaml.sh package.yaml "contents.patterns" 2>/dev/null || echo "")
+    local package_designs=$(./agent/scripts/acp.yaml.sh package.yaml "contents.designs" 2>/dev/null || echo "")
     
     # Check command files
     if [ -d "agent/commands" ]; then
@@ -273,6 +279,13 @@ validate_namespace_consistency() {
             [[ "$basename" == *.template.md ]] && continue
             [[ "$basename" == acp.* ]] && continue
             [[ "$basename" == local.* ]] && continue
+            
+            # Check if file is in package.yaml contents
+            if ! echo "$package_commands" | grep -q "$basename"; then
+                info "Skipping namespace check (not in package contents): $basename"
+                skipped=$((skipped + 1))
+                continue
+            fi
             
             # Check if filename starts with namespace
             if [[ ! "$basename" =~ ^${namespace}\. ]]; then
@@ -292,6 +305,13 @@ validate_namespace_consistency() {
             # Skip templates
             [[ "$basename" == *.template.md ]] && continue
             
+            # Check if file is in package.yaml contents
+            if ! echo "$package_patterns" | grep -q "$basename"; then
+                info "Skipping namespace check (not in package contents): $basename"
+                skipped=$((skipped + 1))
+                continue
+            fi
+            
             # Patterns may or may not use namespace - just warn if inconsistent
             if [[ "$basename" =~ ^${namespace}\. ]]; then
                 # Has namespace - good
@@ -303,10 +323,33 @@ validate_namespace_consistency() {
         done
     fi
     
+    # Check design files
+    if [ -d "agent/design" ]; then
+        for file in agent/design/*.md; do
+            [ -f "$file" ] || continue
+            local basename=$(basename "$file")
+            
+            # Skip templates
+            [[ "$basename" == *.template.md ]] && continue
+            [[ "$basename" == .gitkeep ]] && continue
+            
+            # Check if file is in package.yaml contents
+            if ! echo "$package_designs" | grep -q "$basename"; then
+                info "Skipping namespace check (not in package contents): $basename"
+                skipped=$((skipped + 1))
+                continue
+            fi
+        done
+    fi
+    
     check
     if [ "$inconsistent" -eq 0 ]; then
-        pass "All command files use '$namespace' namespace"
-        pass "Pattern namespace usage noted"
+        pass "All package content files use correct namespace"
+        if [ "$skipped" -gt 0 ]; then
+            info "$skipped file(s) skipped (not in package.yaml contents)"
+            info "These files won't be installed to user projects"
+            info "This is normal for installed dependencies (tracked in manifest.yaml)"
+        fi
     else
         error "$inconsistent file(s) with namespace issues"
     fi

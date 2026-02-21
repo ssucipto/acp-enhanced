@@ -573,14 +573,17 @@ tasks:
   future_enhancements:
     - id: task-30
       name: Fix Package Validation for Non-Package Files
-      status: not_started
+      status: completed
       file: agent/tasks/task-30-fix-package-validation-non-package-files.md
       estimated_hours: 1-2
-      completed_date: null
+      completed_date: 2026-02-21
       notes: |
-        Fix @acp.package-validate to skip namespace validation for files that exist
-        in the package repository but are NOT listed in package.yaml contents.
-        These are typically installed dependencies tracked in manifest.yaml.
+        ✅ Fixed @acp.package-validate namespace validation
+        - Only validates files in package.yaml contents
+        - Skips files not in contents (installed dependencies)
+        - Added informational output for skipped files
+        - Updated documentation to explain behavior
+        - manifest.yaml acts as dev dependency tracker
 
 documentation:
   design_documents: 6
@@ -603,6 +606,23 @@ progress:
   milestone_5: 0
 
 recent_work:
+  - date: 2026-02-21
+    description: |
+      ✅ Task 30 Complete: Fix Package Validation for Non-Package Files
+      Fixed namespace validation to skip files not in package.yaml contents.
+    items:
+      - ✅ Updated agent/scripts/acp.package-validate.sh
+      - ✅ Modified validate_namespace_consistency() function
+      - ✅ Reads package.yaml contents (commands, patterns, designs)
+      - ✅ Only validates files listed in contents
+      - ✅ Skips files not in contents with informational message
+      - ✅ Added skipped file counter and helpful output
+      - ✅ Updated agent/commands/acp.package-validate.md documentation
+      - ✅ Explained that files not in contents are skipped (normal for dependencies)
+      - 📋 Bug fix complete - no more false positive namespace violations
+      - 📋 manifest.yaml already acts as dev dependency tracker
+      - 📋 Installation system already works correctly (only installs contents)
+  
   - date: 2026-02-21
     description: |
       🚀 Agent Context Initialized via @acp.init

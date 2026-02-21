@@ -72,9 +72,12 @@ Run structural validation checks that don't require LLM.
   - Report unlisted files
 - **Namespace Consistency**: Validate filenames use package namespace
   - Extract namespace from package.yaml name field
-  - Check all command files start with {namespace}.
-  - Check all pattern files start with {namespace}. (if package uses namespaced patterns)
+  - **Only validates files listed in package.yaml contents**
+  - Skips files not in contents (e.g., installed dependencies tracked in manifest.yaml)
+  - Check all command files in contents start with {namespace}.
+  - Check all pattern files in contents start with {namespace}. (if package uses namespaced patterns)
   - Report files without namespace prefix
+  - **Note**: Files in your repository but not in package.yaml contents are skipped (this is normal for installed dependencies)
 - **Git Repository**: Validate git setup
   - Check `.git/` directory exists
   - Check git remote configured: `git remote -v`
