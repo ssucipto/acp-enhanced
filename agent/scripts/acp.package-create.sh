@@ -340,6 +340,85 @@ echo "${GREEN}✓${NC} Created package.yaml"
 echo "${GREEN}✓${NC} Configured release branch: ${RELEASE_BRANCH}"
 echo ""
 
+# Step 4.5: Create progress.yaml for package development
+echo "${BOLD}Creating Progress Tracking${NC}"
+echo ""
+
+CURRENT_DATE=$(date +%Y-%m-%d)
+
+cat > "agent/progress.yaml" << EOF
+# Package Development Progress Tracking
+# ACP Package: ${PACKAGE_NAME}
+
+project:
+  name: ${PACKAGE_NAME}
+  version: 1.0.0
+  type: package
+  started: ${CURRENT_DATE}
+  status: in_progress
+  current_milestone: null
+  description: |
+    ACP Package: ${DESCRIPTION}
+
+milestones: []
+
+tasks: {}
+
+documentation:
+  design_documents: 0
+  milestone_documents: 0
+  pattern_documents: 0
+  task_documents: 0
+  command_documents: 0
+  last_updated: ${CURRENT_DATE}
+
+progress:
+  planning: 0
+  implementation: 0
+  testing: 0
+  documentation: 0
+  overall: 0
+
+recent_work:
+  - date: ${CURRENT_DATE}
+    description: |
+      📦 Package Created: ${PACKAGE_NAME}
+      Initial package structure created. Ready for content development.
+    items:
+      - ✅ Created package.yaml with metadata
+      - ✅ Installed full ACP (templates, commands, scripts)
+      - ✅ Created README.md, LICENSE, CHANGELOG.md
+      - ✅ Initialized git repository
+      - ✅ Installed pre-commit hook
+      - ✅ Created progress.yaml for development tracking
+      - 📋 Ready to add content with entity creation commands
+
+next_steps:
+  - Add patterns using @acp.pattern-create
+  - Add commands using @acp.command-create
+  - Add designs using @acp.design-create
+  - Create milestones and tasks as needed
+  - Validate package with @acp.package-validate
+  - Publish with @acp.package-publish
+
+notes:
+  - This is an ACP package repository
+  - Use entity creation commands to add content
+  - Create milestones and tasks as you plan development
+  - progress.yaml is for development only (not installed to user projects)
+
+current_blockers: []
+
+team:
+  - role: Package Author
+    name: ${AUTHOR}
+    focus: |
+      Developing ${PACKAGE_NAME} package
+EOF
+
+echo "${GREEN}✓${NC} Created progress.yaml for package development tracking"
+echo ""
+
 # Step 5: Create README.md
 echo "${BOLD}Creating Documentation${NC}"
 echo ""
@@ -752,6 +831,7 @@ echo "  ${GREEN}✓${NC} Pre-commit hook (validates package.yaml before commits)
 echo "  ${GREEN}✓${NC} Release branch configured (${RELEASE_BRANCH})"
 echo "  ${GREEN}✓${NC} Git repository initialized"
 echo "  ${GREEN}✓${NC} Bootstrap script (scripts/bootstrap.sh)"
+echo "  ${GREEN}✓${NC} Progress tracking (agent/progress.yaml)"
 echo ""
 echo "${BOLD}💡 Bootstrap Installation:${NC}"
 echo ""
@@ -760,6 +840,15 @@ echo ""
 echo "  ${YELLOW}curl -fsSL ${REPO_URL%.git}/raw/${RELEASE_BRANCH}/scripts/bootstrap.sh | bash${NC}"
 echo ""
 echo "This is perfect for bootstrapping new projects!"
+echo ""
+echo "${BOLD}💡 Progress Tracking:${NC}"
+echo ""
+echo "Use standard ACP commands to track package development:"
+echo "  ${YELLOW}@acp.init${NC}     - Initialize context"
+echo "  ${YELLOW}@acp.status${NC}   - Check development status"
+echo "  ${YELLOW}@acp.proceed${NC}  - Work on tasks"
+echo ""
+echo "Create milestones and tasks as you plan development."
 echo ""
 echo "Ready to add content with @acp.pattern-create, @acp.command-create, @acp.design-create"
 echo ""
