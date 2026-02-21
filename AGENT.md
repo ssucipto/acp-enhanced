@@ -1,7 +1,7 @@
 # Agent Context Protocol (ACP)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 2.10.0
+**Version**: 2.10.1
 **Created**: 2026-02-11
 **Status**: Production Pattern
 
@@ -738,6 +738,27 @@ Run ./agent/scripts/unacp.install.sh to remove all ACP files (agent/ directory a
 ---
 
 ## Instructions for Future Agents
+
+### 🚨 CRITICAL: Respect User Commands
+
+**DO NOT IGNORE COMMANDS LIKE RE-READ, RERUN, OR RE-EXECUTE!**
+
+When a user asks you to do something again (e.g., "rerun git.commit.md", "re-read this file", "execute this command again"), they want you to **DO IT AGAIN WITH INTENTION**. This is not a mistake or redundancy - they have a specific reason for the request.
+
+**Examples:**
+- "Run `@git.commit` again" → Execute the git.commit command again
+- "Re-read the design doc" → Read the design document again, even if you just read it
+- "Rerun the tests" → Run the tests again, don't just report previous results
+
+**Why this matters:**
+- Files may have changed since you last read them
+- The user may want to trigger side effects (like creating a commit)
+- Context may have shifted requiring fresh execution
+- The user knows something you don't
+
+**Always assume the user has good reason for asking you to repeat an action.**
+
+---
 
 ### When You First Encounter ACP
 
