@@ -1,29 +1,138 @@
 #!/bin/bash
 
-# ACP Package Creator v2.0.0
+# ACP Package Creator v2.1.0
 # Creates a new ACP package with full ACP installation
 
 set -e
 
 # Source common utilities
-SCRIPT_DIR="$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "${SCRIPT_DIR}/acp.common.sh"
 
 # Initialize colors
 init_colors
 
+# Parse command-line arguments
+PACKAGE_NAME=""
+DESCRIPTION=""
+AUTHOR=""
+LICENSE="MIT"
+HOMEPAGE=""
+REPO_URL=""
+TAGS_INPUT=""
+RELEASE_BRANCH="main"
+TARGET_DIR=""
+
+# Show usage
+show_usage() {
+    echo "Usage: $0 [OPTIONS]"
+    echo ""
+    echo "Create a new ACP package with full ACP installation."
+    echo ""
+    echo "Options:"
+    echo "  --name NAME              Package name (required, lowercase, hyphens allowed)"
+    echo "  --description DESC       Package description (required)"
+    echo "  --author AUTHOR          Author name (required)"
+    echo "  --license LICENSE        License (default: MIT)"
+    echo "  --homepage URL           Homepage URL (optional)"
+    echo "  --repository URL         Git repository URL (required)"
+    echo "  --tags TAGS              Comma-separated tags (optional)"
+    echo "  --branch BRANCH          Release branch (default: main)"
+    echo "  --target-dir DIR         Target directory (default: ~/.acp/projects/acp-NAME)"
+    echo "  -h, --help               Show this help message"
+    echo ""
+    echo "Modes:"
+    echo "  Interactive:    Run without arguments, prompts for all information"
+    echo "  Non-interactive: Provide all required arguments (--name, --description, --author, --repository)"
+    echo ""
+    echo "Examples:"
+    echo "  # Interactive mode (prompts for all information)"
+    echo "  $0"
+    echo ""
+    echo "  # Non-interactive mode (all required parameters provided)"
+    echo "  $0 --name test-package \\"
+    echo "     --description \"Test package for ACP\" \\"
+    echo "     --author \"Your Name\" \\"
+    echo "     --repository \"https://github.com/user/acp-test-package.git\" \\"
+    echo "     --tags \"test,example\""
+    echo ""
+}
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --name)
+            PACKAGE_NAME="$2"
+            shift 2
+            ;;
+        --description)
+            DESCRIPTION="$2"
+            shift 2
+            ;;
+        --author)
+            AUTHOR="$2"
+            shift 2
+            ;;
+        --license)
+            LICENSE="$2"
+            shift 2
+            ;;
+        --homepage)
+            HOMEPAGE="$2"
+            shift 2
+            ;;
+        --repository)
+            REPO_URL="$2"
+            shift 2
+            ;;
+        --tags)
+            TAGS_INPUT="$2"
+            shift 2
+            ;;
+        --branch)
+            RELEASE_BRANCH="$2"
+            shift 2
+            ;;
+        --target-dir)
+            TARGET_DIR="$2"
+            shift 2
+            ;;
+        -h|--help)
+            show_usage
+            exit 0
+            ;;
+        *)
+            echo "${RED}Error: Unknown option: $1${NC}"
+            echo ""
+            show_usage
+            exit 1
+            ;;
+    esac
+done
+
+# Detect if running in non-interactive mode (all required args provided)
+NON_INTERACTIVE=false
+if [ -n "$PACKAGE_NAME" ] && [ -n "$DESCRIPTION" ] && [ -n "$AUTHOR" ] && [ -n "$REPO_URL" ]; then
+    NON_INTERACTIVE=true
+fi
+
 echo "${BLUE}📦 ACP Package Creator${NC}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "Let's create a new ACP package!"
-echo ""
 
-# Step 1: Gather package information
-echo "${BOLD}Package Information${NC}"
-echo ""
+if [ "$NON_INTERACTIVE" = false ]; then
+    echo "Let's create a new ACP package!"
+    echo ""
+    
+    # Step 1: Gather package information
+    echo "${BOLD}Package Information${NC}"
+    echo ""
+fi
 
 # Package name
-read -p "Package name (lowercase, no spaces): " PACKAGE_NAME
+if [ -z "$PACKAGE_NAME" ]; then
+    read -p "Package name (lowercase, no spaces): " PACKAGE_NAME
+fi
 if [ -z "$PACKAGE_NAME" ]; then
     echo "${RED}Error: Package name is required${NC}"
     exit 1
@@ -43,48 +152,67 @@ if [ "$PACKAGE_NAME" = "acp" ] || [ "$PACKAGE_NAME" = "local" ] || [ "$PACKAGE_N
 fi
 
 # Description
-read -p "Description: " DESCRIPTION
+if [ -z "$DESCRIPTION" ]; then
+    read -p "Description: " DESCRIPTION
+fi
 if [ -z "$DESCRIPTION" ]; then
     echo "${RED}Error: Description is required${NC}"
     exit 1
 fi
 
 # Author
-read -p "Author name: " AUTHOR
+if [ -z "$AUTHOR" ]; then
+    read -p "Author name: " AUTHOR
+fi
 if [ -z "$AUTHOR" ]; then
     echo "${RED}Error: Author name is required${NC}"
     exit 1
 fi
 
 # License
-read -p "License [MIT]: " LICENSE
-LICENSE=${LICENSE:-MIT}
+if [ -z "$LICENSE" ]; then
+    LICENSE="MIT"
+fi
+if [ "$NON_INTERACTIVE" = false ]; then
+    read -p "License [MIT]: " LICENSE_INPUT
+    LICENSE=${LICENSE_INPUT:-MIT}
+fi
 
 # Homepage
-read -p "Homepage URL (optional): " HOMEPAGE
+if [ "$NON_INTERACTIVE" = false ] && [ -z "$HOMEPAGE" ]; then
+    read -p "Homepage URL (optional): " HOMEPAGE
+fi
 
 # Repository URL
-read -p "Repository URL (e.g., https://github.com/username/acp-${PACKAGE_NAME}.git): " REPO_URL
+if [ -z "$REPO_URL" ]; then
+    read -p "Repository URL (e.g., https://github.com/username/acp-${PACKAGE_NAME}.git): " REPO_URL
+fi
 if [ -z "$REPO_URL" ]; then
     echo "${RED}Error: Repository URL is required${NC}"
     exit 1
 fi
 
 # Tags
-read -p "Tags (comma-separated): " TAGS_INPUT
+if [ "$NON_INTERACTIVE" = false ] && [ -z "$TAGS_INPUT" ]; then
+    read -p "Tags (comma-separated): " TAGS_INPUT
+fi
 
 # Convert tags to array
 IFS=',' read -ra TAGS_ARRAY <<< "$TAGS_INPUT"
 
 # Release branch
-read -p "Release branch [main]: " RELEASE_BRANCH
-RELEASE_BRANCH=${RELEASE_BRANCH:-main}
+if [ "$NON_INTERACTIVE" = false ]; then
+    read -p "Release branch [main]: " RELEASE_BRANCH_INPUT
+    RELEASE_BRANCH=${RELEASE_BRANCH_INPUT:-main}
+fi
 
 # Target directory (optional)
-# Default: ~/.acp/projects/{package-name} or $HOME/.acp/projects/{package-name}
+# Default: ~/.acp/projects/acp-{package-name}
 # Note: ~/.acp/projects/ is for development, ~/.acp/packages/ is for installed packages
-DEFAULT_TARGET_DIR="$HOME/.acp/projects/${PACKAGE_NAME}"
-read -p "Target directory [${DEFAULT_TARGET_DIR}]: " TARGET_DIR
+DEFAULT_TARGET_DIR="$HOME/.acp/projects/acp-${PACKAGE_NAME}"
+if [ "$NON_INTERACTIVE" = false ] && [ -z "$TARGET_DIR" ]; then
+    read -p "Target directory [${DEFAULT_TARGET_DIR}]: " TARGET_DIR
+fi
 
 # Expand path (handle ~, $HOME, and relative paths)
 if [ -z "$TARGET_DIR" ]; then
@@ -95,12 +223,6 @@ else
     # Expand $HOME
     TARGET_DIR=$(eval echo "$TARGET_DIR")
 fi
-
-# Create target directory if it doesn't exist
-mkdir -p "$TARGET_DIR"
-
-# Convert to absolute path
-TARGET_DIR=$(cd "$TARGET_DIR" && pwd)
 
 echo ""
 echo "${GREEN}✓${NC} Package information collected"
@@ -119,13 +241,20 @@ echo "Homepage: ${HOMEPAGE}"
 echo "Repository: ${REPO_URL}"
 echo "Tags: ${TAGS_INPUT}"
 echo "Release branch: ${RELEASE_BRANCH}"
+echo "Target: ${TARGET_DIR}"
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
 # Step 2: Create directory structure
-PACKAGE_DIR="${TARGET_DIR}/acp-${PACKAGE_NAME}"
+PACKAGE_DIR="${TARGET_DIR}"
 
+# Expand to absolute path if relative
+if [[ "$PACKAGE_DIR" != /* ]]; then
+    PACKAGE_DIR="$(pwd)/$PACKAGE_DIR"
+fi
+
+# Check if directory already exists
 if [ -d "$PACKAGE_DIR" ]; then
     echo "${RED}Error: Directory $PACKAGE_DIR already exists${NC}"
     exit 1
