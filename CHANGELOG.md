@@ -5,6 +5,19 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.1] - 2026-02-21
+
+### Changed
+- **Milestone 5 Planning** - Global Package Installation design completed
+  - Revised design document based on user clarification feedback
+  - Removed symlink-based architecture in favor of simple agent discovery
+  - Added `@acp.init` enhancement to automatically read and report global packages
+  - Created clarification document with 25+ architecture questions answered
+  - Updated milestone document with 4 implementation phases
+  - Global packages install to `~/.acp/packages/` only (no symlinks)
+  - Agents discover packages via `~/.acp/manifest.yaml`
+  - Local packages always take precedence over global packages
+
 ## [2.10.0] - 2026-02-21
 
 ### Added
