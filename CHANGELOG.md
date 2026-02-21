@@ -5,6 +5,28 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.0] - 2026-02-21
+
+### Added
+- **@acp.package-create Non-Interactive Mode** - Command-line argument support
+  - Added `--name`, `--description`, `--author`, `--repository` flags
+  - Added `--license`, `--homepage`, `--tags`, `--branch`, `--target-dir` optional flags
+  - Automatic non-interactive mode when all required args provided
+  - Removed `--yes` flag (not needed with CLI args)
+  - Script version: 2.0.0 → 2.1.0
+
+### Fixed
+- **@acp.package-create Directory Structure** - Fixed redundant nesting
+  - Changed default from `~/.acp/projects/{name}/acp-{name}/` to `~/.acp/projects/acp-{name}/`
+  - Fixed SCRIPT_DIR to use absolute path (prevents issues after cd)
+  - Fixed directory existence check (was creating before checking)
+
+### Changed
+- **Test Package Created** - Successfully tested non-interactive mode
+  - Created acp-test-package at `~/.acp/projects/acp-test-package/`
+  - Verified full ACP installation, package.yaml, git initialization
+  - Pre-commit hook installed and working
+
 ## [2.10.1] - 2026-02-21
 
 ### Changed
