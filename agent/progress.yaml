@@ -600,14 +600,17 @@ tasks:
     
     - id: task-32
       name: Fix package.yaml Schema Mismatch and Add Template
-      status: not_started
+      status: completed
       file: agent/tasks/task-32-fix-package-yaml-schema-mismatch.md
       estimated_hours: 2-3
-      completed_date: null
+      completed_date: 2026-02-21
       notes: |
-        Fix mismatch between package.yaml schema documentation and actual script expectations.
-        Create package.template.yaml to guide package creators on correct format.
-        Ensure validation, installation, and info scripts all expect same format.
+        ✅ Fixed package.yaml schema mismatch
+        - Added yaml_get_nested() function to acp.yaml.sh for array indexing
+        - Updated acp.package-validate.sh to use yaml_get_nested()
+        - Created agent/package.template.yaml with correct object format
+        - Updated agent/schemas/package.schema.yaml to document object format
+        - All scripts now handle contents arrays correctly
 
 documentation:
   design_documents: 6
@@ -630,6 +633,25 @@ progress:
   milestone_5: 0
 
 recent_work:
+  - date: 2026-02-21
+    description: |
+      ✅ Task 32 Complete: Fix package.yaml Schema Mismatch
+      Enhanced YAML parser to support nested objects and fixed validation.
+    items:
+      - ✅ Added yaml_get_nested() function to agent/scripts/acp.yaml.sh
+      - ✅ Supports array indexing: contents.commands[0].name
+      - ✅ POSIX-compliant implementation using awk
+      - ✅ Updated agent/scripts/acp.package-validate.sh
+      - ✅ File existence check now uses yaml_get_nested()
+      - ✅ Namespace validation now uses yaml_get_nested()
+      - ✅ Created agent/package.template.yaml with correct format
+      - ✅ Updated agent/schemas/package.schema.yaml
+      - ✅ Documented that contents arrays contain objects with name field
+      - ✅ Tested with real package - works correctly!
+      - 📋 Validation can now read files from package.yaml contents
+      - 📋 No more "All 0 files in contents exist" errors
+      - 📋 Object format enables version tracking per file
+  
   - date: 2026-02-21
     description: |
       ✅ Task 31 Complete: Add progress.yaml to Package Repositories

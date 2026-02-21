@@ -86,16 +86,34 @@ fields:
     fields:
       patterns:
         type: array
+        item_type: object
         required: false
-        description: "List of pattern files"
+        description: "List of pattern files (each with 'name' field)"
+        item_fields:
+          name:
+            type: string
+            required: true
+            description: "Pattern filename (e.g., namespace.pattern-name.md)"
       commands:
         type: array
+        item_type: object
         required: false
-        description: "List of command files"
+        description: "List of command files (each with 'name' field)"
+        item_fields:
+          name:
+            type: string
+            required: true
+            description: "Command filename (e.g., namespace.command-name.md)"
       designs:
         type: array
+        item_type: object
         required: false
-        description: "List of design files"
+        description: "List of design files (each with 'name' field)"
+        item_fields:
+          name:
+            type: string
+            required: true
+            description: "Design filename (e.g., namespace.design-name.md)"
     
   requires:
     type: object

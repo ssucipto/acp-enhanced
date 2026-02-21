@@ -5,6 +5,41 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2026-02-21
+
+### Added
+
+**Enhanced YAML Parser for Nested Objects**:
+- Added `yaml_get_nested()` function to `acp.yaml.sh` for array indexing support
+- Supports syntax: `contents.commands[0].name`
+- POSIX-compliant implementation using awk
+- Enables reading nested objects in YAML arrays
+- Generic solution for all nested object access
+
+**Package Template**:
+- Created `agent/package.template.yaml` showing correct package.yaml format
+- Documents object format for contents arrays: `{name: "file.md"}`
+- Provides single source of truth for package creators
+
+### Changed
+
+**Package Validation Improvements**:
+- Updated `acp.package-validate.sh` to use `yaml_get_nested()`
+- File existence check now correctly reads package.yaml contents
+- Namespace validation now correctly reads package.yaml contents
+- Fixed "All 0 files in contents exist" error
+
+**Schema Documentation**:
+- Updated `agent/schemas/package.schema.yaml` to document object format
+- Contents arrays must contain objects with `name` field
+- Enables version tracking per file (extensible for future)
+
+### Fixed
+
+- Package validation can now read files from package.yaml contents correctly
+- No more false "unlisted files" warnings
+- Object format works consistently across all scripts
+
 ## [3.2.1] - 2026-02-21
 
 ### Fixed
