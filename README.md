@@ -75,7 +75,7 @@ This will:
 
 ### Resume a Previous Session
 
-Type: **`@/agent/commands/acp.init.md 'agent/reports/report-2026-02-21-session-3.md' 'agent/commands/acp.proceed.md'`**
+Type: **`@acp.init.md @report-2026-02-21-session-3.md @acp.proceed`**
 
 This will:
 - Load the initialization command
