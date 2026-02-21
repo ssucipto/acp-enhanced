@@ -86,6 +86,16 @@ fi
 # Update progress template
 cp "$TEMP_DIR/agent/progress.template.yaml" "agent/"
 
+# Update manifest template
+if [ -f "$TEMP_DIR/agent/manifest.template.yaml" ]; then
+    cp "$TEMP_DIR/agent/manifest.template.yaml" "agent/"
+fi
+
+# Update package template
+if [ -f "$TEMP_DIR/agent/package.template.yaml" ]; then
+    cp "$TEMP_DIR/agent/package.template.yaml" "agent/"
+fi
+
 # Update AGENT.md
 cp "$TEMP_DIR/AGENT.md" "."
 
