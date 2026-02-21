@@ -136,6 +136,44 @@ cleanup_deprecated_scripts
 
 echo "${GREEN}✓${NC} All files installed"
 echo ""
+
+# Create manifest.yaml to track core ACP installation
+echo "Creating manifest..."
+
+# Get ACP version from AGENT.md
+ACP_VERSION=$(grep "^\*\*Version\*\*:" "$TARGET_DIR/AGENT.md" | sed 's/.*: //' | head -1)
+INSTALL_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+# List installed core files
+CORE_COMMANDS=$(cd "$TARGET_DIR" && ls agent/commands/acp.*.md agent/commands/git.*.md 2>/dev/null | xargs -n1 basename)
+CORE_PATTERNS=$(cd "$TARGET_DIR" && ls agent/patterns/*.template.md 2>/dev/null | xargs -n1 basename)
+CORE_DESIGNS=$(cd "$TARGET_DIR" && ls agent/design/*.template.md 2>/dev/null | xargs -n1 basename)
+
+# Create manifest with acp-core package
+cat > "$TARGET_DIR/agent/manifest.yaml" << EOF
+# ACP Package Manifest
+# Tracks installed packages and their versions
+
+packages:
+  acp-core:
+    source: https://github.com/prmichaelsen/agent-context-protocol.git
+    package_version: ${ACP_VERSION}
+    installed_at: ${INSTALL_DATE}
+    updated_at: ${INSTALL_DATE}
+    files:
+      commands:
+$(echo "$CORE_COMMANDS" | sed 's/^/        - name: /')
+      patterns:
+$(echo "$CORE_PATTERNS" | sed 's/^/        - name: /')
+      designs:
+$(echo "$CORE_DESIGNS" | sed 's/^/        - name: /')
+
+manifest_version: 1.0.0
+last_updated: ${INSTALL_DATE}
+EOF
+
+echo "${GREEN}✓${NC} Created manifest.yaml (tracking acp-core v${ACP_VERSION})"
+echo ""
 echo "${GREEN}Installation complete!${NC}"
 echo ""
 echo "${GREEN}Next steps:${NC}"
