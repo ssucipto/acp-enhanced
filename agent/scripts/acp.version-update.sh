@@ -103,6 +103,28 @@ cleanup_deprecated_scripts
 
 echo "${GREEN}✓${NC} All files updated"
 echo ""
+
+# Update acp-core version in manifest if it exists
+if [ -f "agent/manifest.yaml" ]; then
+    echo "Updating manifest..."
+    
+    # Get new ACP version
+    NEW_VERSION=$(grep "^\*\*Version\*\*:" "AGENT.md" | sed 's/.*: //' | head -1)
+    UPDATE_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    
+    # Update acp-core version and timestamps
+    sed -i "/^  acp-core:/,/^  [a-z]/ {
+        s/package_version: .*/package_version: ${NEW_VERSION}/
+        s/updated_at: .*/updated_at: ${UPDATE_DATE}/
+    }" agent/manifest.yaml
+    
+    # Update manifest timestamp
+    sed -i "s/^last_updated: .*/last_updated: ${UPDATE_DATE}/" agent/manifest.yaml
+    
+    echo "${GREEN}✓${NC} Updated acp-core to v${NEW_VERSION} in manifest.yaml"
+    echo ""
+fi
+
 echo "${GREEN}Update complete!${NC}"
 echo ""
 echo "${BLUE}What was updated:${NC}"
