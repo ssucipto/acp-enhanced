@@ -596,7 +596,18 @@ tasks:
         - Creates minimal progress.yaml (no predefined milestones/tasks)
         - Enables full ACP workflow for package development
         - Updated success message to mention progress tracking
-        - progress.yaml is for development only (excluded via .gitignore)
+        - Fixed: progress.yaml should be committed (removed from .gitignore)
+    
+    - id: task-32
+      name: Fix package.yaml Schema Mismatch and Add Template
+      status: not_started
+      file: agent/tasks/task-32-fix-package-yaml-schema-mismatch.md
+      estimated_hours: 2-3
+      completed_date: null
+      notes: |
+        Fix mismatch between package.yaml schema documentation and actual script expectations.
+        Create package.template.yaml to guide package creators on correct format.
+        Ensure validation, installation, and info scripts all expect same format.
 
 documentation:
   design_documents: 6
