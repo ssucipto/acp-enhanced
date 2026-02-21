@@ -611,6 +611,16 @@ tasks:
         - Created agent/package.template.yaml with correct object format
         - Updated agent/schemas/package.schema.yaml to document object format
         - All scripts now handle contents arrays correctly
+    
+    - id: task-33
+      name: Track ACP Core Commands in manifest.yaml
+      status: not_started
+      file: agent/tasks/task-33-track-acp-core-in-manifest.md
+      estimated_hours: 1-2
+      completed_date: null
+      notes: |
+        Update acp.install.sh to track core ACP commands in manifest.yaml as "acp-core" package.
+        Fixes false warnings about unlisted core commands in package validation.
 
 documentation:
   design_documents: 6
