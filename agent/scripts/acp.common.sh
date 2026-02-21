@@ -1021,3 +1021,97 @@ display_available_commands() {
     echo "  ${GREEN}@git.init${NC}                       - Initialize git repository with smart .gitignore"
     echo "  ${GREEN}@git.commit${NC}                     - Intelligent version-aware git commit"
 }
+
+# ============================================================================
+# Pre-Commit Hook System
+# ============================================================================
+
+# Install pre-commit hook for package validation
+# Usage: install_precommit_hook
+# Returns: 0 on success, 1 on failure
+install_precommit_hook() {
+    local hook_file=".git/hooks/pre-commit"
+    
+    # Check if .git directory exists
+    if [ ! -d ".git" ]; then
+        echo "${RED}Error: Not a git repository${NC}" >&2
+        return 1
+    fi
+    
+    # Create hooks directory if it doesn't exist
+    mkdir -p ".git/hooks"
+    
+    # Check if hook already exists
+    if [ -f "$hook_file" ]; then
+        echo "${YELLOW}⚠  Pre-commit hook already exists${NC}"
+        echo "   Backing up to pre-commit.backup"
+        cp "$hook_file" "${hook_file}.backup"
+    fi
+    
+    # Create hook from template
+    cat > "$hook_file" << 'EOF'
+#!/bin/sh
+# ACP Package Pre-Commit Hook
+# Validates package.yaml before allowing commit
+
+# Colors for output
+if command -v tput >/dev/null 2>&1 && [ -t 1 ]; then
+    RED=$(tput setaf 1)
+    GREEN=$(tput setaf 2)
+    YELLOW=$(tput setaf 3)
+    NC=$(tput sgr0)
+else
+    RED=''
+    GREEN=''
+    YELLOW=''
+    NC=''
+fi
+
+# Check if package.yaml exists
+if [ ! -f "package.yaml" ]; then
+    # Not a package directory, skip validation
+    exit 0
+fi
+
+# Check if validation script exists
+if [ ! -f "agent/scripts/acp.yaml-validate.sh" ]; then
+    echo "${YELLOW}Warning: acp.yaml-validate.sh not found, skipping validation${NC}"
+    exit 0
+fi
+
+# Source validation script
+. ./agent/scripts/acp.yaml-validate.sh
+
+# Validate package.yaml
+echo "Validating package.yaml..."
+if ! validate_yaml_file "package.yaml" "agent/schemas/package.schema.yaml" 2>/dev/null; then
+    echo ""
+    echo "${RED}✗ Pre-commit validation failed${NC}"
+    echo ""
+    echo "package.yaml has validation errors."
+    echo "Please fix the errors and try again."
+    echo ""
+    echo "To see detailed errors, run:"
+    echo "  ./agent/scripts/acp.yaml-validate.sh package.yaml agent/schemas/package.schema.yaml"
+    echo ""
+    exit 1
+fi
+
+echo "${GREEN}✓${NC} package.yaml is valid"
+
+# Future enhancements (documented for reference):
+# - Namespace consistency checking across all files
+# - CHANGELOG.md validation for version changes
+# - File existence verification (all files in package.yaml exist)
+# - README.md structure validation
+# - Prevent commits to non-release branches
+
+exit 0
+EOF
+    
+    # Make executable
+    chmod +x "$hook_file"
+    
+    echo "${GREEN}✓${NC} Installed pre-commit hook"
+    return 0
+}

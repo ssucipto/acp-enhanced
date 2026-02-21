@@ -65,6 +65,7 @@ mkdir -p "$TARGET_DIR/agent/patterns"
 mkdir -p "$TARGET_DIR/agent/tasks"
 mkdir -p "$TARGET_DIR/agent/commands"
 mkdir -p "$TARGET_DIR/agent/scripts"
+mkdir -p "$TARGET_DIR/agent/schemas"
 mkdir -p "$TARGET_DIR/agent/reports"
 
 # Create .gitkeep files
@@ -104,7 +105,19 @@ if [ -d "$TEMP_DIR/agent/commands" ]; then
 fi
 
 # Copy progress template
-cp "$TEMP_DIR/agent/progress.template.yaml" "$TARGET_DIR/agent/"
+if [ -f "$TEMP_DIR/agent/progress.template.yaml" ]; then
+    cp "$TEMP_DIR/agent/progress.template.yaml" "$TARGET_DIR/agent/"
+fi
+
+# Copy manifest template
+if [ -f "$TEMP_DIR/agent/manifest.template.yaml" ]; then
+    cp "$TEMP_DIR/agent/manifest.template.yaml" "$TARGET_DIR/agent/"
+fi
+
+# Copy schemas
+if [ -f "$TEMP_DIR/agent/schemas/package.schema.yaml" ]; then
+    cp "$TEMP_DIR/agent/schemas/package.schema.yaml" "$TARGET_DIR/agent/schemas/"
+fi
 
 # Copy AGENT.md
 cp "$TEMP_DIR/AGENT.md" "$TARGET_DIR/"

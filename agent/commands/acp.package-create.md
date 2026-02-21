@@ -1,16 +1,18 @@
 # Command: package-create
 
 > **🤖 Agent Directive**: If you are reading this file, the command `@acp.package-create` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `@{namespace}-{command-name} NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp
-**Version**: 1.0.0
+**Version**: 2.0.0
 **Created**: 2026-02-20
-**Last Updated**: 2026-02-20
+**Last Updated**: 2026-02-21
 **Status**: Active
 
 ---
 
-**Purpose**: Interactive wizard to create a new ACP package from scratch
+**Purpose**: Create a new ACP package with full ACP installation, release branch configuration, and pre-commit hooks
 **Category**: Creation
 **Frequency**: Once per package
 
@@ -18,20 +20,20 @@
 
 ## What This Command Does
 
-This command provides a step-by-step wizard to help users create a new ACP package. It guides through:
+This command creates a complete ACP package from scratch with:
 
-1. **Project Setup** - Initialize directory structure and git repository
-2. **Package Metadata** - Create `package.yaml` with package information
-3. **Content Creation** - Set up patterns, commands, and designs directories
-4. **Documentation** - Generate README.md and CHANGELOG.md
-5. **GitHub Setup** - Instructions for publishing to GitHub
+1. **Full ACP Installation** - Runs `acp.install.sh` to install complete ACP structure
+2. **Package Metadata** - Creates `package.yaml` with package information
+3. **Release Branch Configuration** - Configures which branch(es) can publish
+4. **Pre-Commit Hooks** - Installs validation hooks automatically
+5. **Git Repository** - Initializes git with initial commit
+6. **Documentation** - Creates README.md, LICENSE, CHANGELOG.md
 
-Unlike manually creating files, this wizard ensures:
-- Correct directory structure
-- Valid `package.yaml` format
-- Proper GitHub topics for discoverability
-- Complete documentation templates
-- Best practices followed
+Unlike the old version, this command:
+- ✅ Installs **complete ACP** (all templates, commands, scripts)
+- ✅ Configures **release branch** for publishing
+- ✅ Installs **pre-commit hooks** for validation
+- ❌ Does NOT create example files (use templates instead)
 
 Use this command when starting a new ACP package that you plan to share with others.
 
@@ -39,7 +41,7 @@ Use this command when starting a new ACP package that you plan to share with oth
 
 ## Prerequisites
 
-- [ ] ACP installed in current directory
+- [ ] ACP installed in current directory (to access the script)
 - [ ] Git installed on system
 - [ ] Basic understanding of what content you want to package
 - [ ] (Optional) GitHub account for publishing
@@ -50,7 +52,7 @@ Use this command when starting a new ACP package that you plan to share with oth
 
 ### 1. Gather Package Information via Chat
 
-**IMPORTANT**: Collect all information from the user via chat BEFORE executing the script. This provides maximum context and allows validation.
+**IMPORTANT**: Collect all information from the user via chat BEFORE executing the script.
 
 **Actions**:
 1. Explain what information is needed and why
@@ -97,16 +99,17 @@ Use this command when starting a new ACP package that you plan to share with oth
 - Examples: "firebase, firestore, database, backend"
 - Note: These help users find your package via `@acp.package-search`
 
-**Create Example Files** (optional)
-- Ask: "Would you like to create example files? (yes/no)"
-- If yes: Creates example pattern, command, and design files
-- If no: Creates empty structure only
+**Release Branch** (optional, default: main)
+- Ask: "What branch should be used for publishing? (default: main)"
+- Common options: main, master, mainline, release
+- Default: main if not specified
+- Note: Only commits to this branch can be published
 
 **Target Directory** (optional)
-- Ask: "Where would you like to create the package? (default: current directory)"
+- Ask: "Where would you like to create the package? (default: ~/.acp/packages/{namespace}/{package-name} or $HOME/.acp/packages/{namespace}/{package-name})"
 - Supports: Absolute paths, relative paths, `~` expansion, `$HOME` expansion
-- Examples: ".", "~/projects", "$HOME/packages", "/tmp"
-- Default: Current directory if not specified
+- Examples: "~/.acp/packages/firebase", "~/projects", "$HOME/packages", "/tmp", "."
+- Default: `~/.acp/packages/{package-name}` if not specified (equivalent to `$HOME/.acp/packages/{package-name}`)
 - Note: Package will be created as `{target-dir}/acp-{name}/`
 
 **Expected Outcome**: All metadata collected and validated
@@ -160,12 +163,17 @@ User: firebase, firestore, database, backend
 
 Agent: ✓
 
-Agent: Would you like to create example files? (yes/no)
-      This creates example pattern, command, and design files as templates.
+Agent: What branch should be used for publishing? (default: main)
 
-User: yes
+User: [Enter]
 
-Agent: ✓
+Agent: Using main branch. ✓
+
+Agent: Where would you like to create the package? (default: ~/.acp/packages/firebase or $HOME/.acp/packages/firebase)
+
+User: [Enter]
+
+Agent: Using ~/.acp/packages/firebase. ✓
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -178,7 +186,8 @@ License: MIT
 Homepage: https://github.com/prmichaelsen/acp-firebase
 Repository: https://github.com/prmichaelsen/acp-firebase.git
 Tags: firebase, firestore, database, backend
-Create examples: yes
+Release branch: main
+Target directory: ~/.acp/packages/firebase (or $HOME/.acp/packages/firebase)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -212,7 +221,7 @@ cd /home/prmichaelsen/agent-context-protocol
 {homepage}
 {repository-url}
 {tags}
-{create-examples: y or n}
+{release-branch}
 {target-directory}
 EOF
 ```
@@ -227,8 +236,8 @@ MIT
 https://github.com/prmichaelsen/acp-firebase
 https://github.com/prmichaelsen/acp-firebase.git
 firebase, firestore, database, backend
-y
-~/projects
+main
+.
 EOF
 ```
 
@@ -245,26 +254,32 @@ EOF
 📦 ACP Package Creator
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Let's create a new ACP package!
+Creating new ACP package: firebase
 
 Package name: firebase
 Description: Firebase patterns and utilities for ACP projects
 Author: Patrick Michaelsen
-License [MIT]: MIT
+License: MIT
 Homepage: https://github.com/prmichaelsen/acp-firebase
-Repository URL: https://github.com/prmichaelsen/acp-firebase.git
+Repository: https://github.com/prmichaelsen/acp-firebase.git
 Tags: firebase, firestore, database, backend
+Release branch: main
 
-✓ Package information collected
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Creating Directory Structure
 
 ✓ Created directory: acp-firebase/
-✓ Created agent/ structure
+
+Installing ACP
+
+✓ ACP installed successfully
+✓ All templates and commands available
 
 Creating package.yaml
 
 ✓ Created package.yaml
+✓ Configured release branch: main
 
 Creating Documentation
 
@@ -273,18 +288,15 @@ Creating Documentation
 ✓ Created CHANGELOG.md
 ✓ Created .gitignore
 
+Installing Pre-Commit Hook
+
+✓ Installed pre-commit hook
+✓ Validates package.yaml before commits
+
 Initializing Git Repository
 
 ✓ Initialized git repository
 ✓ Created initial commit
-
-Would you like to create example files? (y/N): y
-
-Creating Example Files
-
-✓ Created agent/patterns/example-pattern.md
-✓ Created agent/commands/example-command.md
-✓ Created agent/design/example-design.md
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -298,21 +310,43 @@ Your ACP package is ready at: ./acp-firebase/
 **Directory Structure Created**:
 ```
 acp-{package-name}/
+├── AGENT.md                     # ACP documentation
 ├── README.md                    # Package documentation
 ├── LICENSE                      # License file (MIT)
 ├── CHANGELOG.md                 # Version history
 ├── package.yaml                 # Package metadata
 ├── .gitignore                   # Git exclusions
 └── agent/
+    ├── .gitignore               # Agent-specific exclusions
+    ├── progress.template.yaml   # Progress tracking template
+    ├── manifest.template.yaml   # Manifest template
+    ├── design/
+    │   ├── .gitkeep
+    │   ├── requirements.template.md
+    │   └── design.template.md
+    ├── milestones/
+    │   ├── .gitkeep
+    │   └── milestone-1-{title}.template.md
     ├── patterns/
     │   ├── .gitkeep
-    │   └── example-pattern.md   # (if requested)
-    ├── commands/
+    │   ├── bootstrap.template.md
+    │   └── pattern.template.md
+    ├── tasks/
     │   ├── .gitkeep
-    │   └── example-command.md   # (if requested)
-    └── design/
-        ├── .gitkeep
-        └── example-design.md    # (if requested)
+    │   └── task-1-{title}.template.md
+    ├── commands/
+    │   ├── command.template.md
+    │   ├── acp.init.md
+    │   ├── acp.proceed.md
+    │   ├── acp.status.md
+    │   └── ... (all ACP commands)
+    ├── scripts/
+    │   ├── acp.common.sh
+    │   ├── acp.install.sh
+    │   ├── acp.version-update.sh
+    │   └── ... (all ACP scripts)
+    └── schemas/
+        └── package.schema.yaml
 ```
 
 ### 3. Display Script Output and Next Steps
@@ -339,46 +373,75 @@ Your ACP package is ready at: ./acp-{package-name}/
 📋 Next Steps:
 
 1. Add your content:
-   - Add patterns to agent/patterns/
-   - Add commands to agent/commands/
-   - Add designs to agent/design/
+   - Use @acp.pattern-create to create patterns
+   - Use @acp.command-create to create commands
+   - Use @acp.design-create to create designs
+   
+   These commands automatically:
+   - Add namespace prefix to filenames
+   - Update package.yaml contents section
+   - Update README.md "What's Included" section
 
-2. Update package.yaml:
-   - Add each file to the contents section
-   - Specify version for each file
-   - Add dependencies if needed
+2. Validate your package:
+   cd acp-{package-name}
+   @acp.package-validate
+   
+   This checks:
+   - package.yaml structure
+   - File existence and namespace consistency
+   - Git repository setup
+   - README.md structure
 
 3. Create GitHub repository:
    - Go to https://github.com/new
    - Name: acp-{package-name}
    - Description: {description}
-   - Create repository
+   - Create repository (public recommended)
 
 4. Push to GitHub:
    cd acp-{package-name}
-   git remote add origin https://github.com/{username}/acp-{package-name}.git
-   git branch -M main
-   git push -u origin main
+   git remote add origin {repository-url}
+   git branch -M {release-branch}
+   git push -u origin {release-branch}
 
 5. Add GitHub topic for discoverability:
    - Go to repository settings
-   - Add topic: "acp-package"
-   - Add other relevant topics: {tags}
+   - Add topic: "acp-package" (REQUIRED)
+   - Add other topics: {tags}
 
-6. Test installation:
-   @acp.package-install https://github.com/{username}/acp-{package-name}.git
+6. Publish your first version:
+   cd acp-{package-name}
+   @acp.package-publish
+   
+   This will:
+   - Validate package
+   - Detect version bump from commits
+   - Update CHANGELOG.md
+   - Create git tag
+   - Push to remote
+   - Test installation
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📚 Resources:
 
-- Package structure guide: See AGENT.md in agent-context-protocol
+- Package structure guide: See AGENT.md
 - package.yaml reference: agent/design/acp-package-management-system.md
-- Example packages: https://github.com/prmichaelsen?tab=repositories&q=acp-
+- Entity creation: @acp.pattern-create, @acp.command-create, @acp.design-create
+- Validation: @acp.package-validate
+- Publishing: @acp.package-publish
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✅ Package creation complete!
+
+Your package has:
+✓ Full ACP installation (all templates and commands)
+✓ Pre-commit hook (validates package.yaml before commits)
+✓ Release branch configured ({release-branch})
+✓ Git repository initialized
+
+Ready to add content with @acp.pattern-create, @acp.command-create, @acp.design-create
 ```
 
 ### 4. Verify Package Creation
@@ -390,6 +453,7 @@ Check that all files were created correctly.
 - Verify directory structure
 - Check git repository status
 - Confirm package.yaml is valid
+- Verify pre-commit hook installed
 
 **Expected Outcome**: Package is ready for content addition
 
@@ -398,11 +462,17 @@ Check that all files were created correctly.
 # List package contents
 ls -la acp-{package-name}/
 
+# Check ACP installation
+ls -la acp-{package-name}/agent/
+
 # Check git status
 cd acp-{package-name} && git status
 
 # Verify package.yaml
 cat acp-{package-name}/package.yaml
+
+# Check pre-commit hook
+ls -la acp-{package-name}/.git/hooks/pre-commit
 ```
 
 ---
@@ -410,12 +480,17 @@ cat acp-{package-name}/package.yaml
 ## Verification
 
 - [ ] Package directory created with correct name
-- [ ] `agent/` directory structure created
+- [ ] Full ACP installed (AGENT.md, agent/ directory with all files)
+- [ ] All templates available (design, milestone, pattern, task, command)
+- [ ] All ACP commands available (acp.init.md, acp.proceed.md, etc.)
+- [ ] All ACP scripts available (acp.common.sh, acp.install.sh, etc.)
 - [ ] `package.yaml` created with valid YAML
+- [ ] Release branch configured in package.yaml
 - [ ] README.md created with package information
 - [ ] LICENSE file created
 - [ ] CHANGELOG.md created with initial version
 - [ ] .gitignore created
+- [ ] Pre-commit hook installed and executable
 - [ ] Git repository initialized
 - [ ] Initial commit created
 - [ ] GitHub publishing instructions displayed
@@ -429,21 +504,44 @@ cat acp-{package-name}/package.yaml
 
 ```
 acp-{package-name}/
+├── AGENT.md                     # ACP documentation
 ├── README.md                    # Package documentation
-├── LICENSE                      # License file (MIT)
+├── LICENSE                      # License file
 ├── CHANGELOG.md                 # Version history
 ├── package.yaml                 # Package metadata
 ├── .gitignore                   # Git exclusions
+├── .git/
+│   └── hooks/
+│       └── pre-commit           # Validation hook
 └── agent/
+    ├── .gitignore               # Agent-specific exclusions
+    ├── progress.template.yaml   # Progress tracking template
+    ├── manifest.template.yaml   # Manifest template
+    ├── design/
+    │   ├── .gitkeep
+    │   ├── requirements.template.md
+    │   └── design.template.md
+    ├── milestones/
+    │   ├── .gitkeep
+    │   └── milestone-1-{title}.template.md
     ├── patterns/
     │   ├── .gitkeep
-    │   └── example-pattern.md   # (if requested)
-    ├── commands/
+    │   ├── bootstrap.template.md
+    │   └── pattern.template.md
+    ├── tasks/
     │   ├── .gitkeep
-    │   └── example-command.md   # (if requested)
-    └── design/
-        ├── .gitkeep
-        └── example-design.md    # (if requested)
+    │   └── task-1-{title}.template.md
+    ├── commands/
+    │   ├── command.template.md
+    │   ├── acp.init.md
+    │   ├── acp.proceed.md
+    │   └── ... (all ACP commands)
+    ├── scripts/
+    │   ├── acp.common.sh
+    │   ├── acp.install.sh
+    │   └── ... (all ACP scripts)
+    └── schemas/
+        └── package.schema.yaml
 ```
 
 ### Console Output
@@ -452,40 +550,57 @@ acp-{package-name}/
 📦 ACP Package Creator
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Let's create a new ACP package!
+Creating new ACP package: firebase
 
 Package name: firebase
 Description: Firebase patterns and utilities for ACP projects
 Author: Patrick Michaelsen
-License [MIT]: 
+License: MIT
 Homepage: https://github.com/prmichaelsen/acp-firebase
+Repository: https://github.com/prmichaelsen/acp-firebase.git
 Tags: firebase, firestore, database, backend
+Release branch: main
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+Creating Directory Structure
+
 ✓ Created directory: acp-firebase/
-✓ Created agent/ structure
+
+Installing ACP
+
+✓ Cloning ACP repository...
+✓ Creating directory structure...
+✓ Installing ACP files...
+✓ ACP installed successfully
+
+Creating package.yaml
+
 ✓ Created package.yaml
+✓ Configured release branch: main
+
+Creating Documentation
+
 ✓ Created README.md
 ✓ Created LICENSE (MIT)
 ✓ Created CHANGELOG.md
 ✓ Created .gitignore
+
+Installing Pre-Commit Hook
+
+✓ Installed pre-commit hook
+✓ Validates package.yaml before commits
+
+Initializing Git Repository
+
 ✓ Initialized git repository
 ✓ Created initial commit
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Would you like to create example files? (y/N): y
-
-✓ Created agent/patterns/example-pattern.md
-✓ Created agent/commands/example-command.md
-✓ Created agent/design/example-design.md
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 🎉 Package Created Successfully!
 
-[Next steps displayed as shown in Step 7]
+[Next steps displayed as shown in Step 3]
 ```
 
 ---
@@ -505,12 +620,13 @@ Description: Firebase patterns and utilities for ACP projects
 Author: Patrick Michaelsen
 License [MIT]: 
 Homepage: https://github.com/prmichaelsen/acp-firebase
+Repository: https://github.com/prmichaelsen/acp-firebase.git
 Tags: firebase, firestore, database, backend
-
-Create example files? (y/N): n
+Release branch [main]: 
+Target directory [.]: 
 ```
 
-**Result**: Package structure created, ready to add Firebase patterns
+**Result**: Complete ACP package with full installation, ready to add Firebase patterns
 
 ### Example 2: Creating MCP Integration Package
 
@@ -523,18 +639,19 @@ Create example files? (y/N): n
 Package name: mcp-integration
 Description: Model Context Protocol server integration patterns
 Author: Patrick Michaelsen
-License [MIT]: 
+License [MIT]: Apache-2.0
 Homepage: https://github.com/prmichaelsen/acp-mcp-integration
+Repository: https://github.com/prmichaelsen/acp-mcp-integration.git
 Tags: mcp, model-context-protocol, integration, server
-
-Create example files? (y/N): y
+Release branch [main]: mainline
+Target directory [.]: ~/projects
 ```
 
-**Result**: Package created with example files to use as templates
+**Result**: Package created in ~/projects/acp-mcp-integration/ with Apache-2.0 license and mainline release branch
 
-### Example 3: Creating OAuth Package
+### Example 3: Creating OAuth Package with Custom Branch
 
-**Context**: Want to share OAuth 2.0 implementation patterns
+**Context**: Want to share OAuth 2.0 implementation patterns, using release branch
 
 **Invocation**: `@acp.package-create`
 
@@ -545,19 +662,24 @@ Description: OAuth 2.0 authentication patterns and flows
 Author: Patrick Michaelsen
 License [MIT]: MIT
 Homepage: https://github.com/prmichaelsen/acp-oauth
+Repository: https://github.com/prmichaelsen/acp-oauth.git
 Tags: oauth, authentication, security, auth
-
-Create example files? (y/N): n
+Release branch [main]: release
+Target directory [.]: 
 ```
 
-**Result**: Clean package structure ready for OAuth patterns
+**Result**: Package with release branch configured for publishing
 
 ---
 
 ## Related Commands
 
+- [`@acp.pattern-create`](acp.pattern-create.md) - Create patterns in package
+- [`@acp.command-create`](acp.command-create.md) - Create commands in package
+- [`@acp.design-create`](acp.design-create.md) - Create designs in package
+- [`@acp.package-validate`](acp.package-validate.md) - Validate package before publishing
+- [`@acp.package-publish`](acp.package-publish.md) - Publish package to GitHub
 - [`@acp.package-install`](acp.package-install.md) - Install packages (test your package)
-- [`@acp.package-search`](acp.package-search.md) - Search for existing packages
 - [`@git.init`](git.init.md) - Initialize git repository
 - [`@git.commit`](git.commit.md) - Version-aware commits
 
@@ -597,16 +719,28 @@ Create example files? (y/N): n
 - No spaces or special characters
 - Examples: "firebase", "mcp-integration", "oauth-2"
 
-### Issue 4: Missing package.yaml fields
+### Issue 4: ACP installation failed
 
-**Symptom**: Validation errors when installing package
+**Symptom**: Error during ACP installation step
 
-**Cause**: Required fields missing from package.yaml
+**Cause**: Network issues or repository unavailable
 
 **Solution**:
-- Ensure `name`, `version`, `description` are present
-- Add `contents` section (even if empty)
-- Validate YAML syntax: https://www.yamllint.com/
+- Check internet connection
+- Verify GitHub is accessible
+- Try again later
+- Or manually install ACP: `curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.install.sh | bash`
+
+### Issue 5: Pre-commit hook not working
+
+**Symptom**: Hook doesn't run or validation fails
+
+**Cause**: Hook not executable or validation script missing
+
+**Solution**:
+- Make hook executable: `chmod +x .git/hooks/pre-commit`
+- Verify validation script exists: `ls agent/scripts/acp.yaml-validate.sh`
+- Test hook manually: `.git/hooks/pre-commit`
 
 ---
 
@@ -615,11 +749,11 @@ Create example files? (y/N): n
 ### File Access
 - **Reads**: None (creates new files)
 - **Writes**: Creates entire package directory structure
-- **Executes**: `git init`, `git add`, `git commit`
+- **Executes**: `acp.install.sh`, `git init`, `git add`, `git commit`
 
 ### Network Access
 - **APIs**: None
-- **Repositories**: None (local creation only)
+- **Repositories**: Clones agent-context-protocol repository for ACP installation
 
 ### Sensitive Data
 - **Secrets**: Never include secrets in package files
@@ -634,10 +768,12 @@ Create example files? (y/N): n
 - Package name in `package.yaml` should NOT include "acp-" prefix
 - GitHub repository name should include "acp-" prefix for clarity
 - Always add "acp-package" topic to GitHub repository for discoverability
-- Update `package.yaml` whenever you add/remove files
+- Update `package.yaml` whenever you add/remove files (or use entity creation commands)
 - Follow semantic versioning for package and file versions
-- Test package installation before publishing
-- Consider creating example usage in README.md
+- Test package installation before publishing: `@acp.package-validate`
+- Use `@acp.package-publish` for automated publishing workflow
+- Pre-commit hook validates package.yaml before every commit
+- Release branch configuration prevents accidental publishing from wrong branch
 
 ---
 
@@ -665,6 +801,7 @@ Create example files? (y/N): n
 - Start at 1.0.0 for initial release
 - Use semantic versioning (MAJOR.MINOR.PATCH)
 - Update CHANGELOG.md with each version
+- Use `@acp.package-publish` for automated versioning
 - Tag releases in git: `git tag v1.0.0`
 
 ### GitHub Setup
@@ -675,13 +812,70 @@ Create example files? (y/N): n
 - Add LICENSE file
 - Consider adding GitHub Actions for validation
 
+### Development Workflow
+1. Create package with `@acp.package-create`
+2. Add content with `@acp.pattern-create`, `@acp.command-create`, `@acp.design-create`
+3. Validate with `@acp.package-validate`
+4. Commit changes (pre-commit hook validates automatically)
+5. Publish with `@acp.package-publish`
+6. Test installation: `@acp.package-install {your-repo-url}`
+
+---
+
+## Changes from v1.0.0
+
+### Breaking Changes
+- **Complete rewrite**: Now installs full ACP instead of minimal structure
+- **No example files**: Use templates from ACP installation instead
+- **Release branch required**: Must configure release branch for publishing
+- **Pre-commit hooks**: Automatically installed (validates package.yaml)
+
+### New Features
+- Full ACP installation with all templates and commands
+- Release branch configuration
+- Pre-commit hook installation
+- Better error handling and validation
+- Clearer next steps and instructions
+
+### Migration Guide
+
+If you have packages created with v1.0.0:
+
+1. **Install full ACP**:
+   ```bash
+   cd your-package
+   curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.install.sh | bash
+   ```
+
+2. **Add release branch to package.yaml**:
+   ```yaml
+   release:
+     branch: main  # or master, mainline, release
+   ```
+
+3. **Install pre-commit hook**:
+   ```bash
+   # In your package directory
+   . agent/scripts/acp.common.sh
+   install_precommit_hook
+   ```
+
+4. **Remove example files** (if present):
+   ```bash
+   rm agent/patterns/example-pattern.md
+   rm agent/commands/example-command.md
+   rm agent/design/example-design.md
+   ```
+
+5. **Update package.yaml contents** (remove example files from contents section)
+
 ---
 
 **Namespace**: acp
 **Command**: package-create
-**Version**: 1.0.0
+**Version**: 2.0.0
 **Created**: 2026-02-20
-**Last Updated**: 2026-02-20
+**Last Updated**: 2026-02-21
 **Status**: Active
-**Compatibility**: ACP 2.0.0+
+**Compatibility**: ACP 2.8.0+
 **Author**: ACP Project

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# ACP Package Creator
-# Interactive wizard to create a new ACP package
+# ACP Package Creator v2.0.0
+# Creates a new ACP package with full ACP installation
 
 set -e
 
@@ -35,6 +35,13 @@ if ! echo "$PACKAGE_NAME" | grep -qE '^[a-z0-9-]+$'; then
     exit 1
 fi
 
+# Check for reserved names
+if [ "$PACKAGE_NAME" = "acp" ] || [ "$PACKAGE_NAME" = "local" ] || [ "$PACKAGE_NAME" = "core" ] || [ "$PACKAGE_NAME" = "system" ] || [ "$PACKAGE_NAME" = "global" ]; then
+    echo "${RED}Error: Package name '${PACKAGE_NAME}' is reserved${NC}"
+    echo "Reserved names: acp, local, core, system, global"
+    exit 1
+fi
+
 # Description
 read -p "Description: " DESCRIPTION
 if [ -z "$DESCRIPTION" ]; then
@@ -56,8 +63,12 @@ LICENSE=${LICENSE:-MIT}
 # Homepage
 read -p "Homepage URL (optional): " HOMEPAGE
 
-# Repository URL (will be filled in later)
+# Repository URL
 read -p "Repository URL (e.g., https://github.com/username/acp-${PACKAGE_NAME}.git): " REPO_URL
+if [ -z "$REPO_URL" ]; then
+    echo "${RED}Error: Repository URL is required${NC}"
+    exit 1
+fi
 
 # Tags
 read -p "Tags (comma-separated): " TAGS_INPUT
@@ -65,12 +76,18 @@ read -p "Tags (comma-separated): " TAGS_INPUT
 # Convert tags to array
 IFS=',' read -ra TAGS_ARRAY <<< "$TAGS_INPUT"
 
+# Release branch
+read -p "Release branch [main]: " RELEASE_BRANCH
+RELEASE_BRANCH=${RELEASE_BRANCH:-main}
+
 # Target directory (optional)
-read -p "Target directory (default: current directory): " TARGET_DIR
+# Default: ~/.acp/packages/{namespace}/{package-name} or $HOME/.acp/packages/{namespace}/{package-name}
+DEFAULT_TARGET_DIR="$HOME/.acp/packages/${PACKAGE_NAME}"
+read -p "Target directory [${DEFAULT_TARGET_DIR}]: " TARGET_DIR
 
 # Expand path (handle ~, $HOME, and relative paths)
 if [ -z "$TARGET_DIR" ]; then
-    TARGET_DIR="."
+    TARGET_DIR="$DEFAULT_TARGET_DIR"
 else
     # Expand ~ to home directory
     TARGET_DIR="${TARGET_DIR/#\~/$HOME}"
@@ -78,11 +95,31 @@ else
     TARGET_DIR=$(eval echo "$TARGET_DIR")
 fi
 
+# Create target directory if it doesn't exist
+mkdir -p "$TARGET_DIR"
+
 # Convert to absolute path
-TARGET_DIR=$(cd "$TARGET_DIR" 2>/dev/null && pwd || echo "$TARGET_DIR")
+TARGET_DIR=$(cd "$TARGET_DIR" && pwd)
 
 echo ""
 echo "${GREEN}✓${NC} Package information collected"
+echo ""
+
+# Display summary
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "${BOLD}Creating new ACP package: ${PACKAGE_NAME}${NC}"
+echo ""
+echo "Package name: ${PACKAGE_NAME}"
+echo "Description: ${DESCRIPTION}"
+echo "Author: ${AUTHOR}"
+echo "License: ${LICENSE}"
+echo "Homepage: ${HOMEPAGE}"
+echo "Repository: ${REPO_URL}"
+echo "Tags: ${TAGS_INPUT}"
+echo "Release branch: ${RELEASE_BRANCH}"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
 # Step 2: Create directory structure
@@ -96,19 +133,33 @@ fi
 echo "${BOLD}Creating Directory Structure${NC}"
 echo ""
 
-mkdir -p "$PACKAGE_DIR/agent/patterns"
-mkdir -p "$PACKAGE_DIR/agent/commands"
-mkdir -p "$PACKAGE_DIR/agent/design"
-
-touch "$PACKAGE_DIR/agent/patterns/.gitkeep"
-touch "$PACKAGE_DIR/agent/commands/.gitkeep"
-touch "$PACKAGE_DIR/agent/design/.gitkeep"
+mkdir -p "$PACKAGE_DIR"
 
 echo "${GREEN}✓${NC} Created directory: $PACKAGE_DIR/"
-echo "${GREEN}✓${NC} Created agent/ structure"
-
-# Step 3: Create package.yaml
 echo ""
+
+# Step 3: Install full ACP
+echo "${BOLD}Installing ACP${NC}"
+echo ""
+
+# Change to package directory
+cd "$PACKAGE_DIR"
+
+# Run ACP installation script
+if [ -f "${SCRIPT_DIR}/acp.install.sh" ]; then
+    # Run install script (it will create agent/ structure and install all files)
+    bash "${SCRIPT_DIR}/acp.install.sh"
+    echo ""
+else
+    echo "${RED}Error: acp.install.sh not found${NC}"
+    exit 1
+fi
+
+echo "${GREEN}✓${NC} ACP installed successfully"
+echo "${GREEN}✓${NC} All templates and commands available"
+echo ""
+
+# Step 4: Create package.yaml
 echo "${BOLD}Creating package.yaml${NC}"
 echo ""
 
@@ -120,7 +171,8 @@ for tag in "${TAGS_ARRAY[@]}"; do
     TAGS_YAML="${TAGS_YAML}  - ${tag}\n"
 done
 
-cat > "$PACKAGE_DIR/package.yaml" << EOF
+# Create package.yaml with release branch configuration
+cat > "package.yaml" << EOF
 # package.yaml
 name: ${PACKAGE_NAME}
 version: 1.0.0
@@ -130,8 +182,14 @@ license: ${LICENSE}
 homepage: ${HOMEPAGE}
 repository: ${REPO_URL}
 
+# Release configuration
+release:
+  branch: ${RELEASE_BRANCH}
+
 # Package contents
 # Add files here as you create them
+# Use @acp.pattern-create, @acp.command-create, @acp.design-create
+# These commands automatically update this section
 contents:
   patterns: []
   
@@ -139,12 +197,9 @@ contents:
   
   designs: []
 
-# Dependencies (other ACP packages required)
-dependencies: []
-
 # Compatibility
 requires:
-  acp: ">=2.0.0"
+  acp: ">=2.8.0"
 
 # Tags for discovery
 tags:
@@ -152,13 +207,14 @@ $(echo -e "$TAGS_YAML")
 EOF
 
 echo "${GREEN}✓${NC} Created package.yaml"
-
-# Step 4: Create README.md
+echo "${GREEN}✓${NC} Configured release branch: ${RELEASE_BRANCH}"
 echo ""
+
+# Step 5: Create README.md
 echo "${BOLD}Creating Documentation${NC}"
 echo ""
 
-cat > "$PACKAGE_DIR/README.md" << EOF
+cat > "README.md" << EOF
 # ACP Package: ${PACKAGE_NAME}
 
 ${DESCRIPTION}
@@ -175,36 +231,84 @@ Or using the installation script:
 ./agent/scripts/acp.package-install.sh ${REPO_URL}
 \`\`\`
 
-## Contents
+## What's Included
+
+<!-- ACP_AUTO_UPDATE_START:CONTENTS -->
+### Commands
+
+(No commands yet - use @acp.command-create to add commands)
 
 ### Patterns
 
-(List patterns here as you add them)
-
-### Commands
-
-(List commands here as you add them)
+(No patterns yet - use @acp.pattern-create to add patterns)
 
 ### Designs
 
-(List design documents here as you add them)
+(No designs yet - use @acp.design-create to add designs)
+<!-- ACP_AUTO_UPDATE_END:CONTENTS -->
+
+## Why Use This Package
+
+(Add benefits and use cases here)
 
 ## Usage
 
 (Add usage examples here)
 
+## Development
+
+### Setup
+
+1. Clone this repository
+2. Make changes
+3. Run \`@acp.package-validate\` to validate
+4. Run \`@acp.package-publish\` to publish
+
+### Adding New Content
+
+- Use \`@acp.pattern-create\` to create patterns
+- Use \`@acp.command-create\` to create commands
+- Use \`@acp.design-create\` to create designs
+
+These commands automatically:
+- Add namespace prefix to filenames
+- Update package.yaml contents section
+- Update this README.md
+
+### Testing
+
+Run \`@acp.package-validate\` to validate your package locally.
+
+### Publishing
+
+Run \`@acp.package-publish\` to publish updates. This will:
+- Validate the package
+- Detect version bump from commits
+- Update CHANGELOG.md
+- Create git tag
+- Push to remote
+- Test installation
+
+## Namespace Convention
+
+All files in this package use the \`${PACKAGE_NAME}\` namespace:
+- Commands: \`${PACKAGE_NAME}.command-name.md\`
+- Patterns: \`${PACKAGE_NAME}.pattern-name.md\`
+- Designs: \`${PACKAGE_NAME}.design-name.md\`
+
 ## Dependencies
 
-(List any required packages or project dependencies)
+(List any required packages or project dependencies here)
 
 ## Contributing
 
 Contributions are welcome! Please:
 
 1. Follow the existing pattern structure
-2. Update \`package.yaml\` when adding files
-3. Document your changes in CHANGELOG.md
-4. Test installation before submitting
+2. Use entity creation commands (@acp.pattern-create, etc.)
+3. Run @acp.package-validate before committing
+4. Document your changes in CHANGELOG.md
+5. Test installation before submitting
 
 ## License
 
@@ -217,8 +321,8 @@ EOF
 
 echo "${GREEN}✓${NC} Created README.md"
 
-# Step 5: Create LICENSE
-cat > "$PACKAGE_DIR/LICENSE" << 'EOF'
+# Step 6: Create LICENSE
+cat > "LICENSE" << 'EOF'
 MIT License
 
 Copyright (c) 2026
@@ -244,10 +348,10 @@ EOF
 
 echo "${GREEN}✓${NC} Created LICENSE (MIT)"
 
-# Step 6: Create CHANGELOG.md
+# Step 7: Create CHANGELOG.md
 CURRENT_DATE=$(date +%Y-%m-%d)
 
-cat > "$PACKAGE_DIR/CHANGELOG.md" << EOF
+cat > "CHANGELOG.md" << EOF
 # Changelog
 
 All notable changes to this package will be documented in this file.
@@ -259,13 +363,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release
-- Package structure created
+- Package structure created with full ACP installation
 EOF
 
 echo "${GREEN}✓${NC} Created CHANGELOG.md"
 
-# Step 7: Create .gitignore
-cat > "$PACKAGE_DIR/.gitignore" << 'EOF'
+# Step 8: Create .gitignore (package-specific)
+cat > ".gitignore" << 'EOF'
 # OS files
 .DS_Store
 Thumbs.db
@@ -292,189 +396,43 @@ venv/
 # Build artifacts
 dist/
 build/
+
+# ACP local files
+agent/manifest.yaml
+agent/progress.yaml
 EOF
 
 echo "${GREEN}✓${NC} Created .gitignore"
-
-# Step 8: Initialize git repository
 echo ""
+
+# Step 9: Install pre-commit hook
+echo "${BOLD}Installing Pre-Commit Hook${NC}"
+echo ""
+
+# Initialize git first (required for hook installation)
+git init -q
+
+# Install hook using common.sh function
+if install_precommit_hook; then
+    echo "${GREEN}✓${NC} Validates package.yaml before commits"
+else
+    echo "${YELLOW}⚠  Pre-commit hook installation failed (non-critical)${NC}"
+fi
+
+echo ""
+
+# Step 10: Create initial commit
 echo "${BOLD}Initializing Git Repository${NC}"
 echo ""
 
-cd "$PACKAGE_DIR"
-git init -q
 git add .
-git commit -q -m "chore: initialize ACP package"
+git commit -q -m "chore: initialize ACP package with full installation"
 
 echo "${GREEN}✓${NC} Initialized git repository"
 echo "${GREEN}✓${NC} Created initial commit"
-
-cd ..
-
-# Step 9: Ask about example files
 echo ""
-read -p "Would you like to create example files? (y/N): " CREATE_EXAMPLES
 
-if [[ "$CREATE_EXAMPLES" =~ ^[Yy]$ ]]; then
-    echo ""
-    echo "${BOLD}Creating Example Files${NC}"
-    echo ""
-    
-    # Example pattern
-    cat > "$PACKAGE_DIR/agent/patterns/example-pattern.md" << 'EOF'
-# Example Pattern
-
-**Version**: 1.0.0
-**Last Updated**: 2026-02-20
-
----
-
-## Overview
-
-[Describe what this pattern is and when to use it]
-
-## Problem
-
-[What problem does this pattern solve?]
-
-## Solution
-
-[How does this pattern solve the problem?]
-
-## Implementation
-
-[Code examples and implementation details]
-
-```typescript
-// Example code
-```
-
-## Benefits
-
-[Why use this pattern?]
-
-## Trade-offs
-
-[What are the downsides?]
-
----
-
-**Status**: Example
-**Recommendation**: Replace with your actual pattern
-EOF
-    
-    echo "${GREEN}✓${NC} Created agent/patterns/example-pattern.md"
-    
-    # Example command
-    cat > "$PACKAGE_DIR/agent/commands/example-command.md" << 'EOF'
-# Command: example-command
-
-> **🤖 Agent Directive**: If you are reading this file, the command `@example-command` has been invoked.
-
-**Namespace**: example
-**Version**: 1.0.0
-**Created**: 2026-02-20
-**Status**: Example
-
----
-
-**Purpose**: [One-line description of what this command does]
-**Category**: [Workflow | Documentation | Maintenance | Creation]
-**Frequency**: [Once | Per Session | As Needed]
-
----
-
-## What This Command Does
-
-[Detailed explanation of the command's purpose and when to use it]
-
----
-
-## Prerequisites
-
-- [ ] Prerequisite 1
-- [ ] Prerequisite 2
-
----
-
-## Steps
-
-### 1. Step Name
-
-[Description]
-
-**Actions**:
-- Action 1
-- Action 2
-
-**Expected Outcome**: [What should happen]
-
----
-
-## Verification
-
-- [ ] Verification item 1
-- [ ] Verification item 2
-
----
-
-**Status**: Example
-**Recommendation**: Replace with your actual command
-EOF
-    
-    echo "${GREEN}✓${NC} Created agent/commands/example-command.md"
-    
-    # Example design
-    cat > "$PACKAGE_DIR/agent/design/example-design.md" << 'EOF'
-# Example Design Document
-
-**Concept**: [One-line description]
-**Created**: 2026-02-20
-**Status**: Example
-
----
-
-## Overview
-
-[High-level description of what this is and why it exists]
-
-## Problem Statement
-
-[What problem does this solve?]
-
-## Solution
-
-[How does this solve the problem?]
-
-## Implementation
-
-[Technical details, code examples, schemas]
-
-## Benefits
-
-[Why this approach is better than alternatives]
-
-## Trade-offs
-
-[What are the downsides or limitations?]
-
----
-
-**Status**: Example
-**Recommendation**: Replace with your actual design document
-EOF
-    
-    echo "${GREEN}✓${NC} Created agent/design/example-design.md"
-    
-    # Commit example files
-    cd "$PACKAGE_DIR"
-    git add .
-    git commit -q -m "docs: add example files"
-    cd ..
-fi
-
-# Step 10: Display success message and next steps
-echo ""
+# Step 11: Display success message and next steps
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 echo "${GREEN}🎉 Package Created Successfully!${NC}"
@@ -486,51 +444,73 @@ echo ""
 echo "${BOLD}📋 Next Steps:${NC}"
 echo ""
 echo "1. ${BOLD}Add your content:${NC}"
-echo "   - Add patterns to agent/patterns/"
-echo "   - Add commands to agent/commands/"
-echo "   - Add designs to agent/design/"
+echo "   ${YELLOW}cd acp-${PACKAGE_NAME}${NC}"
+echo "   ${YELLOW}@acp.pattern-create${NC}    # Create patterns"
+echo "   ${YELLOW}@acp.command-create${NC}    # Create commands"
+echo "   ${YELLOW}@acp.design-create${NC}     # Create designs"
 echo ""
-echo "2. ${BOLD}Update package.yaml:${NC}"
-echo "   - Add each file to the contents section"
-echo "   - Specify version for each file"
-echo "   - Add dependencies if needed"
+echo "   These commands automatically:"
+echo "   - Add namespace prefix to filenames"
+echo "   - Update package.yaml contents section"
+echo "   - Update README.md \"What's Included\" section"
 echo ""
-echo "   Example:"
-echo "   ${YELLOW}contents:"
-echo "     patterns:"
-echo "       - name: my-pattern.md"
-echo "         version: 1.0.0"
-echo "         description: My pattern description${NC}"
+echo "2. ${BOLD}Validate your package:${NC}"
+echo "   ${YELLOW}@acp.package-validate${NC}"
+echo ""
+echo "   This checks:"
+echo "   - package.yaml structure"
+echo "   - File existence and namespace consistency"
+echo "   - Git repository setup"
+echo "   - README.md structure"
 echo ""
 echo "3. ${BOLD}Create GitHub repository:${NC}"
 echo "   - Go to https://github.com/new"
-echo "   - Name: acp-${PACKAGE_NAME}"
+echo "   - Name: ${YELLOW}acp-${PACKAGE_NAME}${NC}"
 echo "   - Description: ${DESCRIPTION}"
-echo "   - Create repository"
+echo "   - Create repository (public recommended)"
 echo ""
 echo "4. ${BOLD}Push to GitHub:${NC}"
 echo "   ${YELLOW}cd acp-${PACKAGE_NAME}"
 echo "   git remote add origin ${REPO_URL}"
-echo "   git branch -M main"
-echo "   git push -u origin main${NC}"
+echo "   git branch -M ${RELEASE_BRANCH}"
+echo "   git push -u origin ${RELEASE_BRANCH}${NC}"
 echo ""
 echo "5. ${BOLD}Add GitHub topic for discoverability:${NC}"
 echo "   - Go to repository settings"
-echo "   - Add topic: ${YELLOW}acp-package${NC}"
+echo "   - Add topic: ${YELLOW}acp-package${NC} (REQUIRED)"
 echo "   - Add other topics: ${TAGS_INPUT}"
 echo ""
-echo "6. ${BOLD}Test installation:${NC}"
-echo "   ${YELLOW}@acp.package-install ${REPO_URL}${NC}"
+echo "6. ${BOLD}Publish your first version:${NC}"
+echo "   ${YELLOW}cd acp-${PACKAGE_NAME}"
+echo "   @acp.package-publish${NC}"
+echo ""
+echo "   This will:"
+echo "   - Validate package"
+echo "   - Detect version bump from commits"
+echo "   - Update CHANGELOG.md"
+echo "   - Create git tag"
+echo "   - Push to remote"
+echo "   - Test installation"
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 echo "${BOLD}📚 Resources:${NC}"
 echo ""
-echo "- Package structure guide: See AGENT.md in agent-context-protocol"
+echo "- Package structure guide: See AGENT.md"
 echo "- package.yaml reference: agent/design/acp-package-management-system.md"
-echo "- Example packages: https://github.com/prmichaelsen?tab=repositories&q=acp-"
+echo "- Entity creation: @acp.pattern-create, @acp.command-create, @acp.design-create"
+echo "- Validation: @acp.package-validate"
+echo "- Publishing: @acp.package-publish"
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 echo "${GREEN}✅ Package creation complete!${NC}"
+echo ""
+echo "Your package has:"
+echo "  ${GREEN}✓${NC} Full ACP installation (all templates and commands)"
+echo "  ${GREEN}✓${NC} Pre-commit hook (validates package.yaml before commits)"
+echo "  ${GREEN}✓${NC} Release branch configured (${RELEASE_BRANCH})"
+echo "  ${GREEN}✓${NC} Git repository initialized"
+echo ""
+echo "Ready to add content with @acp.pattern-create, @acp.command-create, @acp.design-create"
 echo ""

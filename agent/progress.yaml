@@ -75,11 +75,11 @@ milestones:
   - id: M4
     name: ACP Package Development System
     status: in_progress
-    progress: 82
+    progress: 91
     started: 2026-02-20
     completed: null
     estimated_weeks: 6-8
-    tasks_completed: 9
+    tasks_completed: 10
     tasks_total: 11
     notes: |
       Milestone 4: Package Development System
@@ -462,12 +462,31 @@ tasks:
     
     - id: task-23
       name: "Rewrite @acp.package-create"
-      status: not_started
+      status: completed
       file: agent/tasks/task-23-package-create-rewrite.md
       estimated_hours: 6-8
-      completed_date: null
+      completed_date: 2026-02-21
       notes: |
-        Full ACP installation, release branch config, pre-commit hooks
+        ✅ @acp.package-create v2.0.0 complete!
+        - Updated agent/commands/acp.package-create.md (comprehensive rewrite)
+        - Rewritten agent/scripts/acp.package-create.sh (new workflow)
+        - Added install_precommit_hook() to acp.common.sh
+        - Updated acp.install.sh to copy schemas and manifest template
+        - New workflow:
+          1. Collect package information (name, description, author, license, etc.)
+          2. Collect release branch (default: main)
+          3. Create target directory (default: ~/.acp/packages/{package-name})
+          4. Run acp.install.sh in target directory (full ACP installation)
+          5. Create package.yaml with release.branch configuration
+          6. Create README.md, LICENSE, CHANGELOG.md, .gitignore
+          7. Install pre-commit hook (validates package.yaml)
+          8. Initialize git repository and create initial commit
+          9. Display comprehensive next steps
+        - Removed example file creation (use templates instead)
+        - Default directory: ~/.acp/packages/{package-name} or $HOME/.acp/packages/{package-name}
+        - Pre-commit hook validates package.yaml before every commit
+        - Tested successfully with multiple test packages
+        - Version bump: 1.0.0 → 2.0.0 (breaking - complete rewrite)
     
     - id: task-24
       name: Pre-Commit Hook System
@@ -488,16 +507,43 @@ documentation:
 
 progress:
   planning: 100
-  implementation: 85
-  testing: 80
-  documentation: 92
-  overall: 88
+  implementation: 90
+  testing: 85
+  documentation: 95
+  overall: 92
   milestone_1: 100
   milestone_2: 100
   milestone_3: 100
-  milestone_4: 82
+  milestone_4: 91
 
 recent_work:
+  - date: 2026-02-21
+    description: |
+      ✅ Task 23 Complete: Rewrite @acp.package-create
+      Complete package creation with full ACP installation, release branch config, and pre-commit hooks.
+    items:
+      - ✅ Updated agent/commands/acp.package-create.md (comprehensive rewrite)
+      - ✅ Rewritten agent/scripts/acp.package-create.sh (new workflow)
+      - ✅ Added install_precommit_hook() to agent/scripts/acp.common.sh
+      - ✅ Updated agent/scripts/acp.install.sh (copy schemas and manifest)
+      - ✅ New workflow implemented:
+        - Collect package metadata (name, description, author, license, homepage, repo, tags)
+        - Collect release branch (default: main)
+        - Create target directory (default: ~/.acp/packages/{package-name})
+        - Run acp.install.sh for full ACP installation
+        - Create package.yaml with release.branch configuration
+        - Create README.md, LICENSE, CHANGELOG.md, .gitignore
+        - Install pre-commit hook (validates package.yaml)
+        - Initialize git and create initial commit
+      - ✅ Removed example file creation (use templates from ACP installation)
+      - ✅ Default directory: ~/.acp/packages/{package-name} or $HOME/.acp/packages/{package-name}
+      - ✅ Pre-commit hook validates package.yaml before commits
+      - ✅ Tested successfully with multiple test packages
+      - ✅ Version bump: 1.0.0 → 2.0.0 (breaking - complete rewrite)
+      - 📋 Milestone 4 progress: 82% → 91% (10/11 tasks complete)
+      - 📋 Phase 5 (Package Creation) complete! (1/1 task done)
+      - 📋 Next: Task 24 - Pre-Commit Hook System (3-4 hours)
+  
   - date: 2026-02-21
     description: |
       ✅ Task 22 Complete: @acp.package-publish Command
@@ -1107,12 +1153,11 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - Continue Milestone 4 implementation (Phase 4: Publishing)
-  - Start Task 22: @acp.package-publish (8-10 hours)
-  - Implement validation workflow and version detection
-  - Then Task 23: Rewrite @acp.package-create (6-8 hours)
-  - Then Task 24: Pre-Commit Hook System (3-4 hours)
+  - Continue Milestone 4 implementation (Phase 6: Hooks)
+  - Start Task 24: Pre-Commit Hook System (3-4 hours)
+  - Complete Milestone 4 (1 task remaining)
   - Update CHANGELOG.md when milestone complete
+  - Consider Milestone 5: Package Ecosystem
 
 notes:
   - Using flat directory structure with dot notation (acp.status.md)
