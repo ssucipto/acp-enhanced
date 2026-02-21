@@ -5,6 +5,29 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.2] - 2026-02-21
+
+### Added
+
+**YAML Parser Test Suite**:
+- Created `tests/acp.yaml.spec.sh` with comprehensive test coverage
+- 14 tests validating parser functionality (all passing)
+- Tests basic operations, simple arrays, object arrays with indexing
+- Validates `yaml_get_nested()` array indexing feature
+- Tests complex nested structures (manifest.yaml format)
+- Prevents regressions in parser functionality
+
+## [3.3.1] - 2026-02-21
+
+### Fixed
+
+**ACP Core Tracking in manifest.yaml**:
+- `acp.install.sh` now creates `manifest.yaml` with acp-core package entry
+- Tracks all installed core commands, patterns, and designs
+- `acp.version-update.sh` updates acp-core version in manifest
+- `acp.package-validate.sh` checks manifest before warning about unlisted files
+- No more false warnings about core commands
+
 ## [3.3.0] - 2026-02-21
 
 ### Added
