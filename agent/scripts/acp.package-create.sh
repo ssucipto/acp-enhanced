@@ -81,8 +81,9 @@ read -p "Release branch [main]: " RELEASE_BRANCH
 RELEASE_BRANCH=${RELEASE_BRANCH:-main}
 
 # Target directory (optional)
-# Default: ~/.acp/packages/{namespace}/{package-name} or $HOME/.acp/packages/{namespace}/{package-name}
-DEFAULT_TARGET_DIR="$HOME/.acp/packages/${PACKAGE_NAME}"
+# Default: ~/.acp/projects/{package-name} or $HOME/.acp/projects/{package-name}
+# Note: ~/.acp/projects/ is for development, ~/.acp/packages/ is for installed packages
+DEFAULT_TARGET_DIR="$HOME/.acp/projects/${PACKAGE_NAME}"
 read -p "Target directory [${DEFAULT_TARGET_DIR}]: " TARGET_DIR
 
 # Expand path (handle ~, $HOME, and relative paths)
