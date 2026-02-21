@@ -587,14 +587,16 @@ tasks:
     
     - id: task-31
       name: Add progress.yaml to Package Repositories
-      status: not_started
+      status: completed
       file: agent/tasks/task-31-add-progress-yaml-to-packages.md
       estimated_hours: 1-2
-      completed_date: null
+      completed_date: 2026-02-21
       notes: |
-        Update @acp.package-create to initialize progress.yaml in package repositories
-        so package developers can use full ACP workflow (@acp.init, @acp.proceed, @acp.status).
-        progress.yaml is for development only (not installed to user projects).
+        ✅ Added progress.yaml creation to @acp.package-create
+        - Creates minimal progress.yaml (no predefined milestones/tasks)
+        - Enables full ACP workflow for package development
+        - Updated success message to mention progress tracking
+        - progress.yaml is for development only (excluded via .gitignore)
 
 documentation:
   design_documents: 6
@@ -617,6 +619,22 @@ progress:
   milestone_5: 0
 
 recent_work:
+  - date: 2026-02-21
+    description: |
+      ✅ Task 31 Complete: Add progress.yaml to Package Repositories
+      Package repositories now get progress.yaml for development tracking.
+    items:
+      - ✅ Updated agent/scripts/acp.package-create.sh
+      - ✅ Added progress.yaml creation step after package.yaml
+      - ✅ Creates minimal progress.yaml (no predefined milestones/tasks)
+      - ✅ Includes project metadata, empty milestones, empty tasks
+      - ✅ Updated success message to mention progress tracking
+      - ✅ Added helpful output about ACP commands (@acp.init, @acp.status, @acp.proceed)
+      - ✅ progress.yaml excluded via .gitignore (not installed to users)
+      - 📋 Package developers can now use full ACP workflow
+      - 📋 Enables @acp.init, @acp.proceed, @acp.status in packages
+      - 📋 Consistent experience between projects and packages
+  
   - date: 2026-02-21
     description: |
       ✅ Task 30 Complete: Fix Package Validation for Non-Package Files
