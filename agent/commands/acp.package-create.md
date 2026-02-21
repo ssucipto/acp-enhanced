@@ -106,11 +106,12 @@ Use this command when starting a new ACP package that you plan to share with oth
 - Note: Only commits to this branch can be published
 
 **Target Directory** (optional)
-- Ask: "Where would you like to create the package? (default: ~/.acp/packages/{namespace}/{package-name} or $HOME/.acp/packages/{namespace}/{package-name})"
+- Ask: "Where would you like to create the package? (default: ~/.acp/projects/{package-name} or $HOME/.acp/projects/{package-name})"
 - Supports: Absolute paths, relative paths, `~` expansion, `$HOME` expansion
-- Examples: "~/.acp/packages/firebase", "~/projects", "$HOME/packages", "/tmp", "."
-- Default: `~/.acp/packages/{package-name}` if not specified (equivalent to `$HOME/.acp/packages/{package-name}`)
-- Note: Package will be created as `{target-dir}/acp-{name}/`
+- Examples: "~/.acp/projects/firebase", "~/dev/packages", "$HOME/packages", "/tmp", "."
+- Default: `~/.acp/projects/{package-name}` if not specified (equivalent to `$HOME/.acp/projects/{package-name}`)
+- Note: Package will be created in the specified directory
+- Rationale: `~/.acp/projects/` is for development work, while `~/.acp/packages/` is reserved for installed packages from remote repositories
 
 **Expected Outcome**: All metadata collected and validated
 
@@ -169,11 +170,11 @@ User: [Enter]
 
 Agent: Using main branch. ✓
 
-Agent: Where would you like to create the package? (default: ~/.acp/packages/firebase or $HOME/.acp/packages/firebase)
+Agent: Where would you like to create the package? (default: ~/.acp/projects/firebase or $HOME/.acp/projects/firebase)
 
 User: [Enter]
 
-Agent: Using ~/.acp/packages/firebase. ✓
+Agent: Using ~/.acp/projects/firebase. ✓
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -187,7 +188,7 @@ Homepage: https://github.com/prmichaelsen/acp-firebase
 Repository: https://github.com/prmichaelsen/acp-firebase.git
 Tags: firebase, firestore, database, backend
 Release branch: main
-Target directory: ~/.acp/packages/firebase (or $HOME/.acp/packages/firebase)
+Target directory: ~/.acp/projects/firebase (or $HOME/.acp/projects/firebase)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
