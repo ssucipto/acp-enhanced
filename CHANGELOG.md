@@ -5,6 +5,13 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-02-21
+
+### Changed
+- Enhanced `agent/commands/command.template.md` with computer roleplay directive
+  - Clarifies that agent should execute command directives as instructions
+  - Improves command execution clarity and consistency
+
 ## [2.3.0] - 2026-02-21
 
 ### Added
@@ -434,3 +441,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All project-specific content (remember-mcp milestones, tasks, designs)
 - Framework-specific patterns (TanStack Router, Firebase-specific examples)
 - Project-specific TypeScript patterns (Firestore users pattern)
+
