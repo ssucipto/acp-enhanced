@@ -5,6 +5,22 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1] - 2026-02-21
+
+### Fixed
+
+**Package Validation Bug Fix**:
+- Fixed `@acp.package-validate` namespace validation to skip files not in `package.yaml` contents
+- Validation now only checks files listed in package contents
+- Files not in contents (e.g., installed dependencies) are skipped with informational message
+- Fixes false positive namespace violations for package developers
+- manifest.yaml already acts as dev dependency tracker (no new fields needed)
+
+**Impact**:
+- Package developers can install dependencies (like `git.commit.md`) without validation errors
+- Validation correctly focuses only on package content files
+- Installation system already worked correctly (only installs contents)
+
 ## [3.1.0] - 2026-02-21
 
 ### Added
