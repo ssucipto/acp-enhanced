@@ -569,6 +569,21 @@ tasks:
       completed_date: null
       notes: |
         Implement init_global_acp() function for automatic ~/.acp/ initialization on first global command use
+  
+  future_enhancements:
+    - id: task-30
+      name: Fix Package Validation for Non-Package Files
+      status: completed
+      file: agent/tasks/task-30-fix-package-validation-non-package-files.md
+      estimated_hours: 1-2
+      completed_date: 2026-02-21
+      notes: |
+        ✅ Fixed @acp.package-validate namespace validation
+        - Only validates files in package.yaml contents
+        - Skips files not in contents (installed dependencies)
+        - Added informational output for skipped files
+        - Updated documentation to explain behavior
+        - manifest.yaml acts as dev dependency tracker
 
 documentation:
   design_documents: 6
@@ -593,6 +608,23 @@ progress:
 recent_work:
   - date: 2026-02-21
     description: |
+      ✅ Task 30 Complete: Fix Package Validation for Non-Package Files
+      Fixed namespace validation to skip files not in package.yaml contents.
+    items:
+      - ✅ Updated agent/scripts/acp.package-validate.sh
+      - ✅ Modified validate_namespace_consistency() function
+      - ✅ Reads package.yaml contents (commands, patterns, designs)
+      - ✅ Only validates files listed in contents
+      - ✅ Skips files not in contents with informational message
+      - ✅ Added skipped file counter and helpful output
+      - ✅ Updated agent/commands/acp.package-validate.md documentation
+      - ✅ Explained that files not in contents are skipped (normal for dependencies)
+      - 📋 Bug fix complete - no more false positive namespace violations
+      - 📋 manifest.yaml already acts as dev dependency tracker
+      - 📋 Installation system already works correctly (only installs contents)
+  
+  - date: 2026-02-21
+    description: |
       🚀 Agent Context Initialized via @acp.init
       Complete project context loaded. All documentation and source files reviewed.
     items:
@@ -600,10 +632,10 @@ recent_work:
       - ✅ Read agent/progress.yaml - Current status confirmed
       - ✅ Read 6 design documents (requirements template, commands, package-mgmt, package-dev, global-install, install-local)
       - ✅ Read 1 milestone document (M5: Global Package Installation)
-      - ✅ Read 5 task documents (tasks 25-29 for Milestone 5)
-      - ✅ Reviewed AGENT.md (v3.0.0, 1184 lines)
+      - ✅ Read 1 task document (task-25: Global Infrastructure Setup)
+      - ✅ Reviewed AGENT.md (v3.0.0, 1184 lines - first 100 lines)
       - ✅ Reviewed README.md (251 lines)
-      - ✅ Reviewed CHANGELOG.md (735 lines, up to v3.0.0)
+      - ✅ Reviewed CHANGELOG.md (735 lines - first 100 lines, up to v3.0.0)
       - ✅ Reviewed acp.common.sh (~1118 lines, 35+ utility functions)
       - ✅ Verified 25 command files (all with flat dot notation)
       - ✅ Verified 17 script files in agent/scripts/
