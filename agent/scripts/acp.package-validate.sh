@@ -285,36 +285,30 @@ validate_namespace_consistency() {
     local skipped=0
     local skipped_package_files=0
     
-    # Read package.yaml contents to know which files should be validated
-    # Build list of filenames from contents (extract .name from each object)
+    # Read package.yaml contents using grep (consistent with check_unlisted_files)
+    # Extract all "- name: filename" entries from each section
     local package_commands=""
     if yaml_has_key "package.yaml" "contents.commands"; then
-        local command_count=$(yaml_get_array "package.yaml" "contents.commands" | wc -l)
-        for i in $(seq 0 $((command_count - 1))); do
-            local cmd_name=$(yaml_get_nested "package.yaml" "contents.commands[$i].name")
-            [ -n "$cmd_name" ] && package_commands="${package_commands}${cmd_name}"$'\n'
-        done
+        package_commands=$(sed -n '/^[[:space:]]*commands:/,/^[[:space:]]*[a-z]/p' package.yaml | \
+                          grep -E "^[[:space:]]+-[[:space:]]+name:" | \
+                          sed 's/.*name:[[:space:]]*//')
     fi
     
     local package_patterns=""
     if yaml_has_key "package.yaml" "contents.patterns"; then
-        local pattern_count=$(yaml_get_array "package.yaml" "contents.patterns" | wc -l)
-        for i in $(seq 0 $((pattern_count - 1))); do
-            local pat_name=$(yaml_get_nested "package.yaml" "contents.patterns[$i].name")
-            [ -n "$pat_name" ] && package_patterns="${package_patterns}${pat_name}"$'\n'
-        done
+        package_patterns=$(sed -n '/^[[:space:]]*patterns:/,/^[[:space:]]*[a-z]/p' package.yaml | \
+                          grep -E "^[[:space:]]+-[[:space:]]+name:" | \
+                          sed 's/.*name:[[:space:]]*//')
     fi
     
     local package_designs=""
     if yaml_has_key "package.yaml" "contents.designs"; then
-        local design_count=$(yaml_get_array "package.yaml" "contents.designs" | wc -l)
-        for i in $(seq 0 $((design_count - 1))); do
-            local des_name=$(yaml_get_nested "package.yaml" "contents.designs[$i].name")
-            [ -n "$des_name" ] && package_designs="${package_designs}${des_name}"$'\n'
-        done
+        package_designs=$(sed -n '/^[[:space:]]*designs:/,/^[[:space:]]*[a-z]/p' package.yaml | \
+                         grep -E "^[[:space:]]+-[[:space:]]+name:" | \
+                         sed 's/.*name:[[:space:]]*//')
     fi
     
-    # Track package files that were skipped (for helpful warning)
+    # Track package files that were skipped (for helpful error)
     local skipped_package_files_list=""
     
     # Check command files
