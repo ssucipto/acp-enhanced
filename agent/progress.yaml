@@ -569,6 +569,18 @@ tasks:
       completed_date: null
       notes: |
         Implement init_global_acp() function for automatic ~/.acp/ initialization on first global command use
+  
+  future_enhancements:
+    - id: task-30
+      name: Fix Package Validation for Non-Package Files
+      status: not_started
+      file: agent/tasks/task-30-fix-package-validation-non-package-files.md
+      estimated_hours: 1-2
+      completed_date: null
+      notes: |
+        Fix @acp.package-validate to skip namespace validation for files that exist
+        in the package repository but are NOT listed in package.yaml contents.
+        These are typically installed dependencies tracked in manifest.yaml.
 
 documentation:
   design_documents: 6
