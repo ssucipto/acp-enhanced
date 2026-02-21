@@ -3,7 +3,7 @@
 
 project:
   name: agent-context-protocol
-  version: 2.5.0
+  version: 2.6.0
   started: 2026-02-16
   status: in_progress
   current_milestone: M4
@@ -75,11 +75,11 @@ milestones:
   - id: M4
     name: ACP Package Development System
     status: in_progress
-    progress: 64
+    progress: 73
     started: 2026-02-20
     completed: null
     estimated_weeks: 6-8
-    tasks_completed: 7
+    tasks_completed: 8
     tasks_total: 11
     notes: |
       Milestone 4: Package Development System
@@ -414,12 +414,22 @@ tasks:
     
     - id: task-21
       name: "Enhanced @acp.validate"
-      status: not_started
+      status: completed
       file: agent/tasks/task-21-enhanced-acp-validate.md
       estimated_hours: 3-4
-      completed_date: null
+      completed_date: 2026-02-21
       notes: |
-        Add namespace checking and reserved name validation
+        ✅ Enhanced @acp.validate complete!
+        - Updated agent/commands/acp.validate.md with namespace validation
+        - Added computer roleplay directive to agent directive
+        - Added Step 8: Validate Namespace Conventions
+        - Checks command/pattern/design filenames use correct namespace
+        - Validates reserved namespace usage (acp, local, core, system, global)
+        - Context-aware (package vs project detection)
+        - Updated verification checklist
+        - Updated example output with namespace section
+        - Added @acp.package-validate to related commands
+        - Version bump: 1.0.0 → 2.0.0
     
     - id: task-22
       name: "@acp.package-publish Command"
@@ -458,16 +468,35 @@ documentation:
 
 progress:
   planning: 100
-  implementation: 78
+  implementation: 80
   testing: 75
-  documentation: 87
-  overall: 83
+  documentation: 90
+  overall: 85
   milestone_1: 100
   milestone_2: 100
   milestone_3: 100
-  milestone_4: 64
+  milestone_4: 73
 
 recent_work:
+  - date: 2026-02-21
+    description: |
+      ✅ Task 21 Complete: Enhanced @acp.validate
+      Added namespace validation and reserved name checking to general ACP validation.
+    items:
+      - ✅ Updated agent/commands/acp.validate.md with namespace validation
+      - ✅ Added computer roleplay directive to command header
+      - ✅ Added Step 8: Validate Namespace Conventions
+      - ✅ Context-aware validation (package vs project detection)
+      - ✅ Checks command/pattern/design filenames use correct namespace
+      - ✅ Validates reserved namespace usage (acp, local, core, system, global)
+      - ✅ Updated verification checklist with namespace checks
+      - ✅ Updated example output with namespace validation section
+      - ✅ Added @acp.package-validate to related commands
+      - ✅ Version bump: 1.0.0 → 2.0.0 (breaking - new validation checks)
+      - 📋 Milestone 4 progress: 73% (8/11 tasks complete)
+      - 📋 Phase 3 (Validation) complete! (2/2 tasks done)
+      - 📋 Next: Task 22 - @acp.package-publish (8-10 hours)
+  
   - date: 2026-02-21
     description: |
       ✅ Task 20 Complete: @acp.package-validate Command
@@ -1029,10 +1058,11 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - Continue Milestone 4 implementation (Phase 3: Validation)
-  - Start Task 21: Enhanced @acp.validate (3-4 hours)
-  - Add namespace checking and reserved name validation
-  - Then Task 22: @acp.package-publish (8-10 hours)
+  - Continue Milestone 4 implementation (Phase 4: Publishing)
+  - Start Task 22: @acp.package-publish (8-10 hours)
+  - Implement validation workflow and version detection
+  - Then Task 23: Rewrite @acp.package-create (6-8 hours)
+  - Then Task 24: Pre-Commit Hook System (3-4 hours)
   - Update CHANGELOG.md when milestone complete
 
 notes:
