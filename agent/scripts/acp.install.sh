@@ -114,6 +114,11 @@ if [ -f "$TEMP_DIR/agent/manifest.template.yaml" ]; then
     cp "$TEMP_DIR/agent/manifest.template.yaml" "$TARGET_DIR/agent/"
 fi
 
+# Copy package template
+if [ -f "$TEMP_DIR/agent/package.template.yaml" ]; then
+    cp "$TEMP_DIR/agent/package.template.yaml" "$TARGET_DIR/agent/"
+fi
+
 # Copy schemas
 if [ -f "$TEMP_DIR/agent/schemas/package.schema.yaml" ]; then
     cp "$TEMP_DIR/agent/schemas/package.schema.yaml" "$TARGET_DIR/agent/schemas/"
