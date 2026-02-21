@@ -5,6 +5,21 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] - 2026-02-21
+
+### Changed
+- **Enhanced @acp.validate Command** - Added namespace validation and reserved name checking
+  - Added Step 8: Validate Namespace Conventions
+  - Context-aware validation (package vs project detection)
+  - Validates command/pattern/design filenames use correct namespace
+  - Checks for reserved namespace violations (acp, local, core, system, global)
+  - Updated verification checklist with namespace checks
+  - Updated example output with namespace validation section
+  - Added computer roleplay directive to command header
+  - Version bump: 1.0.0 → 2.0.0 (breaking - new validation checks)
+- Milestone 4 progress: 64% → 73% (8/11 tasks complete)
+- Phase 3 (Validation) complete
+
 ## [2.5.0] - 2026-02-21
 
 ### Added
