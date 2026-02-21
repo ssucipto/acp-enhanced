@@ -5,6 +5,132 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-02-21
+
+### Summary
+
+Major release consolidating 33 commits and completing Milestone 4 (ACP Package Development System). This release represents a complete package development workflow from creation to publishing, with breaking changes to `@acp.package-create`.
+
+### Added
+
+**Milestone 4: ACP Package Development System (Complete)**
+- Complete package development workflow operational
+- 11 tasks completed across 6 implementation phases
+- 33 commits since version 2.0.0
+
+**Entity Creation Commands**:
+- `@acp.pattern-create` - Create patterns with namespace and draft support
+- `@acp.command-create` - Create commands with automatic package.yaml updates
+- `@acp.design-create` - Create design documents with namespace enforcement
+- `@acp.task-create` - Create tasks with milestone linking and progress updates
+
+**Validation System**:
+- `@acp.package-validate` - Comprehensive package validation with shell checks and test installation
+- `@acp.validate` v2.0.0 - Enhanced with namespace validation and computer roleplay directive
+- YAML schema system with pure bash validator (zero dependencies)
+- Namespace consistency checking across all entity types
+- Reserved namespace enforcement (acp, local, core, system, global)
+
+**Publishing Automation**:
+- `@acp.package-publish` - 13-step publishing workflow with version management
+- Automatic version bump detection from Conventional Commits
+- CHANGELOG generation support (LLM-based, shell placeholder)
+- Branch validation (main, master, mainline, release, custom)
+- Test installation from remote after publishing
+
+**Package Creation & Management**:
+- `@acp.package-create` v2.0.0 - Complete rewrite with full ACP installation
+- `@acp.package-create` v2.1.0 - Non-interactive mode with CLI arguments
+- Pre-commit hook system for package.yaml validation
+- Default directory: `~/.acp/projects/acp-{name}/`
+- Full ACP installation (templates, scripts, schemas) in packages
+
+**Infrastructure & Utilities**:
+- YAML schema system (agent/schemas/package.schema.yaml)
+- Pure bash YAML validator (acp.yaml-validate.sh) - zero dependencies
+- Namespace utilities (5 functions for context-aware namespace handling)
+- README update utilities (automatic content list generation from package.yaml)
+- Pre-commit hook template system with automatic installation
+- install_precommit_hook() function in acp.common.sh
+
+**Documentation & Patterns**:
+- TypeScript library-services pattern
+- Computer roleplay directive added to command templates
+- "Resume a previous session" section in README
+- Critical directives about respecting user re-execution commands
+- Comprehensive command documentation with examples
+
+**Milestone 5 Planning**:
+- Global Package Installation design completed
+- 5 tasks created (tasks 25-29)
+- Global installation to `~/.acp/packages/` with `--global` flag
+- Agent discovery via `~/.acp/manifest.yaml`
+- Auto-initialization design (global-acp-installation.md)
+- Estimated: 9-13 hours implementation
+
+### Changed
+
+**BREAKING: @acp.package-create** - Complete rewrite (v1.0.0 → v2.0.0 → v2.1.0)
+- Now runs `acp.install.sh` to install complete ACP structure (all templates, commands, scripts)
+- Changed default directory from arbitrary location to `~/.acp/projects/acp-{name}/`
+- Removed example file creation (use templates from ACP installation instead)
+- Added release branch configuration (default: main)
+- Added pre-commit hook installation (validates package.yaml before commits)
+- Added non-interactive mode with CLI arguments (v2.1.0)
+- Breaking: Old workflow no longer supported
+
+**Package Development Workflow**:
+- Packages now created with complete ACP tooling
+- Full validation before publishing
+- Automated version management via Conventional Commits
+- Pre-commit validation hooks automatically installed
+
+**acp.install.sh Enhancements**:
+- Now copies `agent/schemas/*.yaml` files
+- Now copies `agent/manifest.template.yaml`
+- Ensures complete ACP installation for packages
+
+### Fixed
+
+- **@acp.package-create Directory Structure** - Fixed redundant nesting
+  - Changed from `~/.acp/projects/{name}/acp-{name}/` to `~/.acp/projects/acp-{name}/`
+  - Fixed SCRIPT_DIR to use absolute path (prevents issues after cd)
+  - Fixed directory existence check (was creating before checking)
+- **Documentation Formatting** - Fixed command file formatting
+  - Fixed missing closing quote in computer roleplay directive
+  - Fixed repository URLs in examples to include "acp-" prefix
+  - Added explicit confirmation requirement before invoking installed commands
+
+### Migration Guide
+
+**For Package Developers**:
+- **Old**: Create packages anywhere with manual setup
+- **New**: Use `@acp.package-create` for full ACP installation in `~/.acp/projects/`
+- **New**: Packages include pre-commit hooks for automatic validation
+- **New**: Use `@acp.package-publish` for automated publishing with version management
+- **New**: Use entity creation commands (@acp.pattern-create, @acp.command-create, etc.)
+
+**For Package Users**:
+- No breaking changes to package installation
+- All existing `@acp.package-install` commands work as before
+- New validation and publishing commands available
+- New entity creation commands for package development
+
+**Breaking Changes**:
+- `@acp.package-create` workflow completely changed
+- Old manual package creation workflow no longer supported
+- Packages must now be created in `~/.acp/projects/` by default
+- Package structure now includes full ACP installation
+
+### Statistics
+
+- **Commits**: 33 since version 2.0.0
+- **Milestones**: 4 completed (M1-M4), 1 planned (M5)
+- **Tasks**: 24 completed, 5 planned (29 total)
+- **Commands**: 25 implemented
+- **Scripts**: 17 in agent/scripts/
+- **Overall Progress**: 86% (M1-M4 complete, M5 not started)
+
 ## [2.11.0] - 2026-02-21
 
 ### Added
