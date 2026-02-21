@@ -5,6 +5,46 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2026-02-21
+
+### Added
+- **@acp.package-publish Command** - Automated package publishing workflow
+  - 11-step publishing workflow from validation to testing
+  - Delegates to @git.commit for version/CHANGELOG management (avoids logic duplication)
+  - Automatic version bump detection from Conventional Commits
+  - Analyzes commits for breaking changes, features, and fixes
+  - User confirmation for version number (Y/n/custom)
+  - Branch validation (main, master, mainline, release, custom)
+  - Remote status checking (prevents overwriting)
+  - Git tag creation (vX.Y.Z format)
+  - Push to remote (commits and tags)
+  - Post-publish test installation from remote
+  - Comprehensive error handling at each step
+  - Shell script: `agent/scripts/acp.package-publish.sh`
+
+### Changed
+- Milestone 4 progress: 73% → 82% (9/11 tasks complete)
+- Phase 4 (Publishing) complete
+
+## [2.7.0] - 2026-02-21
+
+### Changed
+- **Enhanced @acp.validate Command** - Added strict namespace validation
+  - STRICT enforcement: All patterns/commands/designs MUST have namespace prefix
+  - In packages: Use package namespace (e.g., firebase.pattern.md)
+  - In projects: Use local namespace (e.g., local.pattern.md)
+  - ERROR for files missing namespace prefix (not just warning)
+  - Exception: Template files (*.template.md) don't need namespace
+  - Added Step 8: Validate Namespace Conventions
+  - Context-aware validation (package vs project detection)
+  - Checks for reserved namespace violations (acp, local, core, system, global)
+  - Updated verification checklist with namespace checks
+  - Updated example output with namespace validation section
+  - Added computer roleplay directive to command header
+  - Version bump: 1.0.0 → 2.0.0 (breaking - new strict validation)
+- Milestone 4 progress: 64% → 73% (8/11 tasks complete)
+- Phase 3 (Validation) complete
+
 ## [2.6.0] - 2026-02-21
 
 ### Changed
