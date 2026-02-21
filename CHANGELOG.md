@@ -5,6 +5,30 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.0] - 2026-02-21
+
+### Changed
+- **@acp.package-create Command** - Complete rewrite with full ACP installation
+  - Now runs `acp.install.sh` to install complete ACP structure (all templates, commands, scripts)
+  - Collects release branch configuration (default: main)
+  - Default directory changed to `~/.acp/packages/{package-name}` or `$HOME/.acp/packages/{package-name}`
+  - Installs pre-commit hook automatically (validates package.yaml before commits)
+  - Removed example file creation (use templates from ACP installation instead)
+  - Creates package.yaml with `release.branch` field
+  - Enhanced next steps with entity creation commands
+  - Version bump: 1.0.0 → 2.0.0 (breaking - complete rewrite)
+- **acp.install.sh** - Enhanced to copy schemas directory and manifest template
+  - Now copies `agent/schemas/*.yaml` files
+  - Now copies `agent/manifest.template.yaml`
+  - Ensures complete ACP installation for packages
+
+### Added
+- **install_precommit_hook()** - New function in `acp.common.sh`
+  - Installs pre-commit hook for package validation
+  - Validates package.yaml before allowing commits
+  - Gracefully handles missing validation scripts
+  - Documents future enhancements (namespace checking, CHANGELOG validation)
+
 ## [2.8.0] - 2026-02-21
 
 ### Added
