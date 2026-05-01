@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.2.3] - 2026-05-01 — M22 Documentation Accuracy Audit
+
+### Fixed
+
+- **FIX-A** (`AGENT.md` directory tree): Removed ghost `agent/files/` entry (directory does not exist on disk). Added 7 missing directories: `agent/artifacts/`, `agent/benchmarks/`, `agent/clarifications/`, `agent/feedback/`, `agent/schemas/`, `agent/scripts/`, and template files at `agent/` root level (`manifest.template.yaml`, `package.template.yaml`, `progress.template.yaml`, `projects.template.yaml`, `sessions.template.yaml`). Also added `AGENTS.md` at project root level. Restructured tree for logical grouping.
+
+- **FIX-B** (`AGENT.md` stale references): Replaced stale `@acp.install` reference (no longer a command; the feature is now `@acp.package-install`, which has been shipped since M3). Fixed two occurrences of `unacp.install.sh` → `acp.uninstall.sh` (wrong script name in the "Uninstall Prompt" sample section).
+
+- **FIX-C** (`scripts/AGENTS.md` bootstrap template): Added two bash-safety anti-patterns to the "Anti-Patterns (Never Do These)" section. These were already present in this project's own `.github/copilot-instructions.md` but missing from the bootstrap template distributed to new projects: `Never use set -e without trapping errors in bash scripts` and `Never write bash that breaks on macOS (BSD sed, date +%N differences)`.
+
+---
+
 ## [6.2.2] - 2026-05-01 — M20 + M21 Consistency Cleanup and Functional Readiness
 
 ### Fixed
