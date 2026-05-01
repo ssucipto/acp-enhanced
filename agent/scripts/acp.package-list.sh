@@ -4,6 +4,7 @@
 # Lists installed ACP packages with their versions and details
 
 set -e
+trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Source common utilities
 SCRIPT_DIR="$(dirname "$0")"
