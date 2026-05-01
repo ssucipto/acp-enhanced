@@ -4,6 +4,7 @@
 # Extracts and displays the current ACP version from AGENT.md
 
 set -e
+trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Colors for output using tput (more reliable than ANSI codes)
 if command -v tput >/dev/null 2>&1 && [ -t 1 ]; then
