@@ -1933,7 +1933,7 @@ This repository is actively maintained with improvements to the ACP methodology 
 ./agent/scripts/acp.version-update.sh
 
 # Or download and run directly
-curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.version-update.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.version-update.sh | bash
 ```
 
 The update script will:
@@ -1942,7 +1942,7 @@ The update script will:
 3. Show you the changes
 4. Ask for confirmation before applying
 
-See [CHANGELOG.md](https://github.com/prmichaelsen/agent-context-protocol/blob/main/CHANGELOG.md) for version history and changes.
+See [CHANGELOG.md](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md) for version history and changes.
 
 ---
 
