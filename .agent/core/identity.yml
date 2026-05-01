@@ -1,0 +1,31 @@
+# DO NOT add dynamic content to this file (no dates, no task IDs)
+# This file is prompt-cached by the LLM API after first call
+
+project: agent-context-protocol
+type: ai-agent-tooling-protocol
+description: >
+  A documentation-first development methodology that gives AI agents
+  structured, persistent project memory across sessions. The protocol
+  defines command files, shell scripts, YAML schemas, and E2E tests.
+
+stack:
+  - primary: Bash Shell (agent/scripts/*.sh — cross-platform bash 4+)
+  - secondary: TypeScript (scripts/acp-dispatch.ts, scripts/acp-validate.ts)
+  - format: Markdown (agent/commands/*.md — command directive files)
+  - format: YAML (agent/schemas/*.yaml, agent/progress.yaml, package.yaml)
+
+platform_constraints:
+  - bash_compat: macOS (BSD sed, no date +%N) + Linux (GNU)
+  - no_external_deps: pure bash preferred; no jq, no yq, no python
+  - yaml_parser: tests/acp.yaml-parser.sh — custom pure-bash parser
+
+team: solo-developer
+priorities:
+  - correctness: command docs must be unambiguous for any LLM
+  - shell_compat: every .sh must pass on macOS AND Linux
+  - token_efficiency: ACP itself must model what it preaches
+  - test_coverage: every command must have an E2E test file
+
+fork_of: github.com/prmichaelsen/agent-context-protocol
+repo: github.com/ssucipto/acp-enhanced
+version: 6.2.0

@@ -325,7 +325,77 @@ fi
 echo "${GREEN}✓${NC} Created agent/feedback/ with .gitkeep"
 echo ""
 
-# Step 4: Create package.yaml
+# Step 3.7: Create configurables template and example preset
+echo "${BOLD}Creating Configurables Template${NC}"
+echo ""
+
+mkdir -p agent/configurables
+cat > "agent/configurables/${PACKAGE_NAME}.configurables.yaml" << EOF
+# ${PACKAGE_NAME} Configurables
+# Define available preferences for this package.
+# Users can override these values at project, workspace, or user level.
+#
+# Usage:
+#   acp.preferences.sh get ${PACKAGE_NAME} example.setting
+#   @acp.preferences-show ${PACKAGE_NAME}
+#   @acp.preferences-set ${PACKAGE_NAME} example.setting option2
+#
+# Version: 1.0.0
+# Last Updated: $(date +%Y-%m-%d)
+
+${PACKAGE_NAME}:
+
+  # ── Example preference ─────────────────────────────────────────────────────
+  example:
+    setting:
+      id: 'example.setting'
+      description: Example preference — rename or replace with your own
+      default: option1
+      type: string
+      options:
+        - name: option1
+          description: First option (default)
+          value: option1
+        - name: option2
+          description: Second option
+          value: option2
+
+  # Add your package-specific preferences below.
+  # For a number preference:
+  #   my.count:
+  #     id: 'my.count'
+  #     description: Example number preference
+  #     default: 3
+  #     type: number
+  #     min: 1
+  #     max: 10
+  #
+  # For a boolean preference:
+  #   my.flag:
+  #     id: 'my.flag'
+  #     description: Example boolean preference
+  #     default: false
+  #     type: boolean
+EOF
+
+echo "${GREEN}✓${NC} Created agent/configurables/${PACKAGE_NAME}.configurables.yaml"
+
+mkdir -p agent/preferences
+cat > "agent/preferences/${PACKAGE_NAME}.default.yaml" << EOF
+# ${PACKAGE_NAME} Default Preferences (Project Level)
+# These are the project-level preference values for ${PACKAGE_NAME}.
+# Precedence: Project > Workspace > User > Configurables default
+#
+# Edit this file to set project-wide defaults.
+# For personal overrides, run:
+#   @acp.preferences-set ${PACKAGE_NAME} example.setting option2 --user
+
+${PACKAGE_NAME}:
+  example.setting: option1    # (default) replace with actual preferences
+EOF
+
+echo "${GREEN}✓${NC} Created agent/preferences/${PACKAGE_NAME}.default.yaml"
+echo ""
 echo "${BOLD}Creating package.yaml${NC}"
 echo ""
 
@@ -362,6 +432,16 @@ contents:
   commands: []
   
   designs: []
+
+  # Preference definitions bundled with this package
+  configurables:
+    - name: ${PACKAGE_NAME}.configurables.yaml
+      description: Preference definitions for ${PACKAGE_NAME}
+
+  # Optional preset preference bundles
+  presets:
+    - name: ${PACKAGE_NAME}.default.yaml
+      description: Default preference values for ${PACKAGE_NAME}
 
 # Compatibility
 requires:
@@ -514,6 +594,37 @@ Or using the installation script:
 ## Why Use This Package
 
 (Add benefits and use cases here)
+
+## Preferences & Presets
+
+This package ships with configurable preferences that users can override at any level.
+
+### Configuration
+
+View active preferences:
+\`\`\`bash
+@acp.preferences-show ${PACKAGE_NAME}
+\`\`\`
+
+Set a preference for this project:
+\`\`\`bash
+@acp.preferences-set ${PACKAGE_NAME} example.setting option2 --project
+\`\`\`
+
+### Available Presets
+
+This package provides one preset:
+
+#### default
+**File**: \`agent/preferences/${PACKAGE_NAME}.default.yaml\`
+**Description**: Default preference values for ${PACKAGE_NAME}
+
+Usage:
+\`\`\`bash
+@acp.plan --preset ${PACKAGE_NAME}.default
+\`\`\`
+
+To create additional presets, add files named \`agent/preferences/${PACKAGE_NAME}.<preset-name>.yaml\` with your preferred values.
 
 ## Usage
 
