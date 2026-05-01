@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.2.5] — 2026-05-01
+
+### M24 — AGENT.md Completeness
+
+**AGENT.md — Added commands:**
+- Core Commands: Added `@acp.resume` (Workflow), `@acp.update` (Version & Sync), `@acp.preferences-get` (Preferences), `@acp.projects-restore` (Project Registry)
+- Core Commands: Added Git namespace section — `@git.commit`, `@git.init`
+
+**AGENT.md — New section:**
+- Three-Persona Deployment Model section: Persona A (Copilot Pro only), Persona B (multi-model DeepSeek via OpenRouter), Persona C (recommended combined). Includes Personas at a Glance table, "Which Persona Should I Use?" decision tree, three-layer context model token estimates, and cross-reference to `scripts/QUICKSTART.md`.
+
+**AGENT.md — Conclusion and Sample Prompts:**
+- Conclusion: updated from "Agent Directory Pattern transforms" to "ACP Enhanced transforms"
+- Key Takeaways: added Package Ecosystem (item 8) and Token Efficiency ≥60% reduction (item 9)
+- Sample Prompts: added legacy/modern note at top of section
+- Added `@acp.*` equivalents for all 5 legacy trigger strings (Initialize, Proceed, Update, Check for updates, Uninstall)
+- Added "ACP Enhanced Commands Quick Reference" sub-section with 5 daily-use commands
+
+**Housekeeping:**
+- M23 session memory written to `.agent/memory/sessions.md`
+- Retroactively created `agent/milestones/milestone-17-artifact-commands-system.md`
+- Version bumped to 6.2.5 in `AGENT.md`, `package.yaml`, `.agent/core/identity.yml`, `agent/progress.yaml`
+
+---
+
 ## [6.2.4] - 2026-05-01 — M23 ACP Enhanced Identity
 
 ### Added
