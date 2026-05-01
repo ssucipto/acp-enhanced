@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.2.1] - 2026-05-01 — M19 Preferences System Bug Fix
+
+### Fixed
+
+- **BUG-1**: Replaced all `yaml_query(file, path)` calls with `yaml_get(file, path)` in `acp.preferences.sh` — `yaml_query` takes only one argument; every preference resolution was broken
+- **BUG-2**: Rewrote `generate_preferences` to enumerate preferences via `_index` array in configurables + indexed `yaml_get`; previously always emitted empty namespace block
+- **BUG-3**: Replaced `yaml_get_array` + `grep -oP` option iteration with indexed `yaml_get` loop in `validate_preference`; previously always rejected valid string options
+- **BUG-4**: Migrated all preference test fixtures from flat-dot keys to nested YAML format; `yaml_get` path traversal now resolves correctly
+- **BUG-5**: Removed dead `indent_key` variable in `set_preference`; replaced sed-based value replacement with awk (injection-safe — no delimiter sensitivity)
+- **BUG-6**: Replaced `bc`-based number range checks with bash integer arithmetic `(( value < min ))`; `bc` absent on Alpine and many CI environments
+- **BUG-7**: Changed `acp.common.sh` shebang from `#!/bin/sh` to `#!/usr/bin/env bash`; file uses bash arrays and `${BASH_SOURCE[0]}`
+- **BUG-8**: Added `trap 'cleanup_ast' EXIT` and `cleanup_ast` call inside `init_ast` in `acp.yaml-parser.sh`; temp files were leaking on unexpected exit
+- **BUG-9**: Removed duplicate "Repository cloned" success message in `acp.package-install.sh`
+- **BUG-10**: `get_preference_source` now returns exit 0 for the `"none"` case (valid non-error state)
+- **BUG-11**: Documented `yaml_query` map/array colon-suffix behavior in function header comment
+- **BUG-12**: `_yaml_sed_i` in `acp.yaml-parser.sh` now delegates to `_sed_i` when `acp.common.sh` is also loaded
+- **BUG-13**: `AGENT.md` version corrected from `5.41.0` to `6.2.0` (prior session)
+
+### Added
+
+- `_index` array added to `agent/configurables/acp.configurables.yaml` listing all 8 preference ids — required by `generate_preferences`
+
+---
+
 ## ACP Enhanced Fork
 
 This project is a fork of [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol)
