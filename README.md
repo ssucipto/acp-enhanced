@@ -35,7 +35,7 @@ Install the ACP Enhanced bootstrap into your project using curl:
 
 ```bash
 # From your target project root
-curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/main/scripts/acp-bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/scripts/acp-bootstrap.sh | bash
 ```
 
 This creates the full `.agent/` directory structure and copies `AGENTS.md` into your project root.
