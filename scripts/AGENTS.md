@@ -170,3 +170,5 @@ Append to `.agent/memory/decisions.md`:
 - Never add dynamic content (dates, task IDs) to core/ files
 - Never skip /acp-commit at end of a coding session
 - Never re-debate a decision marked "DO NOT re-open" in decisions.md
+- Never use `set -e` without trapping errors in bash scripts
+- Never write bash that breaks on macOS (BSD sed, date +%N differences)
