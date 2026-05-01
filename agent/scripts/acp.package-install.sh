@@ -144,7 +144,6 @@ else
     echo "${GREEN}✓${NC} Repository cloned"
 fi
 
-echo "${GREEN}✓${NC} Repository cloned"
 echo ""
 
 # Check for agent/ directory

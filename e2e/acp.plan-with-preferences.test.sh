@@ -34,29 +34,35 @@ setup_fixtures() {
   # Configurables (acp namespace)
   cat > "${FIXTURE_DIR}/agent/configurables/acp.configurables.yaml" << 'EOF'
 acp:
-  plan.draft.create_mode:
-    id: 'plan.draft.create_mode'
-    description: How plan drafts are created
-    default: structured
-    type: string
-    options:
-      - name: structured
-        value: structured
-        description: Structured
-      - name: unstructured
-        value: unstructured
-        description: Unstructured
-      - name: guided
-        value: guided
-        description: Guided
-      - name: contextual
-        value: contextual
-        description: Contextual
-  plan.batch.auto_confirm:
-    id: 'plan.batch.auto_confirm'
-    description: Auto-confirm batch operations
-    default: false
-    type: boolean
+  _index:
+    - plan.draft.create_mode
+    - plan.batch.auto_confirm
+  plan:
+    draft:
+      create_mode:
+        id: 'plan.draft.create_mode'
+        description: How plan drafts are created
+        default: structured
+        type: string
+        options:
+          - name: structured
+            value: structured
+            description: Structured
+          - name: unstructured
+            value: unstructured
+            description: Unstructured
+          - name: guided
+            value: guided
+            description: Guided
+          - name: contextual
+            value: contextual
+            description: Contextual
+    batch:
+      auto_confirm:
+        id: 'plan.batch.auto_confirm'
+        description: Auto-confirm batch operations
+        default: false
+        type: boolean
 EOF
 }
 
@@ -87,7 +93,9 @@ print_test_header "@acp.plan — uses project-level preference for draft mode"
 
 cat > "${FIXTURE_DIR}/agent/preferences/acp.default.yaml" << 'EOF'
 acp:
-  plan.draft.create_mode: contextual
+  plan:
+    draft:
+      create_mode: contextual
 EOF
 
 result="$(get_preference "acp" "plan.draft.create_mode")"
@@ -101,13 +109,18 @@ print_test_header "@acp.plan -- preset overrides project-level preference"
 
 cat > "${FIXTURE_DIR}/agent/preferences/acp.default.yaml" << 'EOF'
 acp:
-  plan.draft.create_mode: structured
+  plan:
+    draft:
+      create_mode: structured
 EOF
 
 cat > "${FIXTURE_DIR}/agent/preferences/acp.batch-planning.yaml" << 'EOF'
 acp:
-  plan.draft.create_mode: contextual
-  plan.batch.auto_confirm: true
+  plan:
+    draft:
+      create_mode: contextual
+    batch:
+      auto_confirm: true
 EOF
 
 mode="$(get_preference_with_preset "acp" "plan.draft.create_mode" "batch-planning")"
@@ -127,7 +140,9 @@ print_test_header "@acp.plan -- CLI override wins over preset"
 
 cat > "${FIXTURE_DIR}/agent/preferences/acp.batch-planning.yaml" << 'EOF'
 acp:
-  plan.draft.create_mode: contextual
+  plan:
+    draft:
+      create_mode: contextual
 EOF
 
 preset_val="$(get_preference_with_preset "acp" "plan.draft.create_mode" "batch-planning")"
