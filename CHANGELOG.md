@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.2.4] - 2026-05-01 — M23 ACP Enhanced Identity
+
+### Added
+
+- **Title**: Renamed from "Agent Context Protocol (ACP)" to "Agent Context Protocol Enhanced (ACP Enhanced)" in `AGENT.md` header.
+
+- **Metadata**: Added `Fork of` and `Maintained by` fields to the `AGENT.md` metadata block, pointing to upstream and this fork respectively.
+
+- **ACP Enhanced — What's New section**: New table documenting all 15 capabilities that ACP Enhanced adds over the original `prmichaelsen/agent-context-protocol` (Context Loading Protocol, Package Management, Preferences System, Project Registry, Sessions System, Key File Index, Clarification Capture, Design Reference System, Artifact Commands, Metadata Markers, Specs System, Benchmark Suite, YAML Parser, Cross-platform CI, Index Semantic Entry Types). Also includes a "What the Original ACP Provides" subsection to clearly show the baseline.
+
+- **Complete Table of Contents**: Expanded from 14 entries to 24 entries, covering all body sections previously unlisted: ACP Commands, ACP Preferences System, Global Package Discovery, Project Registry System, Sessions System, Experimental Features, Benchmark Suite, Template Source Files, Key File Index, Sample Prompts.
+
+- **Expanded Core Commands list**: Replaced 6-command flat list with a categorized reference covering all 40+ ACP Enhanced commands across 10 categories (Workflow, Planning, Clarification, Artifacts, Package Management, Preferences, Project Registry, Sessions, Key File Index, Version & Sync). *(ACP Enhanced)* labels identify enhancements beyond the original ACP.
+
+### Changed
+
+- **"What is ACP?" → "What is ACP Enhanced?"**: Section renamed and body text updated to describe ACP Enhanced.
+- **"How to Use the Agent Pattern" → "How to Use ACP Enhanced"**: Section renamed.
+- **Overview paragraph**: Updated to introduce ACP Enhanced as a fork and extension.
+
+---
+
 ## [6.2.3] - 2026-05-01 — M22 Documentation Accuracy Audit
 
 ### Fixed
