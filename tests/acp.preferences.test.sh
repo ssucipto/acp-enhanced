@@ -30,34 +30,47 @@ setup_fixtures() {
   # Configurables (defines defaults + known keys)
   cat > "${FIXTURE_DIR}/agent/configurables/testns.configurables.yaml" << 'EOF'
 testns:
-  plan.draft.create_mode:
-    default: structured
-    description: How plan drafts are created
-  task.granularity:
-    default: 3
-    description: Task granularity level
-  validation.auto_fix:
-    default: false
-    description: Whether to auto-fix validation errors
+  _index:
+    - plan.draft.create_mode
+    - task.granularity
+    - validation.auto_fix
+  plan:
+    draft:
+      create_mode:
+        default: structured
+        description: How plan drafts are created
+  task:
+    granularity:
+      default: 3
+      description: Task granularity level
+  validation:
+    auto_fix:
+      default: false
+      description: Whether to auto-fix validation errors
 EOF
 
   # User-level preferences
   cat > "${FIXTURE_DIR}/user-home/.acp/agent/preferences/testns.default.yaml" << 'EOF'
 testns:
-  task.granularity: 5
-  validation.auto_fix: true
+  task:
+    granularity: 5
+  validation:
+    auto_fix: true
 EOF
 
   # Workspace-level preferences (overrides user)
   cat > "${FIXTURE_DIR}/vscode/preferences/testns.yaml" << 'EOF'
 testns:
-  task.granularity: 7
+  task:
+    granularity: 7
 EOF
 
   # Project-level preferences (highest precedence)
   cat > "${FIXTURE_DIR}/agent/preferences/testns.default.yaml" << 'EOF'
 testns:
-  plan.draft.create_mode: incremental
+  plan:
+    draft:
+      create_mode: incremental
 EOF
 }
 
