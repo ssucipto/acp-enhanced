@@ -17,7 +17,7 @@ echo "Setting up Agent Context Protocol Enhanced in: $(pwd)"
 echo ""
 
 # --- 1. Directory Structure ---
-echo -e "${YELLOW}[1/6] Creating directory structure...${NC}"
+echo -e "${YELLOW}[1/7] Creating directory structure...${NC}"
 mkdir -p .agent/core
 mkdir -p .agent/skills
 mkdir -p .agent/memory
@@ -29,7 +29,7 @@ mkdir -p scripts
 echo -e "${GREEN}✓ Directories created${NC}"
 
 # --- 2. Create AGENTS.md from template ---
-echo -e "${YELLOW}[2/6] Creating AGENTS.md context loading protocol...${NC}"
+echo -e "${YELLOW}[2/7] Creating AGENTS.md context loading protocol...${NC}"
 if [ ! -f AGENTS.md ]; then
   # Try to copy from ACP Enhanced scripts/ if available alongside this script
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -170,7 +170,7 @@ echo -e "${YELLOW}  Note: CLAUDE.md and copilot-instructions.md are copies of AG
 echo -e "${YELLOW}  When you update AGENTS.md, re-run: cp AGENTS.md CLAUDE.md && cp AGENTS.md .github/copilot-instructions.md${NC}"
 
 # --- 3. Core Layer Files ---
-echo -e "${YELLOW}[3/6] Creating core layer files...${NC}"
+echo -e "${YELLOW}[3/7] Creating core layer files...${NC}"
 
 cat > .agent/core/identity.yml << 'YAML'
 # DO NOT add dynamic content to this file (no dates, no task IDs)
@@ -260,7 +260,7 @@ SKILL
 fi
 
 # --- 4. Memory + Wiki Stubs ---
-echo -e "${YELLOW}[4/6] Creating memory and wiki stubs...${NC}"
+echo -e "${YELLOW}[4/7] Creating memory and wiki stubs...${NC}"
 
 cat > .agent/memory/sessions.md << 'MD'
 # Session Memory
@@ -346,7 +346,7 @@ MD
 echo -e "${GREEN}✓ Memory and wiki stubs created${NC}"
 
 # --- 5. Routing Layer ---
-echo -e "${YELLOW}[5/6] Creating routing layer...${NC}"
+echo -e "${YELLOW}[5/7] Creating routing layer...${NC}"
 
 cat > .agent/routing/config.yml << 'YAML'
 version: "1.0"
@@ -516,7 +516,7 @@ MD
 echo -e "${GREEN}✓ Routing layer created${NC}"
 
 # --- 6. Prompt Files ---
-echo -e "${YELLOW}[6/6] Creating Copilot prompt files...${NC}"
+echo -e "${YELLOW}[6/7] Creating Copilot prompt files...${NC}"
 
 cat > .github/prompts/acp-route.prompt.md << 'MD'
 ---
@@ -664,6 +664,26 @@ Bootstrap ACP domain knowledge from this codebase:
 MD
 
 echo -e "${GREEN}✓ Prompt files created${NC}"
+
+# --- 7. Install agent/ commands, scripts and schemas ---
+echo -e "${YELLOW}[7/7] Installing ACP commands, scripts and schemas (agent/ directory)...${NC}"
+
+if [ -d "agent/commands" ] && [ -d "agent/scripts" ]; then
+  echo -e "${GREEN}✓ agent/ already present (running from local ACP Enhanced clone)${NC}"
+else
+  INSTALL_URL="https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh"
+  echo "Downloading ACP installer..."
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$INSTALL_URL" | bash
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q "$INSTALL_URL" -O - | bash
+  else
+    echo -e "${YELLOW}WARNING: curl and wget not found.${NC}"
+    echo "Install agent/ manually after bootstrap:"
+    echo "  curl -fsSL $INSTALL_URL | bash"
+  fi
+fi
+echo ""
 
 # --- Summary ---
 echo ""
