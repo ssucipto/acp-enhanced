@@ -179,7 +179,7 @@ Fixed:
 🎯 To update, run: @acp-version-update
 
 📚 Full changelog:
-  https://github.com/prmichaelsen/agent-context-protocol/blob/mainline/CHANGELOG.md
+  https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md
 ```
 
 ### Status Update

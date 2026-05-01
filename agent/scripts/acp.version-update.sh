@@ -38,7 +38,7 @@ else
 fi
 
 # Repository details
-REPO_URL="https://github.com/prmichaelsen/agent-context-protocol.git"
+REPO_URL="https://github.com/ssucipto/acp-enhanced.git"
 BRANCH="mainline"
 
 echo "${BLUE}Agent Context Protocol (ACP) Updater${NC}"
@@ -168,7 +168,7 @@ echo "2. See what changed: git status"
 echo "3. Revert if needed: git checkout <file>"
 echo ""
 echo "For detailed changelog:"
-echo "  https://github.com/prmichaelsen/agent-context-protocol/blob/mainline/CHANGELOG.md"
+echo "  https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md"
 echo ""
 display_available_commands
 echo ""

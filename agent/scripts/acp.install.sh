@@ -24,7 +24,7 @@ else
 fi
 
 # Repository details
-REPO_URL="https://github.com/prmichaelsen/agent-context-protocol.git"
+REPO_URL="https://github.com/ssucipto/acp-enhanced.git"
 BRANCH="mainline"
 
 echo "${GREEN}Agent Context Protocol (ACP) Installer${NC}"
@@ -295,7 +295,7 @@ cat > "$TARGET_DIR/agent/manifest.yaml" << EOF
 
 packages:
   acp-core:
-    source: https://github.com/prmichaelsen/agent-context-protocol.git
+    source: https://github.com/ssucipto/acp-enhanced.git
     package_version: ${ACP_VERSION}
     installed_at: ${INSTALL_DATE}
     updated_at: ${INSTALL_DATE}
