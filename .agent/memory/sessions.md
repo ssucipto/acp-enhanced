@@ -3,17 +3,27 @@
 # DO NOT edit manually — updated by /acp-commit
 
 - date: 2026-05-01
-  executor: architect
-  tasks: [task-51, task-17]
+  executor: Persona A (Copilot)
+  tasks: [task-126, task-127, task-128]
   done:
-    - pattern-reading-in-6-commands
-    - pattern-create-command-verified
+    - M22-milestone-created
+    - fix-AGENT-md-directory-tree-remove-ghost-add-7-missing-dirs
+    - fix-AGENT-md-stale-acp-install-ref-to-package-install
+    - fix-AGENT-md-unacp-install-to-acp-uninstall
+    - add-bash-safety-anti-patterns-to-scripts-AGENTS-md
+    - bump-version-6.2.2-to-6.2.3
+    - add-changelog-6.2.3-block
+    - update-progress-yaml-M21-complete-M22-complete
+    - commit-and-push-52e05ee
   deferred: {}
   key_fact: |
-    All project tasks now complete (M1-M18 + M6). No remaining not_started tasks.
-    Pattern reading steps: each command gets its own contextual step (2.75, 1.6, 1.5, 4.5, 2.6).
-    task-17 (@acp.pattern-create) was already implemented as LLM directive — no script needed.
-
+    Fourth audit (documentation accuracy) found 3 fix categories:
+    1. AGENT.md tree had ghost agent/files/ and was missing 7 real dirs (artifacts, benchmarks,
+       clarifications, feedback, schemas, scripts, template files at agent/ root)
+    2. AGENT.md had @acp.install stale ref (now @acp.package-install) and unacp.install.sh
+       (should be acp.uninstall.sh)
+    3. scripts/AGENTS.md bootstrap template was missing 2 bash-safety anti-patterns that existed
+       in .github/copilot-instructions.md — always keep bootstrap template in sync with project instance
 
 - date: 2026-05-01
   executor: Persona A (Copilot)
@@ -39,15 +49,7 @@
     in BOTH the main directive line AND the pretend-context line.
     Rule for new milestones: check package.yaml scripts section matches ALL files in agent/scripts/
 
-  done:
-    - M20-milestone-created
-    - fix-9-directive-headers-hyphen-to-dot
-    - fix-body-text-hyphen-refs-in-5-commands
-    - fix-agent-md-directory-tree-comments
-    - add-13-missing-commands-1-script-to-package-yaml
-    - add-changelog-entry-for-afcf61d
-    - update-progress-yaml-M20
-    - commit-and-push-393d9e6
+
   deferred:
     - set_preference-flat-dot-write-still-unresolved: future-M21-candidate
     - blog-00001-acp-intro-hyphen-notation: out-of-scope-intentional
