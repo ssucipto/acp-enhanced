@@ -3,6 +3,7 @@
 # Sets current project in registry and changes to project directory
 
 set -euo pipefail
+trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
