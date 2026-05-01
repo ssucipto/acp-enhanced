@@ -1,0 +1,118 @@
+# ACP Protocol Task Taxonomy
+# Maps task types to executor + context required
+# Generated 2026-05-01 — update weekly via /acp-cost-report suggestions
+
+task_types:
+
+  # ── COMMAND DOCS ────────────────────────────────────────────
+  command-doc-write:
+    executor: deepseek-v4-pro
+    complexity: medium
+    context_required: [wiki/domain.yml#commands, memory/patterns.md]
+    tokens_est: 8000
+    skill: commands
+
+  command-doc-update:
+    executor: deepseek-v4-flash
+    complexity: low
+    context_required: [memory/sessions.md]
+    tokens_est: 3000
+    skill: commands
+
+  # ── BASH SCRIPTS ─────────────────────────────────────────────
+  bash-script-create:
+    executor: deepseek-v4-pro
+    complexity: medium
+    context_required: [wiki/architecture.md#command-script-binding, memory/patterns.md]
+    tokens_est: 10000
+    skill: scripts
+
+  bash-script-fix:
+    executor: deepseek-v4-flash
+    complexity: low
+    context_required: [memory/sessions.md]
+    tokens_est: 3500
+    skill: scripts
+
+  bash-script-refactor:
+    executor: deepseek-v4-pro
+    complexity: medium
+    context_required: [wiki/architecture.md, memory/decisions.md]
+    tokens_est: 12000
+    skill: scripts
+
+  # ── YAML SCHEMAS ─────────────────────────────────────────────
+  yaml-schema:
+    executor: deepseek-v4-flash
+    complexity: low
+    context_required: [wiki/domain.yml#schemas]
+    tokens_est: 4000
+    skill: schemas
+
+  # ── TESTING ──────────────────────────────────────────────────
+  e2e-test-write:
+    executor: deepseek-v4-flash
+    complexity: low
+    context_required: [memory/patterns.md, wiki/domain.yml#test_suites]
+    tokens_est: 5000
+    skill: testing
+
+  test-run:
+    executor: local-script
+    complexity: low
+    context_required: [active-task-only]
+    tokens_est: 0
+    skill: testing
+
+  # ── TYPESCRIPT ───────────────────────────────────────────────
+  typescript-feature:
+    executor: deepseek-v4-flash
+    complexity: low
+    context_required: [wiki/architecture.md#dispatch-script-flow]
+    tokens_est: 5000
+    skill: typescript
+
+  # ── DESIGN & ARCHITECTURE ────────────────────────────────────
+  design-document:
+    executor: claude-sonnet
+    complexity: high
+    context_required: [wiki/architecture.md, wiki/domain.yml, memory/decisions.md]
+    tokens_est: 18000
+    skill: crosscut
+
+  architecture-plan:
+    executor: claude-sonnet
+    complexity: high
+    context_required: [wiki/architecture.md, wiki/domain.yml, memory/decisions.md, memory/sessions.md]
+    tokens_est: 20000
+    skill: crosscut
+
+  # ── DOCUMENTATION & CROSS-CUTTING ────────────────────────────
+  documentation-sync:
+    executor: deepseek-v4-flash
+    complexity: low
+    context_required: [memory/sessions.md]
+    tokens_est: 3000
+    skill: crosscut
+
+  preference-system:
+    executor: deepseek-v4-pro
+    complexity: high
+    context_required: [wiki/architecture.md, wiki/domain.yml, memory/decisions.md]
+    tokens_est: 15000
+    skill: scripts
+
+  # ── BUG FIXES ─────────────────────────────────────────────────
+  bug-fix-simple:
+    executor: deepseek-v4-flash
+    complexity: low
+    context_required: [memory/sessions.md]
+    tokens_est: 3000
+    skill: scripts
+
+  bug-fix-complex:
+    executor: deepseek-v4-pro
+    complexity: medium
+    context_required: [wiki/architecture.md, memory/sessions.md, memory/decisions.md]
+    tokens_est: 12000
+    skill: scripts

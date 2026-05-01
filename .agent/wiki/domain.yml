@@ -1,0 +1,63 @@
+# Domain Entity Model — ACP Protocol project
+# Load ONE section at a time — never load the entire file
+# last_verified: 2026-05-01
+
+commands:
+  count: 31
+  location: agent/commands/
+  naming: "acp.{command-name}.md — dot notation, acp namespace for core"
+  categories:
+    workflow: [acp.init, acp.proceed, acp.status, acp.plan, acp.handoff]
+    version: [acp.version-check, acp.version-check-for-updates, acp.version-update]
+    package: [acp.package-create, acp.package-install, acp.package-update, acp.package-remove, acp.package-list, acp.package-info, acp.package-search, acp.package-validate, acp.package-publish]
+    project: [acp.project-create, acp.project-set, acp.project-info, acp.project-update, acp.project-remove, acp.project-list, acp.projects-sync]
+    entity_creation: [acp.command-create, acp.design-create, acp.pattern-create]
+    documentation: [acp.sync, acp.validate, acp.update, acp.report]
+    clarification: [acp.clarification-create, acp.clarification-address, acp.clarification-capture]
+    artifact: [acp.artifact-research, acp.artifact-glossary, acp.artifact-reference]
+    index: [acp.index]
+    sessions: [acp.sessions]
+
+scripts:
+  count: 27
+  location: agent/scripts/
+  naming: "acp.{feature}.sh"
+  key_scripts:
+    - acp.common.sh  # shared utilities, 1000+ lines — source this first
+    - acp.yaml-parser.sh  # pure-bash YAML parser — yaml_get, yaml_set, yaml_get_array
+    - acp.yaml-validate.sh  # JSON-schema-compatible validator
+    - acp.install.sh  # installs ACP into a project
+    - acp.package-install.sh  # installs packages from GitHub
+    - acp.sessions.sh  # 6 subcommands: register/deregister/list/clean/heartbeat/count
+
+schemas:
+  count: 3
+  location: agent/schemas/
+  files:
+    - package.schema.yaml  # validates package.yaml
+    - projects.schema.yaml  # validates ~/.acp/projects.yaml
+    - (configurables schema: pending M6)
+
+test_suites:
+  e2e_location: e2e/
+  unit_location: tests/
+  common_helpers: tests/common.sh
+  e2e_suites:
+    - acp.package-install-list.test.sh
+    - acp.package-list.test.sh
+    - acp.package-remove.test.sh
+    - acp.package-search.test.sh
+    - acp.package-update.test.sh
+    - acp.package-info.test.sh
+    - acp.project-list.test.sh
+    - acp.project-set.test.sh
+    - acp.project-info.test.sh
+    - acp.project-update.test.sh
+    - acp.project-remove.test.sh
+    - acp.project-workflow.test.sh
+    - acp.projects-sync.test.sh
+    - acp.sessions.test.sh
+    - acp.script-command-binding.test.sh
+    - acp.template-files.test.sh
+    - acp.index.test.sh
+    - acp.experimental-features.test.sh

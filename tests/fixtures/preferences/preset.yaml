@@ -1,0 +1,3 @@
+acp:
+  plan.draft.create_mode: 'contextual'
+  plan.batch.auto_confirm: true

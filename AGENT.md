@@ -1,7 +1,7 @@
 # Agent Context Protocol (ACP)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 5.41.0
+**Version**: 6.2.0
 **Created**: 2026-02-11
 **Status**: Production Pattern
 
@@ -130,6 +130,17 @@ project-root/
 │   │   ├── unassigned/             # Tasks without milestone
 │   │   │   └── task-{M}-{name}.md
 │   │   └── task-{N}-{name}.md      # Legacy flat structure (older tasks)
+│   │
+│   ├── configurables/              # Preference definitions
+│   │   ├── acp.configurables.yaml  # ACP namespace preference schema
+│   │   └── {pkg}.configurables.yaml # Package-specific preference schema
+│   │
+│   ├── preferences/                # Preference values (project-level)
+│   │   ├── acp.default.yaml        # ACP project-level defaults
+│   │   ├── acp.batch-planning.yaml # Preset: automated batch planning
+│   │   ├── acp.interactive-planning.yaml # Preset: guided interactive mode
+│   │   ├── acp.rapid-prototyping.yaml    # Preset: fast iteration
+│   │   └── {pkg}.default.yaml      # Package project-level defaults
 │   │
 │   ├── files/                      # Template source files (in packages)
 │   │   ├── config/                 # Config templates
@@ -836,6 +847,102 @@ Invoke [`@acp.command-create`](agent/commands/acp.command-create.md) and follow 
 Use `@acp.install` to install command packages from git repositories (available in future release).
 
 **Security Note**: Third-party commands can instruct agents to modify files and execute scripts. Always review command files before installation.
+
+---
+
+## ACP Preferences System
+
+The preferences system lets you configure agent behavior, command defaults, and workflow automation at three levels: user-global, workspace, and project.
+
+### Preference Levels
+
+| Level | Location | Scope |
+|-------|----------|-------|
+| **Project** | `./agent/preferences/<ns>.default.yaml` | This project only (highest precedence) |
+| **Workspace** | `.vscode/preferences/<ns>.yaml` | This IDE workspace / team |
+| **User** | `~/.acp/agent/preferences/<ns>.default.yaml` | All your projects |
+| **Default** | `./agent/configurables/<ns>.configurables.yaml` | Package-defined baseline |
+
+**Precedence**: Project > Workspace > User > Default (most specific wins)
+
+### Available Preferences (acp namespace)
+
+| Preference | Type | Default | Description |
+|------------|------|---------|-------------|
+| `plan.draft.create_mode` | string | `structured` | Draft creation: structured, unstructured, guided, contextual |
+| `plan.batch.auto_confirm` | boolean | `false` | Auto-confirm batch operations |
+| `task.create.granularity` | number | `3` | Default task size in hours (1–8) |
+| `task.create.auto_number` | boolean | `true` | Auto-number new tasks |
+| `validation.auto_fix.enabled` | boolean | `true` | Auto-fix validation issues |
+| `validation.strict_mode.enabled` | boolean | `false` | Treat warnings as errors |
+| `output.verbosity.level` | string | `normal` | Output verbosity: quiet, normal, verbose |
+| `git.auto_commit.enabled` | boolean | `false` | Auto-commit after operations |
+
+Full definitions: [`agent/configurables/acp.configurables.yaml`](agent/configurables/acp.configurables.yaml)
+
+### Managing Preferences
+
+```bash
+# View effective preferences with source attribution
+@acp.preferences-show acp
+
+# Create preference file at user level (populate with defaults)
+@acp.preferences-create --level user --namespace acp
+
+# Set a preference value
+@acp.preferences-set acp plan.draft.create_mode guided --user
+
+# Validate all preference files
+@acp.preferences-validate
+```
+
+### Using Presets
+
+Presets are named preference bundles that configure multiple values at once:
+
+```bash
+# Automated planning without interaction
+@acp.plan --preset acp.batch-planning
+
+# Guided planning with user confirmation at every step
+@acp.plan --preset acp.interactive-planning
+
+# Fast iteration with auto-commit enabled
+@acp.plan --preset acp.rapid-prototyping
+
+# List all available presets
+@acp.preferences-show acp --presets
+```
+
+### Command-Line Overrides
+
+Any preference can be overridden for a single invocation using dot notation:
+
+```bash
+# Use guided mode just this time
+@acp.plan --plan.draft.create_mode guided
+
+# Preset with override (override wins)
+@acp.plan --preset acp.batch-planning --plan.draft.create_mode structured
+```
+
+**Precedence**: CLI Override > Preset > Project > Workspace > User > Default
+
+### Package Preferences
+
+Packages can ship their own configurables and presets:
+
+```bash
+# View package preferences
+@acp.preferences-show my-package
+
+# Use a package preset
+@acp.plan --preset my-package.strict-mode
+```
+
+Packages scaffold these files automatically via `@acp.package-create`.
+
+---
 
 ## Global Package Discovery
 
