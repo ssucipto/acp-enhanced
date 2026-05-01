@@ -19,28 +19,29 @@
 6. [Core Components](#core-components)
 7. [Metadata Markers](#metadata-markers)
 8. [How to Use ACP Enhanced](#how-to-use-acp-enhanced)
-9. [Pattern Significance & Impact](#pattern-significance--impact)
-10. [Problems This Pattern Solves](#problems-this-pattern-solves)
-11. [ACP Commands](#acp-commands)
-12. [ACP Preferences System](#acp-preferences-system)
-13. [Global Package Discovery](#global-package-discovery)
-14. [Project Registry System](#project-registry-system)
-15. [Sessions System](#sessions-system)
-16. [Experimental Features](#experimental-features)
-17. [Benchmark Suite](#benchmark-suite)
-18. [Template Source Files](#template-source-files)
-19. [Key File Index](#key-file-index)
-20. [Sample Prompts](#sample-prompts-for-using-acp)
-21. [Instructions for Future Agents](#instructions-for-future-agents)
-22. [Best Practices](#best-practices)
+9. [Three-Persona Deployment Model](#three-persona-deployment-model)
+10. [Pattern Significance & Impact](#pattern-significance--impact)
+11. [Problems This Pattern Solves](#problems-this-pattern-solves)
+12. [ACP Commands](#acp-commands)
+13. [ACP Preferences System](#acp-preferences-system)
+14. [Global Package Discovery](#global-package-discovery)
+15. [Project Registry System](#project-registry-system)
+16. [Sessions System](#sessions-system)
+17. [Experimental Features](#experimental-features)
+18. [Benchmark Suite](#benchmark-suite)
+19. [Template Source Files](#template-source-files)
+20. [Key File Index](#key-file-index)
+21. [Sample Prompts](#sample-prompts-for-using-acp)
+22. [Instructions for Future Agents](#instructions-for-future-agents)
+23. [Best Practices](#best-practices)
     - [Critical Rules](#critical-rules)
     - [Workflow Best Practices](#workflow-best-practices)
     - [Documentation Best Practices](#documentation-best-practices)
     - [Organization Best Practices](#organization-best-practices)
     - [Progress Tracking Best Practices](#progress-tracking-best-practices)
     - [Quality Best Practices](#quality-best-practices)
-23. [What NOT to Do](#what-not-to-do)
-24. [Keeping ACP Updated](#keeping-acp-updated)
+24. [What NOT to Do](#what-not-to-do)
+25. [Keeping ACP Updated](#keeping-acp-updated)
 
 ---
 
@@ -721,6 +722,69 @@ If a pre-marker file still carries a duplicated prose field (`**Status**`, `**La
 
 ---
 
+## Three-Persona Deployment Model
+
+ACP Enhanced supports three deployment configurations ("personas") depending on your tooling and cost goals. Every feature in ACP Enhanced works with all three personas — the difference is only in *which AI models* execute your tasks and *how routing happens*.
+
+### Personas at a Glance
+
+| Persona | Name | Setup Required | Monthly Cost Profile | Key Benefit |
+|---------|------|---------------|---------------------|-------------|
+| **A** | Copilot Pro Only | None — use what you already have | Fixed (Copilot subscription) | Memory layer + ADRs = 20–30% fewer premium requests burned |
+| **B** | DeepSeek Multi-Model | OpenRouter API key + `scripts/acp-dispatch.ts` | Pay-per-token (~$5–20/mo for active use) | Full task routing to cheapest capable model; 60–85% cost reduction |
+| **C** | Copilot + DeepSeek *(Recommended)* | Both of the above | Fixed + small variable | Each tool used for its genuine strength; ACP bridges context loss between them |
+
+### Persona Details
+
+**Persona A — GitHub Copilot Pro Only**
+- Zero additional infrastructure. Use your existing Copilot subscription.
+- The `executor` field in task files is a *recommendation* — you manually select the model from Copilot's model dropdown in VS Code.
+- Skip `scripts/acp-dispatch.ts` entirely.
+- Primary gain: the memory layer (`sessions.md`, `lessons.md`) and ADR-gated decisions eliminate 20–30% of clarification turns, reducing premium requests spent re-explaining context.
+
+**Persona B — DeepSeek / Multi-Model via OpenRouter**
+- Install Continue.dev or Cline; configure OpenRouter API key.
+- `scripts/acp-dispatch.ts` reads each task's `executor` field and routes automatically to the cheapest model capable of the task (DeepSeek R1 for heavy tasks, DeepSeek V3-0324 for lightweight).
+- Primary gain: 50–65% cost reduction via model routing + prompt caching. No Copilot subscription required.
+
+**Persona C — Copilot + DeepSeek (Recommended)**
+- Use Copilot for: tab completion, PR review, inline suggestions.
+- Use DeepSeek via dispatch script for: chat tasks, architecture, heavy coding sessions.
+- `AGENTS.md` (or `AGENT.md`) feeds both tools from a single source — one context file, two models.
+- Primary gain: each tool used for its genuine strength; 60–85% total cost reduction vs. all-Claude baseline.
+
+### Which Persona Should I Use?
+
+```
+Do you have a GitHub Copilot Pro subscription?
+  ├── No  → Start with Persona B (OpenRouter only, no subscription needed)
+  └── Yes → Do you want to reduce AI costs further?
+              ├── No  → Persona A (simplest setup, no extra config)
+              └── Yes → Persona C (recommended — Copilot + DeepSeek)
+```
+
+- **Just getting started?** → Persona A. Get value immediately, upgrade later.
+- **Cost-sensitive / high volume?** → Persona B or C. Set up once, save every month.
+- **Production team project?** → Persona C. Best coverage, one source of truth.
+
+### Three-Layer Context Model
+
+All personas share the same three-layer context architecture. The layers determine what gets loaded into the AI's context window on each task:
+
+| Layer | Content | Size | Caching |
+|-------|---------|------|---------|
+| **Layer 1 — Core** | `.agent/core/identity.yml`, `constraints.yml`, `routing.yml` | ~180 tokens | Cached after first call |
+| **Layer 2 — Skills** | One `.agent/skills/*.md` file matching the task type | ~240–350 tokens | Semi-static per task type |
+| **Layer 3 — Ephemeral** | Session memory (last 3 entries), filtered lessons, active task file, one wiki section | ~1,200–1,700 tokens per task | Never cached |
+
+**Total context per task**: ~1,680–2,230 tokens — compared to 10,000–18,000 tokens for unstructured all-Claude baseline usage.
+
+Layer 1 and Layer 2 are prompt-cached by supported providers (Claude, Gemini), meaning repeated calls within a session cost a fraction of a new call. Layer 3 rotates per task, keeping the window lean and task-specific.
+
+> **For detailed setup instructions per persona**, see [`scripts/QUICKSTART.md`](scripts/QUICKSTART.md).
+
+---
+
 ## Pattern Significance & Impact
 
 ### Significance
@@ -883,6 +947,7 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`@acp.status`](agent/commands/acp.status.md)** - Display project status and active sessions
 - **[`@acp.report`](agent/commands/acp.report.md)** - Generate a completion report; deregisters session
 - **[`@acp.handoff`](agent/commands/acp.handoff.md)** - Prepare handoff documentation for another agent
+- **[`@acp.resume`](agent/commands/acp.resume.md)** - Resume a project — init + review recent progress + proceed in one step
 - **[`@acp.audit`](agent/commands/acp.audit.md)** - Audit ACP files for consistency and drift
 
 **Planning**
@@ -916,6 +981,7 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 
 **Preferences** *(ACP Enhanced)*
 - **[`@acp.preferences-show`](agent/commands/acp.preferences-show.md)** - View effective preferences with source attribution
+- **[`@acp.preferences-get`](agent/commands/acp.preferences-get.md)** - Resolve and display preferences for a given namespace (for scripting/command use)
 - **[`@acp.preferences-create`](agent/commands/acp.preferences-create.md)** - Create a preference file at a given level
 - **[`@acp.preferences-set`](agent/commands/acp.preferences-set.md)** - Set a preference value
 - **[`@acp.preferences-validate`](agent/commands/acp.preferences-validate.md)** - Validate all preference files
@@ -928,6 +994,7 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`@acp.project-update`](agent/commands/acp.project-update.md)** - Update project metadata
 - **[`@acp.project-remove`](agent/commands/acp.project-remove.md)** - Remove project from registry
 - **[`@acp.projects-sync`](agent/commands/acp.projects-sync.md)** - Discover and register existing projects
+- **[`@acp.projects-restore`](agent/commands/acp.projects-restore.md)** - Restore/clone missing projects from their registered git origins
 
 **Sessions** *(ACP Enhanced)*
 - **[`@acp.sessions`](agent/commands/acp.sessions.md)** - List, clean, deregister, or count active agent sessions
@@ -939,8 +1006,15 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`@acp.version-check`](agent/commands/acp.version-check.md)** - Show current ACP Enhanced version
 - **[`@acp.version-check-for-updates`](agent/commands/acp.version-check-for-updates.md)** - Check for ACP Enhanced updates
 - **[`@acp.version-update`](agent/commands/acp.version-update.md)** - Update ACP Enhanced to latest version
+- **[`@acp.update`](agent/commands/acp.update.md)** - Update ACP Enhanced to latest version via script (alias for version-update)
 - **[`@acp.sync`](agent/commands/acp.sync.md)** - Sync spec↔task↔code cross-references; flag unclaimed requirements and stale markers
 - **[`@acp.validate`](agent/commands/acp.validate.md)** - Validate ACP file health and index consistency
+
+**Git Namespace** *(separate from `acp.*`)*
+- **[`@git.commit`](agent/commands/git.commit.md)** - Version-aware commit with CHANGELOG validation and progress.yaml update
+- **[`@git.init`](agent/commands/git.init.md)** - Initialize git repository with ACP conventions
+
+> **Note**: Git commands use the `git` namespace (`@git.commit`, `@git.init`) rather than the `acp` namespace. They are invoked the same way but resolve to `agent/commands/git.*.md`.
 
 ### Command Invocation
 
@@ -1526,9 +1600,12 @@ See `agent/design/local.key-file-index-system.md` for the complete design specif
 
 ## Sample Prompts for Using ACP
 
+> **ACP Enhanced users**: The trigger strings below are the original ACP pattern (legacy). If you are using ACP Enhanced, prefer `@acp.*` command files — they are more precise, self-documenting, and context-aware. The legacy trigger strings remain supported for backward compatibility.
+
 ### Initialize Prompt
 
-**Trigger**: `AGENT.md: Initialize`
+**Trigger**: `AGENT.md: Initialize`  
+**ACP Enhanced equivalent**: `@acp.init`
 
 Use this prompt when starting work on an ACP-structured project:
 
@@ -1551,7 +1628,8 @@ Then read @agent again, update stale @agent/tasks, stale documentation, and upda
 
 ### Proceed Prompt
 
-**Trigger**: `AGENT.md: Proceed`
+**Trigger**: `AGENT.md: Proceed`  
+**ACP Enhanced equivalent**: `@acp.proceed`
 
 Use this prompt to continue with the next task:
 
@@ -1566,7 +1644,8 @@ Let's proceed with implementing the current or next task. Remember to update @ag
 
 ### Update Prompt
 
-**Trigger**: `AGENT.md: Update`
+**Trigger**: `AGENT.md: Update`  
+**ACP Enhanced equivalent**: `@acp.version-update` or `@acp.update`
 
 Updates all ACP files to the latest version:
 
@@ -1582,7 +1661,8 @@ Run ./agent/scripts/acp.version-update.sh to update all ACP files (AGENT.md, tem
 
 ### Check for Updates Prompt
 
-**Trigger**: `AGENT.md: Check for updates`
+**Trigger**: `AGENT.md: Check for updates`  
+**ACP Enhanced equivalent**: `@acp.version-check-for-updates`
 
 Checks if updates are available without applying them:
 
@@ -1597,7 +1677,8 @@ Run ./agent/scripts/acp.version-check-for-updates.sh to see if ACP updates are a
 
 ### Uninstall Prompt
 
-**Trigger**: `AGENT.md: Uninstall`
+**Trigger**: `AGENT.md: Uninstall`  
+**ACP Enhanced equivalent**: `acp.uninstall.sh -y` (bash script — no command file equivalent)
 
 Removes all ACP files from the project:
 
@@ -1614,6 +1695,20 @@ Run ./agent/scripts/acp.uninstall.sh to remove all ACP files (agent/ directory a
 - Complete removal of ACP
 - Clean project state
 - Reversible via git
+
+### ACP Enhanced Commands Quick Reference
+
+For daily use in ACP Enhanced projects, these five commands cover the most common workflows:
+
+| Command | Purpose | Replaces |
+|---------|---------|----------|
+| `@acp.init` | Load full project context at session start | `AGENT.md: Initialize` |
+| `@acp.proceed` | Implement next task (or all with `--complete`) | `AGENT.md: Proceed` |
+| `@acp.resume` | Re-load context mid-session (shorter than `@acp.init`) | — |
+| `@acp.plan` | Plan a new milestone and generate task files | — |
+| `@acp.status` | Show current milestone, task, and progress | — |
+
+> See [`agent/commands/`](agent/commands/) for the full command catalogue.
 
 ---
 
@@ -2067,7 +2162,7 @@ See [CHANGELOG.md](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGE
 
 ## Conclusion
 
-The Agent Directory Pattern transforms software development from an implicit, memory-dependent process into an explicit, documented system that enables AI agents to work effectively on complex projects.
+ACP Enhanced transforms software development from an implicit, memory-dependent process into an explicit, documented system that enables AI agents to work effectively on complex projects.
 
 **Key Takeaways**:
 
@@ -2078,6 +2173,8 @@ The Agent Directory Pattern transforms software development from an implicit, me
 5. **Progress is Measurable** - Track objectively with YAML
 6. **Patterns Ensure Quality** - Document and follow best practices
 7. **Knowledge Persists** - No more lost tribal knowledge
+8. **Package Ecosystem** - Install, publish, and share ACP extensions across projects
+9. **Token Efficiency** - Three-layer context model delivers ≥60% reduction in token usage
 
 **When to Use This Pattern**:
 - ✅ Complex projects (>1 month)
