@@ -545,7 +545,7 @@ cat > "README.md" << EOF
 
 ${DESCRIPTION}
 
-> **This package is designed for use with the [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol). Read more about ACP [here](https://github.com/prmichaelsen/agent-context-protocol).**
+> **This package is designed for use with the [Agent Context Protocol](https://github.com/ssucipto/acp-enhanced). Read more about ACP [here](https://github.com/ssucipto/acp-enhanced).**
 
 ## Installation
 
@@ -843,7 +843,7 @@ if [ ! -f "AGENT.md" ] || [ ! -d "agent" ]; then
     echo ""
     
     # Install ACP
-    curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.install.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh | bash
     
     if [ $? -eq 0 ]; then
         echo ""
