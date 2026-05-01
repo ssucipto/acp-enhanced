@@ -7,8 +7,8 @@
 
 ```
 AGENTS.md                          ← Auto-loaded by Copilot, Cursor, Claude Code
-.github/copilot-instructions.md    ← Symlink → AGENTS.md (Copilot priority 1)
-.github/prompts/*.prompt.md        ← /slash commands in Copilot chat
+CLAUDE.md                          ← Copy of AGENTS.md (Claude Code auto-load)
+.github/copilot-instructions.md    ← Copy of AGENTS.md (Copilot priority 1)
 .agent/core/                       ← Permanent cached context (Layer 1)
 .agent/skills/                     ← Task-specific instructions (Layer 2)
 .agent/memory/                     ← Session memory, corrections, patterns
@@ -16,6 +16,9 @@ AGENTS.md                          ← Auto-loaded by Copilot, Cursor, Claude Co
 .agent/routing/                    ← Model config, taxonomy, cost ledger
 scripts/acp-dispatch.ts            ← Routing engine (Persona B/C only)
 ```
+
+> **Note**: `CLAUDE.md` and `.github/copilot-instructions.md` are file copies (not symlinks).
+> When you update `AGENTS.md`, sync them: `cp AGENTS.md CLAUDE.md && cp AGENTS.md .github/copilot-instructions.md`
 
 ---
 
