@@ -27,6 +27,17 @@
 
 acp:
 
+  # ── Preference index (used by generate_preferences for enumeration) ───────
+  _index:
+    - plan.draft.create_mode
+    - plan.batch.auto_confirm
+    - task.create.granularity
+    - task.create.auto_number
+    - validation.auto_fix.enabled
+    - validation.strict_mode.enabled
+    - output.verbosity.level
+    - git.auto_commit.enabled
+
   # ── Plan command preferences ──────────────────────────────────────────────
 
   plan:
