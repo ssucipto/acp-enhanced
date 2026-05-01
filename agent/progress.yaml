@@ -3,14 +3,14 @@
 
 project:
   name: agent-context-protocol
-  version: 6.2.0
+  version: 6.2.1
   started: 2026-02-16
-  status: in_progress
-  current_milestone: M19
+  status: completed
+  current_milestone: null
   description: |
     Agent Context Protocol (ACP) - A documentation-first development methodology
-    for AI agents. All 18 feature milestones complete (v6.2.0). M19 is an active
-    bug fix sprint fixing the M6 Preferences System (non-functional implementation).
+    for AI agents. All 19 milestones complete (v6.2.1). M19 fixed all 13 bugs
+    in the Preferences System — now fully functional.
 
 milestones:
   M1:
@@ -385,12 +385,12 @@ milestones:
   M19:
     name: Preferences System Bug Fix Sprint
     priority: 5
-    status: not_started
-    progress: 0
-    started: null
-    completed: null
+    status: completed
+    progress: 100
+    started: 2026-05-01
+    completed: 2026-05-01
     estimated_weeks: 1-2
-    tasks_completed: 0
+    tasks_completed: 5
     tasks_total: 5
     file: agent/milestones/milestone-19-preferences-bugfix.md
     notes: |
@@ -2416,12 +2416,12 @@ progress:
     - id: task-121
       name: Fix yaml_query API Misuse and Flat-Dot Key Format Incompatibility
       priority: 5
-      status: not_started
+      status: completed
       file: agent/tasks/milestone-19-preferences-bugfix/task-121-fix-yaml-query-api-misuse.md
       estimated_hours: 3-4
-      started: null
-      completed_date: null
-      actual_hours: null
+      started: 2026-05-01T00:00:00Z
+      completed_date: 2026-05-01T01:00:00Z
+      actual_hours: 1.0
       notes: |
         Replace all yaml_query(file, path) calls in acp.preferences.sh with yaml_get(file, path).
         Migrate preference file format from flat-dot keys to nested YAML structure.
@@ -2431,12 +2431,12 @@ progress:
     - id: task-122
       name: Fix generate_preferences Enumeration and Option Validation
       priority: 5
-      status: not_started
+      status: completed
       file: agent/tasks/milestone-19-preferences-bugfix/task-122-fix-generate-preferences-and-option-validation.md
       estimated_hours: 3-4
-      started: null
-      completed_date: null
-      actual_hours: null
+      started: 2026-05-01T01:00:00Z
+      completed_date: 2026-05-01T01:30:00Z
+      actual_hours: 0.5
       notes: |
         Rewrite generate_preferences to enumerate preferences via _index array in configurables.
         Add _index array to acp.configurables.yaml listing all 8 preference ids.
@@ -2447,12 +2447,12 @@ progress:
     - id: task-123
       name: Fix Portability and Safety Issues
       priority: 4
-      status: not_started
+      status: completed
       file: agent/tasks/milestone-19-preferences-bugfix/task-123-fix-portability-and-safety.md
       estimated_hours: 2-3
-      started: null
-      completed_date: null
-      actual_hours: null
+      started: 2026-05-01T01:30:00Z
+      completed_date: 2026-05-01T02:00:00Z
+      actual_hours: 0.5
       notes: |
         Remove dead indent_key variable and fix sed injection in set_preference.
         Replace bc-based number range check with bash integer arithmetic.
@@ -2464,12 +2464,12 @@ progress:
     - id: task-124
       name: Fix Minor Bugs and Stale Metadata
       priority: 3
-      status: not_started
+      status: completed
       file: agent/tasks/milestone-19-preferences-bugfix/task-124-fix-minor-bugs-and-metadata.md
       estimated_hours: 1-2
-      started: null
-      completed_date: null
-      actual_hours: null
+      started: 2026-05-01T02:00:00Z
+      completed_date: 2026-05-01T02:15:00Z
+      actual_hours: 0.25
       notes: |
         Remove duplicate "Repository cloned" echo in acp.package-install.sh.
         Fix get_preference_source return 1 → return 0 for "none" result.
@@ -2480,12 +2480,12 @@ progress:
     - id: task-125
       name: Re-Validate M6 Test Suite End-to-End
       priority: 4
-      status: not_started
+      status: completed
       file: agent/tasks/milestone-19-preferences-bugfix/task-125-revalidate-m6-test-suite.md
       estimated_hours: 2-3
-      started: null
-      completed_date: null
-      actual_hours: null
+      started: 2026-05-01T02:15:00Z
+      completed_date: 2026-05-01T02:30:00Z
+      actual_hours: 0.25
       notes: |
         Run all M6 unit tests: acp.preferences.test.sh, acp.preferences-validate.test.sh,
         acp.preferences-preset.test.sh. Run E2E: acp.plan-with-preferences.test.sh.
@@ -2493,6 +2493,27 @@ progress:
         Verify no temp file leaks after test run.
 
 recent_work:
+  - date: 2026-05-01
+    description: |
+      ✅ MILESTONE 19 COMPLETE: Preferences System Bug Fix Sprint (5/5 tasks)
+      All 13 bugs fixed. acp.preferences.sh is now fully functional.
+    items:
+      - "✅ BUG-1: Replaced all yaml_query(file,path) calls with yaml_get(file,path) in acp.preferences.sh"
+      - "✅ BUG-4: Migrated all preference test fixtures from flat-dot to nested YAML format"
+      - "✅ BUG-2: Rewrote generate_preferences to use _index array + indexed yaml_get iteration"
+      - "✅ BUG-3: Replaced yaml_get_array misuse + grep -oP with indexed yaml_get option loop"
+      - "✅ BUG-5: Removed dead indent_key variable; replaced sed injection with awk in set_preference"
+      - "✅ BUG-6: Replaced bc-based number range checks with bash integer arithmetic (( value < min ))"
+      - "✅ BUG-7: Changed acp.common.sh shebang from #!/bin/sh to #!/usr/bin/env bash"
+      - "✅ BUG-8: Added trap 'cleanup_ast' EXIT + cleanup_ast call inside init_ast (yaml-parser)"
+      - "✅ BUG-9: Removed duplicate 'Repository cloned' echo in acp.package-install.sh"
+      - "✅ BUG-10: get_preference_source 'none' case now returns 0 (not 1)"
+      - "✅ BUG-11: Documented yaml_query map/array colon-suffix behavior in function header"
+      - "✅ BUG-12: _yaml_sed_i now delegates to _sed_i when acp.common.sh is also loaded"
+      - "✅ BUG-13: AGENT.md version 6.2.0 (already fixed prior session)"
+      - "✅ Added _index array to acp.configurables.yaml (8 preference ids)"
+      - "✅ Updated 4 test fixture files to nested YAML format"
+      - "✅ M19 complete — project now at v6.2.1, all milestones done"
   - date: 2026-05-01
     description: |
       🔍 Critical Review Complete: M19 Preferences Bug Fix Sprint created (5 tasks, 121-125)
