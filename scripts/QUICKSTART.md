@@ -14,6 +14,9 @@ CLAUDE.md                          ← Copy of AGENTS.md (Claude Code auto-load)
 .agent/memory/                     ← Session memory, corrections, patterns
 .agent/wiki/                       ← Project reference knowledge
 .agent/routing/                    ← Model config, taxonomy, cost ledger
+agent/commands/                    ← All ACP command docs (50 commands)
+agent/scripts/                     ← All ACP bash scripts (28 scripts)
+agent/schemas/                     ← YAML validation schemas
 scripts/acp-dispatch.ts            ← Routing engine (Persona B/C only)
 ```
 
