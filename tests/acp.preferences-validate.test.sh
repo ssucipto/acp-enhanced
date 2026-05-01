@@ -23,36 +23,42 @@ setup_fixtures() {
 
   cat > "${FIXTURE_DIR}/agent/configurables/acp.configurables.yaml" << 'EOF'
 acp:
-  plan.draft.create_mode:
-    id: 'plan.draft.create_mode'
-    description: How plan drafts are created
-    default: structured
-    type: string
-    options:
-      - name: structured
-        value: structured
-        description: Structured draft
-      - name: unstructured
-        value: unstructured
-        description: Unstructured draft
-      - name: guided
-        value: guided
-        description: Guided draft
-      - name: contextual
-        value: contextual
-        description: Contextual draft
-  task.create.granularity:
-    id: 'task.create.granularity'
-    description: Task granularity 1-10
-    default: 3
-    type: number
-    min: 1
-    max: 10
-  validation.auto_fix.enabled:
-    id: 'validation.auto_fix.enabled'
-    description: Auto-fix validation errors
-    default: false
-    type: boolean
+  plan:
+    draft:
+      create_mode:
+        id: 'plan.draft.create_mode'
+        description: How plan drafts are created
+        default: structured
+        type: string
+        options:
+          - name: structured
+            value: structured
+            description: Structured draft
+          - name: unstructured
+            value: unstructured
+            description: Unstructured draft
+          - name: guided
+            value: guided
+            description: Guided draft
+          - name: contextual
+            value: contextual
+            description: Contextual draft
+  task:
+    create:
+      granularity:
+        id: 'task.create.granularity'
+        description: Task granularity 1-10
+        default: 3
+        type: number
+        min: 1
+        max: 10
+  validation:
+    auto_fix:
+      enabled:
+        id: 'validation.auto_fix.enabled'
+        description: Auto-fix validation errors
+        default: false
+        type: boolean
 EOF
 }
 

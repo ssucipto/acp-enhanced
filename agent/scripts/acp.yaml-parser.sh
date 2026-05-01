@@ -10,8 +10,11 @@
 
 # Portable in-place sed (works on both GNU and BSD/macOS sed)
 # Usage: _yaml_sed_i "expression" "file"
+# Delegates to _sed_i when acp.common.sh is also loaded (avoids duplication).
 _yaml_sed_i() {
-    if [ "$(uname)" = "Darwin" ]; then
+    if declare -f _sed_i > /dev/null 2>&1; then
+        _sed_i "$@"
+    elif [ "$(uname)" = "Darwin" ]; then
         sed -i '' "$@"
     else
         sed -i "$@"
@@ -35,9 +38,11 @@ fi
 # ============================================================================
 
 init_ast() {
+    cleanup_ast  # remove any prior temp file before creating a new one
     AST_FILE=$(mktemp)
     echo "0|map||root|-1|" > "$AST_FILE"
     AST_ROOT_ID=0
+    trap 'cleanup_ast' EXIT  # ensure temp file is removed even on unexpected exit
 }
 
 cleanup_ast() {
@@ -311,6 +316,16 @@ find_child_by_index() {
     return 1
 }
 
+# yaml_query: query the loaded AST for a value at the given dot-path.
+# The path must NOT start with a dot (e.g. "acp.plan.draft.create_mode").
+#
+# For SCALAR nodes: returns the value with no trailing colon.
+# For MAP or ARRAY nodes: returns each direct child key followed by ':'
+#   (e.g. "plan:" for a map child named "plan"). This is intentional
+#   for YAML-list-style output. Callers that need bare key names should
+#   strip the trailing colon via: key="${key%:}"
+# Returns: empty output and exit 1 if path not found.
+# Note: Call yaml_get(file, path) instead if the AST is not yet loaded.
 yaml_query() {
     local path="$1"
     
