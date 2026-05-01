@@ -345,7 +345,7 @@ GITIGNORE
         # Fallback: Download from repository
         (
             cd "$global_dir" || exit 1
-            curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.install.sh | bash
+            curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh | bash
         ) || {
             echo "${RED}Error: Failed to initialize global ACP infrastructure${NC}" >&2
             return 1
