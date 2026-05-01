@@ -73,6 +73,11 @@ mkdir -p "$TARGET_DIR/agent/clarifications"
 mkdir -p "$TARGET_DIR/agent/feedback"
 mkdir -p "$TARGET_DIR/agent/preferences"
 mkdir -p "$TARGET_DIR/agent/index"
+mkdir -p "$TARGET_DIR/agent/specs"
+mkdir -p "$TARGET_DIR/agent/artifacts"
+mkdir -p "$TARGET_DIR/agent/configurables"
+mkdir -p "$TARGET_DIR/agent/benchmarks/runner"
+mkdir -p "$TARGET_DIR/agent/benchmarks/suite"
 
 # Create .gitkeep files
 touch "$TARGET_DIR/agent/design/.gitkeep"
@@ -81,6 +86,8 @@ touch "$TARGET_DIR/agent/patterns/.gitkeep"
 touch "$TARGET_DIR/agent/tasks/.gitkeep"
 touch "$TARGET_DIR/agent/clarifications/.gitkeep"
 touch "$TARGET_DIR/agent/index/.gitkeep"
+touch "$TARGET_DIR/agent/specs/.gitkeep"
+touch "$TARGET_DIR/agent/artifacts/.gitkeep"
 
 # Create agent/.gitignore to exclude local-only directories from version control
 cat > "$TARGET_DIR/agent/.gitignore" << 'EOF'
@@ -107,6 +114,32 @@ find "$TEMP_DIR/agent/milestones" -maxdepth 1 -name "*.template.md" -exec cp {} 
 find "$TEMP_DIR/agent/patterns" -maxdepth 1 -name "*.template.md" -exec cp {} "$TARGET_DIR/agent/patterns/" \;
 find "$TEMP_DIR/agent/tasks" -maxdepth 1 -name "*.template.md" -exec cp {} "$TARGET_DIR/agent/tasks/" \;
 find "$TEMP_DIR/agent/clarifications" -maxdepth 1 -name "*.template.md" -exec cp {} "$TARGET_DIR/agent/clarifications/" \;
+
+# Copy specs template
+if [ -d "$TEMP_DIR/agent/specs" ]; then
+    find "$TEMP_DIR/agent/specs" -maxdepth 1 -name "*.template.md" -exec cp {} "$TARGET_DIR/agent/specs/" \;
+fi
+
+# Copy artifact templates
+if [ -d "$TEMP_DIR/agent/artifacts" ]; then
+    find "$TEMP_DIR/agent/artifacts" -maxdepth 1 -name "*.template.md" -exec cp {} "$TARGET_DIR/agent/artifacts/" \;
+fi
+
+# Copy configurables (preference schema definitions)
+if [ -d "$TEMP_DIR/agent/configurables" ]; then
+    find "$TEMP_DIR/agent/configurables" -maxdepth 1 -name "acp.*.yaml" -exec cp {} "$TARGET_DIR/agent/configurables/" \;
+fi
+
+# Copy benchmark runner scripts
+if [ -d "$TEMP_DIR/agent/benchmarks/runner" ]; then
+    find "$TEMP_DIR/agent/benchmarks/runner" -maxdepth 1 -type f -exec cp {} "$TARGET_DIR/agent/benchmarks/runner/" \;
+    chmod +x "$TARGET_DIR/agent/benchmarks/runner/"*.sh 2>/dev/null || true
+fi
+
+# Copy benchmark suite scenarios
+if [ -d "$TEMP_DIR/agent/benchmarks/suite" ]; then
+    cp -r "$TEMP_DIR/agent/benchmarks/suite/"* "$TARGET_DIR/agent/benchmarks/suite/" 2>/dev/null || true
+fi
 
 # Copy index template files
 if [ -d "$TEMP_DIR/agent/index" ]; then
