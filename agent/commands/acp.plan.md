@@ -752,15 +752,4 @@ Dependencies may be inferred from:
 **Dependency Expression**:
 - If task undefined: "Task 24"
 - If task defined but no document: "Task 24: Pre-Commit Hook System"
-- If task document exists: "[Task 24](../tasks/milestone-4-package-development/task-24-precommit-hook-system.md)"
-
----
-
-**Namespace**: acp  
-**Command**: plan  
-**Version**: 1.0.0  
-**Created**: 2026-02-22  
-**Last Updated**: 2026-02-22  
-**Status**: Active  
-**Compatibility**: ACP 3.7.3+  
-**Author**: ACP Project  
+- If task document exists: "[Task 24](../tasks/milestone-4-package-development/task-24-precommit-hook-system.md)"  
