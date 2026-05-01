@@ -1,0 +1,4 @@
+acp:
+  plan.draft.create_mode: 'invalid_value'
+  task.create.granularity: 15
+  nonexistent.preference: 'value'

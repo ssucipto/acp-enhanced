@@ -641,6 +641,41 @@ for dir in "${!ALL_FILES_TO_INSTALL[@]}"; do
 done
 
 # ============================================================================
+# Configurables & Presets: Install package-level preference definitions
+# ============================================================================
+
+if [ -d "$TEMP_DIR/agent/configurables" ]; then
+    info "Installing configurables..."
+    mkdir -p "${INSTALL_BASE_DIR}/configurables"
+    while IFS= read -r -d '' cfg_file; do
+        cfg_name="$(basename "$cfg_file")"
+        dest="${INSTALL_BASE_DIR}/configurables/${cfg_name}"
+        cp "$cfg_file" "$dest"
+        echo "  ${GREEN}✓${NC} Configurable: ${cfg_name}"
+    done < <(find "$TEMP_DIR/agent/configurables" -maxdepth 1 -name "*.configurables.yaml" -print0 2>/dev/null)
+    echo "${GREEN}✓${NC} Configurables installed"
+    echo ""
+fi
+
+if [ -d "$TEMP_DIR/agent/preferences" ]; then
+    info "Installing preset preferences..."
+    mkdir -p "${INSTALL_BASE_DIR}/preferences"
+    while IFS= read -r -d '' preset_file; do
+        preset_name="$(basename "$preset_file")"
+        dest="${INSTALL_BASE_DIR}/preferences/${preset_name}"
+        # Never overwrite existing user preference files — presets are templates
+        if [ ! -f "$dest" ]; then
+            cp "$preset_file" "$dest"
+            echo "  ${GREEN}✓${NC} Preset: ${preset_name}"
+        else
+            echo "  ${YELLOW}⚠${NC}  Preset skipped (exists): ${preset_name}"
+        fi
+    done < <(find "$TEMP_DIR/agent/preferences" -maxdepth 1 -name "*.yaml" -print0 2>/dev/null)
+    echo "${GREEN}✓${NC} Preset preferences installed"
+    echo ""
+fi
+
+# ============================================================================
 # Script-Command Binding: Install scripts based on command dependencies
 # ============================================================================
 

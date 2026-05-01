@@ -1,13 +1,17 @@
 # ACP Core Package Definition
 # This file defines the Agent Context Protocol core package
 
-name: acp-core
-version: 4.13.0
-description: Agent Context Protocol - Core commands, patterns, and utilities for AI agent development
-author: Patrick Michaelsen
+name: acp-enhanced
+version: 6.2.0
+description: ACP Enhanced - Agent Context Protocol with structured context management layer (.agent/ framework)
+author: Suryo Sucipto
 license: MIT
-homepage: https://github.com/prmichaelsen/agent-context-protocol
-repository: https://github.com/prmichaelsen/agent-context-protocol.git
+homepage: https://github.com/ssucipto/acp-enhanced
+repository: https://github.com/ssucipto/acp-enhanced.git
+fork_of:
+  name: acp-core
+  author: Patrick Michaelsen
+  source: https://github.com/prmichaelsen/agent-context-protocol
 
 # Release configuration
 release:
