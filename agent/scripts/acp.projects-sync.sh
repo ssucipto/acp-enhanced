@@ -2,6 +2,7 @@
 # Sync registry with filesystem - discover unregistered projects
 
 set -euo pipefail
+trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Source utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
