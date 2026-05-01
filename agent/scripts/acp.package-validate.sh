@@ -535,9 +535,71 @@ validate_git_repository() {
     echo ""
 }
 
+# Validate configurables (optional — packages need not have preferences)
+validate_configurables() {
+    echo "${BOLD}Configurables (Preferences)${NC}"
+
+    local cfg_dir="agent/configurables"
+    if [ ! -d "$cfg_dir" ]; then
+        echo "  (no configurables directory — skipping)"
+        echo ""
+        return 0
+    fi
+
+    local cfg_count=0
+    local cfg_errors=0
+
+    while IFS= read -r -d '' cfg_file; do
+        cfg_count=$((cfg_count + 1))
+        local cfg_name
+        cfg_name="$(basename "$cfg_file")"
+        check
+
+        # Must be valid YAML
+        if ! yaml_parse "$cfg_file" > /dev/null 2>&1; then
+            error "Invalid YAML: ${cfg_file}"
+            cfg_errors=$((cfg_errors + 1))
+            continue
+        fi
+
+        # Check for preference entries via 'id:' keys
+        local id_count
+        id_count=$(grep -c "^[[:space:]]*id:" "$cfg_file" 2>/dev/null || echo 0)
+        if [ "$id_count" -eq 0 ]; then
+            warning "${cfg_name}: no preference entries found (no 'id:' keys)"
+        else
+            # Verify ids follow dot-path pattern
+            local bad_ids=0
+            while IFS= read -r id_line; do
+                local id_val
+                id_val="$(echo "$id_line" | sed "s/.*id:[[:space:]]*//" | tr -d "'\"")"
+                [[ "$id_val" != *"."* ]] && bad_ids=$((bad_ids + 1))
+            done < <(grep "^[[:space:]]*id:" "$cfg_file")
+            if [ "$bad_ids" -gt 0 ]; then
+                warning "${cfg_name}: ${bad_ids} preference(s) missing dot-path in id (expected: 'category.name')"
+            else
+                pass "${cfg_name}: ${id_count} preference(s) — ids valid ✓"
+            fi
+        fi
+
+        # Warn if not listed in package.yaml
+        if [ -f "package.yaml" ] && ! grep -qF "$cfg_name" "package.yaml"; then
+            warning "${cfg_name} not listed in package.yaml contents.configurables"
+            fixable "Add ${cfg_name} to package.yaml contents.configurables"
+        fi
+    done < <(find "$cfg_dir" -maxdepth 1 -name "*.configurables.yaml" -print0 2>/dev/null)
+
+    if [ "$cfg_count" -eq 0 ]; then
+        echo "  (no configurables found — preferences are optional for packages)"
+    elif [ "$cfg_errors" -eq 0 ]; then
+        pass "All ${cfg_count} configurable file(s) valid"
+    fi
+
+    echo ""
+}
+
 # Validate README.md
 validate_readme() {
-    echo "${BOLD}README.md${NC}"
     
     check
     if [ ! -f "README.md" ]; then
@@ -972,6 +1034,7 @@ main() {
     validate_namespace_consistency
     validate_script_dependencies
     validate_experimental_consistency
+    validate_configurables
     validate_git_repository
     validate_readme
     

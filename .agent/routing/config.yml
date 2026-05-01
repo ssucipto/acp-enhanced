@@ -1,0 +1,42 @@
+version: "1.0"
+default_model: claude-sonnet
+
+models:
+  claude-sonnet:
+    provider: anthropic
+    model_id: anthropic/claude-sonnet-4-5
+    cost_input_per_1m: 3.00
+    cost_output_per_1m: 15.00
+    use_for: [architecture-plan, design-document, complex-bash-script, security-review]
+
+  deepseek-v4-flash:
+    provider: deepseek
+    model_id: deepseek/deepseek-v4-flash
+    cost_input_per_1m: 0.14
+    cost_output_per_1m: 0.28
+    use_for: [command-doc-update, yaml-schema, documentation-sync, typescript-feature, bash-script-fix, e2e-test-write, bug-fix-simple]
+
+  deepseek-v4-pro:
+    provider: deepseek
+    model_id: deepseek/deepseek-v4-pro
+    cost_input_per_1m: 0.435
+    cost_output_per_1m: 0.87
+    use_for: [bash-script-create, command-doc-write, preference-system]
+
+  gemini-flash:
+    provider: google
+    model_id: google/gemini-2.0-flash-exp
+    cost_input_per_1m: 0.075
+    cost_output_per_1m: 0.30
+    use_for: []
+
+  local-script:
+    provider: local
+    cost_input_per_1m: 0.00
+    cost_output_per_1m: 0.00
+    use_for: [test-run, lint, e2e-run]
+
+complexity_thresholds:
+  low:    { max_files: 3,  tokens_est: 5000  }
+  medium: { max_files: 6,  tokens_est: 12000 }
+  high:   { max_files: 99, tokens_est: 25000 }
