@@ -292,6 +292,21 @@ Before implementing, load relevant key files from the index.
 
 **Note**: If `agent/index/` does not exist, skip silently. Do NOT spend excessive time here — read files quickly and move to implementation.  
 
+### 1.6. Review Relevant Patterns
+
+Scan patterns relevant to the current task before implementing.
+
+**Actions**:
+- Check if `agent/patterns/` directory exists
+- If it exists, list all pattern files
+- Read patterns directly relevant to the task objective:
+  - Patterns mentioned in the task document
+  - Patterns related to the implementation domain (e.g. bash scripting, YAML, testing)
+  - Up to 2-3 most relevant patterns
+- Note conventions to follow during implementation
+
+**DO NOT spend excessive time. Read only directly relevant patterns. If no patterns are relevant, skip silently.**  
+
 ### 1.7. Load Design Context
 
 Load the design document for supplementary implementation context.

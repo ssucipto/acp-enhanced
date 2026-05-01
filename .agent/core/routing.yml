@@ -1,0 +1,7 @@
+# Updated per session by dispatch script or manually
+# DO NOT mix static and dynamic content in the same file
+
+session:
+  executor: unset        # updated by acp-dispatch.ts at runtime
+  model: unset           # updated by acp-dispatch.ts at runtime
+  persona: A             # A = Copilot only, B = DeepSeek/OpenRouter, C = mixed
