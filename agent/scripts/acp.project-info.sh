@@ -4,6 +4,7 @@
 # Usage: ./acp.project-info.sh <project-name>
 
 set -e
+trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
