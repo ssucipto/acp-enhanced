@@ -468,12 +468,12 @@ milestones:
   M24:
     name: AGENT.md Completeness
     priority: 5
-    status: not_started
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 75
+    started: 2026-05-01
     completed: null
     estimated_weeks: 1
-    tasks_completed: 0
+    tasks_completed: 3
     tasks_total: 4
     file: agent/milestones/milestone-24-agent-md-completeness.md
     notes: |
@@ -2479,8 +2479,8 @@ progress:
     - id: task-133
       name: Add Missing Commands to AGENT.md Core Commands
       priority: 5
-      status: not_started
-      started: null
+      status: in_progress
+      started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-24-agent-md-completeness/task-133-add-missing-commands.md
       estimated_hours: 1-2
       actual_hours: null
@@ -2493,30 +2493,35 @@ progress:
     - id: task-134
       name: Add Three-Persona Deployment Model Section to AGENT.md
       priority: 5
-      status: not_started
-      started: null
+      status: completed
+      started: 2026-05-01T01:00:00Z
       file: agent/tasks/milestone-24-agent-md-completeness/task-134-three-persona-deployment-model.md
       estimated_hours: 2-3
-      actual_hours: null
-      completed_date: null
+      actual_hours: 0.5
+      completed_date: 2026-05-01T01:30:00Z
       notes: |
-        Add new section between How to Use ACP Enhanced and Pattern Significance.
-        Persona A/B/C table, Which Persona decision guide, three-layer context model
-        token estimates, cross-reference to QUICKSTART.md.
+        Added Three-Persona Deployment Model section to AGENT.md between
+        How to Use ACP Enhanced and Pattern Significance & Impact.
+        Added ToC entry #9, renumbered 9-24 to 10-25.
+        Section includes Persona A/B/C table, Which Persona decision guide,
+        Three-Layer Context Model table with token estimates, QUICKSTART crossref.
 
     - id: task-135
       name: Update AGENT.md Conclusion and Sample Prompts
       priority: 5
-      status: not_started
-      started: null
+      status: completed
+      started: 2026-05-01T02:00:00Z
+      completed_date: 2026-05-01T02:30:00Z
+      actual_hours: 0.5
       file: agent/tasks/milestone-24-agent-md-completeness/task-135-conclusion-and-sample-prompts.md
       estimated_hours: 1-2
-      actual_hours: null
-      completed_date: null
       notes: |
-        Conclusion: "Agent Directory Pattern" → "ACP Enhanced". Key Takeaways: add
-        package ecosystem and token efficiency. Sample Prompts: add @acp.* equivalents
-        next to each legacy trigger. Add ACP Enhanced Commands Quick Reference sub-section.
+        Conclusion: "Agent Directory Pattern" → "ACP Enhanced" in opening sentence.
+        Key Takeaways: added items 8 (Package Ecosystem) and 9 (Token Efficiency ≥60%).
+        Sample Prompts: added legacy/modern note at top. Added @acp.* equivalent to each
+        of 5 legacy triggers (Init→@acp.init, Proceed→@acp.proceed, Update→@acp.version-update,
+        Check for updates→@acp.version-check-for-updates, Uninstall→acp.uninstall.sh -y).
+        Added ACP Enhanced Commands Quick Reference sub-section (5 daily-use commands table).
 
     - id: task-136
       name: Session Memory, M17 Doc, Version Bump, CHANGELOG
@@ -2627,6 +2632,43 @@ progress:
         Verify no temp file leaks after test run.
 
 recent_work:
+  - date: 2026-05-01
+    description: |
+      ✅ task-135 COMPLETE: Updated AGENT.md Conclusion and Sample Prompts (M24, 3/4 tasks)
+    items:
+      - "✅ Conclusion: opening sentence now says 'ACP Enhanced transforms' (was 'Agent Directory Pattern')"
+      - "✅ Key Takeaways: added item 8 (Package Ecosystem) and item 9 (Token Efficiency ≥60%)"
+      - "✅ Sample Prompts: added legacy/modern note at top of section"
+      - "✅ Added @acp.init equivalent to AGENT.md: Initialize trigger"
+      - "✅ Added @acp.proceed equivalent to AGENT.md: Proceed trigger"
+      - "✅ Added @acp.version-update equivalent to AGENT.md: Update trigger"
+      - "✅ Added @acp.version-check-for-updates equivalent to AGENT.md: Check for updates trigger"
+      - "✅ Added acp.uninstall.sh -y note to AGENT.md: Uninstall trigger"
+      - "✅ Added ACP Enhanced Commands Quick Reference sub-section (5 daily-use commands table)"
+      - "✅ M24: 3/4 tasks complete (75%)"
+  - date: 2026-05-01
+    description: |
+      ✅ task-134 COMPLETE: Added Three-Persona Deployment Model section to AGENT.md (M24, 2/4 tasks)
+    items:
+      - "✅ Added ToC entry #9 'Three-Persona Deployment Model', renumbered entries 9-24 → 10-25"
+      - "✅ Added Personas at a Glance table (Persona A/B/C: setup, cost, benefit)"
+      - "✅ Added Persona A/B/C detail paragraphs (Copilot Pro, DeepSeek, Copilot+DeepSeek)"
+      - "✅ Added 'Which Persona Should I Use?' decision tree"
+      - "✅ Added Three-Layer Context Model table (Layer 1: ~180 tokens, Layer 3: ~1,200-1,700 per task)"
+      - "✅ Added cross-reference to scripts/QUICKSTART.md"
+      - "✅ Section placed between 'How to Use ACP Enhanced' and 'Pattern Significance & Impact'"
+      - "✅ M24: 2/4 tasks complete (50%)"
+  - date: 2026-05-01
+    description: |
+      ✅ task-133 COMPLETE: Added 6 missing commands to AGENT.md Core Commands (M24, 1/4 tasks)
+    items:
+      - "✅ Added @acp.resume to Workflow category (after @acp.handoff)"
+      - "✅ Added @acp.preferences-get to Preferences category (after @acp.preferences-show)"
+      - "✅ Added @acp.projects-restore to Project Registry category (after @acp.projects-sync)"
+      - "✅ Added @acp.update to Version & Sync category (after @acp.version-update)"
+      - "✅ Added Git Namespace section with @git.commit and @git.init at end of Core Commands"
+      - "✅ Restored ### Command Invocation heading after Git Namespace section"
+      - "✅ M24: 1/4 tasks complete (25%)"
   - date: 2026-05-01
     description: |
       ✅ MILESTONE 19 COMPLETE: Preferences System Bug Fix Sprint (5/5 tasks)
@@ -4496,10 +4538,7 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "▶️ M24 next: task-133 — Add missing commands to AGENT.md Core Commands (6 commands)"
-  - "▶️ M24 next: task-134 — Add Three-Persona Deployment Model section to AGENT.md"
-  - "▶️ M24 next: task-135 — Update Conclusion and Sample Prompts to ACP Enhanced language"
-  - "▶️ M24 next: task-136 — Session memory, M17 doc, version bump to 6.2.5, CHANGELOG"
+  - "▶️ M24 final: task-136 — Session memory, M17 doc, version bump to 6.2.5, CHANGELOG"
   - "📋 Future: M25 — ACP Progress Visualizer (design doc: agent/design/visualizer.requirements.md)"
 
 notes:
