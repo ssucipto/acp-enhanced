@@ -3,14 +3,14 @@
 
 project:
   name: agent-context-protocol
-  version: 6.2.2
+  version: 6.2.3
   started: 2026-02-16
   status: in_progress
-  current_milestone: M21
+  current_milestone: M22
   description: |
     Agent Context Protocol (ACP) - A documentation-first development methodology
-    for AI agents. M21 in progress: functional readiness audit — fixing onboarding
-    blockers, template placeholders, version consistency, and package.yaml gaps.
+    for AI agents. M22 complete: documentation accuracy audit — AGENT.md directory tree,
+    stale command references, and bootstrap template bash-safety anti-patterns.
 
 milestones:
   M1:
@@ -413,21 +413,39 @@ milestones:
   M21:
     name: Functional Readiness Audit
     priority: 5
-    status: in_progress
-    progress: 95
+    status: completed
+    progress: 100
     started: 2026-05-01
-    completed:
+    completed: 2026-05-01
     estimated_weeks: 1
-    tasks_completed: 4
+    tasks_completed: 5
     tasks_total: 5
     file: agent/milestones/milestone-21-functional-readiness.md
     notes: |
-      📋 Milestone 21: Third comprehensive audit — functional and new-project readiness.
+      ✅ Milestone 21 complete: Third comprehensive audit — functional and new-project readiness.
       - BUG-A (9 files): @{namespace}-{command-name} unfilled template placeholder in pretend-context
       - BUG-B (CRITICAL): README.md curl URL uses main branch (404) — should be mainline
       - BUG-C (3 files): version 6.2.1 in package.yaml, AGENT.md, identity.yml — should be 6.2.2
       - BUG-D (7 scripts): acp.project-info/remove/update/restore/sync, meta-scan, install-optimized missing from package.yaml scripts section
       - BUG-E: No [6.2.2] CHANGELOG block for M20 fixes
+
+  M22:
+    name: Documentation Accuracy Audit
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-05-01
+    completed: 2026-05-01
+    estimated_weeks: 1
+    tasks_completed: 3
+    tasks_total: 3
+    file: agent/milestones/milestone-22-documentation-accuracy.md
+    notes: |
+      ✅ Milestone 22 complete: Documentation accuracy audit — AGENT.md and bootstrap template.
+      - FIX-A: AGENT.md directory tree — removed ghost agent/files/, added 7 missing dirs
+        (artifacts/, benchmarks/, clarifications/, feedback/, schemas/, scripts/, template files at root)
+      - FIX-B: AGENT.md stale refs — @acp.install → @acp.package-install; unacp.install.sh → acp.uninstall.sh
+      - FIX-C: scripts/AGENTS.md bootstrap template — added 2 bash-safety anti-patterns (set -e trapping, macOS BSD compat)
 
 tasks:
   M1:
@@ -2415,6 +2433,8 @@ progress:
   M15: 100
   M16: 100
   M17: 100
+  M21: 100
+  M22: 100
 
   M18:
     - id: task-120
