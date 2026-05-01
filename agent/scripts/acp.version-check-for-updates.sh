@@ -24,7 +24,7 @@ else
 fi
 
 # Repository URL
-REPO_URL="https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline"
+REPO_URL="https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline"
 AGENT_MD_URL="$REPO_URL/AGENT.md"
 CHANGELOG_URL="$REPO_URL/CHANGELOG.md"
 
@@ -92,7 +92,7 @@ else
         fi
         echo ""
         echo "To update, run: ./agent/scripts/acp.version-update.sh"
-        echo "Or: curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainlin./agent/scripts/acp.version-update.sh | bash"
+        echo "Or: curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.version-update.sh | bash"
     fi
     rm -f /tmp/AGENT.md.latest
     exit 1
