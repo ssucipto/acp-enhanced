@@ -29,6 +29,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `_index` array added to `agent/configurables/acp.configurables.yaml` listing all 8 preference ids — required by `generate_preferences`
 
+### Post-M19 Audit Fixes (commit afcf61d)
+
+- **BUG-14 (CRITICAL)**: Added `_flat_dot_get()` fallback to `acp.preferences.sh` (8 locations) — production preference files use flat-dot key format (`  plan.draft.create_mode: val`) but M19's `yaml_get` reader requires nested YAML; all preference reads were silently returning empty. Fallback allows both formats to work
+- **BUG-15**: Removed stale duplicate footer from `agent/commands/acp.plan.md` — Version: 1.0.0 / Created: 2026-02-22 block contradicted the canonical Version: 2.0.0 header
+- **BUG-16**: Fixed `.agent/core/identity.yml` version 6.2.0 → 6.2.1 (M19 bump was missed in this file)
+- **BUG-17**: Fixed `@acp-init` → `@acp.init` in `agent/commands/acp.init.md` directive header
+- **BUG-18**: Fixed `@acp-status` → `@acp.status` in `agent/commands/acp.status.md` directive header
+- **BUG-19**: Fixed `@acp-index` → `@acp.index` in `agent/commands/acp.index.md` directive header
+
+### Added (Post-M19 Audit)
+
+- `docs/USAGE.md`: Comprehensive step-by-step day-to-day usage guide covering session lifecycle (`@acp.init` → `@acp.plan` → `@acp.proceed` → `@git.commit` → `/acp-commit`), preferences, packages, key file index, command quick-reference table, and troubleshooting
+
 ---
 
 ## ACP Enhanced Fork

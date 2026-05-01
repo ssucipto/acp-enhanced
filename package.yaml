@@ -102,6 +102,46 @@ contents:
         - acp.project-set.sh
         - acp.common.sh
         - acp.yaml-parser.sh
+
+    - name: acp.project-info.md
+      description: Display project details
+      experimental: true
+      scripts:
+        - acp.project-info.sh
+        - acp.common.sh
+        - acp.yaml-parser.sh
+
+    - name: acp.project-remove.md
+      description: Remove a project from the registry
+      experimental: true
+      scripts:
+        - acp.project-remove.sh
+        - acp.common.sh
+        - acp.yaml-parser.sh
+
+    - name: acp.project-update.md
+      description: Update project metadata in the registry
+      experimental: true
+      scripts:
+        - acp.project-update.sh
+        - acp.common.sh
+        - acp.yaml-parser.sh
+
+    - name: acp.projects-restore.md
+      description: Restore project registry from backup
+      experimental: true
+      scripts:
+        - acp.projects-restore.sh
+        - acp.common.sh
+        - acp.yaml-parser.sh
+
+    - name: acp.projects-sync.md
+      description: Sync project registry across machines
+      experimental: true
+      scripts:
+        - acp.projects-sync.sh
+        - acp.common.sh
+        - acp.yaml-parser.sh
     
     # Version Management Commands
     - name: acp.version-check.md
@@ -127,6 +167,10 @@ contents:
     
     - name: acp.design-create.md
       description: Create design documents
+      scripts: []
+    
+    - name: acp.design-reference.md
+      description: Generate design reference documents from existing designs
       scripts: []
     
     - name: acp.pattern-create.md
@@ -187,12 +231,56 @@ contents:
       description: Validate ACP structure
       scripts: []
 
+    # Preferences Commands
+    - name: acp.preferences-create.md
+      description: Create a preference file at user/workspace/project level
+      scripts:
+        - acp.preferences.sh
+        - acp.common.sh
+        - acp.yaml-parser.sh
+
+    - name: acp.preferences-get.md
+      description: Resolve and generate the effective preference set for a namespace
+      scripts:
+        - acp.preferences.sh
+        - acp.common.sh
+        - acp.yaml-parser.sh
+
+    - name: acp.preferences-set.md
+      description: Set a preference value at a specified level with validation
+      scripts:
+        - acp.preferences.sh
+        - acp.common.sh
+        - acp.yaml-parser.sh
+
+    - name: acp.preferences-show.md
+      description: Display effective preferences with source attribution
+      scripts:
+        - acp.preferences.sh
+        - acp.common.sh
+        - acp.yaml-parser.sh
+
+    - name: acp.preferences-validate.md
+      description: Validate all preference files against configurables schemas
+      scripts:
+        - acp.preferences.sh
+        - acp.common.sh
+        - acp.yaml-parser.sh
+
     - name: acp.handoff.md
       description: Generate cross-context task handoff reports
       scripts: []
 
     - name: acp.clarification-address.md
       description: Address clarification responses with research, tradeoffs, and recommendations (supports --deep and --shallow modes)
+      scripts: []
+
+    - name: acp.clarification-capture.md
+      description: Capture and record clarification responses from stakeholders
+      scripts: []
+
+    - name: acp.clarification-create.md
+      description: Create structured clarification documents for ambiguous requirements
       scripts: []
 
     - name: acp.index.md
@@ -282,6 +370,10 @@ contents:
     - name: acp.sessions.sh
       description: Session tracking and management script
       experimental: true
+
+    # Preferences Scripts
+    - name: acp.preferences.sh
+      description: Unified preferences utilities (get, set, validate, generate, presets)
 
     # Installation Scripts
     - name: acp.install.sh

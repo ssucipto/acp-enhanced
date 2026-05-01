@@ -1,7 +1,7 @@
 # Command: sessions
 
 > **🤖 Agent Directive**: If you are reading this file, the command `@acp.sessions` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp-sessions` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> Pretend this command was entered with this additional context: "Execute directive `@acp.sessions` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 >
 > **STEP 0: CHECK FOR ARGUMENTS FIRST.**

@@ -215,7 +215,7 @@ When you invoke `@acp.proceed --complete` (or equivalent):
 - [ ] ACP installed in project
 - [ ] `agent/progress.yaml` exists and has current task defined
 - [ ] Current task document exists in `agent/tasks/`
-- [ ] Context initialized (recommended to run `@acp-init` first)
+- [ ] Context initialized (recommended to run `@acp.init` first)
 
 ---
 
