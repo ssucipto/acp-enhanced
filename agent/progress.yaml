@@ -3,10 +3,10 @@
 
 project:
   name: agent-context-protocol
-  version: 6.2.4
+  version: 6.2.5
   started: 2026-02-16
   status: in_progress
-  current_milestone: M23
+  current_milestone: M24
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M23 complete: AGENT.md rebranded to ACP Enhanced
@@ -464,6 +464,25 @@ milestones:
       - New "ACP Enhanced — What's New" section with 15-row enhancement table
       - Complete ToC (24 entries, up from 14) — all body sections now listed
       - Core Commands expanded from 6 to 40+ entries, grouped by 10 categories
+
+  M24:
+    name: AGENT.md Completeness
+    priority: 5
+    status: not_started
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 4
+    file: agent/milestones/milestone-24-agent-md-completeness.md
+    notes: |
+      📋 Milestone 24: AGENT.md Completeness
+      - Add 6 missing commands to Core Commands (resume, update, preferences-get, projects-restore, git.commit, git.init)
+      - Add Three-Persona Deployment Model section
+      - Update Conclusion and Sample Prompts to ACP Enhanced language
+      - Session memory (M23), retroactive M17 milestone doc, version bump to 6.2.5
+      - 4 tasks (133-136)
 
 tasks:
   M1:
@@ -2454,6 +2473,64 @@ progress:
   M21: 100
   M22: 100
   M23: 100
+  M24: 0
+
+  M24:
+    - id: task-133
+      name: Add Missing Commands to AGENT.md Core Commands
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-24-agent-md-completeness/task-133-add-missing-commands.md
+      estimated_hours: 1-2
+      actual_hours: null
+      completed_date: null
+      notes: |
+        Add @acp.resume (Workflow), @acp.update (Version & Sync), @acp.preferences-get
+        (Preferences), @acp.projects-restore (Project Registry), and git namespace section
+        (git.commit, git.init) to AGENT.md Core Commands.
+
+    - id: task-134
+      name: Add Three-Persona Deployment Model Section to AGENT.md
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-24-agent-md-completeness/task-134-three-persona-deployment-model.md
+      estimated_hours: 2-3
+      actual_hours: null
+      completed_date: null
+      notes: |
+        Add new section between How to Use ACP Enhanced and Pattern Significance.
+        Persona A/B/C table, Which Persona decision guide, three-layer context model
+        token estimates, cross-reference to QUICKSTART.md.
+
+    - id: task-135
+      name: Update AGENT.md Conclusion and Sample Prompts
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-24-agent-md-completeness/task-135-conclusion-and-sample-prompts.md
+      estimated_hours: 1-2
+      actual_hours: null
+      completed_date: null
+      notes: |
+        Conclusion: "Agent Directory Pattern" → "ACP Enhanced". Key Takeaways: add
+        package ecosystem and token efficiency. Sample Prompts: add @acp.* equivalents
+        next to each legacy trigger. Add ACP Enhanced Commands Quick Reference sub-section.
+
+    - id: task-136
+      name: Session Memory, M17 Doc, Version Bump, CHANGELOG
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-24-agent-md-completeness/task-136-session-memory-and-housekeeping.md
+      estimated_hours: 1-2
+      actual_hours: null
+      completed_date: null
+      notes: |
+        Write M23 session memory to .agent/memory/sessions.md. Create retroactive
+        milestone-17-artifact-commands-system.md. Bump version 6.2.4 → 6.2.5 in 4 files.
+        Add [6.2.5] block to CHANGELOG.md.
 
   M18:
     - id: task-120
@@ -4419,9 +4496,11 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "🎉 All milestones complete (M1-M18 + M6 Preferences). Project 100% done."
-  - "Next: Define a new milestone with @acp.plan, or begin a new project."
-  - "Housekeeping: task-51 and task-17 can be formally added to CHANGELOG.md if desired."
+  - "▶️ M24 next: task-133 — Add missing commands to AGENT.md Core Commands (6 commands)"
+  - "▶️ M24 next: task-134 — Add Three-Persona Deployment Model section to AGENT.md"
+  - "▶️ M24 next: task-135 — Update Conclusion and Sample Prompts to ACP Enhanced language"
+  - "▶️ M24 next: task-136 — Session memory, M17 doc, version bump to 6.2.5, CHANGELOG"
+  - "📋 Future: M25 — ACP Progress Visualizer (design doc: agent/design/visualizer.requirements.md)"
 
 notes:
   - Using flat directory structure with dot notation (acp.status.md)
