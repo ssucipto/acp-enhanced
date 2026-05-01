@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.2.2] - 2026-05-01 — M20 + M21 Consistency Cleanup and Functional Readiness
+
+### Fixed
+
+#### M20 — Notation Standardization (commit 393d9e6)
+
+- **BUG-A** (9 command files): Fixed directive header pretend-context lines using `@acp-*` hyphen notation → dot notation. Files: `acp.audit`, `acp.clarification-address`, `acp.clarification-create`, `acp.handoff`, `acp.sessions`, `acp.spec`, `acp.version-check`, `acp.version-check-for-updates`, `acp.version-update`. LLMs reading these files were taught the wrong invocation notation.
+
+- **BUG-B** (5 command files, ~26 occurrences): Fixed body-text `@acp-*` references in examples, related commands, tips, and troubleshooting sections. Files: `acp.init` (~11), `acp.status` (~8), `acp.handoff` (2), `acp.proceed` (1), `acp.spec` (6).
+
+- **BUG-C**: Fixed `AGENT.md` directory tree comments — `# @acp-init`, `# @acp-proceed`, `# @acp-status` → dot notation.
+
+- **BUG-D** (package.yaml): Added 13 missing commands and 1 missing script that were introduced in M6/M7/M15/M16 but never synced to `package.yaml`. Added: preferences system (5 commands), project registry extended (5 commands), `acp.design-reference`, `acp.clarification-capture`, `acp.clarification-create`, `acp.preferences.sh`.
+
+- **BUG-E**: Added missing CHANGELOG entry for post-M19 audit fixes (commit `afcf61d`). Documents BUG-14 through BUG-19 including the CRITICAL `_flat_dot_get()` fallback fix.
+
+#### M21 — Functional Readiness Audit
+
+- **BUG-A** (9 command files): Fixed unfilled `@{namespace}-{command-name}` template placeholder in pretend-context directive lines. Files: `acp.package-create`, `acp.package-install`, `acp.proceed`, `acp.plan`, `acp.project-create`, `acp.report`, `acp.resume`, `acp.task-create`, `git.commit`. These files were created from the template but the placeholder was never replaced with the actual command name.
+
+- **BUG-B** (CRITICAL — onboarding): Fixed `README.md` bootstrap `curl` URL — referenced `main` branch which does not exist; the repository uses `mainline`. Every new user attempting to follow the install instructions received a 404.
+
+- **BUG-C** (3 files): Bumped version from `6.2.1` → `6.2.2` in `package.yaml`, `AGENT.md`, `.agent/core/identity.yml`.
+
+- **BUG-D** (7 scripts): Added 7 missing scripts to `package.yaml` scripts section: `acp.project-info.sh`, `acp.project-remove.sh`, `acp.project-update.sh`, `acp.projects-restore.sh`, `acp.projects-sync.sh`, `acp.meta-scan.sh`, `acp.package-install-optimized.sh`.
+
+---
+
 ## [6.2.1] - 2026-05-01 — M19 Preferences System Bug Fix
 
 ### Fixed
