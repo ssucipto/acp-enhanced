@@ -240,7 +240,47 @@ fields:
             required: false
             default: false
             description: "Mark as experimental (requires --experimental flag to install)"
-    
+      configurables:
+        type: array
+        item_type: object
+        required: false
+        description: "Preference definition files bundled with this package"
+        item_fields:
+          name:
+            type: string
+            required: true
+            pattern: "^[a-z0-9-]+\\.configurables\\.yaml$"
+            description: "Configurable filename (e.g., 'my-package.configurables.yaml')"
+          description:
+            type: string
+            required: false
+            description: "What preferences this configurable file defines"
+          experimental:
+            type: boolean
+            required: false
+            default: false
+            description: "Mark as experimental (requires --experimental flag to install)"
+      presets:
+        type: array
+        item_type: object
+        required: false
+        description: "Preset preference files bundled with this package"
+        item_fields:
+          name:
+            type: string
+            required: true
+            pattern: "^[a-z0-9-]+\\.[a-z0-9-]+\\.yaml$"
+            description: "Preset filename (e.g., 'my-package.strict.yaml')"
+          description:
+            type: string
+            required: false
+            description: "What workflow or use case this preset configures"
+          experimental:
+            type: boolean
+            required: false
+            default: false
+            description: "Mark as experimental (requires --experimental flag to install)"
+
   requires:
     type: object
     required: false

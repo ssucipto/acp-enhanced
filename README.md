@@ -1,3 +1,88 @@
+# ACP Enhanced — Agent Context Protocol
+
+> **This is a fork of [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol) by [@prmichaelsen](https://github.com/prmichaelsen).**
+> ACP Enhanced adds a structured context management layer (`.agent/` framework) on top of the original ACP command and script system.
+> The original ACP content — commands, scripts, schemas, and workflow — is preserved in full.
+
+---
+
+## What is ACP Enhanced?
+
+ACP Enhanced consists of two layers built on top of the original ACP:
+
+1. **Original ACP** — command documents (`agent/commands/*.md`), bash scripts (`agent/scripts/*.sh`), YAML schemas (`agent/schemas/*.yaml`), the full planning and package workflow.
+2. **Enhanced Framework Layer** — a structured `.agent/` directory that gives the AI agent a 2,800-token context budget system with tiered memory, skill routing, a task taxonomy, and a self-improving correction log.
+
+The framework layer solves a specific problem: as your project grows, the AI agent starts every session with zero context. ACP Enhanced makes the agent systematically load only what it needs, in priority order, within a strict token budget.
+
+### What the `.agent/` layer adds
+
+| Directory | Purpose |
+|---|---|
+| `.agent/core/` | Identity, hard constraints, token budget — loaded every session |
+| `.agent/skills/` | Domain-specific guidance (scripts, schemas, testing, TypeScript, etc.) — one file per session |
+| `.agent/routing/` | Task taxonomy and routing rules — classifies what type of work this session is |
+| `.agent/memory/` | Session log, lessons learned, patterns, architectural decisions |
+| `.agent/wiki/` | Reference docs loaded section-by-section (never all at once) |
+
+---
+
+## Install ACP Enhanced in a New Project
+
+### Step 1 — Copy the framework layer (once per project)
+
+Install the ACP Enhanced bootstrap into your project using curl:
+
+```bash
+# From your target project root
+curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/main/scripts/acp-bootstrap.sh | bash
+```
+
+This creates the full `.agent/` directory structure and copies `AGENTS.md` into your project root.
+
+Then **customize** `.agent/core/identity.yml` for your project (name, stack, team, repo URL).
+
+> If you've cloned this repo locally, you can also run:
+> ```bash
+> bash /path/to/acp-enhanced/scripts/acp-bootstrap.sh
+> ```
+
+### Step 2 — Install ACP commands and scripts (once per project)
+
+Once ACP is running in the new project, use the package install command to pull in all commands and scripts from this fork:
+
+```
+@acp.package-install https://github.com/ssucipto/acp-enhanced.git
+```
+
+This installs `agent/commands/`, `agent/scripts/`, and `agent/schemas/` into the target project and tracks everything in `agent/manifest.yaml`.
+
+### Step 3 — Update when this fork changes
+
+```
+@acp.package-update acp-enhanced
+
+> Repository: <https://github.com/ssucipto/acp-enhanced>
+```
+
+Only files that changed since last install are updated. Locally modified files are flagged as conflicts.
+
+---
+
+## Differences from Original ACP
+
+| | Original ACP | ACP Enhanced |
+|---|---|---|
+| Context loading | AI loads files ad hoc | Structured 6-step protocol with token budget |
+| Memory | None beyond git history | Tiered: session / user / repo memory |
+| Task routing | None | Taxonomy-based routing to skill files |
+| Lessons | None | Correction log appended on every mistake |
+| Install | `curl \| bash` from original repo | Bootstrap script + package install from this fork |
+
+The ACP command and workflow system (clarifications → design → plan → proceed) is identical to the original.
+
+---
+
 # What is Agent Context Protocol (ACP)
 ACP is an agent harness. It centers around markdown command files located in a project-level
 or user-level `agent/commands` directory that agents treat as
@@ -206,6 +291,10 @@ many reasons I recommend Claude over any other agent provider).
 
 ## Quick Start
 
+> **Using ACP Enhanced?** See the [Install ACP Enhanced in a New Project](#install-acp-enhanced-in-a-new-project) section above.
+
+The steps below describe the original ACP bootstrap from the upstream repository.
+
 ### Requirements
 
 - **OS**: Linux or macOS
@@ -214,7 +303,7 @@ many reasons I recommend Claude over any other agent provider).
 
 > macOS note: The default `/bin/bash` on macOS is 3.2. Homebrew's bash (`/opt/homebrew/bin/bash` or `/usr/local/bin/bash`) is typically 5.x and works out of the box.
 
-### Bootstrap a New Project
+### Bootstrap a New Project (Original ACP)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.install.sh | bash
@@ -627,6 +716,68 @@ For complete documentation, see [`AGENT.md`](./AGENT.md), which includes:
 - Best practices and conventions
 - Problem-solving patterns
 - Real-world examples
+
+---
+
+## Preferences System
+
+Configure ACP behavior at user, workspace, or project level — without modifying commands or scripts.
+
+### Quick Start
+
+```bash
+# See what's currently active
+@acp.preferences-show acp
+
+# Set a personal default (applies to all your projects)
+@acp.preferences-set acp plan.draft.create_mode guided --user
+
+# Use a one-click workflow preset
+@acp.plan --preset acp.batch-planning
+```
+
+### Preference Levels
+
+| Level | Location | When to use |
+|-------|----------|-------------|
+| **Project** | `agent/preferences/<ns>.default.yaml` | Project conventions |
+| **Workspace** | `.vscode/preferences/<ns>.yaml` | Team / IDE settings |
+| **User** | `~/.acp/agent/preferences/<ns>.default.yaml` | Personal defaults |
+| **Default** | `agent/configurables/<ns>.configurables.yaml` | Package baseline |
+
+**Precedence**: Project > Workspace > User > Default
+
+### Key Preferences
+
+| Preference | Default | Description |
+|------------|---------|-------------|
+| `plan.draft.create_mode` | `structured` | How drafts are created: `structured`, `guided`, `contextual`, `unstructured` |
+| `plan.batch.auto_confirm` | `false` | Skip confirmation prompts in batch mode |
+| `task.create.granularity` | `3` | Default task size in hours (1–8) |
+| `validation.auto_fix.enabled` | `true` | Auto-fix validation issues |
+| `output.verbosity.level` | `normal` | Output level: `quiet`, `normal`, `verbose` |
+
+### Built-in Presets
+
+| Preset | Mode | Auto-confirm | Verbosity |
+|--------|------|-------------|-----------|
+| `acp.batch-planning` | contextual | true | quiet |
+| `acp.interactive-planning` | guided | false | verbose |
+| `acp.rapid-prototyping` | contextual | true | quiet |
+
+Usage: `@acp.plan --preset acp.batch-planning`
+
+### Preference Commands
+
+| Command | Purpose |
+|---------|---------|
+| `@acp.preferences-show acp` | View effective preferences with source |
+| `@acp.preferences-show acp --presets` | List available presets |
+| `@acp.preferences-create --level user` | Create user preference file |
+| `@acp.preferences-set acp <path> <value>` | Set a preference value |
+| `@acp.preferences-validate` | Validate all preference files |
+
+See [AGENT.md](AGENT.md#acp-preferences-system) for complete documentation.
 
 ---
 

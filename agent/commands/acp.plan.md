@@ -4,11 +4,12 @@
 > Pretend this command was entered with this additional context: "Execute directive `@{namespace}-{command-name} NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
-**Version**: 1.0.0  
+**Version**: 2.0.0  
 **Created**: 2026-02-22  
-**Last Updated**: 2026-02-22  
+**Last Updated**: 2026-05-01  
 **Status**: Active  
-**Scripts**: None  
+**Scripts**: `agent/scripts/acp.preferences.sh`  
+**Compatibility**: ACP 6.2.0+ (preferences system required for preference features; backward compatible without it)  
 
 ---
 
@@ -28,6 +29,32 @@ This command supports both CLI-style and natural language arguments:
 - `--task <id>` - Plan specific task
 - `--draft <path>` - Use specific draft file
 - `--no-commit` - Skip the automatic commit step after planning
+- `--preset <preset-name>` - Load a preset preference bundle for this invocation
+- `--plan.draft.create_mode <value>` - Override draft mode preference for this invocation only
+
+**Preset Support**:  
+Presets are named preference bundles that configure multiple preferences at once:
+- `--preset acp.batch-planning` - Contextual mode, auto-confirm, quiet output
+- `--preset acp.interactive-planning` - Guided mode, manual confirm, verbose output
+- `--preset acp.rapid-prototyping` - Contextual mode, auto-commit, minimal output
+
+Run `@acp.preferences-show acp --presets` to see all available presets.
+
+**Preference Overrides**:  
+Any `acp` namespace preference can be overridden using dot notation for a single invocation:
+- `--plan.draft.create_mode structured` - Use structured drafts this time
+- `--plan.draft.create_mode guided` - Collect requirements via chat this time
+- `--plan.batch.auto_confirm true` - Auto-confirm batch operations this time
+
+**Precedence** (highest to lowest):
+1. Command-line overrides (`--plan.draft.create_mode`)
+2. Preset (`--preset`)
+3. Project preferences (`agent/preferences/acp.default.yaml`)
+4. Workspace preferences (`.vscode/preferences/acp.yaml`)
+5. User preferences (`~/.acp/agent/preferences/acp.default.yaml`)
+6. Defaults (from `agent/configurables/acp.configurables.yaml`)
+
+Overrides and presets do **not** modify stored preference files.
 
 **Natural Language Arguments**:
 - `@acp.plan for milestone 6` - Plan specific milestone
@@ -91,6 +118,8 @@ When invoked, immediately display a brief informational header before proceeding
     @acp.plan --task <id>                  Plan specific task
     @acp.plan --draft <path>               Use specific draft file
     @acp.plan --no-commit                  Skip automatic commit after planning
+    @acp.plan --preset acp.batch-planning  Load batch-planning preset
+    @acp.plan --plan.draft.create_mode guided   Override draft mode for this run
 
   Related:
     @acp.task-create     Create individual task documents
@@ -101,9 +130,9 @@ When invoked, immediately display a brief informational header before proceeding
 
 **Expected Outcome**: User sees at a glance what the command does, how to customize it, and what else is available
 
-### 1. Read Contextual Key Files
+### 1. Read Contextual Key Files & Load Preferences
 
-Before planning, load relevant key files from the index.
+Before planning, load relevant key files from the index and resolve active preferences.
 
 **Actions**:
 - Check if `agent/index/` directory exists
@@ -113,6 +142,35 @@ Before planning, load relevant key files from the index.
 - Sort by weight descending
 - Read matching files
 - Produce visible output
+
+**Preference Loading**:
+- Invoke `@acp.preferences-get acp` to load the complete `acp` preference set
+- If `--preset <name>` was provided, call `acp.preferences.sh load-preset acp <name>` and merge preset values (preset wins over project/workspace/user, but loses to explicit overrides)
+- Parse any command-line `--<pref.path> <value>` overrides from the invocation
+- Merge priority: overrides > preset > loaded preferences
+- Store the effective preference map for use in subsequent steps
+- If `@acp.preferences-get` is unavailable or returns nothing, proceed without preferences (backward compatible)
+
+**Preference display** (when preferences loaded):
+```
+📋 Preferences loaded (acp):
+  plan.draft.create_mode: structured  (project)
+  plan.batch.auto_confirm: false       (default)
+```
+
+**Preset display** (when preset provided):
+```
+📦 Preset loaded: acp.batch-planning
+  plan.draft.create_mode: contextual  (preset)
+  plan.batch.auto_confirm: true        (preset)
+  output.verbosity.level: quiet        (preset)
+```
+
+**Override display** (when override provided):
+```
+⚡ Preference override active:
+  plan.draft.create_mode: guided  (command-line override)
+```
 
 **Display format**:
 ```
@@ -127,6 +185,22 @@ Before planning, load relevant key files from the index.
 **Inline entries** (`path: null`): Display truncated description in quotes. Use 📝 for `kind: note`, ⚡ for `kind: directive`.
 
 **Note**: If `agent/index/` does not exist, skip silently.  
+
+### 1.5. Review Architectural Patterns
+
+Scan project patterns to inform planning decisions.
+
+**Actions**:
+- Check if `agent/patterns/` directory exists
+- If it exists, list all files in `agent/patterns/`
+- Read patterns relevant to what is being planned:
+  - Architectural patterns that constrain milestone/task structure
+  - Patterns related to the domain being planned
+  - Up to 3-5 patterns maximum — prioritize by relevance
+- Note constraints and conventions that milestone definitions must respect
+- Reference relevant patterns in milestone/task documents when applicable
+
+**Note**: If `agent/patterns/` does not exist, skip silently.  
 
 ### 2. Scan for Undefined Planning Items
 
@@ -190,15 +264,34 @@ What would you like to do?
 Based on user selection, gather requirements:
 
 **Option A: Design Document First**
-- Ask: "Structured draft (with questions) or unstructured draft (free-form)?"
-- If structured: Create `agent/drafts/{requirement-title}-design.draft.md` with 3 key questions:
+
+Determine draft creation mode using preference resolution (highest to lowest precedence):
+
+1. **Check command-line override** — if `--plan.draft.create_mode <value>` was passed, use it:
+   - Inform user: `Using draft mode: {value} (command-line override)`
+2. **Check loaded preferences** — extract `plan.draft.create_mode` from effective preference map:
+   - If present, use it: `Using draft mode: {value} (from {source} preferences)`
+3. **No preference set** — ask the user:
+   - Ask: "Structured draft (with questions), unstructured draft (free-form), guided (chat-only), or contextual (infer from context)?"
+
+**Preference source wording**:
+- Project file: `from project preferences`
+- Workspace file: `from workspace preferences`
+- User file: `from user preferences`
+- Configurables default: `default`
+
+**Draft behaviour by mode**:
+- `structured` → Create `agent/drafts/{requirement-title}-design.draft.md` with 3 key questions:
+- `unstructured` → Create empty `agent/drafts/{requirement-title}-design.draft.md`, wait for user to fill
+- `guided` → Collect all requirements via chat conversation; **no draft file created**
+- `contextual` → Infer requirements entirely from current context; **no draft file created**, output summary in chat
+
+**For `structured` mode** — the 3 key questions:
   1. **What problem does this solve?** (Problem statement)
   2. **What is the proposed solution?** (High-level approach)
   3. **What are the key technical decisions?** (Architecture, patterns, trade-offs)
-- If unstructured: Create empty `agent/drafts/{requirement-title}-feature.draft.md` or `agent/design/{requirement-title}-feature.draft.md`
-- Wait for user to fill draft
-- Read completed draft
-- Create full design document from draft responses
+
+After structured/unstructured draft is filled by user: read completed draft and create full design document from responses.
 
 **Option B: Requirements Document First**
 - Ask: "Structured draft (with questions) or unstructured draft (free-form)?"
@@ -515,6 +608,50 @@ Would you like to:
 User: c
 
 [Collects requirements in chat, creates milestone and tasks...]
+```
+
+### Example 5: Using Preferences (Preference Set)
+
+**Context**: User has `plan.draft.create_mode: contextual` in their user preferences
+
+**Invocation**: `@acp.plan`
+
+**Result**:
+```
+⚡ @acp.plan
+  ...
+
+📋 Preferences loaded (acp):
+  plan.draft.create_mode: contextual  (user)
+
+✅ All current items are defined.
+
+What would you like to plan?
+  1. New milestone
+  2. ...
+
+User: 1
+
+Describe the new feature/milestone:
+User: Add real-time collaboration
+
+Using draft mode: contextual (from user preferences)
+
+[Infers requirements from context, creates milestone and tasks directly — no draft file]
+```
+
+### Example 6: Overriding a Preference for One Invocation
+
+**Context**: User's preference is `structured` but wants `guided` mode just this time
+
+**Invocation**: `@acp.plan --plan.draft.create_mode guided`
+
+**Result**:
+```
+⚡ Preference override active:
+  plan.draft.create_mode: guided  (command-line override)
+
+[Proceeds to collect requirements via chat conversation — preference file unchanged]
 ```
 
 ---
