@@ -6,11 +6,11 @@ project:
   version: 6.2.2
   started: 2026-02-16
   status: in_progress
-  current_milestone: M20
+  current_milestone: M21
   description: |
     Agent Context Protocol (ACP) - A documentation-first development methodology
-    for AI agents. M20 in progress: consistency cleanup — fixing @acp- hyphen
-    notation across all command files, adding missing package.yaml entries.
+    for AI agents. M21 in progress: functional readiness audit — fixing onboarding
+    blockers, template placeholders, version consistency, and package.yaml gaps.
 
 milestones:
   M1:
@@ -399,6 +399,20 @@ milestones:
   M20:
     name: Consistency Cleanup and Notation Standardization
     priority: 4
+    status: completed
+    progress: 100
+    started: 2026-05-01
+    completed: 2026-05-01
+    estimated_weeks: 1
+    tasks_completed: 5
+    tasks_total: 5
+    file: agent/milestones/milestone-20-consistency-cleanup.md
+    notes: |
+      ✅ Milestone 20 complete. See CHANGELOG [6.2.2] M20 section.
+
+  M21:
+    name: Functional Readiness Audit
+    priority: 5
     status: in_progress
     progress: 95
     started: 2026-05-01
@@ -406,15 +420,14 @@ milestones:
     estimated_weeks: 1
     tasks_completed: 4
     tasks_total: 5
-    file: agent/milestones/milestone-20-consistency-cleanup.md
+    file: agent/milestones/milestone-21-functional-readiness.md
     notes: |
-      📋 Milestone 20: Second comprehensive audit found 20+ bugs in notation,
-      package.yaml omissions, and missing CHANGELOG entry.
-      - BUG-A (9 files): Directive headers using @acp- hyphen → fixed to @acp. dot
-      - BUG-B (5 files): Body text using @acp- hyphen in examples/related sections
-      - BUG-C: AGENT.md directory tree comments using hyphen notation
-      - BUG-D (13 commands, 1 script): Missing from package.yaml contents
-      - BUG-E: CHANGELOG missing entry for afcf61d audit fixes (post-M19)
+      📋 Milestone 21: Third comprehensive audit — functional and new-project readiness.
+      - BUG-A (9 files): @{namespace}-{command-name} unfilled template placeholder in pretend-context
+      - BUG-B (CRITICAL): README.md curl URL uses main branch (404) — should be mainline
+      - BUG-C (3 files): version 6.2.1 in package.yaml, AGENT.md, identity.yml — should be 6.2.2
+      - BUG-D (7 scripts): acp.project-info/remove/update/restore/sync, meta-scan, install-optimized missing from package.yaml scripts section
+      - BUG-E: No [6.2.2] CHANGELOG block for M20 fixes
 
 tasks:
   M1:
