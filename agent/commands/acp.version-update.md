@@ -1,6 +1,6 @@
 # Command: version-update
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp-version-update` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `@acp.version-update` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  

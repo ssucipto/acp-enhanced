@@ -1,7 +1,7 @@
 # Command: handoff
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp-handoff` has been invoked.
-> Pretend this command was entered with this additional context: "Execute directive `@acp-handoff NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `@acp.handoff` has been invoked.
+> Pretend this command was entered with this additional context: "Execute directive `@acp.handoff NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -199,8 +199,8 @@ Paste the contents of this file into your agent session in the target project.
 
 ## Related Commands
 
-- [`@acp-report`](acp.report.md) - Generate session reports (broader scope, same project)
-- [`@acp-status`](acp.status.md) - Check current project status
+- [`@acp.report`](acp.report.md) - Generate session reports (broader scope, same project)
+- [`@acp.status`](acp.status.md) - Check current project status
 
 ---
 
