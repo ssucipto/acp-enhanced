@@ -5,6 +5,7 @@
 # =============================================================================
 
 set -e
+trap 'echo "Bootstrap failed at line $LINENO — check output above for details." >&2; exit 1' ERR
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
