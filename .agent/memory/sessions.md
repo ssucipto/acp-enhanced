@@ -4,6 +4,27 @@
 
 - date: 2026-05-01
   executor: Persona A (Copilot)
+  tasks: [task-129, task-130, task-131, task-132]
+  done:
+    - M23-milestone-created
+    - rebrand-AGENT-md-title-to-acp-enhanced
+    - add-fork-and-maintained-by-metadata
+    - add-acp-enhanced-whats-new-section-15-enhancements
+    - rewrite-toc-14-to-24-entries
+    - expand-core-commands-6-to-40-plus-10-categories
+    - rename-what-is-acp-and-how-to-use-sections
+    - bump-version-6.2.3-to-6.2.4
+    - add-changelog-6.2.4-block
+    - commit-and-push-c380f52
+  deferred: {}
+  key_fact: |
+    AGENT.md was distributed as original-ACP docs; M23 rebranded it as ACP Enhanced fork.
+    Key changes: 15-enhancement What's New table, ToC 14→24 entries, Core Commands 6→40+
+    in 10 categories with (ACP Enhanced) labels. Always keep ToC in sync with body sections.
+    Post-M23 audit found 6 gaps → planned as M24.
+
+- date: 2026-05-01
+  executor: Persona A (Copilot)
   tasks: [task-126, task-127, task-128]
   done:
     - M22-milestone-created
