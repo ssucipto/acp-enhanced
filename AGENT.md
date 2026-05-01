@@ -1,7 +1,7 @@
 # Agent Context Protocol (ACP)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.2.2
+**Version**: 6.2.3
 **Created**: 2026-02-11
 **Status**: Production Pattern
 
@@ -90,20 +90,29 @@ ACP solves these by:
 ```
 project-root/
 ├── AGENT.md                        # This file - ACP documentation
+├── AGENTS.md                       # AI context loading protocol (.agent/ framework)
 ├── agent/                          # Agent directory (ACP structure)
 │   ├── commands/                   # Command system
-│   │   ├── .gitkeep
 │   │   ├── command.template.md     # Command template
 │   │   ├── acp.init.md             # @acp.init
 │   │   ├── acp.proceed.md          # @acp.proceed
 │   │   ├── acp.status.md           # @acp.status
 │   │   └── ...                     # More commands
 │   │
+│   ├── scripts/                    # Shell utility scripts
+│   │   ├── acp.common.sh           # Shared utility functions
+│   │   ├── acp.yaml-parser.sh      # Pure-bash YAML parser
+│   │   ├── acp.install.sh          # ACP installation
+│   │   └── ...                     # Package and workflow scripts
+│   │
+│   ├── schemas/                    # YAML schema definitions
+│   │   ├── package.schema.yaml     # Schema for package.yaml
+│   │   ├── progress.schema.yaml    # Schema for progress.yaml
+│   │   └── projects.schema.yaml    # Schema for projects.yaml
+│   │
 │   ├── design/                     # Design documents (how-it-works, rationale)
-│   │   ├── .gitkeep
 │   │   ├── requirements.md         # Core requirements
-│   │   ├── {feature}-design.md    # Feature specifications
-│   │   ├── {pattern}-pattern.md   # Design patterns
+│   │   ├── {feature}-design.md     # Feature specifications
 │   │   └── ...
 │   │
 │   ├── specs/                      # Formal specifications (what must be true)
@@ -111,25 +120,34 @@ project-root/
 │   │   └── ...                     # Created by @acp.spec, consumed by @acp.task-create
 │   │
 │   ├── milestones/                 # Project milestones
-│   │   ├── .gitkeep
 │   │   ├── milestone-1-{name}.md
-│   │   ├── milestone-2-{name}.md
-│   │   └── ...
-│   │
-│   ├── patterns/                   # Architectural patterns
-│   │   ├── .gitkeep
-│   │   ├── bootstrap.md            # Project setup pattern
-│   │   ├── {pattern-name}.md
 │   │   └── ...
 │   │
 │   ├── tasks/                      # Granular tasks
-│   │   ├── .gitkeep
 │   │   ├── milestone-{N}-{title}/  # Tasks grouped by milestone (standard)
 │   │   │   ├── task-{M}-{name}.md
 │   │   │   └── ...
 │   │   ├── unassigned/             # Tasks without milestone
 │   │   │   └── task-{M}-{name}.md
 │   │   └── task-{N}-{name}.md      # Legacy flat structure (older tasks)
+│   │
+│   ├── patterns/                   # Architectural patterns
+│   │   ├── bootstrap.md            # Project setup pattern
+│   │   └── {pattern-name}.md
+│   │
+│   ├── artifacts/                  # Long-lived research and reference artifacts
+│   │   ├── glossary.template.md    # Template for glossary artifacts
+│   │   ├── reference.template.md   # Template for reference artifacts
+│   │   └── research.template.md    # Template for research artifacts
+│   │
+│   ├── benchmarks/                 # E2E benchmark suite (ACP vs baseline)
+│   │   ├── runner/                 # Runner scripts and evaluator prompt
+│   │   └── suite/                  # Benchmark task definitions
+│   │
+│   ├── clarifications/             # Clarification documents
+│   │   └── clarification-{N}-{title}.md   # Created by @acp.clarification-create
+│   │
+│   ├── feedback/                   # Agent feedback and improvement notes
 │   │
 │   ├── configurables/              # Preference definitions
 │   │   ├── acp.configurables.yaml  # ACP namespace preference schema
@@ -142,16 +160,12 @@ project-root/
 │   │   ├── acp.rapid-prototyping.yaml    # Preset: fast iteration
 │   │   └── {pkg}.default.yaml      # Package project-level defaults
 │   │
-│   ├── files/                      # Template source files (in packages)
-│   │   ├── config/                 # Config templates
-│   │   └── src/                    # Source code templates
-│   │
 │   ├── index/                      # Key file index
-│   │   ├── .gitkeep
 │   │   ├── local.main.yaml         # Project's own key files
-│   │   ├── local.main.template.yaml# Template with schema docs
+│   │   ├── local.main.template.yaml # Template with schema docs
 │   │   └── {pkg}.main.yaml         # Package-shipped indices
 │   │
+│   ├── manifest.yaml               # Installed package tracking
 │   └── progress.yaml               # Progress tracking
 │
 └── (project-specific files)        # Your project structure
@@ -844,7 +858,7 @@ Invoke [`@acp.command-create`](agent/commands/acp.command-create.md) and follow 
 
 ### Installing Third-Party Commands
 
-Use `@acp.install` to install command packages from git repositories (available in future release).
+Use `@acp.package-install` to install command packages from git repositories.
 
 **Security Note**: Third-party commands can instruct agents to modify files and execute scripts. Always review command files before installation.
 
@@ -1483,12 +1497,12 @@ Run ./agent/scripts/acp.version-check-for-updates.sh to see if ACP updates are a
 Removes all ACP files from the project:
 
 ```markdown
-Run ./agent/scripts/unacp.install.sh to remove all ACP files (agent/ directory and AGENT.md) from this project.
+Run ./agent/scripts/acp.uninstall.sh to remove all ACP files (agent/ directory and AGENT.md) from this project.
 ```
 
 **Note**: This script requires user confirmation. If the user confirms they want to uninstall, run:
 ```bash
-./agent/scripts/unacp.install.sh -y
+./agent/scripts/acp.uninstall.sh -y
 ```
 
 **Purpose**:
