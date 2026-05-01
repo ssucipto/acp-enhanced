@@ -212,6 +212,33 @@ Check for globally installed ACP packages.
 
 **Note**: This step is optional and graceful - if no global packages exist or manifest is not found, continue without error.  
 
+### 2.75. Review Project Patterns
+
+**Skip item**: `patterns`  
+
+Load architectural patterns and coding standards before reviewing source files.
+
+**Actions**:
+- Check if `agent/patterns/` directory exists
+- If it exists, list all files in `agent/patterns/`
+- Read patterns relevant to the current project type:
+  - Always read `bootstrap.md` or any `*.bootstrap.md` if present
+  - Read language-specific patterns matching the project stack
+  - Read up to 3-5 of the most relevant patterns (do NOT read all)
+- Note key architectural decisions and coding conventions
+
+**Display format**:
+```
+📐 Reviewing Project Patterns...
+  ✓ agent/patterns/local.e2e-testing.md
+  ✓ agent/patterns/local.script-structure.md
+  ○ agent/patterns/local.typescript-modules.md (skipped — not relevant)
+
+  2 patterns read
+```
+
+**Note**: If `agent/patterns/` does not exist, skip silently. Do NOT spend excessive time here.  
+
 ### 2.8. Read Key Files from Index
 
 **Skip item**: `keys`  

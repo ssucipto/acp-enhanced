@@ -123,6 +123,22 @@ Before creating content, load relevant key files from the index.
 
 **Note**: If `agent/index/` does not exist, skip silently.  
 
+### 2.6. Review Relevant Patterns
+
+Scan patterns relevant to the task being created.
+
+**Actions**:
+- Check if `agent/patterns/` directory exists
+- List all pattern files
+- Read patterns relevant to the task's objective:
+  - Patterns that inform the implementation approach
+  - Patterns that constrain what steps the task should specify
+  - Up to 3 most relevant patterns
+- Reference relevant patterns in the task document if applicable
+- Consider patterns when defining task steps
+
+**Note**: If `agent/patterns/` does not exist, skip silently.  
+
 ### 2.7. Capture Clarification Context
 
 Invoke the `@acp.clarification-capture` shared directive to capture decisions from clarifications and/or chat context.
