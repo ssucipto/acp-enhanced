@@ -21,7 +21,7 @@ echo "  ACP E2E Test Runner"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
-for test_file in "$SCRIPT_DIR"/e2e/*.test.sh; do
+for test_file in "$SCRIPT_DIR"/e2e/*.test.sh "$SCRIPT_DIR"/tests/*.test.sh; do
     test_name="$(basename "$test_file")"
 
     # Apply filter if provided
