@@ -24,39 +24,49 @@ setup_fixtures() {
   # Minimal configurables so get_preference fallback works
   cat > "${FIXTURE_DIR}/agent/configurables/testns.configurables.yaml" << 'EOF'
 testns:
-  plan.draft.create_mode:
-    id: 'plan.draft.create_mode'
-    description: How plan drafts are created
-    default: structured
-    type: string
-    options:
-      - name: structured
-        value: structured
-        description: Structured draft
-      - name: contextual
-        value: contextual
-        description: Contextual draft
-      - name: guided
-        value: guided
-        description: Guided draft
+  _index:
+    - plan.draft.create_mode
+  plan:
+    draft:
+      create_mode:
+        id: 'plan.draft.create_mode'
+        description: How plan drafts are created
+        default: structured
+        type: string
+        options:
+          - name: structured
+            value: structured
+            description: Structured draft
+          - name: contextual
+            value: contextual
+            description: Contextual draft
+          - name: guided
+            value: guided
+            description: Guided draft
 EOF
 
   # Project-level default
   cat > "${FIXTURE_DIR}/agent/preferences/testns.default.yaml" << 'EOF'
 testns:
-  plan.draft.create_mode: structured
+  plan:
+    draft:
+      create_mode: structured
 EOF
 
   # Named preset file (project-level)
   cat > "${FIXTURE_DIR}/agent/preferences/testns.test-preset.yaml" << 'EOF'
 testns:
-  plan.draft.create_mode: contextual
+  plan:
+    draft:
+      create_mode: contextual
 EOF
 
   # A second preset for list_presets tests
   cat > "${FIXTURE_DIR}/agent/preferences/testns.another-preset.yaml" << 'EOF'
 testns:
-  plan.draft.create_mode: guided
+  plan:
+    draft:
+      create_mode: guided
 EOF
 }
 
