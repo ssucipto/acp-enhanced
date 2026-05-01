@@ -1,7 +1,9 @@
-# Agent Context Protocol (ACP)
+# Agent Context Protocol Enhanced (ACP Enhanced)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.2.3
+**Version**: 6.2.4
+**Fork of**: [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol)
+**Maintained by**: [ssucipto/acp-enhanced](https://github.com/ssucipto/acp-enhanced)
 **Created**: 2026-02-11
 **Status**: Production Pattern
 
@@ -10,39 +12,83 @@
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [What is the Agent Pattern?](#what-is-the-agent-pattern)
-3. [Why This Pattern Exists](#why-this-pattern-exists)
-4. [Directory Structure](#directory-structure)
-5. [Core Components](#core-components)
-6. [Metadata Markers](#metadata-markers)
-7. [How to Use the Agent Pattern](#how-to-use-the-agent-pattern)
-8. [Pattern Significance & Impact](#pattern-significance--impact)
-9. [Problems This Pattern Solves](#problems-this-pattern-solves)
-10. [Key File Index](#key-file-index)
-11. [Instructions for Future Agents](#instructions-for-future-agents)
-12. [Best Practices](#best-practices)
+2. [ACP Enhanced — What's New](#acp-enhanced--whats-new)
+3. [What is ACP Enhanced?](#what-is-acp-enhanced)
+4. [Why This Pattern Exists](#why-this-pattern-exists)
+5. [Directory Structure](#directory-structure)
+6. [Core Components](#core-components)
+7. [Metadata Markers](#metadata-markers)
+8. [How to Use ACP Enhanced](#how-to-use-acp-enhanced)
+9. [Pattern Significance & Impact](#pattern-significance--impact)
+10. [Problems This Pattern Solves](#problems-this-pattern-solves)
+11. [ACP Commands](#acp-commands)
+12. [ACP Preferences System](#acp-preferences-system)
+13. [Global Package Discovery](#global-package-discovery)
+14. [Project Registry System](#project-registry-system)
+15. [Sessions System](#sessions-system)
+16. [Experimental Features](#experimental-features)
+17. [Benchmark Suite](#benchmark-suite)
+18. [Template Source Files](#template-source-files)
+19. [Key File Index](#key-file-index)
+20. [Sample Prompts](#sample-prompts-for-using-acp)
+21. [Instructions for Future Agents](#instructions-for-future-agents)
+22. [Best Practices](#best-practices)
     - [Critical Rules](#critical-rules)
     - [Workflow Best Practices](#workflow-best-practices)
     - [Documentation Best Practices](#documentation-best-practices)
     - [Organization Best Practices](#organization-best-practices)
     - [Progress Tracking Best Practices](#progress-tracking-best-practices)
     - [Quality Best Practices](#quality-best-practices)
-13. [What NOT to Do](#what-not-to-do)
-14. [Keeping ACP Updated](#keeping-acp-updated)
+23. [What NOT to Do](#what-not-to-do)
+24. [Keeping ACP Updated](#keeping-acp-updated)
 
 ---
 
 ## Overview
 
-The **Agent Context Protocol (ACP)** is a comprehensive documentation and planning system designed to enable AI agents to understand, build, and maintain complex software projects through structured knowledge capture. It transforms implicit project knowledge into explicit, machine-readable documentation that persists across agent sessions.
+**ACP Enhanced** is a fork and significant extension of [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol). The original ACP defines a documentation-first `agent/` directory pattern that helps AI agents maintain project context across sessions. ACP Enhanced builds on that foundation with a complete tooling ecosystem: a package management system, a context loading protocol, a preferences system, a project registry, a sessions system, a benchmark suite, and much more.
 
 **Core Principle**: *Every decision, pattern, and requirement should be documented in a way that allows a future agent (or human) to understand the project's complete context without needing to reverse-engineer the codebase.*
 
 ---
 
-## What is ACP?
+## ACP Enhanced — What's New
 
-The **Agent Context Protocol (ACP)** is a **documentation-first development methodology** that creates a parallel knowledge base alongside your source code. It consists of:
+The following capabilities are **ACP Enhanced additions** that do not exist in the original prmichaelsen/agent-context-protocol:
+
+| Enhancement | Description | Since |
+|-------------|-------------|-------|
+| **Context Loading Protocol** | 6-step deterministic protocol (`AGENTS.md`) backed by a `.agent/` framework with skills, memory, routing, and wiki layers. Ensures reproducible session startup. | M0 |
+| **Package Management** | 50+ commands and 28 scripts for installing, publishing, and managing ACP command packages from git repositories. Includes a manifest system, schema validation, and namespace enforcement. | M3–M9 |
+| **Preferences System** | 4-level preference hierarchy (project > workspace > user > default) with configurables, named presets, and per-invocation CLI overrides. | M6 |
+| **Project Registry** | Global `~/.acp/projects.yaml` tracking for discovering, switching between, and managing ACP projects. Integrates with `@acp.init`. | M7 |
+| **Sessions System** | Multi-agent session visibility via `~/.acp/sessions.yaml`. Agents can see what other agents are doing across terminal tabs. Advisory-only (no locking). | M12 |
+| **Key File Index** | `agent/index/` weight-based system for declaring which files agents must read first. `@acp.init` auto-loads all files with weight ≥ 0.8. | M14 |
+| **Clarification Capture** | `@acp.clarification-*` commands for capturing, deduplicating, and synthesizing stakeholder clarifications into design/task/pattern creation. | M15 |
+| **Design Reference System** | `@acp.design-reference` directive for cross-referencing design elements (D-IDs) into task creation and implementation. | M16 |
+| **Artifact Commands** | `@acp.artifact-research`, `@acp.artifact-glossary`, `@acp.artifact-reference` — commands for creating long-lived, living reference documents. | M17 |
+| **Metadata Markers** | Machine-readable `@acp.meta.*` sentinel system for R<N> spec requirements and D<N> design units. Powers `@acp.sync` spec↔task↔code traceability. | M18 |
+| **Specs System** | `agent/specs/` formal specification documents with R<N> requirement IDs. `@acp.task-create` auto-populates `Spec Coverage` from matching specs. | M14–M18 |
+| **Benchmark Suite** | `agent/benchmarks/` automated E2E suite measuring ACP vs baseline outcomes across 6 task types (simple → complex). LLM rubric evaluation and HTML reports. | M11 |
+| **YAML Parser** | Pure-bash generic YAML parser (`acp.yaml-parser.sh`) with AST, path expressions, and full CRUD API. Zero external dependencies. | M4 |
+| **Cross-platform CI** | GitHub Actions workflow running E2E tests on both `ubuntu-latest` and `macos-latest` (BSD compatibility enforced). | M13 |
+| **Index Semantic Entry Types** | Extended key file index with `kind: note` and `kind: directive` for inline path-null entries; `@acp.meta.*` marker integration. | M18 |
+
+### What the Original ACP Provides
+
+The upstream `prmichaelsen/agent-context-protocol` provides the foundational `agent/` directory pattern:
+- `agent/design/`, `agent/milestones/`, `agent/tasks/`, `agent/patterns/` directory structure
+- `agent/progress.yaml` for machine-readable progress tracking
+- A handful of core commands: `@acp.init`, `@acp.proceed`, `@acp.status`, `@acp.version-*`
+- `AGENT.md` (this file) as the installed documentation artifact
+
+ACP Enhanced retains 100% backward compatibility with the original pattern. Projects using the original ACP can install ACP Enhanced and gain all enhancements without changes to existing files.
+
+---
+
+## What is ACP Enhanced?
+
+**ACP Enhanced** is a **documentation-first development methodology** that creates a parallel knowledge base alongside your source code, plus a full tooling ecosystem for package management, preferences, project registry, sessions, and more. Its foundation consists of:
 
 1. **Design Documents** - Architectural decisions, how-it-works rationale, technical approach
 2. **Specs** - Formal specifications: explicit requirements (R<N> IDs), behavior tables, test cases. The source of truth for *what must be true* about a feature
@@ -601,7 +647,7 @@ If a pre-marker file still carries a duplicated prose field (`**Status**`, `**La
 
 ---
 
-## How to Use the Agent Pattern
+## How to Use ACP Enhanced
 
 ### For Starting a New Project
 
@@ -830,12 +876,71 @@ Commands are markdown files in [`agent/commands/`](agent/commands/) that contain
 
 Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`](agent/commands/):
 
-- **[`@acp.init`](agent/commands/acp.init.md)** - Initialize agent context (replaces "AGENT.md: Initialize")
-- **[`@acp.proceed`](agent/commands/acp.proceed.md)** - Continue with next task (replaces "AGENT.md: Proceed")
-- **[`@acp.status`](agent/commands/acp.status.md)** - Display project status
-- **[`@acp.version-check`](agent/commands/acp.version-check.md)** - Show current ACP version
-- **[`@acp.version-check-for-updates`](agent/commands/acp.version-check-for-updates.md)** - Check for ACP updates
-- **[`@acp.version-update`](agent/commands/acp.version-update.md)** - Update ACP to latest version
+**Workflow**
+- **[`@acp.init`](agent/commands/acp.init.md)** - Initialize agent context; loads key files, registers session, reports global packages
+- **[`@acp.proceed`](agent/commands/acp.proceed.md)** - Continue with next task (single-task or autonomous multi-task mode)
+- **[`@acp.plan`](agent/commands/acp.plan.md)** - Plan project milestones and tasks from requirements
+- **[`@acp.status`](agent/commands/acp.status.md)** - Display project status and active sessions
+- **[`@acp.report`](agent/commands/acp.report.md)** - Generate a completion report; deregisters session
+- **[`@acp.handoff`](agent/commands/acp.handoff.md)** - Prepare handoff documentation for another agent
+- **[`@acp.audit`](agent/commands/acp.audit.md)** - Audit ACP files for consistency and drift
+
+**Planning**
+- **[`@acp.design-create`](agent/commands/acp.design-create.md)** - Create a design document
+- **[`@acp.design-reference`](agent/commands/acp.design-reference.md)** - Cross-reference design elements (D-IDs) into tasks
+- **[`@acp.spec`](agent/commands/acp.spec.md)** - Create a formal specification with R\<N\> requirements
+- **[`@acp.task-create`](agent/commands/acp.task-create.md)** - Create a task; auto-populates Spec Coverage from matching spec
+- **[`@acp.pattern-create`](agent/commands/acp.pattern-create.md)** - Create a reusable architectural pattern
+- **[`@acp.command-create`](agent/commands/acp.command-create.md)** - Create a custom command doc
+
+**Clarification**
+- **[`@acp.clarification-create`](agent/commands/acp.clarification-create.md)** - Create a clarification document (with duplicate awareness)
+- **[`@acp.clarification-capture`](agent/commands/acp.clarification-capture.md)** - Synthesize clarifications into entity creation steps
+- **[`@acp.clarification-address`](agent/commands/acp.clarification-address.md)** - Mark a clarification as addressed
+
+**Artifacts**
+- **[`@acp.artifact-research`](agent/commands/acp.artifact-research.md)** - Create a research artifact (plan → execute → synthesize)
+- **[`@acp.artifact-glossary`](agent/commands/acp.artifact-glossary.md)** - Create a glossary artifact (auto-extract + interactive refine)
+- **[`@acp.artifact-reference`](agent/commands/acp.artifact-reference.md)** - Create a reference artifact (command-first sanity check)
+
+**Package Management** *(ACP Enhanced)*
+- **[`@acp.package-install`](agent/commands/acp.package-install.md)** - Install a package from a git repository
+- **[`@acp.package-list`](agent/commands/acp.package-list.md)** - List installed packages
+- **[`@acp.package-info`](agent/commands/acp.package-info.md)** - Show package details
+- **[`@acp.package-update`](agent/commands/acp.package-update.md)** - Update installed packages
+- **[`@acp.package-remove`](agent/commands/acp.package-remove.md)** - Remove a package
+- **[`@acp.package-search`](agent/commands/acp.package-search.md)** - Search GitHub for ACP packages
+- **[`@acp.package-create`](agent/commands/acp.package-create.md)** - Scaffold a new ACP package
+- **[`@acp.package-publish`](agent/commands/acp.package-publish.md)** - Publish a package to GitHub
+- **[`@acp.package-validate`](agent/commands/acp.package-validate.md)** - Validate package files and schema
+
+**Preferences** *(ACP Enhanced)*
+- **[`@acp.preferences-show`](agent/commands/acp.preferences-show.md)** - View effective preferences with source attribution
+- **[`@acp.preferences-create`](agent/commands/acp.preferences-create.md)** - Create a preference file at a given level
+- **[`@acp.preferences-set`](agent/commands/acp.preferences-set.md)** - Set a preference value
+- **[`@acp.preferences-validate`](agent/commands/acp.preferences-validate.md)** - Validate all preference files
+
+**Project Registry** *(ACP Enhanced)*
+- **[`@acp.project-create`](agent/commands/acp.project-create.md)** - Create and register a new project
+- **[`@acp.project-list`](agent/commands/acp.project-list.md)** - List registered projects with filtering
+- **[`@acp.project-set`](agent/commands/acp.project-set.md)** - Switch to a project (set as current)
+- **[`@acp.project-info`](agent/commands/acp.project-info.md)** - Show detailed project information
+- **[`@acp.project-update`](agent/commands/acp.project-update.md)** - Update project metadata
+- **[`@acp.project-remove`](agent/commands/acp.project-remove.md)** - Remove project from registry
+- **[`@acp.projects-sync`](agent/commands/acp.projects-sync.md)** - Discover and register existing projects
+
+**Sessions** *(ACP Enhanced)*
+- **[`@acp.sessions`](agent/commands/acp.sessions.md)** - List, clean, deregister, or count active agent sessions
+
+**Key File Index** *(ACP Enhanced)*
+- **[`@acp.index`](agent/commands/acp.index.md)** - Manage the key file index (list, add, remove, explore, show)
+
+**Version & Sync**
+- **[`@acp.version-check`](agent/commands/acp.version-check.md)** - Show current ACP Enhanced version
+- **[`@acp.version-check-for-updates`](agent/commands/acp.version-check-for-updates.md)** - Check for ACP Enhanced updates
+- **[`@acp.version-update`](agent/commands/acp.version-update.md)** - Update ACP Enhanced to latest version
+- **[`@acp.sync`](agent/commands/acp.sync.md)** - Sync spec↔task↔code cross-references; flag unclaimed requirements and stale markers
+- **[`@acp.validate`](agent/commands/acp.validate.md)** - Validate ACP file health and index consistency
 
 ### Command Invocation
 

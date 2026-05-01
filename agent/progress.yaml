@@ -3,14 +3,14 @@
 
 project:
   name: agent-context-protocol
-  version: 6.2.3
+  version: 6.2.4
   started: 2026-02-16
   status: in_progress
-  current_milestone: M22
+  current_milestone: M23
   description: |
-    Agent Context Protocol (ACP) - A documentation-first development methodology
-    for AI agents. M22 complete: documentation accuracy audit — AGENT.md directory tree,
-    stale command references, and bootstrap template bash-safety anti-patterns.
+    Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
+    of prmichaelsen/agent-context-protocol. M23 complete: AGENT.md rebranded to ACP Enhanced
+    with What's New section, complete ToC, and categorized command reference.
 
 milestones:
   M1:
@@ -446,6 +446,24 @@ milestones:
         (artifacts/, benchmarks/, clarifications/, feedback/, schemas/, scripts/, template files at root)
       - FIX-B: AGENT.md stale refs — @acp.install → @acp.package-install; unacp.install.sh → acp.uninstall.sh
       - FIX-C: scripts/AGENTS.md bootstrap template — added 2 bash-safety anti-patterns (set -e trapping, macOS BSD compat)
+
+  M23:
+    name: ACP Enhanced Identity
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-05-01
+    completed: 2026-05-01
+    estimated_weeks: 1
+    tasks_completed: 4
+    tasks_total: 4
+    file: agent/milestones/milestone-23-acp-enhanced-identity.md
+    notes: |
+      ✅ Milestone 23 complete: AGENT.md rebranded from original ACP to ACP Enhanced.
+      - Title, metadata, overview updated to reflect ACP Enhanced fork identity
+      - New "ACP Enhanced — What's New" section with 15-row enhancement table
+      - Complete ToC (24 entries, up from 14) — all body sections now listed
+      - Core Commands expanded from 6 to 40+ entries, grouped by 10 categories
 
 tasks:
   M1:
@@ -2435,6 +2453,7 @@ progress:
   M17: 100
   M21: 100
   M22: 100
+  M23: 100
 
   M18:
     - id: task-120
