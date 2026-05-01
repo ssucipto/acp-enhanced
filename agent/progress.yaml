@@ -485,6 +485,23 @@ milestones:
       - Session memory (M23), retroactive M17 milestone doc, version bump to 6.2.5
       - 4 tasks (133-136)
 
+  M25:
+    name: ACP Progress Visualizer (P0 MVP)
+    priority: 5
+    status: not_started
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 3
+    tasks_completed: 0
+    tasks_total: 8
+    file: agent/milestones/milestone-25-acp-progress-visualizer.md
+    notes: |
+      Greenfield TanStack Start app in new repo (agent-context-protocol-visualizer).
+      P0 MVP: table view, tree view, search, filter, file-watcher auto-refresh.
+      Tech: TanStack Start (React), Tailwind CSS, @tanstack/react-table, fuse.js, js-yaml.
+      P1 (kanban, GitHub remote, multi-project) = M26.
+
 tasks:
   M1:
     - id: task-1
@@ -2475,17 +2492,18 @@ progress:
   M22: 100
   M23: 100
   M24: 100
+  M25: 0
 
   M24:
     - id: task-133
       name: Add Missing Commands to AGENT.md Core Commands
       priority: 5
-      status: in_progress
+      status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-24-agent-md-completeness/task-133-add-missing-commands.md
       estimated_hours: 1-2
-      actual_hours: null
-      completed_date: null
+      actual_hours: 0.5
+      completed_date: 2026-05-01T01:00:00Z
       notes: |
         Add @acp.resume (Workflow), @acp.update (Version & Sync), @acp.preferences-get
         (Preferences), @acp.projects-restore (Project Registry), and git namespace section
@@ -2539,6 +2557,95 @@ progress:
         Bumped version 6.2.4 → 6.2.5 in AGENT.md, package.yaml, .agent/core/identity.yml.
         Added [6.2.5] CHANGELOG block above [6.2.4] block.
         M24 milestone complete (4/4 tasks). current_milestone updated to M25.
+
+  M25:
+    - id: task-137
+      name: Bootstrap Repository + TanStack Start
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-25-acp-progress-visualizer/task-137-bootstrap-repository.md
+      estimated_hours: 3-4
+      actual_hours: null
+      completed_date: null
+      notes: Create agent-context-protocol-visualizer GitHub repo, init TanStack Start with Tailwind, verify npm run dev.
+
+    - id: task-138
+      name: YAML Parser + TypeScript Data Model
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-25-acp-progress-visualizer/task-138-yaml-parser-data-model.md
+      estimated_hours: 2-3
+      actual_hours: null
+      completed_date: null
+      notes: TypeScript interfaces (ProgressData, Milestone, Task) + yaml-loader.ts with js-yaml, unit tests.
+
+    - id: task-139
+      name: Server Route + File Watcher (Auto-Refresh)
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-25-acp-progress-visualizer/task-139-server-route-file-watcher.md
+      estimated_hours: 2-3
+      actual_hours: null
+      completed_date: null
+      notes: TanStack Start server route reads progress.yaml; SSE file watcher triggers auto-refresh.
+
+    - id: task-140
+      name: Milestone Table View
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-25-acp-progress-visualizer/task-140-milestone-table-view.md
+      estimated_hours: 4-6
+      actual_hours: null
+      completed_date: null
+      notes: "@tanstack/react-table with sortable columns, StatusBadge, ProgressBar components."
+
+    - id: task-141
+      name: Milestone Tree View
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-25-acp-progress-visualizer/task-141-milestone-tree-view.md
+      estimated_hours: 4-6
+      actual_hours: null
+      completed_date: null
+      notes: Expandable/collapsible milestone → task hierarchy; shared route with table (tab toggle).
+
+    - id: task-142
+      name: Search + Status Filter
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-25-acp-progress-visualizer/task-142-search-and-filter.md
+      estimated_hours: 3-4
+      actual_hours: null
+      completed_date: null
+      notes: fuse.js search index across milestones + tasks; FilterBar with All/In Progress/Completed/Not Started.
+
+    - id: task-143
+      name: Dashboard Shell (metadata, progress bar, next steps)
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-25-acp-progress-visualizer/task-143-dashboard-shell.md
+      estimated_hours: 3-4
+      actual_hours: null
+      completed_date: null
+      notes: Root layout (sidebar nav), project header, overall progress bar, NextSteps panel.
+
+    - id: task-144
+      name: "@acp.visualize Command + ACP Integration"
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-25-acp-progress-visualizer/task-144-acp-visualize-command.md
+      estimated_hours: 1-2
+      actual_hours: null
+      completed_date: null
+      notes: Create agent/commands/acp.visualize.md in ACP core; add to AGENT.md Core Commands.
 
   M18:
     - id: task-120
@@ -4553,9 +4660,9 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "▶️ M24 complete — all 4 tasks done, version 6.2.5"
-  - "📋 Next: M25 — ACP Progress Visualizer (design doc: agent/design/visualizer.requirements.md)"
-  - "📝 Run @acp.plan to plan M25 milestone"
+  - "▶️ M25 planned: 8 tasks ready (task-137 → task-144) — run @acp.proceed to start"
+  - "📋 M25 P0: TanStack Start dashboard for progress.yaml (3 weeks, ~22-32h estimated)"
+  - "📋 M26 next: P1 features (kanban, GitHub remote loading, multi-project support)"
 
 notes:
   - Using flat directory structure with dot notation (acp.status.md)
