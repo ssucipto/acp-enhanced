@@ -181,7 +181,7 @@ Files updated: 15
   4. Read changelog: @acp-version-check
 
 📚 Full changelog:
-  https://github.com/prmichaelsen/agent-context-protocol/blob/mainline/CHANGELOG.md
+  https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md
 ```
 
 ### Status Update
