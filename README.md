@@ -29,35 +29,26 @@ The framework layer solves a specific problem: as your project grows, the AI age
 
 ## Install ACP Enhanced in a New Project
 
-### Step 1 — Copy the framework layer (once per project)
-
-Install the ACP Enhanced bootstrap into your project using curl:
+### One command — installs everything
 
 ```bash
 # From your target project root
 curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/scripts/acp-bootstrap.sh | bash
 ```
 
-This creates the full `.agent/` directory structure and copies `AGENTS.md` into your project root.
+This runs in two phases:
+1. **Framework layer** — creates `.agent/` directory structure and `AGENTS.md`
+2. **Commands + scripts** — downloads and installs `agent/commands/`, `agent/scripts/`, `agent/schemas/`
 
-Then **customize** `.agent/core/identity.yml` for your project (name, stack, team, repo URL).
+After it completes, **customize** `.agent/core/identity.yml` for your project (name, stack, team, repo URL).
 
 > If you've cloned this repo locally, you can also run:
 > ```bash
 > bash /path/to/acp-enhanced/scripts/acp-bootstrap.sh
 > ```
+> Local clone is detected automatically — the `agent/` content is already present and won't be re-downloaded.
 
-### Step 2 — Install ACP commands and scripts (once per project)
-
-Once ACP is running in the new project, use the package install command to pull in all commands and scripts from this fork:
-
-```
-@acp.package-install https://github.com/ssucipto/acp-enhanced.git
-```
-
-This installs `agent/commands/`, `agent/scripts/`, and `agent/schemas/` into the target project and tracks everything in `agent/manifest.yaml`.
-
-### Step 3 — Update when this fork changes
+### Update when this fork changes
 
 ```
 @acp.package-update acp-enhanced
@@ -77,7 +68,7 @@ Only files that changed since last install are updated. Locally modified files a
 | Memory | None beyond git history | Tiered: session / user / repo memory |
 | Task routing | None | Taxonomy-based routing to skill files |
 | Lessons | None | Correction log appended on every mistake |
-| Install | `curl \| bash` from original repo | Bootstrap script + package install from this fork |
+| Install | `curl \| bash` from original repo | Single bootstrap script from this fork |
 
 The ACP command and workflow system (clarifications → design → plan → proceed) is identical to the original.
 
