@@ -138,6 +138,33 @@ ACP solves these by:
 project-root/
 ├── AGENT.md                        # This file - ACP documentation
 ├── AGENTS.md                       # AI context loading protocol (.agent/ framework)
+│
+├── .agent/                         # ACP Enhanced framework layer (context management)
+│   ├── core/                       # Layer 1 — permanent cached context (max 300 tokens)
+│   │   ├── identity.yml            # Project identity: name, stack, team, repo URL
+│   │   ├── constraints.yml         # Hard rules, context budget limits, non-negotiables
+│   │   └── routing.yml             # Which executor model to use this session
+│   ├── skills/                     # Layer 2 — task-specific instructions (max 500 tokens)
+│   │   ├── backend.md              # Backend domain patterns and conventions
+│   │   ├── commands.md             # ACP command doc writing guide
+│   │   └── ...                     # One file per domain (ui.md, deploy.md, etc.)
+│   ├── memory/                     # Layer 3 — persistent memory
+│   │   ├── sessions.md             # YAML session log (last 3 entries loaded)
+│   │   ├── lessons.md              # Correction log — appended on every AI mistake
+│   │   ├── patterns.md             # Reusable code/design patterns discovered
+│   │   └── decisions.md            # Architecture Decision Records (ADRs)
+│   ├── wiki/                       # Layer 3 — project reference knowledge
+│   │   ├── domain.yml              # Domain entities, operations, modules
+│   │   ├── architecture.md         # Service boundaries, integration patterns
+│   │   └── integrations.md         # External services, env vars, config refs
+│   ├── routing/                    # Task routing configuration
+│   │   ├── taxonomy.yml            # Task types → executor + context mapping
+│   │   ├── rules.md                # Human-readable routing rules (ambiguity resolution)
+│   │   ├── config.yml              # Model definitions and cost rates
+│   │   └── ledger.md              # Token spend log (auto-appended by dispatch script)
+│   └── tasks/                      # Routed task files (created by /acp-route)
+│       └── task-NNN.md             # Individual task with YAML frontmatter
+│
 ├── agent/                          # Agent directory (ACP structure)
 │   ├── commands/                   # Command system
 │   │   ├── command.template.md     # Command template
