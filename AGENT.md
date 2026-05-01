@@ -94,9 +94,9 @@ project-root/
 │   ├── commands/                   # Command system
 │   │   ├── .gitkeep
 │   │   ├── command.template.md     # Command template
-│   │   ├── acp.init.md             # @acp-init
-│   │   ├── acp.proceed.md          # @acp-proceed
-│   │   ├── acp.status.md           # @acp-status
+│   │   ├── acp.init.md             # @acp.init
+│   │   ├── acp.proceed.md          # @acp.proceed
+│   │   ├── acp.status.md           # @acp.status
 │   │   └── ...                     # More commands
 │   │
 │   ├── design/                     # Design documents (how-it-works, rationale)
