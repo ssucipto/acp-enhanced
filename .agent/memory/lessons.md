@@ -3,6 +3,19 @@
 # Max 5 entries loaded per session, filtered to current task_type + priority:high
 
 - date: 2026-05-01
+  task_type: command-doc-writing
+  mistake: >
+    When creating command files from command.template.md, the @{namespace}-{command-name}
+    placeholder in the pretend-context line (line 4) was never replaced with the actual
+    command name in 9 command files (acp.plan, acp.proceed, acp.package-create, etc.).
+    The main directive line (line 3) was correctly filled in, but not line 4.
+  correction: >
+    When authoring or reviewing a command file, check BOTH line 3 (main directive)
+    AND line 4 (pretend-context) for template placeholders. Both must have the actual
+    command name (e.g. @acp.plan), not @{namespace}-{command-name}.
+  priority: high
+
+- date: 2026-05-01
   task_type: shell-scripting
   mistake: >
     M19 fixed yaml_get API misuse in acp.preferences.sh (read path) but did NOT fix

@@ -17,7 +17,28 @@
 
 - date: 2026-05-01
   executor: Persona A (Copilot)
-  tasks: [task-71, task-72, task-73, task-74, task-75]
+  tasks: [task-76, task-77, task-78, task-79, task-80]
+  done:
+    - M21-milestone-created
+    - fix-9-unfilled-template-placeholders-in-pretend-context
+    - fix-readme-curl-url-main-to-mainline
+    - bump-version-6.2.1-to-6.2.2-in-3-files
+    - add-7-missing-scripts-to-package-yaml
+    - add-changelog-6.2.2-block
+    - update-progress-yaml-M21
+    - commit-and-push-d5a4f8d
+  deferred: {}
+  key_fact: |
+    Third audit (functional readiness) found 5 critical categories:
+    1. @{namespace}-{command-name} unfilled in 9 command pretend-context lines (template never filled in)
+    2. README.md curl URL used main branch (doesn't exist) — onboarding 404 for all new users
+    3. Version not bumped in 3 metadata files after M20
+    4. 7 scripts in agent/scripts/ absent from package.yaml scripts section
+    5. No [6.2.2] CHANGELOG block for M20 fixes
+    Lesson: When creating commands from command.template.md, ALWAYS replace @{namespace}-{command-name}
+    in BOTH the main directive line AND the pretend-context line.
+    Rule for new milestones: check package.yaml scripts section matches ALL files in agent/scripts/
+
   done:
     - M20-milestone-created
     - fix-9-directive-headers-hyphen-to-dot
