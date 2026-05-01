@@ -156,10 +156,18 @@ MD
 fi
 
 # Wire AGENTS.md to other IDEs
-mkdir -p .github
-[ -L CLAUDE.md ] || ln -sf AGENTS.md CLAUDE.md
-[ -f .github/copilot-instructions.md ] || ln -sf ../AGENTS.md .github/copilot-instructions.md
-echo -e "${GREEN}✓ IDE symlinks: CLAUDE.md, .github/copilot-instructions.md${NC}"
+# Use cp (not symlinks) — symlinks break on Windows and WSL cross-drive setups
+mkdir -p .github/prompts
+if [ ! -f CLAUDE.md ]; then
+  cp AGENTS.md CLAUDE.md
+  echo -e "${GREEN}✓ CLAUDE.md created (Claude Code auto-load)${NC}"
+fi
+if [ ! -f .github/copilot-instructions.md ]; then
+  cp AGENTS.md .github/copilot-instructions.md
+  echo -e "${GREEN}✓ .github/copilot-instructions.md created (Copilot priority 1)${NC}"
+fi
+echo -e "${YELLOW}  Note: CLAUDE.md and copilot-instructions.md are copies of AGENTS.md.${NC}"
+echo -e "${YELLOW}  When you update AGENTS.md, re-run: cp AGENTS.md CLAUDE.md && cp AGENTS.md .github/copilot-instructions.md${NC}"
 
 # --- 3. Core Layer Files ---
 echo -e "${YELLOW}[3/6] Creating core layer files...${NC}"
@@ -225,6 +233,31 @@ session:
 YAML
 
 echo -e "${GREEN}✓ Core layer files created${NC}"
+
+# --- 3b. Skill Files (copy from ACP Enhanced if available) ---
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ACP_SKILLS_SRC="${SCRIPT_DIR}/../.agent/skills"
+if [ -d "${ACP_SKILLS_SRC}" ]; then
+  cp "${ACP_SKILLS_SRC}"/*.md .agent/skills/
+  echo -e "${GREEN}✓ Skill files copied from ACP Enhanced (.agent/skills/)${NC}"
+else
+  # Fallback: create a minimal stub so AGENTS.md Step 3 doesn't fail silently
+  cat > .agent/skills/backend.md << 'SKILL'
+<skill name="backend">
+<rules>
+- TODO: Add project-specific coding rules here (error handling, naming, patterns)
+- Each rule should be one line, actionable, and specific to your stack
+</rules>
+<patterns>
+TODO: Add reusable code snippets / templates specific to your framework
+</patterns>
+<anti_patterns>
+TODO: Add things the agent should NEVER do in this codebase
+</anti_patterns>
+</skill>
+SKILL
+  echo -e "${YELLOW}✓ Skill stub created (.agent/skills/backend.md) — populate with your project rules${NC}"
+fi
 
 # --- 4. Memory + Wiki Stubs ---
 echo -e "${YELLOW}[4/6] Creating memory and wiki stubs...${NC}"
