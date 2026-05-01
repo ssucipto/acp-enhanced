@@ -5,7 +5,66 @@ All notable changes to the Agent Context Protocol will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [5.41.0] - 2026-04-28
+---
+
+## ACP Enhanced Fork
+
+This project is a fork of [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol)
+by [@prmichaelsen](https://github.com/prmichaelsen). All original ACP content is preserved.
+
+### Enhanced additions (on top of original ACP)
+
+- **`.agent/` Framework Layer** — structured context management system for the AI agent:
+  - `.agent/core/` — identity, constraints, token budget (loaded every session)
+  - `.agent/skills/` — domain-specific guidance loaded one file per session
+  - `.agent/routing/` — task taxonomy for classifying work and routing to skill files
+  - `.agent/memory/` — tiered memory: session log, lessons learned, patterns, ADRs
+  - `.agent/wiki/` — reference docs loaded section-by-section within token budget
+- **Context Loading Protocol** — 6-step deterministic protocol in `AGENTS.md` / `.github/copilot-instructions.md` enforcing a 2,800-token budget
+- **Correction Protocol** — automatic lesson capture to `.agent/memory/lessons.md` on every developer correction
+- **Session Commit Protocol** (`/acp-commit`) — structured session summaries with auto-compaction
+- **Task Routing** (`/acp-route`) — classifies tasks by type, selects executor and context files
+- **ADR Command** (`/acp-decide`) — records architectural decisions with explicit DO NOT re-open guards
+- **Bootstrap script** (`scripts/acp-bootstrap.sh`) — one-command setup of the full `.agent/` structure in a new project
+- **`scripts/AGENTS.md`** — generic project template for the context loading protocol
+
+---
+
+## [6.2.0] - 2026-05-01
+
+### Added
+- **Preferences System** (`agent/scripts/acp.preferences.sh`): Multi-level preference configuration with 4-level precedence (Project > Workspace > User > Default). Functions: `get_preference`, `has_preference`, `get_preference_or`, `get_preference_source`, `generate_preferences`, `set_preference`, `validate_preference`, `get_preference_with_preset`, `load_preset`, `list_presets`.
+- **Configurables** (`agent/configurables/acp.configurables.yaml`): 9 preferences across 5 categories — plan (draft.create_mode, batch.auto_confirm), task (create.granularity, create.auto_number), validation (auto_fix.enabled, strict_mode.enabled), output (verbosity.level), git (auto_commit.enabled).
+- **Project-Level Defaults** (`agent/preferences/acp.default.yaml`): Project-level preference values for the ACP namespace.
+- **Preference Commands**:
+  - [`@acp.preferences-get`](agent/commands/acp.preferences-get.md) — Resolve and generate the effective preference set for a namespace
+  - [`@acp.preferences-show`](agent/commands/acp.preferences-show.md) — Display effective preferences with source attribution (📁/💼/👤/⚙️)
+  - [`@acp.preferences-set`](agent/commands/acp.preferences-set.md) — Set a preference value at a specified level with validation
+  - [`@acp.preferences-create`](agent/commands/acp.preferences-create.md) — Create a preference file at user/workspace/project level
+  - [`@acp.preferences-validate`](agent/commands/acp.preferences-validate.md) — Validate all preference files against configurables schemas
+- **Preset System**: Three built-in workflow presets:
+  - `acp.batch-planning` — contextual mode, auto-confirm, quiet output
+  - `acp.interactive-planning` — guided mode, manual confirm, verbose output
+  - `acp.rapid-prototyping` — contextual mode, auto-commit, minimal output
+- **`--preset` flag** on `@acp.plan`: Load a named preference bundle for a single invocation. CLI overrides still beat presets.
+- **`--presets` flag** on `@acp.preferences-show`: List available presets instead of showing preference values.
+- **Package Preference Support**: Packages can now bundle configurables and preset preference files.
+  - `agent/schemas/package.schema.yaml` — new `contents.configurables` and `contents.presets` fields
+  - `agent/scripts/acp.package-install.sh` — copies `*.configurables.yaml` and preset `*.yaml` on install (non-destructive)
+  - `agent/scripts/acp.package-create.sh` — scaffolds `agent/configurables/<pkg>.configurables.yaml` + `agent/preferences/<pkg>.default.yaml`
+  - `agent/scripts/acp.package-validate.sh` — `validate_configurables()` checks YAML syntax, id dot-paths, and package.yaml listing
+- **Test Suite** (`tests/acp.preferences.test.sh`, `tests/acp.preferences-validate.test.sh`, `tests/acp.preferences-preset.test.sh`, `e2e/acp.plan-with-preferences.test.sh`): 26+ tests covering precedence, validation, preset loading, and @acp.plan integration.
+
+### Changed
+- **`@acp.plan` v2.0.0**: Step 1 now invokes `@acp.preferences-get acp`, parses `--preset` and `--<pref.path>` CLI overrides, merges with precedence (CLI > preset > preferences), and stores the effective map. Step 4 Option A uses 3-level dispatch: override → preference → ask user.
+- **`agent/scripts/acp.preferences.sh`** CLI: added `set`, `validate`, `load-preset`, `list-presets` subcommands.
+
+### Technical Details
+- Preferences are pure YAML; no external dependencies beyond the existing `acp.yaml-parser.sh`
+- Namespace isolation: each package owns its own namespace (e.g., `acp`, `my-package`)
+- Backward compatible: all commands skip gracefully if `@acp.preferences-get` is unavailable
+
+
 
 ### Added
 - **D-IDs for designs** — designs now carry `D<N>` labels on atomic, addressable units (decisions, code snippets, schemas, interfaces, algorithms, formulas, key invariants, diagrams). This gives designs the same exact-reference surface that specs already have with `R<N>`. Tasks declare which design units they inline via `incorporates: D1, D3` in their task marker (mirroring `covers: R10, R11` for specs).

@@ -151,6 +151,22 @@ If draft file was provided, create clarification if needed (same as pattern-crea
 
 **Expected Outcome**: Clarification created and answered (if needed)  
 
+### 4.5. Review Related Patterns
+
+Before generating the design, scan existing patterns to ensure alignment.
+
+**Actions**:
+- Check if `agent/patterns/` directory exists
+- List all pattern files
+- Read patterns related to the design topic:
+  - Patterns whose name or description overlaps with the design subject
+  - Architectural patterns that constrain implementation choices
+  - Up to 3 most relevant patterns
+- Ensure the design aligns with existing patterns and avoids duplication
+- Reference relevant patterns in the design document
+
+**Note**: If `agent/patterns/` does not exist, skip silently.  
+
 ### 5. Generate Design File
 
 Create design file from template:
