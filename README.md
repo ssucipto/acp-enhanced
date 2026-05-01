@@ -800,8 +800,9 @@ MIT License - See [LICENSE](./LICENSE) for details
 
 ## Links
 
-- **Repository**: https://github.com/prmichaelsen/agent-context-protocol
-- **Issues**: https://github.com/prmichaelsen/agent-context-protocol/issues
+- **Repository**: https://github.com/ssucipto/acp-enhanced
+- **Issues**: https://github.com/ssucipto/acp-enhanced/issues
+- **Upstream (Original ACP)**: https://github.com/prmichaelsen/agent-context-protocol
 - **Documentation**: See [AGENT.md](./AGENT.md)
 
 ---
