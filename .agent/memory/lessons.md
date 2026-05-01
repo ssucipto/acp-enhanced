@@ -40,3 +40,30 @@
     expectations. Production pref files are at agent/preferences/<ns>.*.yaml — check them
     every time the yaml_get path traversal semantics change.
   priority: high
+
+- date: 2026-05-01
+  task_type: command-doc-writing
+  mistake: >
+    The .agent/skills/commands.md canonical pattern used "@acp-foo" (dash) instead of
+    "@acp.foo" (dot) in the directive block example — the wrong separator for the ACP
+    dot-notation command naming convention.
+  correction: >
+    Commands always use dot notation: @namespace.command-name. Dash is never used
+    between namespace and command name. Verified correct: @acp.init, @acp.proceed, etc.
+    Skill file now corrected; check this whenever reading the commands skill.
+  priority: high
+
+- date: 2026-05-01
+  task_type: e2e-test-write
+  mistake: >
+    37 out of 52 commands have no E2E test file. The constraint says every command
+    needs an E2E test. Many are pure-LLM commands with no script binding (so
+    automated testing is hard), but 8 commands with real script bindings
+    (package-create, package-install, package-publish, package-validate,
+    preferences-create/set/show/validate) also lack E2E coverage.
+  correction: >
+    When creating a command that has a Scripts: binding, immediately create an
+    e2e/<command-name>.test.sh as part of the same task. Pure-LLM commands
+    (Scripts: None) should at minimum have a smoke test that checks the command
+    doc is well-formed and the directive header is correct.
+  priority: normal
