@@ -122,6 +122,19 @@ Before creating content, load relevant key files from the index.
 
 **Note**: If `agent/index/` does not exist, skip silently.  
 
+### 2.6. Review Existing Patterns
+
+Review existing patterns before creating a new one to ensure consistency.
+
+**Actions**:
+- List all files in `agent/patterns/`
+- Read patterns similar to what is being created (by topic or name)
+- Check for duplication — if an equivalent pattern already exists, warn the user
+- Note the style, structure, and conventions of existing patterns
+- Ensure the new pattern will follow consistent style
+
+**Note**: If `agent/patterns/` is empty or does not exist, skip silently.  
+
 ### 2.7. Capture Clarification Context
 
 Invoke the `@acp.clarification-capture` shared directive to capture decisions from clarifications and/or chat context.
