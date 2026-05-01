@@ -69,7 +69,7 @@ get_preference() {
   local project_file
   project_file="$(_pref_project_file "$namespace")"
   if [[ -f "$project_file" ]]; then
-    value="$(yaml_query "$project_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    value="$(yaml_get "$project_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
     if [[ -n "$value" ]]; then
       echo "$value"
       return 0
@@ -80,7 +80,7 @@ get_preference() {
   local workspace_file
   workspace_file="$(_pref_workspace_file "$namespace")"
   if [[ -f "$workspace_file" ]]; then
-    value="$(yaml_query "$workspace_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    value="$(yaml_get "$workspace_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
     if [[ -n "$value" ]]; then
       echo "$value"
       return 0
@@ -91,7 +91,7 @@ get_preference() {
   local user_file
   user_file="$(_pref_user_file "$namespace")"
   if [[ -f "$user_file" ]]; then
-    value="$(yaml_query "$user_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    value="$(yaml_get "$user_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
     if [[ -n "$value" ]]; then
       echo "$value"
       return 0
@@ -102,7 +102,7 @@ get_preference() {
   local configurables_file
   configurables_file="$(_pref_configurables_file "$namespace")"
   if [[ -f "$configurables_file" ]]; then
-    value="$(yaml_query "$configurables_file" "${namespace}.${pref_path}.default" 2>/dev/null || true)"
+    value="$(yaml_get "$configurables_file" "${namespace}.${pref_path}.default" 2>/dev/null || true)"
     if [[ -n "$value" ]]; then
       echo "$value"
       return 0
@@ -147,33 +147,33 @@ get_preference_source() {
   local project_file
   project_file="$(_pref_project_file "$namespace")"
   if [[ -f "$project_file" ]]; then
-    value="$(yaml_query "$project_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    value="$(yaml_get "$project_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
     [[ -n "$value" ]] && echo "project" && return 0
   fi
 
   local workspace_file
   workspace_file="$(_pref_workspace_file "$namespace")"
   if [[ -f "$workspace_file" ]]; then
-    value="$(yaml_query "$workspace_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    value="$(yaml_get "$workspace_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
     [[ -n "$value" ]] && echo "workspace" && return 0
   fi
 
   local user_file
   user_file="$(_pref_user_file "$namespace")"
   if [[ -f "$user_file" ]]; then
-    value="$(yaml_query "$user_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    value="$(yaml_get "$user_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
     [[ -n "$value" ]] && echo "user" && return 0
   fi
 
   local configurables_file
   configurables_file="$(_pref_configurables_file "$namespace")"
   if [[ -f "$configurables_file" ]]; then
-    value="$(yaml_query "$configurables_file" "${namespace}.${pref_path}.default" 2>/dev/null || true)"
+    value="$(yaml_get "$configurables_file" "${namespace}.${pref_path}.default" 2>/dev/null || true)"
     [[ -n "$value" ]] && echo "default" && return 0
   fi
 
   echo "none"
-  return 1
+  return 0
 }
 
 # ── Generate output ───────────────────────────────────────────────────────────
@@ -194,14 +194,12 @@ generate_preferences() {
     return 1
   fi
 
-  # Collect all preference paths from configurables using yaml_get_array
-  # Each configurable entry is expected to have a 'key' field
-  local pref_keys=()
-  local raw_keys
-  raw_keys="$(yaml_get_array "$configurables_file" "${namespace}.configurables" 2>/dev/null || true)"
+  # Collect all preference paths from configurables using _index array
+  local count
+  count="$(yaml_get_array "$configurables_file" "${namespace}._index" 2>/dev/null || echo 0)"
 
-  if [[ -z "$raw_keys" ]]; then
-    # Fallback: emit empty namespace block
+  if [[ "$count" -eq 0 ]]; then
+    # No _index array — emit empty namespace block
     if [[ "$format" == "yaml" ]]; then
       echo "${namespace}: {}"
     else
@@ -213,23 +211,30 @@ generate_preferences() {
   # Build output
   if [[ "$format" == "yaml" ]]; then
     echo "${namespace}:"
-    while IFS= read -r key; do
-      [[ -z "$key" ]] && continue
+    local i=0
+    while [[ "$i" -lt "$count" ]]; do
+      local pref_id
+      pref_id="$(yaml_get "$configurables_file" "${namespace}._index[${i}]" 2>/dev/null || true)"
+      [[ -z "$pref_id" ]] && { i=$((i + 1)); continue; }
       local val
-      val="$(get_preference "$namespace" "$key" 2>/dev/null || echo "")"
-      echo "  ${key}: '${val}'"
-    done <<< "$raw_keys"
+      val="$(get_preference "$namespace" "$pref_id" 2>/dev/null || echo "")"
+      echo "  ${pref_id}: '${val}'"
+      i=$((i + 1))
+    done
   elif [[ "$format" == "json" ]]; then
     echo "{"
     echo "  \"${namespace}\": {"
-    local first=true
-    while IFS= read -r key; do
-      [[ -z "$key" ]] && continue
+    local first=true i=0
+    while [[ "$i" -lt "$count" ]]; do
+      local pref_id
+      pref_id="$(yaml_get "$configurables_file" "${namespace}._index[${i}]" 2>/dev/null || true)"
+      [[ -z "$pref_id" ]] && { i=$((i + 1)); continue; }
       local val
-      val="$(get_preference "$namespace" "$key" 2>/dev/null || echo "")"
+      val="$(get_preference "$namespace" "$pref_id" 2>/dev/null || echo "")"
       [[ "$first" == "true" ]] && first=false || echo ","
-      printf '    "%s": "%s"' "$key" "$val"
-    done <<< "$raw_keys"
+      printf '    "%s": "%s"' "$pref_id" "$val"
+      i=$((i + 1))
+    done
     echo ""
     echo "  }"
     echo "}"
@@ -278,18 +283,15 @@ set_preference() {
   fi
 
   # Build the key path to set (namespace.pref.path → top-level key is namespace)
-  # Use sed-based in-place update: find existing key or append it
-  # Key in file is indented under namespace block
-  local indent_key
-  indent_key="$(echo "$pref_path" | sed 's/\./__/g')"
+  # Key is indented under namespace block (flat-dot format for set operations)
   local yaml_key="  ${pref_path}:"
   local yaml_line="${yaml_key} ${value}"
 
   if grep -qF "${yaml_key}" "$target_file" 2>/dev/null; then
-    # Replace existing line (portable sed: works on BSD and GNU)
-    local escaped_key
-    escaped_key="$(printf '%s' "$yaml_key" | sed 's/[[\.*^$()+?{|]/\\&/g')"
-    sed -i.bak "s|${escaped_key}.*|${yaml_line}|" "$target_file" && rm -f "${target_file}.bak"
+    # Replace existing line using awk — injection-safe (no delimiter sensitivity)
+    awk -v key="${yaml_key}" -v line="${yaml_line}" \
+      'index($0, key) == 1 { $0 = line } { print }' \
+      "$target_file" > "${target_file}.tmp" && mv "${target_file}.tmp" "$target_file"
   else
     # Append under the namespace block
     printf '%s\n' "$yaml_line" >> "$target_file"
@@ -314,7 +316,7 @@ validate_preference() {
 
   # Check that the preference exists in configurables
   local pref_type
-  pref_type="$(yaml_query "$configurables_file" "${namespace}.${pref_path}.type" 2>/dev/null || true)"
+  pref_type="$(yaml_get "$configurables_file" "${namespace}.${pref_path}.type" 2>/dev/null || true)"
   if [[ -z "$pref_type" ]]; then
     echo "Error: Preference '${pref_path}' not found in namespace '${namespace}'" >&2
     return 1
@@ -323,18 +325,18 @@ validate_preference() {
   # Type-specific validation
   case "$pref_type" in
     string)
-      # Check options if defined (list of option values)
-      local options_raw
-      options_raw="$(yaml_get_array "$configurables_file" "${namespace}.${pref_path}.options" 2>/dev/null || true)"
-      if [[ -n "$options_raw" ]]; then
+      # Check options if defined (iterate by index using yaml_get)
+      local opt_count
+      opt_count="$(yaml_get_array "$configurables_file" "${namespace}.${pref_path}.options" 2>/dev/null || echo 0)"
+      if [[ "$opt_count" -gt 0 ]]; then
         local found=false
-        while IFS= read -r opt_line; do
-          [[ -z "$opt_line" ]] && continue
-          # Option values are stored under each option's 'value' key
+        local i=0
+        while [[ "$i" -lt "$opt_count" ]]; do
           local opt_val
-          opt_val="$(echo "$opt_line" | grep -oP 'value:\s*\K\S+' || true)"
+          opt_val="$(yaml_get "$configurables_file" "${namespace}.${pref_path}.options[${i}].value" 2>/dev/null || true)"
           [[ "$opt_val" == "$value" ]] && found=true && break
-        done <<< "$options_raw"
+          i=$((i + 1))
+        done
         if [[ "$found" == "false" ]]; then
           echo "Error: Invalid value '${value}' for '${pref_path}' (type: string with options)" >&2
           return 1
@@ -349,13 +351,14 @@ validate_preference() {
       fi
       # Check min/max
       local min max
-      min="$(yaml_query "$configurables_file" "${namespace}.${pref_path}.min" 2>/dev/null || true)"
-      max="$(yaml_query "$configurables_file" "${namespace}.${pref_path}.max" 2>/dev/null || true)"
-      if [[ -n "$min" ]] && (( $(echo "$value < $min" | bc -l 2>/dev/null || echo 0) )); then
+      min="$(yaml_get "$configurables_file" "${namespace}.${pref_path}.min" 2>/dev/null || true)"
+      max="$(yaml_get "$configurables_file" "${namespace}.${pref_path}.max" 2>/dev/null || true)"
+      # Use bash integer arithmetic — no bc dependency required
+      if [[ -n "$min" ]] && (( value < min )); then
         echo "Error: Value ${value} is below minimum ${min} for '${pref_path}'" >&2
         return 1
       fi
-      if [[ -n "$max" ]] && (( $(echo "$value > $max" | bc -l 2>/dev/null || echo 0) )); then
+      if [[ -n "$max" ]] && (( value > max )); then
         echo "Error: Value ${value} exceeds maximum ${max} for '${pref_path}'" >&2
         return 1
       fi
@@ -401,7 +404,7 @@ get_preference_with_preset() {
     preset_file="$(_pref_preset_file "$namespace" "$preset_name")"
     if [ -f "$preset_file" ]; then
       local preset_val
-      preset_val="$(yaml_query "$preset_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+      preset_val="$(yaml_get "$preset_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
       if [ -n "$preset_val" ]; then
         echo "$preset_val"
         return 0
