@@ -1,7 +1,7 @@
 # Command: spec
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp-spec` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp-spec NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `@acp.spec` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `@acp.spec NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -779,7 +779,7 @@ Next steps:
 
 **Context**: Just finished `@acp.clarification-address` on `clarification-12-auth-flow.md`.  
 
-**Invocation**: `@acp-spec --from-clar agent/clarifications/clarification-12-auth-flow.md`  
+**Invocation**: `@acp.spec --from-clar agent/clarifications/clarification-12-auth-flow.md`  
 
 **Result**: Creates `agent/specs/local.auth-flow.md`, carrying decided answers into Requirements and Acceptance Criteria and any unresolved items into Open Questions.
 
@@ -787,7 +787,7 @@ Next steps:
 
 **Context**: `agent/design/local.payment-processor.md` is settled; time to build.  
 
-**Invocation**: `@acp-spec --from-design agent/design/local.payment-processor.md`  
+**Invocation**: `@acp.spec --from-design agent/design/local.payment-processor.md`  
 
 **Result**: Creates `agent/specs/local.payment-processor.md` with concrete interfaces, data shapes, and acceptance criteria extracted from the design's implementation sections.
 
@@ -795,7 +795,7 @@ Next steps:
 
 **Context**: User wrote a rough draft of what they want.  
 
-**Invocation**: `@acp-spec @agent/drafts/webhook-router.md`  
+**Invocation**: `@acp.spec @agent/drafts/webhook-router.md`  
 
 **Result**: Parses the draft into the structured spec format. Ambiguities land in Open Questions rather than being guessed.
 
@@ -803,7 +803,7 @@ Next steps:
 
 **Context**: User wants to build a spec from scratch via chat.  
 
-**Invocation**: `@acp-spec -i`  
+**Invocation**: `@acp.spec -i`  
 
 **Result**: Agent collects scope, requirements, interfaces, and acceptance criteria interactively, then produces the spec file.
 
@@ -811,7 +811,7 @@ Next steps:
 
 **Context**: An external requirements doc was dropped into the project.  
 
-**Invocation**: `@acp-spec --from-req agent/design/external-requirements.md`  
+**Invocation**: `@acp.spec --from-req agent/design/external-requirements.md`  
 
 **Result**: Creates a spec that carries the requirements forward verbatim and expands each into acceptance criteria.
 
@@ -819,11 +819,11 @@ Next steps:
 
 ## Related Commands
 
-- [`@acp-design-create`](acp.design-create.md) — Create design documents (the what/why; typically precedes `@acp.spec`)
-- [`@acp-clarification-create`](acp.clarification-create.md) — Create a clarification to feed into `--from-clar`
-- [`@acp-clarification-address`](acp.clarification-address.md) — Resolve a clarification before converting to spec
-- [`@acp-task-create`](acp.task-create.md) — Break a finished spec into implementation tasks
-- [`@acp-package-validate`](acp.package-validate.md) — Validate package after creation
+- [`@acp.design-create`](acp.design-create.md) — Create design documents (the what/why; typically precedes `@acp.spec`)
+- [`@acp.clarification-create`](acp.clarification-create.md) — Create a clarification to feed into `--from-clar`
+- [`@acp.clarification-address`](acp.clarification-address.md) — Resolve a clarification before converting to spec
+- [`@acp.task-create`](acp.task-create.md) — Break a finished spec into implementation tasks
+- [`@acp.package-validate`](acp.package-validate.md) — Validate package after creation
 
 ---
 

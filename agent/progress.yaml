@@ -3,14 +3,14 @@
 
 project:
   name: agent-context-protocol
-  version: 6.2.1
+  version: 6.2.2
   started: 2026-02-16
-  status: completed
-  current_milestone: null
+  status: in_progress
+  current_milestone: M20
   description: |
     Agent Context Protocol (ACP) - A documentation-first development methodology
-    for AI agents. All 19 milestones complete (v6.2.1). M19 fixed all 13 bugs
-    in the Preferences System — now fully functional.
+    for AI agents. M20 in progress: consistency cleanup — fixing @acp- hyphen
+    notation across all command files, adding missing package.yaml entries.
 
 milestones:
   M1:
@@ -394,22 +394,27 @@ milestones:
     tasks_total: 5
     file: agent/milestones/milestone-19-preferences-bugfix.md
     notes: |
-      📋 Milestone 19: Preferences System Bug Fix Sprint
-      Critical review (2026-05-01) found that acp.preferences.sh is non-functional:
-      - BUG-1: yaml_query called with wrong arity — yaml_get required instead
-      - BUG-2: generate_preferences queries non-existent configurables array
-      - BUG-3: validate_preference option check uses yaml_get_array as element list
-      - BUG-4: flat-dot preference keys incompatible with parser's dot-path traversal
-      - BUG-5: set_preference dead variable + sed injection via unescaped value
-      - BUG-6: bc dependency for number range validation (not portable)
-      - BUG-7: acp.common.sh uses bash syntax but declares #!/bin/sh
-      - BUG-8: no EXIT trap for AST temp file cleanup
-      - BUG-9: double "Repository cloned" message in acp.package-install.sh
-      - BUG-10: get_preference_source returns exit 1 for valid "none" state
-      - BUG-11: yaml_query appends ":" to map/array child key names (undocumented)
-      - BUG-12: duplicate _sed_i / _yaml_sed_i functions
-      - BUG-13: AGENT.md version header stale (5.41.0 vs 6.2.0)
-      5 tasks (121-125): API fix, generate/validate fix, portability, minor/metadata, test validation
+      ✅ Milestone 19 complete. See CHANGELOG [6.2.1] for full list of 13 bugs fixed.
+
+  M20:
+    name: Consistency Cleanup and Notation Standardization
+    priority: 4
+    status: in_progress
+    progress: 95
+    started: 2026-05-01
+    completed:
+    estimated_weeks: 1
+    tasks_completed: 4
+    tasks_total: 5
+    file: agent/milestones/milestone-20-consistency-cleanup.md
+    notes: |
+      📋 Milestone 20: Second comprehensive audit found 20+ bugs in notation,
+      package.yaml omissions, and missing CHANGELOG entry.
+      - BUG-A (9 files): Directive headers using @acp- hyphen → fixed to @acp. dot
+      - BUG-B (5 files): Body text using @acp- hyphen in examples/related sections
+      - BUG-C: AGENT.md directory tree comments using hyphen notation
+      - BUG-D (13 commands, 1 script): Missing from package.yaml contents
+      - BUG-E: CHANGELOG missing entry for afcf61d audit fixes (post-M19)
 
 tasks:
   M1:
