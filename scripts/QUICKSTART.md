@@ -35,8 +35,8 @@ bash scripts/acp-bootstrap.sh
 
 Edit `.agent/core/identity.yml`:
 ```yaml
-project: consumer-project
-type: family-chore-management-mobile-app
+project: YourProject
+type: mobile-app
 stack:
   - language: TypeScript
   - framework: React Native + Expo EAS
@@ -44,7 +44,7 @@ stack:
   - deployment: Expo EAS + Google Cloud Run
 team: solo-developer
 priorities: [code-quality, cost-efficiency, mobile-performance]
-repo: github.com/your-handle/chorehive
+repo: github.com/your-handle/yourproject
 ```
 
 ---
