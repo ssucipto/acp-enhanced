@@ -53,6 +53,21 @@ _pref_configurables_file() {
   echo "./agent/configurables/${1}.configurables.yaml"
 }
 
+# Flat-dot format fallback: reads "  pref.path.key: value" style entries
+# used by preference files written before nested YAML was adopted (and by
+# set_preference, which writes flat-dot format for simplicity).
+# Allows both flat-dot and nested YAML preference files to work interchangeably.
+# Usage: _flat_dot_get <file> <pref_path>
+_flat_dot_get() {
+  local file="$1" pref_path="$2"
+  local escaped_path="${pref_path//./\\.}"
+  grep -E "^[[:space:]]+${escaped_path}:" "$file" 2>/dev/null \
+    | head -1 \
+    | sed 's/^[^:]*:[[:space:]]*//' \
+    | tr -d "'\"" \
+    | tr -d '[:space:]'
+}
+
 # ── Core functions ────────────────────────────────────────────────────────────
 
 # Get preference value with precedence resolution:
@@ -70,6 +85,7 @@ get_preference() {
   project_file="$(_pref_project_file "$namespace")"
   if [[ -f "$project_file" ]]; then
     value="$(yaml_get "$project_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    [[ -z "$value" ]] && value="$(_flat_dot_get "$project_file" "$pref_path")"
     if [[ -n "$value" ]]; then
       echo "$value"
       return 0
@@ -81,6 +97,7 @@ get_preference() {
   workspace_file="$(_pref_workspace_file "$namespace")"
   if [[ -f "$workspace_file" ]]; then
     value="$(yaml_get "$workspace_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    [[ -z "$value" ]] && value="$(_flat_dot_get "$workspace_file" "$pref_path")"
     if [[ -n "$value" ]]; then
       echo "$value"
       return 0
@@ -92,6 +109,7 @@ get_preference() {
   user_file="$(_pref_user_file "$namespace")"
   if [[ -f "$user_file" ]]; then
     value="$(yaml_get "$user_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    [[ -z "$value" ]] && value="$(_flat_dot_get "$user_file" "$pref_path")"
     if [[ -n "$value" ]]; then
       echo "$value"
       return 0
@@ -148,6 +166,7 @@ get_preference_source() {
   project_file="$(_pref_project_file "$namespace")"
   if [[ -f "$project_file" ]]; then
     value="$(yaml_get "$project_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    [[ -z "$value" ]] && value="$(_flat_dot_get "$project_file" "$pref_path")"
     [[ -n "$value" ]] && echo "project" && return 0
   fi
 
@@ -155,6 +174,7 @@ get_preference_source() {
   workspace_file="$(_pref_workspace_file "$namespace")"
   if [[ -f "$workspace_file" ]]; then
     value="$(yaml_get "$workspace_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    [[ -z "$value" ]] && value="$(_flat_dot_get "$workspace_file" "$pref_path")"
     [[ -n "$value" ]] && echo "workspace" && return 0
   fi
 
@@ -162,6 +182,7 @@ get_preference_source() {
   user_file="$(_pref_user_file "$namespace")"
   if [[ -f "$user_file" ]]; then
     value="$(yaml_get "$user_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+    [[ -z "$value" ]] && value="$(_flat_dot_get "$user_file" "$pref_path")"
     [[ -n "$value" ]] && echo "user" && return 0
   fi
 
@@ -405,6 +426,7 @@ get_preference_with_preset() {
     if [ -f "$preset_file" ]; then
       local preset_val
       preset_val="$(yaml_get "$preset_file" "${namespace}.${pref_path}" 2>/dev/null || true)"
+      [ -z "$preset_val" ] && preset_val="$(_flat_dot_get "$preset_file" "$pref_path")"
       if [ -n "$preset_val" ]; then
         echo "$preset_val"
         return 0
