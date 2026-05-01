@@ -118,6 +118,16 @@ Expected output:
 structured
 ```
 
+---
+
+## Verification
+
+- [ ] Preferences resolved without error
+- [ ] Correct precedence applied (project overrides workspace overrides user overrides default)
+- [ ] If `path` argument given, only that key returned
+- [ ] Output format matches requested format (`yaml` or `json`)
+- [ ] If namespace not found, non-zero exit with clear error message
+
 ### Example 3: Get Preferences as JSON
 ```
 @acp.preferences-get acp json
