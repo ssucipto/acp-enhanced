@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.2.1
+version: 6.2.2
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (.agent/ framework)
 author: Suryo Sucipto
 license: MIT
@@ -355,6 +355,26 @@ contents:
     - name: acp.project-set.sh
       description: Context switching script
       experimental: true
+
+    - name: acp.project-info.sh
+      description: Project info display script
+      experimental: true
+
+    - name: acp.project-remove.sh
+      description: Project removal script
+      experimental: true
+
+    - name: acp.project-update.sh
+      description: Project metadata update script
+      experimental: true
+
+    - name: acp.projects-restore.sh
+      description: Project registry restore script
+      experimental: true
+
+    - name: acp.projects-sync.sh
+      description: Project registry sync script
+      experimental: true
     
     # Version Management Scripts
     - name: acp.version-check.sh
@@ -381,6 +401,14 @@ contents:
     
     - name: acp.uninstall.sh
       description: ACP uninstallation script
+
+    # Internal / Utility Scripts
+    - name: acp.meta-scan.sh
+      description: Meta-scanning utility for spec/task/code cross-reference
+      type: internal
+
+    - name: acp.package-install-optimized.sh
+      description: Optimized package installation with parallel fetch support
     
     # Utility Scripts (Shared)
     - name: acp.common.sh
