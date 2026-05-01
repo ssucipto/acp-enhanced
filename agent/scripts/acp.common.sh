@@ -1,6 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # Common utilities for ACP scripts
-# POSIX-compliant for maximum portability
 
 # Portable in-place sed (works on both GNU and BSD/macOS sed)
 # Usage: _sed_i "expression" "file"
