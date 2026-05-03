@@ -682,11 +682,16 @@ serialize_node() {
 # BACKWARD COMPATIBILITY
 # ============================================================================
 
+# _ast_valid: returns 0 if AST is loaded and the temp file still exists
+_ast_valid() {
+    [ -n "$AST_FILE" ] && [ -f "$AST_FILE" ]
+}
+
 yaml_get() {
     local file="$1"
     local key="$2"
     
-    if [ "$YAML_CURRENT_FILE" != "$file" ]; then
+    if [ "$YAML_CURRENT_FILE" != "$file" ] || ! _ast_valid; then
         yaml_parse "$file" || return 1
     fi
     
@@ -697,7 +702,7 @@ yaml_get_nested() {
     local file="$1"
     local path="$2"
     
-    if [ "$YAML_CURRENT_FILE" != "$file" ]; then
+    if [ "$YAML_CURRENT_FILE" != "$file" ] || ! _ast_valid; then
         yaml_parse "$file" || return 1
     fi
     
@@ -709,7 +714,7 @@ yaml_has_key() {
     local file="$1"
     local key="$2"
     
-    if [ "$YAML_CURRENT_FILE" != "$file" ]; then
+    if [ "$YAML_CURRENT_FILE" != "$file" ] || ! _ast_valid; then
         yaml_parse "$file" || return 1
     fi
     
@@ -746,7 +751,7 @@ yaml_get_array() {
     local file="$1"
     local path="$2"
     
-    if [ "$YAML_CURRENT_FILE" != "$file" ]; then
+    if [ "$YAML_CURRENT_FILE" != "$file" ] || ! _ast_valid; then
         yaml_parse "$file" || return 1
     fi
     
