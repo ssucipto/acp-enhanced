@@ -59,7 +59,7 @@ check_package_context() {
         error "Not a package directory: package.yaml not found"
         echo ""
         echo "${RED}This command must be run from an ACP package directory.${NC}"
-        echo "To create a package, use: @acp.package-create"
+        echo "To create a package, use: /acp-package-create"
         exit 1
     fi
     pass "package.yaml found"
@@ -479,7 +479,7 @@ validate_namespace_consistency() {
         done
         echo ""
         echo "  ${RED}Package files matching namespace MUST be in package.yaml contents${NC}"
-        echo "  Add them with: ${YELLOW}@acp.command-create${NC} or ${YELLOW}@acp.pattern-create${NC}"
+        echo "  Add them with: ${YELLOW}/acp-command-create${NC} or ${YELLOW}/acp-pattern-create${NC}"
         echo "  Or remove the namespace prefix if they're dependencies"
         inconsistent=$((inconsistent + skipped_package_files))
     fi
@@ -1065,13 +1065,13 @@ main() {
             echo ""
             echo "Recommendations:"
             echo "  - Address warnings before publishing"
-            echo "  - Run @acp.package-publish when ready"
+            echo "  - Run /acp-package-publish when ready"
             echo ""
         else
             echo "${GREEN}✅ Package validation passed!${NC}"
             echo ""
             echo "Your package is ready to publish."
-            echo "Run: @acp.package-publish"
+            echo "Run: /acp-package-publish"
             echo ""
         fi
         exit 0

@@ -1,6 +1,6 @@
 # Command: sync
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.sync` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-sync` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.2.0  
@@ -23,7 +23,7 @@ This command synchronizes ACP documentation with the actual source code implemen
 
 Use this command after making significant code changes, when you suspect documentation is outdated, or periodically to ensure documentation stays current. It's particularly useful after implementing features, refactoring code, or completing milestones.
 
-Unlike `@acp.update` which updates progress tracking, `@acp.sync` focuses on keeping design documents, patterns, and technical documentation aligned with the actual codebase.
+Unlike `/acp-update` which updates progress tracking, `/acp-sync` focuses on keeping design documents, patterns, and technical documentation aligned with the actual codebase.
 
 ---
 
@@ -42,14 +42,14 @@ Unlike `@acp.update` which updates progress tracking, `@acp.sync` focuses on kee
 ### 0. Display Command Header
 
 ```
-⚡ @acp.sync
+⚡ /acp-sync
   Synchronize documentation with source code by identifying and updating stale documentation
 
   Related:
-    @acp.update    Update progress tracking (not documentation)
-    @acp.validate  Validate documentation structure and consistency
-    @acp.init      Includes sync as part of initialization
-    @acp.report    Generate report including documentation status
+    /acp-update    Update progress tracking (not documentation)
+    /acp-validate  Validate documentation structure and consistency
+    /acp-init      Includes sync as part of initialization
+    /acp-report    Generate report including documentation status
 ```
 
 This step is informational only — do not wait for user input.
@@ -332,7 +332,7 @@ Refresh artifacts to match current codebase and technology landscape.
   - Update Last Verified date if validated
   - Mark as Stale if outdated (triggers user to refresh or deprecate)
 - **Glossary artifacts**:
-  - Add new terms discovered in codebase (use `@acp.artifact-glossary --update`)
+  - Add new terms discovered in codebase (use `/acp-artifact-glossary --update`)
   - Verify existing definitions still accurate
   - Update Last Verified date
 - **Reference artifacts**:
@@ -342,7 +342,7 @@ Refresh artifacts to match current codebase and technology landscape.
   - Update Last Verified date
 - **General**:
   - Flag artifacts as Stale if Last Verified > 6 months and changes detected
-  - Suggest `@acp.artifact-research` re-run for outdated research
+  - Suggest `/acp-artifact-research` re-run for outdated research
   - Update artifact metadata (Last Verified, Status, Confidence if changed)
 
 **Expected Outcome**: Artifacts current with codebase  
@@ -473,7 +473,7 @@ Summary:
 
 **Context**: Refactored authentication system, docs are outdated  
 
-**Invocation**: `@acp.sync`  
+**Invocation**: `/acp-sync`  
 
 **Result**: Identifies auth-design.md is stale, updates it to reflect new implementation, updates related patterns  
 
@@ -481,7 +481,7 @@ Summary:
 
 **Context**: Added 3 new API endpoints, not yet documented  
 
-**Invocation**: `@acp.sync`  
+**Invocation**: `/acp-sync`  
 
 **Result**: Identifies undocumented endpoints, updates api-design.md with new endpoints, adds code examples  
 
@@ -489,7 +489,7 @@ Summary:
 
 **Context**: Monthly documentation review  
 
-**Invocation**: `@acp.sync`  
+**Invocation**: `/acp-sync`  
 
 **Result**: Reviews all docs, finds minor drift in 2 files, updates them, confirms rest is current  
 
@@ -497,10 +497,10 @@ Summary:
 
 ## Related Commands
 
-- [`@acp.update`](acp.update.md) - Update progress tracking (not documentation)
-- [`@acp.validate`](acp.validate.md) - Validate documentation structure and consistency
-- [`@acp.init`](acp.init.md) - Includes sync as part of initialization
-- [`@acp.report`](acp.report.md) - Generate report including documentation status
+- [`/acp-update`](acp.update.md) - Update progress tracking (not documentation)
+- [`/acp-validate`](acp.validate.md) - Validate documentation structure and consistency
+- [`/acp-init`](acp.init.md) - Includes sync as part of initialization
+- [`/acp-report`](acp.report.md) - Generate report including documentation status
 
 ---
 

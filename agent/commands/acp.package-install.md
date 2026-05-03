@@ -1,7 +1,7 @@
 # Command: package-install
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.package-install` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.package-install` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-package-install` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-package-install` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -31,7 +31,7 @@ Use this command when you want to add community-created commands and patterns, i
 
 ## Manifest Tracking
 
-When you install a package, `@acp.package-install` creates or updates `agent/manifest.yaml` to track:
+When you install a package, `/acp-package-install` creates or updates `agent/manifest.yaml` to track:
 
 - **Package metadata**:
   - Package name and version
@@ -102,21 +102,21 @@ This happens automatically - no manual setup required.
 ### 0. Display Command Header
 
 ```
-⚡ @acp.package-install
+⚡ /acp-package-install
   Install third-party command packages from git repositories
 
   Usage:
-    @acp.package-install                           Install package (prompted for repo)
-    @acp.package-install --global                  Install to ~/.acp/ globally
-    @acp.package-install --list                    Preview files without installing
-    @acp.package-install --patterns                Install only patterns
-    @acp.package-install --commands                Install only commands
-    @acp.package-install --experimental            Include experimental features
+    /acp-package-install                           Install package (prompted for repo)
+    /acp-package-install --global                  Install to ~/.acp/ globally
+    /acp-package-install --list                    Preview files without installing
+    /acp-package-install --patterns                Install only patterns
+    /acp-package-install --commands                Install only commands
+    /acp-package-install --experimental            Include experimental features
 
   Related:
-    @acp.validate              Validate installed commands
-    @acp.version-update        Update core ACP commands
-    @acp.status                View project status
+    /acp-validate              Validate installed commands
+    /acp-version-update        Update core ACP commands
+    /acp-status                View project status
 ```
 
 ### 1. Choose Installation Mode
@@ -389,7 +389,7 @@ Next steps:
 
 **Context**: Want to add deployment commands from community  
 
-**Invocation**: `@acp.package-install`  
+**Invocation**: `/acp-package-install`  
 
 **Command to execute**:
 ```bash
@@ -402,7 +402,7 @@ Next steps:
 
 **Context**: Want to add TypeScript patterns from organization  
 
-**Invocation**: `@acp.package-install`  
+**Invocation**: `/acp-package-install`  
 
 **Command to execute**:
 ```bash
@@ -415,7 +415,7 @@ Next steps:
 
 **Context**: Installing package globally for package development  
 
-**Invocation**: `@acp.package-install`  
+**Invocation**: `/acp-package-install`  
 
 **Command to execute**:
 ```bash
@@ -428,7 +428,7 @@ Next steps:
 
 **Context**: Want to preview package contents before installing  
 
-**Invocation**: `@acp.package-install`  
+**Invocation**: `/acp-package-install`  
 
 **Command to execute**:
 ```bash
@@ -441,9 +441,9 @@ Next steps:
 
 ## Related Commands
 
-- [`@acp.validate`](acp.validate.md) - Validate installed commands
-- [`@acp.version-update`](acp.version-update.md) - Update core ACP commands
-- [`@acp.status`](acp.status.md) - View project status
+- [`/acp-validate`](acp.validate.md) - Validate installed commands
+- [`/acp-version-update`](acp.version-update.md) - Update core ACP commands
+- [`/acp-status`](acp.status.md) - View project status
 
 ---
 

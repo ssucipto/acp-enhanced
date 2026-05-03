@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# E2E tests for @acp.project-info command
+# E2E tests for /acp-project-info command
 # Note: Not using set -euo pipefail due to YAML parser AST cleanup issues
 
 # Source test utilities
@@ -137,7 +137,7 @@ test_non_current_project() {
 # Run all tests
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Running @acp.project-info E2E tests..."
+echo "Running /acp-project-info E2E tests..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 

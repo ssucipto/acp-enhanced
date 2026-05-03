@@ -1,7 +1,7 @@
 # Command: project-list
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.project-list` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.project-list` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-project-list` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-project-list` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -22,7 +22,7 @@
 
 Lists all projects registered in `~/.acp/projects.yaml` with their metadata. Shows project type, status, description, git origin (when available), and last accessed time. Highlights the current active project with a ⭐ marker.
 
-**Key Distinction**: This command lists projects IN the registry. Use `@acp.projects-sync` to discover projects NOT YET registered.  
+**Key Distinction**: This command lists projects IN the registry. Use `/acp-projects-sync` to discover projects NOT YET registered.  
 
 ---
 
@@ -39,20 +39,20 @@ Lists all projects registered in `~/.acp/projects.yaml` with their metadata. Sho
 ### 0. Display Command Header
 
 ```
-⚡ @acp.project-list
+⚡ /acp-project-list
   List all projects registered in global workspace
 
   Usage:
-    @acp.project-list                              List all projects
-    @acp.project-list --type <type>                Filter by project type
-    @acp.project-list --status <status>            Filter by status
+    /acp-project-list                              List all projects
+    /acp-project-list --type <type>                Filter by project type
+    /acp-project-list --status <status>            Filter by status
 
   Related:
-    @acp.project-create      Create new project
-    @acp.project-set         Switch to project
-    @acp.projects-sync       Discover unregistered projects
-    @acp.project-info        Show project details
-    @acp.projects-restore    Restore projects from git origins
+    /acp-project-create      Create new project
+    /acp-project-set         Switch to project
+    /acp-projects-sync       Discover unregistered projects
+    /acp-project-info        Show project details
+    /acp-projects-restore    Restore projects from git origins
 ```
 
 ### 1. Run Shell Script
@@ -109,7 +109,7 @@ Examine the project list and identify projects of interest.
 
 No projects registered yet
 
-Create projects with: @acp.project-create
+Create projects with: /acp-project-create
 ```
 
 ### Console Output (With Projects)
@@ -157,7 +157,7 @@ Showing 2 of 3 projects
 
 **Context**: Want to see all registered projects  
 
-**Invocation**: `@acp.project-list`  
+**Invocation**: `/acp-project-list`  
 
 **Result**: Displays all projects with metadata, current project marked  
 
@@ -165,7 +165,7 @@ Showing 2 of 3 projects
 
 **Context**: Only want to see MCP server projects  
 
-**Invocation**: `@acp.project-list --type mcp-server`  
+**Invocation**: `/acp-project-list --type mcp-server`  
 
 **Result**: Displays only MCP server projects  
 
@@ -173,7 +173,7 @@ Showing 2 of 3 projects
 
 **Context**: Only want to see active projects  
 
-**Invocation**: `@acp.project-list --status active`  
+**Invocation**: `/acp-project-list --status active`  
 
 **Result**: Displays only active projects (excludes archived/paused)  
 
@@ -181,7 +181,7 @@ Showing 2 of 3 projects
 
 **Context**: No projects registered yet  
 
-**Invocation**: `@acp.project-list`  
+**Invocation**: `/acp-project-list`  
 
 **Result**: Helpful message suggesting to create projects  
 
@@ -189,11 +189,11 @@ Showing 2 of 3 projects
 
 ## Related Commands
 
-- [`@acp.project-create`](acp.project-create.md) - Create new project
-- [`@acp.project-set`](acp.project-set.md) - Switch to project
-- [`@acp.projects-sync`](acp.projects-sync.md) - Discover unregistered projects
-- [`@acp.project-info`](acp.project-info.md) - Show project details
-- [`@acp.projects-restore`](acp.projects-restore.md) - Restore projects from git origins
+- [`/acp-project-create`](acp.project-create.md) - Create new project
+- [`/acp-project-set`](acp.project-set.md) - Switch to project
+- [`/acp-projects-sync`](acp.projects-sync.md) - Discover unregistered projects
+- [`/acp-project-info`](acp.project-info.md) - Show project details
+- [`/acp-projects-restore`](acp.projects-restore.md) - Restore projects from git origins
 
 ---
 
@@ -205,7 +205,7 @@ Showing 2 of 3 projects
 
 **Cause**: Global ACP not initialized or registry not created  
 
-**Solution**: Run `@acp.project-create` to create first project (auto-initializes registry)  
+**Solution**: Run `/acp-project-create` to create first project (auto-initializes registry)  
 
 ### Issue 2: No projects shown
 
@@ -213,7 +213,7 @@ Showing 2 of 3 projects
 
 **Cause**: Registry exists but is empty  
 
-**Solution**: Create projects with `@acp.project-create` or discover existing projects with `@acp.projects-sync`  
+**Solution**: Create projects with `/acp-project-create` or discover existing projects with `/acp-projects-sync`  
 
 ### Issue 3: Filters return no results
 

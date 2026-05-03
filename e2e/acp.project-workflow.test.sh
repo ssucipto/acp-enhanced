@@ -51,7 +51,7 @@ test_complete_project_lifecycle() {
   
   setup_test_env
   
-  # Step 1: Create projects manually (simulating @acp.project-create)
+  # Step 1: Create projects manually (simulating /acp-project-create)
   echo "Step 1: Creating test projects..."
   
   local project1_dir="${TEST_DIR}/.acp/projects/test-mcp-server"
@@ -100,7 +100,7 @@ EOF
   echo ""
   
   # Step 3: List projects
-  echo "Step 3: Testing @acp.project-list..."
+  echo "Step 3: Testing /acp-project-list..."
   
   local list_output
   list_output=$(bash "${PROJECT_ROOT}/agent/scripts/acp.project-list.sh" 2>&1)
@@ -112,7 +112,7 @@ EOF
   echo ""
   
   # Step 4: Set current project
-  echo "Step 4: Testing @acp.project-set..."
+  echo "Step 4: Testing /acp-project-set..."
   
   local set_output
   set_output=$(bash "${PROJECT_ROOT}/agent/scripts/acp.project-set.sh" test-mcp-server 2>&1)
@@ -127,7 +127,7 @@ EOF
   echo ""
   
   # Step 5: Get project info
-  echo "Step 5: Testing @acp.project-info..."
+  echo "Step 5: Testing /acp-project-info..."
   
   local info_output
   info_output=$(bash "${PROJECT_ROOT}/agent/scripts/acp.project-info.sh" test-mcp-server 2>&1)
@@ -140,7 +140,7 @@ EOF
   echo ""
   
   # Step 6: Update project metadata
-  echo "Step 6: Testing @acp.project-update..."
+  echo "Step 6: Testing /acp-project-update..."
   
   local update_output
   update_output=$(bash "${PROJECT_ROOT}/agent/scripts/acp.project-update.sh" test-mcp-server --status archived 2>&1)
@@ -155,7 +155,7 @@ EOF
   echo ""
   
   # Step 7: Sync unregistered projects (skip - requires interactive input)
-  echo "Step 7: Testing @acp.projects-sync (manual registration)..."
+  echo "Step 7: Testing /acp-projects-sync (manual registration)..."
   
   # Manually register the third project instead of using sync
   register_project "test-cli-tool" "$project3_dir" "cli-tool" "Test CLI tool"
@@ -181,7 +181,7 @@ EOF
   echo ""
   
   # Step 9: Remove a project
-  echo "Step 9: Testing @acp.project-remove..."
+  echo "Step 9: Testing /acp-project-remove..."
   
   local remove_output
   remove_output=$(bash "${PROJECT_ROOT}/agent/scripts/acp.project-remove.sh" test-web-app -y 2>&1)

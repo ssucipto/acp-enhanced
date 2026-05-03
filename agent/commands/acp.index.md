@@ -1,7 +1,7 @@
 # Command: index
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.index` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.index` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-index` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-index` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -37,12 +37,12 @@ This command supports both CLI-style subcommands and natural language arguments.
 
 | Example | Detected Subcommand |
 |---------|---------------------|
-| `@acp.index` | list |
-| `@acp.index show all files` | show |
-| `@acp.index add the testing pattern` | add (infer path from "testing pattern") |
-| `@acp.index remove requirements.md` | remove |
-| `@acp.index what should I add?` | explore |
-| `@acp.index suggest key files` | explore |
+| `/acp-index` | list |
+| `/acp-index show all files` | show |
+| `/acp-index add the testing pattern` | add (infer path from "testing pattern") |
+| `/acp-index remove requirements.md` | remove |
+| `/acp-index what should I add?` | explore |
+| `/acp-index suggest key files` | explore |
 
 **Matching rules**:
 - Look for keywords: `add`, `remove`, `delete`, `explore`, `suggest`, `scan`, `show`, `detail`, `list`
@@ -74,22 +74,22 @@ See also: `agent/design/local.key-file-index-system.md`
 ### 0. Display Command Header
 
 ```
-⚡ @acp.index
+⚡ /acp-index
   Manage the key file index — list, add, remove, explore, and show indexed key files
 
   Usage:
-    @acp.index                     List all indexed key files
-    @acp.index add <path>          Add a file to the index
-    @acp.index remove <path>       Remove a file from the index
-    @acp.index explore             Scan codebase and suggest key files
-    @acp.index show                Show full metadata for all entries
+    /acp-index                     List all indexed key files
+    /acp-index add <path>          Add a file to the index
+    /acp-index remove <path>       Remove a file from the index
+    /acp-index explore             Scan codebase and suggest key files
+    /acp-index show                Show full metadata for all entries
 
   Related:
-    @acp.init            Reads key files during initialization
-    @acp.proceed         Reads contextual key files before tasks
-    @acp.validate        Validates index file paths and schema
-    @acp.design-create   Prompts to add new designs to index
-    @acp.pattern-create  Prompts to add new patterns to index
+    /acp-init            Reads key files during initialization
+    /acp-proceed         Reads contextual key files before tasks
+    /acp-validate        Validates index file paths and schema
+    /acp-design-create   Prompts to add new designs to index
+    /acp-pattern-create  Prompts to add new patterns to index
 ```
 
 This step is informational only — do not wait for user input.
@@ -148,7 +148,7 @@ core-sdk (3 entries):
 📑 Key File Index: Empty
 
 No index files found in agent/index/.
-Run @acp.index explore to discover key files, or @acp.index add <path> to add one.
+Run /acp-index explore to discover key files, or /acp-index add <path> to add one.
 ```
 
 ---
@@ -192,7 +192,7 @@ Remove a file from `agent/index/local.main.yaml`.
 
 **Actions**:
 1. Find entry by path in `agent/index/local.main.yaml`
-2. If not found: report error, suggest checking `@acp.index list`
+2. If not found: report error, suggest checking `/acp-index list`
 3. If found: show the entry and confirm removal
 4. Remove entry from YAML file
 
@@ -324,7 +324,7 @@ See display formats for each subcommand above.
 
 **Context**: Want to see what's currently indexed  
 
-**Invocation**: `@acp.index`  
+**Invocation**: `/acp-index`  
 
 **Result**: Displays compact table of all indexed files grouped by namespace  
 
@@ -332,7 +332,7 @@ See display formats for each subcommand above.
 
 **Context**: Just created a new pattern and want to index it  
 
-**Invocation**: `@acp.index add agent/patterns/local.api-conventions.md`  
+**Invocation**: `/acp-index add agent/patterns/local.api-conventions.md`  
 
 **Result**: Prompts for weight/kind/description/rationale/applies, adds to local.main.yaml  
 
@@ -340,7 +340,7 @@ See display formats for each subcommand above.
 
 **Context**: Want to discover what files should be indexed  
 
-**Invocation**: `@acp.index explore`  
+**Invocation**: `/acp-index explore`  
 
 **Result**: Scans agent/design/ and agent/patterns/, shows un-indexed files with suggestions  
 
@@ -348,7 +348,7 @@ See display formats for each subcommand above.
 
 **Context**: Want to add a file using description instead of path  
 
-**Invocation**: `@acp.index add the e2e testing pattern`  
+**Invocation**: `/acp-index add the e2e testing pattern`  
 
 **Result**: Agent searches for matching file, finds `agent/patterns/local.e2e-testing.md`, proceeds with add flow  
 
@@ -356,7 +356,7 @@ See display formats for each subcommand above.
 
 **Context**: A file was deleted but still in the index  
 
-**Invocation**: `@acp.index remove agent/design/old-feature.md`  
+**Invocation**: `/acp-index remove agent/design/old-feature.md`  
 
 **Result**: Finds entry, confirms removal, updates local.main.yaml  
 
@@ -364,11 +364,11 @@ See display formats for each subcommand above.
 
 ## Related Commands
 
-- [`@acp.init`](acp.init.md) - Reads key files during initialization (step 2.8)
-- [`@acp.proceed`](acp.proceed.md) - Reads contextual key files before task execution
-- [`@acp.validate`](acp.validate.md) - Validates index file paths and schema
-- [`@acp.design-create`](acp.design-create.md) - Prompts to add new designs to index
-- [`@acp.pattern-create`](acp.pattern-create.md) - Prompts to add new patterns to index
+- [`/acp-init`](acp.init.md) - Reads key files during initialization (step 2.8)
+- [`/acp-proceed`](acp.proceed.md) - Reads contextual key files before task execution
+- [`/acp-validate`](acp.validate.md) - Validates index file paths and schema
+- [`/acp-design-create`](acp.design-create.md) - Prompts to add new designs to index
+- [`/acp-pattern-create`](acp.pattern-create.md) - Prompts to add new patterns to index
 
 ---
 
@@ -388,7 +388,7 @@ See display formats for each subcommand above.
 
 **Cause**: Path is incorrect or file was deleted  
 
-**Solution**: Verify the file path. Use `@acp.index explore` to discover files automatically.  
+**Solution**: Verify the file path. Use `/acp-index explore` to discover files automatically.  
 
 ### Issue 3: Cannot remove package index entry
 
@@ -396,7 +396,7 @@ See display formats for each subcommand above.
 
 **Cause**: Trying to remove an entry from a package-shipped index file  
 
-**Solution**: Package index entries are managed by the package. Use `@acp.package-update` or `@acp.package-remove` to modify package indices.  
+**Solution**: Package index entries are managed by the package. Use `/acp-package-update` or `/acp-package-remove` to modify package indices.  
 
 ### Issue 4: Exceeding recommended limits
 

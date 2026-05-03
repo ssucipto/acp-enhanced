@@ -379,7 +379,7 @@ This is a global ACP installation located at `~/.acp/`.
 ### Purpose
 
 This installation provides:
-- **Global packages** in `~/.acp/agent/` - Packages installed with `@acp.package-install --global`
+- **Global packages** in `~/.acp/agent/` - Packages installed with `/acp-package-install --global`
 - **Project workspace** in `~/.acp/projects/` - Optional location for package development
 - **Global manifest** in `~/.acp/agent/manifest.yaml` - Tracks globally installed packages
 - **Templates and scripts** in `~/.acp/agent/` - All ACP templates and utilities
@@ -388,18 +388,18 @@ This installation provides:
 
 **Install packages globally**:
 ```bash
-@acp.package-install --global https://github.com/user/acp-package.git
+/acp-package-install --global https://github.com/user/acp-package.git
 ```
 
 **Create packages**:
 ```bash
 cd ~/.acp/projects
-@acp.package-create
+/acp-package-create
 ```
 
 **List global packages**:
 ```bash
-@acp.package-list --global
+/acp-package-list --global
 ```
 
 ### Discovery
@@ -1470,25 +1470,25 @@ add_file_to_readme() {
 display_available_commands() {
     echo "${BLUE}ACP Commands Available:${NC}"
     echo ""
-    echo "  ${GREEN}@acp.init${NC}                       - Initialize agent context (start here!)"
-    echo "  ${GREEN}@acp.proceed${NC}                    - Continue with next task"
-    echo "  ${GREEN}@acp.status${NC}                     - Display project status"
-    echo "  ${GREEN}@acp.update${NC}                     - Update progress tracking"
-    echo "  ${GREEN}@acp.sync${NC}                       - Sync documentation with code"
-    echo "  ${GREEN}@acp.validate${NC}                   - Validate ACP documents"
-    echo "  ${GREEN}@acp.report${NC}                     - Generate project report"
-    echo "  ${GREEN}@acp.version-check${NC}              - Show current ACP version"
-    echo "  ${GREEN}@acp.version-check-for-updates${NC}  - Check for ACP updates"
-    echo "  ${GREEN}@acp.version-update${NC}             - Update ACP to latest version"
+    echo "  ${GREEN}/acp-init${NC}                       - Initialize agent context (start here!)"
+    echo "  ${GREEN}/acp-proceed${NC}                    - Continue with next task"
+    echo "  ${GREEN}/acp-status${NC}                     - Display project status"
+    echo "  ${GREEN}/acp-update${NC}                     - Update progress tracking"
+    echo "  ${GREEN}/acp-sync${NC}                       - Sync documentation with code"
+    echo "  ${GREEN}/acp-validate${NC}                   - Validate ACP documents"
+    echo "  ${GREEN}/acp-report${NC}                     - Generate project report"
+    echo "  ${GREEN}/acp-version-check${NC}              - Show current ACP version"
+    echo "  ${GREEN}/acp-version-check-for-updates${NC}  - Check for ACP updates"
+    echo "  ${GREEN}/acp-version-update${NC}             - Update ACP to latest version"
     echo ""
     echo "${BLUE}Package Management Commands:${NC}"
     echo ""
-    echo "  ${GREEN}@acp.package-install${NC}            - Install ACP packages from GitHub"
-    echo "  ${GREEN}@acp.package-list${NC}               - List installed packages"
-    echo "  ${GREEN}@acp.package-update${NC}             - Update installed packages"
-    echo "  ${GREEN}@acp.package-remove${NC}             - Remove installed packages"
-    echo "  ${GREEN}@acp.package-info${NC}               - Show package details"
-    echo "  ${GREEN}@acp.package-search${NC}             - Search for packages on GitHub"
+    echo "  ${GREEN}/acp-package-install${NC}            - Install ACP packages from GitHub"
+    echo "  ${GREEN}/acp-package-list${NC}               - List installed packages"
+    echo "  ${GREEN}/acp-package-update${NC}             - Update installed packages"
+    echo "  ${GREEN}/acp-package-remove${NC}             - Remove installed packages"
+    echo "  ${GREEN}/acp-package-info${NC}               - Show package details"
+    echo "  ${GREEN}/acp-package-search${NC}             - Search for packages on GitHub"
     echo ""
     echo "${BLUE}Git Commands Available:${NC}"
     echo ""

@@ -1,6 +1,6 @@
 # Command: package-list
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.package-list` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-package-list` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -50,21 +50,21 @@ This happens automatically - no manual setup required.
 ### 0. Display Command Header
 
 ```
-⚡ @acp.package-list
+⚡ /acp-package-list
   List installed ACP packages with versions and details
 
   Usage:
-    @acp.package-list                              List local packages
-    @acp.package-list --global                     List global packages
-    @acp.package-list --verbose                    Show detailed information
-    @acp.package-list --outdated                   Show packages with updates
-    @acp.package-list --modified                   Show packages with local changes
+    /acp-package-list                              List local packages
+    /acp-package-list --global                     List global packages
+    /acp-package-list --verbose                    Show detailed information
+    /acp-package-list --outdated                   Show packages with updates
+    /acp-package-list --modified                   Show packages with local changes
 
   Related:
-    @acp.package-install       Install packages
-    @acp.package-update        Update packages
-    @acp.package-info          Show detailed package info
-    @acp.package-remove        Remove packages
+    /acp-package-install       Install packages
+    /acp-package-update        Update packages
+    /acp-package-info          Show detailed package info
+    /acp-package-remove        Remove packages
 ```
 
 ### 1. Run Package List Script
@@ -212,7 +212,7 @@ To install a package:
 
 **Context**: Want to see what packages are installed  
 
-**Invocation**: `@acp.package-list`  
+**Invocation**: `/acp-package-list`  
 
 **Result**: Shows 3 packages with versions and file counts  
 
@@ -220,7 +220,7 @@ To install a package:
 
 **Context**: Need detailed info about installed packages  
 
-**Invocation**: `@acp.package-list --verbose`  
+**Invocation**: `/acp-package-list --verbose`  
 
 **Result**: Shows all packages with source URLs, timestamps, file breakdowns, and modified files  
 
@@ -228,7 +228,7 @@ To install a package:
 
 **Context**: Want to see which packages have updates available  
 
-**Invocation**: `@acp.package-list --outdated`  
+**Invocation**: `/acp-package-list --outdated`  
 
 **Result**: Shows only firebase (1.2.0) has update available, suggests update command  
 
@@ -236,7 +236,7 @@ To install a package:
 
 **Context**: Want to see which packages have local modifications  
 
-**Invocation**: `@acp.package-list --modified`  
+**Invocation**: `/acp-package-list --modified`  
 
 **Result**: Shows only firebase has 1 modified file (firebase-security-rules.md)  
 
@@ -244,10 +244,10 @@ To install a package:
 
 ## Related Commands
 
-- [`@acp.package-install`](acp.package-install.md) - Install packages
-- [`@acp.package-update`](acp.package-update.md) - Update packages
-- [`@acp.package-info`](acp.package-info.md) - Show detailed package info
-- [`@acp.package-remove`](acp.package-remove.md) - Remove packages
+- [`/acp-package-install`](acp.package-install.md) - Install packages
+- [`/acp-package-update`](acp.package-update.md) - Update packages
+- [`/acp-package-info`](acp.package-info.md) - Show detailed package info
+- [`/acp-package-remove`](acp.package-remove.md) - Remove packages
 
 ---
 
@@ -259,7 +259,7 @@ To install a package:
 
 **Cause**: No packages installed or manifest doesn't exist  
 
-**Solution**: Install packages using `@acp.package-install`  
+**Solution**: Install packages using `/acp-package-install`  
 
 ### Issue 2: File counts seem wrong
 
@@ -275,7 +275,7 @@ To install a package:
 
 **Cause**: Cloning repositories to check versions  
 
-**Solution**: This is normal for multiple packages, be patient or check specific package with `@acp.package-update <name> --check`  
+**Solution**: This is normal for multiple packages, be patient or check specific package with `/acp-package-update <name> --check`  
 
 ---
 

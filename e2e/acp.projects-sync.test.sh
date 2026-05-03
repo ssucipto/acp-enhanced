@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# E2E tests for @acp.projects-sync command
+# E2E tests for /acp-projects-sync command
 
 # Note: Don't use set -u in tests due to variable scoping
 set -eo pipefail
@@ -74,7 +74,7 @@ projects:
 EOF
 }
 
-echo "Running @acp.projects-sync E2E tests..."
+echo "Running /acp-projects-sync E2E tests..."
 echo ""
 
 # Test 1: Empty projects directory
@@ -278,5 +278,5 @@ test_malformed_progress
 test_registry_auto_init
 
 echo ""
-echo "All @acp.projects-sync tests completed!"
+echo "All /acp-projects-sync tests completed!"
 print_test_summary

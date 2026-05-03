@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# E2E tests for @acp.project-list command
+# E2E tests for /acp-project-list command
 # Note: Not using set -euo pipefail due to YAML parser AST cleanup issues
 
 # Source test utilities
@@ -28,7 +28,7 @@ test_empty_registry_no_file() {
     output=$("$SCRIPT_PATH" 2>&1)
     
     assert_contains "$output" "No projects registry found" "Should show no registry message"
-    assert_contains "$output" "@acp.project-create" "Should suggest creating projects"
+    assert_contains "$output" "/acp-project-create" "Should suggest creating projects"
     
     teardown
 }
@@ -42,7 +42,7 @@ test_empty_registry_with_file() {
     output=$("$SCRIPT_PATH" 2>&1)
     
     assert_contains "$output" "No projects registered yet" "Should show no projects message"
-    assert_contains "$output" "@acp.project-create" "Should suggest creating projects"
+    assert_contains "$output" "/acp-project-create" "Should suggest creating projects"
     
     teardown
 }
@@ -154,7 +154,7 @@ test_invalid_filter_option() {
 # Run all tests
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Running @acp.project-list E2E tests..."
+echo "Running /acp-project-list E2E tests..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
