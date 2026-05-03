@@ -1,6 +1,6 @@
 # Command: status
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.status` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-status` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -23,7 +23,7 @@ This command provides a comprehensive overview of the current project status by 
 
 Use this command when you need to quickly understand the current state of the project without performing a full initialization. It's ideal for checking progress during a session, before starting new work, or when reporting status to stakeholders.
 
-Unlike `@acp.init` which performs a full context load and updates documentation, `@acp.status` is a read-only operation that simply reports the current state as recorded in progress tracking.
+Unlike `/acp-init` which performs a full context load and updates documentation, `/acp-status` is a read-only operation that simply reports the current state as recorded in progress tracking.
 
 ---
 
@@ -39,14 +39,14 @@ Unlike `@acp.init` which performs a full context load and updates documentation,
 ### 0. Display Command Header
 
 ```
-⚡ @acp.status
+⚡ /acp-status
   Display current project status including milestone progress, current task, recent work, and next steps
 
   Related:
-    @acp.init      Full context initialization at session start
-    @acp.proceed   Continue with current task
-    @acp.update    Update progress.yaml after completing work
-    @acp.sync      Sync documentation with code changes
+    /acp-init      Full context initialization at session start
+    /acp-proceed   Continue with current task
+    /acp-update    Update progress.yaml after completing work
+    /acp-sync      Sync documentation with code changes
 ```
 
 This step is informational only — do not wait for user input.
@@ -211,7 +211,7 @@ No status changes - read-only operation
 
 **Context**: You're in the middle of working and want to see where things stand  
 
-**Invocation**: `@acp.status`  
+**Invocation**: `/acp-status`  
 
 **Result**: Displays current milestone (M1, 40% complete), current task (task-3, in progress), recent work (completed task-2 yesterday), and next steps (finish task-3, start task-4)  
 
@@ -219,7 +219,7 @@ No status changes - read-only operation
 
 **Context**: Beginning work after a break, want to see project state before diving in  
 
-**Invocation**: `@acp.status`  
+**Invocation**: `/acp-status`  
 
 **Result**: Shows you're on milestone 2, 60% through, currently on task-7, with 3 tasks completed this week and 2 blockers to address  
 
@@ -227,7 +227,7 @@ No status changes - read-only operation
 
 **Context**: Need to provide a quick status update  
 
-**Invocation**: `@acp.status`  
+**Invocation**: `/acp-status`  
 
 **Result**: Clean, formatted output showing overall progress (65%), current phase (Testing), and upcoming milestones  
 
@@ -235,10 +235,10 @@ No status changes - read-only operation
 
 ## Related Commands
 
-- [`@acp.init`](acp.init.md) - Use for full context initialization at session start
-- [`@acp.proceed`](acp.proceed.md) - Use after checking status to continue with current task
-- [`@acp.update`](acp.update.md) - Use to update progress.yaml after completing work
-- [`@acp.sync`](acp.sync.md) - Use to sync documentation with code changes
+- [`/acp-init`](acp.init.md) - Use for full context initialization at session start
+- [`/acp-proceed`](acp.proceed.md) - Use after checking status to continue with current task
+- [`/acp-update`](acp.update.md) - Use to update progress.yaml after completing work
+- [`/acp-sync`](acp.sync.md) - Use to sync documentation with code changes
 
 ---
 
@@ -266,7 +266,7 @@ No status changes - read-only operation
 
 **Cause**: progress.yaml hasn't been updated after recent work  
 
-**Solution**: Run `@acp.update` to refresh progress tracking, or manually update progress.yaml  
+**Solution**: Run `/acp-update` to refresh progress tracking, or manually update progress.yaml  
 
 ---
 
@@ -291,10 +291,10 @@ No status changes - read-only operation
 
 - This is a read-only command that doesn't modify any files
 - For best results, keep `agent/progress.yaml` up to date
-- Use `@acp.update` after completing tasks to ensure status is accurate
+- Use `/acp-update` after completing tasks to ensure status is accurate
 - Status output is designed to be human-readable and suitable for reports
 - Can be run multiple times per session without side effects
-- Faster than `@acp.init` since it only reads one file
+- Faster than `/acp-init` since it only reads one file
 
 ---
 

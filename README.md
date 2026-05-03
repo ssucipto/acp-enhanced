@@ -51,7 +51,7 @@ After it completes, **customize** `.agent/core/identity.yml` for your project (n
 ### Update when this fork changes
 
 ```
-@acp.package-update acp-enhanced
+/acp-package-update acp-enhanced
 
 > Repository: <https://github.com/ssucipto/acp-enhanced>
 ```
@@ -116,7 +116,7 @@ any or none of following items:
 Instead of creating a draft, you may also discuss your feature interactively via chat.
 
 #### Clarification
-Once you have completed your draft, invoke `@acp.clarification-create` and your
+Once you have completed your draft, invoke `/acp-clarification-create` and your
 agent will generate a comprehensive clarifications document which focuses on:
 - Gaps in your requirements or proposed solution
 - Ambiguous requirements
@@ -143,7 +143,7 @@ such as:
 > rest of your questions".
 
 Once you are satisfied with your partial or complete responses,
-invoke `@acp.clarification-address`. This instructs the agent
+invoke `/acp-clarification-address`. This instructs the agent
 to process your responses, execute any directives, and consider
 any cascading effects of decisions. Once your agent completes your directives,
 it rewrites the clarifications document, inserting its analysis,
@@ -153,7 +153,7 @@ of the document it addressed or updated.
 
 Proof the agent responses in the document and provide follow up
 responses if necessary. It is recommended to iterate on your
-clarifications doc via several chained `@acp.clarification-address`
+clarifications doc via several chained `/acp-clarification-address`
 invocations until all gaps and open questions are addressed
 with concrete decisions. 
 
@@ -176,16 +176,16 @@ document.
 
 #### Design
 If you took the time to generate a bullet proof clarifications document,
-this step is essentially a noop. Invoke `@acp.design-create --from clar`.
-This command invokes the subroutine `@acp.clarification-capture` in addition
-to its primary routine. `@acp.clarification-capture` ensures every decision
+this step is essentially a noop. Invoke `/acp-design-create --from clar`.
+This command invokes the subroutine `/acp-clarification-capture` in addition
+to its primary routine. `/acp-clarification-capture` ensures every decision
 made in your clarification document is captured in a key decisions appendix.
 Clarifications are designed to be ephemeral which means your design is the
 ultimate source of truth for your feature. Review the design carefully
 and optionally iterate on it using chat. 
 
 #### Planning
-Once you are satisfied with the design, invoke `@acp.plan`. 
+Once you are satisfied with the design, invoke `/acp-plan`. 
 Your agent will propose a milestone and task breakdown.
 Once you approve the proposal, the agent will generate planning
 artifacts autonomously in one pass.
@@ -227,10 +227,10 @@ milestones and tasks in a side panel or drill into them directly.
 
 #### Fully autonomous implementation
 The final and easiest step in the ACP workflow is invoking 
-`@acp.proceed` to actually implement your feature.
+`/acp-proceed` to actually implement your feature.
 
 If you are confident in your planning, run 
-`@acp.proceed --yolo`, and the agent will
+`/acp-proceed --yolo`, and the agent will
 implement your entire milestone from start to finish,
 committing each task along the way, with no input from
 you. 
@@ -302,7 +302,7 @@ curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol
 
 ### Update an Existing Project
 
-You can update an existing project via `@acp.version-update` command or by running the update script directly:
+You can update an existing project via `/acp-version-update` command or by running the update script directly:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.version-update.sh | bash
@@ -369,7 +369,7 @@ Once ACP is installed, use these commands with your AI agent:
 
 ### Start Working on a Project
 
-Type: **`@acp.init`** (or `AGENT.md: Initialize`)
+Type: **`/acp-init`** (or `AGENT.md: Initialize`)
 
 This will:
 - Check for ACP updates
@@ -380,7 +380,7 @@ This will:
 
 ### Continue Working
 
-Type: **`@acp.proceed`** (or `AGENT.md: Proceed`)
+Type: **`/acp-proceed`** (or `AGENT.md: Proceed`)
 
 This will:
 - Continue with current or next task
@@ -389,18 +389,18 @@ This will:
 
 ### Resume a Previous Session
 
-Type: **`@acp.resume`** ⭐ Recommended
+Type: **`/acp-resume`** ⭐ Recommended
 
 This convenient command automatically:
-- Initializes context (`@acp.init`)
+- Initializes context (`/acp-init`)
 - Reviews latest session report
-- Continues with next task (`@acp.proceed`)
+- Continues with next task (`/acp-proceed`)
 
 Perfect for starting new sessions or returning after breaks.
 
 ### Check Project Status
 
-Type: **`@acp.status`**
+Type: **`/acp-status`**
 
 This will:
 - Display current milestone and progress
@@ -410,48 +410,48 @@ This will:
 ### Available Commands
 
 **Workflow Commands**:
-- **`@acp.resume`** ⭐ - Resume work (init + report + proceed)
-- **`@acp.init`** - Initialize agent context
-- **`@acp.proceed`** - Continue with next task
-- **`@acp.status`** - Display project status
-- **`@acp.sync`** - Sync documentation with code
-- **`@acp.validate`** - Validate ACP structure
-- **`@acp.report`** - Generate session report
-- **`@acp.index`** - Manage the key file index (list, add, remove, explore, show)
+- **`/acp-resume`** ⭐ - Resume work (init + report + proceed)
+- **`/acp-init`** - Initialize agent context
+- **`/acp-proceed`** - Continue with next task
+- **`/acp-status`** - Display project status
+- **`/acp-sync`** - Sync documentation with code
+- **`/acp-validate`** - Validate ACP structure
+- **`/acp-report`** - Generate session report
+- **`/acp-index`** - Manage the key file index (list, add, remove, explore, show)
 
 **Package Management**:
-- **`@acp.package-install`** - Install packages (supports `--global` flag)
-- **`@acp.package-list`** - List installed packages (supports `--global` flag)
-- **`@acp.package-info`** - Show package details (supports `--global` flag)
-- **`@acp.package-update`** - Update packages (supports `--global` flag)
-- **`@acp.package-remove`** - Remove packages (supports `--global` flag)
-- **`@acp.package-search`** - Search for packages
-- **`@acp.package-validate`** - Validate package structure
-- **`@acp.package-publish`** - Publish package
-- **`@acp.package-create`** - Create new package
+- **`/acp-package-install`** - Install packages (supports `--global` flag)
+- **`/acp-package-list`** - List installed packages (supports `--global` flag)
+- **`/acp-package-info`** - Show package details (supports `--global` flag)
+- **`/acp-package-update`** - Update packages (supports `--global` flag)
+- **`/acp-package-remove`** - Remove packages (supports `--global` flag)
+- **`/acp-package-search`** - Search for packages
+- **`/acp-package-validate`** - Validate package structure
+- **`/acp-package-publish`** - Publish package
+- **`/acp-package-create`** - Create new package
 
 **Entity Creation**:
-- **`@acp.command-create`** - Create command files
-- **`@acp.pattern-create`** - Create pattern files
-- **`@acp.design-create`** - Create design documents
-- **`@acp.task-create`** - Create task files
-- **`@acp.spec`** - Generate spec from clarification, design, draft, requirements, or interactive
+- **`/acp-command-create`** - Create command files
+- **`/acp-pattern-create`** - Create pattern files
+- **`/acp-design-create`** - Create design documents
+- **`/acp-task-create`** - Create task files
+- **`/acp-spec`** - Generate spec from clarification, design, draft, requirements, or interactive
 
 **Version Commands**:
-- **`@acp.version-check`** - Show current ACP version
-- **`@acp.version-check-for-updates`** - Check for updates
-- **`@acp.version-update`** - Update ACP to latest version
+- **`/acp-version-check`** - Show current ACP version
+- **`/acp-version-check-for-updates`** - Check for updates
+- **`/acp-version-update`** - Update ACP to latest version
 
 **Project Registry**:
-- **`@acp.project-list`** - List registered projects
-- **`@acp.project-set`** - Switch to a project
-- **`@acp.project-info`** - Show project details
-- **`@acp.project-update`** - Update project metadata
-- **`@acp.project-remove`** - Remove project from registry
-- **`@acp.projects-sync`** - Discover unregistered projects
+- **`/acp-project-list`** - List registered projects
+- **`/acp-project-set`** - Switch to a project
+- **`/acp-project-info`** - Show project details
+- **`/acp-project-update`** - Update project metadata
+- **`/acp-project-remove`** - Remove project from registry
+- **`/acp-projects-sync`** - Discover unregistered projects
 
 **Sessions** (Experimental):
-- **`@acp.sessions`** - Manage and view active agent sessions across projects
+- **`/acp-sessions`** - Manage and view active agent sessions across projects
 
 **Git Commands**:
 - **`@git.commit`** - Intelligent version-aware commits
@@ -470,16 +470,16 @@ Install packages globally to `~/.acp/agent/` for package development or global c
 ./agent/scripts/acp.package-install.sh --global https://github.com/user/acp-firebase.git
 
 # Or via command
-@acp.package-install --global https://github.com/user/acp-firebase.git
+/acp-package-install --global https://github.com/user/acp-firebase.git
 
 # List global packages
-@acp.package-list --global
+/acp-package-list --global
 
 # Update global packages
-@acp.package-update --global firebase
+/acp-package-update --global firebase
 
 # Remove global packages
-@acp.package-remove --global firebase
+/acp-package-remove --global firebase
 ```
 
 **Global vs Local**:
@@ -501,10 +501,10 @@ Install packages with experimental features:
 
 ```bash
 # Install only stable features (default)
-@acp.package-install --repo https://github.com/user/acp-firebase.git
+/acp-package-install --repo https://github.com/user/acp-firebase.git
 
 # Install including experimental features
-@acp.package-install --repo https://github.com/user/acp-firebase.git --experimental
+/acp-package-install --repo https://github.com/user/acp-firebase.git --experimental
 ```
 
 **What are experimental features?**
@@ -522,9 +522,9 @@ ACP includes a weighted key file index (`agent/index/`) that ensures agents read
 
 ```bash
 # Manage the key file index
-@acp.index list              # List all indexed key files
-@acp.index add <path>        # Add a file to the index
-@acp.index remove <path>     # Remove a file from the index
+/acp-index list              # List all indexed key files
+/acp-index add <path>        # Add a file to the index
+/acp-index remove <path>     # Remove a file from the index
 ```
 
 Packages can ship their own index files (`contents.indices` in package.yaml), which are automatically installed to `agent/index/` and discovered by commands.
@@ -560,29 +560,29 @@ Manage multiple ACP projects with the global project registry at `~/.acp/project
 
 ```bash
 # List all registered projects
-@acp.project-list
+/acp-project-list
 
 # Switch to a specific project
-@acp.project-set my-project
+/acp-project-set my-project
 
 # View current project details
-@acp.project-info
+/acp-project-info
 
 # Update project metadata (tags, status, description)
-@acp.project-update --tags "typescript,api" --status in_progress
+/acp-project-update --tags "typescript,api" --status in_progress
 
 # Discover unregistered projects in ~/.acp/projects/
-@acp.projects-sync
+/acp-projects-sync
 
 # Remove project from registry (keeps files)
-@acp.project-remove old-project
+/acp-project-remove old-project
 ```
 
 **Key Features**:
 - **Project Discovery**: List and filter projects by type, status, or tags
 - **Context Switching**: Quickly switch between projects
 - **Metadata Tracking**: Track type, status, tags, and relationships
-- **Auto-Registration**: Projects auto-register when created via `@acp.project-create`
+- **Auto-Registration**: Projects auto-register when created via `/acp-project-create`
 
 See [AGENT.md](./AGENT.md#project-registry-system) for complete documentation.
 
@@ -612,9 +612,9 @@ project-root/
 │   ├── commands/                   # Command system
 │   │   ├── .gitkeep
 │   │   ├── command.template.md     # Command template
-│   │   ├── acp.init.md             # @acp.init
-│   │   ├── acp.proceed.md          # @acp.proceed
-│   │   ├── acp.status.md           # @acp.status
+│   │   ├── acp.init.md             # /acp-init
+│   │   ├── acp.proceed.md          # /acp-proceed
+│   │   ├── acp.status.md           # /acp-status
 │   │   └── ...                     # More commands
 │   │
 │   ├── design/                     # Design documents
@@ -718,13 +718,13 @@ Configure ACP behavior at user, workspace, or project level — without modifyin
 
 ```bash
 # See what's currently active
-@acp.preferences-show acp
+/acp-preferences-show acp
 
 # Set a personal default (applies to all your projects)
-@acp.preferences-set acp plan.draft.create_mode guided --user
+/acp-preferences-set acp plan.draft.create_mode guided --user
 
 # Use a one-click workflow preset
-@acp.plan --preset acp.batch-planning
+/acp-plan --preset acp.batch-planning
 ```
 
 ### Preference Levels
@@ -756,17 +756,17 @@ Configure ACP behavior at user, workspace, or project level — without modifyin
 | `acp.interactive-planning` | guided | false | verbose |
 | `acp.rapid-prototyping` | contextual | true | quiet |
 
-Usage: `@acp.plan --preset acp.batch-planning`
+Usage: `/acp-plan --preset acp.batch-planning`
 
 ### Preference Commands
 
 | Command | Purpose |
 |---------|---------|
-| `@acp.preferences-show acp` | View effective preferences with source |
-| `@acp.preferences-show acp --presets` | List available presets |
-| `@acp.preferences-create --level user` | Create user preference file |
-| `@acp.preferences-set acp <path> <value>` | Set a preference value |
-| `@acp.preferences-validate` | Validate all preference files |
+| `/acp-preferences-show acp` | View effective preferences with source |
+| `/acp-preferences-show acp --presets` | List available presets |
+| `/acp-preferences-create --level user` | Create user preference file |
+| `/acp-preferences-set acp <path> <value>` | Set a preference value |
+| `/acp-preferences-validate` | Validate all preference files |
 
 See [AGENT.md](AGENT.md#acp-preferences-system) for complete documentation.
 

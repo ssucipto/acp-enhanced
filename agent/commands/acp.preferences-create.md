@@ -1,6 +1,6 @@
 # Command: preferences-create
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.preferences-create` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-preferences-create` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -27,7 +27,7 @@ Use this command when:
 - Initializing workspace or user-level overrides
 - Adding preference files for a newly installed package
 
-Unlike `@acp.preferences-set` which modifies individual values, this command creates an entire preference file in one step.
+Unlike `/acp-preferences-set` which modifies individual values, this command creates an entire preference file in one step.
 
 ---
 
@@ -58,19 +58,19 @@ Unlike `@acp.preferences-set` which modifies individual values, this command cre
 ### 0. Display Command Header
 
 ```
-⚡ @acp.preferences-create
+⚡ /acp-preferences-create
   Create a new preference file with defaults from configurables
 
   Usage:
-    @acp.preferences-create                          Prompt for level and namespace
-    @acp.preferences-create --level user             Create user-level acp preferences
-    @acp.preferences-create --level project          Create project-level acp preferences
-    @acp.preferences-create --namespace mcp-auth     Create preferences for a package
+    /acp-preferences-create                          Prompt for level and namespace
+    /acp-preferences-create --level user             Create user-level acp preferences
+    /acp-preferences-create --level project          Create project-level acp preferences
+    /acp-preferences-create --namespace mcp-auth     Create preferences for a package
 
   Related:
-    @acp.preferences-show      View effective preferences with sources
-    @acp.preferences-set       Set individual preference values
-    @acp.preferences-get       Generate resolved preference set
+    /acp-preferences-show      View effective preferences with sources
+    /acp-preferences-set       Set individual preference values
+    /acp-preferences-get       Generate resolved preference set
 ```
 
 ### 1. Determine Target Level
@@ -115,7 +115,7 @@ Enter namespace name or number:
   ```
   ⚠️  File already exists: agent/preferences/acp.default.yaml
 
-  Use --force to overwrite, or run @acp.preferences-show to view current values.
+  Use --force to overwrite, or run /acp-preferences-show to view current values.
   ```
   Halt without writing.
 
@@ -168,8 +168,8 @@ Level:       Project
 Namespace:   acp
 Preferences: 8 defaults written
 
-Run @acp.preferences-show to view effective preferences.
-Run @acp.preferences-set to override individual values.
+Run /acp-preferences-show to view effective preferences.
+Run /acp-preferences-set to override individual values.
 ```
 
 ---
@@ -206,7 +206,7 @@ Level:       Project
 Namespace:   acp
 Preferences: 8 defaults written
 
-Run @acp.preferences-show to view effective preferences.
+Run /acp-preferences-show to view effective preferences.
 ```
 
 ---
@@ -215,25 +215,25 @@ Run @acp.preferences-show to view effective preferences.
 
 ### Example 1: Create User-Level ACP Preferences
 
-**Invocation**: `@acp.preferences-create --level user --namespace acp`
+**Invocation**: `/acp-preferences-create --level user --namespace acp`
 
 **Result**: Creates `~/.acp/agent/preferences/acp.default.yaml` with all 8 ACP preference defaults.
 
 ### Example 2: Create Project-Level Preferences (Prompted)
 
-**Invocation**: `@acp.preferences-create`
+**Invocation**: `/acp-preferences-create`
 
 **Result**: Prompts for level (user/workspace/project) and namespace, then creates the file.
 
 ### Example 3: Initialize All Namespaces at Workspace Level
 
-**Invocation**: `@acp.preferences-create --level workspace --all`
+**Invocation**: `/acp-preferences-create --level workspace --all`
 
 **Result**: Creates `.vscode/preferences/<ns>.yaml` for every discovered configurables namespace.
 
 ### Example 4: Overwrite Existing File
 
-**Invocation**: `@acp.preferences-create --level project --namespace acp --force`
+**Invocation**: `/acp-preferences-create --level project --namespace acp --force`
 
 **Result**: Overwrites `agent/preferences/acp.default.yaml` with fresh defaults from configurables.
 
@@ -241,10 +241,10 @@ Run @acp.preferences-show to view effective preferences.
 
 ## Related Commands
 
-- [`@acp.preferences-show`](acp.preferences-show.md) — View effective preferences with source attribution
-- [`@acp.preferences-set`](acp.preferences-set.md) — Modify individual preference values
-- [`@acp.preferences-get`](acp.preferences-get.md) — Generate resolved preference set
-- [`@acp.preferences-validate`](acp.preferences-validate.md) — Validate preference files against configurables
+- [`/acp-preferences-show`](acp.preferences-show.md) — View effective preferences with source attribution
+- [`/acp-preferences-set`](acp.preferences-set.md) — Modify individual preference values
+- [`/acp-preferences-get`](acp.preferences-get.md) — Generate resolved preference set
+- [`/acp-preferences-validate`](acp.preferences-validate.md) — Validate preference files against configurables
 
 ---
 
@@ -263,7 +263,7 @@ Run @acp.preferences-show to view effective preferences.
 ### Issue 3: File already exists
 
 **Symptom**: `⚠️  File already exists`  
-**Solution**: Use `--force` to overwrite, or `@acp.preferences-show` to review existing values first.
+**Solution**: Use `--force` to overwrite, or `/acp-preferences-show` to review existing values first.
 
 ---
 

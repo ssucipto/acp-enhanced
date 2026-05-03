@@ -1,6 +1,6 @@
 # Command: update
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.update` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-update` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.1.0  
@@ -23,7 +23,7 @@ This command updates `agent/progress.yaml` with the latest project status. It's 
 
 Use this command when you've completed tasks, made significant progress, or need to ensure the progress tracking is current. It's particularly useful after finishing a work session or when transitioning between tasks.
 
-Unlike `@acp.sync` which updates documentation based on code changes, `@acp.update` focuses specifically on updating the progress tracking file to reflect completed work and current status.
+Unlike `/acp-sync` which updates documentation based on code changes, `/acp-update` focuses specifically on updating the progress tracking file to reflect completed work and current status.
 
 ---
 
@@ -41,14 +41,14 @@ Unlike `@acp.sync` which updates documentation based on code changes, `@acp.upda
 ### 0. Display Command Header
 
 ```
-⚡ @acp.update
+⚡ /acp-update
   Update progress.yaml with latest project status, task completion, and recent work
 
   Related:
-    @acp.status    View current status before updating
-    @acp.proceed   Automatically updates progress after tasks
-    @acp.sync      Update documentation based on code changes
-    @acp.report    Generate comprehensive progress report
+    /acp-status    View current status before updating
+    /acp-proceed   Automatically updates progress after tasks
+    /acp-sync      Update documentation based on code changes
+    /acp-report    Generate comprehensive progress report
 ```
 
 This step is informational only — do not wait for user input.
@@ -240,7 +240,7 @@ Summary:
 
 **Context**: Just finished task-3, need to update progress  
 
-**Invocation**: `@acp.update`  
+**Invocation**: `/acp-update`  
 
 **Result**: Marks task-3 as completed, updates milestone from 40% to 60%, adds recent work entry, identifies task-4 as next  
 
@@ -248,7 +248,7 @@ Summary:
 
 **Context**: Made significant progress on task-5 but not complete  
 
-**Invocation**: `@acp.update`  
+**Invocation**: `/acp-update`  
 
 **Result**: Adds recent work entry documenting progress, updates task notes, keeps task status as in_progress  
 
@@ -256,7 +256,7 @@ Summary:
 
 **Context**: Just finished last task in milestone  
 
-**Invocation**: `@acp.update`  
+**Invocation**: `/acp-update`  
 
 **Result**: Marks task and milestone as completed, sets completion dates, updates to next milestone, celebrates achievement  
 
@@ -264,10 +264,10 @@ Summary:
 
 ## Related Commands
 
-- [`@acp.status`](acp.status.md) - View current status before updating
-- [`@acp.proceed`](acp.proceed.md) - Automatically updates progress after completing tasks
-- [`@acp.sync`](acp.sync.md) - Update documentation based on code changes
-- [`@acp.report`](acp.report.md) - Generate comprehensive progress report
+- [`/acp-status`](acp.status.md) - View current status before updating
+- [`/acp-proceed`](acp.proceed.md) - Automatically updates progress after completing tasks
+- [`/acp-sync`](acp.sync.md) - Update documentation based on code changes
+- [`/acp-report`](acp.report.md) - Generate comprehensive progress report
 
 ---
 
@@ -319,7 +319,7 @@ Summary:
 ## Notes
 
 - This command only updates progress.yaml, not other documentation
-- Use `@acp.sync` to update design docs and other documentation
+- Use `/acp-sync` to update design docs and other documentation
 - Progress percentages should be integers (0-100)
 - Recent work entries should be concise but informative
 - Keep next steps list focused (3-5 items maximum)

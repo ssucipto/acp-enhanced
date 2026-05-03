@@ -19,7 +19,7 @@
 Test file header:
 ```bash
 #!/usr/bin/env bash
-# e2e/acp.foo.test.sh — E2E tests for @acp.foo command script
+# e2e/acp.foo.test.sh — E2E tests for /acp-foo command script
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

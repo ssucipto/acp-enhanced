@@ -26,7 +26,7 @@ It works for three developer personas:
 ### What the Original ACP Does Well
 - Provides a structured `.agent/` directory alongside source code
 - `AGENT.md` gives AI assistants persistent project context
-- Command pattern (`@acp.init`, `@acp.commit`) is intuitive
+- Command pattern (`/acp-init`, `/acp-commit`) is intuitive
 - Zero infrastructure — lives entirely in the repository
 
 ### What It Fails To Do
@@ -115,7 +115,7 @@ Reduction: 75–88% on input tokens alone.
 ```
 Developer creates task
         ↓
-@acp.route classifies task_type
+/acp-route classifies task_type
         ↓
 taxonomy.yml assigns: executor + context_required
         ↓
@@ -125,7 +125,7 @@ taxonomy.yml assigns: executor + context_required
         └─ claude-sonnet → dispatch.ts → OpenRouter/Anthropic
                                    ↓
                         ledger.md auto-appended
-                        sessions.md updated via @acp.commit
+                        sessions.md updated via /acp-commit
 ```
 
 ---
@@ -278,7 +278,7 @@ Developer says "that's wrong, log it". AI appends structured entry
 to memory/lessons.md. Lessons are filtered by task_type on next load.
 Accumulates ~15–25 project-specific corrections in 30 days.
 
-### Loop 2 — Pattern Extraction (triggers: @acp.commit / /acp-commit)
+### Loop 2 — Pattern Extraction (triggers: /acp-commit / /acp-commit)
 At end of every session, AI checks: "did this session produce a
 reusable pattern?" If yes, appends to memory/patterns.md with code ref.
 No manual curation — patterns emerge from real work.
@@ -290,7 +290,7 @@ Outputs 3 specific taxonomy.yml update suggestions.
 Developer accepts/rejects in 5 minutes.
 
 ### Loop 4 — Context Compaction (triggers: sessions.md > 15 entries)
-@acp.commit detects entry count. When > 15, oldest 10 entries are
+/acp-commit detects entry count. When > 15, oldest 10 entries are
 compressed into a weekly summary. Key facts promoted to patterns.md
 or decisions.md. sessions.md stays under 1,500 tokens permanently.
 
@@ -405,7 +405,7 @@ Accept or reject suggestions. Done.
 
 | Risk                          | Likelihood | Mitigation                              |
 |-------------------------------|------------|-----------------------------------------|
-| @acp.commit habit breaks      | High       | Pre-commit hook reminder; 90-second max |
+| /acp-commit habit breaks      | High       | Pre-commit hook reminder; 90-second max |
 | DeepSeek misroutes complex task| Medium     | override_executor field in frontmatter  |
 | Wiki becomes stale            | Medium     | last_verified date + 30-day freshness rule|
 | Dispatch script API changes   | Medium     | OpenRouter abstraction shields providers|

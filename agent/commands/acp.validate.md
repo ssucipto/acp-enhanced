@@ -1,7 +1,7 @@
 # Command: validate
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.validate` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.validate` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-validate` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-validate` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document.
 
 **Namespace**: acp  
@@ -25,7 +25,7 @@ This command validates all ACP documentation to ensure it follows proper structu
 
 Use this command before committing documentation changes, after creating new documents, or periodically to ensure documentation quality. It's particularly useful before releases or when onboarding new contributors.
 
-Unlike `@acp.sync` which compares docs to code, `@acp.validate` checks the internal consistency and correctness of the documentation itself. Unlike `@acp.package-validate` which is for package authors, this command validates general ACP project documentation.
+Unlike `/acp-sync` which compares docs to code, `/acp-validate` checks the internal consistency and correctness of the documentation itself. Unlike `/acp-package-validate` which is for package authors, this command validates general ACP project documentation.
 
 ---
 
@@ -42,15 +42,15 @@ Unlike `@acp.sync` which compares docs to code, `@acp.validate` checks the inter
 ### 0. Display Command Header
 
 ```
-⚡ @acp.validate
+⚡ /acp-validate
   Validate all ACP documents for structure, consistency, correctness, and namespace conventions
 
   Related:
-    @acp.package-validate  Package-specific validation
-    @acp.sync              Sync documentation with code
-    @acp.update            Update progress tracking
-    @acp.report            Generate report with validation results
-    @acp.init              Can include validation during init
+    /acp-package-validate  Package-specific validation
+    /acp-sync              Sync documentation with code
+    /acp-update            Update progress tracking
+    /acp-report            Generate report with validation results
+    /acp-init              Can include validation during init
 ```
 
 This step is informational only — do not wait for user input.
@@ -137,7 +137,7 @@ All findings are **soft warnings**. They never hard-fail validate; they appear i
 
 **Probe 1 — Spec inlining**
 
-For each incomplete task with `@acp.meta.task` marker fields `spec:` + `covers:`:
+For each incomplete task with `/acp-meta.task` marker fields `spec:` + `covers:`:
 
 1. Read the spec file from `spec:`.
 2. Locate each `R<N>` listed in `covers:`.
@@ -177,7 +177,7 @@ For each incomplete task with `**Design Reference**: [name](path) | None` resolv
         Probe 2 (design, legacy): design <design_path> has no D-IDs and task
         body doesn't reflect substantive design content.
         Missing likely: <snippet from unreflected section>
-        → Consider backfilling D-IDs in the design (run @acp.sync), then claim
+        → Consider backfilling D-IDs in the design (run /acp-sync), then claim
           specific D-IDs in this task's `incorporates:` field
      ```
 
@@ -567,7 +567,7 @@ Recommendations:
 
 **Context**: Made changes to several docs, want to verify before commit  
 
-**Invocation**: `@acp.validate`  
+**Invocation**: `/acp-validate`  
 
 **Result**: Validates all docs, finds 2 broken links, reports them, you fix them before committing  
 
@@ -575,7 +575,7 @@ Recommendations:
 
 **Context**: Created 3 new design documents  
 
-**Invocation**: `@acp.validate`  
+**Invocation**: `/acp-validate`  
 
 **Result**: Validates new docs, confirms they follow proper structure, identifies missing section in one doc  
 
@@ -583,7 +583,7 @@ Recommendations:
 
 **Context**: Monthly documentation review  
 
-**Invocation**: `@acp.validate`  
+**Invocation**: `/acp-validate`  
 
 **Result**: Validates all 50+ documents, finds minor formatting issues in 3 files, overall quality is good  
 
@@ -591,11 +591,11 @@ Recommendations:
 
 ## Related Commands
 
-- [`@acp.package-validate`](acp.package-validate.md) - Package-specific validation (for package authors)
-- [`@acp.sync`](acp.sync.md) - Sync documentation with code (different from validation)
-- [`@acp.update`](acp.update.md) - Update progress tracking
-- [`@acp.report`](acp.report.md) - Generate comprehensive report including validation results
-- [`@acp.init`](acp.init.md) - Can include validation as part of initialization
+- [`/acp-package-validate`](acp.package-validate.md) - Package-specific validation (for package authors)
+- [`/acp-sync`](acp.sync.md) - Sync documentation with code (different from validation)
+- [`/acp-update`](acp.update.md) - Update progress tracking
+- [`/acp-report`](acp.report.md) - Generate comprehensive report including validation results
+- [`/acp-init`](acp.init.md) - Can include validation as part of initialization
 
 ---
 

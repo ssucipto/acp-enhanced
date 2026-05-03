@@ -1,6 +1,6 @@
 # Command: package-update
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.package-update` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-package-update` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 2.0.0  
@@ -23,7 +23,7 @@ This command updates installed ACP packages to their latest versions by comparin
 
 Use this command when you want to get the latest bug fixes, features, and improvements from installed packages. The command can update all packages at once or specific packages individually, and it respects local modifications to prevent accidental overwrites.
 
-Unlike `@acp.version-update` which updates ACP itself, this command updates third-party packages installed via `@acp.package-install`.
+Unlike `/acp-version-update` which updates ACP itself, this command updates third-party packages installed via `/acp-package-install`.
 
 ---
 
@@ -42,22 +42,22 @@ Unlike `@acp.version-update` which updates ACP itself, this command updates thir
 ### 0. Display Command Header
 
 ```
-⚡ @acp.package-update
+⚡ /acp-package-update
   Update installed ACP packages to latest versions
 
   Usage:
-    @acp.package-update                            Update all packages
-    @acp.package-update <package-name>             Update specific package
-    @acp.package-update --check                    Preview available updates
-    @acp.package-update --skip-modified            Skip locally modified files
-    @acp.package-update --force                    Overwrite modified files
-    @acp.package-update --global                   Update global packages
+    /acp-package-update                            Update all packages
+    /acp-package-update <package-name>             Update specific package
+    /acp-package-update --check                    Preview available updates
+    /acp-package-update --skip-modified            Skip locally modified files
+    /acp-package-update --force                    Overwrite modified files
+    /acp-package-update --global                   Update global packages
 
   Related:
-    @acp.package-install       Install packages
-    @acp.package-list          List installed packages
-    @acp.package-info          Show package details
-    @acp.version-update        Update ACP itself (not packages)
+    /acp-package-install       Install packages
+    /acp-package-list          List installed packages
+    /acp-package-info          Show package details
+    /acp-version-update        Update ACP itself (not packages)
 ```
 
 ### 1. Choose Update Mode
@@ -117,7 +117,7 @@ The update command handles experimental features intelligently:
 
 **Example**:
 ```bash
-@acp.package-update firebase
+/acp-package-update firebase
 
 Output:
   ↻ Updating: stable-command.md
@@ -260,7 +260,7 @@ Skipping modified files
 
 **Context**: Want to see if updates are available without installing  
 
-**Invocation**: `@acp.package-update --check`  
+**Invocation**: `/acp-package-update --check`  
 
 **Result**: Shows firebase has update (1.2.0 → 1.3.0), mcp-integration is up to date, provides update commands  
 
@@ -268,7 +268,7 @@ Skipping modified files
 
 **Context**: Want to update all installed packages  
 
-**Invocation**: `@acp.package-update`  
+**Invocation**: `/acp-package-update`  
 
 **Result**: Checks all packages, finds 2 with updates, prompts for confirmation, updates both packages, skips 1 modified file  
 
@@ -276,7 +276,7 @@ Skipping modified files
 
 **Context**: Only want to update firebase package  
 
-**Invocation**: `@acp.package-update firebase`  
+**Invocation**: `/acp-package-update firebase`  
 
 **Result**: Checks only firebase, finds update, prompts for modified files, updates 3 files, skips 1 modified file  
 
@@ -284,7 +284,7 @@ Skipping modified files
 
 **Context**: Want to update but preserve all local changes  
 
-**Invocation**: `@acp.package-update --skip-modified`  
+**Invocation**: `/acp-package-update --skip-modified`  
 
 **Result**: Updates all packages, automatically skips any locally modified files without prompting  
 
@@ -292,7 +292,7 @@ Skipping modified files
 
 **Context**: Want to overwrite all local changes  
 
-**Invocation**: `@acp.package-update --force`  
+**Invocation**: `/acp-package-update --force`  
 
 **Result**: Updates all files including locally modified ones, no prompts, all changes overwritten  
 
@@ -300,10 +300,10 @@ Skipping modified files
 
 ## Related Commands
 
-- [`@acp.package-install`](acp.package-install.md) - Install packages
-- [`@acp.package-list`](acp.package-list.md) - List installed packages
-- [`@acp.package-info`](acp.package-info.md) - Show package details
-- [`@acp.version-update`](acp.version-update.md) - Update ACP itself (not packages)
+- [`/acp-package-install`](acp.package-install.md) - Install packages
+- [`/acp-package-list`](acp.package-list.md) - List installed packages
+- [`/acp-package-info`](acp.package-info.md) - Show package details
+- [`/acp-version-update`](acp.version-update.md) - Update ACP itself (not packages)
 
 ---
 
