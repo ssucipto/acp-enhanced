@@ -12,8 +12,12 @@
 #   source ./acp.preferences.sh
 #   get_preference "acp" "plan.draft.create_mode"
 
-set -euo pipefail
-trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
+# Only apply strict mode when run directly (not when sourced by tests or other scripts).
+# set -euo pipefail + ERR trap must not bleed into the parent shell on source.
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  set -euo pipefail
+  trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -304,20 +308,18 @@ set_preference() {
     printf '%s:\n' "$namespace" > "$target_file"
   fi
 
-  # Build the key path to set (namespace.pref.path → top-level key is namespace)
-  # Key is indented under namespace block (flat-dot format for set operations)
-  local yaml_key="  ${pref_path}:"
-  local yaml_line="${yaml_key} ${value}"
-
-  if grep -qF "${yaml_key}" "$target_file" 2>/dev/null; then
-    # Replace existing line using awk — injection-safe (no delimiter sensitivity)
-    awk -v key="${yaml_key}" -v line="${yaml_line}" \
-      'index($0, key) == 1 { $0 = line } { print }' \
-      "$target_file" > "${target_file}.tmp" && mv "${target_file}.tmp" "$target_file"
-  else
-    # Append under the namespace block
-    printf '%s\n' "$yaml_line" >> "$target_file"
-  fi
+  # Load the file into the AST, update the nested path, and write back.
+  # yaml_set creates any missing intermediate map nodes automatically.
+  # This writes proper nested YAML (readable by yaml_get without flat-dot fallback).
+  yaml_parse "$target_file" || {
+    echo "Error: Failed to parse preference file: ${target_file}" >&2
+    return 1
+  }
+  yaml_set ".${namespace}.${pref_path}" "$value" || {
+    echo "Error: Failed to set preference path: ${namespace}.${pref_path}" >&2
+    return 1
+  }
+  yaml_write "$target_file"
 }
 
 # Validate a preference value against the configurables schema
