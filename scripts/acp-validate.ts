@@ -5,7 +5,7 @@ import path from "path";
 
 // ============================================================
 // ACP Enhanced — Task Validator
-// Usage: npx ts-node scripts/acp-validate.ts .agent/tasks/task-NNN.md
+// Usage: npx ts-node scripts/acp-validate.ts agent/routing/tasks/task-NNN.md
 // Exits 0 if valid, exits 1 with errors if not.
 // ============================================================
 

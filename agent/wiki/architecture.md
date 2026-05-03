@@ -54,37 +54,37 @@ acp.yaml-validate.sh is standalone — does NOT source yaml-parser (different pu
 
 ```
 LAYER 1 — CORE (always loaded, ~180 tokens, prompt-cached)
-  .agent/core/identity.yml
-  .agent/core/constraints.yml
-  .agent/core/routing.yml
+  agent/core/identity.yml
+  agent/core/constraints.yml
+  agent/core/routing.yml
 
 LAYER 2 — SKILLS (one per task, ~400 tokens)
-  .agent/skills/commands.md    ← command doc writing
-  .agent/skills/scripts.md     ← bash shell scripting
-  .agent/skills/schemas.md     ← YAML schema design
-  .agent/skills/testing.md     ← E2E and unit tests
-  .agent/skills/typescript.md  ← dispatch/validate TS
-  .agent/skills/crosscut.md    ← docs, AGENT.md, README
+  agent/skills/commands.md    ← command doc writing
+  agent/skills/scripts.md     ← bash shell scripting
+  agent/skills/schemas.md     ← YAML schema design
+  agent/skills/testing.md     ← E2E and unit tests
+  agent/skills/typescript.md  ← dispatch/validate TS
+  agent/skills/crosscut.md    ← docs, AGENT.md, README
 
 LAYER 3 — EPHEMERAL (session-specific, filtered, ~1,200 tokens)
-  .agent/memory/sessions.md    (last 3 entries only)
-  .agent/memory/lessons.md     (filtered by task_type)
-  .agent/memory/decisions.md   (loaded by ADR ID only)
-  .agent/wiki/domain.yml       (one section at a time)
-  .agent/wiki/architecture.md  (one section at a time)
+  agent/memory/sessions.md    (last 3 entries only)
+  agent/memory/lessons.md     (filtered by task_type)
+  agent/memory/decisions.md   (loaded by ADR ID only)
+  agent/wiki/domain.yml       (one section at a time)
+  agent/wiki/architecture.md  (one section at a time)
 ```
 
 ## Dispatch Script Flow (Persona B/C)
 
 ```
-npx ts-node scripts/acp-dispatch.ts .agent/tasks/task-NNN.md
+npx ts-node scripts/acp-dispatch.ts agent/routing/tasks/task-NNN.md
      ↓
   Read task frontmatter (gray-matter)
   Look up executor in taxonomy.yml
   Assemble system prompt (Layer 1 + skill) — STATIC for caching
   Assemble user message (sessions + lessons + task) — dynamic
   Enforce 6,500 token budget
-  Update .agent/core/routing.yml with executor
+  Update agent/core/routing.yml with executor
   Call OpenRouter API (streaming)
-  Append row to .agent/routing/ledger.md
+  Append row to agent/routing/ledger.md
 ```
