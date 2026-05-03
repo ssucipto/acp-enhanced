@@ -58,6 +58,49 @@ fi
 echo "${GREEN}✓${NC} Repository cloned"
 echo ""
 
+# ── Legacy .agent/ migration ──────────────────────────────────────────────────
+# Detect ACP < 6.x layout and auto-merge user-state files into agent/ before
+# the install proceeds. Static files (.agent/core, skills, wiki) are dropped —
+# they will be refreshed by the install anyway.
+if [ -d "$TARGET_DIR/.agent" ]; then
+    echo "${YELLOW}Found legacy .agent/ directory — auto-migrating to agent/ layout...${NC}"
+
+    # User-state memory files (create-if-absent: never overwrite)
+    if [ -d "$TARGET_DIR/.agent/memory" ]; then
+        mkdir -p "$TARGET_DIR/agent/memory"
+        for _f in sessions.md lessons.md decisions.md patterns.md; do
+            if [ -f "$TARGET_DIR/.agent/memory/$_f" ] && [ ! -f "$TARGET_DIR/agent/memory/$_f" ]; then
+                mv "$TARGET_DIR/.agent/memory/$_f" "$TARGET_DIR/agent/memory/$_f"
+                echo "  ✓ Migrated memory/$_f"
+            fi
+        done
+    fi
+
+    # Routing task files (task-NNN.md — user-created, never overwrite)
+    if [ -d "$TARGET_DIR/.agent/tasks" ]; then
+        mkdir -p "$TARGET_DIR/agent/routing/tasks"
+        for _f in "$TARGET_DIR/.agent/tasks/task-"*.md; do
+            [ -f "$_f" ] || continue
+            _dest="$TARGET_DIR/agent/routing/tasks/$(basename "$_f")"
+            if [ ! -f "$_dest" ]; then
+                mv "$_f" "$_dest"
+                echo "  ✓ Migrated routing/tasks/$(basename "$_f")"
+            fi
+        done
+    fi
+
+    # Routing ledger (user-state — never overwrite)
+    if [ -f "$TARGET_DIR/.agent/routing/ledger.md" ] && [ ! -f "$TARGET_DIR/agent/routing/ledger.md" ]; then
+        mkdir -p "$TARGET_DIR/agent/routing"
+        mv "$TARGET_DIR/.agent/routing/ledger.md" "$TARGET_DIR/agent/routing/ledger.md"
+        echo "  ✓ Migrated routing/ledger.md"
+    fi
+
+    rm -rf "$TARGET_DIR/.agent"
+    echo "${GREEN}✓${NC} Legacy .agent/ merged and removed"
+    echo ""
+fi
+
 # Create directory structure
 echo "Creating directory structure..."
 mkdir -p "$TARGET_DIR/agent/design"
