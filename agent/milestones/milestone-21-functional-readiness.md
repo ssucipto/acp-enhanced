@@ -46,6 +46,6 @@ Found 5 bug categories. All are blocking for a smooth new-project experience.
 
 - [ ] All 8 command files have correct command name in pretend-context line (not `@{namespace}-{command-name}`)
 - [ ] `curl | bash` bootstrap in README.md works (mainline branch)
-- [ ] `package.yaml`, `AGENT.md`, `.agent/core/identity.yml` all read `6.2.2`
+- [ ] `package.yaml`, `AGENT.md`, `agent/core/identity.yml` all read `6.2.2`
 - [ ] All scripts that exist in `agent/scripts/` are listed in `package.yaml` scripts section
 - [ ] `CHANGELOG.md` has a `## [6.2.2]` block documenting M20 fixes

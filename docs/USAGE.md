@@ -11,7 +11,7 @@
 ACP Enhanced gives your AI agent two things:
 
 1. **Command system** — Markdown files in `agent/commands/` that the agent reads as executable scripts. When you type `/acp-plan`, the agent reads `agent/commands/acp.plan.md` and follows it step-by-step, just like a shell script.
-2. **Context framework** — The `.agent/` directory gives the agent a structured memory system (session log, corrections, patterns, decisions) that it loads within a strict token budget at the start of every session.
+2. **Context framework** — The `agent/` directory gives the agent a structured memory system (session log, corrections, patterns, decisions) that it loads within a strict token budget at the start of every session.
 
 ---
 
@@ -185,7 +185,7 @@ At the end of your work session, run the session commit protocol:
 /acp-commit
 ```
 
-The agent writes a session summary to `.agent/memory/sessions.md` including:
+The agent writes a session summary to `agent/memory/sessions.md` including:
 - What tasks were completed
 - What was deferred
 - The single most important fact learned this session
@@ -319,7 +319,7 @@ The key file index lets you tell the agent which files are most important to rea
 | `/acp-preferences-set acp <key> <val>` | Set a preference value |
 | `/acp-package-install <url>` | Install an ACP package |
 | `/acp-index explore` | Suggest key files to index |
-| `/acp-commit` | Write session summary to `.agent/memory/` |
+| `/acp-commit` | Write session summary to `agent/memory/` |
 | `/acp-route "<task>"` | Create a routed task file for a new task |
 
 ---
@@ -335,9 +335,9 @@ The key file index lets you tell the agent which files are most important to rea
 | `agent/tasks/milestone-{N}-*/task-{M}-*.md` | Task implementation guides |
 | `agent/preferences/acp.default.yaml` | Project-level preference overrides |
 | `agent/configurables/acp.configurables.yaml` | Available preferences with defaults |
-| `.agent/core/identity.yml` | Project identity loaded every session |
-| `.agent/memory/sessions.md` | Session history (last 15 entries) |
-| `.agent/memory/lessons.md` | Correction log (auto-appended on mistakes) |
+| `agent/core/identity.yml` | Project identity loaded every session |
+| `agent/memory/sessions.md` | Session history (last 15 entries) |
+| `agent/memory/lessons.md` | Correction log (auto-appended on mistakes) |
 
 ---
 
