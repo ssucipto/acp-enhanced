@@ -1,6 +1,6 @@
 # Command: design-create
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.design-create` has been invoked.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-design-create` has been invoked.
 >
 > **This is a CREATION command - you will create files directly, no shell scripts needed.**
 >
@@ -46,7 +46,7 @@ This command creates a new design document with intelligent namespace handling, 
 
 ## Arguments
 
-**Context Capture Arguments** (optional — passed to `@acp.clarification-capture` directive):
+**Context Capture Arguments** (optional — passed to `/acp-clarification-capture` directive):
 
 | Argument | Alias | Behavior |
 |---|---|---|
@@ -66,19 +66,19 @@ This command creates a new design document with intelligent namespace handling, 
 ### 0. Display Command Header
 
 ```
-⚡ @acp.design-create
+⚡ /acp-design-create
   Create design documents with namespace enforcement, draft support, and automatic package updates
 
   Usage:
-    @acp.design-create                             Guided design creation
-    @acp.design-create @my-draft.md                Create from draft file
-    @acp.design-create --from-context              Capture from all sources
-    @acp.design-create --no-commit                 Skip automatic commit
+    /acp-design-create                             Guided design creation
+    /acp-design-create @my-draft.md                Create from draft file
+    /acp-design-create --from-context              Capture from all sources
+    /acp-design-create --no-commit                 Skip automatic commit
 
   Related:
-    @acp.pattern-create    Create patterns
-    @acp.command-create    Create commands
-    @acp.package-validate  Validate package after creation
+    /acp-pattern-create    Create patterns
+    /acp-command-create    Create commands
+    /acp-package-validate  Validate package after creation
 ```
 
 This step is informational only — do not wait for user input.
@@ -115,7 +115,7 @@ Before creating content, load relevant key files from the index.
 
 ### 2.7. Capture Clarification Context
 
-Invoke the `@acp.clarification-capture` shared directive to capture decisions from clarifications and/or chat context.
+Invoke the `/acp-clarification-capture` shared directive to capture decisions from clarifications and/or chat context.
 
 **Actions**:
 - Read and follow the directive in [`agent/commands/acp.clarification-capture.md`](acp.clarification-capture.md)
@@ -185,7 +185,7 @@ Create design file from template:
 
   Prose context surrounding a D-ID is just context — do NOT assign D-IDs to every paragraph. Only atomic units get IDs.
 
-- **Populate the `@acp.meta.design` marker block** — the template ships with `{placeholder}` values; every one MUST be replaced before saving:
+- **Populate the `/acp-meta.design` marker block** — the template ships with `{placeholder}` values; every one MUST be replaced before saving:
   - `topic:` — comma-separated keywords from the design name + user description
   - `description:` — one-line summary, <=150 chars (truncate with `…` if needed)
   - `informs:` — if the user named a spec this design derived (or will derive) into, use that spec path; otherwise omit the line
@@ -290,7 +290,7 @@ If yes:
 
 **Context**: In acp-firebase package directory  
 
-**Invocation**: `@acp.design-create`  
+**Invocation**: `/acp-design-create`  
 
 **Result**: Creates `agent/design/firebase.architecture.md`, updates package.yaml and README.md  
 
@@ -298,7 +298,7 @@ If yes:
 
 **Context**: In regular project (no package.yaml)  
 
-**Invocation**: `@acp.design-create`  
+**Invocation**: `/acp-design-create`  
 
 **Result**: Uses "local" namespace, creates `agent/design/local.my-design.md`, no package updates  
 
@@ -306,15 +306,15 @@ If yes:
 
 ## Related Commands
 
-- [`@acp.pattern-create`](acp.pattern-create.md) - Create patterns
-- [`@acp.command-create`](acp.command-create.md) - Create commands
-- [`@acp.package-validate`](acp.package-validate.md) - Validate package after creation
+- [`/acp-pattern-create`](acp.pattern-create.md) - Create patterns
+- [`/acp-command-create`](acp.command-create.md) - Create commands
+- [`/acp-package-validate`](acp.package-validate.md) - Validate package after creation
 
 ---
 
 ## Troubleshooting
 
-Same as @acp.pattern-create and @acp.command-create.
+Same as /acp-pattern-create and /acp-command-create.
 
 ---
 

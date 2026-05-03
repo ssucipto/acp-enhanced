@@ -62,25 +62,25 @@ The following capabilities are **ACP Enhanced additions** that do not exist in t
 | **Context Loading Protocol** | 6-step deterministic protocol (`AGENTS.md`) backed by a `.agent/` framework with skills, memory, routing, and wiki layers. Ensures reproducible session startup. | M0 |
 | **Package Management** | 50+ commands and 28 scripts for installing, publishing, and managing ACP command packages from git repositories. Includes a manifest system, schema validation, and namespace enforcement. | M3–M9 |
 | **Preferences System** | 4-level preference hierarchy (project > workspace > user > default) with configurables, named presets, and per-invocation CLI overrides. | M6 |
-| **Project Registry** | Global `~/.acp/projects.yaml` tracking for discovering, switching between, and managing ACP projects. Integrates with `@acp.init`. | M7 |
+| **Project Registry** | Global `~/.acp/projects.yaml` tracking for discovering, switching between, and managing ACP projects. Integrates with `/acp-init`. | M7 |
 | **Sessions System** | Multi-agent session visibility via `~/.acp/sessions.yaml`. Agents can see what other agents are doing across terminal tabs. Advisory-only (no locking). | M12 |
-| **Key File Index** | `agent/index/` weight-based system for declaring which files agents must read first. `@acp.init` auto-loads all files with weight ≥ 0.8. | M14 |
-| **Clarification Capture** | `@acp.clarification-*` commands for capturing, deduplicating, and synthesizing stakeholder clarifications into design/task/pattern creation. | M15 |
-| **Design Reference System** | `@acp.design-reference` directive for cross-referencing design elements (D-IDs) into task creation and implementation. | M16 |
-| **Artifact Commands** | `@acp.artifact-research`, `@acp.artifact-glossary`, `@acp.artifact-reference` — commands for creating long-lived, living reference documents. | M17 |
-| **Metadata Markers** | Machine-readable `@acp.meta.*` sentinel system for R<N> spec requirements and D<N> design units. Powers `@acp.sync` spec↔task↔code traceability. | M18 |
-| **Specs System** | `agent/specs/` formal specification documents with R<N> requirement IDs. `@acp.task-create` auto-populates `Spec Coverage` from matching specs. | M14–M18 |
+| **Key File Index** | `agent/index/` weight-based system for declaring which files agents must read first. `/acp-init` auto-loads all files with weight ≥ 0.8. | M14 |
+| **Clarification Capture** | `/acp-clarification-*` commands for capturing, deduplicating, and synthesizing stakeholder clarifications into design/task/pattern creation. | M15 |
+| **Design Reference System** | `/acp-design-reference` directive for cross-referencing design elements (D-IDs) into task creation and implementation. | M16 |
+| **Artifact Commands** | `/acp-artifact-research`, `/acp-artifact-glossary`, `/acp-artifact-reference` — commands for creating long-lived, living reference documents. | M17 |
+| **Metadata Markers** | Machine-readable `/acp-meta.*` sentinel system for R<N> spec requirements and D<N> design units. Powers `/acp-sync` spec↔task↔code traceability. | M18 |
+| **Specs System** | `agent/specs/` formal specification documents with R<N> requirement IDs. `/acp-task-create` auto-populates `Spec Coverage` from matching specs. | M14–M18 |
 | **Benchmark Suite** | `agent/benchmarks/` automated E2E suite measuring ACP vs baseline outcomes across 6 task types (simple → complex). LLM rubric evaluation and HTML reports. | M11 |
 | **YAML Parser** | Pure-bash generic YAML parser (`acp.yaml-parser.sh`) with AST, path expressions, and full CRUD API. Zero external dependencies. | M4 |
 | **Cross-platform CI** | GitHub Actions workflow running E2E tests on both `ubuntu-latest` and `macos-latest` (BSD compatibility enforced). | M13 |
-| **Index Semantic Entry Types** | Extended key file index with `kind: note` and `kind: directive` for inline path-null entries; `@acp.meta.*` marker integration. | M18 |
+| **Index Semantic Entry Types** | Extended key file index with `kind: note` and `kind: directive` for inline path-null entries; `/acp-meta.*` marker integration. | M18 |
 
 ### What the Original ACP Provides
 
 The upstream `prmichaelsen/agent-context-protocol` provides the foundational `agent/` directory pattern:
 - `agent/design/`, `agent/milestones/`, `agent/tasks/`, `agent/patterns/` directory structure
 - `agent/progress.yaml` for machine-readable progress tracking
-- A handful of core commands: `@acp.init`, `@acp.proceed`, `@acp.status`, `@acp.version-*`
+- A handful of core commands: `/acp-init`, `/acp-proceed`, `/acp-status`, `/acp-version-*`
 - `AGENT.md` (this file) as the installed documentation artifact
 
 ACP Enhanced retains 100% backward compatibility with the original pattern. Projects using the original ACP can install ACP Enhanced and gain all enhancements without changes to existing files.
@@ -168,9 +168,9 @@ project-root/
 ├── agent/                          # Agent directory (ACP structure)
 │   ├── commands/                   # Command system
 │   │   ├── command.template.md     # Command template
-│   │   ├── acp.init.md             # @acp.init
-│   │   ├── acp.proceed.md          # @acp.proceed
-│   │   ├── acp.status.md           # @acp.status
+│   │   ├── acp.init.md             # /acp-init
+│   │   ├── acp.proceed.md          # /acp-proceed
+│   │   ├── acp.status.md           # /acp-status
 │   │   └── ...                     # More commands
 │   │
 │   ├── scripts/                    # Shell utility scripts
@@ -191,7 +191,7 @@ project-root/
 │   │
 │   ├── specs/                      # Formal specifications (what must be true)
 │   │   ├── {namespace}.{name}.md   # R<N> requirements, behavior tables, tests
-│   │   └── ...                     # Created by @acp.spec, consumed by @acp.task-create
+│   │   └── ...                     # Created by /acp-spec, consumed by /acp-task-create
 │   │
 │   ├── milestones/                 # Project milestones
 │   │   ├── milestone-1-{name}.md
@@ -219,7 +219,7 @@ project-root/
 │   │   └── suite/                  # Benchmark task definitions
 │   │
 │   ├── clarifications/             # Clarification documents
-│   │   └── clarification-{N}-{title}.md   # Created by @acp.clarification-create
+│   │   └── clarification-{N}-{title}.md   # Created by /acp-clarification-create
 │   │
 │   ├── feedback/                   # Agent feedback and improvement notes
 │   │
@@ -324,12 +324,12 @@ Specs complement design documents; both can exist for the same feature. Design i
 ...
 ```
 
-**When to Create**: Use `@acp.spec` when a feature is complex enough that informal descriptions drift. Specs are especially valuable for:
+**When to Create**: Use `/acp-spec` when a feature is complex enough that informal descriptions drift. Specs are especially valuable for:
 - Multi-task features where each task owns a subset of requirements
 - Features with non-obvious edge cases
 - Features where the distinction between "works" and "specified correctly" matters
 
-**How Tasks Use Specs**: When `@acp.task-create` finds a matching spec in `agent/specs/`, it pulls relevant R<N> requirements verbatim into the task's `Spec Coverage` section. Sub-agents implement against the inline requirements; the spec file itself remains the source of truth for audits and drift detection via `@acp.sync`.
+**How Tasks Use Specs**: When `/acp-task-create` finds a matching spec in `agent/specs/`, it pulls relevant R<N> requirements verbatim into the task's `Spec Coverage` section. Sub-agents implement against the inline requirements; the spec file itself remains the source of truth for audits and drift detection via `/acp-sync`.
 
 ### 3. Milestones (`agent/milestones/`)
 
@@ -520,8 +520,8 @@ ACP documents (and optionally source code files) carry machine-readable **metada
 
 Every marker has two literal sentinels:
 
-- **Opening**: `@acp.meta.<kind>` where `<kind>` is one of: `spec`, `task`, `design`, `milestone`, `pattern`, `clarification`, `artifact`, `code`
-- **Closing**: `@acp.meta.end`
+- **Opening**: `/acp-meta.<kind>` where `<kind>` is one of: `spec`, `task`, `design`, `milestone`, `pattern`, `clarification`, `artifact`, `code`
+- **Closing**: `/acp-meta.end`
 
 Authors wrap both sentinels and each body line in the host language's comment syntax. The parser strips the comment characters before extracting fields.
 
@@ -531,47 +531,47 @@ Same marker, five languages:
 
 **Markdown** (`<!-- ... -->`):
 ```markdown
-<!-- @acp.meta.task
+<!-- /acp-meta.task
 topic: wire awk parser into sync
 milestone: M3
 covers: R31, R32
 status: in_progress
 updated: 2026-04-27
-@acp.meta.end -->
+/acp-meta.end -->
 ```
 
 **TypeScript / JS / Rust / Go** (`// ...`):
 ```ts
-// @acp.meta.code
+// /acp-meta.code
 // topic: marker parser util
 // implements: R31, R32
 // spec: agent/specs/local.marker-system.md
 // file_role: util
 // status: implemented
 // updated: 2026-04-27
-// @acp.meta.end
+// /acp-meta.end
 ```
 
 **Python / Shell / YAML** (`# ...`):
 ```python
-# @acp.meta.code
+# /acp-meta.code
 # topic: backfill legacy files
 # implements: R40
 # file_role: cli
 # status: draft
 # updated: 2026-04-27
-# @acp.meta.end
+# /acp-meta.end
 ```
 
 **SQL / Haskell** (`-- ...`):
 ```sql
--- @acp.meta.code
+-- /acp-meta.code
 -- topic: migration for spec_coverage table
 -- implements: R42
 -- file_role: migration
 -- status: implemented
 -- updated: 2026-04-27
--- @acp.meta.end
+-- /acp-meta.end
 ```
 
 **Lisp / Clojure** (`;; ...`) and **OCaml / Elm** (`(* ... *)`) follow the same pattern.
@@ -619,8 +619,8 @@ Output is a flat stream of `file:` / `kind:` / `key:` lines, with `---` between 
 
 ### What markers enable
 
-- **`@acp.task-create`** invokes the scanner to find a matching spec for a new task and auto-populates the task's `Spec Coverage` section from the spec's declared `requirements:` range.
-- **`@acp.sync`** invokes the scanner to build a spec ↔ task ↔ code cross-reference map in one pass, surfacing:
+- **`/acp-task-create`** invokes the scanner to find a matching spec for a new task and auto-populates the task's `Spec Coverage` section from the spec's declared `requirements:` range.
+- **`/acp-sync`** invokes the scanner to build a spec ↔ task ↔ code cross-reference map in one pass, surfacing:
   - Unclaimed requirements (spec R<N> with no task `covers:` it) → planning gap
   - Unimplemented claims (task `covers: R<N>` but no code `implements: R<N>`) → completion drift
   - Stale markers (`status: complete` but `updated:` > 6 months ago) → possibly out-of-date
@@ -643,15 +643,15 @@ The rule is functional: if a chunk is atomic enough that a task could legitimate
 
 **Numbering:** sequential (`D1, D2, D3, ...`) across the whole document, regardless of section.
 
-**Task incorporation:** when `@acp.task-create` inlines design content, it records the specific D-IDs in the task marker's `incorporates:` field. `@acp.validate` then confirms each claimed D-ID is actually reflected in the task body.
+**Task incorporation:** when `/acp-task-create` inlines design content, it records the specific D-IDs in the task marker's `incorporates:` field. `/acp-validate` then confirms each claimed D-ID is actually reflected in the task body.
 
-**Migration:** legacy designs don't have D-IDs. `@acp.sync` Pass C scans each design for candidate atomic units and proposes D-ID labels for user approval. Never silent.
+**Migration:** legacy designs don't have D-IDs. `/acp-sync` Pass C scans each design for candidate atomic units and proposes D-ID labels for user approval. Never silent.
 
 ### Authoring
 
-- Markers are auto-populated by creation commands at file creation (`@acp.task-create`, `@acp.spec`, `@acp.design-create`, etc.).
-- Hand-authored edits are welcome. `@acp.sync` updates `updated:` timestamps when it detects content changes.
-- `@acp.sync` can backfill markers into legacy files (prompts for user confirmation; never silently writes).
+- Markers are auto-populated by creation commands at file creation (`/acp-task-create`, `/acp-spec`, `/acp-design-create`, etc.).
+- Hand-authored edits are welcome. `/acp-sync` updates `updated:` timestamps when it detects content changes.
+- `/acp-sync` can backfill markers into legacy files (prompts for user confirmation; never silently writes).
 
 ### Markers supersede prose frontmatter
 
@@ -671,7 +671,7 @@ Prose fields that remain are content-specific and structural, not machine-tracke
 
 Task lifecycle (Not Started / In Progress / Completed) is tracked in `agent/progress.yaml` — that's authoritative for task-completion state; the marker's `status` field reflects the document's own state (draft/active/deprecated), not the work-item state.
 
-If a pre-marker file still carries a duplicated prose field (`**Status**`, `**Last Updated**`, etc.), `@acp.sync` Step 1.4 flags it and proposes removal.
+If a pre-marker file still carries a duplicated prose field (`**Status**`, `**Last Updated**`, etc.), `/acp-sync` Step 1.4 flags it and proposes removal.
 
 ---
 
@@ -686,7 +686,7 @@ If a pre-marker file still carries a duplicated prose field (`**Status**`, `**La
    ```
 
 2. **Create Requirements Document**
-   - Invoke [`@acp.design-create`](agent/commands/acp.design-create.md) and follow directives defined in that file
+   - Invoke [`/acp-design-create`](agent/commands/acp.design-create.md) and follow directives defined in that file
    - Specify "requirements" as the design type
 
 3. **Define Milestones**
@@ -695,14 +695,14 @@ If a pre-marker file still carries a duplicated prose field (`**Status**`, `**La
    - Clear deliverables and success criteria
 
 4. **(Optional) Create Specs for Complex Features**
-   - Invoke [`@acp.spec`](agent/commands/acp.spec.md) and follow directives defined in that file
+   - Invoke [`/acp-spec`](agent/commands/acp.spec.md) and follow directives defined in that file
    - Use for features with many requirements, edge cases, or where "works" vs "specified correctly" matters
    - Specs define *what must be true*; tasks claim subsets of spec requirements via `Spec Coverage`
 
 5. **Create Initial Tasks**
-   - Invoke [`@acp.task-create`](agent/commands/acp.task-create.md) and follow directives defined in that file
+   - Invoke [`/acp-task-create`](agent/commands/acp.task-create.md) and follow directives defined in that file
    - Break first milestone into concrete tasks
-   - If a matching spec exists, `@acp.task-create` auto-populates the task's `Spec Coverage` section
+   - If a matching spec exists, `/acp-task-create` auto-populates the task's `Spec Coverage` section
 
 6. **Initialize Progress Tracking**
    - Create `agent/progress.yaml`
@@ -710,7 +710,7 @@ If a pre-marker file still carries a duplicated prose field (`**Status**`, `**La
    - Document initial status
 
 7. **Document Patterns**
-   - Invoke [`@acp.pattern-create`](agent/commands/acp.pattern-create.md) and follow directives defined in that file
+   - Invoke [`/acp-pattern-create`](agent/commands/acp.pattern-create.md) and follow directives defined in that file
    - Document architectural decisions as patterns
 
 ### For Continuing an Existing Project
@@ -954,88 +954,88 @@ ACP supports a command system for common workflows. Commands are file-based trig
 
 ### What are ACP Commands?
 
-Commands are markdown files in [`agent/commands/`](agent/commands/) that contain step-by-step instructions for AI agents. Instead of typing long prompts like "AGENT.md: Initialize", you can reference command files like `@acp.init` to trigger specific workflows.
+Commands are markdown files in [`agent/commands/`](agent/commands/) that contain step-by-step instructions for AI agents. Instead of typing long prompts like "AGENT.md: Initialize", you can reference command files like `/acp-init` to trigger specific workflows.
 
 **Benefits**:
 - **Discoverable**: Browse [`agent/commands/`](agent/commands/) to see all available commands
 - **Consistent**: All commands follow the same structure
 - **Extensible**: Create custom commands for your project
 - **Self-Documenting**: Each command file contains complete documentation
-- **Autocomplete-Friendly**: Type `@acp.` to see all ACP commands
+- **Autocomplete-Friendly**: Type `/acp-` to see all ACP commands
 
 ### Core Commands
 
 Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`](agent/commands/):
 
 **Workflow**
-- **[`@acp.init`](agent/commands/acp.init.md)** - Initialize agent context; loads key files, registers session, reports global packages
-- **[`@acp.proceed`](agent/commands/acp.proceed.md)** - Continue with next task (single-task or autonomous multi-task mode)
-- **[`@acp.plan`](agent/commands/acp.plan.md)** - Plan project milestones and tasks from requirements
-- **[`@acp.status`](agent/commands/acp.status.md)** - Display project status and active sessions
-- **[`@acp.report`](agent/commands/acp.report.md)** - Generate a completion report; deregisters session
-- **[`@acp.handoff`](agent/commands/acp.handoff.md)** - Prepare handoff documentation for another agent
-- **[`@acp.resume`](agent/commands/acp.resume.md)** - Resume a project — init + review recent progress + proceed in one step
-- **[`@acp.audit`](agent/commands/acp.audit.md)** - Audit ACP files for consistency and drift
+- **[`/acp-init`](agent/commands/acp.init.md)** - Initialize agent context; loads key files, registers session, reports global packages
+- **[`/acp-proceed`](agent/commands/acp.proceed.md)** - Continue with next task (single-task or autonomous multi-task mode)
+- **[`/acp-plan`](agent/commands/acp.plan.md)** - Plan project milestones and tasks from requirements
+- **[`/acp-status`](agent/commands/acp.status.md)** - Display project status and active sessions
+- **[`/acp-report`](agent/commands/acp.report.md)** - Generate a completion report; deregisters session
+- **[`/acp-handoff`](agent/commands/acp.handoff.md)** - Prepare handoff documentation for another agent
+- **[`/acp-resume`](agent/commands/acp.resume.md)** - Resume a project — init + review recent progress + proceed in one step
+- **[`/acp-audit`](agent/commands/acp.audit.md)** - Audit ACP files for consistency and drift
 
 **Planning**
-- **[`@acp.design-create`](agent/commands/acp.design-create.md)** - Create a design document
-- **[`@acp.design-reference`](agent/commands/acp.design-reference.md)** - Cross-reference design elements (D-IDs) into tasks
-- **[`@acp.spec`](agent/commands/acp.spec.md)** - Create a formal specification with R\<N\> requirements
-- **[`@acp.task-create`](agent/commands/acp.task-create.md)** - Create a task; auto-populates Spec Coverage from matching spec
-- **[`@acp.pattern-create`](agent/commands/acp.pattern-create.md)** - Create a reusable architectural pattern
-- **[`@acp.command-create`](agent/commands/acp.command-create.md)** - Create a custom command doc
+- **[`/acp-design-create`](agent/commands/acp.design-create.md)** - Create a design document
+- **[`/acp-design-reference`](agent/commands/acp.design-reference.md)** - Cross-reference design elements (D-IDs) into tasks
+- **[`/acp-spec`](agent/commands/acp.spec.md)** - Create a formal specification with R\<N\> requirements
+- **[`/acp-task-create`](agent/commands/acp.task-create.md)** - Create a task; auto-populates Spec Coverage from matching spec
+- **[`/acp-pattern-create`](agent/commands/acp.pattern-create.md)** - Create a reusable architectural pattern
+- **[`/acp-command-create`](agent/commands/acp.command-create.md)** - Create a custom command doc
 
 **Clarification**
-- **[`@acp.clarification-create`](agent/commands/acp.clarification-create.md)** - Create a clarification document (with duplicate awareness)
-- **[`@acp.clarification-capture`](agent/commands/acp.clarification-capture.md)** - Synthesize clarifications into entity creation steps
-- **[`@acp.clarification-address`](agent/commands/acp.clarification-address.md)** - Mark a clarification as addressed
+- **[`/acp-clarification-create`](agent/commands/acp.clarification-create.md)** - Create a clarification document (with duplicate awareness)
+- **[`/acp-clarification-capture`](agent/commands/acp.clarification-capture.md)** - Synthesize clarifications into entity creation steps
+- **[`/acp-clarification-address`](agent/commands/acp.clarification-address.md)** - Mark a clarification as addressed
 
 **Artifacts**
-- **[`@acp.artifact-research`](agent/commands/acp.artifact-research.md)** - Create a research artifact (plan → execute → synthesize)
-- **[`@acp.artifact-glossary`](agent/commands/acp.artifact-glossary.md)** - Create a glossary artifact (auto-extract + interactive refine)
-- **[`@acp.artifact-reference`](agent/commands/acp.artifact-reference.md)** - Create a reference artifact (command-first sanity check)
+- **[`/acp-artifact-research`](agent/commands/acp.artifact-research.md)** - Create a research artifact (plan → execute → synthesize)
+- **[`/acp-artifact-glossary`](agent/commands/acp.artifact-glossary.md)** - Create a glossary artifact (auto-extract + interactive refine)
+- **[`/acp-artifact-reference`](agent/commands/acp.artifact-reference.md)** - Create a reference artifact (command-first sanity check)
 
 **Package Management** *(ACP Enhanced)*
-- **[`@acp.package-install`](agent/commands/acp.package-install.md)** - Install a package from a git repository
-- **[`@acp.package-list`](agent/commands/acp.package-list.md)** - List installed packages
-- **[`@acp.package-info`](agent/commands/acp.package-info.md)** - Show package details
-- **[`@acp.package-update`](agent/commands/acp.package-update.md)** - Update installed packages
-- **[`@acp.package-remove`](agent/commands/acp.package-remove.md)** - Remove a package
-- **[`@acp.package-search`](agent/commands/acp.package-search.md)** - Search GitHub for ACP packages
-- **[`@acp.package-create`](agent/commands/acp.package-create.md)** - Scaffold a new ACP package
-- **[`@acp.package-publish`](agent/commands/acp.package-publish.md)** - Publish a package to GitHub
-- **[`@acp.package-validate`](agent/commands/acp.package-validate.md)** - Validate package files and schema
+- **[`/acp-package-install`](agent/commands/acp.package-install.md)** - Install a package from a git repository
+- **[`/acp-package-list`](agent/commands/acp.package-list.md)** - List installed packages
+- **[`/acp-package-info`](agent/commands/acp.package-info.md)** - Show package details
+- **[`/acp-package-update`](agent/commands/acp.package-update.md)** - Update installed packages
+- **[`/acp-package-remove`](agent/commands/acp.package-remove.md)** - Remove a package
+- **[`/acp-package-search`](agent/commands/acp.package-search.md)** - Search GitHub for ACP packages
+- **[`/acp-package-create`](agent/commands/acp.package-create.md)** - Scaffold a new ACP package
+- **[`/acp-package-publish`](agent/commands/acp.package-publish.md)** - Publish a package to GitHub
+- **[`/acp-package-validate`](agent/commands/acp.package-validate.md)** - Validate package files and schema
 
 **Preferences** *(ACP Enhanced)*
-- **[`@acp.preferences-show`](agent/commands/acp.preferences-show.md)** - View effective preferences with source attribution
-- **[`@acp.preferences-get`](agent/commands/acp.preferences-get.md)** - Resolve and display preferences for a given namespace (for scripting/command use)
-- **[`@acp.preferences-create`](agent/commands/acp.preferences-create.md)** - Create a preference file at a given level
-- **[`@acp.preferences-set`](agent/commands/acp.preferences-set.md)** - Set a preference value
-- **[`@acp.preferences-validate`](agent/commands/acp.preferences-validate.md)** - Validate all preference files
+- **[`/acp-preferences-show`](agent/commands/acp.preferences-show.md)** - View effective preferences with source attribution
+- **[`/acp-preferences-get`](agent/commands/acp.preferences-get.md)** - Resolve and display preferences for a given namespace (for scripting/command use)
+- **[`/acp-preferences-create`](agent/commands/acp.preferences-create.md)** - Create a preference file at a given level
+- **[`/acp-preferences-set`](agent/commands/acp.preferences-set.md)** - Set a preference value
+- **[`/acp-preferences-validate`](agent/commands/acp.preferences-validate.md)** - Validate all preference files
 
 **Project Registry** *(ACP Enhanced)*
-- **[`@acp.project-create`](agent/commands/acp.project-create.md)** - Create and register a new project
-- **[`@acp.project-list`](agent/commands/acp.project-list.md)** - List registered projects with filtering
-- **[`@acp.project-set`](agent/commands/acp.project-set.md)** - Switch to a project (set as current)
-- **[`@acp.project-info`](agent/commands/acp.project-info.md)** - Show detailed project information
-- **[`@acp.project-update`](agent/commands/acp.project-update.md)** - Update project metadata
-- **[`@acp.project-remove`](agent/commands/acp.project-remove.md)** - Remove project from registry
-- **[`@acp.projects-sync`](agent/commands/acp.projects-sync.md)** - Discover and register existing projects
-- **[`@acp.projects-restore`](agent/commands/acp.projects-restore.md)** - Restore/clone missing projects from their registered git origins
+- **[`/acp-project-create`](agent/commands/acp.project-create.md)** - Create and register a new project
+- **[`/acp-project-list`](agent/commands/acp.project-list.md)** - List registered projects with filtering
+- **[`/acp-project-set`](agent/commands/acp.project-set.md)** - Switch to a project (set as current)
+- **[`/acp-project-info`](agent/commands/acp.project-info.md)** - Show detailed project information
+- **[`/acp-project-update`](agent/commands/acp.project-update.md)** - Update project metadata
+- **[`/acp-project-remove`](agent/commands/acp.project-remove.md)** - Remove project from registry
+- **[`/acp-projects-sync`](agent/commands/acp.projects-sync.md)** - Discover and register existing projects
+- **[`/acp-projects-restore`](agent/commands/acp.projects-restore.md)** - Restore/clone missing projects from their registered git origins
 
 **Sessions** *(ACP Enhanced)*
-- **[`@acp.sessions`](agent/commands/acp.sessions.md)** - List, clean, deregister, or count active agent sessions
+- **[`/acp-sessions`](agent/commands/acp.sessions.md)** - List, clean, deregister, or count active agent sessions
 
 **Key File Index** *(ACP Enhanced)*
-- **[`@acp.index`](agent/commands/acp.index.md)** - Manage the key file index (list, add, remove, explore, show)
+- **[`/acp-index`](agent/commands/acp.index.md)** - Manage the key file index (list, add, remove, explore, show)
 
 **Version & Sync**
-- **[`@acp.version-check`](agent/commands/acp.version-check.md)** - Show current ACP Enhanced version
-- **[`@acp.version-check-for-updates`](agent/commands/acp.version-check-for-updates.md)** - Check for ACP Enhanced updates
-- **[`@acp.version-update`](agent/commands/acp.version-update.md)** - Update ACP Enhanced to latest version
-- **[`@acp.update`](agent/commands/acp.update.md)** - Update ACP Enhanced to latest version via script (alias for version-update)
-- **[`@acp.sync`](agent/commands/acp.sync.md)** - Sync spec↔task↔code cross-references; flag unclaimed requirements and stale markers
-- **[`@acp.validate`](agent/commands/acp.validate.md)** - Validate ACP file health and index consistency
+- **[`/acp-version-check`](agent/commands/acp.version-check.md)** - Show current ACP Enhanced version
+- **[`/acp-version-check-for-updates`](agent/commands/acp.version-check-for-updates.md)** - Check for ACP Enhanced updates
+- **[`/acp-version-update`](agent/commands/acp.version-update.md)** - Update ACP Enhanced to latest version
+- **[`/acp-update`](agent/commands/acp.update.md)** - Update ACP Enhanced to latest version via script (alias for version-update)
+- **[`/acp-sync`](agent/commands/acp.sync.md)** - Sync spec↔task↔code cross-references; flag unclaimed requirements and stale markers
+- **[`/acp-validate`](agent/commands/acp.validate.md)** - Validate ACP file health and index consistency
 
 **Git Namespace** *(separate from `acp.*`)*
 - **[`@git.commit`](agent/commands/git.commit.md)** - Version-aware commit with CHANGELOG validation and progress.yaml update
@@ -1048,9 +1048,9 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 Commands are invoked using the `@` syntax with dot notation:
 
 ```
-@acp.init                    → agent/commands/acp.init.md
-@acp.proceed                 → agent/commands/acp.proceed.md
-@acp.status                  → agent/commands/acp.status.md
+/acp-init                    → agent/commands/acp.init.md
+/acp-proceed                 → agent/commands/acp.proceed.md
+/acp-status                  → agent/commands/acp.status.md
 @deploy.production           → agent/commands/deploy.production.md
 ```
 
@@ -1058,13 +1058,13 @@ Commands are invoked using the `@` syntax with dot notation:
 
 ### Creating Custom Commands
 
-Invoke [`@acp.command-create`](agent/commands/acp.command-create.md) and follow directives defined in that file.
+Invoke [`/acp-command-create`](agent/commands/acp.command-create.md) and follow directives defined in that file.
 
 **Note**: The `acp` namespace is reserved for core commands. Use descriptive, single-word namespaces for custom commands (e.g., `local`, `deploy`, `test`, `custom`).
 
 ### Installing Third-Party Commands
 
-Use `@acp.package-install` to install command packages from git repositories.
+Use `/acp-package-install` to install command packages from git repositories.
 
 **Security Note**: Third-party commands can instruct agents to modify files and execute scripts. Always review command files before installation.
 
@@ -1104,16 +1104,16 @@ Full definitions: [`agent/configurables/acp.configurables.yaml`](agent/configura
 
 ```bash
 # View effective preferences with source attribution
-@acp.preferences-show acp
+/acp-preferences-show acp
 
 # Create preference file at user level (populate with defaults)
-@acp.preferences-create --level user --namespace acp
+/acp-preferences-create --level user --namespace acp
 
 # Set a preference value
-@acp.preferences-set acp plan.draft.create_mode guided --user
+/acp-preferences-set acp plan.draft.create_mode guided --user
 
 # Validate all preference files
-@acp.preferences-validate
+/acp-preferences-validate
 ```
 
 ### Using Presets
@@ -1122,16 +1122,16 @@ Presets are named preference bundles that configure multiple values at once:
 
 ```bash
 # Automated planning without interaction
-@acp.plan --preset acp.batch-planning
+/acp-plan --preset acp.batch-planning
 
 # Guided planning with user confirmation at every step
-@acp.plan --preset acp.interactive-planning
+/acp-plan --preset acp.interactive-planning
 
 # Fast iteration with auto-commit enabled
-@acp.plan --preset acp.rapid-prototyping
+/acp-plan --preset acp.rapid-prototyping
 
 # List all available presets
-@acp.preferences-show acp --presets
+/acp-preferences-show acp --presets
 ```
 
 ### Command-Line Overrides
@@ -1140,10 +1140,10 @@ Any preference can be overridden for a single invocation using dot notation:
 
 ```bash
 # Use guided mode just this time
-@acp.plan --plan.draft.create_mode guided
+/acp-plan --plan.draft.create_mode guided
 
 # Preset with override (override wins)
-@acp.plan --preset acp.batch-planning --plan.draft.create_mode structured
+/acp-plan --preset acp.batch-planning --plan.draft.create_mode structured
 ```
 
 **Precedence**: CLI Override > Preset > Project > Workspace > User > Default
@@ -1154,13 +1154,13 @@ Packages can ship their own configurables and presets:
 
 ```bash
 # View package preferences
-@acp.preferences-show my-package
+/acp-preferences-show my-package
 
 # Use a package preset
-@acp.plan --preset my-package.strict-mode
+/acp-plan --preset my-package.strict-mode
 ```
 
-Packages scaffold these files automatically via `@acp.package-create`.
+Packages scaffold these files automatically via `/acp-package-create`.
 
 ---
 
@@ -1177,7 +1177,7 @@ When working in any project, you can discover globally installed packages:
 3. **Navigate to package files**: Files are installed directly into `~/.acp/agent/`
 4. **Use commands/patterns**: Reference via `@namespace.command` syntax
 
-**Automatic Discovery**: The [`@acp.init`](agent/commands/acp.init.md) command automatically reads `~/.acp/agent/manifest.yaml` and reports globally installed packages.
+**Automatic Discovery**: The [`/acp-init`](agent/commands/acp.init.md) command automatically reads `~/.acp/agent/manifest.yaml` and reports globally installed packages.
 
 ### Namespace Precedence Rules
 
@@ -1228,10 +1228,10 @@ When working in any project, you can discover globally installed packages:
 
 ```bash
 # Install git helpers globally
-@acp.package-install --global https://github.com/prmichaelsen/acp-git.git
+/acp-package-install --global https://github.com/prmichaelsen/acp-git.git
 
 # In any project, discover global packages
-@acp.init
+/acp-init
 # Output: "Found 2 global packages: acp-core, @prmichaelsen/acp-git"
 
 # Use global command
@@ -1248,21 +1248,21 @@ ACP supports a global project registry at `~/.acp/projects.yaml` that tracks all
 ### Key Features
 
 - **Project Discovery**: List all registered projects with filtering options
-- **Context Switching**: Quickly switch between projects using `@acp.project-set`
+- **Context Switching**: Quickly switch between projects using `/acp-project-set`
 - **Metadata Tracking**: Track project type, status, tags, and relationships
-- **Automatic Registration**: Projects auto-register when created via `@acp.project-create`
-- **Sync Discovery**: Find and register existing projects with `@acp.projects-sync`
+- **Automatic Registration**: Projects auto-register when created via `/acp-project-create`
+- **Sync Discovery**: Find and register existing projects with `/acp-projects-sync`
 
 ### Commands
 
 | Command | Description |
 |---------|-------------|
-| [`@acp.project-list`](agent/commands/acp.project-list.md) | List all registered projects with optional filtering |
-| [`@acp.project-set`](agent/commands/acp.project-set.md) | Switch to a project (set as current) |
-| [`@acp.project-info`](agent/commands/acp.project-info.md) | Show detailed project information |
-| [`@acp.project-update`](agent/commands/acp.project-update.md) | Update project metadata |
-| [`@acp.project-remove`](agent/commands/acp.project-remove.md) | Remove project from registry |
-| [`@acp.projects-sync`](agent/commands/acp.projects-sync.md) | Discover and register existing projects |
+| [`/acp-project-list`](agent/commands/acp.project-list.md) | List all registered projects with optional filtering |
+| [`/acp-project-set`](agent/commands/acp.project-set.md) | Switch to a project (set as current) |
+| [`/acp-project-info`](agent/commands/acp.project-info.md) | Show detailed project information |
+| [`/acp-project-update`](agent/commands/acp.project-update.md) | Update project metadata |
+| [`/acp-project-remove`](agent/commands/acp.project-remove.md) | Remove project from registry |
+| [`/acp-projects-sync`](agent/commands/acp.projects-sync.md) | Discover and register existing projects |
 
 ### Registry Structure
 
@@ -1289,22 +1289,22 @@ current_project: my-project
 
 ```bash
 # List all projects
-@acp.project-list
+/acp-project-list
 
 # Switch to a specific project
-@acp.project-set my-project
+/acp-project-set my-project
 
 # View project details
-@acp.project-info
+/acp-project-info
 
 # Update project metadata
-@acp.project-update --tags "typescript,api,rest"
+/acp-project-update --tags "typescript,api,rest"
 
 # Discover unregistered projects
-@acp.projects-sync
+/acp-projects-sync
 
 # Remove a project from registry (keeps files)
-@acp.project-remove old-project
+/acp-project-remove old-project
 ```
 
 ### For Agents: How to Use the Registry
@@ -1312,11 +1312,11 @@ current_project: my-project
 When working in any ACP project, you can:
 
 1. **Check current project**: Read `~/.acp/projects.yaml` and find `current_project`
-2. **List available projects**: Use `@acp.project-list` to see all projects
-3. **Switch context**: Use `@acp.project-set <name>` to change projects
-4. **Get project info**: Use `@acp.project-info` for detailed metadata
+2. **List available projects**: Use `/acp-project-list` to see all projects
+3. **Switch context**: Use `/acp-project-set <name>` to change projects
+4. **Get project info**: Use `/acp-project-info` for detailed metadata
 
-**Automatic Tracking**: The `@acp.init` command automatically reads the registry and reports the current project context.
+**Automatic Tracking**: The `/acp-init` command automatically reads the registry and reports the current project context.
 
 ---
 
@@ -1324,7 +1324,7 @@ When working in any ACP project, you can:
 
 ACP supports global session tracking via `~/.acp/sessions.yaml` for awareness of concurrent agent work across projects. When multiple `claude` terminals run from a single IDE instance, sessions give each agent visibility into what other agents are doing.
 
-This is an advisory-only visibility layer — no locking or coordination. Sessions are registered at `@acp.init` and deregistered at `@acp.report`, with automatic stale cleanup for crashed terminals.
+This is an advisory-only visibility layer — no locking or coordination. Sessions are registered at `/acp-init` and deregistered at `/acp-report`, with automatic stale cleanup for crashed terminals.
 
 ### What sessions.yaml Tracks
 
@@ -1334,26 +1334,26 @@ Each session entry contains: session ID, project name, description, timestamps (
 
 | Command | Description |
 |---------|-------------|
-| [`@acp.sessions`](agent/commands/acp.sessions.md) | List, clean, deregister, or count sessions |
-| `@acp.sessions list` | Show all active sessions |
-| `@acp.sessions clean` | Remove stale sessions (dead PIDs, timeouts) |
-| `@acp.sessions deregister` | End current session |
+| [`/acp-sessions`](agent/commands/acp.sessions.md) | List, clean, deregister, or count sessions |
+| `/acp-sessions list` | Show all active sessions |
+| `/acp-sessions clean` | Remove stale sessions (dead PIDs, timeouts) |
+| `/acp-sessions deregister` | End current session |
 
 ### Integration with Other Commands
 
 | Command | Integration |
 |---------|-------------|
-| `@acp.init` | Registers session and displays active siblings |
-| `@acp.status` | Shows session count ("Sessions: N active") |
-| `@acp.report` | Deregisters session on completion |
+| `/acp-init` | Registers session and displays active siblings |
+| `/acp-status` | Shows session count ("Sessions: N active") |
+| `/acp-report` | Deregisters session on completion |
 
 All integrations are optional — if `acp.sessions.sh` is missing, commands skip the session step silently.
 
 ### Session Lifecycle
 
-1. **Register**: `@acp.init` registers a session with project, PID, timestamps
+1. **Register**: `/acp-init` registers a session with project, PID, timestamps
 2. **Heartbeat**: Activity updates via `acp.sessions.sh heartbeat`
-3. **Deregister**: `@acp.report` ends the session, or manual via `@acp.sessions deregister`
+3. **Deregister**: `/acp-report` ends the session, or manual via `/acp-sessions deregister`
 4. **Stale Cleanup**: Dead PIDs removed immediately; inactive >2h removed; inactive >30m marked idle
 
 ---
@@ -1397,17 +1397,17 @@ contents:
 
 ```bash
 # Install only stable features (default)
-@acp.package-install --repo https://github.com/user/package.git
+/acp-package-install --repo https://github.com/user/package.git
 
 # Install all features including experimental
-@acp.package-install --repo https://github.com/user/package.git --experimental
+/acp-package-install --repo https://github.com/user/package.git --experimental
 ```
 
 ### Updating Experimental Features
 
 Once installed, experimental features update normally:
 ```bash
-@acp.package-update package-name  # Updates experimental features if already installed
+/acp-package-update package-name  # Updates experimental features if already installed
 ```
 
 ### Graduating Features
@@ -1422,7 +1422,7 @@ To graduate a feature from experimental to stable:
 
 Validation ensures consistency:
 ```bash
-@acp.package-validate  # Checks experimental marking is synchronized
+/acp-package-validate  # Checks experimental marking is synchronized
 ```
 
 ### Best Practices
@@ -1470,7 +1470,7 @@ bash agent/benchmarks/runner/serve-reports.sh
 
 1. Each task runs in an isolated temp directory using `claude -p` (non-interactive mode)
 2. Multi-turn conversations use `--resume` for step-by-step execution
-3. ACP mode installs ACP and injects `@acp.plan` / `@acp.proceed` directives
+3. ACP mode installs ACP and injects `/acp-plan` / `/acp-proceed` directives
 4. After execution: automated verification checks + LLM evaluator (6-category rubric)
 5. Reports generated in Markdown and HTML (with Chart.js radar charts)
 
@@ -1508,13 +1508,13 @@ ACP packages can bundle template source files (code, configs, etc.) alongside pa
 
 ```bash
 # Install all files (templates install to target paths)
-@acp.package-install --repo <url>
+/acp-package-install --repo <url>
 
 # Install specific template files only
-@acp.package-install --files config/tsconfig.json src/schemas/example.schema.ts --repo <url>
+/acp-package-install --files config/tsconfig.json src/schemas/example.schema.ts --repo <url>
 
 # Preview what would be installed
-@acp.package-install --list --repo <url>
+/acp-package-install --list --repo <url>
 ```
 
 ### Variable Substitution
@@ -1586,24 +1586,24 @@ Index files in `agent/index/` declare which project files are critical. Each ent
 
 Files follow `{namespace}.{qualifier}.yaml` naming:
 - `local.main.yaml` — Project's own key files (highest precedence)
-- `{package}.main.yaml` — Package-shipped key files (installed via `@acp.package-install`)
+- `{package}.main.yaml` — Package-shipped key files (installed via `/acp-package-install`)
 
 ### When Key Files Are Read
 
-- **`@acp.init`**: Reads all key files with weight >= 0.8
-- **`@acp.proceed`**, **`@acp.plan`**: Read key files where `applies` includes the command name
-- **Creation commands** (`@acp.design-create`, etc.): Read key files where `applies` includes the command name
+- **`/acp-init`**: Reads all key files with weight >= 0.8
+- **`/acp-proceed`**, **`/acp-plan`**: Read key files where `applies` includes the command name
+- **Creation commands** (`/acp-design-create`, etc.): Read key files where `applies` includes the command name
 - **After context compaction**: Re-read key files following [When Recovering from Context Loss](#when-recovering-from-context-loss)
 
 ### Managing the Index
 
-Use `@acp.index` to manage entries:
+Use `/acp-index` to manage entries:
 ```
-@acp.index list              # List all indexed key files
-@acp.index add <path>        # Add a file to the index
-@acp.index remove <path>     # Remove a file from the index
-@acp.index explore           # Suggest files that should be indexed
-@acp.index show <path>       # Show details for a specific entry
+/acp-index list              # List all indexed key files
+/acp-index add <path>        # Add a file to the index
+/acp-index remove <path>     # Remove a file from the index
+/acp-index explore           # Suggest files that should be indexed
+/acp-index show <path>       # Show details for a specific entry
 ```
 
 ### Weight Guidelines
@@ -1617,7 +1617,7 @@ Use `@acp.index` to manage entries:
 
 ### Validation
 
-Run `@acp.validate` to check index health: valid schema, existing paths, reasonable limits (recommended max 20 entries total, 10 per namespace).
+Run `/acp-validate` to check index health: valid schema, existing paths, reasonable limits (recommended max 20 entries total, 10 per namespace).
 
 ### Design Document
 
@@ -1627,12 +1627,12 @@ See `agent/design/local.key-file-index-system.md` for the complete design specif
 
 ## Sample Prompts for Using ACP
 
-> **ACP Enhanced users**: The trigger strings below are the original ACP pattern (legacy). If you are using ACP Enhanced, prefer `@acp.*` command files — they are more precise, self-documenting, and context-aware. The legacy trigger strings remain supported for backward compatibility.
+> **ACP Enhanced users**: The trigger strings below are the original ACP pattern (legacy). If you are using ACP Enhanced, prefer `/acp-*` command files — they are more precise, self-documenting, and context-aware. The legacy trigger strings remain supported for backward compatibility.
 
 ### Initialize Prompt
 
 **Trigger**: `AGENT.md: Initialize`  
-**ACP Enhanced equivalent**: `@acp.init`
+**ACP Enhanced equivalent**: `/acp-init`
 
 Use this prompt when starting work on an ACP-structured project:
 
@@ -1656,7 +1656,7 @@ Then read @agent again, update stale @agent/tasks, stale documentation, and upda
 ### Proceed Prompt
 
 **Trigger**: `AGENT.md: Proceed`  
-**ACP Enhanced equivalent**: `@acp.proceed`
+**ACP Enhanced equivalent**: `/acp-proceed`
 
 Use this prompt to continue with the next task:
 
@@ -1672,7 +1672,7 @@ Let's proceed with implementing the current or next task. Remember to update @ag
 ### Update Prompt
 
 **Trigger**: `AGENT.md: Update`  
-**ACP Enhanced equivalent**: `@acp.version-update` or `@acp.update`
+**ACP Enhanced equivalent**: `/acp-version-update` or `/acp-update`
 
 Updates all ACP files to the latest version:
 
@@ -1689,7 +1689,7 @@ Run ./agent/scripts/acp.version-update.sh to update all ACP files (AGENT.md, tem
 ### Check for Updates Prompt
 
 **Trigger**: `AGENT.md: Check for updates`  
-**ACP Enhanced equivalent**: `@acp.version-check-for-updates`
+**ACP Enhanced equivalent**: `/acp-version-check-for-updates`
 
 Checks if updates are available without applying them:
 
@@ -1729,11 +1729,11 @@ For daily use in ACP Enhanced projects, these five commands cover the most commo
 
 | Command | Purpose | Replaces |
 |---------|---------|----------|
-| `@acp.init` | Load full project context at session start | `AGENT.md: Initialize` |
-| `@acp.proceed` | Implement next task (or all with `--complete`) | `AGENT.md: Proceed` |
-| `@acp.resume` | Re-load context mid-session (shorter than `@acp.init`) | — |
-| `@acp.plan` | Plan a new milestone and generate task files | — |
-| `@acp.status` | Show current milestone, task, and progress | — |
+| `/acp-init` | Load full project context at session start | `AGENT.md: Initialize` |
+| `/acp-proceed` | Implement next task (or all with `--complete`) | `AGENT.md: Proceed` |
+| `/acp-resume` | Re-load context mid-session (shorter than `/acp-init`) | — |
+| `/acp-plan` | Plan a new milestone and generate task files | — |
+| `/acp-status` | Show current milestone, task, and progress | — |
 
 > See [`agent/commands/`](agent/commands/) for the full command catalogue.
 
@@ -1831,12 +1831,12 @@ When your context is compacted, truncated, or you start a new session mid-task:
    - Ask if they want full context reload or minimal recovery
    - Suggest relevant key files based on current work
 
-This is equivalent to running `@acp.init` steps 2-2.8 followed by resuming the current task.
+This is equivalent to running `/acp-init` steps 2-2.8 followed by resuming the current task.
 
 ### When Creating New Features
 
 1. **Create design document first**
-   - Invoke [`@acp.design-create`](agent/commands/acp.design-create.md) and follow directives defined in that file
+   - Invoke [`/acp-design-create`](agent/commands/acp.design-create.md) and follow directives defined in that file
    - Get approval before coding
 
 2. **Update or create milestone**
@@ -1845,10 +1845,10 @@ This is equivalent to running `@acp.init` steps 2-2.8 followed by resuming the c
    - Update progress.yaml
 
 3. **Break into tasks**
-   - Invoke [`@acp.task-create`](agent/commands/acp.task-create.md) and follow directives defined in that file
+   - Invoke [`/acp-task-create`](agent/commands/acp.task-create.md) and follow directives defined in that file
 
 4. **Document patterns**
-   - Invoke [`@acp.pattern-create`](agent/commands/acp.pattern-create.md) and follow directives defined in that file
+   - Invoke [`/acp-pattern-create`](agent/commands/acp.pattern-create.md) and follow directives defined in that file
    - Update existing patterns if needed
 
 5. **Implement and verify**
@@ -1872,8 +1872,8 @@ This is equivalent to running `@acp.init` steps 2-2.8 followed by resuming the c
 
 3. **Document new solutions**
    - If you solve a new problem, document it
-   - Invoke [`@acp.design-create`](agent/commands/acp.design-create.md) to create design document
-   - Invoke [`@acp.pattern-create`](agent/commands/acp.pattern-create.md) if solution is reusable
+   - Invoke [`/acp-design-create`](agent/commands/acp.design-create.md) to create design document
+   - Invoke [`/acp-pattern-create`](agent/commands/acp.pattern-create.md) if solution is reusable
 
 4. **Update progress.yaml**
    - Add blocker if stuck

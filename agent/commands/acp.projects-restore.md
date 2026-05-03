@@ -1,6 +1,6 @@
 # Command: projects-restore
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.projects-restore` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-projects-restore` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -27,15 +27,15 @@ This command reads `~/.acp/projects.yaml` and clones any missing project directo
 - You want to preview what projects are missing with `--dry-run`
 
 **Key Distinction**:
-- `@acp.projects-sync` - Discovers projects on disk and registers them in the registry
-- `@acp.projects-restore` - Reads the registry and clones projects that are missing from disk
+- `/acp-projects-sync` - Discovers projects on disk and registers them in the registry
+- `/acp-projects-restore` - Reads the registry and clones projects that are missing from disk
 
 ---
 
 ## Prerequisites
 
 - [ ] `~/.acp/projects.yaml` exists with project entries
-- [ ] Projects have `git_origin` field set (run `@acp.projects-sync` to backfill)
+- [ ] Projects have `git_origin` field set (run `/acp-projects-sync` to backfill)
 - [ ] Git installed and network access available for cloning
 
 ---
@@ -45,19 +45,19 @@ This command reads `~/.acp/projects.yaml` and clones any missing project directo
 ### 0. Display Command Header
 
 ```
-⚡ @acp.projects-restore
+⚡ /acp-projects-restore
   Restore/clone missing projects from their registered git origins
 
   Usage:
-    @acp.projects-restore                          Restore all missing projects
-    @acp.projects-restore --dry-run                Preview what would be cloned
-    @acp.projects-restore --install-acp            Restore and install ACP
+    /acp-projects-restore                          Restore all missing projects
+    /acp-projects-restore --dry-run                Preview what would be cloned
+    /acp-projects-restore --install-acp            Restore and install ACP
 
   Related:
-    @acp.projects-sync       Discover and register unregistered projects
-    @acp.project-list        List all registered projects
-    @acp.project-info        View project details including git info
-    @acp.project-update      Manually set git_origin/git_branch
+    /acp-projects-sync       Discover and register unregistered projects
+    /acp-project-list        List all registered projects
+    /acp-project-info        View project details including git info
+    /acp-project-update      Manually set git_origin/git_branch
 ```
 
 ### 1. Execute Restore Script
@@ -149,7 +149,7 @@ Restore Complete
 
 **Context**: Check what would be restored on a new machine  
 
-**Invocation**: `@acp.projects-restore --dry-run`  
+**Invocation**: `/acp-projects-restore --dry-run`  
 
 **Result**: Lists projects that would be cloned, skipped projects, and reasons  
 
@@ -157,7 +157,7 @@ Restore Complete
 
 **Context**: Restore all projects on a new machine  
 
-**Invocation**: `@acp.projects-restore`  
+**Invocation**: `/acp-projects-restore`  
 
 **Result**: Clones all missing projects from their git origins  
 
@@ -165,7 +165,7 @@ Restore Complete
 
 **Context**: Restore and set up ACP in each project  
 
-**Invocation**: `@acp.projects-restore --install-acp`  
+**Invocation**: `/acp-projects-restore --install-acp`  
 
 **Result**: Clones missing projects and installs ACP in each one  
 
@@ -173,10 +173,10 @@ Restore Complete
 
 ## Related Commands
 
-- [`@acp.projects-sync`](acp.projects-sync.md) - Discover and register unregistered projects (opposite direction)
-- [`@acp.project-list`](acp.project-list.md) - List all registered projects
-- [`@acp.project-info`](acp.project-info.md) - View project details including git info
-- [`@acp.project-update`](acp.project-update.md) - Manually set git_origin/git_branch
+- [`/acp-projects-sync`](acp.projects-sync.md) - Discover and register unregistered projects (opposite direction)
+- [`/acp-project-list`](acp.project-list.md) - List all registered projects
+- [`/acp-project-info`](acp.project-info.md) - View project details including git info
+- [`/acp-project-update`](acp.project-update.md) - Manually set git_origin/git_branch
 
 ---
 
@@ -188,7 +188,7 @@ Restore Complete
 
 **Cause**: Either all projects exist on disk, or git origins haven't been recorded  
 
-**Solution**: Run `@acp.projects-sync` first to backfill git_origin for existing projects  
+**Solution**: Run `/acp-projects-sync` first to backfill git_origin for existing projects  
 
 ### Issue 2: Clone failed
 
@@ -204,7 +204,7 @@ Restore Complete
 
 **Cause**: The stored branch no longer exists on the remote  
 
-**Solution**: This is handled automatically by falling back to the default branch. Update with `@acp.project-update <name> --git-branch <new-branch>`  
+**Solution**: This is handled automatically by falling back to the default branch. Update with `/acp-project-update <name> --git-branch <new-branch>`  
 
 ---
 
@@ -227,9 +227,9 @@ Restore Complete
 
 ## Notes
 
-- This command is the counterpart to `@acp.projects-sync` (sync discovers on disk, restore clones from registry)
+- This command is the counterpart to `/acp-projects-sync` (sync discovers on disk, restore clones from registry)
 - Archived projects are always skipped
-- Projects without `git_origin` are skipped (use `@acp.projects-sync` to backfill)
+- Projects without `git_origin` are skipped (use `/acp-projects-sync` to backfill)
 - Falls back to default branch if the stored branch doesn't exist on the remote
 - Safe to run multiple times (existing directories are skipped)
 - Does not modify the registry, only creates directories

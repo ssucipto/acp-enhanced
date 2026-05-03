@@ -1,6 +1,6 @@
 # Command: preferences-set
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.preferences-set` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-preferences-set` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -63,19 +63,19 @@ Use this command when:
 ### 0. Display Command Header
 
 ```
-⚡ @acp.preferences-set
+⚡ /acp-preferences-set
   Set a preference value with validation
 
   Usage:
-    @acp.preferences-set acp plan.draft.create_mode guided
-    @acp.preferences-set acp plan.draft.create_mode guided --user
-    @acp.preferences-set acp task.create.granularity 5 --project
-    @acp.preferences-set                              (interactive)
+    /acp-preferences-set acp plan.draft.create_mode guided
+    /acp-preferences-set acp plan.draft.create_mode guided --user
+    /acp-preferences-set acp task.create.granularity 5 --project
+    /acp-preferences-set                              (interactive)
 
   Related:
-    @acp.preferences-show      View current effective preferences
-    @acp.preferences-create    Create a preference file first
-    @acp.preferences-validate  Validate all preference files
+    /acp-preferences-show      View current effective preferences
+    /acp-preferences-create    Create a preference file first
+    /acp-preferences-validate  Validate all preference files
 ```
 
 ### 1. Parse Arguments
@@ -115,7 +115,7 @@ Use `./agent/scripts/acp.preferences.sh validate <namespace> <preference.path> <
     • guided       — Chat-only collection, no file created
     • contextual   — Inferred from context, no file created
 
-Run @acp.preferences-set without arguments for interactive mode.
+Run /acp-preferences-set without arguments for interactive mode.
 ```
 
 Halt without writing.
@@ -131,7 +131,7 @@ Map level to file path:
 | `user` / `global` | `~/.acp/agent/preferences/<namespace>.default.yaml` |
 
 If the target file does not exist:
-- Auto-create it by running `@acp.preferences-create --level <level> --namespace <namespace>` internally
+- Auto-create it by running `/acp-preferences-create --level <level> --namespace <namespace>` internally
 - Inform the user: `Creating preference file at <path> with defaults...`
 
 ### 4. Preview Change (Dry-Run or Confirmation)
@@ -173,7 +173,7 @@ Shell equivalent (for reference — agent may write YAML directly):
   Value:      'guided'
   Level:      Project  (agent/preferences/acp.default.yaml)
 
-Run @acp.preferences-show to see all effective preferences.
+Run /acp-preferences-show to see all effective preferences.
 ```
 
 ---
@@ -208,7 +208,7 @@ Run @acp.preferences-show to see all effective preferences.
   Value:      'guided'
   Level:      Project  (agent/preferences/acp.default.yaml)
 
-Run @acp.preferences-show to see all effective preferences.
+Run /acp-preferences-show to see all effective preferences.
 ```
 
 ---
@@ -217,31 +217,31 @@ Run @acp.preferences-show to see all effective preferences.
 
 ### Example 1: Set Draft Mode to Guided (Project Level)
 
-**Invocation**: `@acp.preferences-set acp plan.draft.create_mode guided`
+**Invocation**: `/acp-preferences-set acp plan.draft.create_mode guided`
 
 **Result**: Sets `plan.draft.create_mode: guided` in `agent/preferences/acp.default.yaml`.
 
 ### Example 2: Set Personal Preference at User Level
 
-**Invocation**: `@acp.preferences-set acp plan.draft.create_mode contextual --user`
+**Invocation**: `/acp-preferences-set acp plan.draft.create_mode contextual --user`
 
 **Result**: Sets `plan.draft.create_mode: contextual` in `~/.acp/agent/preferences/acp.default.yaml`. Applies to all projects on this machine.
 
 ### Example 3: Preview Without Writing
 
-**Invocation**: `@acp.preferences-set acp task.create.granularity 5 --dry-run`
+**Invocation**: `/acp-preferences-set acp task.create.granularity 5 --dry-run`
 
 **Result**: Displays the change that would be made. Does not modify any file.
 
 ### Example 4: Interactive Mode
 
-**Invocation**: `@acp.preferences-set`
+**Invocation**: `/acp-preferences-set`
 
 **Result**: Prompts for namespace, preference path, value, and level in sequence. Validates and writes.
 
 ### Example 5: Invalid Value
 
-**Invocation**: `@acp.preferences-set acp plan.draft.create_mode freestyle`
+**Invocation**: `/acp-preferences-set acp plan.draft.create_mode freestyle`
 
 **Result**: Validation fails — shows valid options (`structured`, `unstructured`, `guided`, `contextual`). Nothing written.
 
@@ -249,10 +249,10 @@ Run @acp.preferences-show to see all effective preferences.
 
 ## Related Commands
 
-- [`@acp.preferences-show`](acp.preferences-show.md) — View current effective preferences with source
-- [`@acp.preferences-create`](acp.preferences-create.md) — Create a new preference file
-- [`@acp.preferences-get`](acp.preferences-get.md) — Generate resolved preference set
-- [`@acp.preferences-validate`](acp.preferences-validate.md) — Validate all preference files
+- [`/acp-preferences-show`](acp.preferences-show.md) — View current effective preferences with source
+- [`/acp-preferences-create`](acp.preferences-create.md) — Create a new preference file
+- [`/acp-preferences-get`](acp.preferences-get.md) — Generate resolved preference set
+- [`/acp-preferences-validate`](acp.preferences-validate.md) — Validate all preference files
 
 ---
 
@@ -261,18 +261,18 @@ Run @acp.preferences-show to see all effective preferences.
 ### Issue 1: Validation fails for a value I expect to be valid
 
 **Symptom**: `❌ Invalid value for <pref>: '<value>'`  
-**Solution**: Run `@acp.preferences-show` to see valid options. Check the configurables file for the exact accepted values.
+**Solution**: Run `/acp-preferences-show` to see valid options. Check the configurables file for the exact accepted values.
 
 ### Issue 2: Wrong level being written
 
-**Symptom**: Preference shows at unexpected level in `@acp.preferences-show`  
+**Symptom**: Preference shows at unexpected level in `/acp-preferences-show`  
 **Solution**: Use explicit `--user`, `--workspace`, or `--project` flag to target the correct file.
 
 ### Issue 3: Preference not in effective set after setting
 
-**Symptom**: `@acp.preferences-show` shows old value  
+**Symptom**: `/acp-preferences-show` shows old value  
 **Cause**: A higher-precedence level is overriding the one you wrote  
-**Solution**: Check which level is overriding (the source column in `@acp.preferences-show`). Update or remove the higher-precedence override.
+**Solution**: Check which level is overriding (the source column in `/acp-preferences-show`). Update or remove the higher-precedence override.
 
 ---
 

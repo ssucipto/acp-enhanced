@@ -1,6 +1,6 @@
 # Command: version-check-for-updates
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.version-check-for-updates` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-version-check-for-updates` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -43,12 +43,12 @@ Unlike `@acp-version-update` which applies updates immediately, this command onl
 Display the following informational header, then continue immediately:
 
 ```
-⚡ @acp.version-check-for-updates
+⚡ /acp-version-check-for-updates
   Check if newer version of ACP is available without applying updates
 
   Related:
-    @acp.version-check    Show current version only
-    @acp.version-update   Apply updates if available
+    /acp-version-check    Show current version only
+    /acp-version-update   Apply updates if available
 ```
 
 ### 1. Run Update Check Script
