@@ -10,7 +10,7 @@
 **Purpose**: Resolve and display preferences for a given namespace  
 **Category**: Utility  
 **Frequency**: As Needed  
-**Scripts**: `agent/scripts/acp.preferences.sh`  
+**Scripts**: acp.preferences.sh  
 
 ---
 
