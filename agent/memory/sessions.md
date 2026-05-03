@@ -4,6 +4,29 @@
 
 - date: 2026-05-03
   executor: Persona A (Copilot)
+  tasks: [audit-001]
+  done:
+    - ran-acp-audit-full-task-and-bug-inventory
+    - fixed-task-template-id-placeholder-bug-01
+    - fixed-task-002-corrupted-title-bug-02
+    - fixed-task-006-missing-completed-date-bug-03
+    - fixed-awk-3arg-match-macos-incompatible-project-remove-bug-04
+    - fixed-package-list-global-test-wrong-manifest-path-bug-05
+    - wrote-audit-report-agent-reports-audit-001
+    - pushed-3b528b5
+  deferred:
+    - git-commands-old-syntax-in-display-available-commands: BUG-06-needs-design-decision
+    - preferences-tests-fail-under-e2e-runner: task-011
+    - 10-remaining-e2e-failures: task-011
+    - untracked-test-fixtures-gitignore: BUG-09-minor
+  key_fact: |
+    macOS ships BSD awk (POSIX only). Three-argument match($0, /regex/, arr) is a gawk
+    extension — it fails silently with exit code 2 on macOS. Replace with two sub() calls
+    on a key copy: `sub(/^  /, "", key); sub(/:.*/, "", key)`. Always use POSIX awk
+    in any script expected to run on macOS. Added pattern: posix-awk-key-extraction.
+
+- date: 2026-05-03
+  executor: Persona A (Copilot)
   tasks: [task-007, task-008, task-009, task-010]
   done:
     - fix-display-available-commands-50-commands-7-categories
