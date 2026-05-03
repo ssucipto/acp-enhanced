@@ -82,5 +82,5 @@
     4. 13 commands + 1 script absent from package.yaml (M6/M7/M15/M16 never synced)
     5. CHANGELOG missing post-M19 audit entry (afcf61d undocumented)
     Lesson: package.yaml must be updated at the END of every milestone that adds commands.
-    .agent/skills/commands.md @acp-foo example is intentional generic placeholder — do NOT change.
+    agent/skills/commands.md @acp-foo example is intentional generic placeholder — do NOT change.
 
