@@ -2,6 +2,23 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-05-03
+  executor: Persona A (Copilot)
+  tasks: [task-001, task-002, task-003, task-004, task-005]
+  done:
+    - unify-command-syntax-at-acp-dot-to-slash-acp-hyphen-92-files
+    - migrate-dot-agent-hidden-dir-into-agent-directory
+    - update-install-update-scripts-acp-enhanced-context-layer
+    - fix-e2e-test-assertions-update-skill-files-slash-notation
+    - auto-migrate-legacy-dot-agent-on-install-or-update
+  deferred: {}
+  key_fact: |
+    ACP Enhanced standardisation complete. @acp.X → /acp-X across 92 files (task-001).
+    .agent/ hidden dir fully merged into agent/ (task-002). Install/update scripts now
+    bootstrap agent/core/, skills/, wiki/, routing/, memory/ (task-003). Legacy .agent/
+    projects auto-migrated on next install or update with create-if-absent semantics (task-005).
+    @acp.meta.* namespace must remain unchanged — file annotation markers, not commands.
+
 - date: 2026-05-01
   executor: Persona A (Copilot)
   tasks: [task-129, task-130, task-131, task-132]
