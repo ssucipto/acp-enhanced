@@ -1,5 +1,5 @@
 ---
-id: task-001
+id: task-NNN
 title: Example task title
 task_type: bash-script-create
 milestone: none
