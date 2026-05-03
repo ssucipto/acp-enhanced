@@ -3,7 +3,7 @@
 
 name: acp-enhanced
 version: 6.2.5
-description: ACP Enhanced - Agent Context Protocol with structured context management layer (.agent/ framework)
+description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
 homepage: https://github.com/ssucipto/acp-enhanced

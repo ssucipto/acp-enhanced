@@ -9,11 +9,11 @@
 AGENTS.md                          ← Auto-loaded by Copilot, Cursor, Claude Code
 CLAUDE.md                          ← Copy of AGENTS.md (Claude Code auto-load)
 .github/copilot-instructions.md    ← Copy of AGENTS.md (Copilot priority 1)
-.agent/core/                       ← Permanent cached context (Layer 1)
-.agent/skills/                     ← Task-specific instructions (Layer 2)
-.agent/memory/                     ← Session memory, corrections, patterns
-.agent/wiki/                       ← Project reference knowledge
-.agent/routing/                    ← Model config, taxonomy, cost ledger
+agent/core/                       ← Permanent cached context (Layer 1)
+agent/skills/                     ← Task-specific instructions (Layer 2)
+agent/memory/                     ← Session memory, corrections, patterns
+agent/wiki/                       ← Project reference knowledge
+agent/routing/                    ← Model config, taxonomy, cost ledger
 agent/commands/                    ← All ACP command docs (50 commands)
 agent/scripts/                     ← All ACP bash scripts (28 scripts)
 agent/schemas/                     ← YAML validation schemas
@@ -36,7 +36,7 @@ bash scripts/acp-bootstrap.sh
 
 ## Step 2 — Fill in Your Project Identity (10 minutes)
 
-Edit `.agent/core/identity.yml`:
+Edit `agent/core/identity.yml`:
 ```yaml
 project: YourProject
 type: mobile-app
@@ -59,8 +59,8 @@ In Copilot chat or Claude Code:
 /acp-init
 ```
 AI reads your src/ directory and populates:
-- `.agent/wiki/domain.yml` (entities, screens, operations)
-- `.agent/wiki/integrations.md` (Firebase, Expo, Cloud Run config)
+- `agent/wiki/domain.yml` (entities, screens, operations)
+- `agent/wiki/integrations.md` (Firebase, Expo, Cloud Run config)
 
 Review the output. Fix any obvious errors. That's it.
 
@@ -94,7 +94,7 @@ Test with a real task:
 /acp-route "Add loading skeleton to ChoreList screen"
 
 # Then dispatch it
-npx ts-node scripts/acp-dispatch.ts .agent/tasks/task-001.md
+npx ts-node scripts/acp-dispatch.ts agent/routing/tasks/task-001.md
 ```
 
 ---
@@ -102,12 +102,12 @@ npx ts-node scripts/acp-dispatch.ts .agent/tasks/task-001.md
 ## Step 6 — Validate the Full Loop (30 minutes)
 
 1. `/acp-route "Add loading skeleton to ChoreList screen"`
-   → Check: `.agent/tasks/task-001.md` created with executor and frontmatter
+   → Check: `agent/routing/tasks/task-001.md` created with executor and frontmatter
 
 2. Do the work (via Copilot chat or dispatch script)
 
 3. `/acp-commit`
-   → Check: `.agent/memory/sessions.md` has a new YAML entry
+   → Check: `agent/memory/sessions.md` has a new YAML entry
 
 4. `/acp-cost-report`
    → Check: ledger has a row with token counts
@@ -176,7 +176,7 @@ EOD       → /acp-commit (90 seconds). Git commit. Done.
 
 **Dispatch script fails?**
 → Check OPENROUTER_API_KEY is set: `echo $OPENROUTER_API_KEY`
-→ Check task file has valid YAML frontmatter: `head -20 .agent/tasks/task-NNN.md`
+→ Check task file has valid YAML frontmatter: `head -20 agent/routing/tasks/task-NNN.md`
 
 **sessions.md getting too long?**
 → Run `/acp-memory-sync` — it compacts automatically

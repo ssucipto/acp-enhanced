@@ -10,7 +10,7 @@
 
 Four housekeeping items deferred from earlier milestones, bundled here for a single commit:
 
-1. Write M23 session memory entry to `.agent/memory/sessions.md`
+1. Write M23 session memory entry to `agent/memory/sessions.md`
 2. Retroactively create `milestone-17-artifact-commands-system.md`
 3. Bump version from 6.2.4 → 6.2.5 in all 4 version files
 4. Add `[6.2.5]` block to CHANGELOG.md
@@ -19,7 +19,7 @@ Four housekeeping items deferred from earlier milestones, bundled here for a sin
 
 ### 1. Write M23 Session Memory
 
-Prepend to `.agent/memory/sessions.md`:
+Prepend to `agent/memory/sessions.md`:
 
 ```yaml
 - date: 2026-05-01
@@ -59,7 +59,7 @@ Create `agent/milestones/milestone-17-artifact-commands-system.md` retroactively
 Update version in all 4 files:
 - `AGENT.md` — `**Version**: 6.2.4` → `**Version**: 6.2.5`
 - `package.yaml` — `version: 6.2.4` → `version: 6.2.5`
-- `.agent/core/identity.yml` — `version: 6.2.4` → `version: 6.2.5`
+- `agent/core/identity.yml` — `version: 6.2.4` → `version: 6.2.5`
 - `agent/progress.yaml` — `version: 6.2.4` → `version: 6.2.5`
 
 ### 4. Add CHANGELOG [6.2.5] Block
@@ -85,7 +85,7 @@ Prepend to `CHANGELOG.md` (above the [6.2.4] block):
 
 **Housekeeping:**
 - Created retroactive `agent/milestones/milestone-17-artifact-commands-system.md`
-- Added M23 session memory entry to `.agent/memory/sessions.md`
+- Added M23 session memory entry to `agent/memory/sessions.md`
 ```
 
 ### 5. Update progress.yaml
@@ -98,7 +98,7 @@ Prepend to `CHANGELOG.md` (above the [6.2.4] block):
 
 ## Verification
 
-- [ ] `.agent/memory/sessions.md` has M23 entry at top (YAML format, correct fields)
+- [ ] `agent/memory/sessions.md` has M23 entry at top (YAML format, correct fields)
 - [ ] `milestone-17-artifact-commands-system.md` exists with correct content
 - [ ] Version is `6.2.5` in AGENT.md, package.yaml, identity.yml, progress.yaml
 - [ ] CHANGELOG.md has `[6.2.5]` block above `[6.2.4]`

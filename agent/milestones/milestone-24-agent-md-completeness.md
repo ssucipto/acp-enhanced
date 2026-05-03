@@ -16,15 +16,15 @@ M23 successfully rebranded AGENT.md from original-ACP style to ACP Enhanced. A t
 3. **Stale Conclusion** — still says "Agent Directory Pattern" not "ACP Enhanced"
 4. **Legacy Sample Prompts** — trigger strings reference old AGENT.md format; no `@acp.*` equivalents shown
 5. **Missing M17 doc** — milestone-17-artifact-commands-system.md was never created; M17 is marked complete
-6. **Deferred M23 session memory** — `.agent/memory/sessions.md` M23 entry was not written at end of M23
+6. **Deferred M23 session memory** — `agent/memory/sessions.md` M23 entry was not written at end of M23
 
 ## Deliverables
 
 - `AGENT.md` — Core Commands complete, Three-Persona section added, Conclusion updated, Sample Prompts modernized
 - `agent/milestones/milestone-17-artifact-commands-system.md` — retroactive milestone doc
-- `.agent/memory/sessions.md` — M23 entry prepended
+- `agent/memory/sessions.md` — M23 entry prepended
 - `CHANGELOG.md` — `[6.2.5]` block
-- `agent/progress.yaml`, `package.yaml`, `.agent/core/identity.yml` — version bumped to 6.2.5
+- `agent/progress.yaml`, `package.yaml`, `agent/core/identity.yml` — version bumped to 6.2.5
 
 ## Success Criteria
 
@@ -33,7 +33,7 @@ M23 successfully rebranded AGENT.md from original-ACP style to ACP Enhanced. A t
 - [ ] AGENT.md Conclusion section says "ACP Enhanced" not "Agent Directory Pattern"
 - [ ] Sample Prompts section shows both legacy trigger strings AND their modern `@acp.*` equivalents
 - [ ] `milestone-17-artifact-commands-system.md` exists in `agent/milestones/`
-- [ ] `.agent/memory/sessions.md` has M23 session entry
+- [ ] `agent/memory/sessions.md` has M23 session entry
 - [ ] Version 6.2.5 in AGENT.md, package.yaml, identity.yml, progress.yaml
 - [ ] `[6.2.5]` block in CHANGELOG.md
 
@@ -41,11 +41,11 @@ M23 successfully rebranded AGENT.md from original-ACP style to ACP Enhanced. A t
 
 - `AGENT.md` — multiple section edits
 - `agent/milestones/milestone-17-artifact-commands-system.md` — new file
-- `.agent/memory/sessions.md` — prepend M23 entry
+- `agent/memory/sessions.md` — prepend M23 entry
 - `CHANGELOG.md` — prepend [6.2.5] block
 - `agent/progress.yaml` — version + M24 milestone + tasks 133-136
 - `package.yaml` — version bump
-- `.agent/core/identity.yml` — version bump
+- `agent/core/identity.yml` — version bump
 
 ## Tasks
 
