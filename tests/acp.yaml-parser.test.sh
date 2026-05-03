@@ -1,8 +1,8 @@
 #!/bin/bash
 # Test suite for acp.yaml-parser.sh - Generic YAML Parser with AST
 # Tests lexer, parser, AST construction, and query engine
-
-set -e
+# NOTE: set -e intentionally omitted — test suites track failures via counters,
+# not shell exit codes. assert_* functions return 1 on failure by design.
 
 # Source test utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -256,18 +256,19 @@ echo ""
 
 yaml_parse "tests/fixtures/simple.yaml"
 
-# Nonexistent key
-result=$(yaml_query ".nonexistent" 2>&1)
+# Nonexistent key — yaml_query returns exit 1 for not-found; || true prevents
+# set -e from aborting the test (we assert on the empty output, not exit code)
+result=$(yaml_query ".nonexistent" 2>&1) || true
 assert_empty "$result" "Edge case: nonexistent key returns empty"
 
 # Out of bounds array index
 yaml_parse "tests/fixtures/array.yaml"
-result=$(yaml_query ".tags[99]" 2>&1)
+result=$(yaml_query ".tags[99]" 2>&1) || true
 assert_empty "$result" "Edge case: out of bounds array index returns empty"
 
 # Invalid path
 yaml_parse "tests/fixtures/simple.yaml"
-result=$(yaml_query ".name.invalid" 2>&1)
+result=$(yaml_query ".name.invalid" 2>&1) || true
 assert_empty "$result" "Edge case: invalid nested path returns empty"
 
 echo ""
@@ -364,19 +365,22 @@ echo -e "${BLUE}${BOLD}Test Group 11: AST Structure Tests${NC}"
 echo ""
 
 yaml_parse "tests/fixtures/simple.yaml"
-assert_not_empty "$AST_NODES" "AST: Nodes created"
-assert_not_empty "$AST_NODE_COUNT" "AST: Node count tracked"
+assert_not_empty "$AST_FILE" "AST: AST_FILE set after parse"
+assert_file_exists "$AST_FILE" "AST: AST_FILE points to existing file"
 assert_not_empty "$AST_ROOT_ID" "AST: Root ID set"
 
-# Check node count is reasonable
-if [ "$AST_NODE_COUNT" -ge 4 ]; then
-    echo -e "${GREEN}✓${NC} AST: Node count reasonable (>= 4 for simple.yaml)"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
-else
-    echo -e "${RED}✗${NC} AST: Node count too low (< 4)"
-    TESTS_FAILED=$((TESTS_FAILED + 1))
+# Check node count is reasonable (line count of AST file = node count)
+if [ -f "$AST_FILE" ]; then
+    AST_NODE_COUNT=$(wc -l < "$AST_FILE" | tr -d ' ')
+    if [ "$AST_NODE_COUNT" -ge 4 ]; then
+        echo -e "${GREEN}✓${NC} AST: Node count reasonable (>= 4 for simple.yaml, got $AST_NODE_COUNT)"
+        TESTS_PASSED=$((TESTS_PASSED + 1))
+    else
+        echo -e "${RED}✗${NC} AST: Node count too low (< 4, got $AST_NODE_COUNT)"
+        TESTS_FAILED=$((TESTS_FAILED + 1))
+    fi
+    TESTS_RUN=$((TESTS_RUN + 1))
 fi
-TESTS_RUN=$((TESTS_RUN + 1))
 
 echo ""
 
@@ -532,8 +536,8 @@ echo ""
 echo -e "${BLUE}${BOLD}Test Group 15: Error Handling${NC}"
 echo ""
 
-# Test parsing nonexistent file
-result=$(yaml_parse "tests/fixtures/nonexistent.yaml" 2>&1)
+# Test parsing nonexistent file — yaml_parse returns 1; || true prevents set -e abort
+result=$(yaml_parse "tests/fixtures/nonexistent.yaml" 2>&1) || true
 if echo "$result" | grep -q "Error"; then
     echo -e "${GREEN}✓${NC} Error handling: nonexistent file"
     TESTS_PASSED=$((TESTS_PASSED + 1))
@@ -543,9 +547,10 @@ else
 fi
 TESTS_RUN=$((TESTS_RUN + 1))
 
-# Test query without parse
-AST_NODES=""
-result=$(yaml_query ".name" 2>&1)
+# Test query without parse — clear AST_FILE to simulate no-AST state
+# (AST_NODES is not the parser's state variable; AST_FILE is)
+AST_FILE=""
+result=$(yaml_query ".name" 2>&1) || true
 if echo "$result" | grep -q "Error"; then
     echo -e "${GREEN}✓${NC} Error handling: query without parse"
     TESTS_PASSED=$((TESTS_PASSED + 1))
