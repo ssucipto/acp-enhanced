@@ -127,7 +127,7 @@ Run content quality checks that require LLM analysis.
   - Report quality issues
 - **Namespace Consistency (Content)**: Check file content uses correct namespace
   - Read command files
-  - Check invocation examples use correct namespace (@{namespace}-{command})
+  - Check invocation examples use correct namespace (`/acp-<namespace>-<command>`)
   - Check related command links use correct namespace
   - Report namespace inconsistencies
 - **README Structure**: Validate README.md follows package structure
