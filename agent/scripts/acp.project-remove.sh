@@ -183,9 +183,11 @@ main() {
     
     # Detect project start
     /^  [a-zA-Z0-9_-]+:/ {
-      # Extract project name from line
-      match($0, /^  ([a-zA-Z0-9_-]+):/, arr)
-      if (arr[1] == proj) {
+      # Extract project name from line (POSIX awk: no 3-arg match)
+      key = $0
+      sub(/^  /, "", key)
+      sub(/:.*/, "", key)
+      if (key == proj) {
         in_project = 1
         indent_level = 2
         next

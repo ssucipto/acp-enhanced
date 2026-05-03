@@ -163,10 +163,11 @@ test_list_global_empty() {
     
     # Create fake home directory for testing
     local fake_home=$(mktemp -d)
-    mkdir -p "$fake_home/.acp"
+    mkdir -p "$fake_home/.acp/agent"
+    touch "$fake_home/.acp/AGENT.md"  # Prevent init_global_acp from running full install
     
-    # Create empty global manifest
-    cat > "$fake_home/.acp/manifest.yaml" << 'EOF'
+    # Create empty global manifest at correct path
+    cat > "$fake_home/.acp/agent/manifest.yaml" << 'EOF'
 packages: {}
 manifest_version: 1.0.0
 last_updated: null
@@ -196,10 +197,12 @@ test_list_global_with_packages() {
     
     # Create fake home directory
     local fake_home=$(mktemp -d)
+    mkdir -p "$fake_home/.acp/agent"
     mkdir -p "$fake_home/.acp/packages/test-global-package"
+    touch "$fake_home/.acp/AGENT.md"  # Prevent init_global_acp from running full install
     
-    # Create global manifest with package
-    cat > "$fake_home/.acp/manifest.yaml" << 'EOF'
+    # Create global manifest with package at correct path
+    cat > "$fake_home/.acp/agent/manifest.yaml" << 'EOF'
 packages:
   test-global-package:
     package_version: 1.0.0
@@ -230,7 +233,7 @@ EOF
     assert_contains "$output" "Global Packages" "Should indicate global mode"
     assert_contains "$output" "test-global-package" "Should show package name"
     assert_contains "$output" "1.0.0" "Should show version"
-    assert_contains "$output" "~/.acp/packages" "Should show global location"
+    assert_contains "$output" "~/.acp/agent/" "Should show global location"
     
     rm -rf "$fake_home"
     
