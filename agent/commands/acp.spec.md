@@ -1,7 +1,7 @@
 # Command: spec
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.spec` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.spec` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-spec` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-spec` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -28,7 +28,7 @@
 - `--from-requirements <file>` or `--from-req <file>` - Generate spec from a requirements document
 - `--interactive` or `-i` - Interactive mode; collect spec contents via chat (default)
 
-**CLI-Style Arguments** (context capture, optional — passed through to `@acp.clarification-capture`):
+**CLI-Style Arguments** (context capture, optional — passed through to `/acp-clarification-capture`):
 - `--from-chat-context` or `--from-chat` - Also capture decisions from chat conversation
 - `--from-context` - Shorthand for all sources (clarifications + chat)
 - `--include-clarifications` - Alias for `--from-clars`
@@ -39,9 +39,9 @@
 - `--no-interactive` - Skip Phase 12 (interactive OQ resolution) entirely
 
 **Natural Language Arguments**:
-- `@acp.spec @my-draft.md` - Treated as `--from-draft @my-draft.md`
-- `@acp.spec for <topic>` - Starts interactive mode seeded with `<topic>` as the spec subject
-- `@acp.spec from the last clarification` - Resolves the most recent clarification file and uses `--from-clar`
+- `/acp-spec @my-draft.md` - Treated as `--from-draft @my-draft.md`
+- `/acp-spec for <topic>` - Starts interactive mode seeded with `<topic>` as the spec subject
+- `/acp-spec from the last clarification` - Resolves the most recent clarification file and uses `--from-clar`
 
 **Argument Mapping**:
 Arguments are inferred from chat context. The agent will:
@@ -57,7 +57,7 @@ Arguments are inferred from chat context. The agent will:
 
 Generates a specification document by reading an input source (clarification, design, draft, requirements, or interactive chat) and producing a structured spec in `agent/specs/{namespace}.{spec-name}.md`. The command handles namespace inference, optional package/README updates, and key file index registration.
 
-A design captures the *what* and *why* (architecture, rationale, tradeoffs). A spec captures the *how* — concrete, implementation-ready acceptance criteria, interfaces, data shapes, and step-by-step behavior a developer or agent can build against. Use `@acp.design-create` when direction is still open; use `@acp.spec` when direction is settled and you need an executable blueprint.
+A design captures the *what* and *why* (architecture, rationale, tradeoffs). A spec captures the *how* — concrete, implementation-ready acceptance criteria, interfaces, data shapes, and step-by-step behavior a developer or agent can build against. Use `/acp-design-create` when direction is still open; use `/acp-spec` when direction is settled and you need an executable blueprint.
 
 ### Core Principle: The Spec Defines the End-System Behavior Exactly
 
@@ -106,26 +106,26 @@ When the command is invoked, immediately display a brief informational header be
 
 **Display format**:
 ```
-⚡ @acp.spec
+⚡ /acp-spec
   Generate a specification document from a clarification, design, draft, requirements doc, or interactive input
 
   Usage:
-    @acp.spec                                      Interactive mode (default)
-    @acp.spec -i                                   Interactive mode (explicit)
-    @acp.spec --from-clar <file>                   Generate from clarification
-    @acp.spec --from-design <file>                 Generate from design doc
-    @acp.spec --from-draft <file>                  Generate from draft
-    @acp.spec @my-draft.md                         Generate from draft (shorthand)
-    @acp.spec --from-req <file>                    Generate from requirements
-    @acp.spec --no-commit                          Skip automatic commit
-    @acp.spec --resolve-oqs                        Enable interactive OQ resolution
-    @acp.spec --no-interactive                     Skip OQ resolution phase
+    /acp-spec                                      Interactive mode (default)
+    /acp-spec -i                                   Interactive mode (explicit)
+    /acp-spec --from-clar <file>                   Generate from clarification
+    /acp-spec --from-design <file>                 Generate from design doc
+    /acp-spec --from-draft <file>                  Generate from draft
+    /acp-spec @my-draft.md                         Generate from draft (shorthand)
+    /acp-spec --from-req <file>                    Generate from requirements
+    /acp-spec --no-commit                          Skip automatic commit
+    /acp-spec --resolve-oqs                        Enable interactive OQ resolution
+    /acp-spec --no-interactive                     Skip OQ resolution phase
 
   Related:
-    @acp.design-create         Create design documents (what/why)
-    @acp.clarification-create  Create a clarification to feed into --from-clar
-    @acp.task-create           Break a finished spec into tasks
-    @acp.package-validate      Validate package after creation
+    /acp-design-create         Create design documents (what/why)
+    /acp-clarification-create  Create a clarification to feed into --from-clar
+    /acp-task-create           Break a finished spec into tasks
+    /acp-package-validate      Validate package after creation
 ```
 
 **Expected Outcome**: User sees at a glance what the command does and how to customize it.
@@ -172,7 +172,7 @@ Before generating the spec, load relevant key files from the index.
 
 ### 4. Capture Clarification Context
 
-Invoke the `@acp.clarification-capture` shared directive if additional context flags were passed.
+Invoke the `/acp-clarification-capture` shared directive if additional context flags were passed.
 
 **Actions**:
 - Read and follow the directive in [`agent/commands/acp.clarification-capture.md`](acp.clarification-capture.md)
@@ -218,7 +218,7 @@ Create the spec file.
 - If `agent/specs/spec.template.md` exists, use it as the base
 - Otherwise, use this default structure:
   - Title
-  - **`@acp.meta.spec` marker block** (immediately after the title — see population rules below)
+  - **`/acp-meta.spec` marker block** (immediately after the title — see population rules below)
   - Directive header (template-style)
   - Metadata block (Namespace, Version, Created, Last Updated, Status)
   - **Purpose** (one line)
@@ -242,7 +242,7 @@ Create the spec file.
   - `--from-requirements`: carry requirements forward verbatim where possible; expand each into acceptance criteria
   - `--interactive`: build from user-collected answers in Step 5
 - If a "Key Design Decisions" section was generated in Step 4, insert it above "Related Artifacts"
-- **Populate the `@acp.meta.spec` marker block** (if `spec.template.md` supplied one, replace its `{placeholder}` values; otherwise insert a fresh block):
+- **Populate the `/acp-meta.spec` marker block** (if `spec.template.md` supplied one, replace its `{placeholder}` values; otherwise insert a fresh block):
   - `topic:` — comma-separated keywords derived from the spec title + user-provided scope keywords from Step 5
   - `description:` — one-line summary from the spec's `## Purpose` section, <=150 chars (truncate with `…` if needed)
   - `requirements:` — computed from the final `## Requirements` count. If the spec has N sequential requirements R1..R<N>, write `R1..R<N>`. If the requirement IDs are non-contiguous (rare), enumerate them: `R1, R3, R7`.
@@ -489,7 +489,7 @@ Type 'y' to start, or 'N' to finish now (you can resolve OQs later).
 ```
 
 **If user types `N` or skips**:
-- Print: "Skipping OQ resolution. You can resolve OQs later by running `@acp.spec --resolve-oqs` or manually editing the spec."
+- Print: "Skipping OQ resolution. You can resolve OQs later by running `/acp-spec --resolve-oqs` or manually editing the spec."
 - Exit Phase 12
 
 **If user types `y`**:
@@ -703,7 +703,7 @@ Commit all changes? [y/N]
 
 **Pause/resume** (intentionally out of scope for v1):
 - Single-session only for the first implementation
-- Future: `@acp.oq-resolve --resume` to continue across sessions
+- Future: `/acp-oq-resolve --resume` to continue across sessions
 
 **Expected Outcome**: Open Questions triaged (resolved or deferred); Behavior Table has no `undefined` rows; new tests added; all changes committed (or staged for manual commit).
 
@@ -762,8 +762,8 @@ Version: 1.0.0
 
 Next steps:
 - Review the spec and fill in any Open Questions
-- Run @acp.task-create to break the spec into tasks
-- Run @acp.package-validate to verify (if package)
+- Run /acp-task-create to break the spec into tasks
+- Run /acp-package-validate to verify (if package)
 ```
 
 ### Status Update
@@ -777,9 +777,9 @@ Next steps:
 
 ### Example 1: Spec From a Clarification
 
-**Context**: Just finished `@acp.clarification-address` on `clarification-12-auth-flow.md`.  
+**Context**: Just finished `/acp-clarification-address` on `clarification-12-auth-flow.md`.  
 
-**Invocation**: `@acp.spec --from-clar agent/clarifications/clarification-12-auth-flow.md`  
+**Invocation**: `/acp-spec --from-clar agent/clarifications/clarification-12-auth-flow.md`  
 
 **Result**: Creates `agent/specs/local.auth-flow.md`, carrying decided answers into Requirements and Acceptance Criteria and any unresolved items into Open Questions.
 
@@ -787,7 +787,7 @@ Next steps:
 
 **Context**: `agent/design/local.payment-processor.md` is settled; time to build.  
 
-**Invocation**: `@acp.spec --from-design agent/design/local.payment-processor.md`  
+**Invocation**: `/acp-spec --from-design agent/design/local.payment-processor.md`  
 
 **Result**: Creates `agent/specs/local.payment-processor.md` with concrete interfaces, data shapes, and acceptance criteria extracted from the design's implementation sections.
 
@@ -795,7 +795,7 @@ Next steps:
 
 **Context**: User wrote a rough draft of what they want.  
 
-**Invocation**: `@acp.spec @agent/drafts/webhook-router.md`  
+**Invocation**: `/acp-spec @agent/drafts/webhook-router.md`  
 
 **Result**: Parses the draft into the structured spec format. Ambiguities land in Open Questions rather than being guessed.
 
@@ -803,7 +803,7 @@ Next steps:
 
 **Context**: User wants to build a spec from scratch via chat.  
 
-**Invocation**: `@acp.spec -i`  
+**Invocation**: `/acp-spec -i`  
 
 **Result**: Agent collects scope, requirements, interfaces, and acceptance criteria interactively, then produces the spec file.
 
@@ -811,7 +811,7 @@ Next steps:
 
 **Context**: An external requirements doc was dropped into the project.  
 
-**Invocation**: `@acp.spec --from-req agent/design/external-requirements.md`  
+**Invocation**: `/acp-spec --from-req agent/design/external-requirements.md`  
 
 **Result**: Creates a spec that carries the requirements forward verbatim and expands each into acceptance criteria.
 
@@ -819,11 +819,11 @@ Next steps:
 
 ## Related Commands
 
-- [`@acp.design-create`](acp.design-create.md) — Create design documents (the what/why; typically precedes `@acp.spec`)
-- [`@acp.clarification-create`](acp.clarification-create.md) — Create a clarification to feed into `--from-clar`
-- [`@acp.clarification-address`](acp.clarification-address.md) — Resolve a clarification before converting to spec
-- [`@acp.task-create`](acp.task-create.md) — Break a finished spec into implementation tasks
-- [`@acp.package-validate`](acp.package-validate.md) — Validate package after creation
+- [`/acp-design-create`](acp.design-create.md) — Create design documents (the what/why; typically precedes `/acp-spec`)
+- [`/acp-clarification-create`](acp.clarification-create.md) — Create a clarification to feed into `--from-clar`
+- [`/acp-clarification-address`](acp.clarification-address.md) — Resolve a clarification before converting to spec
+- [`/acp-task-create`](acp.task-create.md) — Break a finished spec into implementation tasks
+- [`/acp-package-validate`](acp.package-validate.md) — Validate package after creation
 
 ---
 
@@ -882,7 +882,7 @@ Next steps:
 
 ## Key Design Decisions (Optional)
 
-<!-- This section is populated by @acp.clarification-capture when
+<!-- This section is populated by /acp-clarification-capture when
      create commands are invoked with --from-clar, --from-chat, or
      --from-context. It can also be manually authored.
      Omit this section entirely if no decisions to capture. -->
@@ -891,7 +891,7 @@ Next steps:
 
 ## Notes
 
-- Specs are the bridge between a settled design and implementation tasks — if scope is still unsettled, use `@acp.design-create` first
+- Specs are the bridge between a settled design and implementation tasks — if scope is still unsettled, use `/acp-design-create` first
 - `--from-clar` is the most common path: clarify → spec → tasks → build
 - In non-package projects, the `local` namespace is used automatically
 - The spec template (`agent/specs/spec.template.md`) is optional; the command falls back to a default inline structure when it is missing

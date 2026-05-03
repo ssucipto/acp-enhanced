@@ -1,7 +1,7 @@
 # Command: package-validate
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.package-validate` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.package-validate` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-package-validate` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-package-validate` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document.
 
 **Namespace**: acp  
@@ -25,7 +25,7 @@ This command performs comprehensive validation of an ACP package to ensure it's 
 
 Use this command before publishing a package, after making significant changes, or when preparing a release. It catches issues early and provides actionable fixes, ensuring package quality and preventing broken installations for users.
 
-Unlike `@acp.validate` which validates general ACP documentation, `@acp.package-validate` is specifically designed for package authors and includes package-specific checks like namespace consistency, remote availability, and test installation.
+Unlike `/acp-validate` which validates general ACP documentation, `/acp-package-validate` is specifically designed for package authors and includes package-specific checks like namespace consistency, remote availability, and test installation.
 
 ---
 
@@ -43,15 +43,15 @@ Unlike `@acp.validate` which validates general ACP documentation, `@acp.package-
 ### 0. Display Command Header
 
 ```
-⚡ @acp.package-validate
+⚡ /acp-package-validate
   Comprehensive package validation with auto-fix
 
   Related:
-    @acp.validate              General ACP validation
-    @acp.package-publish       Publish package (runs validation first)
-    @acp.pattern-create        Create patterns
-    @acp.command-create        Create commands
-    @acp.design-create         Create designs
+    /acp-validate              General ACP validation
+    /acp-package-publish       Publish package (runs validation first)
+    /acp-pattern-create        Create patterns
+    /acp-command-create        Create commands
+    /acp-design-create         Create designs
 ```
 
 ### 1. Detect Package Context
@@ -408,7 +408,7 @@ Choose option (1-4): 1
 Your package is ready to publish.
 
 Recommendations:
-  - Run @acp.package-publish to publish this package
+  - Run /acp-package-publish to publish this package
   - Consider adding more examples to patterns
   - Update CHANGELOG.md before publishing
 
@@ -429,7 +429,7 @@ Recommendations:
 
 **Context**: About to publish package, want to ensure it's valid  
 
-**Invocation**: `@acp.package-validate`  
+**Invocation**: `/acp-package-validate`  
 
 **Result**: Runs all checks, finds 2 issues (missing file in package.yaml, incomplete README), offers auto-fix, fixes issues, re-validates, confirms package is ready  
 
@@ -437,7 +437,7 @@ Recommendations:
 
 **Context**: Added 3 new patterns, want to verify package is still valid  
 
-**Invocation**: `@acp.package-validate`  
+**Invocation**: `/acp-package-validate`  
 
 **Result**: Validates package, finds new files not listed in package.yaml, offers to add them, updates package.yaml, confirms all checks pass  
 
@@ -445,7 +445,7 @@ Recommendations:
 
 **Context**: Package has multiple issues  
 
-**Invocation**: `@acp.package-validate`  
+**Invocation**: `/acp-package-validate`  
 
 **Result**: Finds 5 errors (missing git remote, invalid version format, namespace inconsistencies, incomplete docs, missing README sections), offers step-by-step fixes, guides through fixing each issue  
 
@@ -453,7 +453,7 @@ Recommendations:
 
 **Context**: Well-maintained package, routine validation  
 
-**Invocation**: `@acp.package-validate`  
+**Invocation**: `/acp-package-validate`  
 
 **Result**: All 32 checks pass, no warnings, no errors, confirms package is ready to publish  
 
@@ -461,11 +461,11 @@ Recommendations:
 
 ## Related Commands
 
-- [`@acp.validate`](acp.validate.md) - General ACP documentation validation (not package-specific)
-- [`@acp.package-publish`](acp.package-publish.md) - Publish package (runs validation first)
-- [`@acp.pattern-create`](acp.pattern-create.md) - Create patterns (auto-updates package.yaml)
-- [`@acp.command-create`](acp.command-create.md) - Create commands (auto-updates package.yaml)
-- [`@acp.design-create`](acp.design-create.md) - Create designs (auto-updates package.yaml)
+- [`/acp-validate`](acp.validate.md) - General ACP documentation validation (not package-specific)
+- [`/acp-package-publish`](acp.package-publish.md) - Publish package (runs validation first)
+- [`/acp-pattern-create`](acp.pattern-create.md) - Create patterns (auto-updates package.yaml)
+- [`/acp-command-create`](acp.command-create.md) - Create commands (auto-updates package.yaml)
+- [`/acp-design-create`](acp.design-create.md) - Create designs (auto-updates package.yaml)
 
 ---
 
@@ -477,7 +477,7 @@ Recommendations:
 
 **Cause**: Running command in non-package directory  
 
-**Solution**: Navigate to package directory, or create package with `@acp.package-create`  
+**Solution**: Navigate to package directory, or create package with `/acp-package-create`  
 
 ### Issue 2: YAML validation fails
 

@@ -1,7 +1,7 @@
 # Command: artifact-reference
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.artifact-reference` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.artifact-reference` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-artifact-reference` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-artifact-reference` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -31,10 +31,10 @@
 - `--no-commit` - Skip auto-commit, leave artifact staged
 
 **Natural Language Arguments**:
-- `@acp.artifact-reference environment variables` - Create reference for topic
-- `@acp.artifact-reference CLI syntax --type cli-syntax` - Specify reference type
-- `@acp.artifact-reference --from-clarification clarification-9` - Pull from clarification
-- `@acp.artifact-reference` - Infer topic from conversation context
+- `/acp-artifact-reference environment variables` - Create reference for topic
+- `/acp-artifact-reference CLI syntax --type cli-syntax` - Specify reference type
+- `/acp-artifact-reference --from-clarification clarification-9` - Pull from clarification
+- `/acp-artifact-reference` - Infer topic from conversation context
 
 **Argument Mapping**:
 The agent infers intent from context:
@@ -77,20 +77,20 @@ Reference artifacts are appropriate for:
 Display the following informational header, then continue immediately:
 
 ```
-⚡ @acp.artifact-reference
+⚡ /acp-artifact-reference
   Create reference guides for passive information after command-first principle check
 
   Usage:
-    @acp.artifact-reference <topic>                Create reference for topic
-    @acp.artifact-reference --type <type>          Specify reference type
-    @acp.artifact-reference --from-clarification <f> Pull topic from clarification
-    @acp.artifact-reference --skip-check           Skip command-first principle check
-    @acp.artifact-reference --no-commit            Skip auto-commit, leave staged
+    /acp-artifact-reference <topic>                Create reference for topic
+    /acp-artifact-reference --type <type>          Specify reference type
+    /acp-artifact-reference --from-clarification <f> Pull topic from clarification
+    /acp-artifact-reference --skip-check           Skip command-first principle check
+    /acp-artifact-reference --no-commit            Skip auto-commit, leave staged
 
   Related:
-    @acp.artifact-research    Create research artifacts
-    @acp.artifact-glossary    Create terminology glossaries
-    @acp.command-create       Create commands (if content is executable)
+    /acp-artifact-research    Create research artifacts
+    /acp-artifact-glossary    Create terminology glossaries
+    /acp-command-create       Create commands (if content is executable)
 ```
 
 ### 1. Determine Reference Topic
@@ -142,7 +142,7 @@ Is this content executable by an agent?
   │          @local.{workflow-name} or @namespace.{workflow-name}
   │          Would you like me to create a command instead?"
   │         Wait for user response.
-  │         If yes → Exit this command, suggest invoking @acp.command-create
+  │         If yes → Exit this command, suggest invoking /acp-command-create
   │         If no → Proceed to Step 3
   └─ NO → Proceed to Step 3 (passive information, reference appropriate)
 ```
@@ -451,7 +451,7 @@ Next steps:
 
 **Context**: Need to document all environment variables for new developers  
 
-**Invocation**: `@acp.artifact-reference environment variables --type config-table`  
+**Invocation**: `/acp-artifact-reference environment variables --type config-table`  
 
 **Result**: Agent performs command-first check (passive lookup table, not executable), gathers env vars from .env.example and codebase, creates config table reference with Variable/Type/Default/Description/Required columns, auto-commits.  
 
@@ -459,7 +459,7 @@ Next steps:
 
 **Context**: Team uses Git but not everyone knows advanced commands  
 
-**Invocation**: `@acp.artifact-reference Git CLI syntax --type cli-syntax`  
+**Invocation**: `/acp-artifact-reference Git CLI syntax --type cli-syntax`  
 
 **Result**: Agent checks command-first (generic tool syntax, not project workflow), creates CLI syntax reference with common Git commands + examples, cites official Git docs, auto-commits.  
 
@@ -467,15 +467,15 @@ Next steps:
 
 **Context**: Want to document deploy process  
 
-**Invocation**: `@acp.artifact-reference deployment process`  
+**Invocation**: `/acp-artifact-reference deployment process`  
 
-**Result**: Agent performs command-first check, detects executable workflow steps, prompts: "This looks like an executable workflow. Consider: @local.deploy or @acme.deploy. Would you like me to create a command instead?" User says yes, agent exits and suggests `@acp.command-create deployment`.  
+**Result**: Agent performs command-first check, detects executable workflow steps, prompts: "This looks like an executable workflow. Consider: @local.deploy or @acme.deploy. Would you like me to create a command instead?" User says yes, agent exits and suggests `/acp-command-create deployment`.  
 
 ### Example 4: Troubleshooting Guide
 
 **Context**: Common auth errors, need diagnostic guide  
 
-**Invocation**: `@acp.artifact-reference auth troubleshooting --type troubleshooting`  
+**Invocation**: `/acp-artifact-reference auth troubleshooting --type troubleshooting`  
 
 **Result**: Agent checks command-first (diagnostic decision tree with human judgment, not automated), prompts user for common symptoms + resolutions, creates troubleshooting guide with "Symptom → Check → Resolution" flow, auto-commits.  
 
@@ -483,7 +483,7 @@ Next steps:
 
 **Context**: New team members need service topology overview  
 
-**Invocation**: `@acp.artifact-reference architecture diagram --type diagrams`  
+**Invocation**: `/acp-artifact-reference architecture diagram --type diagrams`  
 
 **Result**: Agent checks command-first (passive diagram, requires human interpretation), searches for existing architecture docs, creates reference with ASCII/mermaid diagram + component descriptions, auto-commits.  
 
@@ -491,11 +491,11 @@ Next steps:
 
 ## Related Commands
 
-- [`@acp.artifact-research`](acp.artifact-research.md) - Create research artifacts (external knowledge)
-- [`@acp.artifact-glossary`](acp.artifact-glossary.md) - Create terminology glossaries
-- [`@acp.command-create`](acp.command-create.md) - Create commands (if content is executable)
-- [`@acp.sync`](acp.sync.md) - Detect reference staleness after code changes
-- [`@acp.validate`](acp.validate.md) - Validate artifact metadata and structure
+- [`/acp-artifact-research`](acp.artifact-research.md) - Create research artifacts (external knowledge)
+- [`/acp-artifact-glossary`](acp.artifact-glossary.md) - Create terminology glossaries
+- [`/acp-command-create`](acp.command-create.md) - Create commands (if content is executable)
+- [`/acp-sync`](acp.sync.md) - Detect reference staleness after code changes
+- [`/acp-validate`](acp.validate.md) - Validate artifact metadata and structure
 
 ---
 
@@ -597,7 +597,7 @@ Next steps:
 - Reference types guide structure but are not rigid — adapt as needed
 - References complement commands (informational support) but don't replace them
 - Consider splitting large references into multiple focused references
-- Use `@acp.sync` to detect staleness (code changes affecting reference content)
+- Use `/acp-sync` to detect staleness (code changes affecting reference content)
 - References are living documents — update as project standards evolve
 
 ---

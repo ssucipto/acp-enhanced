@@ -1,5 +1,5 @@
 #!/bin/bash
-# E2E Tests for @acp.package-update command
+# E2E Tests for /acp-package-update command
 # Tests updating packages with various scenarios
 
 set -e

@@ -44,7 +44,7 @@ REGISTRY_PATH=$(get_projects_registry_path)
 if ! projects_registry_exists; then
     echo "${YELLOW}No projects registry found${NC}"
     echo ""
-    echo "Create projects with: @acp.project-create"
+    echo "Create projects with: /acp-project-create"
     exit 0
 fi
 
@@ -73,7 +73,7 @@ echo ""
 if [ -z "$PROJECT_NAMES" ]; then
     echo "${YELLOW}No projects registered yet${NC}"
     echo ""
-    echo "Create projects with: @acp.project-create"
+    echo "Create projects with: /acp-project-create"
     exit 0
 fi
 

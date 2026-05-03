@@ -1,7 +1,7 @@
 # Command: artifact-glossary
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.artifact-glossary` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.artifact-glossary` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-artifact-glossary` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-artifact-glossary` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -31,11 +31,11 @@
 - `--output <path>` or `-o <path>` - Custom output path (default: `agent/artifacts/glossary-1-core-terminology.md`)
 
 **Natural Language Arguments**:
-- `@acp.artifact-glossary` - Create or update glossary (auto-detect mode)
-- `@acp.artifact-glossary --create` - Force create new glossary
-- `@acp.artifact-glossary --update` - Update existing glossary
-- `@acp.artifact-glossary --scope src/auth/` - Extract terms from auth module only
-- `@acp.artifact-glossary --interactive` - Review every term
+- `/acp-artifact-glossary` - Create or update glossary (auto-detect mode)
+- `/acp-artifact-glossary --create` - Force create new glossary
+- `/acp-artifact-glossary --update` - Update existing glossary
+- `/acp-artifact-glossary --scope src/auth/` - Extract terms from auth module only
+- `/acp-artifact-glossary --interactive` - Review every term
 
 **Argument Mapping**:
 The agent infers intent from context:
@@ -73,21 +73,21 @@ Unlike research artifacts (external knowledge) or reference artifacts (passive i
 Display the following informational header, then continue immediately:
 
 ```
-⚡ @acp.artifact-glossary
+⚡ /acp-artifact-glossary
   Create and maintain project glossaries through auto-extraction and interactive refinement
 
   Usage:
-    @acp.artifact-glossary                         Create or update glossary (auto-detect)
-    @acp.artifact-glossary --create                Force create new glossary
-    @acp.artifact-glossary --update                Update existing glossary
-    @acp.artifact-glossary --scope <path>          Limit extraction to directory
-    @acp.artifact-glossary --interactive           Prompt for every term
-    @acp.artifact-glossary --auto                  Accept all inferred definitions
+    /acp-artifact-glossary                         Create or update glossary (auto-detect)
+    /acp-artifact-glossary --create                Force create new glossary
+    /acp-artifact-glossary --update                Update existing glossary
+    /acp-artifact-glossary --scope <path>          Limit extraction to directory
+    /acp-artifact-glossary --interactive           Prompt for every term
+    /acp-artifact-glossary --auto                  Accept all inferred definitions
 
   Related:
-    @acp.artifact-research    Create research artifacts
-    @acp.artifact-reference   Create reference guides
-    @acp.sync                 Detect glossary staleness
+    /acp-artifact-research    Create research artifacts
+    /acp-artifact-reference   Create reference guides
+    /acp-sync                 Detect glossary staleness
 ```
 
 ### 1. Determine Mode
@@ -319,7 +319,7 @@ Status: Active
 
 Next steps:
 - Review the glossary for accuracy
-- Add missing terms with `@acp.artifact-glossary --update`
+- Add missing terms with `/acp-artifact-glossary --update`
 - Reference glossary in onboarding docs
 ```
 
@@ -364,7 +364,7 @@ Status: Active
 
 Next steps:
 - Review the glossary for accuracy
-- Add missing terms with `@acp.artifact-glossary --update`
+- Add missing terms with `/acp-artifact-glossary --update`
 - Reference glossary in onboarding docs
 ```
 
@@ -383,7 +383,7 @@ Status: Active
 
 Next steps:
 - Review the new terms for accuracy
-- Add missing terms with `@acp.artifact-glossary --update`
+- Add missing terms with `/acp-artifact-glossary --update`
 ```
 
 ---
@@ -394,7 +394,7 @@ Next steps:
 
 **Context**: New project, no glossary exists, want to catalog terminology  
 
-**Invocation**: `@acp.artifact-glossary`  
+**Invocation**: `/acp-artifact-glossary`  
 
 **Result**: Agent scans entire codebase, extracts 15 terms (classes, interfaces, domain patterns), generates definitions from docstrings/comments, prompts for 3 ambiguous terms, creates `glossary-1-core-terminology.md` with 3 categories (Architecture, Data, Infrastructure), auto-commits.  
 
@@ -402,7 +402,7 @@ Next steps:
 
 **Context**: Glossary exists, new module added (src/auth/), want to add auth-related terms  
 
-**Invocation**: `@acp.artifact-glossary --update --scope src/auth/`  
+**Invocation**: `/acp-artifact-glossary --update --scope src/auth/`  
 
 **Result**: Agent scans src/auth/, extracts 5 new terms (AuthProvider, TokenService, RefreshToken, etc.), generates definitions, prompts for 1 ambiguous term, adds to existing glossary under new "Security" category, auto-commits with "+5 terms" message.  
 
@@ -410,7 +410,7 @@ Next steps:
 
 **Context**: Want to review every extracted term before accepting  
 
-**Invocation**: `@acp.artifact-glossary --interactive`  
+**Invocation**: `/acp-artifact-glossary --interactive`  
 
 **Result**: Agent extracts 20 terms, prompts for EVERY term (not just ambiguous ones), user edits 3 definitions and changes 2 categories, creates glossary with all user-approved content.  
 
@@ -418,7 +418,7 @@ Next steps:
 
 **Context**: High confidence in codebase documentation, want fast glossary creation  
 
-**Invocation**: `@acp.artifact-glossary --auto`  
+**Invocation**: `/acp-artifact-glossary --auto`  
 
 **Result**: Agent extracts terms, generates definitions, skips all prompts, creates glossary with inferred definitions and categories, auto-commits immediately.  
 
@@ -426,7 +426,7 @@ Next steps:
 
 **Context**: Existing glossary is for backend, want separate frontend glossary  
 
-**Invocation**: `@acp.artifact-glossary --create --scope src/frontend/ --output agent/artifacts/glossary-2-frontend-terminology.md`  
+**Invocation**: `/acp-artifact-glossary --create --scope src/frontend/ --output agent/artifacts/glossary-2-frontend-terminology.md`  
 
 **Result**: Agent creates new `glossary-2-frontend-terminology.md` (does not update existing glossary-1), extracts frontend-specific terms, commits as separate glossary.  
 
@@ -434,10 +434,10 @@ Next steps:
 
 ## Related Commands
 
-- [`@acp.artifact-research`](acp.artifact-research.md) - Create research artifacts (external knowledge)
-- [`@acp.artifact-reference`](acp.artifact-reference.md) - Create reference guides (passive info)
-- [`@acp.sync`](acp.sync.md) - Detect glossary staleness (new terms in code not in glossary)
-- [`@acp.validate`](acp.validate.md) - Validate artifact metadata and structure
+- [`/acp-artifact-research`](acp.artifact-research.md) - Create research artifacts (external knowledge)
+- [`/acp-artifact-reference`](acp.artifact-reference.md) - Create reference guides (passive info)
+- [`/acp-sync`](acp.sync.md) - Detect glossary staleness (new terms in code not in glossary)
+- [`/acp-validate`](acp.validate.md) - Validate artifact metadata and structure
 
 ---
 
@@ -538,7 +538,7 @@ Next steps:
 - Consider splitting into multiple glossaries when 50+ terms or clear domain boundaries emerge
 - Reference glossaries in onboarding docs and README for maximum value
 - Glossaries complement research artifacts (external knowledge) and reference artifacts (passive info)
-- Use `@acp.sync` to detect staleness (new terms in code not in glossary)
+- Use `/acp-sync` to detect staleness (new terms in code not in glossary)
 
 ---
 

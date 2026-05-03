@@ -1,6 +1,6 @@
 # Command: preferences-show
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.preferences-show` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-preferences-show` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -58,22 +58,22 @@ This is the primary debugging tool for the preferences system. Use it to:
 ### 0. Display Command Header
 
 ```
-⚡ @acp.preferences-show
+⚡ /acp-preferences-show
   Display effective preferences with source attribution
 
   Usage:
-    @acp.preferences-show                     Show acp namespace
-    @acp.preferences-show mcp-auth            Show specific namespace
-    @acp.preferences-show --all               Show all namespaces
-    @acp.preferences-show --presets           List available presets for acp
-    @acp.preferences-show acp --presets       List available presets for specific namespace
-    @acp.preferences-show --format yaml       Output as YAML
+    /acp-preferences-show                     Show acp namespace
+    /acp-preferences-show mcp-auth            Show specific namespace
+    /acp-preferences-show --all               Show all namespaces
+    /acp-preferences-show --presets           List available presets for acp
+    /acp-preferences-show acp --presets       List available presets for specific namespace
+    /acp-preferences-show --format yaml       Output as YAML
 
   Related:
-    @acp.preferences-get       Generate resolved preference set (raw)
-    @acp.preferences-set       Modify a preference value
-    @acp.preferences-create    Create a preference file
-    @acp.preferences-validate  Check preferences for errors
+    /acp-preferences-get       Generate resolved preference set (raw)
+    /acp-preferences-set       Modify a preference value
+    /acp-preferences-create    Create a preference file
+    /acp-preferences-validate  Check preferences for errors
 ```
 
 ### 1. Determine Namespace
@@ -97,7 +97,7 @@ If `--presets` was provided, display available presets and exit without showing 
   📁 project: interactive-planning
   📁 project: rapid-prototyping
 
-  Use with: @acp.plan --preset acp.<preset-name>
+  Use with: /acp-plan --preset acp.<preset-name>
   File path: agent/preferences/acp.<preset-name>.yaml
 ```
 
@@ -110,7 +110,7 @@ If no presets are found:
   To create a preset:
     1. Create agent/preferences/acp.<preset-name>.yaml
     2. Set any acp namespace preferences in that file
-    3. Use with: @acp.plan --preset acp.<preset-name>
+    3. Use with: /acp-plan --preset acp.<preset-name>
 ```
 
 ### 2. Generate Preferences
@@ -180,7 +180,7 @@ acp:
 
 - **No configurables found**: warn and show what files were found at each level
 - **No preference files found at any level**: show defaults from configurables only, note that no overrides are set
-- **No data at all**: guide user to run `@acp.preferences-create`
+- **No data at all**: guide user to run `/acp-preferences-create`
 
 ---
 
@@ -212,19 +212,19 @@ See Step 4 for the full output format.
 
 ### Example 1: Show ACP Preferences (Default)
 
-**Invocation**: `@acp.preferences-show`
+**Invocation**: `/acp-preferences-show`
 
 **Result**: Table of all 8 ACP preferences with source attribution.
 
 ### Example 2: Show Specific Package Preferences
 
-**Invocation**: `@acp.preferences-show mcp-auth-server-base`
+**Invocation**: `/acp-preferences-show mcp-auth-server-base`
 
 **Result**: Table of all preferences defined in `agent/configurables/mcp-auth-server-base.configurables.yaml`.
 
 ### Example 3: Show All Namespaces as YAML
 
-**Invocation**: `@acp.preferences-show --all --format yaml`
+**Invocation**: `/acp-preferences-show --all --format yaml`
 
 **Result**: All discovered namespaces output in YAML format with inline source comments.
 
@@ -232,10 +232,10 @@ See Step 4 for the full output format.
 
 ## Related Commands
 
-- [`@acp.preferences-get`](acp.preferences-get.md) — Generate resolved preference set (raw output)
-- [`@acp.preferences-create`](acp.preferences-create.md) — Create a preference file with defaults
-- [`@acp.preferences-set`](acp.preferences-set.md) — Modify individual preference values
-- [`@acp.preferences-validate`](acp.preferences-validate.md) — Validate preference files
+- [`/acp-preferences-get`](acp.preferences-get.md) — Generate resolved preference set (raw output)
+- [`/acp-preferences-create`](acp.preferences-create.md) — Create a preference file with defaults
+- [`/acp-preferences-set`](acp.preferences-set.md) — Modify individual preference values
+- [`/acp-preferences-validate`](acp.preferences-validate.md) — Validate preference files
 
 ---
 
@@ -245,7 +245,7 @@ See Step 4 for the full output format.
 
 **Symptom**: Every preference shows ⚙️ Default  
 **Cause**: No preference files exist at project/workspace/user level  
-**Solution**: Run `@acp.preferences-create --level project` to create a project-level file with your overrides.
+**Solution**: Run `/acp-preferences-create --level project` to create a project-level file with your overrides.
 
 ### Issue 2: Unexpected value source
 

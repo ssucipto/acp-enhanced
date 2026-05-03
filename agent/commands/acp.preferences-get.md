@@ -97,7 +97,7 @@ Show the resolved preferences to the user with clear formatting.
 
 ### Example 1: Get All ACP Preferences
 ```
-@acp.preferences-get acp
+/acp-preferences-get acp
 ```
 
 Expected output:
@@ -110,7 +110,7 @@ acp:
 
 ### Example 2: Get a Single Preference
 ```
-@acp.preferences-get acp plan.draft.create_mode
+/acp-preferences-get acp plan.draft.create_mode
 ```
 
 Expected output:
@@ -130,12 +130,12 @@ structured
 
 ### Example 3: Get Preferences as JSON
 ```
-@acp.preferences-get acp json
+/acp-preferences-get acp json
 ```
 
 ### Example 4: Check Preference Source
 ```
-@acp.preferences-get source acp plan.draft.create_mode
+/acp-preferences-get source acp plan.draft.create_mode
 ```
 
 Expected output:
@@ -147,9 +147,9 @@ project
 
 ## Related Commands
 
-- `@acp.preferences-show` — Display preferences annotated with their source level
-- `@acp.preferences-set` — Set a preference at a specific level
-- `@acp.preferences-validate` — Validate preferences against schema
+- `/acp-preferences-show` — Display preferences annotated with their source level
+- `/acp-preferences-set` — Set a preference at a specific level
+- `/acp-preferences-validate` — Validate preferences against schema
 
 ---
 

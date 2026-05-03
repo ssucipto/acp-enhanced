@@ -1,6 +1,6 @@
 # Command: version-update
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.version-update` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-version-update` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -44,13 +44,13 @@ Unlike `@acp-version-check-for-updates` which only checks, this command actually
 Display the following informational header, then continue immediately:
 
 ```
-⚡ @acp.version-update
+⚡ /acp-version-update
   Update ACP files (AGENT.md, templates, scripts) to the latest version
 
   Related:
-    @acp.version-check-for-updates   Check before updating
-    @acp.version-check               Verify version after updating
-    @acp.init                        Reload context after updating
+    /acp-version-check-for-updates   Check before updating
+    /acp-version-check               Verify version after updating
+    /acp-init                        Reload context after updating
 ```
 
 ### 1. Verify Prerequisites

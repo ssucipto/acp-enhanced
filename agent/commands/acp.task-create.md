@@ -1,7 +1,7 @@
 # Command: task-create
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.task-create` has been invoked.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.task-create` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-task-create` has been invoked.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-task-create` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 >
 > **This is a CREATION command - you will create files directly, no shell scripts needed.**
@@ -49,7 +49,7 @@ This command creates a new task file with proper structure, milestone linking, a
 
 ## Arguments
 
-**Context Capture Arguments** (optional — passed to `@acp.clarification-capture` directive):
+**Context Capture Arguments** (optional — passed to `/acp-clarification-capture` directive):
 
 | Argument | Alias | Behavior |
 |---|---|---|
@@ -68,20 +68,20 @@ This command creates a new task file with proper structure, milestone linking, a
 ### 0. Display Command Header
 
 ```
-⚡ @acp.task-create
+⚡ /acp-task-create
   Create task files with proper structure, milestone linking, and automatic progress.yaml updates
 
   Usage:
-    @acp.task-create                               Guided task creation
-    @acp.task-create @my-draft.md                  Create from draft file
-    @acp.task-create --from-clar <file>            Capture from specific clarification
-    @acp.task-create --from-context                Capture from all sources
+    /acp-task-create                               Guided task creation
+    /acp-task-create @my-draft.md                  Create from draft file
+    /acp-task-create --from-clar <file>            Capture from specific clarification
+    /acp-task-create --from-context                Capture from all sources
 
   Related:
-    @acp.pattern-create    Create patterns
-    @acp.command-create    Create commands
-    @acp.design-create     Create designs
-    @acp.proceed           Start working on created task
+    /acp-pattern-create    Create patterns
+    /acp-command-create    Create commands
+    /acp-design-create     Create designs
+    /acp-proceed           Start working on created task
 ```
 
 This step is informational only — do not wait for user input.
@@ -141,7 +141,7 @@ Scan patterns relevant to the task being created.
 
 ### 2.7. Capture Clarification Context
 
-Invoke the `@acp.clarification-capture` shared directive to capture decisions from clarifications and/or chat context.
+Invoke the `/acp-clarification-capture` shared directive to capture decisions from clarifications and/or chat context.
 
 **Actions**:
 - Read and follow the directive in [`agent/commands/acp.clarification-capture.md`](acp.clarification-capture.md)
@@ -158,9 +158,9 @@ Invoke the `@acp.clarification-capture` shared directive to capture decisions fr
 Check if draft file was provided as argument:
 
 **Syntax**:
-- `@acp.task-create @my-draft.md` (@ reference)
-- `@acp.task-create agent/drafts/my-draft.md` (path)
-- `@acp.task-create` (no draft)
+- `/acp-task-create @my-draft.md` (@ reference)
+- `/acp-task-create agent/drafts/my-draft.md` (path)
+- `/acp-task-create` (no draft)
 
 **Actions**:
 - If draft provided: Read draft file
@@ -209,7 +209,7 @@ If draft file was provided, create clarification if needed:
 
 ### 5.5. Cross-Reference Design Documents
 
-Invoke the `@acp.design-reference` shared directive to discover and extract design document context.
+Invoke the `/acp-design-reference` shared directive to discover and extract design document context.
 
 **Actions**:
 - Read and follow the directive in [`agent/commands/acp.design-reference.md`](acp.design-reference.md)
@@ -225,7 +225,7 @@ Invoke the `@acp.design-reference` shared directive to discover and extract desi
   4. Flag any design gaps (suggest clarification if needed)
   5. Return structured data: design elements, gaps, and paths
 - Hold the returned design elements for use in Step 6
-- **Record D-ID incorporation.** As you extract atomic design units, note their `D<N>` IDs. If the design uses D-IDs (look for `\*\*D\d+[:\s*]` bold-prefix or `### D\d+:` heading forms), record the specific D-IDs you intend to inline in the task body. These become the `incorporates:` field in the task's `@acp.meta.task` marker during Step 6. If the design has no D-IDs (legacy, pre-v5.41), skip this; validate will warn and suggest backfilling D-IDs via `@acp.sync`.
+- **Record D-ID incorporation.** As you extract atomic design units, note their `D<N>` IDs. If the design uses D-IDs (look for `\*\*D\d+[:\s*]` bold-prefix or `### D\d+:` heading forms), record the specific D-IDs you intend to inline in the task body. These become the `incorporates:` field in the task's `/acp-meta.task` marker during Step 6. If the design has no D-IDs (legacy, pre-v5.41), skip this; validate will warn and suggest backfilling D-IDs via `/acp-sync`.
 
 **If no design found**: The directive warns and returns empty. Proceed to Step 6 with available context only (user input, draft, clarifications).  
 
@@ -262,7 +262,7 @@ Discover and extract requirements from any matching spec in `agent/specs/`, usin
   ```
 - Hold this data for use in Step 6.
 
-**If `acp.meta-scan.sh` returns no output**: No specs have markers. Fall back to the legacy path (scan `agent/specs/*.md` by filename and `## Requirements` sections) and warn the user that spec markers should be backfilled via `@acp.sync` Step 1.4.
+**If `acp.meta-scan.sh` returns no output**: No specs have markers. Fall back to the legacy path (scan `agent/specs/*.md` by filename and `## Requirements` sections) and warn the user that spec markers should be backfilled via `/acp-sync` Step 1.4.
 
 **If no spec matches the task topic**: Skip silently. The `Spec Coverage` section in the task file is omitted entirely (not left as scaffolding). Proceed to Step 6.  
 
@@ -282,14 +282,14 @@ Create task file from template:
   - name = kebab-case version of task name
 - Create milestone subdirectory if it doesn't exist
 - Copy from task template (agent/tasks/task-1-{title}.template.md)
-- **Populate the `@acp.meta.task` marker block at the top** — the template ships with `{placeholder}` values; every one of them MUST be replaced before saving:
+- **Populate the `/acp-meta.task` marker block at the top** — the template ships with `{placeholder}` values; every one of them MUST be replaced before saving:
   - `topic:` — comma-separated keywords derived from task name + milestone name (reuse the keywords computed for Step 5.5/5.6)
   - `description:` — user-provided task description from Step 4, one line, <=150 chars (truncate with `…` if needed)
   - `milestone:` — milestone ID string (e.g. `M10`) from Step 1. If no milestone, omit the line entirely.
   - `spec:` — the spec path from Step 5.6 if a matching spec was found, otherwise OMIT the line entirely
   - `covers:` — comma-separated R-IDs from Step 5.6 (e.g. `R10, R11, R12`), otherwise OMIT the line entirely
   - `design:` — the design path from Step 5.5 if a design was found, otherwise OMIT the line entirely
-  - `incorporates:` — comma-separated D-IDs from the design that this task actually inlines (e.g. `D1, D3, D7`). When Step 5.5 extracts design content for inlining, record the specific `D<N>` IDs of the atomic units being copied into the task body. If the design has D-IDs but none are being inlined, OMIT the line. If the design has no D-IDs yet (legacy), OMIT; validate will fall back to a holistic check and may suggest running `@acp.sync` to backfill D-IDs.
+  - `incorporates:` — comma-separated D-IDs from the design that this task actually inlines (e.g. `D1, D3, D7`). When Step 5.5 extracts design content for inlining, record the specific `D<N>` IDs of the atomic units being copied into the task body. If the design has D-IDs but none are being inlined, OMIT the line. If the design has no D-IDs yet (legacy), OMIT; validate will fall back to a holistic check and may suggest running `/acp-sync` to backfill D-IDs.
   - `depends_on:` — task IDs from Step 4 dependencies (e.g. `task-17, task-19`), otherwise OMIT the line entirely
   - `status:` — literal `draft`
   - `updated:` — today's ISO date (`YYYY-MM-DD`)
@@ -325,7 +325,7 @@ Create task file from template:
     - Backend-only "it compiles" is not observable. "Tests pass" is not observable. "Table exists with new column" IS observable (via a DB query).
     - If the task genuinely has no user-observable outcome (pure refactor, internal rename, dev tooling, test-only changes), replace the checklist with a single line: `N/A — <one-sentence reason>`. The justification must be >= 10 characters.
     - Feature work should never be N/A. If you are creating a task for a user-visible feature and you find yourself writing N/A, stop and identify the observable effect first.
-    - This section is validated by `@acp.proceed` after task completion. Tasks with empty or unjustified N/A will block completion.
+    - This section is validated by `/acp-proceed` after task completion. Tasks with empty or unjustified N/A will block completion.
   - **Spec Coverage** — CONDITIONAL section:
     - Include this section ONLY if Step 5.6 found a matching spec in `agent/specs/`.
     - Populate it with the spec path and the scoped R<N> requirements from Step 5.6, copying each requirement's short description verbatim from the spec so the implementing sub-agent has the full requirement text inline:
@@ -413,13 +413,13 @@ Estimated Time: {hours}
 
 ✓ Task file created
 ✓ progress.yaml updated
-✓ @acp.meta.task marker populated (verified no {placeholder} text remains)
+✓ /acp-meta.task marker populated (verified no {placeholder} text remains)
 ✓ Draft file deleted (if requested)
 
 Next steps:
 - Review and refine task steps
 - Add verification items
-- Start working with @acp.proceed
+- Start working with /acp-proceed
 ```
 
 **Expected Outcome**: User knows task was created successfully  
@@ -456,7 +456,7 @@ If yes, prompt for weight, description, rationale, and applies values. Add entry
 - [ ] `User-Observable Acceptance` section present and populated (at least one criterion OR justified N/A)
 - [ ] `Spec Coverage` section present if a matching spec was found in Step 5.6; absent otherwise
 - [ ] Spec requirements (when present) copied verbatim from `agent/specs/` — not paraphrased
-- [ ] `@acp.meta.task` marker block fully populated — every `{placeholder}` replaced, `updated:` is today's date, optional lines (`spec:`, `covers:`, `depends_on:`) omitted if not applicable
+- [ ] `/acp-meta.task` marker block fully populated — every `{placeholder}` replaced, `updated:` is today's date, optional lines (`spec:`, `covers:`, `depends_on:`) omitted if not applicable
 - [ ] Running `./agent/scripts/acp.meta-scan.sh --kind task <task-path>` returns the task's metadata correctly
 
 ---
@@ -481,7 +481,7 @@ If yes, prompt for weight, description, rationale, and applies values. Add entry
 
 **Context**: Working on Milestone 3, need to add a new task  
 
-**Invocation**: `@acp.task-create`  
+**Invocation**: `/acp-task-create`  
 
 **Interaction**:
 ```
@@ -493,7 +493,7 @@ Agent: What would you like to name your task?
 User: Implement Package Search Command
 
 Agent: Provide a description (what this task accomplishes):
-User: Create @acp.package-search command to discover ACP packages via GitHub API
+User: Create /acp-package-search command to discover ACP packages via GitHub API
 
 Agent: Estimated time? (e.g., "4 hours", "2 days")
 User: 6-8 hours
@@ -519,7 +519,7 @@ Estimated Time: 6-8 hours
 
 **Context**: Have draft file describing task  
 
-**Invocation**: `@acp.task-create @my-task-draft.md`  
+**Invocation**: `/acp-task-create @my-task-draft.md`  
 
 **Result**: Reads draft, creates clarification if needed, generates task, updates progress.yaml  
 
@@ -527,7 +527,7 @@ Estimated Time: 6-8 hours
 
 **Context**: Want to add task to future milestone  
 
-**Invocation**: `@acp.task-create`  
+**Invocation**: `/acp-task-create`  
 
 **Interaction**:
 ```
@@ -551,10 +551,10 @@ User: M4
 
 ## Related Commands
 
-- [`@acp.pattern-create`](acp.pattern-create.md) - Create patterns
-- [`@acp.command-create`](acp.command-create.md) - Create commands
-- [`@acp.design-create`](acp.design-create.md) - Create designs
-- [`@acp.proceed`](acp.proceed.md) - Start working on created task
+- [`/acp-pattern-create`](acp.pattern-create.md) - Create patterns
+- [`/acp-command-create`](acp.command-create.md) - Create commands
+- [`/acp-design-create`](acp.design-create.md) - Create designs
+- [`/acp-proceed`](acp.proceed.md) - Start working on created task
 
 ---
 

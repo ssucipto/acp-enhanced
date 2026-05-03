@@ -37,10 +37,10 @@ These arguments are passed through from the calling create command. The create c
 | `--include-clarifications` | (none) | Alias for `--from-clars`, enforces Key Design Decisions section |
 
 **Natural Language**:
-- `@acp.design-create --from-clar` → Capture from clarifications in session
-- `@acp.design-create --from-chat` → Capture from chat conversation
-- `@acp.design-create --from-context` → Capture from all sources
-- `@acp.design-create` (no flags) → **Auto-detect**: equivalent to implicit `--from-context`
+- `/acp-design-create --from-clar` → Capture from clarifications in session
+- `/acp-design-create --from-chat` → Capture from chat conversation
+- `/acp-design-create --from-context` → Capture from all sources
+- `/acp-design-create` (no flags) → **Auto-detect**: equivalent to implicit `--from-context`
 
 **Default Behavior**: When no `--from-*` flags are specified, the directive auto-detects clarifications and context in the current session. This is the common case.  
 
@@ -75,7 +75,7 @@ The directive is called internally by create commands after context detection an
 ### 0. Display Directive Header
 
 ```
-⚡ @acp.clarification-capture
+⚡ /acp-clarification-capture
   Capture decisions from ephemeral clarification files and chat context into permanent entity documents
 ```
 
@@ -294,25 +294,25 @@ This warning is **mandatory** when uncaptured clarifications exist. It ensures t
 
 ### Example 1: Auto-detect with clarifications in session
 
-**Context**: User created and answered a clarification, then invokes `@acp.design-create`  
+**Context**: User created and answered a clarification, then invokes `/acp-design-create`  
 
 **Flow**: Directive auto-detects the clarification, warns user, user confirms, decisions captured into design document  
 
 ### Example 2: Explicit capture from specific file
 
-**Context**: User invokes `@acp.task-create --from-clar clarification-6-create-command-context-capture.md`  
+**Context**: User invokes `/acp-task-create --from-clar clarification-6-create-command-context-capture.md`  
 
 **Flow**: Directive reads only that clarification, synthesizes decisions, generates section  
 
 ### Example 3: Chat-only capture
 
-**Context**: User had extensive discussion about design choices, invokes `@acp.pattern-create --from-chat`  
+**Context**: User had extensive discussion about design choices, invokes `/acp-pattern-create --from-chat`  
 
 **Flow**: Directive synthesizes decisions from chat history, generates section (no clarification files involved)  
 
 ### Example 4: No context available
 
-**Context**: User invokes `@acp.design-create` with no prior clarifications or design discussion  
+**Context**: User invokes `/acp-design-create` with no prior clarifications or design discussion  
 
 **Flow**: Directive finds no context sources, skips capture silently, entity created without Key Design Decisions section  
 
@@ -320,11 +320,11 @@ This warning is **mandatory** when uncaptured clarifications exist. It ensures t
 
 ## Related Commands
 
-- [`@acp.clarification-create`](acp.clarification-create.md) - Creates clarification files that this directive captures from
-- [`@acp.design-create`](acp.design-create.md) - Calls this directive during design creation
-- [`@acp.task-create`](acp.task-create.md) - Calls this directive during task creation
-- [`@acp.pattern-create`](acp.pattern-create.md) - Calls this directive during pattern creation
-- [`@acp.command-create`](acp.command-create.md) - Calls this directive during command creation
+- [`/acp-clarification-create`](acp.clarification-create.md) - Creates clarification files that this directive captures from
+- [`/acp-design-create`](acp.design-create.md) - Calls this directive during design creation
+- [`/acp-task-create`](acp.task-create.md) - Calls this directive during task creation
+- [`/acp-pattern-create`](acp.pattern-create.md) - Calls this directive during pattern creation
+- [`/acp-command-create`](acp.command-create.md) - Calls this directive during command creation
 
 ---
 
