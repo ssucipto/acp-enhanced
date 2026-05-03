@@ -133,6 +133,36 @@ cleanup_deprecated_scripts
 echo "${GREEN}✓${NC} All files updated"
 echo ""
 
+# ACP Enhanced — update static context files (preserve user-state files)
+echo "Updating ACP Enhanced context layer..."
+mkdir -p agent/core agent/memory agent/routing/tasks agent/skills agent/wiki
+
+# Overwrite static files (no user state in these)
+[ -d "$TEMP_DIR/agent/core" ]   && cp "$TEMP_DIR/agent/core/"*.yml   agent/core/   2>/dev/null || true
+[ -d "$TEMP_DIR/agent/skills" ] && cp "$TEMP_DIR/agent/skills/"*.md  agent/skills/ 2>/dev/null || true
+if [ -d "$TEMP_DIR/agent/wiki" ]; then
+    cp "$TEMP_DIR/agent/wiki/"*.yml agent/wiki/ 2>/dev/null || true
+    cp "$TEMP_DIR/agent/wiki/"*.md  agent/wiki/ 2>/dev/null || true
+fi
+if [ -d "$TEMP_DIR/agent/routing" ]; then
+    cp "$TEMP_DIR/agent/routing/taxonomy.yml" agent/routing/ 2>/dev/null || true
+    cp "$TEMP_DIR/agent/routing/rules.md"     agent/routing/ 2>/dev/null || true
+    cp "$TEMP_DIR/agent/routing/config.yml"   agent/routing/ 2>/dev/null || true
+    # task-template only — never overwrite user routing task files
+    cp "$TEMP_DIR/agent/routing/tasks/task-template.md" \
+       agent/routing/tasks/ 2>/dev/null || true
+fi
+
+# Preserve user-state files — create only if somehow missing
+[ -f "agent/memory/sessions.md"  ] || echo "# Session Memory"    > agent/memory/sessions.md
+[ -f "agent/memory/lessons.md"   ] || echo "# Lessons Log"       > agent/memory/lessons.md
+[ -f "agent/memory/decisions.md" ] || echo "# ADR Log"           > agent/memory/decisions.md
+[ -f "agent/memory/patterns.md"  ] || echo "# Reusable Patterns" > agent/memory/patterns.md
+[ -f "agent/routing/ledger.md"   ] || echo "# Routing Ledger"    > agent/routing/ledger.md
+
+echo "${GREEN}✓${NC} ACP Enhanced context layer updated"
+echo ""
+
 # Update acp-core version in manifest if it exists
 if [ -f "agent/manifest.yaml" ]; then
     echo "Updating manifest..."
@@ -161,6 +191,7 @@ echo "  ✓ AGENT.md (methodology documentation)"
 echo "  ✓ Template files (design, milestone, task, pattern)"
 echo "  ✓ Command files (all ACP commands)"
 echo "  ✓ Utility scripts (update, check-for-updates, version, etc.)"
+echo "  ✓ ACP Enhanced context layer (agent/core/, agent/skills/, agent/wiki/, agent/routing/)"
 echo ""
 echo "${BLUE}Next steps:${NC}"
 echo "1. Review changes: git diff"
