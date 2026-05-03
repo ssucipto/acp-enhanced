@@ -1,7 +1,7 @@
 # Command: package-publish
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.package-publish` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.package-publish` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-package-publish` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-package-publish` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document.
 
 **Namespace**: acp  
@@ -35,7 +35,7 @@ Unlike manual publishing which is error-prone and time-consuming, this command p
 - [ ] All changes committed or ready to commit
 - [ ] Git repository initialized with remote configured
 - [ ] On a valid release branch (main, master, mainline, release, or configured branch)
-- [ ] Package passes validation (@acp.package-validate)
+- [ ] Package passes validation (/acp-package-validate)
 
 ---
 
@@ -44,14 +44,14 @@ Unlike manual publishing which is error-prone and time-consuming, this command p
 ### 0. Display Command Header
 
 ```
-⚡ @acp.package-publish
+⚡ /acp-package-publish
   Automated package publishing with validation and testing
 
   Related:
-    @acp.package-validate      Validate package before publishing
-    @acp.package-create        Create new package
-    @acp.pattern-create        Add patterns to package
-    @acp.command-create        Add commands to package
+    /acp-package-validate      Validate package before publishing
+    /acp-package-create        Create new package
+    /acp-pattern-create        Add patterns to package
+    /acp-command-create        Add commands to package
 ```
 
 ### 1. Run Non-Destructive Validation
@@ -59,7 +59,7 @@ Unlike manual publishing which is error-prone and time-consuming, this command p
 Validate package before making any changes.
 
 **Actions**:
-- Run `@acp.package-validate` command
+- Run `/acp-package-validate` command
 - Capture validation results
 - If validation fails:
   - Display comprehensive error report
@@ -239,7 +239,7 @@ Display comprehensive publishing report.
   - Test installation: PASSED
 - Show next steps:
   - Package is live at <repository-url>
-  - Users can install with: @acp.package-install <url>
+  - Users can install with: /acp-package-install <url>
   - Consider announcing release
   - Monitor for issues
 
@@ -283,7 +283,7 @@ Display comprehensive publishing report.
 
 🔍 Step 1: Validation
 
-Running @acp.package-validate...
+Running /acp-package-validate...
 
 ✅ Package validation passed!
   - 32 checks passed
@@ -386,7 +386,7 @@ Installing from remote: https://github.com/user/acp-firebase.git
 🎉 Your package is now live!
 
 Users can install it with:
-  @acp.package-install https://github.com/user/acp-firebase.git
+  /acp-package-install https://github.com/user/acp-firebase.git
 
 Next steps:
   - Announce release to users
@@ -410,7 +410,7 @@ Next steps:
 
 **Context**: Added 2 new patterns, ready to publish  
 
-**Invocation**: `@acp.package-publish`  
+**Invocation**: `/acp-package-publish`  
 
 **Result**: Validates package, detects minor version bump (1.2.3 → 1.3.0), generates CHANGELOG, commits, tags, pushes, tests installation, confirms success  
 
@@ -418,7 +418,7 @@ Next steps:
 
 **Context**: Fixed typo in documentation  
 
-**Invocation**: `@acp.package-publish`  
+**Invocation**: `/acp-package-publish`  
 
 **Result**: Validates, detects patch bump (1.2.3 → 1.2.4), generates CHANGELOG, publishes, tests, confirms success  
 
@@ -426,7 +426,7 @@ Next steps:
 
 **Context**: Package has issues  
 
-**Invocation**: `@acp.package-publish`  
+**Invocation**: `/acp-package-publish`  
 
 **Result**: Validation fails with 3 errors, offers auto-fix, user fixes issues, re-runs validation, then proceeds with publishing  
 
@@ -434,7 +434,7 @@ Next steps:
 
 **Context**: On feature branch instead of main  
 
-**Invocation**: `@acp.package-publish`  
+**Invocation**: `/acp-package-publish`  
 
 **Result**: Detects wrong branch, reports error: "Not on release branch. Current: feature/new-pattern, Expected: main, master, mainline, or release", stops publishing  
 
@@ -442,7 +442,7 @@ Next steps:
 
 **Context**: Remote has commits not pulled locally  
 
-**Invocation**: `@acp.package-publish`  
+**Invocation**: `/acp-package-publish`  
 
 **Result**: Detects remote ahead, reports error: "Remote has 2 commits not in local. Run: git pull", stops publishing  
 
@@ -450,11 +450,11 @@ Next steps:
 
 ## Related Commands
 
-- [`@acp.package-validate`](acp.package-validate.md) - Validate package before publishing (run automatically)
+- [`/acp-package-validate`](acp.package-validate.md) - Validate package before publishing (run automatically)
 - [`@git.commit`](git.commit.md) - Commit changes with version management
-- [`@acp.package-create`](acp.package-create.md) - Create new package
-- [`@acp.pattern-create`](acp.pattern-create.md) - Add patterns to package
-- [`@acp.command-create`](acp.command-create.md) - Add commands to package
+- [`/acp-package-create`](acp.package-create.md) - Create new package
+- [`/acp-pattern-create`](acp.pattern-create.md) - Add patterns to package
+- [`/acp-command-create`](acp.command-create.md) - Add commands to package
 
 ---
 
@@ -466,7 +466,7 @@ Next steps:
 
 **Cause**: Package has structural or content issues  
 
-**Solution**: Use auto-fix to resolve issues, or fix manually, then run `@acp.package-publish` again  
+**Solution**: Use auto-fix to resolve issues, or fix manually, then run `/acp-package-publish` again  
 
 ### Issue 2: Not on release branch
 
@@ -482,7 +482,7 @@ Next steps:
 
 **Cause**: Someone else pushed to remote  
 
-**Solution**: Pull latest changes (`git pull`), resolve conflicts if any, then run `@acp.package-publish` again  
+**Solution**: Pull latest changes (`git pull`), resolve conflicts if any, then run `/acp-package-publish` again  
 
 ### Issue 4: Test installation fails
 
@@ -498,7 +498,7 @@ Next steps:
 
 **Cause**: Nothing to publish  
 
-**Solution**: Make changes, commit them, then run `@acp.package-publish`  
+**Solution**: Make changes, commit them, then run `/acp-package-publish`  
 
 ### Issue 6: Version already exists
 
@@ -538,7 +538,7 @@ Next steps:
 - Test installation verifies package works after publishing
 - Can be cancelled at any confirmation prompt
 - Failed test installation does not rollback (version is already pushed)
-- Consider running `@acp.package-validate` first to preview issues
+- Consider running `/acp-package-validate` first to preview issues
 - Branch validation ensures you're publishing from correct branch
 - Remote check prevents overwriting others' work
 

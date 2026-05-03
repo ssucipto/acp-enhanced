@@ -1,7 +1,7 @@
 # Directive: design-reference
 
 > **🤖 Agent Directive**: This is a **SHARED DIRECTIVE**, not a user-invocable command.
-> It is referenced by `@acp.task-create`, `@acp.plan` (via task-create delegation), and `@acp.proceed` to discover and cross-reference design documents, ensuring tasks contain all implementation detail.
+> It is referenced by `/acp-task-create`, `/acp-plan` (via task-create delegation), and `/acp-proceed` to discover and cross-reference design documents, ensuring tasks contain all implementation detail.
 >
 > **Do NOT invoke this directive directly.** It is called internally by commands that need design document context.
 >
@@ -65,7 +65,7 @@ This directive dynamically discovers design documents relevant to the current ta
 ### 0. Display Directive Header
 
 ```
-⚡ @acp.design-reference
+⚡ /acp-design-reference
   Discover and cross-reference design documents to ensure tasks have complete implementation detail
 ```
 
@@ -77,7 +77,7 @@ Extract topic keywords from the calling context to form a search query.
 
 **Actions**:
 - Collect keywords from all available inputs:
-  - **Task name**: e.g., "Create @acp.clarification-capture Directive" → keywords: `clarification`, `capture`, `directive`
+  - **Task name**: e.g., "Create /acp-clarification-capture Directive" → keywords: `clarification`, `capture`, `directive`
   - **Milestone name**: e.g., "Clarification Capture System" → keywords: `clarification`, `capture`, `system`
   - **User description**: Extract nouns and action words
   - **Draft content**: Extract topic-relevant terms from first ~20 lines
@@ -173,7 +173,7 @@ Design gaps detected in {filename}:
 Suggest creating a clarification? (yes/no)
 ```
 
-- If user says **yes**: Suggest invoking `@acp.clarification-create` targeting the specific gaps. Halt the directive and let the user address gaps first.
+- If user says **yes**: Suggest invoking `/acp-clarification-create` targeting the specific gaps. Halt the directive and let the user address gaps first.
 - If user says **no**: Proceed with available detail. Include a note about gaps in the returned data so the calling command can mention them in the task.
 
 **Expected Outcome**: Design gaps identified and user informed; decision made on whether to address them  
@@ -256,31 +256,31 @@ design_names:
 
 ### Example 1: task-create finds relevant design
 
-**Context**: User invokes `@acp.task-create` for a task about "clarification capture"  
+**Context**: User invokes `/acp-task-create` for a task about "clarification capture"  
 
 **Flow**: Directive searches `agent/design/`, matches `local.clarification-capture-system.md` by filename keywords, reads it, extracts 8-step directive flow + argument table + UX warning format + affected commands table + lifecycle rules. Returns all to task-create. Task is generated with full implementation detail.  
 
 ### Example 2: No design document exists
 
-**Context**: User invokes `@acp.task-create` for a task about "user preferences"  
+**Context**: User invokes `/acp-task-create` for a task about "user preferences"  
 
 **Flow**: Directive searches `agent/design/`, no filenames match "preferences" (M6 has no design doc yet). Reports "No design documents found." Task is created from available context only (user input, draft, clarifications).  
 
 ### Example 3: Multiple relevant designs
 
-**Context**: User invokes `@acp.task-create` for a task about "package validation"  
+**Context**: User invokes `/acp-task-create` for a task about "package validation"  
 
 **Flow**: Directive finds both `acp-package-management-system.md` and `local.experimental-features-system.md` as relevant. Reads both. Extracts elements from each. Returns combined elements to task-create.  
 
 ### Example 4: Design has gaps
 
-**Context**: User invokes `@acp.task-create` for a feature whose design has a TBD Testing Strategy  
+**Context**: User invokes `/acp-task-create` for a feature whose design has a TBD Testing Strategy  
 
 **Flow**: Directive reads design, extracts elements, flags "Testing Strategy: marked TBD". Asks user whether to create clarification. User says no. Task is created with a note about the gap.  
 
 ### Example 5: proceed loads design context
 
-**Context**: Agent runs `@acp.proceed` on a task with `Design Reference: [Clarification Capture System](../design/local.clarification-capture-system.md)`  
+**Context**: Agent runs `/acp-proceed` on a task with `Design Reference: [Clarification Capture System](../design/local.clarification-capture-system.md)`  
 
 **Flow**: Proceed reads the linked design document. Uses it as supplementary context during implementation — consulting it when the task step is ambiguous or when an unlisted edge case arises.  
 
@@ -288,11 +288,11 @@ design_names:
 
 ## Related Commands
 
-- [`@acp.clarification-capture`](acp.clarification-capture.md) - Sister shared directive for clarification context capture
-- [`@acp.task-create`](acp.task-create.md) - Calls this directive during task creation (Step 5.5)
-- [`@acp.plan`](acp.plan.md) - Calls this directive via task-create delegation
-- [`@acp.proceed`](acp.proceed.md) - Calls this directive during implementation for design context
-- [`@acp.design-create`](acp.design-create.md) - Creates the design documents this directive discovers
+- [`/acp-clarification-capture`](acp.clarification-capture.md) - Sister shared directive for clarification context capture
+- [`/acp-task-create`](acp.task-create.md) - Calls this directive during task creation (Step 5.5)
+- [`/acp-plan`](acp.plan.md) - Calls this directive via task-create delegation
+- [`/acp-proceed`](acp.proceed.md) - Calls this directive during implementation for design context
+- [`/acp-design-create`](acp.design-create.md) - Creates the design documents this directive discovers
 
 ---
 
@@ -343,14 +343,14 @@ design_names:
 
 ## Notes
 
-- This directive is modeled after `@acp.clarification-capture` (same shared directive pattern)
+- This directive is modeled after `/acp-clarification-capture` (same shared directive pattern)
 - Discovery is always dynamic — no explicit links or configuration required
 - Multiple design documents can be loaded and cross-referenced
 - The directive is read-only — it never modifies any files
 - Context window cost is mitigated by keyword filtering (only relevant docs loaded, borderline checked via first ~50 lines)
 - The calling command decides how to use the returned elements — the directive just extracts and returns
-- When called by `@acp.proceed`, the design context is supplementary (task is primary)
-- When called by `@acp.task-create`, the design elements are mandatory inputs for task generation
+- When called by `/acp-proceed`, the design context is supplementary (task is primary)
+- When called by `/acp-task-create`, the design elements are mandatory inputs for task generation
 
 ---
 

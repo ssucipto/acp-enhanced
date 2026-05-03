@@ -1,6 +1,6 @@
 # Command: package-search
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.package-search` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-package-search` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -41,20 +41,20 @@ Use this command when you want to discover available ACP packages, find packages
 ### 0. Display Command Header
 
 ```
-⚡ @acp.package-search
+⚡ /acp-package-search
   Discover ACP packages on GitHub using the GitHub API
 
   Usage:
-    @acp.package-search <query>                    Search by keyword
-    @acp.package-search --tag <tag>                Filter by tag
-    @acp.package-search --user <username>          Search user's packages
-    @acp.package-search --sort updated             Sort by recently updated
-    @acp.package-search --limit <n>                Limit results
+    /acp-package-search <query>                    Search by keyword
+    /acp-package-search --tag <tag>                Filter by tag
+    /acp-package-search --user <username>          Search user's packages
+    /acp-package-search --sort updated             Sort by recently updated
+    /acp-package-search --limit <n>                Limit results
 
   Related:
-    @acp.package-install       Install discovered packages
-    @acp.package-list          List installed packages
-    @acp.package-info          Show package details
+    /acp-package-install       Install discovered packages
+    /acp-package-list          List installed packages
+    /acp-package-info          Show package details
 ```
 
 ### 1. Run Package Search Script
@@ -98,7 +98,7 @@ Use the provided installation command.
 
 **Actions**:
 - Copy installation command from search results
-- Run `@acp.package-install <url>` with the package URL
+- Run `/acp-package-install <url>` with the package URL
 - Follow installation prompts
 
 **Expected Outcome**: Package installed successfully  
@@ -183,7 +183,7 @@ To install a package:
 
 **Context**: Looking for Firebase-related packages  
 
-**Invocation**: `@acp.package-search firebase`  
+**Invocation**: `/acp-package-search firebase`  
 
 **Result**: Shows 3 packages with firebase in name/description/tags, sorted by stars  
 
@@ -191,7 +191,7 @@ To install a package:
 
 **Context**: Need OAuth authentication patterns  
 
-**Invocation**: `@acp.package-search oauth --tag authentication`  
+**Invocation**: `/acp-package-search oauth --tag authentication`  
 
 **Result**: Shows packages tagged with both "oauth" and "authentication"  
 
@@ -199,7 +199,7 @@ To install a package:
 
 **Context**: Want to see all packages from specific author  
 
-**Invocation**: `@acp.package-search --user prmichaelsen`  
+**Invocation**: `/acp-package-search --user prmichaelsen`  
 
 **Result**: Shows all acp-package repos from prmichaelsen  
 
@@ -207,7 +207,7 @@ To install a package:
 
 **Context**: Want to see recently updated packages  
 
-**Invocation**: `@acp.package-search --sort updated --limit 5`  
+**Invocation**: `/acp-package-search --sort updated --limit 5`  
 
 **Result**: Shows 5 most recently updated packages  
 
@@ -215,7 +215,7 @@ To install a package:
 
 **Context**: Search for non-existent package  
 
-**Invocation**: `@acp.package-search nonexistent123`  
+**Invocation**: `/acp-package-search nonexistent123`  
 
 **Result**: "No packages found matching your search", suggests trying broader terms  
 
@@ -223,9 +223,9 @@ To install a package:
 
 ## Related Commands
 
-- [`@acp.package-install`](acp.package-install.md) - Install discovered packages
-- [`@acp.package-list`](acp.package-list.md) - List installed packages
-- [`@acp.package-info`](acp.package-info.md) - Show package details
+- [`/acp-package-install`](acp.package-install.md) - Install discovered packages
+- [`/acp-package-list`](acp.package-list.md) - List installed packages
+- [`/acp-package-info`](acp.package-info.md) - Show package details
 
 ---
 
@@ -248,7 +248,7 @@ export GITHUB_TOKEN="your_github_token"
 
 ## Package Discovery Requirements
 
-For packages to be discoverable via `@acp.package-search`:
+For packages to be discoverable via `/acp-package-search`:
 
 1. **GitHub Topic** (REQUIRED): Add `acp-package` topic to repository
    - This is the canonical way to identify ACP packages

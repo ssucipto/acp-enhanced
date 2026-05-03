@@ -29,7 +29,7 @@ CHANGELOG entry format:
 
 AGENT.md command entry (in the Commands section table):
 ```markdown
-| `@acp.foo` | Brief one-line description | `acp.foo.md` |
+| `/acp-foo` | Brief one-line description | `acp.foo.md` |
 ```
 
 Package.yaml command entry:

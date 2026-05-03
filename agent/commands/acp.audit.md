@@ -1,7 +1,7 @@
 # Command: audit
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.audit` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.audit` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-audit` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-audit` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -26,10 +26,10 @@
 - `--output <path>` or `-o <path>` - Custom report output path (default: `agent/reports/`)
 
 **Natural Language Arguments**:
-- `@acp.audit the install system` - Audit a named subject
-- `@acp.audit src/auth/` - Audit a directory
-- `@acp.audit everything related to sessions` - Audit by description
-- `@acp.audit` - Infer subject from current context
+- `/acp-audit the install system` - Audit a named subject
+- `/acp-audit src/auth/` - Audit a directory
+- `/acp-audit everything related to sessions` - Audit by description
+- `/acp-audit` - Infer subject from current context
 
 **Argument Mapping**:
 The agent infers intent from context:
@@ -44,7 +44,7 @@ The agent infers intent from context:
 
 This command performs a directed, deep investigation of a specific subject and produces a persistent, structured report. The subject can be anything — a feature area, a directory, a codebase pattern, a set of milestones, a refactoring target, or any topic that requires comprehensive understanding.
 
-Unlike `@acp.init` (broad context loading) or `@acp.status` (quick snapshot), `@acp.audit` goes narrow and deep. It reads, analyzes, and cross-references everything relevant to the subject, then captures findings efficiently in a report with tables, code pointers, and key decisions.
+Unlike `/acp-init` (broad context loading) or `/acp-status` (quick snapshot), `/acp-audit` goes narrow and deep. It reads, analyzes, and cross-references everything relevant to the subject, then captures findings efficiently in a report with tables, code pointers, and key decisions.
 
 Use this when you need a thorough understanding of a subject before acting — refactors, status reports, pattern alignment, scope analysis, or any situation where you need to see the full picture before making decisions.
 
@@ -62,18 +62,18 @@ Use this when you need a thorough understanding of a subject before acting — r
 ### 0. Display Command Header
 
 ```
-⚡ @acp.audit
+⚡ /acp-audit
   Deep-dive investigation of a subject, producing a structured report
 
   Usage:
-    @acp.audit                     Infer subject from context
-    @acp.audit <subject>           Audit a named subject or path
-    @acp.audit --output <path>     Custom report output path
+    /acp-audit                     Infer subject from context
+    /acp-audit <subject>           Audit a named subject or path
+    /acp-audit --output <path>     Custom report output path
 
   Related:
-    @acp.init      Broad context loading (not deep dives)
-    @acp.status    Quick status snapshot
-    @acp.validate  Schema and consistency validation
+    /acp-init      Broad context loading (not deep dives)
+    /acp-status    Quick status snapshot
+    /acp-validate  Schema and consistency validation
 ```
 
 This step is informational only — do not wait for user input.
@@ -116,7 +116,7 @@ Perform the deep dive. The agent uses judgment on scope and depth based on the s
 - Cast the net as wide or narrow as the user's instructions imply
 - Use judgment on which files to read in full vs. summarize
 - Use judgment on whether to note specific functions/line ranges
-- Do NOT check for inconsistencies between entities (that's `@acp.validate`)
+- Do NOT check for inconsistencies between entities (that's `/acp-validate`)
 - The goal is understanding, not validation
 
 **Expected Outcome**: Comprehensive understanding of the subject across the project  
@@ -241,7 +241,7 @@ Code pointers: 15
 
 **Context**: Need to understand the sessions system before making changes  
 
-**Invocation**: `@acp.audit sessions`  
+**Invocation**: `/acp-audit sessions`  
 
 **Result**: Agent searches for "sessions" across the project, reads the design doc, milestone, tasks, shell script, command file, progress.yaml entries. Produces `agent/reports/audit-1-sessions-system.md` with tables of files, findings, and code pointers.  
 
@@ -249,7 +249,7 @@ Code pointers: 15
 
 **Context**: Need to understand what's in src/auth/ before a refactor  
 
-**Invocation**: `@acp.audit src/auth/`  
+**Invocation**: `/acp-audit src/auth/`  
 
 **Result**: Agent reads all files in src/auth/, traces imports and references from other parts of the codebase, checks git history for recent changes. Produces a report with file inventory, key code pointers, and recommendations.  
 
@@ -257,7 +257,7 @@ Code pointers: 15
 
 **Context**: Currently working on task-37 (Preference Loading Infrastructure), want to understand the full scope  
 
-**Invocation**: `@acp.audit`  
+**Invocation**: `/acp-audit`  
 
 **Result**: Agent infers "preferences system" from current task context, investigates the design doc, all 8 planned tasks, related clarifications, and any existing code. Produces a report capturing the full scope.  
 
@@ -265,7 +265,7 @@ Code pointers: 15
 
 **Context**: Need to understand how package installation works end-to-end  
 
-**Invocation**: `@acp.audit everything related to how packages get installed`  
+**Invocation**: `/acp-audit everything related to how packages get installed`  
 
 **Result**: Agent searches for install-related code, reads acp.install.sh, package management design, related commands and tasks. Produces a comprehensive report.  
 
@@ -273,9 +273,9 @@ Code pointers: 15
 
 ## Related Commands
 
-- [`@acp.init`](acp.init.md) - Broad context loading (use for session start, not deep dives)
-- [`@acp.status`](acp.status.md) - Quick status snapshot (use for "where are we?", not "what is X?")
-- [`@acp.validate`](acp.validate.md) - Schema and consistency validation (use for correctness checks, not investigation)
+- [`/acp-init`](acp.init.md) - Broad context loading (use for session start, not deep dives)
+- [`/acp-status`](acp.status.md) - Quick status snapshot (use for "where are we?", not "what is X?")
+- [`/acp-validate`](acp.validate.md) - Schema and consistency validation (use for correctness checks, not investigation)
 
 ---
 
@@ -338,7 +338,7 @@ Code pointers: 15
 
 | Decision | Choice | Rationale |
 |---|---|---|
-| Consistency checking | Not in scope | That's `@acp.validate`'s job — audit is for understanding, not validation |
+| Consistency checking | Not in scope | That's `/acp-validate`'s job — audit is for understanding, not validation |
 | Git history | Included | Useful context for understanding a subject's evolution |
 | Distinction from init/status | Narrow/deep vs. broad/shallow vs. snapshot | Each command has a distinct purpose; audit's differentiator is depth + persistent report |
 

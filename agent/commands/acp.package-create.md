@@ -1,7 +1,7 @@
 # Command: package-create
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.package-create` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.package-create` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-package-create` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-package-create` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -66,15 +66,15 @@ This happens automatically - no manual setup required.
 ### 0. Display Command Header
 
 ```
-⚡ @acp.package-create
+⚡ /acp-package-create
   Create a new ACP package with full installation and hooks
 
   Related:
-    @acp.pattern-create        Create patterns in package
-    @acp.command-create        Create commands in package
-    @acp.design-create         Create designs in package
-    @acp.package-validate      Validate package before publishing
-    @acp.package-publish       Publish package to GitHub
+    /acp-pattern-create        Create patterns in package
+    /acp-command-create        Create commands in package
+    /acp-design-create         Create designs in package
+    /acp-package-validate      Validate package before publishing
+    /acp-package-publish       Publish package to GitHub
 ```
 
 ### 1. Gather Package Information via Chat
@@ -124,7 +124,7 @@ This happens automatically - no manual setup required.
 - Ask: "What tags describe your package? (comma-separated, for discovery)"
 - Validation: At least one tag recommended
 - Examples: "firebase, firestore, database, backend"
-- Note: These help users find your package via `@acp.package-search`
+- Note: These help users find your package via `/acp-package-search`
 
 **Release Branch** (optional, default: main)
 - Ask: "What branch should be used for publishing? (default: main)"
@@ -185,7 +185,7 @@ User: https://github.com/prmichaelsen/acp-firebase.git
 Agent: ✓
 
 Agent: What tags describe your package? (comma-separated, for discovery)
-      These help users find your package via @acp.package-search
+      These help users find your package via /acp-package-search
 
 User: firebase, firestore, database, backend
 
@@ -401,9 +401,9 @@ Your ACP package is ready at: ./acp-{package-name}/
 📋 Next Steps:
 
 1. Add your content:
-   - Use @acp.pattern-create to create patterns
-   - Use @acp.command-create to create commands
-   - Use @acp.design-create to create designs
+   - Use /acp-pattern-create to create patterns
+   - Use /acp-command-create to create commands
+   - Use /acp-design-create to create designs
    
    These commands automatically:
    - Add namespace prefix to filenames
@@ -412,7 +412,7 @@ Your ACP package is ready at: ./acp-{package-name}/
 
 2. Validate your package:
    cd acp-{package-name}
-   @acp.package-validate
+   /acp-package-validate
    
    This checks:
    - package.yaml structure
@@ -439,7 +439,7 @@ Your ACP package is ready at: ./acp-{package-name}/
 
 6. Publish your first version:
    cd acp-{package-name}
-   @acp.package-publish
+   /acp-package-publish
    
    This will:
    - Validate package
@@ -455,9 +455,9 @@ Your ACP package is ready at: ./acp-{package-name}/
 
 - Package structure guide: See AGENT.md
 - package.yaml reference: agent/design/acp-package-management-system.md
-- Entity creation: @acp.pattern-create, @acp.command-create, @acp.design-create
-- Validation: @acp.package-validate
-- Publishing: @acp.package-publish
+- Entity creation: /acp-pattern-create, /acp-command-create, /acp-design-create
+- Validation: /acp-package-validate
+- Publishing: /acp-package-publish
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -469,7 +469,7 @@ Your package has:
 ✓ Release branch configured ({release-branch})
 ✓ Git repository initialized
 
-Ready to add content with @acp.pattern-create, @acp.command-create, @acp.design-create
+Ready to add content with /acp-pattern-create, /acp-command-create, /acp-design-create
 ```
 
 ### 4. Verify Package Creation
@@ -639,7 +639,7 @@ Initializing Git Repository
 
 **Context**: Want to share Firebase patterns with community  
 
-**Invocation**: `@acp.package-create`  
+**Invocation**: `/acp-package-create`  
 
 **Interaction**:
 ```
@@ -660,7 +660,7 @@ Target directory [.]:
 
 **Context**: Want to package MCP server integration patterns  
 
-**Invocation**: `@acp.package-create`  
+**Invocation**: `/acp-package-create`  
 
 **Interaction**:
 ```
@@ -681,7 +681,7 @@ Target directory [.]: ~/projects
 
 **Context**: Want to share OAuth 2.0 implementation patterns, using release branch  
 
-**Invocation**: `@acp.package-create`  
+**Invocation**: `/acp-package-create`  
 
 **Interaction**:
 ```
@@ -702,12 +702,12 @@ Target directory [.]:
 
 ## Related Commands
 
-- [`@acp.pattern-create`](acp.pattern-create.md) - Create patterns in package
-- [`@acp.command-create`](acp.command-create.md) - Create commands in package
-- [`@acp.design-create`](acp.design-create.md) - Create designs in package
-- [`@acp.package-validate`](acp.package-validate.md) - Validate package before publishing
-- [`@acp.package-publish`](acp.package-publish.md) - Publish package to GitHub
-- [`@acp.package-install`](acp.package-install.md) - Install packages (test your package)
+- [`/acp-pattern-create`](acp.pattern-create.md) - Create patterns in package
+- [`/acp-command-create`](acp.command-create.md) - Create commands in package
+- [`/acp-design-create`](acp.design-create.md) - Create designs in package
+- [`/acp-package-validate`](acp.package-validate.md) - Validate package before publishing
+- [`/acp-package-publish`](acp.package-publish.md) - Publish package to GitHub
+- [`/acp-package-install`](acp.package-install.md) - Install packages (test your package)
 - [`@git.init`](git.init.md) - Initialize git repository
 - [`@git.commit`](git.commit.md) - Version-aware commits
 
@@ -798,8 +798,8 @@ Target directory [.]:
 - Always add "acp-package" topic to GitHub repository for discoverability
 - Update `package.yaml` whenever you add/remove files (or use entity creation commands)
 - Follow semantic versioning for package and file versions
-- Test package installation before publishing: `@acp.package-validate`
-- Use `@acp.package-publish` for automated publishing workflow
+- Test package installation before publishing: `/acp-package-validate`
+- Use `/acp-package-publish` for automated publishing workflow
 - Pre-commit hook validates package.yaml before every commit
 - Release branch configuration prevents accidental publishing from wrong branch
 
@@ -829,7 +829,7 @@ Target directory [.]:
 - Start at 1.0.0 for initial release
 - Use semantic versioning (MAJOR.MINOR.PATCH)
 - Update CHANGELOG.md with each version
-- Use `@acp.package-publish` for automated versioning
+- Use `/acp-package-publish` for automated versioning
 - Tag releases in git: `git tag v1.0.0`
 
 ### GitHub Setup
@@ -841,12 +841,12 @@ Target directory [.]:
 - Consider adding GitHub Actions for validation
 
 ### Development Workflow
-1. Create package with `@acp.package-create`
-2. Add content with `@acp.pattern-create`, `@acp.command-create`, `@acp.design-create`
-3. Validate with `@acp.package-validate`
+1. Create package with `/acp-package-create`
+2. Add content with `/acp-pattern-create`, `/acp-command-create`, `/acp-design-create`
+3. Validate with `/acp-package-validate`
 4. Commit changes (pre-commit hook validates automatically)
-5. Publish with `@acp.package-publish`
-6. Test installation: `@acp.package-install {your-repo-url}`
+5. Publish with `/acp-package-publish`
+6. Test installation: `/acp-package-install {your-repo-url}`
 
 ---
 

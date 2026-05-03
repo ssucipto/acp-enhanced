@@ -1,7 +1,7 @@
 # Command: project-create
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.project-create` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.project-create` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-project-create` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-project-create` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -36,9 +36,9 @@ This command creates a new **generic ACP project** (not a package) with full ACP
 
 **Use this when**: Starting a new application, tool, or experiment that will use ACP for development.  
 
-### Comparison with @acp.package-create
+### Comparison with /acp-package-create
 
-| Feature | @acp.package-create | @acp.project-create |
+| Feature | /acp-package-create | /acp-project-create |
 |---------|---------------------|---------------------|
 | **Purpose** | Create distributable ACP packages | Create generic ACP projects |
 | **Creates package.yaml** | ✅ Yes | ❌ No |
@@ -63,14 +63,14 @@ This command creates a new **generic ACP project** (not a package) with full ACP
 ### 0. Display Command Header
 
 ```
-⚡ @acp.project-create
+⚡ /acp-project-create
   Create a new generic ACP project with full installation and guided setup
 
   Related:
-    @acp.package-create      Create distributable ACP packages
-    @acp.init                Initialize context in created project
-    @acp.plan                Plan milestones and tasks
-    @acp.projects-restore    Restore projects from git origins
+    /acp-package-create      Create distributable ACP packages
+    /acp-init                Initialize context in created project
+    /acp-plan                Plan milestones and tasks
+    /acp-projects-restore    Restore projects from git origins
 ```
 
 ### 1. Collect Project Information
@@ -198,10 +198,10 @@ Generate project-focused README with metadata:
 
 This project uses the Agent Context Protocol for development:
 
-- `@acp.init` - Initialize agent context
-- `@acp.plan` - Plan milestones and tasks
-- `@acp.proceed` - Continue with next task
-- `@acp.status` - Check project status
+- `/acp-init` - Initialize agent context
+- `/acp-plan` - Plan milestones and tasks
+- `/acp-proceed` - Continue with next task
+- `/acp-status` - Check project status
 
 See [AGENT.md](./AGENT.md) for complete ACP documentation.
 
@@ -221,9 +221,9 @@ project-root/
 
 ## Getting Started
 
-1. Initialize context: `@acp.init`
-2. Plan your project: `@acp.plan`
-3. Start building: `@acp.proceed`
+1. Initialize context: `/acp-init`
+2. Plan your project: `/acp-plan`
+3. Start building: `/acp-proceed`
 
 ## License
 
@@ -357,8 +357,8 @@ Create minimal progress.yaml for project:
   
   next_steps:
     - Define project requirements in agent/design/requirements.md
-    - Plan milestones and tasks with @acp.plan
-    - Start development with @acp.proceed
+    - Plan milestones and tasks with /acp-plan
+    - Start development with /acp-proceed
   
   notes: []
   
@@ -399,7 +399,7 @@ License: {license}
    Edit agent/design/requirements.md with your project goals
 
 3. Plan your project:
-   @acp.plan
+   /acp-plan
    
    This will help you:
    - Create milestones
@@ -407,7 +407,7 @@ License: {license}
    - Define deliverables
 
 4. Start development:
-   @acp.proceed
+   /acp-proceed
    
    This will begin implementing your first task
 
@@ -416,15 +416,15 @@ License: {license}
 📚 ACP Commands Available:
 
 Workflow:
-- @acp.init - Initialize agent context
-- @acp.proceed - Continue with next task
-- @acp.status - Check project status
-- @acp.plan - Plan milestones and tasks
+- /acp-init - Initialize agent context
+- /acp-proceed - Continue with next task
+- /acp-status - Check project status
+- /acp-plan - Plan milestones and tasks
 
 Documentation:
-- @acp.sync - Sync documentation with code
-- @acp.validate - Validate ACP structure
-- @acp.report - Generate session report
+- /acp-sync - Sync documentation with code
+- /acp-validate - Validate ACP structure
+- /acp-report - Generate session report
 
 See AGENT.md for complete command documentation.
 
@@ -504,7 +504,7 @@ Happy building! 🚀
 
 **Context**: Want to build a web app with ACP  
 
-**Invocation**: `@acp.project-create`  
+**Invocation**: `/acp-project-create`  
 
 **Interaction**:
 ```
@@ -571,7 +571,7 @@ Agent: Creating project...
 
 **Context**: Want to build an MCP server  
 
-**Invocation**: `@acp.project-create`  
+**Invocation**: `/acp-project-create`  
 
 **Interaction**:
 ```
@@ -590,7 +590,7 @@ Location: ~/.acp/projects/my-mcp-server/
 
 **Context**: Want to create project in specific directory  
 
-**Invocation**: `@acp.project-create`  
+**Invocation**: `/acp-project-create`  
 
 **Interaction**:
 ```
@@ -609,11 +609,11 @@ Location: ~/dev/experiments/experiment/
 
 ## Related Commands
 
-- [`@acp.package-create`](acp.package-create.md) - Create distributable ACP packages
-- [`@acp.init`](acp.init.md) - Initialize context in created project
-- [`@acp.plan`](acp.plan.md) - Plan milestones and tasks
+- [`/acp-package-create`](acp.package-create.md) - Create distributable ACP packages
+- [`/acp-init`](acp.init.md) - Initialize context in created project
+- [`/acp-plan`](acp.plan.md) - Plan milestones and tasks
 - [`@git.init`](git.init.md) - Initialize git repository
-- [`@acp.projects-restore`](acp.projects-restore.md) - Restore projects from git origins on new machines
+- [`/acp-projects-restore`](acp.projects-restore.md) - Restore projects from git origins on new machines
 
 ---
 
@@ -670,11 +670,11 @@ Location: ~/dev/experiments/experiment/
 - No release branch configuration (not for distribution)
 - No pre-commit hooks (no package.yaml to validate)
 - README is project-focused (usage, development, deployment)
-- Use `@acp.package-create` if you want to create a distributable package
+- Use `/acp-package-create` if you want to create a distributable package
 - Projects can be created anywhere, not just ~/.acp/projects/
 - Full ACP installation means all commands and templates are available
-- progress.yaml starts empty (plan milestones with @acp.plan)
-- After adding a git remote, run `@acp.projects-sync` to record `git_origin` in the registry for `@acp.projects-restore` support
+- progress.yaml starts empty (plan milestones with /acp-plan)
+- After adding a git remote, run `/acp-projects-sync` to record `git_origin` in the registry for `/acp-projects-restore` support
 
 ---
 
