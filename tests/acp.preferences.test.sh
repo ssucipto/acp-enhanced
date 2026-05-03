@@ -2,10 +2,13 @@
 # Unit tests for acp.preferences.sh
 # Tests: get_preference(), has_preference(), get_preference_or(),
 #        get_preference_source(), generate_preferences()
-
-set -e
+# NOTE: Do NOT add set -e here. assert_* functions and has_preference() return
+# exit code 1 on failure by design; set -e would abort the suite at the first failure.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Save the project root before sourcing scripts — some scripts (e.g. acp.preferences.sh)
+# override SCRIPT_DIR with their own directory when sourced.
+ACP_TEST_ROOT="$SCRIPT_DIR"
 
 # Source test utilities
 . "${SCRIPT_DIR}/tests/common.sh"
@@ -19,7 +22,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # ── Test fixture setup ─────────────────────────────────────────────────────────
 
-FIXTURE_DIR="${SCRIPT_DIR}/tests/fixtures/preferences"
+FIXTURE_DIR="${ACP_TEST_ROOT}/tests/fixtures/preferences"
+# Use a temp subdirectory to avoid rm -rf deleting tracked fixture files
+# that live in tests/fixtures/preferences/ (e.g. invalid.yaml, preset.yaml, valid.yaml)
+FIXTURE_DIR="$(mktemp -d)/acp_pref_test"
 
 setup_fixtures() {
   mkdir -p "${FIXTURE_DIR}/agent/preferences"
@@ -166,10 +172,8 @@ output="$(generate_preferences "testns" "yaml" 2>/dev/null || true)"
 assert_contains "$output" "testns:" "YAML output starts with namespace key"
 
 print_test_header "generate_preferences — fails for unknown namespace"
-set +e
 generate_preferences "unknown_ns" "yaml" 2>/dev/null
 RESULT=$?
-set -e
 assert_false "generate_preferences exits non-zero for missing configurables" $RESULT
 
 print_test_header "generate_preferences — emits JSON when requested"
@@ -179,8 +183,28 @@ assert_contains "$output" "\"testns\"" "JSON output contains namespace key"
 # ── Syntax check ─────────────────────────────────────────────────────────────
 
 print_test_header "acp.preferences.sh — no bash syntax errors"
-bash -n "${SCRIPT_DIR}/agent/scripts/acp.preferences.sh"
+bash -n "${ACP_TEST_ROOT}/agent/scripts/acp.preferences.sh"
 assert_true "bash -n reports no syntax errors" $?
+
+# ── set_preference() round-trip ───────────────────────────────────────────────
+
+print_test_header "set_preference — writes nested YAML readable by yaml_get"
+# Use project level — file created by setup_fixtures (nested format)
+set_preference "testns" "plan.draft.create_mode" "guided" "project"
+round_trip="$(yaml_get "${FIXTURE_DIR}/agent/preferences/testns.default.yaml" "testns.plan.draft.create_mode" 2>/dev/null || true)"
+assert_equals "guided" "$round_trip" "set_preference writes nested YAML, yaml_get reads it back"
+
+print_test_header "set_preference — creates new preference file with correct nested format"
+rm -f "${FIXTURE_DIR}/agent/preferences/newns.default.yaml"
+set_preference "newns" "output.verbosity.level" "verbose" "project"
+round_trip="$(yaml_get "${FIXTURE_DIR}/agent/preferences/newns.default.yaml" "newns.output.verbosity.level" 2>/dev/null || true)"
+assert_equals "verbose" "$round_trip" "new file written in nested format, yaml_get reads back"
+rm -f "${FIXTURE_DIR}/agent/preferences/newns.default.yaml"
+
+print_test_header "set_preference — get_preference returns value without flat-dot fallback"
+set_preference "testns" "task.create.granularity" "2" "workspace"
+pref_val="$(get_preference "testns" "task.create.granularity")"
+assert_equals "2" "$pref_val" "get_preference reads set_preference result correctly"
 
 # ── Cleanup ───────────────────────────────────────────────────────────────────
 
