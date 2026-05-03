@@ -1,6 +1,6 @@
 ---
 id: task-002
-title: Migrate agent/ to agent/ — unify directory layout
+title: Migrate .agent/ to agent/ — unify directory layout
 task_type: bash-script-refactor
 milestone: none
 complexity: high
