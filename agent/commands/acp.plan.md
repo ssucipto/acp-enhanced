@@ -8,7 +8,7 @@
 **Created**: 2026-02-22  
 **Last Updated**: 2026-05-01  
 **Status**: Active  
-**Scripts**: `agent/scripts/acp.preferences.sh`  
+**Scripts**: acp.preferences.sh  
 **Compatibility**: ACP 6.2.0+ (preferences system required for preference features; backward compatible without it)  
 
 ---
