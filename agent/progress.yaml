@@ -2552,9 +2552,9 @@ progress:
       file: agent/tasks/milestone-24-agent-md-completeness/task-136-session-memory-and-housekeeping.md
       estimated_hours: 1-2
       notes: |
-        Prepended M23 session memory entry to .agent/memory/sessions.md.
+        Prepended M23 session memory entry to agent/memory/sessions.md.
         Created agent/milestones/milestone-17-artifact-commands-system.md retroactively.
-        Bumped version 6.2.4 → 6.2.5 in AGENT.md, package.yaml, .agent/core/identity.yml.
+        Bumped version 6.2.4 → 6.2.5 in AGENT.md, package.yaml, agent/core/identity.yml.
         Added [6.2.5] CHANGELOG block above [6.2.4] block.
         M24 milestone complete (4/4 tasks). current_milestone updated to M25.
 
@@ -2746,9 +2746,9 @@ recent_work:
     description: |
       ✅ task-136 COMPLETE: Housekeeping, version bump to 6.2.5, M24 COMPLETE (4/4 tasks)
     items:
-      - "✅ M23 session memory entry prepended to .agent/memory/sessions.md"
+      - "✅ M23 session memory entry prepended to agent/memory/sessions.md"
       - "✅ Created agent/milestones/milestone-17-artifact-commands-system.md (retroactive)"
-      - "✅ Version bumped 6.2.4 → 6.2.5 in AGENT.md, package.yaml, .agent/core/identity.yml"
+      - "✅ Version bumped 6.2.4 → 6.2.5 in AGENT.md, package.yaml, agent/core/identity.yml"
       - "✅ [6.2.5] CHANGELOG block added above [6.2.4]"
       - "✅ M24 milestone: status=completed, progress=100, tasks_completed=4/4"
       - "✅ current_milestone updated to M25"
@@ -2960,7 +2960,7 @@ recent_work:
   - date: 2026-05-01
     description: |
       🚀 @acp.init x2 — ACP Enhanced scaffolding complete
-      Full session: PRD implemented, ACP Enhanced .agent/ system live, drift corrected.
+      Full session: PRD implemented, ACP Enhanced agent/ system live, drift corrected.
     items:
       - "✅ ACP version check: v6.2.0 (check script exists, bash unavailable on Windows)"
       - "✅ Read agent/progress.yaml and all agent documentation (M1–M18)"
@@ -2970,7 +2970,7 @@ recent_work:
       - "✅ Verified: 27 scripts in agent/scripts/, 48 command docs in agent/commands/"
       - "⚠️ Drift fixed: notes said '17 scripts / 26 commands' → corrected to 27 / 48"
       - "⚠️ Drift fixed: task-37 was in_progress but acp.preferences.sh does not exist → not_started"
-      - "✅ ACP Enhanced scaffolded: .agent/core (3), .agent/skills (6), .agent/memory (4), .agent/wiki (3), .agent/routing (4), .agent/tasks (1)"
+      - "✅ ACP Enhanced scaffolded: agent/core (3), agent/skills (6), agent/memory (4), agent/wiki (3), agent/routing (4), agent/tasks (1)"
       - "✅ Created: .github/copilot-instructions.md, .github/prompts/ (7 slash commands), AGENTS.md"
       - "✅ Created: scripts/package.json, scripts/acp-validate.ts, updated scripts/acp-dispatch.ts"
       - "📋 M6 (Preferences System) has 8 tasks: all not_started — task-37 is next"
@@ -4677,7 +4677,7 @@ notes:
   - Complete package development workflow operational
   - Milestone 5: Global package installation complete with --global flag and auto-initialization
   - Milestone 6: Preferences system with multi-level configuration and presets
-  - ACP Enhanced scaffolding complete (.agent/ three-layer context system, routing, dispatch)
+  - ACP Enhanced scaffolding complete (agent/ three-layer context system, routing, dispatch)
 
 current_blockers: []
 

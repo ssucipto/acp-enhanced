@@ -2,6 +2,14 @@
 # Loaded by section (ADR ID) only — never fully loaded
 # Add entries via /acp-decide command
 
+## ADR-5 | 2026-05-03 | Merge agent/ hidden directory into agent/
+**Status:** Accepted
+**Context:** ACP Enhanced introduced `agent/` as a hidden meta-layer separate from the original `agent/` protocol directory. This caused ongoing confusion: developers must remember which layer a file lives in; the dot-prefix hides the directory from `ls` and GitHub web UI; the agent/vs-agent/ split is not intuitive.
+**Options considered:** (1) Keep `agent/` hidden — preserves fork separation. (2) Merge into `agent/` — makes ACP Enhanced additions visible and first-class alongside original protocol files.
+**Decision:** Merge `agent/` into `agent/`. Subdirs map directly except `agent/routing/tasks/` → `agent/routing/tasks/` (to avoid collision with existing `agent/tasks/` project task files).
+**Consequences:** Single `agent/` tree. ACP Enhanced additions (`core/`, `memory/`, `routing/`, `skills/`, `wiki/`) are visible and navigable. All `agent/` path references updated across 13 files. Install/update scripts updated in task-003.
+**DO NOT re-open** unless ACP Enhanced is used as an overlay package on a separate project's `agent/` directory (multi-repo use case requiring namespace separation).
+
 ## ADR-1 | 2026-05-01 | Use flat dot-notation command directory structure
 **Status:** Accepted
 **Context:** Commands needed to be discoverable via IDE autocomplete and distinguishable by namespace without nested directories.

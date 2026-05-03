@@ -62,7 +62,7 @@ These assertions check the terminal output of `acp.project-list.sh` and `acp.pro
 scripts. After task-001 updates those scripts' output from `@acp.project-create` to
 `/acp-project-create`, these tests will produce false failures.
 
-Additionally, the skill files (`.agent/skills/*.md` → after task-002: `agent/skills/*.md`)
+Additionally, the skill files (`agent/skills/*.md` → after task-002: `agent/skills/*.md`)
 are loaded as authoritative AI agent instructions. They still contain `@acp.*` references
 which would give the AI conflicting guidance after task-001 establishes `/acp-*` as canonical.
 
@@ -134,7 +134,7 @@ done
 Files intentionally NOT updated:
 - `CHANGELOG.md` — historical log, intentionally preserves original syntax as written
 - `blog/blog-00001-acp-intro.md` — published blog post, intentionally historical
-- `.agent/memory/sessions.md`, `.agent/memory/lessons.md` — user-created state, do not touch
+- `agent/memory/sessions.md`, `agent/memory/lessons.md` — user-created state, do not touch
 
 ---
 

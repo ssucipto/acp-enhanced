@@ -1,7 +1,7 @@
 # ACP Enhanced — Agent Context Protocol
 
 > **This is a fork of [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol) by [@prmichaelsen](https://github.com/prmichaelsen).**
-> ACP Enhanced adds a structured context management layer (`.agent/` framework) on top of the original ACP command and script system.
+> ACP Enhanced adds a structured context management layer (`agent/` framework) on top of the original ACP command and script system.
 > The original ACP content — commands, scripts, schemas, and workflow — is preserved in full.
 
 ---
@@ -11,19 +11,19 @@
 ACP Enhanced consists of two layers built on top of the original ACP:
 
 1. **Original ACP** — command documents (`agent/commands/*.md`), bash scripts (`agent/scripts/*.sh`), YAML schemas (`agent/schemas/*.yaml`), the full planning and package workflow.
-2. **Enhanced Framework Layer** — a structured `.agent/` directory that gives the AI agent a 2,800-token context budget system with tiered memory, skill routing, a task taxonomy, and a self-improving correction log.
+2. **Enhanced Framework Layer** — a structured `agent/` directory that gives the AI agent a 2,800-token context budget system with tiered memory, skill routing, a task taxonomy, and a self-improving correction log.
 
 The framework layer solves a specific problem: as your project grows, the AI agent starts every session with zero context. ACP Enhanced makes the agent systematically load only what it needs, in priority order, within a strict token budget.
 
-### What the `.agent/` layer adds
+### What the `agent/` layer adds
 
 | Directory | Purpose |
 |---|---|
-| `.agent/core/` | Identity, hard constraints, token budget — loaded every session |
-| `.agent/skills/` | Domain-specific guidance (scripts, schemas, testing, TypeScript, etc.) — one file per session |
-| `.agent/routing/` | Task taxonomy and routing rules — classifies what type of work this session is |
-| `.agent/memory/` | Session log, lessons learned, patterns, architectural decisions |
-| `.agent/wiki/` | Reference docs loaded section-by-section (never all at once) |
+| `agent/core/` | Identity, hard constraints, token budget — loaded every session |
+| `agent/skills/` | Domain-specific guidance (scripts, schemas, testing, TypeScript, etc.) — one file per session |
+| `agent/routing/` | Task taxonomy and routing rules — classifies what type of work this session is |
+| `agent/memory/` | Session log, lessons learned, patterns, architectural decisions |
+| `agent/wiki/` | Reference docs loaded section-by-section (never all at once) |
 
 ---
 
@@ -37,10 +37,10 @@ curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/scri
 ```
 
 This runs in two phases:
-1. **Framework layer** — creates `.agent/` directory structure and `AGENTS.md`
+1. **Framework layer** — creates `agent/` directory structure and `AGENTS.md`
 2. **Commands + scripts** — downloads and installs `agent/commands/`, `agent/scripts/`, `agent/schemas/`
 
-After it completes, **customize** `.agent/core/identity.yml` for your project (name, stack, team, repo URL).
+After it completes, **customize** `agent/core/identity.yml` for your project (name, stack, team, repo URL).
 
 > If you've cloned this repo locally, you can also run:
 > ```bash

@@ -47,7 +47,7 @@ New section inserted after Overview, containing:
 - Backward compatibility statement
 
 Enhancements documented:
-1. Context Loading Protocol (`.agent/` framework, 6-step deterministic protocol)
+1. Context Loading Protocol (`agent/` framework, 6-step deterministic protocol)
 2. Package Management (50+ commands, 28 scripts, manifest, schema validation)
 3. Preferences System (4-level hierarchy, configurables, presets, CLI overrides)
 4. Project Registry (global `~/.acp/projects.yaml`, project switching)
