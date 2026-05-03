@@ -125,6 +125,43 @@ update_node_type() {
     _yaml_sed_i "$((node_id + 1))s@.*@$updated@" "$AST_FILE"
 }
 
+# Count leading spaces in a string.
+# Usage: get_indent_level "  key: value"  → 2
+get_indent_level() {
+    local line="$1"
+    local count=0
+    while [ "$line" != "${line# }" ]; do
+        count=$((count + 1))
+        line="${line# }"
+    done
+    echo "$count"
+}
+
+# Remove inline comments from a YAML line (everything from # onwards).
+# Usage: strip_comments "key: value # comment"  → "key: value "
+strip_comments() {
+    echo "$1" | sed 's/#.*$//'
+}
+
+# Trim leading and trailing whitespace from a string.
+# Usage: trim "  value  "  → "value"
+trim() {
+    local s="$1"
+    s="${s#"${s%%[![:space:]]*}"}"
+    s="${s%"${s##*[![:space:]]}"}"
+    printf '%s' "$s"
+}
+
+# Return 0 (true) if line is a YAML array item (starts with optional whitespace then "- ").
+# Usage: is_array_item "  - item"  → 0 (true)
+is_array_item() {
+    local trimmed="${1#"${1%%[![:space:]]*}"}"
+    case "$trimmed" in
+        -\ *|-) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
 # ============================================================================
 # PARSER
 # ============================================================================
@@ -622,7 +659,12 @@ serialize_node() {
         
         array)
             if [ -n "$key" ]; then
-                echo "$indent$key:"
+                if [ -z "$children" ]; then
+                    # Empty array — emit inline [] so yaml_parse reloads it as array, not map
+                    echo "$indent$key: []"
+                else
+                    echo "$indent$key:"
+                fi
             fi
             
             if [ -n "$children" ]; then
