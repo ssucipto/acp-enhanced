@@ -23,3 +23,20 @@
       done
       rm -rf "$OLD_DIR"
     fi
+
+- date: 2026-05-03
+  name: posix-awk-key-extraction
+  task_type: bash-script-fix
+  code_ref: agent/scripts/acp.project-remove.sh (awk project removal block)
+  description: |
+    macOS ships BSD awk (POSIX only). The 3-argument match($0, /regex/, arr) form is
+    a gawk extension and fails on macOS with "awk: syntax error". To extract a capture
+    group in POSIX awk, use two sub() calls on a copy of the line instead.
+  template: |
+    # WRONG (gawk only):
+    #   match($0, /^  ([a-zA-Z0-9_-]+):/, arr); use arr[1]
+    # CORRECT (POSIX):
+    key = $0
+    sub(/^  /, "", key)
+    sub(/:.*/, "", key)
+    # key now holds the value between the indent and the colon
