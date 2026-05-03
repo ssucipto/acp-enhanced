@@ -261,7 +261,7 @@ Try invoking one of the installed commands (if any). Prompt user for explicit co
 
 **Actions**:
 - Choose a simple command to test
-- Invoke it using `@{namespace}.{action}` syntax
+- Invoke it using `/acp-<namespace>-<action>` syntax (e.g. `/acp-firebase-deploy`)
 - Verify it works as expected
 - Check for any errors
 
