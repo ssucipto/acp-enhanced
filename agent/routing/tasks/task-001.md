@@ -30,7 +30,7 @@ tokens_actual:
 cost_est_usd:
 cost_actual_usd:
 created: 2026-05-03
-completed:
+completed: 2026-05-03
 override_reason:
 precedes: task-002  # must complete before directory migration
 ---

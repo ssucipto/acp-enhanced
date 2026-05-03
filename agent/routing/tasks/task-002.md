@@ -36,7 +36,7 @@ tokens_actual:
 cost_est_usd:
 cost_actual_usd:
 created: 2026-05-03
-completed:
+completed: 2026-05-03
 override_reason:
 depends_on: task-001  # prefer completing syntax unification first (simpler rollback)
 ---
