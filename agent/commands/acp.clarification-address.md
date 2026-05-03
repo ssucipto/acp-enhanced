@@ -1,7 +1,7 @@
 # Command: clarification-address
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.clarification-address` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.clarification-address` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-clarification-address` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-clarification-address` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -30,10 +30,10 @@
 - `--shallow` - Codebase-only research, no tradeoffs/recommendations, no web/MCP
 
 **Natural Language Arguments**:
-- `@acp.clarification-address agent/clarifications/clarification-9-foo.md` - Address a specific file
-- `@acp.clarification-address --latest` - Address the most recent clarification
-- `@acp.clarification-address` - Same as `--latest` (auto-detect), deep mode
-- `@acp.clarification-address --shallow` - Quick codebase-only pass
+- `/acp-clarification-address agent/clarifications/clarification-9-foo.md` - Address a specific file
+- `/acp-clarification-address --latest` - Address the most recent clarification
+- `/acp-clarification-address` - Same as `--latest` (auto-detect), deep mode
+- `/acp-clarification-address --shallow` - Quick codebase-only pass
 
 **Argument Mapping**:
 The agent infers intent from context:
@@ -83,19 +83,19 @@ Use `--shallow` for a quick pass when you've left "research this" or "agent: ...
 ### 0. Display Command Header
 
 ```
-⚡ @acp.clarification-address
+⚡ /acp-clarification-address
   Address clarification responses by researching, exploring code/web, and presenting recommendations
 
   Usage:
-    @acp.clarification-address                     Address latest (deep, default)
-    @acp.clarification-address <file>              Address a specific file
-    @acp.clarification-address --shallow           Quick codebase-only pass
-    @acp.clarification-address --dry-run           Preview without modifying
+    /acp-clarification-address                     Address latest (deep, default)
+    /acp-clarification-address <file>              Address a specific file
+    /acp-clarification-address --shallow           Quick codebase-only pass
+    /acp-clarification-address --dry-run           Preview without modifying
 
   Related:
-    @acp.clarification-create   Create clarification documents
-    @acp.clarification-capture  Capture decisions into design docs / tasks
-    @acp.design-create          Create design documents
+    /acp-clarification-create   Create clarification documents
+    /acp-clarification-capture  Capture decisions into design docs / tasks
+    /acp-design-create          Create design documents
 ```
 
 This step is informational only — do not wait for user input.
@@ -411,7 +411,7 @@ Would you like to accept this recommendation? (yes/no)
 
 **Context**: Just finished answering questions in a clarification, want the agent to analyze responses  
 
-**Invocation**: `@acp.clarification-address`  
+**Invocation**: `/acp-clarification-address`  
 
 **Result**: Auto-detects the latest clarification, reads all user responses, researches directives, presents tradeoffs where relevant, and writes analysis as comment blocks.  
 
@@ -419,7 +419,7 @@ Would you like to accept this recommendation? (yes/no)
 
 **Context**: Left "research this" on several questions, want quick codebase answers before reviewing  
 
-**Invocation**: `@acp.clarification-address --shallow`  
+**Invocation**: `/acp-clarification-address --shallow`  
 
 **Result**: Finds research directives, explores the codebase, writes `[Agent — Researched]` comment blocks. Skips user answers entirely — no tradeoffs, no web research.  
 
@@ -427,7 +427,7 @@ Would you like to accept this recommendation? (yes/no)
 
 **Context**: Clarification has questions where user responded "look into this" about an external API  
 
-**Invocation**: `@acp.clarification-address --deep`  
+**Invocation**: `/acp-clarification-address --deep`  
 
 **Result**: Agent finds research directives, uses WebSearch/WebFetch to research external APIs, writes findings as `[Agent — Researched]` comment blocks.  
 
@@ -435,7 +435,7 @@ Would you like to accept this recommendation? (yes/no)
 
 **Context**: Want to preview what would be addressed before modifying the file  
 
-**Invocation**: `@acp.clarification-address agent/clarifications/clarification-5-foo.md --dry-run`  
+**Invocation**: `/acp-clarification-address agent/clarifications/clarification-5-foo.md --dry-run`  
 
 **Result**: Shows count of items to address by type, without modifying the file.  
 
@@ -443,7 +443,7 @@ Would you like to accept this recommendation? (yes/no)
 
 **Context**: User reviewed agent's previous comment blocks and left follow-up questions in their own comment blocks  
 
-**Invocation**: `@acp.clarification-address`  
+**Invocation**: `/acp-clarification-address`  
 
 **Result**: Agent detects user comment blocks containing questions, researches and responds with new comment blocks below each.  
 
@@ -451,10 +451,10 @@ Would you like to accept this recommendation? (yes/no)
 
 ## Related Commands
 
-- [`@acp.clarification-create`](acp.clarification-create.md) - Create clarification documents (run first)
-- [`@acp.clarification-capture`](acp.clarification-capture.md) - Capture answered clarifications into design docs / tasks (run after addressing)
-- [`@acp.design-create`](acp.design-create.md) - Create design documents (often follows clarification)
-- [`@acp.task-create`](acp.task-create.md) - Create task documents (may use clarification answers)
+- [`/acp-clarification-create`](acp.clarification-create.md) - Create clarification documents (run first)
+- [`/acp-clarification-capture`](acp.clarification-capture.md) - Capture answered clarifications into design docs / tasks (run after addressing)
+- [`/acp-design-create`](acp.design-create.md) - Create design documents (often follows clarification)
+- [`/acp-task-create`](acp.task-create.md) - Create task documents (may use clarification answers)
 
 ---
 
@@ -466,7 +466,7 @@ Would you like to accept this recommendation? (yes/no)
 
 **Cause**: No clarification files exist or all have been captured  
 
-**Solution**: Create a new clarification with `@acp.clarification-create` or provide a specific file path  
+**Solution**: Create a new clarification with `/acp-clarification-create` or provide a specific file path  
 
 ### Issue 2: No items to address
 
@@ -513,14 +513,14 @@ Would you like to accept this recommendation? (yes/no)
 
 ## Notes
 
-- This command never changes the clarification's `Status:` field — the user reviews agent comments and then uses `@acp.clarification-capture` when satisfied
+- This command never changes the clarification's `Status:` field — the user reviews agent comments and then uses `/acp-clarification-capture` when satisfied
 - Agent responses are always written as HTML comment blocks, keeping `>` response lines as the canonical user content — `>` lines are never modified
 - Each comment block is followed by a blank `>` response line to allow the user to respond interactively
 - Recommendations end with "Would you like to accept this recommendation? (yes/no)" to prompt user feedback
 - The `[Agent]`, `[Agent — Researched]`, and `[Agent Analysis]` prefixes make it easy to distinguish agent comment types
 - If a comment block response is wrong, the user can delete it or respond in the `>` line below — re-running the command will address the new response
 - The agent should be selective about which answers get comment blocks — clear, unambiguous answers that need no follow-up should be skipped silently
-- This command replaces the former `@acp.clarifications-research` command — use `--shallow` for the equivalent quick research-only behavior
+- This command replaces the former `/acp-clarifications-research` command — use `--shallow` for the equivalent quick research-only behavior
 
 ---
 

@@ -1,7 +1,7 @@
 # Command: project-remove
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.project-remove` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.project-remove` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-project-remove` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-project-remove` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -48,19 +48,19 @@ The command includes safety features:
 ### 0. Display Command Header
 
 ```
-⚡ @acp.project-remove
+⚡ /acp-project-remove
   Remove a project from the global registry with optional directory deletion
 
   Usage:
-    @acp.project-remove <name>                     Remove from registry only
-    @acp.project-remove <name> --delete-files       Also delete project directory
-    @acp.project-remove <name> -y                   Skip confirmation prompts
+    /acp-project-remove <name>                     Remove from registry only
+    /acp-project-remove <name> --delete-files       Also delete project directory
+    /acp-project-remove <name> -y                   Skip confirmation prompts
 
   Related:
-    @acp.project-list        List all projects
-    @acp.project-set         Switch to another project
-    @acp.project-info        Show project details
-    @acp.project-update      Update project metadata
+    /acp-project-list        List all projects
+    /acp-project-set         Switch to another project
+    /acp-project-info        Show project details
+    /acp-project-update      Update project metadata
 ```
 
 ### 1. Run Shell Script
@@ -94,8 +94,8 @@ Confirm the project was removed successfully.
 If removed project was current, switch to another project.
 
 **Actions**:
-- Run `@acp.project-list` to see remaining projects
-- Run `@acp.project-set <name>` to switch to another project
+- Run `/acp-project-list` to see remaining projects
+- Run `/acp-project-set <name>` to switch to another project
 - Or continue without a current project
 
 **Expected Outcome**: New project context established (if needed)  
@@ -144,7 +144,7 @@ Remove this project from registry? [y/N] y
 Removed from registry: old-project
 Directory preserved: /home/user/.acp/projects/old-project
 
-Run '@acp.project-list' to see remaining projects
+Run '/acp-project-list' to see remaining projects
 ```
 
 ### Console Output (With Directory Deletion)
@@ -179,7 +179,7 @@ Deleting project directory...
 Removed from registry: old-project
 Deleted from filesystem: /home/user/.acp/projects/old-project
 
-Run '@acp.project-list' to see remaining projects
+Run '/acp-project-list' to see remaining projects
 ```
 
 ### Console Output (Removing Current Project)
@@ -209,9 +209,9 @@ Removed from registry: current-project
 Directory preserved: /home/user/.acp/projects/current-project
 
 ⚠️  This was the current project
-Run '@acp.project-set <name>' to switch to another project
+Run '/acp-project-set <name>' to switch to another project
 
-Run '@acp.project-list' to see remaining projects
+Run '/acp-project-list' to see remaining projects
 ```
 
 ### Registry Changes
@@ -254,7 +254,7 @@ last_updated: 2026-02-26T18:00:00Z  # Updated
 
 **Context**: Project archived, want to clean up registry but keep files  
 
-**Invocation**: `@acp.project-remove old-project`  
+**Invocation**: `/acp-project-remove old-project`  
 
 **Result**: 
 - Project removed from registry
@@ -266,7 +266,7 @@ last_updated: 2026-02-26T18:00:00Z  # Updated
 
 **Context**: Abandoned project, want to delete everything  
 
-**Invocation**: `@acp.project-remove abandoned-project --delete-files`  
+**Invocation**: `/acp-project-remove abandoned-project --delete-files`  
 
 **Result**:
 - Project removed from registry
@@ -278,7 +278,7 @@ last_updated: 2026-02-26T18:00:00Z  # Updated
 
 **Context**: Scripting or automation, want to skip prompts  
 
-**Invocation**: `@acp.project-remove old-project -y`  
+**Invocation**: `/acp-project-remove old-project -y`  
 
 **Result**:
 - No confirmation prompts
@@ -289,7 +289,7 @@ last_updated: 2026-02-26T18:00:00Z  # Updated
 
 **Context**: Removing the project you're currently working on  
 
-**Invocation**: `@acp.project-remove current-project`  
+**Invocation**: `/acp-project-remove current-project`  
 
 **Result**:
 - Warning displayed about removing current project
@@ -301,10 +301,10 @@ last_updated: 2026-02-26T18:00:00Z  # Updated
 
 ## Related Commands
 
-- [`@acp.project-list`](acp.project-list.md) - List all projects
-- [`@acp.project-set`](acp.project-set.md) - Switch to another project
-- [`@acp.project-info`](acp.project-info.md) - Show project details
-- [`@acp.project-update`](acp.project-update.md) - Update project metadata
+- [`/acp-project-list`](acp.project-list.md) - List all projects
+- [`/acp-project-set`](acp.project-set.md) - Switch to another project
+- [`/acp-project-info`](acp.project-info.md) - Show project details
+- [`/acp-project-update`](acp.project-update.md) - Update project metadata
 
 ---
 
@@ -317,7 +317,7 @@ last_updated: 2026-02-26T18:00:00Z  # Updated
 **Cause**: Project not registered or typo in name  
 
 **Solution**: 
-- Run `@acp.project-list` to see available projects
+- Run `/acp-project-list` to see available projects
 - Check spelling of project name
 - Project may already be removed
 
@@ -329,7 +329,7 @@ last_updated: 2026-02-26T18:00:00Z  # Updated
 
 **Solution**:
 - No action needed if no projects exist
-- Run `@acp.project-create` to create new project (initializes registry)
+- Run `/acp-project-create` to create new project (initializes registry)
 
 ### Issue 3: Cannot delete directory
 

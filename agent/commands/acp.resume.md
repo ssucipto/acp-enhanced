@@ -1,7 +1,7 @@
 # Command: resume
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.resume` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.resume` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-resume` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-resume` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -23,9 +23,9 @@
 
 This command is a convenient alias that combines three essential workflow commands into one:
 
-1. **Initialize Context** - Loads all project documentation via `@acp.init`
+1. **Initialize Context** - Loads all project documentation via `/acp-init`
 2. **Review Recent Work** - Reads the latest session report to understand what was done
-3. **Continue Work** - Proceeds with the current/next task via `@acp.proceed`
+3. **Continue Work** - Proceeds with the current/next task via `/acp-proceed`
 
 **Use this when**: Starting a new session or returning to a project after a break.  
 
@@ -44,14 +44,14 @@ This command is a convenient alias that combines three essential workflow comman
 ### 0. Display Command Header
 
 ```
-⚡ @acp.resume
+⚡ /acp-resume
   Resume work by initializing context, reviewing progress, and continuing next task
 
   Related:
-    @acp.init      Initialize context only
-    @acp.proceed   Proceed with task only
-    @acp.status    Check status without proceeding
-    @acp.report    Generate session report
+    /acp-init      Initialize context only
+    /acp-proceed   Proceed with task only
+    /acp-status    Check status without proceeding
+    /acp-report    Generate session report
 ```
 
 This step is informational only — do not wait for user input.
@@ -61,10 +61,10 @@ This step is informational only — do not wait for user input.
 Run the initialization workflow to load complete project context.
 
 **Actions**:
-- Execute `@acp.init` workflow
+- Execute `/acp-init` workflow
 - Check for ACP updates
 - Read all agent documentation
-- Read key files from `agent/index/` (via `@acp.init` step 2.8)
+- Read key files from `agent/index/` (via `/acp-init` step 2.8)
 - Review key source files
 - Update stale documentation
 - Refresh progress tracking
@@ -89,7 +89,7 @@ Find and read the most recent session report to understand what was accomplished
 Continue work by executing the current or next task.
 
 **Actions**:
-- Execute `@acp.proceed` workflow
+- Execute `/acp-proceed` workflow
 - Identify current task from progress.yaml
 - Read task document
 - **START IMPLEMENTING immediately**
@@ -117,7 +117,7 @@ Continue work by executing the current or next task.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Step 1: Initializing Context (@acp.init)
+Step 1: Initializing Context (/acp-init)
 
 ✓ ACP version check: v3.7.1 (up to date)
 ✓ Read agent/progress.yaml
@@ -147,7 +147,7 @@ Current Status:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Step 3: Proceeding with Next Task (@acp.proceed)
+Step 3: Proceeding with Next Task (/acp-proceed)
 
 📋 Current Task: task-25-global-infrastructure
 
@@ -164,7 +164,7 @@ Objective: Create ~/.acp/ directory structure with AGENT.md and manifest.yaml
 
 **Context**: Haven't worked on project in a few days  
 
-**Invocation**: `@acp.resume`  
+**Invocation**: `/acp-resume`  
 
 **Result**: 
 - Loads complete context
@@ -176,7 +176,7 @@ Objective: Create ~/.acp/ directory structure with AGENT.md and manifest.yaml
 
 **Context**: Beginning work for the day  
 
-**Invocation**: `@acp.resume`  
+**Invocation**: `/acp-resume`  
 
 **Result**:
 - Initializes context
@@ -187,10 +187,10 @@ Objective: Create ~/.acp/ directory structure with AGENT.md and manifest.yaml
 
 **Context**: Different AI agent picking up the project  
 
-**Invocation**: `@acp.resume`  
+**Invocation**: `/acp-resume`  
 
 **Result**:
-- Complete onboarding via @acp.init
+- Complete onboarding via /acp-init
 - Understands recent work from reports
 - Ready to contribute immediately
 
@@ -198,10 +198,10 @@ Objective: Create ~/.acp/ directory structure with AGENT.md and manifest.yaml
 
 ## Related Commands
 
-- [`@acp.init`](acp.init.md) - Initialize context only
-- [`@acp.proceed`](acp.proceed.md) - Proceed with task only
-- [`@acp.status`](acp.status.md) - Check status without proceeding
-- [`@acp.report`](acp.report.md) - Generate session report
+- [`/acp-init`](acp.init.md) - Initialize context only
+- [`/acp-proceed`](acp.proceed.md) - Proceed with task only
+- [`/acp-status`](acp.status.md) - Check status without proceeding
+- [`/acp-report`](acp.report.md) - Generate session report
 
 ---
 
@@ -217,11 +217,11 @@ Objective: Create ~/.acp/ directory structure with AGENT.md and manifest.yaml
 
 ### Issue 2: Context initialization fails
 
-**Symptom**: Error during @acp.init  
+**Symptom**: Error during /acp-init  
 
 **Cause**: Missing agent/ directory or corrupted files  
 
-**Solution**: Run `@acp.init` separately to see detailed error, fix issues, then run `@acp.resume` again  
+**Solution**: Run `/acp-init` separately to see detailed error, fix issues, then run `/acp-resume` again  
 
 ### Issue 3: No current task
 
@@ -236,7 +236,7 @@ Objective: Create ~/.acp/ directory structure with AGENT.md and manifest.yaml
 ## Notes
 
 - This is a convenience command that chains three workflows
-- Equivalent to running: `@acp.init` → read reports → `@acp.proceed`
+- Equivalent to running: `/acp-init` → read reports → `/acp-proceed`
 - Saves time when starting new sessions
 - Provides comprehensive context before starting work
 - Reports are optional but highly recommended for context

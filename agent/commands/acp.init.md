@@ -1,6 +1,6 @@
 # Command: init
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.init` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-init` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.1.0  
@@ -41,10 +41,10 @@
 ### Argument Parsing
 
 Arguments are parsed from the user's invocation using natural language matching:
-- `@acp.init --quick` or `@acp.init -q`
-- `@acp.init --skip checks,sync`
-- `@acp.init --quick --skip sessions` (quick mode plus additional skips)
-- `@acp.init --skip checks,files,sync,progress` (granular control)
+- `/acp-init --quick` or `/acp-init -q`
+- `/acp-init --skip checks,sync`
+- `/acp-init --quick --skip sessions` (quick mode plus additional skips)
+- `/acp-init --skip checks,files,sync,progress` (granular control)
 
 When `--quick` is combined with `--skip`, the skip sets are merged (union).
 
@@ -56,7 +56,7 @@ This command performs a comprehensive initialization of the agent's context for 
 
 Use this command at the start of each work session to ensure you have complete project context. It's the most thorough way to get up to speed on a project, understanding both what's documented and what's actually implemented in the code.
 
-Unlike `@acp.status` which only reads progress.yaml, or `@acp.proceed` which focuses on a single task, `@acp.init` provides comprehensive context loading across all project documentation and source code. It's designed to answer: "What is this project? Where does it stand? What needs to be done?"
+Unlike `/acp-status` which only reads progress.yaml, or `/acp-proceed` which focuses on a single task, `/acp-init` provides comprehensive context loading across all project documentation and source code. It's designed to answer: "What is this project? Where does it stand? What needs to be done?"
 
 ---
 
@@ -75,18 +75,18 @@ Unlike `@acp.status` which only reads progress.yaml, or `@acp.proceed` which foc
 Display the following informational header, then continue immediately:
 
 ```
-⚡ @acp.init
+⚡ /acp-init
   Initialize agent context by loading documentation, reviewing source code, and preparing for work
 
   Usage:
-    @acp.init                                      Full initialization
-    @acp.init --quick                              Skip version checks, files, sync
-    @acp.init --skip <items>                       Skip specific steps
+    /acp-init                                      Full initialization
+    /acp-init --quick                              Skip version checks, files, sync
+    /acp-init --skip <items>                       Skip specific steps
 
   Related:
-    @acp.proceed                     Start working on current task
-    @acp.status                      Quick status check without full init
-    @acp.version-check-for-updates   Part of init process
+    /acp-proceed                     Start working on current task
+    /acp-status                      Quick status check without full init
+    /acp-version-check-for-updates   Part of init process
 ```
 
 ### 1. Check for ACP Updates
@@ -370,9 +370,9 @@ Provide comprehensive status report.
 Show a helpful tip about init flags when no flags were used.
 
 **Actions**:
-- If the user invoked `@acp.init` **without** `--quick` or `--skip`, display the following tip at the end of the output:
+- If the user invoked `/acp-init` **without** `--quick` or `--skip`, display the following tip at the end of the output:
   ```
-  Tip: Use `@acp.init --quick` to skip version checks, source file review, and doc sync for faster startup. Use `--skip <items>` to skip individual steps (e.g. `--skip checks,files`).
+  Tip: Use `/acp-init --quick` to skip version checks, source file review, and doc sync for faster startup. Use `--skip <items>` to skip individual steps (e.g. `--skip checks,files`).
   ```
 - If the user already used `--quick` or `--skip`, do **not** display the tip (they already know about it).
 
@@ -478,8 +478,8 @@ File: agent/tasks/task-2-workflow-commands.md
 
 Recent Work (2026-02-16):
   - ✅ Created comprehensive design document
-  - ✅ Implemented @acp.status command
-  - ✅ Implemented @acp.proceed command
+  - ✅ Implemented /acp-status command
+  - ✅ Implemented /acp-proceed command
   - 📋 Next: Complete workflow commands (init)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -510,7 +510,7 @@ Ready to proceed with task-2 completion.
 
 **Context**: Beginning work on a project for the first time today  
 
-**Invocation**: `@acp.init`  
+**Invocation**: `/acp-init`  
 
 **Result**: Checks for updates, reads all 15 agent files, reviews 10 source files, updates progress tracking, reports you're on milestone 2 task 5, ready to continue  
 
@@ -518,7 +518,7 @@ Ready to proceed with task-2 completion.
 
 **Context**: Haven't worked on project in a week  
 
-**Invocation**: `@acp.init`  
+**Invocation**: `/acp-init`  
 
 **Result**: Full context reload, discovers 3 new commits since last session, updates documentation to reflect changes, shows current status (milestone 3, 80% complete), identifies next task  
 
@@ -526,7 +526,7 @@ Ready to proceed with task-2 completion.
 
 **Context**: Different AI agent picking up the project  
 
-**Invocation**: `@acp.init`  
+**Invocation**: `/acp-init`  
 
 **Result**: Complete onboarding - reads all documentation, understands architecture from source code, gets current status, ready to contribute immediately  
 
@@ -534,7 +534,7 @@ Ready to proceed with task-2 completion.
 
 **Context**: Returning to a familiar project, just need docs and status  
 
-**Invocation**: `@acp.init --quick`  
+**Invocation**: `/acp-init --quick`  
 
 **Result**: Skips version checks, source file review, and doc sync. Reads agent documentation, key files, reports status — fast startup in ~10 seconds  
 
@@ -542,7 +542,7 @@ Ready to proceed with task-2 completion.
 
 **Context**: Want everything except version checks and session registration  
 
-**Invocation**: `@acp.init --skip checks,sessions`  
+**Invocation**: `/acp-init --skip checks,sessions`  
 
 **Result**: Full init minus the two skipped steps. All docs read, files reviewed, sync performed, status reported  
 
@@ -550,10 +550,10 @@ Ready to proceed with task-2 completion.
 
 ## Related Commands
 
-- [`@acp.proceed`](acp.proceed.md) - Use after init to start working on current task
-- [`@acp.status`](acp.status.md) - Use for quick status check without full initialization
-- [`@acp.sync`](acp.sync.md) - Use to sync documentation after code changes
-- [`@acp.version-check-for-updates`](acp.version-check-for-updates.md) - Part of init process
+- [`/acp-proceed`](acp.proceed.md) - Use after init to start working on current task
+- [`/acp-status`](acp.status.md) - Use for quick status check without full initialization
+- [`/acp-sync`](acp.sync.md) - Use to sync documentation after code changes
+- [`/acp-version-check-for-updates`](acp.version-check-for-updates.md) - Part of init process
 
 ---
 
@@ -589,7 +589,7 @@ Ready to proceed with task-2 completion.
 
 **Cause**: Progress tracking not initialized yet  
 
-**Solution**: Create progress.yaml from template: `cp agent/progress.template.yaml agent/progress.yaml`, then run `@acp.init` again  
+**Solution**: Create progress.yaml from template: `cp agent/progress.template.yaml agent/progress.yaml`, then run `/acp-init` again  
 
 ---
 

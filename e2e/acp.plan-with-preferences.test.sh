@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# Integration tests for @acp.plan preference and preset integration.
+# Integration tests for /acp-plan preference and preset integration.
 #
 # These tests validate the shell-level behavior of preference resolution
-# as it would be invoked by @acp.plan. They do NOT invoke the LLM command
+# as it would be invoked by /acp-plan. They do NOT invoke the LLM command
 # directly — instead they exercise acp.preferences.sh directly, simulating
-# what @acp.plan step 1 performs.
+# what /acp-plan step 1 performs.
 #
 # Test coverage:
-#   1. @acp.plan respects project-level preferences
-#   2. @acp.plan preset overrides project preference
-#   3. @acp.plan CLI override overrides preset value
-#   4. @acp.plan preset load fails gracefully for missing preset
+#   1. /acp-plan respects project-level preferences
+#   2. /acp-plan preset overrides project preference
+#   3. /acp-plan CLI override overrides preset value
+#   4. /acp-plan preset load fails gracefully for missing preset
 
 set -e
 
@@ -83,13 +83,13 @@ _pref_preset_file() {
 
 # ── Tests ─────────────────────────────────────────────────────────────────────
 
-print_suite_header "@acp.plan Preference Integration Tests"
+print_suite_header "/acp-plan Preference Integration Tests"
 
 setup_fixtures
 
-# ── Test 1: @acp.plan respects project-level preference ───────────────────────
+# ── Test 1: /acp-plan respects project-level preference ───────────────────────
 
-print_test_header "@acp.plan — uses project-level preference for draft mode"
+print_test_header "/acp-plan — uses project-level preference for draft mode"
 
 cat > "${FIXTURE_DIR}/agent/preferences/acp.default.yaml" << 'EOF'
 acp:
@@ -99,13 +99,13 @@ acp:
 EOF
 
 result="$(get_preference "acp" "plan.draft.create_mode")"
-assert_equals "contextual" "$result" "@acp.plan would use project preference: contextual"
+assert_equals "contextual" "$result" "/acp-plan would use project preference: contextual"
 
 rm -f "${FIXTURE_DIR}/agent/preferences/acp.default.yaml"
 
 # ── Test 2: Preset overrides project preference ───────────────────────────────
 
-print_test_header "@acp.plan -- preset overrides project-level preference"
+print_test_header "/acp-plan -- preset overrides project-level preference"
 
 cat > "${FIXTURE_DIR}/agent/preferences/acp.default.yaml" << 'EOF'
 acp:
@@ -133,9 +133,9 @@ rm -f "${FIXTURE_DIR}/agent/preferences/acp.batch-planning.yaml"
 
 # ── Test 3: CLI override beats preset ─────────────────────────────────────────
 
-print_test_header "@acp.plan -- CLI override wins over preset"
-# Simulates: @acp.plan --preset acp.batch-planning --plan.draft.create_mode guided
-# The CLI parsing logic in @acp.plan reads preset first, then applies explicit overrides.
+print_test_header "/acp-plan -- CLI override wins over preset"
+# Simulates: /acp-plan --preset acp.batch-planning --plan.draft.create_mode guided
+# The CLI parsing logic in /acp-plan reads preset first, then applies explicit overrides.
 # Here we simulate the final merge step: override wins.
 
 cat > "${FIXTURE_DIR}/agent/preferences/acp.batch-planning.yaml" << 'EOF'
@@ -156,7 +156,7 @@ rm -f "${FIXTURE_DIR}/agent/preferences/acp.default.yaml"
 
 # ── Test 4: Missing preset fails gracefully ───────────────────────────────────
 
-print_test_header "@acp.plan -- missing preset falls back to normal precedence"
+print_test_header "/acp-plan -- missing preset falls back to normal precedence"
 
 set +e
 load_preset "acp" "nonexistent-preset" 2>/dev/null
@@ -171,7 +171,7 @@ assert_equals "structured" "$result" "falls back to configurables default when p
 
 # ── Test 5: Default from configurables used when no overrides ─────────────────
 
-print_test_header "@acp.plan -- uses configurables default when no preference files exist"
+print_test_header "/acp-plan -- uses configurables default when no preference files exist"
 
 result="$(get_preference "acp" "plan.draft.create_mode")"
 assert_equals "structured" "$result" "configurables default 'structured' used with no overrides"

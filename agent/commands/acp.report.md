@@ -1,7 +1,7 @@
 # Command: report
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.report` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.report` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-report` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-report` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -25,7 +25,7 @@ This command generates a comprehensive markdown report summarizing the project's
 
 Use this command when you need to communicate project status, before milestone reviews, for weekly/monthly updates, or when onboarding new team members. The report provides a complete snapshot of the project at a point in time.
 
-Unlike `@acp.status` which provides a quick console summary, `@acp.report` generates a detailed markdown document that can be saved, shared, or archived.
+Unlike `/acp-status` which provides a quick console summary, `/acp-report` generates a detailed markdown document that can be saved, shared, or archived.
 
 ---
 
@@ -42,14 +42,14 @@ Unlike `@acp.status` which provides a quick console summary, `@acp.report` gener
 ### 0. Display Command Header
 
 ```
-⚡ @acp.report
+⚡ /acp-report
   Generate a comprehensive project status report including progress, accomplishments, and next steps
 
   Related:
-    @acp.status    Quick console status (not a full report)
-    @acp.update    Update progress before generating report
-    @acp.validate  Validate documentation before reporting
-    @acp.sync      Sync docs before generating report
+    /acp-status    Quick console status (not a full report)
+    /acp-update    Update progress before generating report
+    /acp-validate  Validate documentation before reporting
+    /acp-sync      Sync docs before generating report
 ```
 
 This step is informational only — do not wait for user input.
@@ -323,7 +323,7 @@ Summary:
 
 **Context**: End of week, need to report progress  
 
-**Invocation**: `@acp.report`  
+**Invocation**: `/acp-report`  
 
 **Result**: Generates comprehensive report showing week's accomplishments, current status, and next week's plans  
 
@@ -331,7 +331,7 @@ Summary:
 
 **Context**: Just completed milestone 1, need review document  
 
-**Invocation**: `@acp.report`  
+**Invocation**: `/acp-report`  
 
 **Result**: Report highlights milestone 1 completion, shows deliverables achieved, documents lessons learned  
 
@@ -339,7 +339,7 @@ Summary:
 
 **Context**: Monthly update for stakeholders  
 
-**Invocation**: `@acp.report`  
+**Invocation**: `/acp-report`  
 
 **Result**: Executive-friendly report with high-level progress, key achievements, and timeline  
 
@@ -347,10 +347,10 @@ Summary:
 
 ## Related Commands
 
-- [`@acp.status`](acp.status.md) - Quick console status (not a full report)
-- [`@acp.update`](acp.update.md) - Update progress before generating report
-- [`@acp.validate`](acp.validate.md) - Validate documentation before reporting
-- [`@acp.sync`](acp.sync.md) - Sync docs before generating report
+- [`/acp-status`](acp.status.md) - Quick console status (not a full report)
+- [`/acp-update`](acp.update.md) - Update progress before generating report
+- [`/acp-validate`](acp.validate.md) - Validate documentation before reporting
+- [`/acp-sync`](acp.sync.md) - Sync docs before generating report
 
 ---
 
@@ -362,7 +362,7 @@ Summary:
 
 **Cause**: progress.yaml not up to date or missing data  
 
-**Solution**: Run `@acp.update` first to ensure progress.yaml is current, then generate report  
+**Solution**: Run `/acp-update` first to ensure progress.yaml is current, then generate report  
 
 ### Issue 2: Statistics don't match reality
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# E2E Tests for @acp.package-list command
+# E2E Tests for /acp-package-list command
 # Tests listing installed packages with various filters
 
 set -e

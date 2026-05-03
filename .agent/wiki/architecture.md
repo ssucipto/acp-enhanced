@@ -1,7 +1,7 @@
 # System Architecture
 # Update monthly or when service boundaries change
 # Load ONE section at a time — never fully loaded
-# last_verified: 2026-05-01
+# last_verified: 2026-05-03
 
 ## Command → Script Binding
 
@@ -11,13 +11,13 @@ Scripts in `agent/scripts/` are bash implementations — they DO the work.
 Each command's `**Scripts**:` field lists which bash scripts it invokes.
 Example: `acp.package-install.md` binds to `acp.package-install.sh`.
 
-Binding is validated by `@acp.package-validate` Step: Script-Command Binding check.
+Binding is validated by `/acp-package-validate` Step: Script-Command Binding check.
 The `package.yaml` at repo root lists all commands with their `scripts:` arrays.
 
 ## Package System Data Flow
 
 ```
-User runs @acp.package-install github-user/repo
+User runs /acp-package-install github-user/repo
      ↓
 acp.package-install.sh
      ↓
@@ -45,9 +45,9 @@ acp.yaml-validate.sh is standalone — does NOT source yaml-parser (different pu
 ```
 ~/.acp/
   manifest.yaml     ← globally installed packages
-  projects.yaml     ← registered ACP projects (from @acp.project-create)
+  projects.yaml     ← registered ACP projects (from /acp-project-create)
   packages/         ← globally installed package files
-  sessions.yaml     ← concurrent agent sessions (from @acp.sessions)
+  sessions.yaml     ← concurrent agent sessions (from /acp-sessions)
 ```
 
 ## ACP Enhanced Layer Structure

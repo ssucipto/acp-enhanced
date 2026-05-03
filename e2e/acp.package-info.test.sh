@@ -1,5 +1,5 @@
 #!/bin/bash
-# E2E Tests for @acp.package-info command
+# E2E Tests for /acp-package-info command
 # Tests displaying package information
 
 set -e

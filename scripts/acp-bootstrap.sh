@@ -132,7 +132,7 @@ When the developer corrects your output, IMMEDIATELY:
 
 ## Session Commit Protocol (/acp-commit)
 
-When developer runs /acp-commit or @acp.commit:
+When developer runs /acp-commit or /acp-commit:
 1. Write session summary to `.agent/memory/sessions.md` in YAML format:
 ```yaml
 - date: [today]
