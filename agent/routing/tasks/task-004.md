@@ -37,7 +37,7 @@ tokens_actual:
 cost_est_usd:
 cost_actual_usd:
 created: 2026-05-03
-completed:
+completed: 2026-05-03
 override_reason:
 depends_on: task-001  # task-001 changes command file content — these tests must match
 ---
