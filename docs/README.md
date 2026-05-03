@@ -48,9 +48,9 @@ The browser uses unauthenticated requests for simplicity.
 
 To make your package discoverable:
 
-1. **Create package** with `@acp.package-create`
+1. **Create package** with `/acp-package-create`
 2. **Add topic** `acp-package` to your GitHub repository
-3. **Publish** with `@acp.package-publish`
+3. **Publish** with `/acp-package-publish`
 4. **Wait** for GitHub to index (can take a few hours)
 
 Your package will then appear in search results!

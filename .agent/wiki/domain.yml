@@ -1,63 +1,341 @@
 # Domain Entity Model — ACP Protocol project
 # Load ONE section at a time — never load the entire file
-# last_verified: 2026-05-01
+# last_verified: 2026-05-03
 
 commands:
-  count: 31
+  count: 51
   location: agent/commands/
   naming: "acp.{command-name}.md — dot notation, acp namespace for core"
   categories:
-    workflow: [acp.init, acp.proceed, acp.status, acp.plan, acp.handoff]
+    core: [acp.audit, acp.handoff, acp.index, acp.init, acp.plan, acp.proceed, acp.report, acp.resume, acp.sessions, acp.spec, acp.status, acp.sync, acp.task-create, acp.update, acp.validate]
+    artifact: [acp.artifact-glossary, acp.artifact-reference, acp.artifact-research]
+    clarification: [acp.clarification-address, acp.clarification-capture, acp.clarification-create]
+    design: [acp.command-create, acp.design-create, acp.design-reference, acp.pattern-create]
+    package: [acp.package-create, acp.package-info, acp.package-install, acp.package-list, acp.package-publish, acp.package-remove, acp.package-search, acp.package-update, acp.package-validate]
+    project: [acp.project-create, acp.project-info, acp.project-list, acp.project-remove, acp.project-set, acp.project-update, acp.projects-restore, acp.projects-sync]
+    preferences: [acp.preferences-create, acp.preferences-get, acp.preferences-set, acp.preferences-show, acp.preferences-validate]
     version: [acp.version-check, acp.version-check-for-updates, acp.version-update]
-    package: [acp.package-create, acp.package-install, acp.package-update, acp.package-remove, acp.package-list, acp.package-info, acp.package-search, acp.package-validate, acp.package-publish]
-    project: [acp.project-create, acp.project-set, acp.project-info, acp.project-update, acp.project-remove, acp.project-list, acp.projects-sync]
-    entity_creation: [acp.command-create, acp.design-create, acp.pattern-create]
-    documentation: [acp.sync, acp.validate, acp.update, acp.report]
-    clarification: [acp.clarification-create, acp.clarification-address, acp.clarification-capture]
-    artifact: [acp.artifact-research, acp.artifact-glossary, acp.artifact-reference]
-    index: [acp.index]
-    sessions: [acp.sessions]
+    git: [git.commit, git.init]
+  entries:
+    - command: acp.audit
+      category: core
+      purpose: Deep-dive investigation of a subject, producing a structured report in agent/reports/.
+    - command: acp.handoff
+      category: core
+      purpose: Generate a context-aware handoff report for transferring work to an agent in a different context.
+    - command: acp.index
+      category: core
+      purpose: Manage the key file index — list, add, remove, explore, and show indexed key files.
+    - command: acp.init
+      category: core
+      purpose: Initialize agent context by loading all documentation, reviewing source code, and preparing for work.
+    - command: acp.plan
+      category: core
+      purpose: Plan milestones or tasks for undefined items in progress.yaml or new requirements.
+    - command: acp.proceed
+      category: core
+      purpose: Immediately implement the current or next task, with support for autonomous and parallel execution modes.
+    - command: acp.report
+      category: core
+      purpose: Generate a comprehensive project status report including progress, accomplishments, and next steps.
+    - command: acp.resume
+      category: core
+      purpose: Resume work on a project by initializing context, reviewing recent progress, and continuing with the next task.
+    - command: acp.sessions
+      category: core
+      purpose: Manage and view active agent sessions across projects.
+    - command: acp.spec
+      category: core
+      purpose: Generate a specification document from a clarification, design, draft, requirements doc, or interactive input.
+    - command: acp.status
+      category: core
+      purpose: Display current project status including milestone progress, current task, recent work, and next steps.
+    - command: acp.sync
+      category: core
+      purpose: Synchronize documentation with source code by identifying and updating stale documentation.
+    - command: acp.task-create
+      category: core
+      purpose: Create task files with proper structure, milestone linking, and automatic progress.yaml updates.
+    - command: acp.update
+      category: core
+      purpose: Update progress.yaml with latest project status, task completion, and recent work.
+    - command: acp.validate
+      category: core
+      purpose: Validate all ACP documents for structure, consistency, correctness, and namespace conventions.
+    - command: acp.artifact-glossary
+      category: artifact
+      purpose: Create and maintain project glossaries through auto-extraction and interactive refinement.
+    - command: acp.artifact-reference
+      category: artifact
+      purpose: Create reference guides for passive information after a command-first principle check.
+    - command: acp.artifact-research
+      category: artifact
+      purpose: Create long-lived research artifacts via systematic investigation with web/MCP integration and quality standards.
+    - command: acp.clarification-address
+      category: clarification
+      purpose: Address clarification responses by researching, exploring code/web, using tools, and presenting recommendations.
+    - command: acp.clarification-capture
+      category: clarification
+      internal: true
+      purpose: Capture decisions from ephemeral clarification files and chat context into permanent entity documents.
+    - command: acp.clarification-create
+      category: clarification
+      purpose: Create clarification documents from file input or chat to gather detailed requirements.
+    - command: acp.command-create
+      category: design
+      purpose: Create command files with namespace enforcement, draft support, and automatic package updates.
+    - command: acp.design-create
+      category: design
+      purpose: Create design documents with namespace enforcement, draft support, and automatic package updates.
+    - command: acp.design-reference
+      category: design
+      internal: true
+      purpose: Discover and cross-reference design documents to ensure tasks have complete implementation detail.
+    - command: acp.pattern-create
+      category: design
+      purpose: Create pattern files with namespace enforcement, draft support, and automatic package updates.
+    - command: acp.package-create
+      category: package
+      purpose: Create a new ACP package with full ACP installation, release branch configuration, and pre-commit hooks.
+    - command: acp.package-info
+      category: package
+      purpose: Display detailed information about a specific installed package (local or global).
+    - command: acp.package-install
+      category: package
+      purpose: Install third-party command packages from git repositories using the package-install script.
+    - command: acp.package-list
+      category: package
+      purpose: List installed ACP packages with versions, file counts, and optional details.
+    - command: acp.package-publish
+      category: package
+      purpose: Automated package publishing with validation, version detection, CHANGELOG generation, and testing.
+    - command: acp.package-remove
+      category: package
+      purpose: Remove installed ACP packages and clean up the manifest.
+    - command: acp.package-search
+      category: package
+      purpose: Discover ACP packages on GitHub using the GitHub API.
+    - command: acp.package-update
+      category: package
+      purpose: Update installed ACP packages to their latest versions with smart conflict detection.
+    - command: acp.package-validate
+      category: package
+      purpose: Comprehensive package validation with shell and LLM checks, auto-fix, and test installation.
+    - command: acp.project-create
+      category: project
+      purpose: Create a new generic ACP project (not a package) with full ACP installation and guided setup.
+    - command: acp.project-info
+      category: project
+      purpose: Display detailed information about a specific project from the global registry.
+    - command: acp.project-list
+      category: project
+      purpose: List all projects registered in the global workspace registry.
+    - command: acp.project-remove
+      category: project
+      purpose: Remove a project from the global registry with optional directory deletion.
+    - command: acp.project-set
+      category: project
+      purpose: Switch to a different project in the global registry, updating working directory and last-accessed timestamp.
+    - command: acp.project-update
+      category: project
+      purpose: Update project metadata (status, description, tags, related projects) in the global registry.
+    - command: acp.projects-restore
+      category: project
+      purpose: Restore/clone missing projects from their registered git origins.
+    - command: acp.projects-sync
+      category: project
+      purpose: Discover unregistered ACP projects in ~/.acp/projects/ and add them to the registry.
+    - command: acp.preferences-create
+      category: preferences
+      purpose: Create preference files at a specified level (user/workspace/project) with default values from configurables.
+    - command: acp.preferences-get
+      category: preferences
+      purpose: Resolve and display preferences for a given namespace with full precedence applied.
+    - command: acp.preferences-set
+      category: preferences
+      purpose: Set a preference value at a specified level (user/workspace/project) with validation.
+    - command: acp.preferences-show
+      category: preferences
+      purpose: Display the effective preference set for a namespace with source attribution for each value.
+    - command: acp.preferences-validate
+      category: preferences
+      purpose: Validate all preference files across all levels against their configurables schemas.
+    - command: acp.version-check
+      category: version
+      purpose: Display current ACP version and compatibility information.
+    - command: acp.version-check-for-updates
+      category: version
+      purpose: Check if a newer version of ACP is available without applying updates.
+    - command: acp.version-update
+      category: version
+      purpose: Update ACP files (AGENT.md, templates, scripts) to the latest version.
+    - command: git.commit
+      category: git
+      purpose: Automate version detection, changelog updates, and git commits with proper semantic versioning.
+    - command: git.init
+      category: git
+      purpose: Initialize a git repository with an intelligent .gitignore based on detected project type.
 
 scripts:
-  count: 27
+  count: 28
   location: agent/scripts/
   naming: "acp.{feature}.sh"
   key_scripts:
-    - acp.common.sh  # shared utilities, 1000+ lines — source this first
-    - acp.yaml-parser.sh  # pure-bash YAML parser — yaml_get, yaml_set, yaml_get_array
-    - acp.yaml-validate.sh  # JSON-schema-compatible validator
-    - acp.install.sh  # installs ACP into a project
-    - acp.package-install.sh  # installs packages from GitHub
-    - acp.sessions.sh  # 6 subcommands: register/deregister/list/clean/heartbeat/count
+    - acp.common.sh       # shared utilities — portable sed wrapper, color init, common helpers; source first
+    - acp.yaml-parser.sh  # pure-bash YAML parser — yaml_get, yaml_set, yaml_get_array; zero deps
+    - acp.yaml-validate.sh  # validates YAML against ACP schema definitions
+    - acp.install.sh      # bootstraps ACP directory structure and template files into a project
+    - acp.package-install.sh  # installs packages from GitHub with commands/scripts/patterns/designs support
+  entries:
+    - script: acp.common.sh
+      implements: Shared utility library providing portable sed wrapper, tput-based color initialization, and common helper functions sourced by all ACP scripts.
+    - script: acp.install.sh
+      implements: Sets up the ACP directory structure and copies template files into a target project, bootstrapping a new ACP installation.
+    - script: acp.meta-scan.sh
+      implements: Scans any file type for language-agnostic @acp.meta.* marker blocks and emits structured metadata (topic, requirements, kind) as a flat output stream.
+    - script: acp.package-create.sh
+      implements: Creates a new ACP package scaffold directory with full structure, package.yaml, and a bundled ACP installation.
+    - script: acp.package-info.sh
+      implements: Displays detailed information about an installed ACP package from the local or global manifest.
+    - script: acp.package-install-optimized.sh
+      implements: Installs third-party ACP packages from a git repo using batched file operations for improved performance (supports patterns/commands/designs).
+    - script: acp.package-install.sh
+      implements: Installs third-party ACP packages from a git repo with full support for patterns, commands, designs, files, indices, experimental features, and dry-run listing.
+    - script: acp.package-list.sh
+      implements: Lists all installed ACP packages with version, modification status, and optional outdated/verbose filtering.
+    - script: acp.package-publish.sh
+      implements: Automates package publishing with schema validation, semantic versioning, and optional testing before pushing to a git release branch.
+    - script: acp.package-remove.sh
+      implements: Removes an installed ACP package and updates the manifest, with optional auto-confirm and modified-file protection flags.
+    - script: acp.package-search.sh
+      implements: Searches for ACP packages on GitHub via the GitHub API, filtered by keyword, tag, user, or org.
+    - script: acp.package-update.sh
+      implements: Updates installed ACP packages to their latest versions, with check-only, skip-modified, and force flags.
+    - script: acp.package-validate.sh
+      implements: Validates a package directory against ACP schema rules, tracking pass/fail/warning counts and listing fixable issues.
+    - script: acp.preferences.sh
+      implements: Unified preferences system supporting get, set, validate, generate, and preset operations, usable as a direct CLI or sourced library.
+    - script: acp.project-info.sh
+      implements: Displays detailed metadata for a named project from the global ~/.acp/projects.yaml registry.
+    - script: acp.project-list.sh
+      implements: Lists all registered projects from the global registry with optional type, status, and tags filtering.
+    - script: acp.project-remove.sh
+      implements: Removes a project entry from the global registry, optionally deleting the project directory from the filesystem.
+    - script: acp.project-set.sh
+      implements: Switches the active project in the global registry and changes the working directory to the project path.
+    - script: acp.project-update.sh
+      implements: Updates project metadata fields (status, description, type, git origin, tags, related projects) in the global registry.
+    - script: acp.projects-restore.sh
+      implements: Clones/restores projects from their stored git origins in the registry, with optional ACP installation and dry-run mode.
+    - script: acp.projects-sync.sh
+      implements: Discovers unregistered ACP projects in ~/.acp/projects/ by scanning for agent/progress.yaml and adds them to the registry.
+    - script: acp.sessions.sh
+      implements: Global session tracking for concurrent multi-project agent work; supports register, deregister, list, clean, heartbeat, and count subcommands.
+    - script: acp.uninstall.sh
+      implements: Removes all ACP files and directories from a project, with optional auto-confirm flag.
+    - script: acp.version-check-for-updates.sh
+      implements: Checks for available ACP updates by comparing the local AGENT.md against the remote repository version.
+    - script: acp.version-check.sh
+      implements: Extracts and displays the current ACP version from the local AGENT.md file.
+    - script: acp.version-update.sh
+      implements: Downloads and applies the latest AGENT.md, template files, and utility scripts from the upstream repository, re-execing via a temp copy to survive self-overwrite.
+    - script: acp.yaml-parser.sh
+      implements: Pure POSIX shell YAML parser with a lexer, AST builder, and query engine; zero external dependencies, portable across macOS/Linux.
+    - script: acp.yaml-validate.sh
+      implements: Validates YAML files against ACP schema definitions, reporting typed errors and warnings with pass/fail counts.
 
 schemas:
   count: 3
   location: agent/schemas/
-  files:
-    - package.schema.yaml  # validates package.yaml
-    - projects.schema.yaml  # validates ~/.acp/projects.yaml
-    - (configurables schema: pending M6)
+  entries:
+    - schema: package.schema.yaml
+      validates: package.yaml — the descriptor for any ACP package
+      key_fields: [name, version, description, author, license, repository]
+    - schema: progress.schema.yaml
+      validates: agent/progress.yaml — per-project task and milestone progress tracking
+      key_fields: [project, milestones, tasks]
+    - schema: projects.schema.yaml
+      validates: ~/.acp/projects.yaml — the global multi-project registry
+      key_fields: [registry_version, last_updated, current_project, projects]
 
 test_suites:
   e2e_location: e2e/
   unit_location: tests/
   common_helpers: tests/common.sh
   e2e_suites:
-    - acp.package-install-list.test.sh
-    - acp.package-list.test.sh
-    - acp.package-remove.test.sh
-    - acp.package-search.test.sh
-    - acp.package-update.test.sh
-    - acp.package-info.test.sh
-    - acp.project-list.test.sh
-    - acp.project-set.test.sh
-    - acp.project-info.test.sh
-    - acp.project-update.test.sh
-    - acp.project-remove.test.sh
-    - acp.project-workflow.test.sh
-    - acp.projects-sync.test.sh
-    - acp.sessions.test.sh
-    - acp.script-command-binding.test.sh
-    - acp.template-files.test.sh
-    - acp.index.test.sh
-    - acp.experimental-features.test.sh
+    - suite: acp.experimental-features.test.sh
+      coverage: Install/update behavior when experimental features flag is present in a package
+      test_count: 6
+    - suite: acp.index.test.sh
+      coverage: Key-file index schema parsing, package integration, and edge cases
+      test_count: 16
+    - suite: acp.package-info.test.sh
+      coverage: acp.package-info command — display of installed package metadata
+      test_count: 5
+    - suite: acp.package-install-list.test.sh
+      coverage: acp.package-install.sh --list dry-run flag, file preview without installing
+      test_count: 8
+    - suite: acp.package-list.test.sh
+      coverage: acp.package-list command — listing installed packages with filters
+      test_count: 5
+    - suite: acp.package-remove.test.sh
+      coverage: acp.package-remove command — removing installed packages
+      test_count: 3
+    - suite: acp.package-search.test.sh
+      coverage: acp.package-search command — GitHub API search by keyword, tag, user, org
+      test_count: 5
+    - suite: acp.package-update.test.sh
+      coverage: acp.package-update command — update scenarios (check-only, force, skip-modified)
+      test_count: 9
+    - suite: acp.plan-with-preferences.test.sh
+      coverage: acp.plan preference and preset resolution (project-level, preset override, CLI override, missing preset)
+      test_count: 4
+    - suite: acp.project-info.test.sh
+      coverage: acp.project-info command — displaying project details from registry
+      test_count: 6
+    - suite: acp.project-list.test.sh
+      coverage: acp.project-list command — listing and filtering projects from registry
+      test_count: 8
+    - suite: acp.project-remove.test.sh
+      coverage: acp.project-remove.sh — registry removal with and without filesystem deletion
+      test_count: 8
+    - suite: acp.project-set.test.sh
+      coverage: acp.project-set command — switching active project in registry
+      test_count: 8
+    - suite: acp.project-update.test.sh
+      coverage: acp.project-update command — updating project metadata fields
+      test_count: 10
+    - suite: acp.project-workflow.test.sh
+      coverage: Full registry workflow — create to list to set to info to update to sync to remove
+      test_count: 4
+    - suite: acp.projects-sync.test.sh
+      coverage: acp.projects-sync command — filesystem scan and registry sync
+      test_count: 8
+    - suite: acp.script-command-binding.test.sh
+      coverage: Selective script installation based on command dependency declarations
+      test_count: 8
+    - suite: acp.sessions.test.sh
+      coverage: acp.sessions.sh — session register, deregister, list, clean, heartbeat, count
+      test_count: 10
+    - suite: acp.template-files.test.sh
+      coverage: contents.files template installation with target paths and variable substitution
+      test_count: 15
+  unit_suites:
+    - suite: acp.preferences-preset.test.sh
+      coverage: load_preset(), get_preference_with_preset(), list_presets() in acp.preferences.sh
+      test_count: 4
+    - suite: acp.preferences-validate.test.sh
+      coverage: validate_preference() — type validation, string options, number range, boolean
+      test_count: 5
+    - suite: acp.preferences.test.sh
+      coverage: get_preference(), has_preference(), get_preference_or(), get_preference_source(), generate_preferences()
+      test_count: 5
+    - suite: acp.project-registry.test.sh
+      coverage: Project registry CRUD functions in acp.common.sh
+      test_count: 4
+    - suite: acp.yaml-parser.test.sh
+      coverage: YAML parser AST — lexer, parser, query engine, array operations, edge cases
+      test_count: 20
+    - suite: yaml-array-operations.test.sh
+      coverage: yaml_array_append operations — empty array, append, multi-append, conversion
+      test_count: 4

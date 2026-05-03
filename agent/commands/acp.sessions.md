@@ -1,11 +1,11 @@
 # Command: sessions
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.sessions` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.sessions` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-sessions` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-sessions` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 >
 > **STEP 0: CHECK FOR ARGUMENTS FIRST.**
-> If arguments or natural language follow `@acp.sessions`, detect the subcommand before doing anything else.
+> If arguments or natural language follow `/acp-sessions`, detect the subcommand before doing anything else.
 > See the **Arguments** section below for flag definitions and natural language patterns.
 > If no arguments, default to `list`.
 
@@ -58,7 +58,7 @@ The agent infers intent from context:
 
 This command provides a user-friendly interface for managing agent sessions tracked in `~/.acp/sessions.yaml`. It wraps the `acp.sessions.sh` script subcommands with NLP argument parsing and formatted output.
 
-Sessions are registered when `@acp.init` runs and deregistered when `@acp.report` runs. Between those, this command lets you see what's active, clean stale sessions, or manually end a session.
+Sessions are registered when `/acp-init` runs and deregistered when `/acp-report` runs. Between those, this command lets you see what's active, clean stale sessions, or manually end a session.
 
 Use this command when you want to see what other agents are working on, check if stale sessions need cleanup, or manage your current session. The default behavior (`list`) always runs stale cleanup first to show accurate state.
 
@@ -78,20 +78,20 @@ Use this command when you want to see what other agents are working on, check if
 Display the following informational header, then continue immediately:
 
 ```
-⚡ @acp.sessions
+⚡ /acp-sessions
   Manage and view active agent sessions across projects
 
   Usage:
-    @acp.sessions                                  List all active sessions
-    @acp.sessions clean                            Remove stale sessions
-    @acp.sessions deregister                       End current session
-    @acp.sessions count                            Output active session count
-    @acp.sessions --project <name>                 Filter by project name
+    /acp-sessions                                  List all active sessions
+    /acp-sessions clean                            Remove stale sessions
+    /acp-sessions deregister                       End current session
+    /acp-sessions count                            Output active session count
+    /acp-sessions --project <name>                 Filter by project name
 
   Related:
-    @acp.init      Registers session at start
-    @acp.status    Shows session count in status
-    @acp.report    Deregisters session at end
+    /acp-init      Registers session at start
+    /acp-status    Shows session count in status
+    /acp-report    Deregisters session at end
 ```
 
 ### 1. Parse Arguments
@@ -176,8 +176,8 @@ Active sessions remaining: 2
 If relevant, suggest follow-up actions.
 
 **Actions**:
-- If sessions are stale: "Run `@acp.sessions clean` to remove stale sessions"
-- If no sessions: "Run `@acp.init` to register a new session"
+- If sessions are stale: "Run `/acp-sessions clean` to remove stale sessions"
+- If no sessions: "Run `/acp-init` to register a new session"
 - If showing list: No suggestions needed (informational)
 
 **Expected Outcome**: User knows what to do next (if applicable)  
@@ -210,7 +210,7 @@ See output formats in Step 4 above.
 
 **Context**: You want to see what's currently running  
 
-**Invocation**: `@acp.sessions`  
+**Invocation**: `/acp-sessions`  
 
 **Result**: Shows all active sessions with project, description, and timing info  
 
@@ -218,7 +218,7 @@ See output formats in Step 4 above.
 
 **Context**: You want to see sessions for a specific project  
 
-**Invocation**: `@acp.sessions --project remember-core`  
+**Invocation**: `/acp-sessions --project remember-core`  
 
 **Result**: Shows only sessions for remember-core  
 
@@ -226,7 +226,7 @@ See output formats in Step 4 above.
 
 **Context**: You suspect some sessions are stale  
 
-**Invocation**: `@acp.sessions clean`  
+**Invocation**: `/acp-sessions clean`  
 
 **Result**: Removes dead-PID and timed-out sessions, shows what was cleaned  
 
@@ -234,15 +234,15 @@ See output formats in Step 4 above.
 
 **Context**: You want to check what's running using natural language  
 
-**Invocation**: `@acp.sessions what's running?`  
+**Invocation**: `/acp-sessions what's running?`  
 
-**Result**: Same as `@acp.sessions list` — shows all active sessions  
+**Result**: Same as `/acp-sessions list` — shows all active sessions  
 
 ### Example 5: End Current Session
 
 **Context**: You're done working and want to deregister  
 
-**Invocation**: `@acp.sessions stop my session`  
+**Invocation**: `/acp-sessions stop my session`  
 
 **Result**: Deregisters the current session, shows remaining count  
 
@@ -250,9 +250,9 @@ See output formats in Step 4 above.
 
 ## Related Commands
 
-- [`@acp.init`](acp.init.md) — Registers session automatically at start
-- [`@acp.status`](acp.status.md) — Shows session count in status output
-- [`@acp.report`](acp.report.md) — Deregisters session automatically at end
+- [`/acp-init`](acp.init.md) — Registers session automatically at start
+- [`/acp-status`](acp.status.md) — Shows session count in status output
+- [`/acp-report`](acp.report.md) — Deregisters session automatically at end
 
 ---
 
@@ -280,7 +280,7 @@ See output formats in Step 4 above.
 
 **Cause**: Sessions were registered under a different process tree and stale cleanup removed them  
 
-**Solution**: Re-register with `@acp.init` or manually via `./agent/scripts/acp.sessions.sh register --project <name> --pid <pid>`  
+**Solution**: Re-register with `/acp-init` or manually via `./agent/scripts/acp.sessions.sh register --project <name> --pid <pid>`  
 
 ---
 

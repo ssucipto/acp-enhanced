@@ -1,6 +1,6 @@
 # Command: pattern-create
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.pattern-create` has been invoked.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-pattern-create` has been invoked.
 >
 > **This is a CREATION command - you will create files directly, no shell scripts needed.**
 >
@@ -46,7 +46,7 @@ This command creates a new pattern file with intelligent namespace handling, opt
 
 ## Arguments
 
-**Context Capture Arguments** (optional — passed to `@acp.clarification-capture` directive):
+**Context Capture Arguments** (optional — passed to `/acp-clarification-capture` directive):
 
 | Argument | Alias | Behavior |
 |---|---|---|
@@ -66,19 +66,19 @@ This command creates a new pattern file with intelligent namespace handling, opt
 ### 0. Display Command Header
 
 ```
-⚡ @acp.pattern-create
+⚡ /acp-pattern-create
   Create pattern files with namespace enforcement, draft support, and automatic package updates
 
   Usage:
-    @acp.pattern-create                            Guided pattern creation
-    @acp.pattern-create @my-draft.md               Create from draft file
-    @acp.pattern-create --from-context             Capture from all sources
-    @acp.pattern-create --no-commit                Skip automatic commit
+    /acp-pattern-create                            Guided pattern creation
+    /acp-pattern-create @my-draft.md               Create from draft file
+    /acp-pattern-create --from-context             Capture from all sources
+    /acp-pattern-create --no-commit                Skip automatic commit
 
   Related:
-    @acp.command-create    Create commands
-    @acp.design-create     Create designs
-    @acp.package-validate  Validate package after creation
+    /acp-command-create    Create commands
+    /acp-design-create     Create designs
+    /acp-package-validate  Validate package after creation
 ```
 
 This step is informational only — do not wait for user input.
@@ -99,9 +99,9 @@ Determine if in package or project directory:
 Check if draft file was provided as argument:
 
 **Syntax**:
-- `@acp.pattern-create @my-draft.md` (@ reference)
-- `@acp.pattern-create agent/drafts/my-draft.md` (path)
-- `@acp.pattern-create` (no draft)
+- `/acp-pattern-create @my-draft.md` (@ reference)
+- `/acp-pattern-create agent/drafts/my-draft.md` (path)
+- `/acp-pattern-create` (no draft)
 
 **Actions**:
 - If draft provided: Read draft file
@@ -137,7 +137,7 @@ Review existing patterns before creating a new one to ensure consistency.
 
 ### 2.7. Capture Clarification Context
 
-Invoke the `@acp.clarification-capture` shared directive to capture decisions from clarifications and/or chat context.
+Invoke the `/acp-clarification-capture` shared directive to capture decisions from clarifications and/or chat context.
 
 **Actions**:
 - Read and follow the directive in [`agent/commands/acp.clarification-capture.md`](acp.clarification-capture.md)
@@ -194,7 +194,7 @@ Create pattern file from template:
 - If draft/clarification provided: Incorporate content
 - If no draft: Create from template with user-provided description
 - If Key Design Decisions section was generated in Step 2.7: Insert it into the pattern document
-- **Populate the `@acp.meta.pattern` marker block** — the template ships with `{placeholder}` values; replace every one:
+- **Populate the `/acp-meta.pattern` marker block** — the template ships with `{placeholder}` values; replace every one:
   - `topic:` — comma-separated keywords from the pattern name + description
   - `description:` — one-line summary, <=150 chars
   - `applies_to:` — comma-separated contexts (e.g. `data-access, auth, testing`) — from Step 3 user input
@@ -261,7 +261,7 @@ Version: 1.0.0
 
 Next steps:
 - Edit the pattern file to add implementation details
-- Run @acp.package-validate to verify (if package)
+- Run /acp-package-validate to verify (if package)
 ```
 
 **Expected Outcome**: User knows pattern was created successfully  
@@ -332,7 +332,7 @@ If yes, prompt for weight (suggest 0.8 for patterns), description, rationale, an
 
 **Context**: In acp-firebase package directory  
 
-**Invocation**: `@acp.pattern-create`  
+**Invocation**: `/acp-pattern-create`  
 
 **Interaction**:
 ```
@@ -362,7 +362,7 @@ Version: 1.0.0
 
 **Context**: Have draft file describing pattern  
 
-**Invocation**: `@acp.pattern-create @my-pattern-draft.md`  
+**Invocation**: `/acp-pattern-create @my-pattern-draft.md`  
 
 **Result**: Reads draft, creates clarification if needed, generates pattern, updates package files  
 
@@ -370,7 +370,7 @@ Version: 1.0.0
 
 **Context**: In regular project (no package.yaml)  
 
-**Invocation**: `@acp.pattern-create`  
+**Invocation**: `/acp-pattern-create`  
 
 **Result**: Uses "local" namespace, creates `agent/patterns/local.my-pattern.md`, no package updates  
 
@@ -378,9 +378,9 @@ Version: 1.0.0
 
 ## Related Commands
 
-- [`@acp.command-create`](acp.command-create.md) - Create commands
-- [`@acp.design-create`](acp.design-create.md) - Create designs
-- [`@acp.package-validate`](acp.package-validate.md) - Validate package after creation
+- [`/acp-command-create`](acp.command-create.md) - Create commands
+- [`/acp-design-create`](acp.design-create.md) - Create designs
+- [`/acp-package-validate`](acp.package-validate.md) - Validate package after creation
 
 ---
 
@@ -402,7 +402,7 @@ Version: 1.0.0
 
 **Symptom**: Error updating package.yaml  
 
-**Solution**: Verify package.yaml exists and is valid YAML. Run @acp.package-validate to check.  
+**Solution**: Verify package.yaml exists and is valid YAML. Run /acp-package-validate to check.  
 
 ---
 

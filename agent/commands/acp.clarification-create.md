@@ -1,7 +1,7 @@
 # Command: clarification-create
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.clarification-create` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.clarification-create` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-clarification-create` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-clarification-create` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -27,10 +27,10 @@
 - `--interactive` or `-i` - **One-question-at-a-time chat mode** (see "Interactive Mode" below). Can be combined with a topic string: `-i "topic description"`
 
 **Natural Language Arguments**:
-- `@acp.clarification-create from draft file` - Analyze draft and create clarifications
-- `@acp.clarification-create for feature X` - Create clarifications about feature X
-- `@acp.clarification-create` - Chat-based mode (agent asks for topic, then generates full file)
-- `@acp.clarification-create -i "topic"` - One-question-at-a-time interactive mode
+- `/acp-clarification-create from draft file` - Analyze draft and create clarifications
+- `/acp-clarification-create for feature X` - Create clarifications about feature X
+- `/acp-clarification-create` - Chat-based mode (agent asks for topic, then generates full file)
+- `/acp-clarification-create -i "topic"` - One-question-at-a-time interactive mode
 
 **Argument Mapping**:
 The agent infers intent from context:
@@ -89,20 +89,20 @@ Use this command when you need to gather detailed information about ambiguous re
 ### 0. Display Command Header
 
 ```
-⚡ @acp.clarification-create
+⚡ /acp-clarification-create
   Create clarification documents from file input or chat to gather detailed requirements
 
   Usage:
-    @acp.clarification-create                      Chat-based mode (asks topic, generates file)
-    @acp.clarification-create -i "topic"           One-question-at-a-time in chat
-    @acp.clarification-create --file <path>        Analyze source file
-    @acp.clarification-create -t <title>           Set clarification title
-    @acp.clarification-create --auto               Auto-generate questions
+    /acp-clarification-create                      Chat-based mode (asks topic, generates file)
+    /acp-clarification-create -i "topic"           One-question-at-a-time in chat
+    /acp-clarification-create --file <path>        Analyze source file
+    /acp-clarification-create -t <title>           Set clarification title
+    /acp-clarification-create --auto               Auto-generate questions
 
   Related:
-    @acp.clarification-address  Address responses with research and recommendations
-    @acp.design-create          Create design documents (often follows clarification)
-    @acp.task-create             Create tasks (may use clarification answers)
+    /acp-clarification-address  Address responses with research and recommendations
+    /acp-design-create          Create design documents (often follows clarification)
+    /acp-task-create             Create tasks (may use clarification answers)
 ```
 
 This step is informational only — do not wait for user input.
@@ -155,9 +155,9 @@ Before generating questions, check if existing clarifications already cover rela
 Check if file was provided as argument:
 
 **Syntax**:
-- `@acp.clarification-create --file agent/drafts/my-draft.md`
-- `@acp.clarification-create @my-draft.md` (@ reference)
-- `@acp.clarification-create` (no file - interactive mode)
+- `/acp-clarification-create --file agent/drafts/my-draft.md`
+- `/acp-clarification-create @my-draft.md` (@ reference)
+- `/acp-clarification-create` (no file - interactive mode)
 
 **Actions**:
 - If file provided: Read source file
@@ -226,8 +226,8 @@ Create structured questions organized by topic:
 - Provide context for complex questions
 - Include examples where helpful
 - Leave blank response lines (`>`) for user answers
-- **Default to a strong recommendation in yes/no form.** The goal is that the user can work through a clarification document typing mostly just `y` / `n` (or `yes` / `no`), elaborating in prose *only* where they want to override the recommendation. This cuts the length of `@acp.clarification-address` passes dramatically and keeps the user's effort proportional to the disagreements, not the question count.
-  - **Default form**: "We recommend **X** — {1-clause rationale}. Accept? (y/n)" — user types `y` to accept or `n` to reject; rejecting triggers follow-up in `@acp.clarification-address`.
+- **Default to a strong recommendation in yes/no form.** The goal is that the user can work through a clarification document typing mostly just `y` / `n` (or `yes` / `no`), elaborating in prose *only* where they want to override the recommendation. This cuts the length of `/acp-clarification-address` passes dramatically and keeps the user's effort proportional to the disagreements, not the question count.
+  - **Default form**: "We recommend **X** — {1-clause rationale}. Accept? (y/n)" — user types `y` to accept or `n` to reject; rejecting triggers follow-up in `/acp-clarification-address`.
   - **Take a stance.** If you have enough context to justify a preference, give one even when both options have real tradeoffs. A confident recommendation the user can reject with one keystroke is cheaper than a neutral "which do you want?" that forces them to write a sentence.
   - **3+ options**: still lead with the recommended option in y/n form — "Recommend **A** — {rationale}. Accept? (y/n; if n we'll ask which of B/C/D)." This keeps the common path to a single keystroke.
   - **Multi-option per-item questions** (a set of features/properties decided independently): each bullet gets its own per-item recommendation with a `>` response line so the user can accept or override each with `y`/`n`:
@@ -246,7 +246,7 @@ Create structured questions organized by topic:
     Users type `y`/`n` per line, or override with a short note on the line where they disagree.
   - **When options are genuinely equivalent** (pure taste, no evidence either way): drop the recommendation and ask neutrally — "Prefer **X**? (y/n — if n we'll use the alternative)." Still one-keystroke-answerable, just without a stance.
   - **Do NOT hedge.** "We might suggest X, but Y could also work" is worse than no recommendation — it asks the user to pick without helping them. If you can't justify a stance in one clause, drop the recommendation and present the neutral y/n.
-  - **Keep rationales short** — one clause, ideally under 15 words. If a recommendation needs a paragraph to justify, that's a signal the question belongs in `@acp.clarification-address` for research, not here.
+  - **Keep rationales short** — one clause, ideally under 15 words. If a recommendation needs a paragraph to justify, that's a signal the question belongs in `/acp-clarification-address` for research, not here.
 - **Reserve prose-answer questions for genuinely open-ended questions** (names, descriptions, free-text context). If a question could plausibly be re-framed as a y/n with a recommendation, do that instead.
 
 **If analyzing file**:
@@ -288,7 +288,7 @@ Generate clarification document from template:
   - Do NOT add a `**Status**` prose field. The marker supersedes it via `status:` and `resolved:`.
 - Fill in Items and Questions sections with generated questions
 - Include "How to Use This Document" section from template
-- **Populate the `@acp.meta.clarification` marker block** — the template ships with `{placeholder}` values; replace every one:
+- **Populate the `/acp-meta.clarification` marker block** — the template ships with `{placeholder}` values; replace every one:
   - `topic:` — comma-separated keywords from the clarification title + source file topic
   - `resolves:` — path to the task/design/spec this clarification targets (from Step 2 or Step 3)
   - `resolved:` — literal `false`
@@ -314,14 +314,14 @@ Questions: {count} questions across {item-count} topics
 
 ✓ Clarification file created
 ✓ {count} questions generated
-✓ @acp.meta.clarification marker populated (resolved: false)
+✓ /acp-meta.clarification marker populated (resolved: false)
 
 Next steps:
 - Review the clarification file
 - Answer questions by typing responses after > markers
 - To leave feedback or ask follow-up questions, use HTML comment blocks (<!-- your feedback -->)
 - Update Status to "Completed" when done
-- Run @acp.clarification-address to have the agent analyze your responses and address comment-block feedback
+- Run /acp-clarification-address to have the agent analyze your responses and address comment-block feedback
 - Use answers to update design docs, tasks, or create new entities
 ```
 
@@ -359,7 +359,7 @@ Next steps:
 
 **Context**: Have draft design document that needs elaboration  
 
-**Invocation**: `@acp.clarification-create --file agent/drafts/auth-system-draft.md`  
+**Invocation**: `/acp-clarification-create --file agent/drafts/auth-system-draft.md`  
 
 **Result**:
 ```
@@ -389,7 +389,7 @@ Next steps:
 
 **Context**: Need to gather requirements for new feature  
 
-**Invocation**: `@acp.clarification-create`  
+**Invocation**: `/acp-clarification-create`  
 
 **Interaction**:
 ```
@@ -419,7 +419,7 @@ Questions: 12 questions across 4 topics
 
 **Context**: Analyzing existing design document  
 
-**Invocation**: `@acp.clarification-create --file agent/design/local.api-design.md --title api-endpoint-details`  
+**Invocation**: `/acp-clarification-create --file agent/design/local.api-design.md --title api-endpoint-details`  
 
 **Result**: Creates clarification-9-api-endpoint-details.md with questions about API design gaps  
 
@@ -427,10 +427,10 @@ Questions: 12 questions across 4 topics
 
 ## Related Commands
 
-- [`@acp.clarification-address`](acp.clarification-address.md) - Address user responses with research, tradeoffs, and recommendations (use `--shallow` for quick research-only pass)
-- [`@acp.design-create`](acp.design-create.md) - Create design documents (often follows clarification)
-- [`@acp.task-create`](acp.task-create.md) - Create tasks (may use clarification answers)
-- [`@acp.pattern-create`](acp.pattern-create.md) - Create patterns (may use clarification answers)
+- [`/acp-clarification-address`](acp.clarification-address.md) - Address user responses with research, tradeoffs, and recommendations (use `--shallow` for quick research-only pass)
+- [`/acp-design-create`](acp.design-create.md) - Create design documents (often follows clarification)
+- [`/acp-task-create`](acp.task-create.md) - Create tasks (may use clarification answers)
+- [`/acp-pattern-create`](acp.pattern-create.md) - Create patterns (may use clarification answers)
 
 ---
 
@@ -487,7 +487,7 @@ Questions: 12 questions across 4 topics
 - Use hierarchical structure (Items > Questions > Bullet points)
 - Response markers (>) make it easy for users to answer inline
 - Clarifications are living documents - can be updated as questions are answered
-- Users can leave feedback or follow-up questions in HTML comment blocks (`<!-- ... -->`); run `@acp.clarification-address` to have the agent respond
+- Users can leave feedback or follow-up questions in HTML comment blocks (`<!-- ... -->`); run `/acp-clarification-address` to have the agent respond
 - After clarification is complete, use answers to update design docs, tasks, or create new entities
 - Clarifications are typically kept in version control for historical reference
 - Good clarifications have 10-30 questions organized into 3-5 major topics

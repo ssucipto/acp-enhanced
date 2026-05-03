@@ -1,7 +1,7 @@
 # Command: project-set
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.project-set` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.project-set` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-project-set` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-project-set` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -47,17 +47,17 @@ After running this command, all subsequent file operations will be relative to t
 ### 0. Display Command Header
 
 ```
-⚡ @acp.project-set
+⚡ /acp-project-set
   Switch to a different project in the global registry
 
   Usage:
-    @acp.project-set <project-name>                Switch to project
+    /acp-project-set <project-name>                Switch to project
 
   Related:
-    @acp.project-list        List all projects
-    @acp.project-info        Show project details
-    @acp.project-create      Create new project
-    @acp.init                Load project context
+    /acp-project-list        List all projects
+    /acp-project-info        Show project details
+    /acp-project-create      Create new project
+    /acp-init                Load project context
 ```
 
 ### 1. Run Shell Script
@@ -86,10 +86,10 @@ Confirm the context switch was successful.
 
 ### 3. Load Project Context (Optional)
 
-Suggest running `@acp.init` to load full project context.
+Suggest running `/acp-init` to load full project context.
 
 **Actions**:
-- Inform user they can run `@acp.init`
+- Inform user they can run `/acp-init`
 - This will load project documentation and status
 - All ACP commands now operate on this project
 
@@ -122,7 +122,7 @@ Suggest running `@acp.init` to load full project context.
 You are now in the project directory. All file operations will be relative to:
   /home/user/.acp/projects/remember-mcp-server
 
-Run '@acp.init' to load project context
+Run '/acp-init' to load project context
 ```
 
 ### Registry Changes
@@ -146,7 +146,7 @@ last_updated: 2026-02-24T17:00:00Z  # Updated
 
 **Context**: Working on multiple MCP servers, need to switch between them  
 
-**Invocation**: `@acp.project-set remember-mcp-server`  
+**Invocation**: `/acp-project-set remember-mcp-server`  
 
 **Result**: 
 - Context switched to remember-mcp-server
@@ -157,7 +157,7 @@ last_updated: 2026-02-24T17:00:00Z  # Updated
 
 **Context**: Need to work on client library after working on server  
 
-**Invocation**: `@acp.project-set remember-mcp`  
+**Invocation**: `/acp-project-set remember-mcp`  
 
 **Result**:
 - Context switched to remember-mcp (client)
@@ -168,22 +168,22 @@ last_updated: 2026-02-24T17:00:00Z  # Updated
 
 **Context**: Trying to switch to non-existent project  
 
-**Invocation**: `@acp.project-set nonexistent-project`  
+**Invocation**: `/acp-project-set nonexistent-project`  
 
 **Result**:
 - Error message displayed
 - List of available projects shown
-- Suggestion to run `@acp.project-list`
+- Suggestion to run `/acp-project-list`
 - Working directory unchanged
 
 ---
 
 ## Related Commands
 
-- [`@acp.project-list`](acp.project-list.md) - List all projects
-- [`@acp.project-info`](acp.project-info.md) - Show project details
-- [`@acp.project-create`](acp.project-create.md) - Create new project
-- [`@acp.init`](acp.init.md) - Load project context
+- [`/acp-project-list`](acp.project-list.md) - List all projects
+- [`/acp-project-info`](acp.project-info.md) - Show project details
+- [`/acp-project-create`](acp.project-create.md) - Create new project
+- [`/acp-init`](acp.init.md) - Load project context
 
 ---
 
@@ -196,9 +196,9 @@ last_updated: 2026-02-24T17:00:00Z  # Updated
 **Cause**: Project not registered or typo in name  
 
 **Solution**: 
-- Run `@acp.project-list` to see available projects
+- Run `/acp-project-list` to see available projects
 - Check spelling of project name
-- Register project with `@acp.project-create` if needed
+- Register project with `/acp-project-create` if needed
 
 ### Issue 2: Project directory not found
 
@@ -207,8 +207,8 @@ last_updated: 2026-02-24T17:00:00Z  # Updated
 **Cause**: Project moved or deleted from filesystem  
 
 **Solution**:
-- Update project path: `@acp.project-update <name> --path <new-path>`
-- Or remove from registry: `@acp.project-remove <name>`
+- Update project path: `/acp-project-update <name> --path <new-path>`
+- Or remove from registry: `/acp-project-remove <name>`
 
 ### Issue 3: Registry file not found
 
@@ -217,7 +217,7 @@ last_updated: 2026-02-24T17:00:00Z  # Updated
 **Cause**: Global ACP not initialized or registry deleted  
 
 **Solution**:
-- Run `@acp.project-create` to create first project (initializes registry)
+- Run `/acp-project-create` to create first project (initializes registry)
 - Or manually create `~/.acp/projects.yaml` from template
 
 ---

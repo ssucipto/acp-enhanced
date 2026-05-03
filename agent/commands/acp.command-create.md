@@ -1,6 +1,6 @@
 # Command: command-create
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.command-create` has been invoked.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-command-create` has been invoked.
 >
 > **This is a CREATION command - you will create files directly, no shell scripts needed.**
 >
@@ -47,7 +47,7 @@ This command creates a new command file with intelligent namespace handling, opt
 
 ## Arguments
 
-**Context Capture Arguments** (optional — passed to `@acp.clarification-capture` directive):
+**Context Capture Arguments** (optional — passed to `/acp-clarification-capture` directive):
 
 | Argument | Alias | Behavior |
 |---|---|---|
@@ -66,19 +66,19 @@ This command creates a new command file with intelligent namespace handling, opt
 ### 0. Display Command Header
 
 ```
-⚡ @acp.command-create
+⚡ /acp-command-create
   Create command files with namespace enforcement, draft support, and automatic package updates
 
   Usage:
-    @acp.command-create                            Guided command creation
-    @acp.command-create @my-draft.md               Create from draft file
-    @acp.command-create --from-clar <file>         Capture from specific clarification
-    @acp.command-create --from-context             Capture from all sources
+    /acp-command-create                            Guided command creation
+    /acp-command-create @my-draft.md               Create from draft file
+    /acp-command-create --from-clar <file>         Capture from specific clarification
+    /acp-command-create --from-context             Capture from all sources
 
   Related:
-    @acp.pattern-create    Create patterns
-    @acp.design-create     Create designs
-    @acp.package-validate  Validate package after creation
+    /acp-pattern-create    Create patterns
+    /acp-design-create     Create designs
+    /acp-package-validate  Validate package after creation
 ```
 
 This step is informational only — do not wait for user input.
@@ -99,9 +99,9 @@ Determine if in package or project directory:
 Check if draft file was provided as argument:
 
 **Syntax**:
-- `@acp.command-create @my-draft.md` (@ reference)
-- `@acp.command-create agent/drafts/my-draft.md` (path)
-- `@acp.command-create` (no draft)
+- `/acp-command-create @my-draft.md` (@ reference)
+- `/acp-command-create agent/drafts/my-draft.md` (path)
+- `/acp-command-create` (no draft)
 
 **Actions**:
 - If draft provided: Read draft file
@@ -124,7 +124,7 @@ Before creating content, load relevant key files from the index.
 
 ### 2.7. Capture Clarification Context
 
-Invoke the `@acp.clarification-capture` shared directive to capture decisions from clarifications and/or chat context.
+Invoke the `/acp-clarification-capture` shared directive to capture decisions from clarifications and/or chat context.
 
 **Actions**:
 - Read and follow the directive in [`agent/commands/acp.clarification-capture.md`](acp.clarification-capture.md)
@@ -249,7 +249,7 @@ Version: 1.0.0
 
 Next steps:
 - Edit the command file to add detailed steps
-- Run @acp.package-validate to verify (if package)
+- Run /acp-package-validate to verify (if package)
 ```
 
 **Expected Outcome**: User knows command was created successfully  
@@ -339,7 +339,7 @@ If yes, prompt for weight (suggest 0.6 for commands), description, rationale, an
 
 **Context**: In acp-firebase package directory  
 
-**Invocation**: `@acp.command-create`  
+**Invocation**: `/acp-command-create`  
 
 **Interaction**:
 ```
@@ -377,7 +377,7 @@ Version: 1.0.0
 
 **Context**: In regular project (no package.yaml)  
 
-**Invocation**: `@acp.command-create`  
+**Invocation**: `/acp-command-create`  
 
 **Result**: Uses "local" namespace, creates `agent/commands/local.my-command.md`, no package updates  
 
@@ -385,9 +385,9 @@ Version: 1.0.0
 
 ## Related Commands
 
-- [`@acp.pattern-create`](acp.pattern-create.md) - Create patterns
-- [`@acp.design-create`](acp.design-create.md) - Create designs
-- [`@acp.package-validate`](acp.package-validate.md) - Validate package after creation
+- [`/acp-pattern-create`](acp.pattern-create.md) - Create patterns
+- [`/acp-design-create`](acp.design-create.md) - Create designs
+- [`/acp-package-validate`](acp.package-validate.md) - Validate package after creation
 
 ---
 
@@ -409,7 +409,7 @@ Version: 1.0.0
 
 **Symptom**: Error updating package.yaml  
 
-**Solution**: Verify package.yaml exists and is valid YAML. Run @acp.package-validate to check.  
+**Solution**: Verify package.yaml exists and is valid YAML. Run /acp-package-validate to check.  
 
 ---
 

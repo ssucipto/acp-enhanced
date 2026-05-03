@@ -52,7 +52,7 @@ Display the following informational header, then continue immediately:
 
   Related:
     @git.commit   Make your first commit after init
-    @acp.init     Initialize ACP structure after git init
+    /acp-init     Initialize ACP structure after git init
 ```
 
 ### 1. Evaluate Project Type
@@ -414,7 +414,7 @@ Next steps:
 ## Related Commands
 
 - [`@git.commit`](git.commit.md) - Use after initialization to make your first commit
-- [`@acp.init`](acp.init.md) - Use to initialize ACP structure after git init
+- [`/acp-init`](acp.init.md) - Use to initialize ACP structure after git init
 
 ---
 

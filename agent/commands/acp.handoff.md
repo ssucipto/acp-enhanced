@@ -1,7 +1,7 @@
 # Command: handoff
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.handoff` has been invoked.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.handoff` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-handoff` has been invoked.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-handoff` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -25,9 +25,9 @@
 - `--to <path-or-project>` or `--target <path-or-project>` - Target project path or registered ACP project name
 
 **Natural Language Arguments**:
-- `@acp.handoff to weaviate-schema` - Handoff to a named project
-- `@acp.handoff --to ~/projects/other-repo` - Handoff to a specific path
-- `@acp.handoff` - Infer target from conversation context
+- `/acp-handoff to weaviate-schema` - Handoff to a named project
+- `/acp-handoff --to ~/projects/other-repo` - Handoff to a specific path
+- `/acp-handoff` - Infer target from conversation context
 
 **Argument Mapping**:
 The agent infers intent from context:
@@ -59,16 +59,16 @@ The report is written to be understandable by any agent, though ACP-aware agents
 ### 0. Display Command Header
 
 ```
-⚡ @acp.handoff
+⚡ /acp-handoff
   Generate a context-aware handoff report for transferring work to another agent context
 
   Usage:
-    @acp.handoff                          Infer target from context
-    @acp.handoff --to <project>           Handoff to a named project or path
+    /acp-handoff                          Infer target from context
+    /acp-handoff --to <project>           Handoff to a named project or path
 
   Related:
-    @acp.report    Generate session reports (same project)
-    @acp.status    Check current project status
+    /acp-report    Generate session reports (same project)
+    /acp-status    Check current project status
 ```
 
 This step is informational only — do not wait for user input.
@@ -175,7 +175,7 @@ Paste the contents of this file into your agent session in the target project.
 
 **Context**: Working in REST server project, discovered Weaviate schema needs a new field  
 
-**Invocation**: `@acp.handoff --to weaviate-schema`  
+**Invocation**: `/acp-handoff --to weaviate-schema`  
 
 **Result**: Generates a report explaining that the REST server needs a new `embedding_model` field on the `Document` class, references the source project path, and describes the data model expectations — without prescribing how to write the migration.  
 
@@ -183,7 +183,7 @@ Paste the contents of this file into your agent session in the target project.
 
 **Context**: Conversation mentions "the frontend repo needs to update its API client types"  
 
-**Invocation**: `@acp.handoff`  
+**Invocation**: `/acp-handoff`  
 
 **Result**: Agent infers the target is the frontend project, checks `~/.acp/projects.yaml` for a match, generates the handoff report describing the API contract changes.  
 
@@ -191,7 +191,7 @@ Paste the contents of this file into your agent session in the target project.
 
 **Context**: Quick handoff, user doesn't need a file  
 
-**Invocation**: `@acp.handoff --to ~/projects/infra`  
+**Invocation**: `/acp-handoff --to ~/projects/infra`  
 
 **Result**: Agent generates the report and outputs it directly in chat. User copies it into their next agent session.  
 
@@ -199,8 +199,8 @@ Paste the contents of this file into your agent session in the target project.
 
 ## Related Commands
 
-- [`@acp.report`](acp.report.md) - Generate session reports (broader scope, same project)
-- [`@acp.status`](acp.status.md) - Check current project status
+- [`/acp-report`](acp.report.md) - Generate session reports (broader scope, same project)
+- [`/acp-status`](acp.status.md) - Check current project status
 
 ---
 

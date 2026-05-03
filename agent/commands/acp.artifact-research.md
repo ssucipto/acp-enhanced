@@ -1,7 +1,7 @@
 # Command: artifact-research
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.artifact-research` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.artifact-research` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-artifact-research` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-artifact-research` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
@@ -30,10 +30,10 @@
 - `--no-commit` - Skip auto-commit, leave artifact staged
 
 **Natural Language Arguments**:
-- `@acp.artifact-research GraphQL federation patterns` - Research a specific topic
-- `@acp.artifact-research authentication` - Research from conversation context
-- `@acp.artifact-research --from-clarification clarification-12` - Pull topic from clarification
-- `@acp.artifact-research` - Infer topic from current context
+- `/acp-artifact-research GraphQL federation patterns` - Research a specific topic
+- `/acp-artifact-research authentication` - Research from conversation context
+- `/acp-artifact-research --from-clarification clarification-12` - Pull topic from clarification
+- `/acp-artifact-research` - Infer topic from current context
 
 **Argument Mapping**:
 The agent infers intent from context:
@@ -74,19 +74,19 @@ All findings require exact citations with confidence scores (1-10) and reproduci
 Display the following informational header, then continue immediately:
 
 ```
-⚡ @acp.artifact-research
+⚡ /acp-artifact-research
   Create long-lived research artifacts via systematic investigation with web/MCP integration and quality standards
 
   Usage:
-    @acp.artifact-research <topic>                 Research a specific topic
-    @acp.artifact-research --from-clarification <f> Pull topic from clarification file
-    @acp.artifact-research --shallow               Skip web research, codebase only
-    @acp.artifact-research --no-commit             Skip auto-commit, leave staged
+    /acp-artifact-research <topic>                 Research a specific topic
+    /acp-artifact-research --from-clarification <f> Pull topic from clarification file
+    /acp-artifact-research --shallow               Skip web research, codebase only
+    /acp-artifact-research --no-commit             Skip auto-commit, leave staged
 
   Related:
-    @acp.artifact-glossary    Create terminology glossaries
-    @acp.artifact-reference   Create reference guides
-    @acp.audit                Deep-dive investigation (ephemeral)
+    /acp-artifact-glossary    Create terminology glossaries
+    /acp-artifact-reference   Create reference guides
+    /acp-audit                Deep-dive investigation (ephemeral)
 ```
 
 ### 1. Determine Research Topic
@@ -450,7 +450,7 @@ Next steps:
 
 **Context**: Need to understand GraphQL federation before architectural decision  
 
-**Invocation**: `@acp.artifact-research GraphQL federation patterns`  
+**Invocation**: `/acp-artifact-research GraphQL federation patterns`  
 
 **Result**: Agent generates research plan, searches official docs + community discussions, compares federation vs schema stitching, captures performance benchmarks, creates `research-1-graphql-federation-patterns.md` with citations and confidence scores. Auto-commits baseline.  
 
@@ -458,7 +458,7 @@ Next steps:
 
 **Context**: Clarification-12 captured decision to use JWT auth but noted "research JWT best practices"  
 
-**Invocation**: `@acp.artifact-research --from-clarification clarification-12`  
+**Invocation**: `/acp-artifact-research --from-clarification clarification-12`  
 
 **Result**: Agent extracts "JWT best practices" topic from clarification, researches token expiration strategies, refresh token patterns, storage security, creates artifact with recommendations, auto-commits.  
 
@@ -466,7 +466,7 @@ Next steps:
 
 **Context**: Need to understand current error handling patterns before refactor  
 
-**Invocation**: `@acp.artifact-research error handling --shallow`  
+**Invocation**: `/acp-artifact-research error handling --shallow`  
 
 **Result**: Agent scans codebase for error handling patterns, catalogs approaches across files, notes inconsistencies, creates lightweight artifact (no web research), auto-commits.  
 
@@ -474,7 +474,7 @@ Next steps:
 
 **Context**: Evaluating vendor API, have GitHub MCP tool configured  
 
-**Invocation**: `@acp.artifact-research Stripe API integration`  
+**Invocation**: `/acp-artifact-research Stripe API integration`  
 
 **Result**: Agent uses WebSearch for Stripe docs, invokes GitHub MCP to check Stripe SDK repo stats (stars, issues, release cadence), captures community sentiment from Reddit/Twitter via web, creates comprehensive evaluation with vendor support metrics, auto-commits.  
 
@@ -482,7 +482,7 @@ Next steps:
 
 **Context**: Researching Redis persistence options, sources disagree on RDB vs AOF performance  
 
-**Invocation**: `@acp.artifact-research Redis persistence strategies`  
+**Invocation**: `/acp-artifact-research Redis persistence strategies`  
 
 **Result**: Agent finds vendor blog claiming "RDB is faster" and independent benchmark claiming "AOF is faster under load". Uses git conflict markers to preserve both findings. Does NOT auto-commit. Prompts user to resolve conflict.  
 
@@ -490,11 +490,11 @@ Next steps:
 
 ## Related Commands
 
-- [`@acp.artifact-glossary`](acp.artifact-glossary.md) - Create terminology glossaries
-- [`@acp.artifact-reference`](acp.artifact-reference.md) - Create reference guides (after command-first check)
-- [`@acp.clarification-address`](acp.clarification-address.md) - Address clarifications (can trigger research)
-- [`@acp.audit`](acp.audit.md) - Deep-dive investigation with ephemeral reports (not committed)
-- [`@acp.sync`](acp.sync.md) - Detect artifact staleness after code changes
+- [`/acp-artifact-glossary`](acp.artifact-glossary.md) - Create terminology glossaries
+- [`/acp-artifact-reference`](acp.artifact-reference.md) - Create reference guides (after command-first check)
+- [`/acp-clarification-address`](acp.clarification-address.md) - Address clarifications (can trigger research)
+- [`/acp-audit`](acp.audit.md) - Deep-dive investigation with ephemeral reports (not committed)
+- [`/acp-sync`](acp.sync.md) - Detect artifact staleness after code changes
 
 ---
 
@@ -581,7 +581,7 @@ Next steps:
 | Auto-commit | Yes (default), unless conflicts or `--no-commit` | Establishes baseline, enables visible git diff for refinements |
 | Conflict resolution | User-driven, not auto-resolved | Agent cannot make judgment calls on conflicting claims; user context required |
 | Living document | Edit in place (git history preserves versions) | Single canonical version per topic; git log shows evolution |
-| Staleness detection | Via `@acp.sync` (separate command) | Artifact creation is independent of maintenance; sync command handles updates |
+| Staleness detection | Via `/acp-sync` (separate command) | Artifact creation is independent of maintenance; sync command handles updates |
 
 ### Quality Enforcement
 
