@@ -105,6 +105,53 @@ EOF
 echo "${GREEN}✓${NC} Directory structure created"
 echo ""
 
+# ACP Enhanced — context loading layer
+echo "Installing ACP Enhanced context layer..."
+mkdir -p "$TARGET_DIR/agent/core"
+mkdir -p "$TARGET_DIR/agent/memory"
+mkdir -p "$TARGET_DIR/agent/routing/tasks"
+mkdir -p "$TARGET_DIR/agent/skills"
+mkdir -p "$TARGET_DIR/agent/wiki"
+
+# Copy static config files (always overwrite — no user state)
+if [ -d "$TEMP_DIR/agent/core" ]; then
+    cp "$TEMP_DIR/agent/core/"*.yml "$TARGET_DIR/agent/core/" 2>/dev/null || true
+fi
+if [ -d "$TEMP_DIR/agent/skills" ]; then
+    cp "$TEMP_DIR/agent/skills/"*.md "$TARGET_DIR/agent/skills/" 2>/dev/null || true
+fi
+if [ -d "$TEMP_DIR/agent/wiki" ]; then
+    cp "$TEMP_DIR/agent/wiki/"*.yml "$TARGET_DIR/agent/wiki/" 2>/dev/null || true
+    cp "$TEMP_DIR/agent/wiki/"*.md  "$TARGET_DIR/agent/wiki/" 2>/dev/null || true
+fi
+if [ -d "$TEMP_DIR/agent/routing" ]; then
+    cp "$TEMP_DIR/agent/routing/taxonomy.yml" "$TARGET_DIR/agent/routing/" 2>/dev/null || true
+    cp "$TEMP_DIR/agent/routing/rules.md"     "$TARGET_DIR/agent/routing/" 2>/dev/null || true
+    cp "$TEMP_DIR/agent/routing/config.yml"   "$TARGET_DIR/agent/routing/" 2>/dev/null || true
+    # task-template only — never copy task-*.md (user routing files)
+    cp "$TEMP_DIR/agent/routing/tasks/task-template.md" \
+       "$TARGET_DIR/agent/routing/tasks/" 2>/dev/null || true
+fi
+
+# Create user-state files only if absent (never overwrite existing state)
+_create_if_absent() {
+    local file="$1"; local content="$2"
+    [ -f "$file" ] || printf '%s\n' "$content" > "$file"
+}
+_create_if_absent "$TARGET_DIR/agent/memory/sessions.md" \
+    "# Session Memory\n# Created by acp.install.sh — do not delete"
+_create_if_absent "$TARGET_DIR/agent/memory/lessons.md" \
+    "# Lessons Log\n# Created by acp.install.sh — do not delete"
+_create_if_absent "$TARGET_DIR/agent/memory/decisions.md" \
+    "# Architecture Decision Records (ADR Log)\n# Add entries via /acp-decide command"
+_create_if_absent "$TARGET_DIR/agent/memory/patterns.md" \
+    "# Reusable Patterns\n# Created by acp.install.sh — do not delete"
+_create_if_absent "$TARGET_DIR/agent/routing/ledger.md" \
+    "# Routing Cost Ledger\n# Appended by acp-dispatch.ts on each task run"
+
+echo "${GREEN}✓${NC} ACP Enhanced context layer installed"
+echo ""
+
 # Copy files
 echo "Installing ACP files..."
 
@@ -346,7 +393,11 @@ EOF
 
 echo "${GREEN}✓${NC} Created manifest.yaml (tracking acp-core v${ACP_VERSION})"
 echo ""
-echo "${GREEN}Installation complete!${NC}"
+echo "${GREEN}Installation complete! (ACP Enhanced v${ACP_VERSION})${NC}"
+echo ""
+echo "${GREEN}What was installed:${NC}"
+echo "  ✓ ACP command docs, scripts, schemas"
+echo "  ✓ ACP Enhanced context layer (agent/core/, agent/skills/, agent/wiki/, agent/routing/)"
 echo ""
 echo "${GREEN}Next steps:${NC}"
 echo "1. Create your requirements document:"
