@@ -44,7 +44,7 @@
 - date: 2026-05-01
   task_type: command-doc-writing
   mistake: >
-    The .agent/skills/commands.md canonical pattern used "@acp-foo" (dash) instead of
+    The agent/skills/commands.md canonical pattern used "@acp-foo" (dash) instead of
     "@acp.foo" (dot) in the directive block example — the wrong separator for the ACP
     dot-notation command naming convention.
   correction: >

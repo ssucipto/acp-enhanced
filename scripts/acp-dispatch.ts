@@ -11,7 +11,7 @@ import path from "path";
 
 // ============================================================
 // ACP Enhanced — Dispatch Script
-// Usage: npx ts-node scripts/acp-dispatch.ts .agent/tasks/task-NNN.md
+// Usage: npx ts-node scripts/acp-dispatch.ts agent/routing/tasks/task-NNN.md
 // ============================================================
 
 const OPENROUTER_BASE = "https://openrouter.ai/api/v1";
@@ -265,12 +265,12 @@ async function dispatch(taskPath: string) {
   console.log(
     `[ACP] Tokens: ${inputTokens} in / ${outputTokens} out | Cost: $${totalCost.toFixed(4)}`
   );
-  console.log(`[ACP] Ledger updated: .agent/routing/ledger.md`);
+  console.log(`[ACP] Ledger updated: agent/routing/ledger.md`);
 }
 
 const taskArg = process.argv[2];
 if (!taskArg) {
-  console.error("Usage: npx ts-node scripts/acp-dispatch.ts .agent/tasks/task-NNN.md");
+  console.error("Usage: npx ts-node scripts/acp-dispatch.ts agent/routing/tasks/task-NNN.md");
   process.exit(1);
 }
 

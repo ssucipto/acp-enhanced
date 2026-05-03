@@ -23,7 +23,7 @@ files_affected:
   - scripts/AGENTS.md
   - docs/USAGE.md
   - docs/README.md
-  - .agent/wiki/architecture.md
+  - agent/wiki/architecture.md
   - scripts/PRD-MAIN.md
 tokens_est: 18000
 tokens_actual:
@@ -73,7 +73,7 @@ Remove the `@acp.commit` alias. All meta-commands already use `/acp-*`; remove t
 ### Layer 3 — User-facing documentation (3 files)
 - `docs/USAGE.md` — all `@acp.*` usage examples
 - `docs/README.md` — command references
-- `.agent/wiki/architecture.md` — example invocations in data-flow diagrams
+- `agent/wiki/architecture.md` — example invocations in data-flow diagrams
 
 ### Layer 4 — Internal/planning docs (1 file, low priority)
 - `scripts/PRD-MAIN.md` — historical references; update for consistency
@@ -104,12 +104,12 @@ first thing a developer sees after running the install script. Must use `/acp-*`
 - [ ] `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `scripts/AGENTS.md` — `/acp-commit or @acp.commit` collapsed to `/acp-commit` only
 - [ ] `docs/USAGE.md` updated to `/acp-*` syntax throughout
 - [ ] `docs/README.md` updated to `/acp-*` syntax
-- [ ] `.agent/wiki/architecture.md` example flows updated
+- [ ] `agent/wiki/architecture.md` example flows updated
 - [ ] `scripts/PRD-MAIN.md` updated
 - [ ] `README.md` updated to `/acp-*` syntax (77 references)
 - [ ] `scripts/acp-bootstrap.sh` updated
 - [ ] `acp.script-command-binding.test.sh` still passes (file naming unchanged, only invocation text)
-- [ ] ADR logged in `.agent/memory/decisions.md`
+- [ ] ADR logged in `agent/memory/decisions.md`
 
 ---
 
