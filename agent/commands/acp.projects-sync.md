@@ -1,7 +1,7 @@
 # Command: projects-sync
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.projects-sync` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.projects-sync` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-projects-sync` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-projects-sync` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -24,12 +24,12 @@ This command scans the `~/.acp/projects/` directory for ACP projects (directorie
 
 **Use this when**:
 - You have existing projects in `~/.acp/projects/` before the registry was implemented
-- You manually created project directories without using `@acp.project-create`
+- You manually created project directories without using `/acp-project-create`
 - You want to discover and organize all your ACP projects
 
 **Key Distinction**:
-- `@acp.project-list` - Lists projects **IN** the registry (reads YAML)
-- `@acp.projects-sync` - Discovers projects **NOT** in registry (scans filesystem)
+- `/acp-project-list` - Lists projects **IN** the registry (reads YAML)
+- `/acp-projects-sync` - Discovers projects **NOT** in registry (scans filesystem)
 
 ---
 
@@ -46,15 +46,15 @@ This command scans the `~/.acp/projects/` directory for ACP projects (directorie
 ### 0. Display Command Header
 
 ```
-⚡ @acp.projects-sync
+⚡ /acp-projects-sync
   Discover unregistered ACP projects and add them to the registry
 
   Related:
-    @acp.project-list        List all registered projects
-    @acp.project-info        View project details
-    @acp.project-set         Switch to a project
-    @acp.project-create      Create new project (auto-registers)
-    @acp.projects-restore    Restore projects from git origins
+    /acp-project-list        List all registered projects
+    /acp-project-info        View project details
+    /acp-project-set         Switch to a project
+    /acp-project-create      Create new project (auto-registers)
+    /acp-projects-restore    Restore projects from git origins
 ```
 
 ### 1. Execute Sync Script
@@ -115,7 +115,7 @@ Show sync results.
 - Count newly registered projects
 - Count backfilled git origins
 - Display summary statistics
-- Suggest running `@acp.project-list`
+- Suggest running `/acp-project-list`
 
 **Expected Outcome**: User knows what was registered and backfilled  
 
@@ -160,7 +160,7 @@ Sync Complete
   Found: 4 projects
   Registered: 1 new projects
 
-Run @acp.project-list to see all registered projects
+Run /acp-project-list to see all registered projects
 ```
 
 ---
@@ -171,7 +171,7 @@ Run @acp.project-list to see all registered projects
 
 **Context**: User has 3 projects in `~/.acp/projects/`, none registered  
 
-**Invocation**: `@acp.projects-sync`  
+**Invocation**: `/acp-projects-sync`  
 
 **Result**:
 - Finds 3 projects
@@ -183,7 +183,7 @@ Run @acp.project-list to see all registered projects
 
 **Context**: User has 5 projects, 2 already registered  
 
-**Invocation**: `@acp.projects-sync`  
+**Invocation**: `/acp-projects-sync`  
 
 **Result**:
 - Finds 5 projects total
@@ -196,7 +196,7 @@ Run @acp.project-list to see all registered projects
 
 **Context**: All projects already registered  
 
-**Invocation**: `@acp.projects-sync`  
+**Invocation**: `/acp-projects-sync`  
 
 **Result**:
 - Finds all projects
@@ -208,7 +208,7 @@ Run @acp.project-list to see all registered projects
 
 **Context**: `~/.acp/projects/` is empty  
 
-**Invocation**: `@acp.projects-sync`  
+**Invocation**: `/acp-projects-sync`  
 
 **Result**:
 - No projects found
@@ -218,11 +218,11 @@ Run @acp.project-list to see all registered projects
 
 ## Related Commands
 
-- [`@acp.project-list`](acp.project-list.md) - List all registered projects
-- [`@acp.project-info`](acp.project-info.md) - View project details
-- [`@acp.project-set`](acp.project-set.md) - Switch to a project
-- [`@acp.project-create`](acp.project-create.md) - Create new project (auto-registers)
-- [`@acp.projects-restore`](acp.projects-restore.md) - Restore projects from git origins
+- [`/acp-project-list`](acp.project-list.md) - List all registered projects
+- [`/acp-project-info`](acp.project-info.md) - View project details
+- [`/acp-project-set`](acp.project-set.md) - Switch to a project
+- [`/acp-project-create`](acp.project-create.md) - Create new project (auto-registers)
+- [`/acp-projects-restore`](acp.projects-restore.md) - Restore projects from git origins
 
 ---
 

@@ -18,6 +18,14 @@
 **Consequences:** Works everywhere bash 4+ is available. Limited to flat/simple YAML — no anchors or complex nesting.
 **DO NOT re-open** unless the YAML structures grow beyond what the parser handles correctly.
 
+## ADR-4 | 2026-05-03 | Standardize command invocation syntax to /acp-<command>
+**Status:** Accepted
+**Context:** Two patterns coexisted — `@acp.<command>` in 51 command files, AGENT.md, README; `/acp-<command>` in AGENTS.md, CLAUDE.md, copilot-instructions.md. Dual-alias notation ("run /acp-commit or @acp.commit") confirmed this was never resolved.
+**Options considered:** (1) Keep `@acp.<command>` — matches original ACP upstream. (2) Keep `/acp-<command>` — matches VS Code slash-command convention, unambiguous in terminal/chat UIs. (3) Support both forever — already proven confusing.
+**Decision:** `/acp-<command>` is the single canonical syntax everywhere. `@acp.<command>` is eliminated across all command docs, AGENT.md, README, shell scripts, docs, and e2e tests.
+**Consequences:** task-001 (text/docs), task-002 (directory migration), task-003 (install scripts), task-004 (e2e tests + skill files) implement this fully. `git.*` namespace commands are out of scope — separate decision required.
+**DO NOT re-open** unless a new AI runtime mandates `@` prefix over `/`.
+
 ## ADR-3 | 2026-05-01 | ACP Enhanced: three-layer context model replaces monolithic AGENT.md
 **Status:** Accepted
 **Context:** The original AGENT.md loaded all project knowledge for every task, wasting tokens and preventing prompt caching.

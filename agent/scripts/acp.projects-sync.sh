@@ -152,5 +152,5 @@ echo "  Backfilled: $BACKFILL_COUNT git origins"
 echo ""
 
 if [ $REGISTERED_COUNT -gt 0 ] || [ $BACKFILL_COUNT -gt 0 ]; then
-    echo "Run ${BOLD}@acp.project-list${NC} to see all registered projects"
+    echo "Run ${BOLD}/acp-project-list${NC} to see all registered projects"
 fi

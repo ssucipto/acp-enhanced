@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# E2E tests for @acp.project-set command
+# E2E tests for /acp-project-set command
 
 set -euo pipefail
 
@@ -211,7 +211,7 @@ test_registry_not_found() {
   
   # Check error message
   assert_contains "$output" "Error: Project registry not found" "Should show error"
-  assert_contains "$output" "@acp.project-create" "Should suggest creating project"
+  assert_contains "$output" "/acp-project-create" "Should suggest creating project"
   
   cleanup_test_env
   echo "✓ Test 5 passed"
@@ -315,7 +315,7 @@ test_registry_timestamp_updated() {
 # Run all tests
 main() {
   echo "======================================"
-  echo "E2E Tests: @acp.project-set"
+  echo "E2E Tests: /acp-project-set"
   echo "======================================"
   echo ""
   

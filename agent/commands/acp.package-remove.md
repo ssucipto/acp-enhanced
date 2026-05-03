@@ -1,6 +1,6 @@
 # Command: package-remove
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.package-remove` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-package-remove` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 2.0.0  
@@ -39,19 +39,19 @@ Use this command when you no longer need a package, want to clean up unused depe
 ### 0. Display Command Header
 
 ```
-⚡ @acp.package-remove
+⚡ /acp-package-remove
   Remove installed ACP packages and clean up manifest
 
   Usage:
-    @acp.package-remove <package-name>             Remove package (prompted)
-    @acp.package-remove -y <package-name>          Remove without confirmation
-    @acp.package-remove --keep-modified <name>     Keep locally modified files
+    /acp-package-remove <package-name>             Remove package (prompted)
+    /acp-package-remove -y <package-name>          Remove without confirmation
+    /acp-package-remove --keep-modified <name>     Keep locally modified files
 
   Related:
-    @acp.package-install       Install packages
-    @acp.package-list          List installed packages
-    @acp.package-info          Show package details
-    @acp.package-update        Update packages
+    /acp-package-install       Install packages
+    /acp-package-list          List installed packages
+    /acp-package-info          Show package details
+    /acp-package-update        Update packages
 ```
 
 ### 1. Run Package Remove Script
@@ -208,7 +208,7 @@ Kept: 1 file(s) (modified)
 
 **Context**: No longer need firebase package  
 
-**Invocation**: `@acp.package-remove firebase`  
+**Invocation**: `/acp-package-remove firebase`  
 
 **Result**: Prompts for confirmation, removes all 6 files, updates manifest  
 
@@ -216,7 +216,7 @@ Kept: 1 file(s) (modified)
 
 **Context**: Want to remove without prompts  
 
-**Invocation**: `@acp.package-remove -y firebase`  
+**Invocation**: `/acp-package-remove -y firebase`  
 
 **Result**: Removes package immediately without confirmation  
 
@@ -224,7 +224,7 @@ Kept: 1 file(s) (modified)
 
 **Context**: Want to remove package but keep customized files  
 
-**Invocation**: `@acp.package-remove --keep-modified firebase`  
+**Invocation**: `/acp-package-remove --keep-modified firebase`  
 
 **Result**: Removes 5 unmodified files, keeps 1 modified file, updates manifest  
 
@@ -232,7 +232,7 @@ Kept: 1 file(s) (modified)
 
 **Context**: Try to remove non-existent package  
 
-**Invocation**: `@acp.package-remove nonexistent`  
+**Invocation**: `/acp-package-remove nonexistent`  
 
 **Result**: Error message "Package not installed: nonexistent", exits without changes  
 
@@ -240,10 +240,10 @@ Kept: 1 file(s) (modified)
 
 ## Related Commands
 
-- [`@acp.package-install`](acp.package-install.md) - Install packages
-- [`@acp.package-list`](acp.package-list.md) - List installed packages
-- [`@acp.package-info`](acp.package-info.md) - Show package details
-- [`@acp.package-update`](acp.package-update.md) - Update packages
+- [`/acp-package-install`](acp.package-install.md) - Install packages
+- [`/acp-package-list`](acp.package-list.md) - List installed packages
+- [`/acp-package-info`](acp.package-info.md) - Show package details
+- [`/acp-package-update`](acp.package-update.md) - Update packages
 
 ---
 
@@ -255,7 +255,7 @@ Kept: 1 file(s) (modified)
 
 **Cause**: Package name incorrect or not installed  
 
-**Solution**: Run `@acp.package-list` to see installed packages, check spelling  
+**Solution**: Run `/acp-package-list` to see installed packages, check spelling  
 
 ### Issue 2: Files not removed
 
@@ -284,7 +284,7 @@ Kept: 1 file(s) (modified)
 
 ### Best Practices
 - **Use git**: Commit before removing packages
-- **Review first**: Use `@acp.package-info` to see what will be removed
+- **Review first**: Use `/acp-package-info` to see what will be removed
 - **Keep modified**: Use --keep-modified if you've customized files
 - **Backup**: Consider git commit or manual backup before removal
 
@@ -297,7 +297,7 @@ Kept: 1 file(s) (modified)
 - Manifest entry completely removed
 - --keep-modified preserves customizations
 - Safe to remove and reinstall packages
-- Use `@acp.package-list --modified` to see which files would be kept
+- Use `/acp-package-list --modified` to see which files would be kept
 
 ---
 
