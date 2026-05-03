@@ -8,7 +8,7 @@ executor: Persona A (Copilot)
 files_affected:
   - package.yaml
   - AGENT.md
-  - .agent/core/identity.yml
+  - agent/core/identity.yml
 created: 2026-05-01
 ---
 
@@ -20,7 +20,7 @@ M20 introduced a version bump from 6.2.1 → 6.2.2 (in progress.yaml and git.com
 |------|---------|----------|
 | `package.yaml` line 5 | `version: 6.2.1` | `version: 6.2.2` |
 | `AGENT.md` line 4 | `**Version**: 6.2.1` | `**Version**: 6.2.2` |
-| `.agent/core/identity.yml` line 31 | `version: 6.2.1` | `version: 6.2.2` |
+| `agent/core/identity.yml` line 31 | `version: 6.2.1` | `version: 6.2.2` |
 
 ## Acceptance Criteria
 

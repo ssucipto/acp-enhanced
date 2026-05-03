@@ -59,7 +59,7 @@ The following capabilities are **ACP Enhanced additions** that do not exist in t
 
 | Enhancement | Description | Since |
 |-------------|-------------|-------|
-| **Context Loading Protocol** | 6-step deterministic protocol (`AGENTS.md`) backed by a `.agent/` framework with skills, memory, routing, and wiki layers. Ensures reproducible session startup. | M0 |
+| **Context Loading Protocol** | 6-step deterministic protocol (`AGENTS.md`) backed by a `agent/` framework with skills, memory, routing, and wiki layers. Ensures reproducible session startup. | M0 |
 | **Package Management** | 50+ commands and 28 scripts for installing, publishing, and managing ACP command packages from git repositories. Includes a manifest system, schema validation, and namespace enforcement. | M3–M9 |
 | **Preferences System** | 4-level preference hierarchy (project > workspace > user > default) with configurables, named presets, and per-invocation CLI overrides. | M6 |
 | **Project Registry** | Global `~/.acp/projects.yaml` tracking for discovering, switching between, and managing ACP projects. Integrates with `/acp-init`. | M7 |
@@ -137,9 +137,9 @@ ACP solves these by:
 ```
 project-root/
 ├── AGENT.md                        # This file - ACP documentation
-├── AGENTS.md                       # AI context loading protocol (.agent/ framework)
+├── AGENTS.md                       # AI context loading protocol (agent/ framework)
 │
-├── .agent/                         # ACP Enhanced framework layer (context management)
+├── agent/                         # ACP Enhanced framework layer (context management)
 │   ├── core/                       # Layer 1 — permanent cached context (max 300 tokens)
 │   │   ├── identity.yml            # Project identity: name, stack, team, repo URL
 │   │   ├── constraints.yml         # Hard rules, context budget limits, non-negotiables
@@ -800,8 +800,8 @@ All personas share the same three-layer context architecture. The layers determi
 
 | Layer | Content | Size | Caching |
 |-------|---------|------|---------|
-| **Layer 1 — Core** | `.agent/core/identity.yml`, `constraints.yml`, `routing.yml` | ~180 tokens | Cached after first call |
-| **Layer 2 — Skills** | One `.agent/skills/*.md` file matching the task type | ~240–350 tokens | Semi-static per task type |
+| **Layer 1 — Core** | `agent/core/identity.yml`, `constraints.yml`, `routing.yml` | ~180 tokens | Cached after first call |
+| **Layer 2 — Skills** | One `agent/skills/*.md` file matching the task type | ~240–350 tokens | Semi-static per task type |
 | **Layer 3 — Ephemeral** | Session memory (last 3 entries), filtered lessons, active task file, one wiki section | ~1,200–1,700 tokens per task | Never cached |
 
 **Total context per task**: ~1,680–2,230 tokens — compared to 10,000–18,000 tokens for unstructured all-Claude baseline usage.

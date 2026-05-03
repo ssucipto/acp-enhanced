@@ -18,12 +18,12 @@ echo ""
 
 # --- 1. Directory Structure ---
 echo -e "${YELLOW}[1/7] Creating directory structure...${NC}"
-mkdir -p .agent/core
-mkdir -p .agent/skills
-mkdir -p .agent/memory
-mkdir -p .agent/wiki
-mkdir -p .agent/routing
-mkdir -p .agent/tasks
+mkdir -p agent/core
+mkdir -p agent/skills
+mkdir -p agent/memory
+mkdir -p agent/wiki
+mkdir -p agent/routing
+mkdir -p agent/tasks
 mkdir -p .github/prompts
 mkdir -p scripts
 echo -e "${GREEN}✓ Directories created${NC}"
@@ -43,7 +43,7 @@ if [ ! -f AGENTS.md ]; then
 
 > This file is auto-loaded by GitHub Copilot, Cursor, and Claude Code.
 > Do NOT add project content here. This file contains ONLY the context
-> loading protocol. All content lives in .agent/ subdirectories.
+> loading protocol. All content lives in agent/ subdirectories.
 
 ---
 
@@ -64,37 +64,37 @@ self-improving correction layer.
 
 ### Step 1 — Load Core (always, every session)
 Read these files in order. They are small and always relevant:
-1. `.agent/core/identity.yml` — project identity and stack
-2. `.agent/core/constraints.yml` — hard rules and context budget
-3. `.agent/core/routing.yml` — which executor you are this session
+1. `agent/core/identity.yml` — project identity and stack
+2. `agent/core/constraints.yml` — hard rules and context budget
+3. `agent/core/routing.yml` — which executor you are this session
 
 ### Step 2 — Identify Task Domain
 From the developer's request, determine the task_type by reading:
-`.agent/routing/taxonomy.yml`
+`agent/routing/taxonomy.yml`
 
 Match the request to the closest task_type entry.
 If uncertain between two types, choose the one with the higher-risk executor.
 
 ### Step 3 — Load Skill (one file only)
-Based on task_type, load EXACTLY ONE skill file from `.agent/skills/`.
+Based on task_type, load EXACTLY ONE skill file from `agent/skills/`.
 Create one skill file per domain relevant to your project (e.g. `backend.md`, `ui.md`, `deploy.md`).
-Map task types → skill files in `.agent/routing/taxonomy.yml`.
+Map task types → skill files in `agent/routing/taxonomy.yml`.
 
 Do NOT load multiple skill files unless the task explicitly spans two domains.
 
 ### Step 4 — Load Working Memory (filtered)
-1. Read last 3 entries from `.agent/memory/sessions.md` only
-2. Read `.agent/memory/lessons.md` — filter to entries where
+1. Read last 3 entries from `agent/memory/sessions.md` only
+2. Read `agent/memory/lessons.md` — filter to entries where
    `trigger` matches current task_type OR `priority: high`
    Load maximum 5 lesson entries.
 
 ### Step 5 — Load Reference (section only, if needed)
 Only if the task requires it:
-- Domain model / entity definitions → load relevant section of `.agent/wiki/domain.yml`
-- Architecture or integration details → load relevant section of `.agent/wiki/architecture.md`
-- Architecture decisions → load specific ADR from `.agent/memory/decisions.md` by ID
+- Domain model / entity definitions → load relevant section of `agent/wiki/domain.yml`
+- Architecture or integration details → load relevant section of `agent/wiki/architecture.md`
+- Architecture decisions → load specific ADR from `agent/memory/decisions.md` by ID
 
-Add your own wiki files under `.agent/wiki/` as the project grows.
+Add your own wiki files under `agent/wiki/` as the project grows.
 
 **Never load an entire wiki file. Load one section at a time.**
 
@@ -118,7 +118,7 @@ Enforce these limits. If exceeded, drop lower-tier content first:
 ## Correction Protocol
 
 When the developer corrects your output, IMMEDIATELY:
-1. Append to `.agent/memory/lessons.md`:
+1. Append to `agent/memory/lessons.md`:
 ```yaml
 - date: [today]
   task_type: [current task type]
@@ -133,7 +133,7 @@ When the developer corrects your output, IMMEDIATELY:
 ## Session Commit Protocol (/acp-commit)
 
 When developer runs /acp-commit or /acp-commit:
-1. Write session summary to `.agent/memory/sessions.md` in YAML format:
+1. Write session summary to `agent/memory/sessions.md` in YAML format:
 ```yaml
 - date: [today]
   executor: [executor used]
@@ -143,7 +143,7 @@ When developer runs /acp-commit or /acp-commit:
   key_fact: [single most important thing learned, if any]
 ```
 2. Check: did this session produce a reusable code pattern? If yes, append to
-   `.agent/memory/patterns.md`
+   `agent/memory/patterns.md`
 3. Check: did you make an architectural decision? If yes, prompt:
    "An architectural decision was made: [decision]. Create ADR? (y/n)"
 4. Count entries in sessions.md. If > 15, auto-compact oldest 10 entries:
@@ -172,7 +172,7 @@ echo -e "${YELLOW}  When you update AGENTS.md, re-run: cp AGENTS.md CLAUDE.md &&
 # --- 3. Core Layer Files ---
 echo -e "${YELLOW}[3/7] Creating core layer files...${NC}"
 
-cat > .agent/core/identity.yml << 'YAML'
+cat > agent/core/identity.yml << 'YAML'
 # DO NOT add dynamic content to this file (no dates, no task IDs)
 # This file is prompt-cached by the LLM API after first call
 # TODO: Fill in your project details below
@@ -197,7 +197,7 @@ priorities:
 repo: github.com/YOUR_USERNAME/YOUR_REPO
 YAML
 
-cat > .agent/core/constraints.yml << 'YAML'
+cat > agent/core/constraints.yml << 'YAML'
 # Hard rules — never violate these
 # DO NOT add dynamic content to this file
 # TODO: Add project-specific code rules below
@@ -222,7 +222,7 @@ context_budget:
 #   - require_error_handling: true
 YAML
 
-cat > .agent/core/routing.yml << 'YAML'
+cat > agent/core/routing.yml << 'YAML'
 # Updated per session by dispatch script or manually
 # DO NOT mix static and dynamic content in the same file
 
@@ -236,13 +236,13 @@ echo -e "${GREEN}✓ Core layer files created${NC}"
 
 # --- 3b. Skill Files (copy from ACP Enhanced if available) ---
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ACP_SKILLS_SRC="${SCRIPT_DIR}/../.agent/skills"
+ACP_SKILLS_SRC="${SCRIPT_DIR}/../agent/skills"
 if [ -d "${ACP_SKILLS_SRC}" ]; then
-  cp "${ACP_SKILLS_SRC}"/*.md .agent/skills/
-  echo -e "${GREEN}✓ Skill files copied from ACP Enhanced (.agent/skills/)${NC}"
+  cp "${ACP_SKILLS_SRC}"/*.md agent/skills/
+  echo -e "${GREEN}✓ Skill files copied from ACP Enhanced (agent/skills/)${NC}"
 else
   # Fallback: create a minimal stub so AGENTS.md Step 3 doesn't fail silently
-  cat > .agent/skills/backend.md << 'SKILL'
+  cat > agent/skills/backend.md << 'SKILL'
 <skill name="backend">
 <rules>
 - TODO: Add project-specific coding rules here (error handling, naming, patterns)
@@ -256,41 +256,41 @@ TODO: Add things the agent should NEVER do in this codebase
 </anti_patterns>
 </skill>
 SKILL
-  echo -e "${YELLOW}✓ Skill stub created (.agent/skills/backend.md) — populate with your project rules${NC}"
+  echo -e "${YELLOW}✓ Skill stub created (agent/skills/backend.md) — populate with your project rules${NC}"
 fi
 
 # --- 4. Memory + Wiki Stubs ---
 echo -e "${YELLOW}[4/7] Creating memory and wiki stubs...${NC}"
 
-cat > .agent/memory/sessions.md << 'MD'
+cat > agent/memory/sessions.md << 'MD'
 # Session Memory
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
 MD
 
-cat > .agent/memory/decisions.md << 'MD'
+cat > agent/memory/decisions.md << 'MD'
 # Architecture Decision Records (ADR Log)
 # Loaded by section (ADR ID) only — never fully loaded
 # Add entries via /acp-decide command
 
 MD
 
-cat > .agent/memory/patterns.md << 'MD'
+cat > agent/memory/patterns.md << 'MD'
 # Reusable Code Patterns
 # Populated automatically by /acp-commit when patterns are identified
 # Format: date-stamped YAML entries, max 60 days active
 
 MD
 
-cat > .agent/memory/lessons.md << 'MD'
+cat > agent/memory/lessons.md << 'MD'
 # Correction Log — Filtered by task_type before loading
 # Populated automatically when developer says "log it" or "wrong, log this"
 # Max 5 entries loaded per session, filtered to current task_type + priority:high
 
 MD
 
-cat > .agent/wiki/domain.yml << 'YAML'
+cat > agent/wiki/domain.yml << 'YAML'
 # Domain Entity Model
 # TODO: Describe the core entities your project works with
 # Run /acp-init to auto-populate from your source code
@@ -300,7 +300,7 @@ operations: []   # Key operations grouped by category
 modules: []      # Main modules or packages
 YAML
 
-cat > .agent/wiki/integrations.md << 'MD'
+cat > agent/wiki/integrations.md << 'MD'
 # Service Integrations — XML-tagged sections, load one section at a time
 # TODO: Replace with your actual external service config. Delete unused sections.
 
@@ -323,7 +323,7 @@ cat > .agent/wiki/integrations.md << 'MD'
 </external_apis>
 MD
 
-cat > .agent/wiki/architecture.md << 'MD'
+cat > agent/wiki/architecture.md << 'MD'
 # System Architecture
 # Update monthly or when service boundaries change
 # last_verified: YYYY-MM-DD (update this date when you verify)
@@ -348,7 +348,7 @@ echo -e "${GREEN}✓ Memory and wiki stubs created${NC}"
 # --- 5. Routing Layer ---
 echo -e "${YELLOW}[5/7] Creating routing layer...${NC}"
 
-cat > .agent/routing/config.yml << 'YAML'
+cat > agent/routing/config.yml << 'YAML'
 version: "1.0"
 default_model: claude-sonnet
 
@@ -393,7 +393,7 @@ complexity_thresholds:
   high:   { max_files: 99, tokens_est: 25000 }
 YAML
 
-cat > .agent/routing/taxonomy.yml << 'YAML'
+cat > agent/routing/taxonomy.yml << 'YAML'
 # Project Task Taxonomy
 # Maps task types to executor + required context
 # TODO: Add task types specific to your project's domains
@@ -480,7 +480,7 @@ task_types:
     skill: backend
 YAML
 
-cat > .agent/routing/rules.md << 'MD'
+cat > agent/routing/rules.md << 'MD'
 # Routing Rules — Human-readable version of taxonomy.yml
 # AI reads this when taxonomy.yml match is ambiguous
 # TODO: Customize these rules for your project's executors and risk levels
@@ -504,7 +504,7 @@ When uncertain between two executors:
 MD
 
 # Initialise ledger with header
-cat > .agent/routing/ledger.md << 'MD'
+cat > agent/routing/ledger.md << 'MD'
 # ACP Cost Ledger
 # Auto-appended by scripts/acp-dispatch.ts after every task
 # Never edit manually
@@ -526,12 +526,12 @@ description: Classify and route a task to the cheapest appropriate executor
 
 Given the task description: ${input}
 
-1. Read `.agent/routing/taxonomy.yml` and `.agent/routing/rules.md`
+1. Read `agent/routing/taxonomy.yml` and `agent/routing/rules.md`
 2. Match to the closest task_type
-3. If uncertain, read `.agent/routing/rules.md` ambiguity resolution section
-4. Get next task ID from the highest existing ID in `.agent/tasks/`
-5. Create `.agent/tasks/task-[ID].md` with complete YAML frontmatter
-6. Append a pending row to `.agent/routing/ledger.md`
+3. If uncertain, read `agent/routing/rules.md` ambiguity resolution section
+4. Get next task ID from the highest existing ID in `agent/routing/tasks/`
+5. Create `agent/routing/tasks/task-[ID].md` with complete YAML frontmatter
+6. Append a pending row to `agent/routing/ledger.md`
 7. Output: "Task [ID] created | executor: [X] | est. [N] tokens | [file path]"
 MD
 
@@ -544,17 +544,17 @@ description: End-of-session memory commit — run before closing VS Code
 Perform ACP session commit:
 
 1. Ask: "Which task IDs were completed this session?" if not obvious from context
-2. Write YAML session entry to `.agent/memory/sessions.md`:
+2. Write YAML session entry to `agent/memory/sessions.md`:
    - date, executor, tasks completed, done items (kebab-case), deferred items,
      key_fact (most important thing learned today, if any)
 3. Check: did this session produce a reusable code pattern?
-   If yes → append to `.agent/memory/patterns.md` with date and code_ref
+   If yes → append to `agent/memory/patterns.md` with date and code_ref
 4. Check: was an architectural decision made?
    If yes → prompt "Create ADR for [decision]? (y/n)"
 5. Count entries in sessions.md. If > 15 → compact oldest 10 entries:
    a. Extract key_facts → check if any belong in patterns.md or decisions.md
    b. Replace 10 entries with single weekly summary block
-6. Mark completed tasks as done in their .agent/tasks/ files
+6. Mark completed tasks as done in their agent/routing/tasks/ files
 7. Confirm: "[ACP] Session committed | [N] entries in sessions.md | [compacted? y/n]"
 MD
 
@@ -566,7 +566,7 @@ description: Weekly token spend report with taxonomy improvement suggestions
 
 Generate ACP cost report:
 
-1. Read `.agent/routing/ledger.md` — all entries
+1. Read `agent/routing/ledger.md` — all entries
 2. Group by executor and calculate: total tokens, total cost, task count
 3. Calculate: what would same tasks cost if all used claude-sonnet?
 4. Output table:
@@ -585,14 +585,14 @@ description: Monthly memory compaction — run first Friday of each month
 
 Perform ACP monthly memory sync:
 
-1. Read `.agent/memory/sessions.md`
+1. Read `agent/memory/sessions.md`
 2. Find all weekly summary entries older than 4 weeks
 3. Compress them into a monthly summary block:
    - month, features_shipped, architectural_changes (ADR IDs), recurring_issues,
      net_new_patterns count
-4. Read `.agent/memory/patterns.md`
+4. Read `agent/memory/patterns.md`
 5. Flag entries older than 60 days as stale (add `stale: true` flag)
-6. Read `.agent/wiki/architecture.md` — check last_verified date
+6. Read `agent/wiki/architecture.md` — check last_verified date
 7. If last_verified > 30 days ago → output: "⚠ architecture.md needs verification"
 8. Output: "[ACP] Memory sync complete | sessions.md: [N] entries | [N] stale patterns flagged"
 MD
@@ -605,14 +605,14 @@ description: Create a new Architecture Decision Record
 
 Create a new ADR for the decision: ${input}
 
-1. Get next ADR ID from `.agent/memory/decisions.md`
+1. Get next ADR ID from `agent/memory/decisions.md`
 2. Prompt for (or infer from context):
    - Why this decision was needed
    - What options were considered
    - What was decided
    - What the consequences are
    - What would trigger re-opening this decision
-3. Append to `.agent/memory/decisions.md`:
+3. Append to `agent/memory/decisions.md`:
    ## ADR-[ID] | [date] | [title]
    **Status:** Accepted
    **Context:** ...
@@ -632,9 +632,9 @@ description: Update a wiki file section after architectural changes
 Update wiki for: ${input}
 
 1. Determine which wiki file is affected:
-   - Domain entity/operation changes → `.agent/wiki/domain.yml`
-   - External service/integration changes → `.agent/wiki/integrations.md`
-   - Service boundary/architecture changes → `.agent/wiki/architecture.md`
+   - Domain entity/operation changes → `agent/wiki/domain.yml`
+   - External service/integration changes → `agent/wiki/integrations.md`
+   - Service boundary/architecture changes → `agent/wiki/architecture.md`
 2. Read the current content of the relevant section
 3. Update ONLY the affected section — do not rewrite other sections
 4. Update `last_verified` date in the file header
@@ -650,16 +650,16 @@ description: Bootstrap domain knowledge from codebase — run ONCE on new projec
 Bootstrap ACP domain knowledge from this codebase:
 
 1. Scan the project source files to understand the structure
-2. Extract and write to `.agent/wiki/domain.yml`:
+2. Extract and write to `agent/wiki/domain.yml`:
    - entities: core domain objects (data models, types, interfaces)
    - operations: major functions/endpoints grouped by category
    - modules: main packages or modules in the project
 3. Identify any external service dependencies (APIs, databases, cloud services)
-4. Write placeholders to `.agent/wiki/integrations.md` for each external dependency:
+4. Write placeholders to `agent/wiki/integrations.md` for each external dependency:
    - service name and type
    - environment variable names used (values redacted)
    - any config file references found
-5. Fill in `.agent/core/identity.yml` stack fields based on actual tech stack found
+5. Fill in `agent/core/identity.yml` stack fields based on actual tech stack found
 6. Confirm: "[ACP] Domain extraction complete | [N] entities | [N] modules | [N] external services"
 MD
 
@@ -691,10 +691,10 @@ echo -e "${BLUE}=== Bootstrap Complete ===${NC}"
 echo ""
 echo "Next steps:"
 echo "  1. Edit AGENTS.md — fill in the 'Who You Are' section with your project description"
-echo "  2. Edit .agent/core/identity.yml — fill in project name, stack, repo URL"
+echo "  2. Edit agent/core/identity.yml — fill in project name, stack, repo URL"
 echo "  3. Run /acp-init in Copilot chat to extract domain knowledge from your source files"
 echo "  4. Write 3 ADRs: /acp-decide for your top architectural decisions"
-echo "  5. Edit .agent/routing/taxonomy.yml — replace generic task types with your project's domains"
+echo "  5. Edit agent/routing/taxonomy.yml — replace generic task types with your project's domains"
 echo "  6. Run first task: /acp-route \"[your first task description]\""
 echo ""
 echo "Copilot slash commands available:"
