@@ -4,6 +4,22 @@
 
 - date: 2026-05-03
   executor: Persona A (Copilot)
+  tasks: [task-007, task-008, task-009, task-010]
+  done:
+    - fix-display-available-commands-50-commands-7-categories
+    - fix-yaml-parser-test-hang-group-7-set-e-root-cause
+    - fix-set-preference-nested-yaml-round-trip-yaml-ast-cache-bug
+    - fix-namespace-placeholders-and-scripts-path-prefix-command-docs
+  deferred: {}
+  key_fact: |
+    AST cache bug found: yaml_get/yaml_get_nested/yaml_has_key/yaml_get_array only checked
+    YAML_CURRENT_FILE match, not whether AST temp file still exists. A nested subshell can
+    delete the temp file via cleanup_ast EXIT trap while parent sees stale YAML_CURRENT_FILE.
+    Fixed with _ast_valid() helper checking both conditions. Also: scripts with set -euo pipefail
+    must guard with BASH_SOURCE[0]==$0 to prevent polluting sourcing test shells.
+
+- date: 2026-05-03
+  executor: Persona A (Copilot)
   tasks: [task-001, task-002, task-003, task-004, task-005]
   done:
     - unify-command-syntax-at-acp-dot-to-slash-acp-hyphen-92-files
