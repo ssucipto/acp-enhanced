@@ -66,6 +66,49 @@ fi
 echo "${GREEN}✓${NC} Latest files fetched"
 echo ""
 
+# ── Legacy .agent/ migration ──────────────────────────────────────────────────
+# Detect ACP < 6.x layout and auto-merge user-state files into agent/ before
+# the update proceeds. Static files (.agent/core, skills, wiki) are dropped —
+# they will be refreshed by the update anyway.
+if [ -d ".agent" ]; then
+    echo "${YELLOW}Found legacy .agent/ directory — auto-migrating to agent/ layout...${NC}"
+
+    # User-state memory files (create-if-absent: never overwrite)
+    if [ -d ".agent/memory" ]; then
+        mkdir -p agent/memory
+        for _f in sessions.md lessons.md decisions.md patterns.md; do
+            if [ -f ".agent/memory/$_f" ] && [ ! -f "agent/memory/$_f" ]; then
+                mv ".agent/memory/$_f" "agent/memory/$_f"
+                echo "  ✓ Migrated memory/$_f"
+            fi
+        done
+    fi
+
+    # Routing task files (task-NNN.md — user-created, never overwrite)
+    if [ -d ".agent/tasks" ]; then
+        mkdir -p agent/routing/tasks
+        for _f in ".agent/tasks/task-"*.md; do
+            [ -f "$_f" ] || continue
+            _dest="agent/routing/tasks/$(basename "$_f")"
+            if [ ! -f "$_dest" ]; then
+                mv "$_f" "$_dest"
+                echo "  ✓ Migrated routing/tasks/$(basename "$_f")"
+            fi
+        done
+    fi
+
+    # Routing ledger (user-state — never overwrite)
+    if [ -f ".agent/routing/ledger.md" ] && [ ! -f "agent/routing/ledger.md" ]; then
+        mkdir -p agent/routing
+        mv ".agent/routing/ledger.md" "agent/routing/ledger.md"
+        echo "  ✓ Migrated routing/ledger.md"
+    fi
+
+    rm -rf ".agent"
+    echo "${GREEN}✓${NC} Legacy .agent/ merged and removed"
+    echo ""
+fi
+
 # Ensure reports directory exists and is ignored
 mkdir -p "agent/reports"
 if [ ! -f "agent/.gitignore" ]; then
