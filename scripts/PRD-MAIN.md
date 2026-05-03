@@ -24,7 +24,7 @@ It works for three developer personas:
 ## Problem Statement
 
 ### What the Original ACP Does Well
-- Provides a structured `.agent/` directory alongside source code
+- Provides a structured `agent/` directory alongside source code
 - `AGENT.md` gives AI assistants persistent project context
 - Command pattern (`/acp-init`, `/acp-commit`) is intuitive
 - Zero infrastructure — lives entirely in the repository
@@ -73,23 +73,23 @@ It works for three developer personas:
 
 ```
 LAYER 1 — CORE (Always loaded, static, prompt-cached)
-  .agent/core/identity.yml        ~60 tokens
-  .agent/core/constraints.yml     ~80 tokens
-  .agent/core/routing.yml         ~40 tokens
+  agent/core/identity.yml        ~60 tokens
+  agent/core/constraints.yml     ~80 tokens
+  agent/core/routing.yml         ~40 tokens
   Total Layer 1:                  ~180 tokens, cached after first call
 
 LAYER 2 — SKILLS (Loaded per task type, semi-static)
-  .agent/skills/ui.md             ~300 tokens
-  .agent/skills/data.md           ~350 tokens
-  .agent/skills/deploy.md         ~280 tokens
-  .agent/skills/gamification.md   ~260 tokens
-  .agent/skills/auth.md           ~200 tokens
-  .agent/skills/crosscut.md       ~240 tokens
+  agent/skills/ui.md             ~300 tokens
+  agent/skills/data.md           ~350 tokens
+  agent/skills/deploy.md         ~280 tokens
+  agent/skills/gamification.md   ~260 tokens
+  agent/skills/auth.md           ~200 tokens
+  agent/skills/crosscut.md       ~240 tokens
   Only ONE skill file loaded per task
 
 LAYER 3 — EPHEMERAL (Session-specific, never cached)
-  .agent/memory/sessions.md       ~500 tokens max (last 3 entries)
-  .agent/memory/lessons.md        ~200 tokens max (filtered by task_type)
+  agent/memory/sessions.md       ~500 tokens max (last 3 entries)
+  agent/memory/lessons.md        ~200 tokens max (filtered by task_type)
   [active task file]              ~400 tokens average
   [relevant wiki section]         ~600 tokens max (section only, not full file)
   Total Layer 3:                  ~1,200–1,700 tokens per task
@@ -146,7 +146,7 @@ taxonomy.yml assigns: executor + context_required
 │       ├── acp-memory-sync.prompt.md  ← /acp-memory-sync
 │       ├── acp-decide.prompt.md       ← /acp-decide
 │       └── acp-wiki-update.prompt.md  ← /acp-wiki-update
-├── .agent/
+├── agent/
 │   ├── core/                          ← Layer 1: always loaded, cached
 │   │   ├── identity.yml
 │   │   ├── constraints.yml
@@ -192,7 +192,7 @@ AGENTS.md is the root file loaded by all major IDEs automatically:
 - Claude Code reads CLAUDE.md (symlinked from AGENTS.md)
 
 AGENTS.md contains ONLY the Context Loading Protocol — it is not a
-monolith. All substantive content lives in the layered `.agent/` files.
+monolith. All substantive content lives in the layered `agent/` files.
 
 ### F2 — Core Layer (Layer 1)
 
@@ -323,7 +323,7 @@ No pasting. No explaining. No setup.
 ### Creating a Task (1 command, 90 seconds)
 Type: /acp-route "Add haptic feedback to reward screen"
 AI reads taxonomy.yml, assigns executor: deepseek-v4-flash,
-creates .agent/tasks/task-NNN.md with full frontmatter.
+creates agent/routing/tasks/task-NNN.md with full frontmatter.
 Developer reviews frontmatter (30 seconds), overrides executor if wrong.
 
 ### Doing the Work — Persona A (Copilot Pro)
@@ -333,7 +333,7 @@ model to select in the dropdown. No dispatch script needed.
 
 ### Doing the Work — Persona B/C (DeepSeek)
 For in-IDE chat: use Continue.dev with model already selected by task.
-For explicit dispatch: npx ts-node scripts/acp-dispatch.ts .agent/tasks/task-NNN.md
+For explicit dispatch: npx ts-node scripts/acp-dispatch.ts agent/routing/tasks/task-NNN.md
 Output streams to terminal. Ledger updated automatically.
 
 ### End of Session (1 command, 90 seconds)
@@ -411,4 +411,4 @@ Accept or reject suggestions. Done.
 | Dispatch script API changes   | Medium     | OpenRouter abstraction shields providers|
 | sessions.md grows unbounded   | Low        | Auto-compaction at 15 entries           |
 | Context budget exceeded       | Low        | Hard enforcement in dispatch script     |
-| Second dev joins, no onboarding| Low       | .agent/ IS the onboarding document      |
+| Second dev joins, no onboarding| Low       | agent/ IS the onboarding document      |

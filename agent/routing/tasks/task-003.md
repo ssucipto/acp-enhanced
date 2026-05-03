@@ -18,12 +18,12 @@ cost_actual_usd:
 created: 2026-05-03
 completed:
 override_reason:
-depends_on: task-002  # must run after .agent/ → agent/ migration is complete
+depends_on: task-002  # must run after agent/ → agent/ migration is complete
 ---
 
 ## Context
 
-After task-002 moves `.agent/` into `agent/`, the ACP Enhanced layer directories become:
+After task-002 moves `agent/` into `agent/`, the ACP Enhanced layer directories become:
 - `agent/core/` — static identity, constraints, routing session state
 - `agent/memory/` — sessions.md, lessons.md, decisions.md, patterns.md (user-state files)
 - `agent/routing/` — taxonomy.yml, rules.md, ledger.md, config.yml
@@ -177,4 +177,4 @@ Also update the "What was updated" completion message to include:
 
 Run after task-002. The directories being referenced (`agent/core/`, etc.) must exist in the
 repo before the install/update scripts can copy from them. Task-002 creates them by migrating
-from `.agent/`.
+from `agent/`.
