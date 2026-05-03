@@ -53,8 +53,8 @@ Arguments are inferred from chat context. The agent will:
 - `--force` - Skip confirmations and proceed
 
 **Natural Language Arguments**:
-- `@acp.package-list global packages` - List global packages
-- `@acp.package-list with details` - Verbose mode
+- `/acp-package-list global packages` - List global packages
+- `/acp-package-list with details` - Verbose mode
 
 **Argument Mapping**:
 The agent infers intent from context. "Show me global packages" maps to `--global` flag.
@@ -330,7 +330,7 @@ Example output message or status report
 
 ## Key Design Decisions (Optional)
 
-<!-- This section is populated by @acp.clarification-capture when
+<!-- This section is populated by /acp-clarification-capture when
      create commands are invoked with --from-clar, --from-chat, or
      --from-context. It can also be manually authored.
      Omit this section entirely if no decisions to capture.

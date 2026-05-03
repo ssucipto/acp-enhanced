@@ -1,5 +1,5 @@
 #!/bin/bash
-# E2E Tests for @acp.package-remove command
+# E2E Tests for /acp-package-remove command
 # Tests removing installed packages
 
 set -e

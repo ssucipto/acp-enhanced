@@ -10,7 +10,7 @@
 
 ACP Enhanced gives your AI agent two things:
 
-1. **Command system** — Markdown files in `agent/commands/` that the agent reads as executable scripts. When you type `@acp.plan`, the agent reads `agent/commands/acp.plan.md` and follows it step-by-step, just like a shell script.
+1. **Command system** — Markdown files in `agent/commands/` that the agent reads as executable scripts. When you type `/acp-plan`, the agent reads `agent/commands/acp.plan.md` and follows it step-by-step, just like a shell script.
 2. **Context framework** — The `.agent/` directory gives the agent a structured memory system (session log, corrections, patterns, decisions) that it loads within a strict token budget at the start of every session.
 
 ---
@@ -23,12 +23,12 @@ ACP Enhanced gives your AI agent two things:
 
 ---
 
-## Step 1 — Start Every Session with `@acp.init`
+## Step 1 — Start Every Session with `/acp-init`
 
 At the beginning of every new chat session, run:
 
 ```
-@acp.init
+/acp-init
 ```
 
 The agent will:
@@ -40,7 +40,7 @@ The agent will:
 
 **Fast mode** (skip source file review and sync checks):
 ```
-@acp.init --quick
+/acp-init --quick
 ```
 
 **Expected output**: The agent prints a structured summary of project state and tells you what the next task is.
@@ -50,7 +50,7 @@ The agent will:
 ## Step 2 — Check Project Status at Any Time
 
 ```
-@acp.status
+/acp-status
 ```
 
 Reads `agent/progress.yaml` and shows:
@@ -59,25 +59,25 @@ Reads `agent/progress.yaml` and shows:
 - Recent completed work
 - What's next
 
-Use this instead of `@acp.init` when you just want a quick summary without a full context reload.
+Use this instead of `/acp-init` when you just want a quick summary without a full context reload.
 
 ---
 
-## Step 3 — Plan New Work with `@acp.plan`
+## Step 3 — Plan New Work with `/acp-plan`
 
 When you have new requirements or undefined milestones/tasks:
 
 ```
-@acp.plan
+/acp-plan
 ```
 
 The agent scans `agent/progress.yaml` for undefined items and presents options. You can also be direct:
 
 ```
-@acp.plan --milestone M20                    # Plan a specific milestone
-@acp.plan --draft agent/drafts/my-idea.md   # Use a prepared draft
-@acp.plan new feature: user authentication  # Inline description
-@acp.plan --batch                           # Plan everything without prompting
+/acp-plan --milestone M20                    # Plan a specific milestone
+/acp-plan --draft agent/drafts/my-idea.md   # Use a prepared draft
+/acp-plan new feature: user authentication  # Inline description
+/acp-plan --batch                           # Plan everything without prompting
 ```
 
 ### What Planning Produces
@@ -100,12 +100,12 @@ Control how the agent collects requirements via preference:
 
 Set your preferred mode:
 ```
-@acp.preferences-set acp plan.draft.create_mode guided
+/acp-preferences-set acp plan.draft.create_mode guided
 ```
 
 Override for a single run:
 ```
-@acp.plan --plan.draft.create_mode contextual
+/acp-plan --plan.draft.create_mode contextual
 ```
 
 ### Using Presets
@@ -113,24 +113,24 @@ Override for a single run:
 Presets bundle multiple preferences for a specific planning style:
 
 ```
-@acp.plan --preset acp.batch-planning       # Fast, no confirmations, quiet output
-@acp.plan --preset acp.interactive-planning # Guided, manual confirm, verbose
-@acp.plan --preset acp.rapid-prototyping   # Contextual, auto-commit, coarse tasks
+/acp-plan --preset acp.batch-planning       # Fast, no confirmations, quiet output
+/acp-plan --preset acp.interactive-planning # Guided, manual confirm, verbose
+/acp-plan --preset acp.rapid-prototyping   # Contextual, auto-commit, coarse tasks
 ```
 
 List available presets:
 ```
-@acp.preferences-show acp --presets
+/acp-preferences-show acp --presets
 ```
 
 ---
 
-## Step 4 — Implement Tasks with `@acp.proceed`
+## Step 4 — Implement Tasks with `/acp-proceed`
 
 After planning, start implementation:
 
 ```
-@acp.proceed
+/acp-proceed
 ```
 
 The agent picks up the current or next task, reads its task document step-by-step, implements the code changes, runs the verification checklist, and stops for your review.
@@ -138,9 +138,9 @@ The agent picks up the current or next task, reads its task document step-by-ste
 ### Autonomous Mode (implement an entire milestone without stopping)
 
 ```
-@acp.proceed --complete          # Finish all tasks in current milestone
-@acp.proceed --complete --yolo   # Same, skip confirmation prompt
-@acp.proceed --yolo              # If task is already clear from context, start immediately
+/acp-proceed --complete          # Finish all tasks in current milestone
+/acp-proceed --complete --yolo   # Same, skip confirmation prompt
+/acp-proceed --yolo              # If task is already clear from context, start immediately
 ```
 
 **What happens in autonomous mode:**
@@ -152,7 +152,7 @@ The agent picks up the current or next task, reads its task document step-by-ste
 ### Targeting a Specific Task
 
 ```
-@acp.proceed --task task-42     # Jump to a specific task
+/acp-proceed --task task-42     # Jump to a specific task
 ```
 
 ---
@@ -199,9 +199,9 @@ This is how the agent "remembers" across sessions. **Don't skip this step.**
 ### "I want to start a new feature from scratch"
 
 ```
-1. @acp.plan                          ← Describe the feature when prompted
+1. /acp-plan                          ← Describe the feature when prompted
 2. Review the generated milestone/task files
-3. @acp.proceed                       ← Implement first task
+3. /acp-proceed                       ← Implement first task
 4. @git.commit                        ← Commit after each task
 5. (repeat 3-4 for each task)
 6. /acp-commit                        ← End session
@@ -210,7 +210,7 @@ This is how the agent "remembers" across sessions. **Don't skip this step.**
 ### "I just want to finish the current milestone fast"
 
 ```
-@acp.proceed --complete --yolo
+/acp-proceed --complete --yolo
 ```
 
 The agent handles everything: implements each task, commits, and reports when done.
@@ -218,14 +218,14 @@ The agent handles everything: implements each task, commits, and reports when do
 ### "I need to check what's going on before starting"
 
 ```
-@acp.status                           ← Quick summary
-@acp.init                             ← Full context load (use at session start)
+/acp-status                           ← Quick summary
+/acp-init                             ← Full context load (use at session start)
 ```
 
 ### "I want to validate everything is consistent"
 
 ```
-@acp.validate
+/acp-validate
 ```
 
 Checks that task documents, progress.yaml, and code are consistent. Reports any drift.
@@ -239,7 +239,7 @@ Preferences control agent behavior across commands (draft mode, task granularity
 ### See current effective preferences
 
 ```
-@acp.preferences-show acp
+/acp-preferences-show acp
 ```
 
 Output shows each preference, its value, and which level set it (project/workspace/user/default).
@@ -247,16 +247,16 @@ Output shows each preference, its value, and which level set it (project/workspa
 ### Set a preference
 
 ```
-@acp.preferences-set acp plan.draft.create_mode contextual
-@acp.preferences-set acp task.create.granularity 2 --user   # Set globally for all projects
+/acp-preferences-set acp plan.draft.create_mode contextual
+/acp-preferences-set acp task.create.granularity 2 --user   # Set globally for all projects
 ```
 
 ### Create a preference file from defaults
 
 ```
-@acp.preferences-create --level user           # Set your personal defaults
-@acp.preferences-create --level project        # Set project-wide defaults
-@acp.preferences-create --level workspace      # Set per-workspace overrides
+/acp-preferences-create --level user           # Set your personal defaults
+/acp-preferences-create --level project        # Set project-wide defaults
+/acp-preferences-create --level workspace      # Set per-workspace overrides
 ```
 
 ### Available Preferences
@@ -279,11 +279,11 @@ Output shows each preference, its value, and which level set it (project/workspa
 ACP Enhanced has a package system for distributing command sets.
 
 ```
-@acp.package-install https://github.com/some/acp-package.git   # Install a package
-@acp.package-list                                                # List installed packages
-@acp.package-update acp-enhanced                                # Update this fork
-@acp.package-remove some-package                                # Remove a package
-@acp.package-info acp-enhanced                                  # Show package details
+/acp-package-install https://github.com/some/acp-package.git   # Install a package
+/acp-package-list                                                # List installed packages
+/acp-package-update acp-enhanced                                # Update this fork
+/acp-package-remove some-package                                # Remove a package
+/acp-package-info acp-enhanced                                  # Show package details
 ```
 
 Installed packages land in `agent/commands/`, `agent/scripts/`, and `agent/schemas/`, tracked in `agent/manifest.yaml`.
@@ -292,12 +292,12 @@ Installed packages land in `agent/commands/`, `agent/scripts/`, and `agent/schem
 
 ## The Key File Index
 
-The key file index lets you tell the agent which files are most important to read during `@acp.plan` and `@acp.proceed`.
+The key file index lets you tell the agent which files are most important to read during `/acp-plan` and `/acp-proceed`.
 
 ```
-@acp.index                          # List indexed files
-@acp.index add agent/design/my-design.md   # Add a file
-@acp.index explore                  # Suggest files to add based on your codebase
+/acp-index                          # List indexed files
+/acp-index add agent/design/my-design.md   # Add a file
+/acp-index explore                  # Suggest files to add based on your codebase
 ```
 
 ---
@@ -306,19 +306,19 @@ The key file index lets you tell the agent which files are most important to rea
 
 | Command | What it does |
 |---|---|
-| `@acp.init` | Full context load at session start |
-| `@acp.init --quick` | Fast context load (skip source review) |
-| `@acp.status` | Show project status from progress.yaml |
-| `@acp.plan` | Plan milestones and tasks interactively |
-| `@acp.plan --batch` | Plan all undefined items without prompting |
-| `@acp.proceed` | Implement the current task |
-| `@acp.proceed --complete --yolo` | Autonomously finish entire milestone |
+| `/acp-init` | Full context load at session start |
+| `/acp-init --quick` | Fast context load (skip source review) |
+| `/acp-status` | Show project status from progress.yaml |
+| `/acp-plan` | Plan milestones and tasks interactively |
+| `/acp-plan --batch` | Plan all undefined items without prompting |
+| `/acp-proceed` | Implement the current task |
+| `/acp-proceed --complete --yolo` | Autonomously finish entire milestone |
 | `@git.commit` | Version-aware commit with CHANGELOG update |
-| `@acp.validate` | Check docs/code consistency |
-| `@acp.preferences-show acp` | Show active preferences with source |
-| `@acp.preferences-set acp <key> <val>` | Set a preference value |
-| `@acp.package-install <url>` | Install an ACP package |
-| `@acp.index explore` | Suggest key files to index |
+| `/acp-validate` | Check docs/code consistency |
+| `/acp-preferences-show acp` | Show active preferences with source |
+| `/acp-preferences-set acp <key> <val>` | Set a preference value |
+| `/acp-package-install <url>` | Install an ACP package |
+| `/acp-index explore` | Suggest key files to index |
 | `/acp-commit` | Write session summary to `.agent/memory/` |
 | `/acp-route "<task>"` | Create a routed task file for a new task |
 
@@ -329,7 +329,7 @@ The key file index lets you tell the agent which files are most important to rea
 | Path | Purpose |
 |---|---|
 | `agent/progress.yaml` | Source of truth for all milestone/task status |
-| `agent/commands/*.md` | Command directive files (what `@acp.*` reads) |
+| `agent/commands/*.md` | Command directive files (what `/acp-*` reads) |
 | `agent/scripts/*.sh` | Shell scripts bound to commands |
 | `agent/milestones/milestone-{N}-*.md` | Milestone planning documents |
 | `agent/tasks/milestone-{N}-*/task-{M}-*.md` | Task implementation guides |
@@ -343,14 +343,14 @@ The key file index lets you tell the agent which files are most important to rea
 
 ## Troubleshooting
 
-**Agent ignores `@acp.plan` or doesn't follow the steps**  
-→ The command file in `agent/commands/acp.plan.md` must be readable by the agent. In VS Code Copilot, type `@acp.plan` in chat — Copilot will read the matching `.md` file if it's in `agent/commands/`. In Claude Code, the agent reads `AGENT.md` which references the command system.
+**Agent ignores `/acp-plan` or doesn't follow the steps**  
+→ The command file in `agent/commands/acp.plan.md` must be readable by the agent. In VS Code Copilot, type `/acp-plan` in chat — Copilot will read the matching `.md` file if it's in `agent/commands/`. In Claude Code, the agent reads `AGENT.md` which references the command system.
 
 **Preferences don't seem to take effect**  
-→ Run `@acp.preferences-show acp` to see the effective values and which level each came from. Check that your preference file is at the right path and uses the correct format.
+→ Run `/acp-preferences-show acp` to see the effective values and which level each came from. Check that your preference file is at the right path and uses the correct format.
 
 **progress.yaml is out of sync**  
-→ Run `@acp.validate` to detect inconsistencies. The agent will report what's stale and offer to fix it.
+→ Run `/acp-validate` to detect inconsistencies. The agent will report what's stale and offer to fix it.
 
 **Session context runs out mid-task**  
-→ Run `@acp.report` to generate a handoff summary, then start a new session and run `@acp.resume` to pick up where you left off.
+→ Run `/acp-report` to generate a handoff summary, then start a new session and run `/acp-resume` to pick up where you left off.

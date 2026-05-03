@@ -1,6 +1,6 @@
 # Command: project-info
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.project-info` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-project-info` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -22,7 +22,7 @@ This command displays comprehensive information about a project registered in `~
 
 Use this command to understand project details, check project status, view relationships with other projects, and verify project directory existence. It's particularly useful when working with multiple projects in the global workspace to quickly understand project context.
 
-Unlike [`@acp.project-list`](acp.project-list.md:1) which shows all projects in a summary view, `@acp.project-info` focuses on a single project and displays all available metadata in detail.
+Unlike [`/acp-project-list`](acp.project-list.md:1) which shows all projects in a summary view, `/acp-project-info` focuses on a single project and displays all available metadata in detail.
 
 ---
 
@@ -39,18 +39,18 @@ Unlike [`@acp.project-list`](acp.project-list.md:1) which shows all projects in 
 ### 0. Display Command Header
 
 ```
-⚡ @acp.project-info
+⚡ /acp-project-info
   Display detailed information about a specific project
 
   Usage:
-    @acp.project-info <project-name>               Show project details
+    /acp-project-info <project-name>               Show project details
 
   Related:
-    @acp.project-list        List all projects in registry
-    @acp.project-set         Switch to a project
-    @acp.project-update      Update project metadata
-    @acp.projects-sync       Sync registry with filesystem
-    @acp.projects-restore    Restore projects from git origins
+    /acp-project-list        List all projects in registry
+    /acp-project-set         Switch to a project
+    /acp-project-update      Update project metadata
+    /acp-projects-sync       Sync registry with filesystem
+    /acp-projects-restore    Restore projects from git origins
 ```
 
 ### 1. Validate Arguments
@@ -212,7 +212,7 @@ Dependencies:
 
 **Context**: Want to see details about the current project  
 
-**Invocation**: `@acp.project-info remember-mcp-server`  
+**Invocation**: `/acp-project-info remember-mcp-server`  
 
 **Result**: Displays complete project metadata including type, status, path, description, timestamps, tags, related projects, dependencies, and directory status  
 
@@ -220,7 +220,7 @@ Dependencies:
 
 **Context**: Want to verify project exists before switching to it  
 
-**Invocation**: `@acp.project-info agentbase-mcp-server`  
+**Invocation**: `/acp-project-info agentbase-mcp-server`  
 
 **Result**: Shows project details, confirms directory exists, shows it's an ACP project with version  
 
@@ -228,7 +228,7 @@ Dependencies:
 
 **Context**: Trying to view info for non-existent project  
 
-**Invocation**: `@acp.project-info nonexistent-project`  
+**Invocation**: `/acp-project-info nonexistent-project`  
 
 **Result**: Error message with list of available projects  
 
@@ -236,7 +236,7 @@ Dependencies:
 
 **Context**: Project in registry but directory deleted  
 
-**Invocation**: `@acp.project-info old-project`  
+**Invocation**: `/acp-project-info old-project`  
 
 **Result**: Shows metadata but warns that directory doesn't exist  
 
@@ -244,11 +244,11 @@ Dependencies:
 
 ## Related Commands
 
-- [`@acp.project-list`](acp.project-list.md) - List all projects in registry
-- [`@acp.project-set`](acp.project-set.md) - Switch to a project
-- [`@acp.project-update`](acp.project-update.md) - Update project metadata
-- [`@acp.projects-sync`](acp.projects-sync.md) - Sync registry with filesystem
-- [`@acp.projects-restore`](acp.projects-restore.md) - Restore projects from git origins
+- [`/acp-project-list`](acp.project-list.md) - List all projects in registry
+- [`/acp-project-set`](acp.project-set.md) - Switch to a project
+- [`/acp-project-update`](acp.project-update.md) - Update project metadata
+- [`/acp-projects-sync`](acp.projects-sync.md) - Sync registry with filesystem
+- [`/acp-projects-restore`](acp.projects-restore.md) - Restore projects from git origins
 
 ---
 
@@ -260,7 +260,7 @@ Dependencies:
 
 **Cause**: `~/.acp/projects.yaml` doesn't exist  
 
-**Solution**: Create a project with `@acp.project-create` to initialize the registry  
+**Solution**: Create a project with `/acp-project-create` to initialize the registry  
 
 ### Issue 2: Project not found
 
@@ -268,7 +268,7 @@ Dependencies:
 
 **Cause**: Project not registered or wrong name  
 
-**Solution**: Run `@acp.project-list` to see available projects, or use `@acp.projects-sync` to discover unregistered projects  
+**Solution**: Run `/acp-project-list` to see available projects, or use `/acp-projects-sync` to discover unregistered projects  
 
 ### Issue 3: Directory not found
 
@@ -276,7 +276,7 @@ Dependencies:
 
 **Cause**: Project directory was moved or deleted  
 
-**Solution**: Either restore the directory, update the path with `@acp.project-update`, or remove the project with `@acp.project-remove`  
+**Solution**: Either restore the directory, update the path with `/acp-project-update`, or remove the project with `/acp-project-remove`  
 
 ### Issue 4: No metadata displayed
 
@@ -284,7 +284,7 @@ Dependencies:
 
 **Cause**: Optional fields not set in registry  
 
-**Solution**: This is normal for optional fields (tags, related_projects, dependencies). Use `@acp.project-update` to add metadata.  
+**Solution**: This is normal for optional fields (tags, related_projects, dependencies). Use `/acp-project-update` to add metadata.  
 
 ---
 

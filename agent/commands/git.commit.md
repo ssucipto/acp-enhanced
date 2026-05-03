@@ -53,9 +53,9 @@ Display the following informational header, then continue immediately:
   Automate version detection, changelog updates, and git commits with proper semantic versioning
 
   Related:
-    @acp.version-check    Check current version
-    @acp.version-update   Update ACP itself
-    @acp.status           Check project status before committing
+    /acp-version-check    Check current version
+    /acp-version-update   Update ACP itself
+    /acp-status           Check project status before committing
 ```
 
 ### 1. Analyze Changes for Version Impact
@@ -399,7 +399,7 @@ Version: 1.2.4
 
 ### Example 3: Breaking Change (Major Version)
 
-**Context**: Changed command syntax from `AGENT.md: Initialize` to `@acp.init`  
+**Context**: Changed command syntax from `AGENT.md: Initialize` to `/acp-init`  
 
 **Detection**:
 - Breaking change to user interface
@@ -412,25 +412,25 @@ Version: 1.2.4
 ## [2.0.0] - 2026-02-16
 
 ### Changed
-- **BREAKING**: Command syntax changed from `AGENT.md: Initialize` to `@acp.init`
-- All commands now use `@acp.*` format
+- **BREAKING**: Command syntax changed from `AGENT.md: Initialize` to `/acp-init`
+- All commands now use `/acp-*` format
 - Old prompt format no longer supported
 
 ### Migration Guide
-- Replace `AGENT.md: Initialize` with `@acp.init`
-- Replace `AGENT.md: Proceed` with `@acp.proceed`
+- Replace `AGENT.md: Initialize` with `/acp-init`
+- Replace `AGENT.md: Proceed` with `/acp-proceed`
 ```
 
 **Commit Message**:
 ```
-feat!: change command syntax to @acp.* format
+feat!: change command syntax to /acp-* format
 
 BREAKING CHANGE: Command syntax has changed from "AGENT.md: Initialize" 
-to "@acp.init" format. All commands now use the @acp.* namespace.
+to "/acp-init" format. All commands now use the /acp-* namespace.
 
 Migration:
-- AGENT.md: Initialize → @acp.init
-- AGENT.md: Proceed → @acp.proceed
+- AGENT.md: Initialize → /acp-init
+- AGENT.md: Proceed → /acp-proceed
 
 Version: 2.0.0
 ```
@@ -520,9 +520,9 @@ Is this a breaking change?
 
 ## Related Commands
 
-- [`@acp.version-check`](acp.version-check.md) - Check current version
-- [`@acp.version-update`](acp.version-update.md) - Update ACP itself
-- [`@acp.status`](acp.status.md) - Check project status before committing
+- [`/acp-version-check`](acp.version-check.md) - Check current version
+- [`/acp-version-update`](acp.version-update.md) - Update ACP itself
+- [`/acp-status`](acp.status.md) - Check project status before committing
 
 ---
 

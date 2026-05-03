@@ -1,7 +1,7 @@
 # Command: plan
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.plan` has been invoked. Follow the steps below to execute this command.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.plan` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-plan` has been invoked. Follow the steps below to execute this command.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-plan` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
 **Version**: 2.0.0  
@@ -38,7 +38,7 @@ Presets are named preference bundles that configure multiple preferences at once
 - `--preset acp.interactive-planning` - Guided mode, manual confirm, verbose output
 - `--preset acp.rapid-prototyping` - Contextual mode, auto-commit, minimal output
 
-Run `@acp.preferences-show acp --presets` to see all available presets.
+Run `/acp-preferences-show acp --presets` to see all available presets.
 
 **Preference Overrides**:  
 Any `acp` namespace preference can be overridden using dot notation for a single invocation:
@@ -57,10 +57,10 @@ Any `acp` namespace preference can be overridden using dot notation for a single
 Overrides and presets do **not** modify stored preference files.
 
 **Natural Language Arguments**:
-- `@acp.plan for milestone 6` - Plan specific milestone
-- `@acp.plan all undefined tasks` - Batch mode
-- `@acp.plan @my-draft.md` - Use draft file
-- `@acp.plan new feature: user authentication` - Inline requirements
+- `/acp-plan for milestone 6` - Plan specific milestone
+- `/acp-plan all undefined tasks` - Batch mode
+- `/acp-plan @my-draft.md` - Use draft file
+- `/acp-plan new feature: user authentication` - Inline requirements
 
 **Argument Mapping**:
 Arguments are inferred from chat context. The agent will:
@@ -79,7 +79,7 @@ This command helps agents systematically plan project milestones and tasks. It s
 - Automatic detection of undefined milestones/tasks in progress.yaml
 - Support for design document creation (structured or unstructured drafts)
 - Clarification workflow for ambiguous requirements
-- Invokes `@acp.design-create`, `@acp.task-create` as subroutines
+- Invokes `/acp-design-create`, `/acp-task-create` as subroutines
 - Automatic progress.yaml updates
 - Flexible workflow (iterative or batch planning)
 
@@ -108,24 +108,24 @@ When invoked, immediately display a brief informational header before proceeding
 
 **Display format**:
 ```
-⚡ @acp.plan
+⚡ /acp-plan
   Plan milestones OR tasks for undefined items or new requirements
 
   Usage:
-    @acp.plan                              Scan and plan undefined items interactively
-    @acp.plan --batch                      Plan all undefined items without prompting
-    @acp.plan --milestone <id>             Plan specific milestone
-    @acp.plan --task <id>                  Plan specific task
-    @acp.plan --draft <path>               Use specific draft file
-    @acp.plan --no-commit                  Skip automatic commit after planning
-    @acp.plan --preset acp.batch-planning  Load batch-planning preset
-    @acp.plan --plan.draft.create_mode guided   Override draft mode for this run
+    /acp-plan                              Scan and plan undefined items interactively
+    /acp-plan --batch                      Plan all undefined items without prompting
+    /acp-plan --milestone <id>             Plan specific milestone
+    /acp-plan --task <id>                  Plan specific task
+    /acp-plan --draft <path>               Use specific draft file
+    /acp-plan --no-commit                  Skip automatic commit after planning
+    /acp-plan --preset acp.batch-planning  Load batch-planning preset
+    /acp-plan --plan.draft.create_mode guided   Override draft mode for this run
 
   Related:
-    @acp.task-create     Create individual task documents
-    @acp.design-create   Create design documents
-    @acp.proceed         Start implementing planned tasks
-    @acp.status          Check current project status
+    /acp-task-create     Create individual task documents
+    /acp-design-create   Create design documents
+    /acp-proceed         Start implementing planned tasks
+    /acp-status          Check current project status
 ```
 
 **Expected Outcome**: User sees at a glance what the command does, how to customize it, and what else is available
@@ -144,12 +144,12 @@ Before planning, load relevant key files from the index and resolve active prefe
 - Produce visible output
 
 **Preference Loading**:
-- Invoke `@acp.preferences-get acp` to load the complete `acp` preference set
+- Invoke `/acp-preferences-get acp` to load the complete `acp` preference set
 - If `--preset <name>` was provided, call `acp.preferences.sh load-preset acp <name>` and merge preset values (preset wins over project/workspace/user, but loses to explicit overrides)
 - Parse any command-line `--<pref.path> <value>` overrides from the invocation
 - Merge priority: overrides > preset > loaded preferences
 - Store the effective preference map for use in subsequent steps
-- If `@acp.preferences-get` is unavailable or returns nothing, proceed without preferences (backward compatible)
+- If `/acp-preferences-get` is unavailable or returns nothing, proceed without preferences (backward compatible)
 
 **Preference display** (when preferences loaded):
 ```
@@ -333,7 +333,7 @@ After structured/unstructured draft is filled by user: read completed draft and 
 - Wait for clarification responses
 
 **Option F: Point to Existing Draft**
-- Support syntax: `@acp.plan @agent/drafts/my-feature.draft.md`
+- Support syntax: `/acp-plan @agent/drafts/my-feature.draft.md`
 - Read draft file
 - If ambiguous, request chat clarification or offer to create clarification
 
@@ -359,8 +359,8 @@ For each milestone to plan:
 
 **Actions**:
 - Determine milestone number (find highest M{N} in progress.yaml and increment)
-- Invoke `@acp.design-create` if design document needed (ask user)
-- Create milestone document using template or invoke `@acp.milestone-create`
+- Invoke `/acp-design-create` if design document needed (ask user)
+- Create milestone document using template or invoke `/acp-milestone-create`
 - Fill in:
   - Goal and overview
   - Deliverables
@@ -377,7 +377,7 @@ For each task in milestone:
 
 **Actions**:
 - Determine task number (find highest task-{N} across ALL milestones and increment)
-- Invoke `@acp.task-create` for each task (follows its routine)
+- Invoke `/acp-task-create` for each task (follows its routine)
 - Tasks created in: `agent/tasks/milestone-{N}-{title}/task-{M}-{title}.md`
 - **New Structure**: Tasks grouped by milestone folder
 - For orphaned tasks (no milestone): Use `agent/tasks/unassigned/task-{M}-{title}.md`
@@ -449,9 +449,9 @@ Files Created:
 Next Steps:
   • Review milestone and task documents
   • Refine task steps and verification items
-  • Run @acp.validate to check consistency
-  • Run @acp.proceed to start first task
-  • Run @acp.sync to update related documentation (optional)
+  • Run /acp-validate to check consistency
+  • Run /acp-proceed to start first task
+  • Run /acp-sync to update related documentation (optional)
 ```
 
 **Expected Outcome**: User understands what was created  
@@ -480,10 +480,10 @@ Commit all created planning documents and progress.yaml updates.
 Prompt user for next action:
 
 **Options**:
-- `@acp.proceed` - Start implementing first task
-- `@acp.plan` - Continue planning (if more to plan)
-- `@acp.validate` - Validate planning consistency
-- `@acp.sync` - Sync documentation with new plans
+- `/acp-proceed` - Start implementing first task
+- `/acp-plan` - Continue planning (if more to plan)
+- `/acp-validate` - Validate planning consistency
+- `/acp-sync` - Sync documentation with new plans
 - Review and refine manually
 
 **Expected Outcome**: User chooses next action  
@@ -534,7 +534,7 @@ Prompt user for next action:
 
 **Context**: M6 exists in progress.yaml but no milestone document  
 
-**Invocation**: `@acp.plan`  
+**Invocation**: `/acp-plan`  
 
 **Result**:
 ```
@@ -568,7 +568,7 @@ User: yes
 
 **Context**: Have requirements draft prepared  
 
-**Invocation**: `@acp.plan @agent/drafts/auth-feature.draft.md`  
+**Invocation**: `/acp-plan @agent/drafts/auth-feature.draft.md`  
 
 **Result**: Reads draft, creates clarification if needed, generates milestone and tasks, updates progress.yaml  
 
@@ -576,7 +576,7 @@ User: yes
 
 **Context**: Multiple undefined items  
 
-**Invocation**: `@acp.plan --all`  
+**Invocation**: `/acp-plan --all`  
 
 **Result**: Plans all undefined milestones and tasks without prompting, generates report  
 
@@ -584,7 +584,7 @@ User: yes
 
 **Context**: No undefined items, want to plan new feature  
 
-**Invocation**: `@acp.plan`  
+**Invocation**: `/acp-plan`  
 
 **Result**:
 ```
@@ -614,11 +614,11 @@ User: c
 
 **Context**: User has `plan.draft.create_mode: contextual` in their user preferences
 
-**Invocation**: `@acp.plan`
+**Invocation**: `/acp-plan`
 
 **Result**:
 ```
-⚡ @acp.plan
+⚡ /acp-plan
   ...
 
 📋 Preferences loaded (acp):
@@ -644,7 +644,7 @@ Using draft mode: contextual (from user preferences)
 
 **Context**: User's preference is `structured` but wants `guided` mode just this time
 
-**Invocation**: `@acp.plan --plan.draft.create_mode guided`
+**Invocation**: `/acp-plan --plan.draft.create_mode guided`
 
 **Result**:
 ```
@@ -658,12 +658,12 @@ Using draft mode: contextual (from user preferences)
 
 ## Related Commands
 
-- [`@acp.task-create`](acp.task-create.md) - Create individual tasks (invoked as subroutine)
-- [`@acp.design-create`](acp.design-create.md) - Create design documents (invoked as subroutine)
-- [`@acp.proceed`](acp.proceed.md) - Start implementing planned tasks
-- [`@acp.validate`](acp.validate.md) - Validate planning consistency
-- [`@acp.sync`](acp.sync.md) - Sync documentation after planning
-- [`@acp.status`](acp.status.md) - Check current project status
+- [`/acp-task-create`](acp.task-create.md) - Create individual tasks (invoked as subroutine)
+- [`/acp-design-create`](acp.design-create.md) - Create design documents (invoked as subroutine)
+- [`/acp-proceed`](acp.proceed.md) - Start implementing planned tasks
+- [`/acp-validate`](acp.validate.md) - Validate planning consistency
+- [`/acp-sync`](acp.sync.md) - Sync documentation after planning
+- [`/acp-status`](acp.status.md) - Check current project status
 
 ---
 
@@ -718,10 +718,10 @@ Using draft mode: contextual (from user preferences)
 - **Orphaned Tasks**: Tasks without milestone go in `agent/tasks/unassigned/task-{M}-{title}.md`
 - **Task Numbering**: Sequential across ALL milestones (M2: T1-T2, M3: T3-T5, etc.)
 - **Milestone Priority**: Generally prioritized over tasks, but agent uses context to determine intent
-- **Subroutine Pattern**: Invokes `@acp.milestone-create`, `@acp.task-create`, `@acp.design-create` to ensure consistent structure
+- **Subroutine Pattern**: Invokes `/acp-milestone-create`, `/acp-task-create`, `/acp-design-create` to ensure consistent structure
 - **No current_milestone Update**: Planning updates next_steps, not current_milestone (which is for implementation)
-- **Validation**: Defer to `@acp.validate` for consistency checking (offer to run before or after planning)
-- **Context Window**: If >20% used, suggest `@acp.report` → new session → `@acp.resume`
+- **Validation**: Defer to `/acp-validate` for consistency checking (offer to run before or after planning)
+- **Context Window**: If >20% used, suggest `/acp-report` → new session → `/acp-resume`
 
 ### Estimation Guidelines
 

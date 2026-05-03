@@ -1,6 +1,6 @@
 # Command: project-update
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.project-update` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-project-update` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -22,7 +22,7 @@ This command updates metadata for a project in `~/.acp/projects.yaml`, allowing 
 
 Use this command to keep project metadata current as projects evolve, mark projects as archived when completed, add tags for organization, link related projects, or correct project information. All updates automatically update the `last_modified` timestamp.
 
-Unlike [`@acp.project-info`](acp.project-info.md:1) which displays information, this command modifies the registry. It supports multiple update operations in a single invocation.
+Unlike [`/acp-project-info`](acp.project-info.md:1) which displays information, this command modifies the registry. It supports multiple update operations in a single invocation.
 
 ---
 
@@ -39,23 +39,23 @@ Unlike [`@acp.project-info`](acp.project-info.md:1) which displays information, 
 ### 0. Display Command Header
 
 ```
-⚡ @acp.project-update
+⚡ /acp-project-update
   Update project metadata in the global registry
 
   Usage:
-    @acp.project-update <name> --status <status>   Update project status
-    @acp.project-update <name> --description "..."  Update description
-    @acp.project-update <name> --add-tag <tag>      Add a tag
-    @acp.project-update <name> --remove-tag <tag>   Remove a tag
-    @acp.project-update <name> --git-origin <url>   Set git origin URL
-    @acp.project-update <name> --add-related <name> Link related project
+    /acp-project-update <name> --status <status>   Update project status
+    /acp-project-update <name> --description "..."  Update description
+    /acp-project-update <name> --add-tag <tag>      Add a tag
+    /acp-project-update <name> --remove-tag <tag>   Remove a tag
+    /acp-project-update <name> --git-origin <url>   Set git origin URL
+    /acp-project-update <name> --add-related <name> Link related project
 
   Related:
-    @acp.project-info        View project details before updating
-    @acp.project-list        List all projects
-    @acp.project-set         Switch to a project
-    @acp.projects-sync       Sync registry with filesystem
-    @acp.projects-restore    Restore projects from git origins
+    /acp-project-info        View project details before updating
+    /acp-project-list        List all projects
+    /acp-project-set         Switch to a project
+    /acp-projects-sync       Sync registry with filesystem
+    /acp-projects-restore    Restore projects from git origins
 ```
 
 ### 1. Parse Arguments
@@ -181,7 +181,7 @@ Run 'acp.project-info.sh remember-mcp-server' to see updated information
 
 **Context**: Mark project as archived when completed  
 
-**Invocation**: `@acp.project-update old-project --status archived`  
+**Invocation**: `/acp-project-update old-project --status archived`  
 
 **Result**: Status changed to "archived", last_modified timestamp updated  
 
@@ -189,7 +189,7 @@ Run 'acp.project-info.sh remember-mcp-server' to see updated information
 
 **Context**: Add organization tags to project  
 
-**Invocation**: `@acp.project-update my-project --add-tag production --add-tag critical --add-tag backend`  
+**Invocation**: `/acp-project-update my-project --add-tag production --add-tag critical --add-tag backend`  
 
 **Result**: Three tags added, duplicates prevented if tags already exist  
 
@@ -197,7 +197,7 @@ Run 'acp.project-info.sh remember-mcp-server' to see updated information
 
 **Context**: Improve project description  
 
-**Invocation**: `@acp.project-update my-project --description "Multi-tenant memory system with vector search and relationship tracking"`  
+**Invocation**: `/acp-project-update my-project --description "Multi-tenant memory system with vector search and relationship tracking"`  
 
 **Result**: Description updated in registry  
 
@@ -205,7 +205,7 @@ Run 'acp.project-info.sh remember-mcp-server' to see updated information
 
 **Context**: Connect server and client projects  
 
-**Invocation**: `@acp.project-update remember-mcp-server --add-related remember-mcp`  
+**Invocation**: `/acp-project-update remember-mcp-server --add-related remember-mcp`  
 
 **Result**: remember-mcp added to related_projects array  
 
@@ -213,15 +213,15 @@ Run 'acp.project-info.sh remember-mcp-server' to see updated information
 
 **Context**: Manually set git remote URL for a project  
 
-**Invocation**: `@acp.project-update my-project --git-origin git@github.com:user/my-project.git --git-branch main`  
+**Invocation**: `/acp-project-update my-project --git-origin git@github.com:user/my-project.git --git-branch main`  
 
-**Result**: git_origin and git_branch set in registry, enabling `@acp.projects-restore`  
+**Result**: git_origin and git_branch set in registry, enabling `/acp-projects-restore`  
 
 ### Example 6: Multiple Updates
 
 **Context**: Update several fields at once  
 
-**Invocation**: `@acp.project-update my-project --status active --add-tag production --remove-tag development`  
+**Invocation**: `/acp-project-update my-project --status active --add-tag production --remove-tag development`  
 
 **Result**: Status updated, production tag added, development tag removed  
 
@@ -229,7 +229,7 @@ Run 'acp.project-info.sh remember-mcp-server' to see updated information
 
 **Context**: Remove obsolete tag  
 
-**Invocation**: `@acp.project-update my-project --remove-tag deprecated`  
+**Invocation**: `/acp-project-update my-project --remove-tag deprecated`  
 
 **Result**: Tag removed from tags array  
 
@@ -237,11 +237,11 @@ Run 'acp.project-info.sh remember-mcp-server' to see updated information
 
 ## Related Commands
 
-- [`@acp.project-info`](acp.project-info.md) - View project details before updating
-- [`@acp.project-list`](acp.project-list.md) - List all projects
-- [`@acp.project-set`](acp.project-set.md) - Switch to a project
-- [`@acp.projects-sync`](acp.projects-sync.md) - Sync registry with filesystem
-- [`@acp.projects-restore`](acp.projects-restore.md) - Restore projects from git origins
+- [`/acp-project-info`](acp.project-info.md) - View project details before updating
+- [`/acp-project-list`](acp.project-list.md) - List all projects
+- [`/acp-project-set`](acp.project-set.md) - Switch to a project
+- [`/acp-projects-sync`](acp.projects-sync.md) - Sync registry with filesystem
+- [`/acp-projects-restore`](acp.projects-restore.md) - Restore projects from git origins
 
 ---
 
@@ -253,7 +253,7 @@ Run 'acp.project-info.sh remember-mcp-server' to see updated information
 
 **Cause**: `~/.acp/projects.yaml` doesn't exist  
 
-**Solution**: Create a project with `@acp.project-create` to initialize the registry  
+**Solution**: Create a project with `/acp-project-create` to initialize the registry  
 
 ### Issue 2: Project not found
 
@@ -261,7 +261,7 @@ Run 'acp.project-info.sh remember-mcp-server' to see updated information
 
 **Cause**: Project not registered or wrong name  
 
-**Solution**: Run `@acp.project-list` to see available projects  
+**Solution**: Run `/acp-project-list` to see available projects  
 
 ### Issue 3: Invalid status value
 

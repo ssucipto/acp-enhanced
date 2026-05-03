@@ -42,7 +42,7 @@ main() {
   # Check if registry exists
   if [ ! -f "$registry_path" ]; then
     echo "Error: Project registry not found at: $registry_path"
-    echo "Run '@acp.project-create' to create your first project"
+    echo "Run '/acp-project-create' to create your first project"
     exit 1
   fi
   
@@ -69,7 +69,7 @@ main() {
     fi
     
     echo ""
-    echo "Run '@acp.project-list' to see all projects"
+    echo "Run '/acp-project-list' to see all projects"
     exit 1
   fi
   
@@ -82,8 +82,8 @@ main() {
     echo "Project may have been moved or deleted"
     echo ""
     echo "To fix:"
-    echo "  1. Update project path: @acp.project-update ${project_name} --path <new-path>"
-    echo "  2. Or remove from registry: @acp.project-remove ${project_name}"
+    echo "  1. Update project path: /acp-project-update ${project_name} --path <new-path>"
+    echo "  2. Or remove from registry: /acp-project-remove ${project_name}"
     exit 1
   fi
   
@@ -118,7 +118,7 @@ main() {
   echo "You are now in the project directory. All file operations will be relative to:"
   echo "  ${project_path}"
   echo ""
-  echo "Run '@acp.init' to load project context"
+  echo "Run '/acp-init' to load project context"
   
   # Change to project directory (only if running interactively, not in tests)
   # Note: cd in a script only affects the script's process, not the parent shell
