@@ -41,7 +41,7 @@ main() {
     echo "Error: Project registry not found at: $registry_path"
     echo ""
     echo "The registry may not be initialized yet."
-    echo "Create a project with '@acp.project-create' to initialize the registry."
+    echo "Create a project with '/acp-project-create' to initialize the registry."
     return 1
   fi
   

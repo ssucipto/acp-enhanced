@@ -37,15 +37,15 @@ echo "${BLUE}━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 echo "${BOLD}🔍 Step 1: Validation${NC}"
 echo ""
-echo "Running @acp.package-validate..."
+echo "Running /acp-package-validate..."
 echo ""
 
 if ! "${SCRIPT_DIR}/acp.package-validate.sh"; then
     echo ""
     echo "${RED}❌ Package validation failed${NC}"
     echo ""
-    echo "Fix validation errors and run @acp.package-publish again."
-    echo "Or use @acp.package-validate to see detailed errors."
+    echo "Fix validation errors and run /acp-package-publish again."
+    echo "Or use /acp-package-validate to see detailed errors."
     exit 1
 fi
 
@@ -412,7 +412,7 @@ echo ""
 echo "${GREEN}${BOLD}🎉 Your package is now live!${NC}"
 echo ""
 echo "Users can install it with:"
-echo "  ${BOLD}@acp.package-install ${REPO_URL}${NC}"
+echo "  ${BOLD}/acp-package-install ${REPO_URL}${NC}"
 echo ""
 echo "Next steps:"
 echo "  - Announce release to users"

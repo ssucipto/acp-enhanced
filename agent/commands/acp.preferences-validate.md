@@ -1,6 +1,6 @@
 # Command: preferences-validate
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.preferences-validate` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-preferences-validate` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
@@ -57,18 +57,18 @@ Use this command when:
 ### 0. Display Command Header
 
 ```
-⚡ @acp.preferences-validate
+⚡ /acp-preferences-validate
   Validate preference files against configurables schemas
 
   Usage:
-    @acp.preferences-validate                    Validate all namespaces
-    @acp.preferences-validate acp                Validate acp namespace only
-    @acp.preferences-validate --fix              Auto-fix invalid values
-    @acp.preferences-validate --level project    Validate project level only
+    /acp-preferences-validate                    Validate all namespaces
+    /acp-preferences-validate acp                Validate acp namespace only
+    /acp-preferences-validate --fix              Auto-fix invalid values
+    /acp-preferences-validate --level project    Validate project level only
 
   Related:
-    @acp.preferences-show      View effective preferences with sources
-    @acp.preferences-set       Fix invalid values interactively
+    /acp-preferences-show      View effective preferences with sources
+    /acp-preferences-set       Fix invalid values interactively
 ```
 
 ### 1. Discover Preference Files
@@ -140,7 +140,7 @@ Summary:
 
 Status: FAIL
 
-Fix errors with @acp.preferences-set or @acp.preferences-validate --fix
+Fix errors with /acp-preferences-set or /acp-preferences-validate --fix
 ```
 
 **When no issues found**:
@@ -165,7 +165,7 @@ After all fixes:
 ```
 ✅ Fixed 2 errors, 1 warning.
 
-Run @acp.preferences-validate to confirm all files are valid.
+Run /acp-preferences-validate to confirm all files are valid.
 ```
 
 **Note**: `--fix` only applies configurables defaults. It does not apply project/user precedence — it always uses the `.default` value from the configurables file.
@@ -209,31 +209,31 @@ See Step 4 for full report format.
 
 ### Example 1: Validate All Preferences
 
-**Invocation**: `@acp.preferences-validate`
+**Invocation**: `/acp-preferences-validate`
 
 **Result**: Scans all levels/namespaces, reports any errors or warnings.
 
 ### Example 2: Validate Only ACP Namespace
 
-**Invocation**: `@acp.preferences-validate acp`
+**Invocation**: `/acp-preferences-validate acp`
 
 **Result**: Checks only `acp` namespace files across all levels.
 
 ### Example 3: Auto-Fix Errors
 
-**Invocation**: `@acp.preferences-validate --fix`
+**Invocation**: `/acp-preferences-validate --fix`
 
 **Result**: Validates all files, then reverts all invalid values to configurables defaults. Reports what was changed.
 
 ### Example 4: Strict Mode (Warnings as Errors)
 
-**Invocation**: `@acp.preferences-validate --strict`
+**Invocation**: `/acp-preferences-validate --strict`
 
 **Result**: Exits with code 1 if any warnings are found, not just errors. Useful for CI pipelines.
 
 ### Example 5: Validate Project Level Only
 
-**Invocation**: `@acp.preferences-validate --level project`
+**Invocation**: `/acp-preferences-validate --level project`
 
 **Result**: Checks only `agent/preferences/*.yaml` files.
 
@@ -241,10 +241,10 @@ See Step 4 for full report format.
 
 ## Related Commands
 
-- [`@acp.preferences-show`](acp.preferences-show.md) — View effective preferences with sources
-- [`@acp.preferences-set`](acp.preferences-set.md) — Fix individual values interactively
-- [`@acp.preferences-create`](acp.preferences-create.md) — Create a preference file with defaults
-- [`@acp.preferences-get`](acp.preferences-get.md) — Generate resolved preference set
+- [`/acp-preferences-show`](acp.preferences-show.md) — View effective preferences with sources
+- [`/acp-preferences-set`](acp.preferences-set.md) — Fix individual values interactively
+- [`/acp-preferences-create`](acp.preferences-create.md) — Create a preference file with defaults
+- [`/acp-preferences-get`](acp.preferences-get.md) — Generate resolved preference set
 
 ---
 

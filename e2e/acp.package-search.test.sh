@@ -1,5 +1,5 @@
 #!/bin/bash
-# E2E Tests for @acp.package-search command
+# E2E Tests for /acp-package-search command
 # Tests searching for packages on GitHub
 
 set -e

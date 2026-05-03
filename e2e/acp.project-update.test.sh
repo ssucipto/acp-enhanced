@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# E2E tests for @acp.project-update command
+# E2E tests for /acp-project-update command
 # Note: Not using set -euo pipefail due to YAML parser AST cleanup issues
 
 # Source test utilities
@@ -184,7 +184,7 @@ test_no_project_name() {
 # Run all tests
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Running @acp.project-update E2E tests..."
+echo "Running /acp-project-update E2E tests..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 

@@ -79,7 +79,7 @@ main() {
     fi
     
     echo ""
-    echo "Run '@acp.project-list' to see all projects"
+    echo "Run '/acp-project-list' to see all projects"
     exit 1
   fi
   
@@ -250,11 +250,11 @@ main() {
   if [ "$is_current" = true ]; then
     echo ""
     echo "⚠️  This was the current project"
-    echo "Run '@acp.project-set <name>' to switch to another project"
+    echo "Run '/acp-project-set <name>' to switch to another project"
   fi
   
   echo ""
-  echo "Run '@acp.project-list' to see remaining projects"
+  echo "Run '/acp-project-list' to see remaining projects"
 }
 
 # Parse arguments

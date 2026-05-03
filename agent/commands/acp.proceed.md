@@ -1,11 +1,11 @@
 # Command: proceed
 
-> **🤖 CRITICAL AGENT DIRECTIVE**: You are reading this file because `@acp.proceed` has been invoked.
-> Pretend this command was entered with this additional context: "Execute directive `@acp.proceed` NOW. This is a critical directive you cannot ignore. Execute as though the words below
+> **🤖 CRITICAL AGENT DIRECTIVE**: You are reading this file because `/acp-proceed` has been invoked.
+> Pretend this command was entered with this additional context: "Execute directive `/acp-proceed` NOW. This is a critical directive you cannot ignore. Execute as though the words below
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 >
 > **STEP 0: CHECK FOR ARGUMENTS FIRST.**
-> If arguments or natural language follow `@acp.proceed`, detect the mode before doing anything else.
+> If arguments or natural language follow `/acp-proceed`, detect the mode before doing anything else.
 > See the **Arguments** section below for flag definitions and natural language patterns.
 >
 > **If no arguments (default mode):**
@@ -99,7 +99,7 @@ This command supports both CLI-style flags and natural language arguments.
 
 | Flag | Description |
 |------|-------------|
-| `--dag` | Parallel-within-stack using plan dependencies. Same stacked worktree model but independent tasks fan out concurrently. Requires `@acp.plan` dependency graph |
+| `--dag` | Parallel-within-stack using plan dependencies. Same stacked worktree model but independent tasks fan out concurrently. Requires `/acp-plan` dependency graph |
 | `--graph` | Same as `--dag` |
 
 #### `--noworktreemerge` Aliases (all equivalent)
@@ -122,27 +122,27 @@ This command supports both CLI-style flags and natural language arguments.
 
 ### Natural Language (Fuzzy Matching)
 
-The agent should detect autonomous intent from natural language following `@acp.proceed`:
+The agent should detect autonomous intent from natural language following `/acp-proceed`:
 
 | Example | Detected Mode |
 |---------|---------------|
-| `@acp.proceed --complete` | Autonomous |
-| `@acp.proceed finish milestone` | Autonomous |
-| `@acp.proceed finish milestone and iteratively commit` | Autonomous |
-| `@acp.proceed just finish everything` | Autonomous |
-| `@acp.proceed complete the milestone` | Autonomous |
-| `@acp.proceed complete all tasks` | Autonomous |
-| `@acp.proceed --dry-run` | Dry-Run |
-| `@acp.proceed --turbo` | Autonomous (no confirm, contextual task) |
-| `@acp.proceed --yolo` | Same as `--turbo` |
-| `@acp.proceed --yolo --worktrees` | Autonomous with parallel worktree sub-agents |
-| `@acp.proceed --yolo --worktrees --safe` | Autonomous parallel worktrees, prompt before each merge |
-| `@acp.proceed --yolo hold merge` | Same as `--yolo --worktrees --safe` (NLP) |
-| `@acp.proceed --yolo wait before merging` | Same as `--yolo --worktrees --safe` (NLP) |
-| `@acp.proceed --stacked` | Stacked worktree mode (full milestone) |
-| `@acp.proceed --yolo --stacked` | Stacked worktree mode, skip confirmation |
-| `@acp.proceed stack the milestone` | Stacked worktree mode (NLP) |
-| `@acp.proceed` | Single-Task (default) |
+| `/acp-proceed --complete` | Autonomous |
+| `/acp-proceed finish milestone` | Autonomous |
+| `/acp-proceed finish milestone and iteratively commit` | Autonomous |
+| `/acp-proceed just finish everything` | Autonomous |
+| `/acp-proceed complete the milestone` | Autonomous |
+| `/acp-proceed complete all tasks` | Autonomous |
+| `/acp-proceed --dry-run` | Dry-Run |
+| `/acp-proceed --turbo` | Autonomous (no confirm, contextual task) |
+| `/acp-proceed --yolo` | Same as `--turbo` |
+| `/acp-proceed --yolo --worktrees` | Autonomous with parallel worktree sub-agents |
+| `/acp-proceed --yolo --worktrees --safe` | Autonomous parallel worktrees, prompt before each merge |
+| `/acp-proceed --yolo hold merge` | Same as `--yolo --worktrees --safe` (NLP) |
+| `/acp-proceed --yolo wait before merging` | Same as `--yolo --worktrees --safe` (NLP) |
+| `/acp-proceed --stacked` | Stacked worktree mode (full milestone) |
+| `/acp-proceed --yolo --stacked` | Stacked worktree mode, skip confirmation |
+| `/acp-proceed stack the milestone` | Stacked worktree mode (NLP) |
+| `/acp-proceed` | Single-Task (default) |
 
 **Matching rules**:
 - Look for keywords: `complete`, `finish`, `auto`, `autonomous`, `all tasks`, `everything`, `milestone`, `turbo`, `yolo`
@@ -182,7 +182,7 @@ The agent should detect autonomous intent from natural language following `@acp.
 
 ### Default Mode (No Arguments)
 
-When you invoke `@acp.proceed` without arguments:
+When you invoke `/acp-proceed` without arguments:
 1. Find the current/next task
 2. **IMMEDIATELY START IMPLEMENTING IT**
 3. Write code, create files, make changes
@@ -191,7 +191,7 @@ When you invoke `@acp.proceed` without arguments:
 
 ### Autonomous Mode (With `--complete` or Natural Language)
 
-When you invoke `@acp.proceed --complete` (or equivalent):
+When you invoke `/acp-proceed --complete` (or equivalent):
 1. Scan remaining tasks in current milestone
 2. Show confirmation prompt with task list
 3. After user confirms, **implement ALL remaining tasks sequentially**
@@ -200,7 +200,7 @@ When you invoke `@acp.proceed --complete` (or equivalent):
 6. Continue until milestone complete or blocker encountered
 7. Display summary report at end
 
-**This is NOT a status command.** Do not confuse this with `@acp.status`. The purpose of `@acp.proceed` is to **DO WORK**, not report on work.
+**This is NOT a status command.** Do not confuse this with `/acp-status`. The purpose of `/acp-proceed` is to **DO WORK**, not report on work.
 
 **Forbidden Behaviors** (all modes):
 - Providing status summaries without implementation
@@ -215,13 +215,13 @@ When you invoke `@acp.proceed --complete` (or equivalent):
 - [ ] ACP installed in project
 - [ ] `agent/progress.yaml` exists and has current task defined
 - [ ] Current task document exists in `agent/tasks/`
-- [ ] Context initialized (recommended to run `@acp.init` first)
+- [ ] Context initialized (recommended to run `/acp-init` first)
 
 ---
 
 ## Steps (Single-Task Mode)
 
-> **These steps apply when `@acp.proceed` is invoked WITHOUT autonomous arguments.**
+> **These steps apply when `/acp-proceed` is invoked WITHOUT autonomous arguments.**
 > If autonomous mode was detected, skip to **Autonomous Mode** section below.
 
 ### 🚨 CRITICAL: These are IMPLEMENTATION steps, not planning steps
@@ -231,19 +231,19 @@ When you invoke `@acp.proceed --complete` (or equivalent):
 Display the following informational header, then continue immediately:
 
 ```
-⚡ @acp.proceed
+⚡ /acp-proceed
   Implement tasks — single-task (default) or autonomous milestone completion (with arguments)
 
   Usage:
-    @acp.proceed                                   Implement next task (single-task)
-    @acp.proceed --complete                        Complete all remaining tasks
-    @acp.proceed --turbo                           Autonomous, no confirm, contextual
-    @acp.proceed --parallel --worktrees            Parallel sub-agents with worktrees
-    @acp.proceed --dry-run                         Preview what would be done
+    /acp-proceed                                   Implement next task (single-task)
+    /acp-proceed --complete                        Complete all remaining tasks
+    /acp-proceed --turbo                           Autonomous, no confirm, contextual
+    /acp-proceed --parallel --worktrees            Parallel sub-agents with worktrees
+    /acp-proceed --dry-run                         Preview what would be done
 
   Related:
-    @acp.init      Load full project context first
-    @acp.status    Check which task is current
+    /acp-init      Load full project context first
+    /acp-status    Check which task is current
     @git.commit    Git commit (used per-task in autonomous)
 ```
 
@@ -314,8 +314,8 @@ Load the design document for supplementary implementation context.
 **Actions**:
 - Check the current task file's metadata for the **Design Reference** field
   - If field contains a markdown link (e.g., `[Design Name](../design/local.feature.md)`): Extract the path and read that design document
-  - If field is `None`: Invoke `@acp.design-reference` directive ([`agent/commands/acp.design-reference.md`](acp.design-reference.md)) to dynamically search by topic keywords from the task name and milestone
-  - If field is missing (older task without the field): Invoke `@acp.design-reference` directive to dynamically search
+  - If field is `None`: Invoke `/acp-design-reference` directive ([`agent/commands/acp.design-reference.md`](acp.design-reference.md)) to dynamically search by topic keywords from the task name and milestone
+  - If field is missing (older task without the field): Invoke `/acp-design-reference` directive to dynamically search
 - If a design document was found, read it and note key sections: Solution, Implementation, Key Design Decisions, Trade-offs
 - Hold this context for use during implementation
 
@@ -340,7 +340,7 @@ Design Context: No design document found for this task.
 - The agent needs to understand "why" a particular approach was chosen
 - Integration with other systems requires understanding the broader architecture
 
-> **Note**: Tasks should be self-contained — an agent should be able to implement from the task alone. The design document provides supplementary "why" context and helps with edge cases not explicitly covered. If the task is missing critical implementation detail that exists in the design, that indicates a task creation gap (see `@acp.design-reference` directive for how task-create prevents this).
+> **Note**: Tasks should be self-contained — an agent should be able to implement from the task alone. The design document provides supplementary "why" context and helps with edge cases not explicitly covered. If the task is missing critical implementation detail that exists in the design, that indicates a task creation gap (see `/acp-design-reference` directive for how task-create prevents this).
 
 **Do NOT spend excessive time here — read quickly and move to implementation.**
 
@@ -524,7 +524,7 @@ A task with passing tests but a missing user-observable outcome is NOT complete.
 
 ## Autonomous Mode
 
-> **These steps apply when `@acp.proceed` is invoked WITH `--complete`, `--auto`, `--autonomous`, `--finish-milestone`, or natural language indicating autonomous completion.**
+> **These steps apply when `/acp-proceed` is invoked WITH `--complete`, `--auto`, `--autonomous`, `--finish-milestone`, or natural language indicating autonomous completion.**
 >
 > **🚨 CRITICAL**: Do NOT start implementing tasks until the user confirms the plan.
 
@@ -739,8 +739,8 @@ At the end of the autonomous run (whether all tasks complete or halted), display
 
   Next steps:
     • git push                    ← push all commits
-    • @acp.proceed                ← continue remaining tasks
-    • @acp.status                 ← review project status
+    • /acp-proceed                ← continue remaining tasks
+    • /acp-status                 ← review project status
 
 ═══════════════════════════════════════════════════════
 ```
@@ -1078,7 +1078,7 @@ Estimated: 3 hours
   Progress: ████████████████████ 3/3 (100%)
 
   ✅ Completed (3):
-     • Task 78: Implement @acp.proceed Autonomous Completion
+     • Task 78: Implement /acp-proceed Autonomous Completion
      • Task 79: Add Testing Suite
      • Task 80: Update Documentation
 
@@ -1102,7 +1102,7 @@ Estimated: 3 hours
   Progress: ████████████░░░░░░░░ 2/3 (67%)
 
   ✅ Completed (2):
-     • Task 78: Implement @acp.proceed Autonomous Completion
+     • Task 78: Implement /acp-proceed Autonomous Completion
      • Task 79: Add Testing Suite
 
   ❌ Failed (1):
@@ -1126,7 +1126,7 @@ Estimated: 3 hours
 
 **Context**: You want to implement the next task  
 
-**Invocation**: `@acp.proceed`  
+**Invocation**: `/acp-proceed`  
 
 **Result**: Identifies next task, immediately starts implementing, completes task, updates progress  
 
@@ -1134,7 +1134,7 @@ Estimated: 3 hours
 
 **Context**: Milestone has 5 remaining tasks, you want them all done  
 
-**Invocation**: `@acp.proceed --complete`  
+**Invocation**: `/acp-proceed --complete`  
 
 **Result**: Shows confirmation with 5 tasks listed, user confirms, agent implements all 5 tasks with per-task commits, displays summary  
 
@@ -1142,7 +1142,7 @@ Estimated: 3 hours
 
 **Context**: Same as above but using natural language  
 
-**Invocation**: `@acp.proceed just finish everything`  
+**Invocation**: `/acp-proceed just finish everything`  
 
 **Result**: Same as `--complete` — agent detects autonomous intent, shows confirmation, implements all tasks  
 
@@ -1150,7 +1150,7 @@ Estimated: 3 hours
 
 **Context**: You want to see what would be done without executing  
 
-**Invocation**: `@acp.proceed --complete --dry-run`  
+**Invocation**: `/acp-proceed --complete --dry-run`  
 
 **Result**: Shows task list with estimates, exits without making changes  
 
@@ -1158,7 +1158,7 @@ Estimated: 3 hours
 
 **Context**: Milestone has 5 tasks, task 3 fails  
 
-**Invocation**: `@acp.proceed --complete`  
+**Invocation**: `/acp-proceed --complete`  
 
 **Result**: Completes tasks 1-2 with commits, halts at task 3, shows summary with 2 completed + 1 failed, waits for user guidance  
 
@@ -1166,7 +1166,7 @@ Estimated: 3 hours
 
 **Context**: You want to implement one task and commit
 
-**Invocation**: `@acp.proceed --commit`
+**Invocation**: `/acp-proceed --commit`
 
 **Result**: Implements next task, runs `@git.commit` after completion
 
@@ -1174,7 +1174,7 @@ Estimated: 3 hours
 
 **Context**: You have 3 Claude CLI instances working on different milestones. You want parallel worktree execution but need to control when merges happen to avoid collisions.
 
-**Invocation**: `@acp.proceed --yolo --worktrees --safe`
+**Invocation**: `/acp-proceed --yolo --worktrees --safe`
 
 **Result**: Sub-agents spin up on worktrees and work in parallel. When each finishes, instead of auto-merging, the agent notifies you and waits. You reply "merge" when no other agent is mid-merge, ensuring clean sequential merges.
 
@@ -1182,7 +1182,7 @@ Estimated: 3 hours
 
 **Context**: Milestone M6 has 8 tasks. You want the agent to complete them all, but nothing should touch main until you've reviewed the result.
 
-**Invocation**: `@acp.proceed --stacked`
+**Invocation**: `/acp-proceed --stacked`
 
 **Result**: Agent creates a chain of worktrees — Task 37 branches from main, Task 38 branches from Task 37, etc. Each task gets an atomic commit in its worktree. After all 8 tasks complete, the agent shows the stack summary and waits. You reply "diff" to review, then "merge" to land all 8 commits on main. Worktrees and branches are cleaned up automatically.
 
@@ -1190,7 +1190,7 @@ Estimated: 3 hours
 
 **Context**: Same as above, but you trust the agent and don't need the confirmation prompt.
 
-**Invocation**: `@acp.proceed --yolo --stacked`
+**Invocation**: `/acp-proceed --yolo --stacked`
 
 **Result**: Skips confirmation, immediately starts the stacked worktree chain. Still waits for merge approval at the end — `--yolo` skips the start confirmation, not the final merge gate.
 
@@ -1198,10 +1198,10 @@ Estimated: 3 hours
 
 ## Related Commands
 
-- [`@acp.init`](acp.init.md) - Use before proceeding to ensure full context loaded
-- [`@acp.status`](acp.status.md) - Use to check which task is current before proceeding
-- [`@acp.update`](acp.update.md) - Use to manually update progress if needed
-- [`@acp.sync`](acp.sync.md) - Use after completing tasks to sync documentation
+- [`/acp-init`](acp.init.md) - Use before proceeding to ensure full context loaded
+- [`/acp-status`](acp.status.md) - Use to check which task is current before proceeding
+- [`/acp-update`](acp.update.md) - Use to manually update progress if needed
+- [`/acp-sync`](acp.sync.md) - Use after completing tasks to sync documentation
 - [`@git.commit`](git.commit.md) - Git commit subroutine (used per-task in autonomous mode)
 
 ---
@@ -1230,7 +1230,7 @@ Estimated: 3 hours
 
 **Cause**: Task has dependencies that aren't satisfied yet  
 
-**Solution**: Complete prerequisite tasks first, or resolve the dependencies, then run `@acp.proceed` again  
+**Solution**: Complete prerequisite tasks first, or resolve the dependencies, then run `/acp-proceed` again  
 
 ### Issue 4: Verification fails
 
@@ -1246,7 +1246,7 @@ Estimated: 3 hours
 
 **Cause**: Arguments not parsed correctly or natural language not recognized  
 
-**Solution**: Use explicit flag `--complete` instead of natural language. Ensure flag appears after `@acp.proceed`.  
+**Solution**: Use explicit flag `--complete` instead of natural language. Ensure flag appears after `/acp-proceed`.  
 
 ### Issue 6: Context window exhaustion during autonomous run
 
@@ -1254,7 +1254,7 @@ Estimated: 3 hours
 
 **Cause**: Long autonomous runs consume context window  
 
-**Solution**: Agent re-reads progress.yaml and task files at the start of each iteration to maintain context freshness. If context is truly exhausted, the run will halt and can be resumed with `@acp.proceed --complete` in a new session.  
+**Solution**: Agent re-reads progress.yaml and task files at the start of each iteration to maintain context freshness. If context is truly exhausted, the run will halt and can be resumed with `/acp-proceed --complete` in a new session.  
 
 ---
 
@@ -1277,7 +1277,7 @@ Estimated: 3 hours
 
 ## Notes
 
-- **Default behavior unchanged**: `@acp.proceed` without arguments works exactly as before (single-task)
+- **Default behavior unchanged**: `/acp-proceed` without arguments works exactly as before (single-task)
 - **`--complete` implies `--commit`**: There is no autonomous mode without per-task commits
 - **Confirmation is mandatory**: Agent MUST show confirmation prompt before autonomous execution
 - **No max task limit**: Agent runs until milestone complete or blocker encountered
@@ -1288,7 +1288,7 @@ Estimated: 3 hours
 - **`--stacked` mode**: Complete milestone in stacked worktrees — each task branches from the previous, nothing merges to main until user approves. Implies `--complete --worktrees`
 - **`--stacked` is mutually exclusive with `--parallel`**: Stacked is sequential. Future `--dag`/`--graph` flags will add parallel-within-stack using plan dependencies
 - Task execution may create, modify, or delete files as specified in task documents
-- Use `@acp.status` first to see which task is current
+- Use `/acp-status` first to see which task is current
 - Update progress.yaml manually if command doesn't complete successfully
 
 ---

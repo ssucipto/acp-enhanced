@@ -1,6 +1,6 @@
 # Command: package-info
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@acp.package-info` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-package-info` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
 **Version**: 2.0.0  
@@ -30,7 +30,7 @@ Use this command when you need detailed information about a package (local or gl
 - [ ] ACP installed in project
 - [ ] `agent/manifest.yaml` exists with installed packages
 - [ ] `agent/scripts/acp.package-info.sh` exists
-- [ ] Package name is known (use `@acp.package-list` to see installed packages)
+- [ ] Package name is known (use `/acp-package-list` to see installed packages)
 
 ---
 
@@ -39,18 +39,18 @@ Use this command when you need detailed information about a package (local or gl
 ### 0. Display Command Header
 
 ```
-⚡ @acp.package-info
+⚡ /acp-package-info
   Display detailed information about an installed package
 
   Usage:
-    @acp.package-info <package-name>               Show local package info
-    @acp.package-info --global <package-name>      Show global package info
+    /acp-package-info <package-name>               Show local package info
+    /acp-package-info --global <package-name>      Show global package info
 
   Related:
-    @acp.package-list          List all installed packages
-    @acp.package-update        Update package
-    @acp.package-remove        Remove package
-    @acp.package-install       Install package
+    /acp-package-list          List all installed packages
+    /acp-package-update        Update package
+    /acp-package-remove        Remove package
+    /acp-package-install       Install package
 ```
 
 ### 1. Run Package Info Script
@@ -142,7 +142,7 @@ Total Files: 6
 
 **Context**: Want to see details about firebase package  
 
-**Invocation**: `@acp.package-info firebase`  
+**Invocation**: `/acp-package-info firebase`  
 
 **Result**: Shows complete package information with 6 files, 1 modified  
 
@@ -150,7 +150,7 @@ Total Files: 6
 
 **Context**: Want to see what will be updated  
 
-**Invocation**: `@acp.package-info firebase`  
+**Invocation**: `/acp-package-info firebase`  
 
 **Result**: Shows current versions and modified files, helps decide update strategy  
 
@@ -158,7 +158,7 @@ Total Files: 6
 
 **Context**: Just installed package, want to confirm  
 
-**Invocation**: `@acp.package-info mcp-integration`  
+**Invocation**: `/acp-package-info mcp-integration`  
 
 **Result**: Shows all installed files with versions, confirms installation successful  
 
@@ -166,18 +166,18 @@ Total Files: 6
 
 **Context**: Try to get info for non-existent package  
 
-**Invocation**: `@acp.package-info nonexistent`  
+**Invocation**: `/acp-package-info nonexistent`  
 
-**Result**: Error message "Package not installed: nonexistent", suggests using @acp.package-list  
+**Result**: Error message "Package not installed: nonexistent", suggests using /acp-package-list  
 
 ---
 
 ## Related Commands
 
-- [`@acp.package-list`](acp.package-list.md) - List all installed packages
-- [`@acp.package-update`](acp.package-update.md) - Update package
-- [`@acp.package-remove`](acp.package-remove.md) - Remove package
-- [`@acp.package-install`](acp.package-install.md) - Install package
+- [`/acp-package-list`](acp.package-list.md) - List all installed packages
+- [`/acp-package-update`](acp.package-update.md) - Update package
+- [`/acp-package-remove`](acp.package-remove.md) - Remove package
+- [`/acp-package-install`](acp.package-install.md) - Install package
 
 ---
 
@@ -189,7 +189,7 @@ Total Files: 6
 
 **Cause**: Package name incorrect or not installed  
 
-**Solution**: Run `@acp.package-list` to see installed packages, check spelling  
+**Solution**: Run `/acp-package-list` to see installed packages, check spelling  
 
 ### Issue 2: Modified status incorrect
 
