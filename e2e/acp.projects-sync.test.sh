@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# ACP_NETWORK_TEST=true
 # E2E tests for /acp-projects-sync command
 
 # Note: Don't use set -u in tests due to variable scoping

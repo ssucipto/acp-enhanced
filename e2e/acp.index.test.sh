@@ -1,4 +1,5 @@
 #!/bin/bash
+# ACP_NETWORK_TEST=true
 # E2E Tests for Key File Index System
 # Tests index schema parsing, package integration, and edge cases
 
