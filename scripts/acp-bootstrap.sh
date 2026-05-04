@@ -23,7 +23,9 @@ mkdir -p agent/skills
 mkdir -p agent/memory
 mkdir -p agent/wiki
 mkdir -p agent/routing
+mkdir -p agent/routing/tasks
 mkdir -p agent/tasks
+mkdir -p agent/milestones
 mkdir -p .github/prompts
 mkdir -p scripts
 echo -e "${GREEN}✓ Directories created${NC}"
