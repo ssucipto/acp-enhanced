@@ -663,6 +663,456 @@ Bootstrap ACP domain knowledge from this codebase:
 6. Confirm: "[ACP] Domain extraction complete | [N] entities | [N] modules | [N] external services"
 MD
 
+cat > .github/prompts/acp-proceed.prompt.md << 'MD'
+---
+mode: agent
+description: Implement tasks — single-task (default) or autonomous milestone completion (with arguments)
+---
+
+Read and execute `agent/commands/acp.proceed.md`.
+MD
+
+cat > .github/prompts/acp-status.prompt.md << 'MD'
+---
+mode: agent
+description: Display current project status including milestone progress, current task, recent work, and next steps
+---
+
+Read and execute `agent/commands/acp.status.md`.
+MD
+
+cat > .github/prompts/acp-plan.prompt.md << 'MD'
+---
+mode: agent
+description: Plan milestones OR tasks for undefined items in progress.yaml or new requirements
+---
+
+Read and execute `agent/commands/acp.plan.md`.
+MD
+
+cat > .github/prompts/acp-update.prompt.md << 'MD'
+---
+mode: agent
+description: Update progress.yaml with latest project status, task completion, and recent work
+---
+
+Read and execute `agent/commands/acp.update.md`.
+MD
+
+cat > .github/prompts/acp-report.prompt.md << 'MD'
+---
+mode: agent
+description: Generate a comprehensive project status report including progress, accomplishments, and next steps
+---
+
+Read and execute `agent/commands/acp.report.md`.
+MD
+
+cat > .github/prompts/acp-resume.prompt.md << 'MD'
+---
+mode: agent
+description: Resume work on a project by initializing context, reviewing recent progress, and continuing
+---
+
+Read and execute `agent/commands/acp.resume.md`.
+MD
+
+cat > .github/prompts/acp-audit.prompt.md << 'MD'
+---
+mode: agent
+description: Deep-dive investigation of a subject, producing a structured report in agent/reports/
+---
+
+Read and execute `agent/commands/acp.audit.md`.
+MD
+
+cat > .github/prompts/acp-handoff.prompt.md << 'MD'
+---
+mode: agent
+description: Generate a context-aware handoff report for transferring work to an agent in a different context
+---
+
+Read and execute `agent/commands/acp.handoff.md`.
+MD
+
+cat > .github/prompts/acp-sync.prompt.md << 'MD'
+---
+mode: agent
+description: Synchronize documentation with source code by identifying and updating stale documentation
+---
+
+Read and execute `agent/commands/acp.sync.md`.
+MD
+
+cat > .github/prompts/acp-validate.prompt.md << 'MD'
+---
+mode: agent
+description: Validate all ACP documents for structure, consistency, correctness, and namespace conventions
+---
+
+Read and execute `agent/commands/acp.validate.md`.
+MD
+
+cat > .github/prompts/acp-index.prompt.md << 'MD'
+---
+mode: agent
+description: Manage the key file index — list, add, remove, explore, and show indexed key files
+---
+
+Read and execute `agent/commands/acp.index.md`.
+MD
+
+cat > .github/prompts/acp-spec.prompt.md << 'MD'
+---
+mode: agent
+description: Generate a specification document from a clarification, design, draft, or requirements doc
+---
+
+Read and execute `agent/commands/acp.spec.md`.
+MD
+
+cat > .github/prompts/acp-task-create.prompt.md << 'MD'
+---
+mode: agent
+description: Create task files with proper structure, milestone linking, and automatic progress.yaml updates
+---
+
+Read and execute `agent/commands/acp.task-create.md`.
+MD
+
+cat > .github/prompts/acp-command-create.prompt.md << 'MD'
+---
+mode: agent
+description: Create command files with namespace enforcement, draft support, and automatic package updates
+---
+
+Read and execute `agent/commands/acp.command-create.md`.
+MD
+
+cat > .github/prompts/acp-design-create.prompt.md << 'MD'
+---
+mode: agent
+description: Create design documents with namespace enforcement, draft support, and automatic package updates
+---
+
+Read and execute `agent/commands/acp.design-create.md`.
+MD
+
+cat > .github/prompts/acp-design-reference.prompt.md << 'MD'
+---
+mode: agent
+description: Discover and cross-reference design documents to ensure tasks have complete implementation detail
+---
+
+Read and execute `agent/commands/acp.design-reference.md`.
+MD
+
+cat > .github/prompts/acp-pattern-create.prompt.md << 'MD'
+---
+mode: agent
+description: Create pattern files with namespace enforcement, draft support, and automatic package updates
+---
+
+Read and execute `agent/commands/acp.pattern-create.md`.
+MD
+
+cat > .github/prompts/acp-clarification-create.prompt.md << 'MD'
+---
+mode: agent
+description: Create clarification documents from file input or chat to gather detailed requirements
+---
+
+Read and execute `agent/commands/acp.clarification-create.md`.
+MD
+
+cat > .github/prompts/acp-clarification-address.prompt.md << 'MD'
+---
+mode: agent
+description: Address clarification responses by researching, exploring code/web, using tools, and presenting recommendations
+---
+
+Read and execute `agent/commands/acp.clarification-address.md`.
+MD
+
+cat > .github/prompts/acp-clarification-capture.prompt.md << 'MD'
+---
+mode: agent
+description: Capture decisions from ephemeral clarification files and chat context into permanent entity documents
+---
+
+Read and execute `agent/commands/acp.clarification-capture.md`.
+MD
+
+cat > .github/prompts/acp-artifact-glossary.prompt.md << 'MD'
+---
+mode: agent
+description: Create and maintain project glossaries through auto-extraction and interactive refinement
+---
+
+Read and execute `agent/commands/acp.artifact-glossary.md`.
+MD
+
+cat > .github/prompts/acp-artifact-reference.prompt.md << 'MD'
+---
+mode: agent
+description: Create reference guides for passive information after command-first principle check
+---
+
+Read and execute `agent/commands/acp.artifact-reference.md`.
+MD
+
+cat > .github/prompts/acp-artifact-research.prompt.md << 'MD'
+---
+mode: agent
+description: Create long-lived research artifacts via systematic investigation with web/MCP integration
+---
+
+Read and execute `agent/commands/acp.artifact-research.md`.
+MD
+
+cat > .github/prompts/acp-sessions.prompt.md << 'MD'
+---
+mode: agent
+description: Manage and view active agent sessions across projects
+---
+
+Read and execute `agent/commands/acp.sessions.md`.
+MD
+
+cat > .github/prompts/acp-package-install.prompt.md << 'MD'
+---
+mode: agent
+description: Install third-party command packages from git repositories
+---
+
+Read and execute `agent/commands/acp.package-install.md`.
+MD
+
+cat > .github/prompts/acp-package-list.prompt.md << 'MD'
+---
+mode: agent
+description: List installed ACP packages with versions, file counts, and optional details
+---
+
+Read and execute `agent/commands/acp.package-list.md`.
+MD
+
+cat > .github/prompts/acp-package-info.prompt.md << 'MD'
+---
+mode: agent
+description: Display detailed information about a specific installed package (local or global)
+---
+
+Read and execute `agent/commands/acp.package-info.md`.
+MD
+
+cat > .github/prompts/acp-package-search.prompt.md << 'MD'
+---
+mode: agent
+description: Discover ACP packages on GitHub using the GitHub API
+---
+
+Read and execute `agent/commands/acp.package-search.md`.
+MD
+
+cat > .github/prompts/acp-package-remove.prompt.md << 'MD'
+---
+mode: agent
+description: Remove installed ACP packages and clean up manifest
+---
+
+Read and execute `agent/commands/acp.package-remove.md`.
+MD
+
+cat > .github/prompts/acp-package-update.prompt.md << 'MD'
+---
+mode: agent
+description: Update installed ACP packages to their latest versions with smart conflict detection
+---
+
+Read and execute `agent/commands/acp.package-update.md`.
+MD
+
+cat > .github/prompts/acp-package-create.prompt.md << 'MD'
+---
+mode: agent
+description: Create a new ACP package with full ACP installation, release branch configuration, and pre-commit hooks
+---
+
+Read and execute `agent/commands/acp.package-create.md`.
+MD
+
+cat > .github/prompts/acp-package-publish.prompt.md << 'MD'
+---
+mode: agent
+description: Automated package publishing with validation, version detection, CHANGELOG generation, and testing
+---
+
+Read and execute `agent/commands/acp.package-publish.md`.
+MD
+
+cat > .github/prompts/acp-package-validate.prompt.md << 'MD'
+---
+mode: agent
+description: Comprehensive package validation with shell and LLM checks, auto-fix, and test installation
+---
+
+Read and execute `agent/commands/acp.package-validate.md`.
+MD
+
+cat > .github/prompts/acp-project-create.prompt.md << 'MD'
+---
+mode: agent
+description: Create a new generic ACP project with full ACP installation and guided setup
+---
+
+Read and execute `agent/commands/acp.project-create.md`.
+MD
+
+cat > .github/prompts/acp-project-list.prompt.md << 'MD'
+---
+mode: agent
+description: List all projects registered in global workspace
+---
+
+Read and execute `agent/commands/acp.project-list.md`.
+MD
+
+cat > .github/prompts/acp-project-info.prompt.md << 'MD'
+---
+mode: agent
+description: Display detailed information about a specific project from the global registry
+---
+
+Read and execute `agent/commands/acp.project-info.md`.
+MD
+
+cat > .github/prompts/acp-project-set.prompt.md << 'MD'
+---
+mode: agent
+description: Switch to a different project in the global registry
+---
+
+Read and execute `agent/commands/acp.project-set.md`.
+MD
+
+cat > .github/prompts/acp-project-update.prompt.md << 'MD'
+---
+mode: agent
+description: Update project metadata in the global registry
+---
+
+Read and execute `agent/commands/acp.project-update.md`.
+MD
+
+cat > .github/prompts/acp-project-remove.prompt.md << 'MD'
+---
+mode: agent
+description: Remove a project from the global registry with optional directory deletion
+---
+
+Read and execute `agent/commands/acp.project-remove.md`.
+MD
+
+cat > .github/prompts/acp-projects-sync.prompt.md << 'MD'
+---
+mode: agent
+description: Discover unregistered ACP projects in ~/.acp/projects/ and add them to the registry
+---
+
+Read and execute `agent/commands/acp.projects-sync.md`.
+MD
+
+cat > .github/prompts/acp-projects-restore.prompt.md << 'MD'
+---
+mode: agent
+description: Restore/clone missing projects from their registered git origins
+---
+
+Read and execute `agent/commands/acp.projects-restore.md`.
+MD
+
+cat > .github/prompts/acp-preferences-show.prompt.md << 'MD'
+---
+mode: agent
+description: Display the effective preference set for a namespace with source attribution for each value
+---
+
+Read and execute `agent/commands/acp.preferences-show.md`.
+MD
+
+cat > .github/prompts/acp-preferences-get.prompt.md << 'MD'
+---
+mode: agent
+description: Resolve and display preferences for a given namespace
+---
+
+Read and execute `agent/commands/acp.preferences-get.md`.
+MD
+
+cat > .github/prompts/acp-preferences-set.prompt.md << 'MD'
+---
+mode: agent
+description: Set a preference value at a specified level (user/workspace/project) with validation
+---
+
+Read and execute `agent/commands/acp.preferences-set.md`.
+MD
+
+cat > .github/prompts/acp-preferences-create.prompt.md << 'MD'
+---
+mode: agent
+description: Create preference files at a specified level with default values from configurables
+---
+
+Read and execute `agent/commands/acp.preferences-create.md`.
+MD
+
+cat > .github/prompts/acp-preferences-validate.prompt.md << 'MD'
+---
+mode: agent
+description: Validate all preference files across all levels against their configurables schemas
+---
+
+Read and execute `agent/commands/acp.preferences-validate.md`.
+MD
+
+cat > .github/prompts/acp-version-check.prompt.md << 'MD'
+---
+mode: agent
+description: Display current ACP version and compatibility information
+---
+
+Read and execute `agent/commands/acp.version-check.md`.
+MD
+
+cat > .github/prompts/acp-version-check-for-updates.prompt.md << 'MD'
+---
+mode: agent
+description: Check if a newer version of ACP is available without applying updates
+---
+
+Read and execute `agent/commands/acp.version-check-for-updates.md`.
+MD
+
+cat > .github/prompts/acp-version-update.prompt.md << 'MD'
+---
+mode: agent
+description: Update ACP files (AGENT.md, templates, scripts) to the latest version
+---
+
+Read and execute `agent/commands/acp.version-update.md`.
+MD
+
+cat > .github/prompts/git-commit.prompt.md << 'MD'
+---
+mode: agent
+description: Commit staged changes with a well-formatted conventional commit message
+---
+
+Read and execute `agent/commands/git.commit.md`.
+MD
+
 echo -e "${GREEN}✓ Prompt files created${NC}"
 
 # --- 7. Install agent/ commands, scripts and schemas ---
