@@ -381,14 +381,19 @@ List of files/directories this milestone produces
 >
 > When someone says "the task file", they mean `agent/tasks/`. When `/acp-route` creates a file, it goes in `agent/routing/tasks/` as `route-NNN.md`.
 
+> **Deprecation notice**: `**Status**: Not Started / In Progress / Completed` prose fields in task bodies are deprecated — use the YAML `completed:` frontmatter field instead. New tasks created by `/acp-task-create` use the YAML format. Legacy task files with `**Status**:` prose are kept as-is for backward compatibility; do not bulk-update them.
+
 **Structure**:
 ```markdown
+---
+created: YYYY-MM-DD
+completed:  # Set by /acp-commit automatically — do not edit manually
+---
+
 # Task {N}: {Name}
 
 **Milestone**: Parent milestone
 **Estimated Time**: Hours/days
-**Dependencies**: Other tasks
-**Status**: Not Started | In Progress | Completed
 
 ---
 

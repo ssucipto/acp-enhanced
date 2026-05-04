@@ -10,7 +10,7 @@ files_affected:
   - agent/tasks/task-1-{title}.template.md (or equivalent task template)
   - agent/commands/acp.proceed.md (status display step)
 created: 2026-05-04
-completed:
+completed: 2026-05-04
 ---
 
 ## Objective
