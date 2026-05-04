@@ -91,14 +91,16 @@ When the developer corrects your output, IMMEDIATELY:
 
 When developer runs /acp-commit:
 1. Write session summary to `agent/memory/sessions.md` in YAML format:
-```yaml
-- date: [today]
-  executor: [executor used]
-  tasks: [list of task IDs]
-  done: [kebab-case list of completed items]
-  deferred: [item → task-ID for each deferred item]
-  key_fact: [single most important thing learned, if any]
-```
+
+   ```yaml
+   - date: [today]
+     executor: [executor used]
+     tasks: [list of task IDs]
+     done: [kebab-case list of completed items]
+     deferred: [item → task-ID for each deferred item]
+     key_fact: [single most important thing learned, if any]
+   ```
+
 2. Auto-stamp `completed:` on routing task files:
    - Read the `tasks:` list from the session entry just written
    - For each task ID in the list:
