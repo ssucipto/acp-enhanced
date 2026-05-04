@@ -79,7 +79,7 @@ echo ""
 
 # Test 1: Empty projects directory
 test_empty_directory() {
-    local test_dir=$(setup_test_env)
+    setup_test_env; local test_dir="$TEST_DIR"
     
     # Run sync (should handle empty directory gracefully)
     local output
@@ -94,7 +94,7 @@ test_empty_directory() {
 
 # Test 2: Single unregistered project
 test_single_unregistered() {
-    local test_dir=$(setup_test_env)
+    setup_test_env; local test_dir="$TEST_DIR"
     local test_projects_dir="$test_dir/.acp/projects"
     local test_registry="$test_dir/.acp/projects.yaml"
     
@@ -122,7 +122,7 @@ test_single_unregistered() {
 
 # Test 3: Already registered project
 test_already_registered() {
-    local test_dir=$(setup_test_env)
+    setup_test_env; local test_dir="$TEST_DIR"
     local test_projects_dir="$test_dir/.acp/projects"
     local test_registry="$test_dir/.acp/projects.yaml"
     
@@ -145,7 +145,7 @@ test_already_registered() {
 
 # Test 4: Multiple projects (mixed registered/unregistered)
 test_mixed_projects() {
-    local test_dir=$(setup_test_env)
+    setup_test_env; local test_dir="$TEST_DIR"
     local test_projects_dir="$test_dir/.acp/projects"
     local test_registry="$test_dir/.acp/projects.yaml"
     
@@ -174,7 +174,7 @@ test_mixed_projects() {
 
 # Test 5: User declines registration
 test_decline_registration() {
-    local test_dir=$(setup_test_env)
+    setup_test_env; local test_dir="$TEST_DIR"
     local test_projects_dir="$test_dir/.acp/projects"
     
     # Create one project
@@ -195,7 +195,7 @@ test_decline_registration() {
 
 # Test 6: Non-ACP directories (no progress.yaml)
 test_non_acp_directories() {
-    local test_dir=$(setup_test_env)
+    setup_test_env; local test_dir="$TEST_DIR"
     local test_projects_dir="$test_dir/.acp/projects"
     
     # Create directories without progress.yaml
@@ -221,7 +221,7 @@ test_non_acp_directories() {
 
 # Test 7: Malformed progress.yaml (missing fields)
 test_malformed_progress() {
-    local test_dir=$(setup_test_env)
+    setup_test_env; local test_dir="$TEST_DIR"
     local test_projects_dir="$test_dir/.acp/projects"
     
     # Create project with minimal progress.yaml
@@ -245,7 +245,7 @@ test_malformed_progress() {
 
 # Test 8: Registry auto-initialization
 test_registry_auto_init() {
-    local test_dir=$(setup_test_env)
+    setup_test_env; local test_dir="$TEST_DIR"
     local test_projects_dir="$test_dir/.acp/projects"
     local test_registry="$test_dir/.acp/projects.yaml"
     
