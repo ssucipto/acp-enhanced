@@ -8,6 +8,7 @@ executor: Persona A (Copilot)
 files_affected:
   - package.yaml
 created: 2026-05-01
+completed: 2026-05-01
 ---
 
 ## Problem
