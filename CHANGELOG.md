@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.3.0] — 2026-05-04
+
+### Added
+- 50 new `.github/prompts/*.prompt.md` files registering all ACP commands as VS Code Copilot slash commands with autocomplete (`/acp-proceed`, `/acp-status`, `/acp-plan`, all package/project/preference commands, etc.)
+- `git-init.prompt.md` slash command registration for git init workflow
+- `scripts/acp-bootstrap.sh`: All 57 prompt file blocks added to section [6/7] so fresh installs receive full slash command autocomplete out of the box
+
+### Internal
+- `agent/routing/tasks/task-012.md`: Task tracking for bootstrap prompt coverage
+
+---
+
 ## [6.2.5] — 2026-05-01
 
 ### M24 — AGENT.md Completeness
