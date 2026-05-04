@@ -65,10 +65,10 @@ Then proceed with the task.
 ## Context Budget Hard Limits
 
 Enforce these limits. If exceeded, drop lower-tier content first:
-- Layer 1 (core): max 300 tokens
-- Layer 2 (skills): max 500 tokens
-- Layer 3 (memory + wiki): max 2,000 tokens
-- Total session context: max 2,800 tokens (before task content)
+- Layer 1 (core): max 500 tokens
+- Layer 2 (skills): max 1,000 tokens
+- Layer 3 (memory + wiki): max 3,500 tokens
+- Total session context: max 5,000 tokens (before task content)
 
 ---
 

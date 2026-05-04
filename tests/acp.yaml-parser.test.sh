@@ -13,10 +13,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Create test YAML files
 setup_test_files() {
-    mkdir -p test/yaml-parser-fixtures
+    mkdir -p tests/fixtures
     
     # Simple YAML
-    cat > test/yaml-parser-fixtures/simple.yaml << 'EOF'
+    cat > tests/fixtures/simple.yaml << 'EOF'
 name: test-package
 version: 1.0.0
 description: Test package
@@ -24,7 +24,7 @@ author: Test Author
 EOF
     
     # Nested YAML
-    cat > test/yaml-parser-fixtures/nested.yaml << 'EOF'
+    cat > tests/fixtures/nested.yaml << 'EOF'
 project:
   name: test-project
   version: 1.0.0
@@ -34,7 +34,7 @@ project:
 EOF
     
     # Simple array YAML
-    cat > test/yaml-parser-fixtures/array.yaml << 'EOF'
+    cat > tests/fixtures/array.yaml << 'EOF'
 tags:
   - tag1
   - tag2
@@ -42,7 +42,7 @@ tags:
 EOF
     
     # Object array YAML
-    cat > test/yaml-parser-fixtures/object-array.yaml << 'EOF'
+    cat > tests/fixtures/object-array.yaml << 'EOF'
 contents:
   patterns:
     - name: namespace.pattern1.md
@@ -55,7 +55,7 @@ contents:
 EOF
     
     # Complex nested structure
-    cat > test/yaml-parser-fixtures/complex.yaml << 'EOF'
+    cat > tests/fixtures/complex.yaml << 'EOF'
 project:
   name: complex-project
   version: 2.5.0
@@ -72,7 +72,7 @@ project:
 EOF
     
     # Mixed structure
-    cat > test/yaml-parser-fixtures/mixed.yaml << 'EOF'
+    cat > tests/fixtures/mixed.yaml << 'EOF'
 name: mixed
 version: 1.0.0
 tags:
