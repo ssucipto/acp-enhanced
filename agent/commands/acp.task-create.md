@@ -282,6 +282,10 @@ Create task file from template:
   - name = kebab-case version of task name
 - Create milestone subdirectory if it doesn't exist
 - Copy from task template (agent/tasks/task-1-{title}.template.md)
+- **Populate the YAML frontmatter block** (the `---` section at the very top of the file):
+  - `created:` — today's ISO date (`YYYY-MM-DD`)
+  - `completed:` — leave blank (value set by `/acp-commit` automatically — do not edit manually)
+  - Do NOT add `**Status**:` or `**Dependencies**:` prose fields to the task body. These fields are deprecated. Use the YAML frontmatter `completed:` field and the `@acp.meta.task` `depends_on:` field instead.
 - **Populate the `/acp-meta.task` marker block at the top** — the template ships with `{placeholder}` values; every one of them MUST be replaced before saving:
   - `topic:` — comma-separated keywords derived from task name + milestone name (reuse the keywords computed for Step 5.5/5.6)
   - `description:` — user-provided task description from Step 4, one line, <=150 chars (truncate with `…` if needed)
@@ -299,7 +303,7 @@ Create task file from template:
   - Milestone link
   - **Design Reference**: If Step 5.5 found a design document, link to it: `[{Design Name}](../design/{namespace}.{design-name}.md)`. If none found, set to `None`.
   - Estimated time
-  - Do NOT add `**Status**` or `**Dependencies**` prose fields. The marker supersedes them (`status:` and `depends_on:`). Task lifecycle state is in `progress.yaml`.
+  - Do NOT add `**Status**` or `**Dependencies**` prose fields. The YAML frontmatter `completed:` field and `@acp.meta.task` `depends_on:` field supersede them. Task lifecycle state is in `progress.yaml`.
 - Fill in sections:
   - Objective (from collected info)
   - Context (from collected info or draft)
