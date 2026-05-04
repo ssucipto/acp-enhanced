@@ -122,6 +122,42 @@ Active Sessions: 2 others
 
 **Expected Outcome**: Session registered, sibling sessions displayed  
 
+**Overlap Check** (run immediately after registration):
+After registering the session and before loading key files, check for concurrent sessions targeting the same milestone or task:
+- Read `~/.acp/sessions.yaml`
+- Filter sessions where ALL of these are true:
+  - Session ID is NOT the current session
+  - `status: active` OR `last_updated` within the past 2 hours (recently active heuristic)
+- If the current agent has declared a `current_milestone` target (from arguments or progress.yaml):
+  - For each qualifying foreign session, compare `current_milestone`:
+    - **Task match** → emit strong conflict warning:
+      ```
+      ⚠️  CONFLICT: Same Task Active in Another Session
+      Session: <session-id> (started <time-ago>)
+      Working on: task-<N> — <task title>
+
+      Both sessions are targeting the same task. This will likely cause file conflicts.
+      Recommended: coordinate before continuing.
+        - Stop one session, or
+        - Assign this session to a different task
+
+      This is advisory only — /acp-init will continue.
+      ```
+    - **Milestone match only** → emit moderate warning:
+      ```
+      ⚠️  Concurrent Session Detected
+      Session: <session-id> (started <time-ago>)
+      Working on: M<N> — <milestone name>
+
+      Both sessions are targeting the same milestone. Coordinate to avoid conflicts:
+        - Assign different tasks to each session, or
+        - Stop one session before continuing
+
+      This is advisory only — /acp-init will continue.
+      ```
+    - **No match** → proceed silently
+- Skip this check silently if `~/.acp/sessions.yaml` does not exist
+
 **Note**: If `./agent/scripts/acp.sessions.sh` does not exist, skip this step silently.  
 
 ### 2. Read All Agent Documentation
