@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.1] — 2026-05-04
+
+### Added
+- `agent/artifacts/glossary-1-core-terminology.md` — 42-term core terminology glossary covering all ACP Enhanced concepts (protocol, routing, personas, memory system, opencode integration, workflow terms) with alphabetical index
+- `docs/USAGE.md` — new section "ACP Enhanced vs Original ACP — The Memory Layer Explained": per-component breakdown of what is automatic vs what requires user action, including sessions.md, lessons.md, ADRs, and patterns
+
+### Changed
+- `README.md` — new "AI Tools & Model Routing" section: persona comparison table, model selection table with exact costs, semi-automatic vs fully automatic routing flows, step-by-step OpenRouter + acp-dispatch.ts setup, daily opencode workflow
+- `README.md` — "Differences from Original ACP" table expanded with opencode, preferences, project registry, and cost tracking rows; plain-language value statement added; link to USAGE.md for full automatic vs manual breakdown
+
+---
+
 ## [6.4.0] — 2026-05-04
 
 ### M27 — Distribution Readiness
