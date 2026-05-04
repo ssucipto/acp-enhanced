@@ -76,7 +76,7 @@ if [ -d "$TARGET_DIR/.agent" ]; then
         done
     fi
 
-    # Routing task files (task-NNN.md — user-created, never overwrite)
+    # Routing task files (route-NNN.md — user-created, never overwrite)
     if [ -d "$TARGET_DIR/.agent/tasks" ]; then
         mkdir -p "$TARGET_DIR/agent/routing/tasks"
         for _f in "$TARGET_DIR/.agent/tasks/task-"*.md; do
@@ -171,8 +171,8 @@ if [ -d "$TEMP_DIR/agent/routing" ]; then
     cp "$TEMP_DIR/agent/routing/taxonomy.yml" "$TARGET_DIR/agent/routing/" 2>/dev/null || true
     cp "$TEMP_DIR/agent/routing/rules.md"     "$TARGET_DIR/agent/routing/" 2>/dev/null || true
     cp "$TEMP_DIR/agent/routing/config.yml"   "$TARGET_DIR/agent/routing/" 2>/dev/null || true
-    # task-template only — never copy task-*.md (user routing files)
-    cp "$TEMP_DIR/agent/routing/tasks/task-template.md" \
+    # route-template only — never copy route-*.md (user routing files)
+    cp "$TEMP_DIR/agent/routing/tasks/route-template.md" \
        "$TARGET_DIR/agent/routing/tasks/" 2>/dev/null || true
 fi
 
