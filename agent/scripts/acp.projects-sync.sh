@@ -77,7 +77,8 @@ for project_dir in "$PROJECTS_DIR"/*; do
     fi
     
     # Detect git info
-    local git_origin git_branch
+    git_origin=""
+    git_branch=""
     git_origin=$(get_git_origin "$project_dir")
     git_branch=$(get_git_branch "$project_dir")
 

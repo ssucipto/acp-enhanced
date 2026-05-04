@@ -504,7 +504,7 @@ yaml_set() {
             index=$(echo "$segment" | sed 's/.*\[\([0-9]*\)\].*/\1/')
             
             local child_node
-            child_node=$(find_child_by_key "$current_node" "$key")
+            child_node=$(find_child_by_key "$current_node" "$key") || true
             if [ -z "$child_node" ]; then
                 # Create missing array node
                 child_node=$(create_node_and_link "array" "$key" "" "$current_node")
@@ -519,7 +519,7 @@ yaml_set() {
             current_node="$child_node"
         else
             local child_node
-            child_node=$(find_child_by_key "$current_node" "$segment")
+            child_node=$(find_child_by_key "$current_node" "$segment") || true
             
             if [ -z "$child_node" ]; then
                 # Create missing node
@@ -772,7 +772,7 @@ yaml_get_array() {
     if [ -z "$children" ]; then
         echo "0"
     else
-        echo "$children" | tr ',' '\n' | wc -l
+        echo "$children" | tr ',' '\n' | wc -l | tr -d ' '
     fi
 }
 
