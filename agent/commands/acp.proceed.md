@@ -490,6 +490,7 @@ A task with passing tests but a missing user-observable outcome is NOT complete.
 **🚨 MANDATORY TASK UPDATES:**
 - Mark task `status` as `completed` (if done) or leave as `in_progress` (if partial)
 - **Set `completed_date`** to the current ISO 8601 timestamp (e.g., `2026-03-20T14:45:00Z`). This is MANDATORY for completed tasks.
+- **Set `completed:` in the task file's YAML frontmatter** to today's ISO date (`YYYY-MM-DD`). This field is the task-file-level status indicator — leave blank for in-progress tasks. Only applies to task files that have a YAML `---` frontmatter block (M20+ format); skip silently for legacy task files that use `**Status**:` prose fields.
 - **Auto-compute `actual_hours`**: If both `started` and `completed_date` are set, calculate `actual_hours = (completed_date - started)` in hours, rounded to 1 decimal place. If `started` is missing, set `actual_hours` to `null`.
 - Increment `tasks_completed` on the milestone
 
@@ -620,6 +621,7 @@ FOR each remaining task in planned order:
   6. UPDATE progress tracking (🚨 ALL fields mandatory — do not skip any)
      - Mark task `status` as `completed`
      - Set `completed_date` to current ISO 8601 timestamp — MANDATORY
+     - **Set `completed:` in the task file's YAML frontmatter** to today's ISO date (`YYYY-MM-DD`). Skip silently for legacy task files without a `---` frontmatter block.
      - If `started` is `null` or missing, set `started` to current timestamp (same as completed_date)
      - Auto-compute `actual_hours` from `(completed_date - started)` in hours
      - Increment milestone `tasks_completed`
