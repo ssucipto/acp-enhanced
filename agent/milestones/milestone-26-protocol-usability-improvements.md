@@ -1,7 +1,7 @@
 # Milestone 26: ACP Protocol Usability Improvements
 
 **Goal**: Reduce friction and confusion for new and existing ACP users by fixing systemic protocol gaps identified in audit-002 and the critical review of ACP Enhanced.  
-**Duration**: ~2 weeks (9–14 total agent-hours across 5 tasks)  
+**Duration**: ~2 weeks (11–17 total agent-hours across 6 tasks)  
 **Dependencies**: M25 (ACP Progress Visualizer) — may run concurrently; no hard dependency  
 **Status**: Not Started
 
@@ -80,6 +80,7 @@ The sessions system is described as "advisory-only (no locking)" — two agents 
 | task-147 | Document token budget as discipline, not technical necessity | 1–2 h |
 | task-148 | Resolve `@acp.*` vs `/acp-*` dual-syntax confusion in docs | 1–2 h |
 | task-149 | Add concurrent modification warning to sessions system | 2–3 h |
+| task-150 | Separate routing task system from milestone task system (`route-NNN.md`) | 2–3 h |
 
 ---
 
@@ -91,3 +92,4 @@ These improvements keep ACP Enhanced true to its core purpose: **making the agen
 - task-147: New users misread "2,800 token budget" as a hard constraint and over-restrict themselves
 - task-148: Ambiguous invocation surface means users on non-VS Code agents have no clear starting point
 - task-149: Silent multi-agent conflicts undermine the reliability the protocol is meant to provide
+- task-150: Two "task-NNN" directories with incompatible purposes creates immediate confusion for new agents and contributors
