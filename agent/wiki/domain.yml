@@ -1,6 +1,6 @@
 # Domain Entity Model — ACP Protocol project
 # Load ONE section at a time — never load the entire file
-# last_verified: 2026-05-03
+# last_verified: 2026-05-04
 
 commands:
   count: 51
@@ -263,6 +263,9 @@ test_suites:
   unit_location: tests/
   common_helpers: tests/common.sh
   e2e_suites:
+    - suite: acp.command-docs.test.sh
+      coverage: Structure validation of all command docs — required sections, /acp-<cmd> invocation syntax, no unfilled placeholders
+      test_count: 15
     - suite: acp.experimental-features.test.sh
       coverage: Install/update behavior when experimental features flag is present in a package
       test_count: 6
@@ -320,6 +323,9 @@ test_suites:
     - suite: acp.template-files.test.sh
       coverage: contents.files template installation with target paths and variable substitution
       test_count: 15
+    - suite: acp.version.test.sh
+      coverage: acp.version-check.sh, acp.version-check-for-updates.sh (--silent), acp.version-update.sh (structure only — no network in CI)
+      test_count: 13
   unit_suites:
     - suite: acp.preferences-preset.test.sh
       coverage: load_preset(), get_preference_with_preset(), list_presets() in acp.preferences.sh

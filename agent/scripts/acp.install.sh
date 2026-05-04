@@ -167,6 +167,10 @@ if [ -d "$TEMP_DIR/agent/wiki" ]; then
     cp "$TEMP_DIR/agent/wiki/"*.yml "$TARGET_DIR/agent/wiki/" 2>/dev/null || true
     cp "$TEMP_DIR/agent/wiki/"*.md  "$TARGET_DIR/agent/wiki/" 2>/dev/null || true
 fi
+if [ -d "$TEMP_DIR/.opencode/commands" ]; then
+    mkdir -p "$TARGET_DIR/.opencode/commands"
+    cp "$TEMP_DIR/.opencode/commands/"*.md "$TARGET_DIR/.opencode/commands/" 2>/dev/null || true
+fi
 if [ -d "$TEMP_DIR/agent/routing" ]; then
     cp "$TEMP_DIR/agent/routing/taxonomy.yml" "$TARGET_DIR/agent/routing/" 2>/dev/null || true
     cp "$TEMP_DIR/agent/routing/rules.md"     "$TARGET_DIR/agent/routing/" 2>/dev/null || true
