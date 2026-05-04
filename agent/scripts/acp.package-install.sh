@@ -131,7 +131,8 @@ fi
 
 # Create temporary directory
 TEMP_DIR=$(mktemp -d)
-trap "rm -rf $TEMP_DIR" EXIT
+CHECKSUMS_FILE=$(mktemp)
+trap "rm -rf $TEMP_DIR; rm -f $CHECKSUMS_FILE" EXIT
 
 echo "Cloning repository..."
 if [ -d "$REPO_URL" ]; then
@@ -194,35 +195,47 @@ INSTALL_DIRS=()
 [ "$INSTALL_FILES" = true ] && INSTALL_DIRS+=("files")
 [ "$INSTALL_INDICES" = true ] && INSTALL_DIRS+=("index")
 
-# Mapping from dir names to manifest keys (dir → manifest key)
-declare -A MANIFEST_KEYS=(
-    ["patterns"]="patterns"
-    ["commands"]="commands"
-    ["design"]="designs"
-    ["scripts"]="scripts"
-    ["files"]="files"
-    ["index"]="indices"
-)
+# ── bash 3.2 compatible "associative array" helpers ──────────────────────────
+# Keys are encoded: / → __S__, . → __D__, - → __H__
+_aenc() { printf '%s' "$1" | sed 's|/|__S__|g; s|\.|__D__|g; s|-|__H__|g'; }
+_aset() { local _e; _e="$(_aenc "$2")"; printf -v "_A_${1}__${_e}" '%s' "$3"; }
+_aget() { local _e _n; _e="$(_aenc "$2")"; _n="_A_${1}__${_e}"; printf '%s' "${!_n:-${3:-}}"; }
+_ahas() { local _e _n; _e="$(_aenc "$2")"; _n="_A_${1}__${_e}"; eval "[ \"\${${_n}+x}\" = x ]"; }
+_akeys() {
+    local _pfx="_A_${1}__" _v _k
+    for _v in $(compgen -v "_A_${1}__"); do
+        _k="${_v#$_pfx}"
+        _k="$(printf '%s' "$_k" | sed 's|__S__|/|g; s|__D__|.|g; s|__H__|-|g')"
+        printf '%s\n' "$_k"
+    done
+}
+# Static mapping: dir name → manifest YAML key
+get_manifest_key() {
+    case "$1" in
+        patterns) echo "patterns" ;;
+        commands) echo "commands" ;;
+        design)   echo "designs"  ;;
+        scripts)  echo "scripts"  ;;
+        files)    echo "files"    ;;
+        index)    echo "indices"  ;;
+        *)        echo "$1"       ;;
+    esac
+}
+# ─────────────────────────────────────────────────────────────────────────────
 
-# ============================================================================
-# OPTIMIZATION: Collect all files first, then batch process
-# ============================================================================
+# Arrays to hold all files to install (bash 3.2 compat — no declare -A)
+# _A_ALL_FILES_TO_INSTALL__<dir> = space-separated file paths
+# _AFTI_DIRS tracks which dirs have files (for iteration)
+_AFTI_DIRS=()
 
-# Arrays to hold all files to install
-declare -A ALL_FILES_TO_INSTALL  # Key: dir, Value: space-separated file paths
-declare -A FILE_METADATA  # Key: "dir/filename", Value: "version|experimental"
+# _A_FILE_METADATA__<dir__S__filename> = "version|experimental"
+# _A_FILE_TARGETS__files__S__<relpath> = target directory path
+# _A_FILE_VARS__files__S__<relpath>    = "VAR1,VAR2,..."
+_FVARS_KEYS=()   # tracks keys set in FILE_VARS (for iteration)
+_FVARS_ANY=false # true when at least one FILE_VARS entry exists
 
-# Track installed commands for script-command binding resolution
-INSTALLED_COMMANDS=()
-
-INSTALLED_COUNT=0
-SKIPPED_COUNT=0
-
-# Template file metadata (populated during scanning when contents.files exists)
-declare -A FILE_TARGETS    # Key: "files/relpath", Value: target directory path
-declare -A FILE_VARS       # Key: "files/relpath", Value: "VAR1,VAR2,..."
-declare -A COLLECTED_VARS  # Key: "VARNAME", Value: user-provided value
-HAS_FILE_METADATA=false
+# _A_COLLECTED_VARS__<VARNAME> = user-provided value
+_CVARS_ANY=false # true when at least one COLLECTED_VARS entry exists
 
 echo "Scanning for installable files..."
 echo ""
@@ -240,22 +253,33 @@ for dir in "${INSTALL_DIRS[@]}"; do
         continue
     fi
     
-    # Determine which files to process
-    declare -n FILE_LIST
-    case "$dir" in
-        patterns) FILE_LIST=PATTERN_FILES ;;
-        commands) FILE_LIST=COMMAND_FILES ;;
-        design) FILE_LIST=DESIGN_FILES ;;
-        scripts) FILE_LIST=COMMAND_FILES ;;
-        files) FILE_LIST=FILE_FILES ;;
-        index) FILE_LIST=INDEX_FILES ;;
-    esac
+    # Determine which files to process (bash 3.2 compat: no declare -n nameref)
+    _dir_file_list() {
+        case "$dir" in
+            patterns) echo "${PATTERN_FILES[@]:-}" ;;
+            commands) echo "${COMMAND_FILES[@]:-}" ;;
+            design)   echo "${DESIGN_FILES[@]:-}"  ;;
+            scripts)  echo "${COMMAND_FILES[@]:-}" ;;
+            files)    echo "${FILE_FILES[@]:-}"    ;;
+            index)    echo "${INDEX_FILES[@]:-}"   ;;
+        esac
+    }
+    _dir_file_count() {
+        case "$dir" in
+            patterns) echo "${#PATTERN_FILES[@]}" ;;
+            commands) echo "${#COMMAND_FILES[@]}" ;;
+            design)   echo "${#DESIGN_FILES[@]}"  ;;
+            scripts)  echo "${#COMMAND_FILES[@]}" ;;
+            files)    echo "${#FILE_FILES[@]}"    ;;
+            index)    echo "${#INDEX_FILES[@]}"   ;;
+        esac
+    }
 
     # Collect files
     FILES_TO_PROCESS=()
-    if [ ${#FILE_LIST[@]} -gt 0 ]; then
+    if [ "$(_dir_file_count)" -gt 0 ]; then
         # Selective installation
-        for file_name in "${FILE_LIST[@]}"; do
+        for file_name in $(_dir_file_list); do
             if [ "$dir" = "scripts" ]; then
                 [[ "$file_name" != *.sh ]] && file_name="${file_name}.sh"
             elif [ "$dir" != "files" ]; then
@@ -275,7 +299,7 @@ for dir in "${INSTALL_DIRS[@]}"; do
                         if [ "$_sel_name" = "$file_name" ]; then
                             HAS_FILE_METADATA=true
                             _sel_target=$(yaml_query ".contents.files[$_sel_idx].target" 2>/dev/null || echo "")
-                            [ -n "$_sel_target" ] && [ "$_sel_target" != "null" ] && FILE_TARGETS["files/$file_name"]="$_sel_target"
+                            [ -n "$_sel_target" ] && [ "$_sel_target" != "null" ] && _aset FILE_TARGETS "files/$file_name" "$_sel_target"
                             _sel_var_idx=0
                             _sel_vars=""
                             while true; do
@@ -284,7 +308,7 @@ for dir in "${INSTALL_DIRS[@]}"; do
                                 [ -n "$_sel_vars" ] && _sel_vars="$_sel_vars,$_sel_var" || _sel_vars="$_sel_var"
                                 _sel_var_idx=$((_sel_var_idx + 1))
                             done
-                            [ -n "$_sel_vars" ] && FILE_VARS["files/$file_name"]="$_sel_vars"
+                            if [ -n "$_sel_vars" ]; then _aset FILE_VARS "files/$file_name" "$_sel_vars"; _FVARS_KEYS+=("files/$file_name"); _FVARS_ANY=true; fi
                             break
                         fi
                         _sel_idx=$((_sel_idx + 1))
@@ -313,7 +337,7 @@ for dir in "${INSTALL_DIRS[@]}"; do
 
                         # Store target metadata
                         _target=$(yaml_query ".contents.files[$_file_idx].target" 2>/dev/null || echo "")
-                        [ -n "$_target" ] && [ "$_target" != "null" ] && FILE_TARGETS["files/$_fname"]="$_target"
+                        [ -n "$_target" ] && [ "$_target" != "null" ] && _aset FILE_TARGETS "files/$_fname" "$_target"
 
                         # Collect variable names
                         _var_idx=0
@@ -324,7 +348,7 @@ for dir in "${INSTALL_DIRS[@]}"; do
                             [ -n "$_vars" ] && _vars="$_vars,$_var" || _vars="$_var"
                             _var_idx=$((_var_idx + 1))
                         done
-                        [ -n "$_vars" ] && FILE_VARS["files/$_fname"]="$_vars"
+                        if [ -n "$_vars" ]; then _aset FILE_VARS "files/$_fname" "$_vars"; _FVARS_KEYS+=("files/$_fname"); _FVARS_ANY=true; fi
                     else
                         echo "  ${YELLOW}⚠${NC}  Declared in package.yaml but not found: agent/files/$_fname"
                         SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
@@ -354,7 +378,6 @@ for dir in "${INSTALL_DIRS[@]}"; do
     fi
     
     if [ ${#FILES_TO_PROCESS[@]} -eq 0 ]; then
-        unset -n FILE_LIST
         continue
     fi
     
@@ -420,14 +443,14 @@ for dir in "${INSTALL_DIRS[@]}"; do
         FILE_VERSION=$(get_file_version "$TEMP_DIR/package.yaml" "$dir" "$filename")
 
         # Store metadata
-        FILE_METADATA["$dir/$filename"]="$FILE_VERSION|$is_experimental"
+        _aset FILE_METADATA "$dir/$filename" "$FILE_VERSION|$is_experimental"
 
         # Add to valid files
         VALID_FILES+=("$file")
 
         # Determine target path for overwrite check
         if [ "$dir" = "files" ] && [ "$HAS_FILE_METADATA" = true ]; then
-            _file_target="${FILE_TARGETS[files/$filename]:-./}"
+            _file_target="$(_aget FILE_TARGETS "files/$filename" "./")"
             _bname=$(basename "$filename")
             _bname="${_bname%.template}"
             target_path="${_file_target}${_bname}"
@@ -440,7 +463,7 @@ for dir in "${INSTALL_DIRS[@]}"; do
         # Build display info for files with metadata
         _display_extra=""
         if [ "$dir" = "files" ] && [ "$HAS_FILE_METADATA" = true ]; then
-            _file_vars="${FILE_VARS[files/$filename]:-}"
+            _file_vars="$(_aget FILE_VARS "files/$filename")"
             _display_extra=" → $target_path"
             [ -n "$_file_vars" ] && _display_extra="$_display_extra (variables: $_file_vars)"
         fi
@@ -456,10 +479,9 @@ for dir in "${INSTALL_DIRS[@]}"; do
     
     # Store valid files for this directory
     if [ ${#VALID_FILES[@]} -gt 0 ]; then
-        ALL_FILES_TO_INSTALL["$dir"]="${VALID_FILES[*]}"
+        _aset ALL_FILES_TO_INSTALL "$dir" "${VALID_FILES[*]}"
+        _AFTI_DIRS+=("$dir")
     fi
-    
-    unset -n FILE_LIST
     echo ""
 done
 
@@ -514,13 +536,13 @@ fi
 echo ""
 
 # Collect template variables from user (if any files have variables declared)
-if [ ${#FILE_VARS[@]} -gt 0 ]; then
+if [ "$_FVARS_ANY" = "true" ]; then
     echo "${BLUE}Collecting template variables...${NC}"
 
     # Build list of unique variables across all templates
     _all_vars=""
-    for _key in "${!FILE_VARS[@]}"; do
-        IFS=',' read -ra _var_arr <<< "${FILE_VARS[$_key]}"
+    for _key in "${_FVARS_KEYS[@]}"; do
+        IFS=',' read -ra _var_arr <<< "$(_aget FILE_VARS "$_key")"
         for _var in "${_var_arr[@]}"; do
             if [[ ! ",$_all_vars," =~ ",$_var," ]]; then
                 [ -n "$_all_vars" ] && _all_vars="$_all_vars,$_var" || _all_vars="$_var"
@@ -532,7 +554,8 @@ if [ ${#FILE_VARS[@]} -gt 0 ]; then
     IFS=',' read -ra _unique_vars <<< "$_all_vars"
     for _var in "${_unique_vars[@]}"; do
         read -p "  Enter $_var: " _value
-        COLLECTED_VARS["$_var"]="$_value"
+        _aset COLLECTED_VARS "$_var" "$_value"
+        _CVARS_ANY=true
     done
 
     echo "${GREEN}✓${NC} Variables collected"
@@ -577,7 +600,7 @@ should_install_file() {
 add_package_to_manifest "$PACKAGE_NAME" "$REPO_URL" "$PACKAGE_VERSION" "$COMMIT_HASH"
 
 # Batch copy all files (skip scripts — handled via script-command binding below)
-for dir in "${!ALL_FILES_TO_INSTALL[@]}"; do
+for dir in "${_AFTI_DIRS[@]}"; do
     SOURCE_DIR="$TEMP_DIR/agent/$dir"
 
     # Skip scripts in first pass — install selectively after commands via script-command binding
@@ -586,13 +609,13 @@ for dir in "${!ALL_FILES_TO_INSTALL[@]}"; do
     fi
 
     # Copy all files
-    for file in ${ALL_FILES_TO_INSTALL[$dir]}; do
+    for file in $(_aget ALL_FILES_TO_INSTALL "$dir"); do
         if [ "$dir" = "files" ]; then
             rel_path="${file#$SOURCE_DIR/}"
 
             if [ "$HAS_FILE_METADATA" = true ]; then
                 # Metadata-aware installation: use target path and variable substitution
-                _file_target="${FILE_TARGETS[files/$rel_path]:-./}"
+                _file_target="$(_aget FILE_TARGETS "files/$rel_path" "./")"
                 _bname=$(basename "$rel_path")
                 _bname="${_bname%.template}"
                 _dest="${_file_target}${_bname}"
@@ -606,12 +629,12 @@ for dir in "${!ALL_FILES_TO_INSTALL[@]}"; do
                 mkdir -p "$(dirname "$_dest")"
 
                 # Apply variable substitution if template has variables
-                _file_vars="${FILE_VARS[files/$rel_path]:-}"
-                if [ -n "$_file_vars" ] && [ ${#COLLECTED_VARS[@]} -gt 0 ]; then
+                _file_vars="$(_aget FILE_VARS "files/$rel_path")"
+                if [ -n "$_file_vars" ] && [ "$_CVARS_ANY" = "true" ]; then
                     cp "$file" "$_dest"
                     IFS=',' read -ra _var_arr <<< "$_file_vars"
                     for _var in "${_var_arr[@]}"; do
-                        _value="${COLLECTED_VARS[$_var]:-}"
+                        _value="$(_aget COLLECTED_VARS "$_var")"
                         if [ -n "$_value" ]; then
                             _escaped=$(printf '%s\n' "$_value" | sed 's/[&/\]/\\&/g')
                             _sed_i "s|{{${_var}}}|${_escaped}|g" "$_dest"
@@ -757,7 +780,7 @@ if [ -f "$TEMP_DIR/package.yaml" ] && [ ${#INSTALLED_COMMANDS[@]} -gt 0 ]; then
             if [ -f "$TEMP_DIR/package.yaml" ]; then
                 is_experimental=$(grep -A 1000 "^  scripts:" "$TEMP_DIR/package.yaml" 2>/dev/null | grep -A 2 "name: ${script}" | grep "^ *experimental: true" | grep -v "^[[:space:]]*#" | head -1)
             fi
-            FILE_METADATA["scripts/$script"]="$FILE_VERSION|$is_experimental"
+            _aset FILE_METADATA "scripts/$script" "$FILE_VERSION|$is_experimental"
 
             # Track for batch processing
             if [ -n "$SCRIPT_FILES_LIST" ]; then
@@ -770,13 +793,17 @@ if [ -f "$TEMP_DIR/package.yaml" ] && [ ${#INSTALLED_COMMANDS[@]} -gt 0 ]; then
 
     # Update ALL_FILES_TO_INSTALL with resolved scripts
     if [ -n "$SCRIPT_FILES_LIST" ]; then
-        ALL_FILES_TO_INSTALL["scripts"]="$SCRIPT_FILES_LIST"
+        _aset ALL_FILES_TO_INSTALL "scripts" "$SCRIPT_FILES_LIST"
+        # Add to tracking array if not already present
+        _already=false
+        for _d in "${_AFTI_DIRS[@]:-}"; do [ "$_d" = "scripts" ] && _already=true && break; done
+        [ "$_already" = "false" ] && _AFTI_DIRS+=("scripts")
     fi
     echo ""
-elif [ -d "$TEMP_DIR/agent/scripts" ] && [ -n "${ALL_FILES_TO_INSTALL[scripts]+x}" ]; then
+elif [ -d "$TEMP_DIR/agent/scripts" ] && _ahas ALL_FILES_TO_INSTALL "scripts"; then
     # Scripts were collected during scan but no package.yaml script-command binding
     # Install all scripts that passed validation (backward compatibility)
-    for file in ${ALL_FILES_TO_INSTALL[scripts]}; do
+    for file in $(_aget ALL_FILES_TO_INSTALL "scripts"); do
         filename=$(basename "$file")
         mkdir -p "$INSTALL_BASE_DIR/scripts"
         cp "$file" "$INSTALL_BASE_DIR/scripts/$filename"
@@ -792,13 +819,13 @@ echo "  ${BLUE}Calculating checksums...${NC}"
 
 # Collect all installed files for batch checksum
 ALL_INSTALLED_FILES=()
-for dir in "${!ALL_FILES_TO_INSTALL[@]}"; do
+for dir in "${_AFTI_DIRS[@]}"; do
     SOURCE_DIR="$TEMP_DIR/agent/$dir"
-    for file in ${ALL_FILES_TO_INSTALL[$dir]}; do
+    for file in $(_aget ALL_FILES_TO_INSTALL "$dir"); do
         if [ "$dir" = "files" ]; then
             rel_path="${file#$SOURCE_DIR/}"
             if [ "$HAS_FILE_METADATA" = true ]; then
-                _file_target="${FILE_TARGETS[files/$rel_path]:-./}"
+                _file_target="$(_aget FILE_TARGETS "files/$rel_path" "./")"
                 _bname=$(basename "$rel_path")
                 _bname="${_bname%.template}"
                 ALL_INSTALLED_FILES+=("${_file_target}${_bname}")
@@ -812,15 +839,16 @@ for dir in "${!ALL_FILES_TO_INSTALL[@]}"; do
     done
 done
 
-# Calculate all checksums in one pass
-declare -A CHECKSUMS
+# Calculate all checksums in one pass (temp file, bash 3.2 compat)
+CHECKSUMS_FILE=$(mktemp)
 if [ ${#ALL_INSTALLED_FILES[@]} -gt 0 ]; then
-    while IFS= read -r line; do
-        checksum=$(echo "$line" | awk '{print $1}')
-        filepath=$(echo "$line" | awk '{$1=""; print substr($0,2)}')
-        CHECKSUMS["$filepath"]="$checksum"
-    done < <(if command -v sha256sum >/dev/null 2>&1; then sha256sum "${ALL_INSTALLED_FILES[@]}" 2>/dev/null; elif command -v shasum >/dev/null 2>&1; then shasum -a 256 "${ALL_INSTALLED_FILES[@]}" 2>/dev/null; fi)
+    if command -v sha256sum >/dev/null 2>&1; then
+        sha256sum "${ALL_INSTALLED_FILES[@]}" 2>/dev/null >> "$CHECKSUMS_FILE" || true
+    elif command -v shasum >/dev/null 2>&1; then
+        shasum -a 256 "${ALL_INSTALLED_FILES[@]}" 2>/dev/null >> "$CHECKSUMS_FILE" || true
+    fi
 fi
+_get_checksum() { awk -v p="$1" 'index($0, " " p) {print $1; exit}' "$CHECKSUMS_FILE"; }
 
 # ============================================================================
 # OPTIMIZATION: Batch manifest update
@@ -833,16 +861,16 @@ yaml_parse "$MANIFEST_FILE"
 
 # Add all files to manifest in memory
 timestamp=$(get_timestamp)
-for dir in "${!ALL_FILES_TO_INSTALL[@]}"; do
+for dir in "${_AFTI_DIRS[@]}"; do
     SOURCE_DIR="$TEMP_DIR/agent/$dir"
-    manifest_key="${MANIFEST_KEYS[$dir]:-$dir}"
+    manifest_key="$(get_manifest_key "$dir")"
 
-    for file in ${ALL_FILES_TO_INSTALL[$dir]}; do
+    for file in $(_aget ALL_FILES_TO_INSTALL "$dir"); do
         # Determine filename and installed filepath based on dir type
         if [ "$dir" = "files" ]; then
             filename="${file#$SOURCE_DIR/}"
             if [ "$HAS_FILE_METADATA" = true ]; then
-                _file_target="${FILE_TARGETS[files/$filename]:-./}"
+                _file_target="$(_aget FILE_TARGETS "files/$filename" "./")"
                 _bname=$(basename "$filename")
                 _bname="${_bname%.template}"
                 filepath="${_file_target}${_bname}"
@@ -855,10 +883,10 @@ for dir in "${!ALL_FILES_TO_INSTALL[@]}"; do
         fi
 
         # Get metadata
-        IFS='|' read -r file_version is_experimental <<< "${FILE_METADATA[$dir/$filename]}"
+        IFS='|' read -r file_version is_experimental <<< "$(_aget FILE_METADATA "$dir/$filename")"
 
         # Get checksum
-        checksum="${CHECKSUMS[$filepath]:-unknown}"
+        checksum="$(_get_checksum "$filepath")" ; checksum="${checksum:-unknown}"
 
         # Append to manifest using mapped key
         obj_node=$(yaml_array_append_object ".packages.${PACKAGE_NAME}.files.${manifest_key}")
@@ -876,14 +904,14 @@ for dir in "${!ALL_FILES_TO_INSTALL[@]}"; do
         if [ "$dir" = "files" ] && [ "$HAS_FILE_METADATA" = true ]; then
             yaml_object_set "$obj_node" "target" "$filepath" >/dev/null
             # Store variable values if this file had variables
-            _file_vars_manifest="${FILE_VARS[files/$filename]:-}"
+            _file_vars_manifest="$(_aget FILE_VARS "files/$filename")"
             if [ -n "$_file_vars_manifest" ]; then
                 # Create nested map node for variables
                 _vars_node=$(create_node "map" "variables" "" "$obj_node")
                 add_child "$obj_node" "$_vars_node"
                 IFS=',' read -ra _var_names <<< "$_file_vars_manifest"
                 for _vname in "${_var_names[@]}"; do
-                    _vval="${COLLECTED_VARS[$_vname]:-}"
+                    _vval="$(_aget COLLECTED_VARS "$_vname")"
                     if [ -n "$_vval" ]; then
                         yaml_object_set "$_vars_node" "$_vname" "$_vval" >/dev/null
                     fi
