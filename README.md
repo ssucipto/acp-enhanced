@@ -82,18 +82,130 @@ ACP Enhanced registers **58 slash commands** across two tools — available afte
 
 ---
 
+## AI Tools & Model Routing
+
+ACP Enhanced supports three deployment configurations depending on your tooling and budget. Every ACP feature works with all three — the difference is only in which models execute your tasks and how routing happens.
+
+### Choose Your Setup (Persona)
+
+| Persona | Tools | Setup | Cost Profile | Primary Gain |
+|---|---|---|---|---|
+| **A — Copilot Only** | VS Code Copilot | None | Fixed subscription | Memory + ADRs cut 20–30% of clarification turns |
+| **B — DeepSeek / opencode** | opencode + OpenRouter | API key + `scripts/acp-dispatch.ts` | ~$5–20/mo pay-per-token | 50–65% cost reduction via automatic model routing |
+| **C — Copilot + DeepSeek** *(recommended)* | Both | Both | Fixed + small variable | Each tool used for its strength; 60–85% total savings |
+
+### Model Selection — Which Model for Which Task
+
+ACP's `agent/routing/taxonomy.yml` already encodes the right model for every task type:
+
+| Model | When to use | Example task types | Cost (per 1M tokens) |
+|---|---|---|---|
+| **deepseek-v4-flash** | Low complexity, fast iteration | Doc updates, simple bug fixes, test writing, schema edits, status checks | $0.14 in / $0.28 out |
+| **deepseek-v4-pro** | Medium complexity, new implementation | New scripts from scratch, complex bugs, command doc writing, preference system | $0.44 in / $0.87 out |
+| **claude-sonnet** | High complexity, architecture | Design documents, architecture decisions, full system reasoning | $3.00 in / $15.00 out |
+
+**The routing rule in one sentence**: if the task creates something new with cross-component reasoning → pro; if it fixes or updates something existing → flash; if it requires reasoning about the whole system → claude-sonnet.
+
+### How Routing Works Day-to-Day
+
+**Semi-automatic (Persona A/B with opencode):**
+1. `/acp-route "describe your task"` — AI reads taxonomy + rules, classifies the task, creates a route file, and tells you the recommended model
+2. You switch to that model in opencode's model picker (one click)
+3. `/acp-proceed` — execute the task
+
+**Fully automatic (Persona B/C with `acp-dispatch.ts`):**
+```bash
+# 1. Classify and create route file
+/acp-route "Add retry logic to the auth service"
+# → route file created: agent/routing/tasks/route-042.md
+# → executor: deepseek-v4-pro
+
+# 2. Dispatch — reads executor field, calls correct model, logs cost
+npx ts-node scripts/acp-dispatch.ts agent/routing/tasks/route-042.md
+# → [ACP] Dispatching route-042 → deepseek-v4-pro (deepseek/deepseek-v4-pro)
+# → [ACP] Context: ~420 system (cached) + ~1840 user tokens
+# → ... model output streamed to terminal ...
+# → [ACP] Tokens: 2260 in / 847 out | Cost: $0.0017
+# → [ACP] Ledger updated: agent/routing/ledger.md
+```
+
+No model-switching needed — dispatch handles it automatically.
+
+### Setting Up OpenRouter + acp-dispatch.ts (Persona B/C)
+
+**Prerequisites**: Node.js 18+, an [OpenRouter](https://openrouter.ai) account with credits loaded for DeepSeek models.
+
+**Step 1 — Install dispatch dependencies**
+```bash
+cd scripts
+npm install
+cd ..
+```
+
+**Step 2 — Add your API key**
+```bash
+# Add to your project .env (never commit this file)
+echo "OPENROUTER_API_KEY=sk-or-v1-your-key-here" >> .env
+export OPENROUTER_API_KEY="sk-or-v1-your-key-here"
+```
+
+**Step 3 — Test the dispatch loop**
+```bash
+# Create a route file via /acp-route in your AI tool first, then:
+npx ts-node scripts/acp-dispatch.ts agent/routing/tasks/route-001.md
+```
+
+**Step 4 — Review the cost ledger**
+```bash
+cat agent/routing/ledger.md
+# | Date | Task ID | Type | Executor | In Tokens | Out Tokens | Cost |
+# | 2026-05-04 | route-001 | bash-script-fix | deepseek-v4-flash | 1840 | 412 | $0.0004 |
+```
+
+**Step 5 — Update `agent/core/routing.yml`** to reflect your persona:
+```yaml
+session:
+  executor: deepseek-v4-pro
+  model: deepseek/deepseek-v4-pro
+  persona: B
+```
+
+> **Override when needed**: Add `override_executor: claude-sonnet` to any route file's frontmatter to force a specific model regardless of taxonomy. Use this for critical tasks, then update taxonomy.yml if the pattern repeats.
+
+### Daily opencode Workflow
+
+```
+Morning    → /acp-resume        (flash — loads context in 6 steps, ~30 sec)
+New task   → /acp-route "task"  (flash — classifies task, creates route file)
+Switch     → Change to pro/flash based on route recommendation
+Execute    → /acp-proceed       (pro or flash — do the work)
+EOD        → /acp-commit        (flash — writes sessions.md, stamps route files)
+```
+
+Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, reports total spend.
+
+---
+
 ## Differences from Original ACP
 
 | | Original ACP | ACP Enhanced |
 | --- | --- | --- |
 | Context loading | AI loads files ad hoc | Structured 6-step protocol with token budget |
-| Memory | None beyond git history | Tiered: session / user / repo memory |
+| Memory | None — every session starts cold | sessions.md + lessons.md + ADRs + patterns |
 | Task routing | None | Taxonomy-based routing to skill files |
-| Lessons | None | Correction log appended on every mistake |
+| Mistake learning | None | Correction log appended per task type |
 | VS Code commands | Manual file reference | 58 slash commands with autocomplete |
+| opencode support | None | 58 slash commands in `.opencode/commands/` |
+| Preferences | None | 4-level hierarchy (project > workspace > user > default) |
+| Project registry | None | Global `~/.acp/projects.yaml` for multi-project tracking |
+| Cost tracking | None | Per-task token + USD ledger via dispatch |
 | Install | `curl \| bash` from original repo | Single bootstrap script from this fork |
 
 The ACP command and workflow system (clarifications → design → plan → proceed) is identical to the original.
+
+**Is ACP Enhanced worth it without the routing/dispatch system?** Yes — the memory layer is the primary value. Without memory, every AI session starts cold and you re-explain context every time. With ACP Enhanced, sessions compound: corrections are remembered by task type, architectural decisions never get re-debated, and session summaries load automatically. Routing is additive on top of that.
+
+> **Detailed breakdown — what's automatic vs what requires your action**: [`docs/USAGE.md` → "ACP Enhanced vs Original ACP — The Memory Layer Explained"](docs/USAGE.md#acp-enhanced-vs-original-acp--the-memory-layer-explained)
 
 ---
 
