@@ -2,7 +2,7 @@
 
 **Milestone**: M24 — AGENT.md Completeness  
 **Estimated Time**: 2–3 hours  
-**Status**: Not Started
+**Status**: Completed
 
 ---
 
