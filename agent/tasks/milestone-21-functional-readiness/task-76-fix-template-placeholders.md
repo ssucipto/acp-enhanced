@@ -16,6 +16,7 @@ files_affected:
   - agent/commands/acp.task-create.md
   - agent/commands/git.commit.md
 created: 2026-05-01
+completed: 2026-05-01
 ---
 
 ## Problem
