@@ -12,11 +12,14 @@ rules:
   - never_break_macos: test BSD sed and date compatibility before committing
   - never_use_gdate_without_fallback: wrap date +%N with linux/macos detection
 
+# Context budget: a discipline practice, not a hard technical limit.
+# Modern LLMs have 100K+ context windows — this budget enforces reproducibility and focus.
+# Exceed deliberately when needed; never exceed silently.
 context_budget:
-  layer1_max_tokens: 300
-  layer2_max_tokens: 500
-  layer3_max_tokens: 2000
-  total_max_tokens: 2800
+  layer1_max_tokens: 500
+  layer2_max_tokens: 1000
+  layer3_max_tokens: 3500
+  total_max_tokens: 5000
   warning_threshold: 0.80
 
 bash_rules:

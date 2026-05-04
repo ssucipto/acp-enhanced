@@ -116,6 +116,46 @@ Always clean stale sessions before displaying results.
 
 **Expected Outcome**: Stale sessions removed  
 
+### 2.5. Overlap Check (Advisory Only)
+
+When the current agent has a declared `current_milestone` or `current_task` (from `/acp-init` context), check for concurrent sessions targeting the same work area.
+
+**Actions**:
+- Read `~/.acp/sessions.yaml`
+- Filter sessions where ALL of these are true:
+  - Session ID is NOT the current session
+  - `status: active` OR `last_updated` is within the past 2 hours (recently active heuristic)
+- For each qualifying foreign session, compare `current_milestone` with the current agent's milestone:
+  - **Milestone match + task match** → emit strong warning:
+    ```
+    ⚠️  CONFLICT: Same Task Active in Another Session
+    Session: <session-id> (started <time-ago>)
+    Working on: task-<N> — <task title>
+
+    Both sessions are targeting the same task. This will cause file conflicts.
+    Recommended: coordinate before continuing.
+      - Stop one session, or
+      - Assign this session to a different task
+
+    This is advisory only — you can continue, but conflicts are likely.
+    ```
+  - **Milestone match only** → emit moderate warning:
+    ```
+    ⚠️  Concurrent Session Detected
+    Session: <session-id> (started <time-ago>)
+    Working on: M<N> — <milestone name>
+
+    Both sessions are targeting the same milestone. Coordinate to avoid conflicts:
+      - Assign different tasks to each session, or
+      - Stop one session before continuing
+
+    This is advisory only — execution is not blocked.
+    ```
+  - **No match** → proceed silently
+- Skip this check silently if: no `~/.acp/sessions.yaml` exists, no current milestone is declared, or the `list`/`count`/`clean` subcommand is the only intent (i.e. no active task context to compare)
+
+**Expected Outcome**: User warned of concurrent overlap if present; execution continues regardless  
+
 ### 3. Execute Requested Subcommand
 
 Run the appropriate `acp.sessions.sh` subcommand.
