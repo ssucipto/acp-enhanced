@@ -406,9 +406,16 @@ yaml_query() {
             # Split by comma and iterate
             local IFS=','
             for child_id in $children; do
-                local child_key
+                local child_type child_key child_value
+                child_type=$(get_node_field "$child_id" 2)
                 child_key=$(get_node_field "$child_id" 3)
-                echo "${child_key}:"
+                child_value=$(get_node_field "$child_id" 4)
+                if [ "$child_type" = "scalar" ] && [ -z "$child_key" ]; then
+                    # Bare array scalar item (e.g. "- production") — return value
+                    echo "$child_value"
+                else
+                    echo "${child_key}:"
+                fi
             done
         fi
     else
