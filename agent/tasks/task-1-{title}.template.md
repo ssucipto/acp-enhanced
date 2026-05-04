@@ -1,3 +1,8 @@
+---
+created: {YYYY-MM-DD}
+completed:  # Set by /acp-commit automatically — do not edit manually
+---
+
 # Task {N}: {Descriptive Task Name}
 
 <!-- @acp.meta.task
