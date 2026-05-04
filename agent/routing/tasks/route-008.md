@@ -1,5 +1,5 @@
 ---
-id: task-008
+id: route-008
 title: Fix yaml-parser test hang at Group 7 edge cases
 task_type: bash-script-fix
 milestone: M26-audit

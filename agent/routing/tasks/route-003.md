@@ -1,5 +1,5 @@
 ---
-id: task-003
+id: route-003
 title: Update install/update scripts for ACP Enhanced directory layout
 task_type: bash-script-refactor
 milestone: none
@@ -18,7 +18,7 @@ cost_actual_usd:
 created: 2026-05-03
 completed: 2026-05-03
 override_reason:
-depends_on: task-002  # must run after agent/ → agent/ migration is complete
+depends_on: route-002  # must run after agent/ → agent/ migration is complete
 ---
 
 ## Context

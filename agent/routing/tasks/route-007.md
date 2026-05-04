@@ -1,5 +1,5 @@
 ---
-id: task-007
+id: route-007
 title: Fix display_available_commands — list all 50 commands
 task_type: bash-script-fix
 milestone: M26-audit

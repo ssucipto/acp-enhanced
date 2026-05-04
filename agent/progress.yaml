@@ -505,9 +505,9 @@ milestones:
   M26:
     name: ACP Protocol Usability Improvements
     priority: 4
-    status: not_started
+    status: in_progress
     progress: 0
-    started: null
+    started: 2026-05-04
     completed: null
     estimated_weeks: 2
     tasks_completed: 0
@@ -2724,13 +2724,13 @@ progress:
     - id: task-150
       name: Separate routing task system from milestone task system (rename route-NNN.md)
       priority: 3
-      status: not_started
-      started: null
+      status: completed
+      started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-150-separate-routing-and-milestone-task-systems.md
       estimated_hours: 2-3
-      actual_hours: null
-      completed_date: null
-      notes: Rename agent/routing/tasks/task-NNN.md to route-NNN.md; update install.sh, version-update.sh, copilot-instructions.md, acp.route.md, AGENT.md.
+      actual_hours: 0.5
+      completed_date: 2026-05-04
+      notes: Renamed 12 routing task files task-NNN.md → route-NNN.md; updated id:/precedes:/depends_on: fields; updated install.sh, version-update.sh, AGENTS.md, scripts/AGENTS.md, .github/copilot-instructions.md; added Two Task Systems note to AGENT.md.
 
   M18:
     - id: task-120
