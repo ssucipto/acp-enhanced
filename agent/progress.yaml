@@ -511,7 +511,7 @@ milestones:
     completed: null
     estimated_weeks: 2
     tasks_completed: 0
-    tasks_total: 5
+    tasks_total: 6
     file: agent/milestones/milestone-26-protocol-usability-improvements.md
     notes: |
       Addresses systemic gaps from audit-002 (2026-05-04) and critical review.
@@ -2720,6 +2720,17 @@ progress:
       actual_hours: null
       completed_date: null
       notes: Add overlap heuristic to acp.sessions.md and acp.init.md; warn when two sessions target same milestone/task.
+
+    - id: task-150
+      name: Separate routing task system from milestone task system (rename route-NNN.md)
+      priority: 3
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-26-protocol-usability-improvements/task-150-separate-routing-and-milestone-task-systems.md
+      estimated_hours: 2-3
+      actual_hours: null
+      completed_date: null
+      notes: Rename agent/routing/tasks/task-NNN.md to route-NNN.md; update install.sh, version-update.sh, copilot-instructions.md, acp.route.md, AGENT.md.
 
   M18:
     - id: task-120
