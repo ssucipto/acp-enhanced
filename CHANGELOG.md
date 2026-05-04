@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.0] — 2026-05-04
+
+### M27 — Distribution Readiness
+
+- `agent/scripts/acp.install.sh`: Added `.opencode/commands/` copy step so fresh installs via `acp.install.sh` receive opencode slash commands
+- `scripts/acp-bootstrap.sh`: Step 6b added — generates `.opencode/commands/*.md` from `.github/prompts/*.prompt.md` during bootstrap
+- `AGENT.md`: Updated "Command Invocation Styles" table — added opencode row, removed broken `@acp.*` notation
+
+### M28 — opencode Command Parity
+
+- `.opencode/commands/` (58 files): Full parity with `.github/prompts/` — every `/acp-*` command available in opencode TUI autocomplete
+- `agent/scripts/acp.version-update.sh`: Added `.opencode/commands/` update step so existing projects receive new opencode commands on `/acp-version-update`
+- `e2e/acp.opencode-commands.test.sh`: New E2E test enforcing 1:1 parity between Copilot and opencode command files (351 assertions across 5 suites: directory, file, content, count, body parity)
+- `README.md`: Replaced broken `@acp.*` notation with accurate per-tool invocation table; added opencode to slash commands section; fixed `@git.commit` → `/git-commit`, `@git.init` → `/git-init`
+- `CHANGELOG.md`: This entry
+
+---
+
 ## [6.3.0] — 2026-05-04
 
 ### Added
