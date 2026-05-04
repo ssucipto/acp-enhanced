@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# ACP_NETWORK_TEST=true
 # E2E Tests for template file installation (contents.files with target paths, variables)
 # Tests that files declared in contents.files install to correct targets with variable substitution
 # Note: Not using set -euo pipefail due to YAML parser AST cleanup issues

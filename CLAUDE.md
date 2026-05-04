@@ -72,11 +72,25 @@ Then proceed with the task.
 
 ## Context Budget Hard Limits
 
+> **Why does this budget exist?**
+> The 2,800-token budget is a **discipline practice, not a technical limit**.
+> Modern LLMs (Claude 3.5+, GPT-4o, Gemini 1.5) have 100K–200K token context windows —
+> this budget is not required to prevent context overflow.
+>
+> The budget exists because:
+> - **Reproducibility** — deterministic loading means every session starts identically
+> - **Speed and cost** — smaller prompts are faster and cheaper at API scale
+> - **Focus** — less context forces the agent to load only what is decision-relevant
+> - **Credibility** — ACP preaches discipline; the protocol must model what it teaches
+>
+> If a task genuinely requires more context, exceed the budget deliberately and note it.
+> The budget is a default, not a ceiling.
+
 Enforce these limits. If exceeded, drop lower-tier content first:
-- Layer 1 (core): max 300 tokens
-- Layer 2 (skills): max 500 tokens
-- Layer 3 (memory + wiki): max 2,000 tokens
-- Total session context: max 2,800 tokens (before task content)
+- Layer 1 (core): max 500 tokens
+- Layer 2 (skills): max 1,000 tokens
+- Layer 3 (memory + wiki): max 3,500 tokens
+- Total session context: max 5,000 tokens (before task content)
 
 ---
 
