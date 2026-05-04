@@ -1,7 +1,7 @@
 # System Architecture
 # Update monthly or when service boundaries change
 # Load ONE section at a time — never fully loaded
-# last_verified: 2026-05-03
+# last_verified: 2026-05-04
 
 ## Command → Script Binding
 
