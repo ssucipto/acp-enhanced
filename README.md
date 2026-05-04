@@ -60,14 +60,32 @@ Only files that changed since last install are updated. Locally modified files a
 
 ---
 
+## VS Code Copilot Slash Commands
+
+ACP Enhanced registers **58 slash commands** in VS Code Copilot via `.github/prompts/*.prompt.md` files. After bootstrapping, every `/acp-*` command is available in the Copilot chat autocomplete — type `/acp-` and press Tab to browse.
+
+```text
+/acp-init          /acp-proceed       /acp-plan          /acp-status
+/acp-resume        /acp-report        /acp-audit         /acp-handoff
+/acp-package-*     /acp-project-*     /acp-preferences-* /acp-clarification-*
+/acp-design-*      /acp-artifact-*    /git-commit        /git-init
+```
+
+These are VS Code-specific. In other editors or CLI agents, invoke commands by telling the agent to read the command file directly: `Read and execute agent/commands/acp.proceed.md`.
+
+> Requires GitHub Copilot with agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.
+
+---
+
 ## Differences from Original ACP
 
 | | Original ACP | ACP Enhanced |
-|---|---|---|
+| --- | --- | --- |
 | Context loading | AI loads files ad hoc | Structured 6-step protocol with token budget |
 | Memory | None beyond git history | Tiered: session / user / repo memory |
 | Task routing | None | Taxonomy-based routing to skill files |
 | Lessons | None | Correction log appended on every mistake |
+| VS Code commands | Manual file reference | 58 slash commands with autocomplete |
 | Install | `curl \| bash` from original repo | Single bootstrap script from this fork |
 
 The ACP command and workflow system (clarifications → design → plan → proceed) is identical to the original.
@@ -289,10 +307,10 @@ The steps below describe the original ACP bootstrap from the upstream repository
 ### Requirements
 
 - **OS**: Linux or macOS
-- **Shell**: Bash 4+ (`bash --version` to check)
+- **Shell**: Bash 3.2+ (macOS system bash works; Bash 4+ recommended for best compatibility)
 - **Git**: 2.x+
 
-> macOS note: The default `/bin/bash` on macOS is 3.2. Homebrew's bash (`/opt/homebrew/bin/bash` or `/usr/local/bin/bash`) is typically 5.x and works out of the box.
+> macOS note: The default `/bin/bash` on macOS is 3.2. ACP Enhanced scripts are tested against bash 3.2 for compatibility — no Homebrew bash required. Homebrew's bash (`/opt/homebrew/bin/bash`) is typically 5.x and also works.
 
 ### Bootstrap a New Project (Original ACP)
 
@@ -416,6 +434,7 @@ This will:
 - **`/acp-status`** - Display project status
 - **`/acp-sync`** - Sync documentation with code
 - **`/acp-validate`** - Validate ACP structure
+- **`/acp-audit`** - Audit task completion status, bugs, and improvement opportunities
 - **`/acp-report`** - Generate session report
 - **`/acp-index`** - Manage the key file index (list, add, remove, explore, show)
 
