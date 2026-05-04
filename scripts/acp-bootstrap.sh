@@ -174,7 +174,7 @@ echo -e "${YELLOW}  When you update AGENTS.md, re-run: cp AGENTS.md CLAUDE.md &&
 # --- 3. Core Layer Files ---
 echo -e "${YELLOW}[3/7] Creating core layer files...${NC}"
 
-cat > agent/core/identity.yml << 'YAML'
+[ -f agent/core/identity.yml ] || cat > agent/core/identity.yml << 'YAML'
 # DO NOT add dynamic content to this file (no dates, no task IDs)
 # This file is prompt-cached by the LLM API after first call
 # TODO: Fill in your project details below
@@ -264,28 +264,28 @@ fi
 # --- 4. Memory + Wiki Stubs ---
 echo -e "${YELLOW}[4/7] Creating memory and wiki stubs...${NC}"
 
-cat > agent/memory/sessions.md << 'MD'
+[ -f agent/memory/sessions.md ] || cat > agent/memory/sessions.md << 'MD'
 # Session Memory
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
 MD
 
-cat > agent/memory/decisions.md << 'MD'
+[ -f agent/memory/decisions.md ] || cat > agent/memory/decisions.md << 'MD'
 # Architecture Decision Records (ADR Log)
 # Loaded by section (ADR ID) only — never fully loaded
 # Add entries via /acp-decide command
 
 MD
 
-cat > agent/memory/patterns.md << 'MD'
+[ -f agent/memory/patterns.md ] || cat > agent/memory/patterns.md << 'MD'
 # Reusable Code Patterns
 # Populated automatically by /acp-commit when patterns are identified
 # Format: date-stamped YAML entries, max 60 days active
 
 MD
 
-cat > agent/memory/lessons.md << 'MD'
+[ -f agent/memory/lessons.md ] || cat > agent/memory/lessons.md << 'MD'
 # Correction Log — Filtered by task_type before loading
 # Populated automatically when developer says "log it" or "wrong, log this"
 # Max 5 entries loaded per session, filtered to current task_type + priority:high
@@ -506,7 +506,7 @@ When uncertain between two executors:
 MD
 
 # Initialise ledger with header
-cat > agent/routing/ledger.md << 'MD'
+[ -f agent/routing/ledger.md ] || cat > agent/routing/ledger.md << 'MD'
 # ACP Cost Ledger
 # Auto-appended by scripts/acp-dispatch.ts after every task
 # Never edit manually
@@ -1117,6 +1117,25 @@ MD
 
 echo -e "${GREEN}✓ Prompt files created${NC}"
 
+# --- 6b. Generate opencode commands from Copilot prompts ---
+echo -e "${YELLOW}[6b/7] Generating opencode slash commands...${NC}"
+mkdir -p .opencode/commands
+_oc_count=0
+for _oc_src in .github/prompts/*.prompt.md; do
+  _oc_base="$(basename "$_oc_src" .prompt.md)"
+  _oc_dst=".opencode/commands/${_oc_base}.md"
+  _oc_desc=$(grep "^description:" "$_oc_src" | sed 's/^description: //')
+  _oc_body=$(awk 'BEGIN{fm=0} /^---/{fm++; next} fm>=2{print}' "$_oc_src")
+  {
+    echo "---"
+    echo "description: ${_oc_desc}"
+    echo "---"
+    printf '%s\n' "$_oc_body"
+  } > "$_oc_dst"
+  _oc_count=$((_oc_count + 1))
+done
+echo -e "${GREEN}✓ ${_oc_count} opencode slash commands generated in .opencode/commands/${NC}"
+
 # --- 7. Install agent/ commands, scripts and schemas ---
 echo -e "${YELLOW}[7/7] Installing ACP commands, scripts and schemas (agent/ directory)...${NC}"
 
@@ -1157,5 +1176,7 @@ echo "  /acp-decide      Create architecture decision record"
 echo "  /acp-cost-report Weekly spend report"
 echo "  /acp-memory-sync Monthly compaction"
 echo "  /acp-wiki-update Update wiki after changes"
+echo ""
+echo "opencode slash commands: same /acp-* set (via .opencode/commands/)"
 echo ""
 echo -e "${GREEN}Done. ACP Enhanced is ready.${NC}"

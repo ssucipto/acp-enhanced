@@ -203,6 +203,12 @@ fi
 [ -f "agent/memory/patterns.md"  ] || echo "# Reusable Patterns" > agent/memory/patterns.md
 [ -f "agent/routing/ledger.md"   ] || echo "# Routing Ledger"    > agent/routing/ledger.md
 
+# Update opencode slash commands (static generated artifact — always overwrite)
+if [ -d "$TEMP_DIR/.opencode/commands" ]; then
+    mkdir -p .opencode/commands
+    cp "$TEMP_DIR/.opencode/commands/"*.md .opencode/commands/ 2>/dev/null || true
+fi
+
 echo "${GREEN}✓${NC} ACP Enhanced context layer updated"
 echo ""
 
@@ -235,6 +241,7 @@ echo "  ✓ Template files (design, milestone, task, pattern)"
 echo "  ✓ Command files (all ACP commands)"
 echo "  ✓ Utility scripts (update, check-for-updates, version, etc.)"
 echo "  ✓ ACP Enhanced context layer (agent/core/, agent/skills/, agent/wiki/, agent/routing/)"
+echo "  ✓ opencode slash commands (.opencode/commands/)"
 echo ""
 echo "${BLUE}Next steps:${NC}"
 echo "1. Review changes: git diff"
