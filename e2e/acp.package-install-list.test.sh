@@ -1,4 +1,5 @@
 #!/bin/bash
+# ACP_NETWORK_TEST=true
 # E2E Tests for acp.package-install.sh --list (dry-run) flag
 # Tests that --list shows a full file preview without installing anything
 

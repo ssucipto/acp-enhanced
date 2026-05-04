@@ -1,4 +1,5 @@
 #!/bin/bash
+# ACP_NETWORK_TEST=true
 # E2E Tests for /acp-package-update command
 # Tests updating packages with various scenarios
 

@@ -1,5 +1,0 @@
-acp:
-  plan.draft.create_mode: 'structured'
-  plan.batch.auto_confirm: false
-  task.create.granularity: 3
-  validation.auto_fix.enabled: true
