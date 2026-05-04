@@ -1,4 +1,5 @@
 #!/bin/bash
+# ACP_NETWORK_TEST=true
 # E2E Tests for /acp-package-search command
 # Tests searching for packages on GitHub
 

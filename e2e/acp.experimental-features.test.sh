@@ -1,4 +1,5 @@
 #!/bin/bash
+# ACP_NETWORK_TEST=true
 # E2E Tests for Experimental Features System
 # Tests installation and update behavior with experimental features
 

@@ -1,4 +1,5 @@
 #!/bin/bash
+# ACP_NETWORK_TEST=true
 # E2E Tests for Script-Command Binding System
 # Tests selective script installation based on command dependencies
 
