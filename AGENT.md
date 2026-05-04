@@ -1,7 +1,7 @@
 # Agent Context Protocol Enhanced (ACP Enhanced)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.3.0
+**Version**: 6.4.0
 **Fork of**: [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol)
 **Maintained by**: [ssucipto/acp-enhanced](https://github.com/ssucipto/acp-enhanced)
 **Created**: 2026-02-11
@@ -979,14 +979,15 @@ Commands are markdown files in [`agent/commands/`](agent/commands/) that contain
 
 ### Command Invocation Styles
 
-ACP commands can be invoked in two ways depending on your editor or agent:
+ACP commands can be invoked in several ways depending on your editor or agent:
 
 | Style | When to use | Example |
 |-------|-------------|---------|
 | `/acp-*` (slash command) | VS Code with GitHub Copilot | `/acp-init` |
-| `@acp.*` (dot notation) | Any agent — Cursor, Claude Code, Windsurf, CLI | `@acp.init` |
+| `/acp-*` (slash command) | opencode terminal agent | `/acp-init` |
+| Manual delegation | Any agent — Cursor, Claude Code, Windsurf, CLI | *"Read and execute `agent/commands/acp.init.md`"* |
 
-Both styles execute the same command. The `/acp-*` slash command style requires the `.github/prompts/` directory (created by `acp-bootstrap.sh`). On any other agent, use `@acp.*` notation or tell your agent: *"Read and execute `agent/commands/acp.init.md`"* — both work identically.
+The `/acp-*` slash command style in Copilot requires the `.github/prompts/` directory (created by `acp-bootstrap.sh`). In opencode, it requires the `.opencode/commands/` directory (also created by `acp-bootstrap.sh`). Both directories are committed to the repo so clones get slash command support automatically. On any other agent, tell your agent: *"Read and execute `agent/commands/acp.init.md`"* — this works identically.
 
 ### Core Commands
 

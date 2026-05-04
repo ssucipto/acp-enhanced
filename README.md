@@ -60,11 +60,15 @@ Only files that changed since last install are updated. Locally modified files a
 
 ---
 
-## VS Code Copilot Slash Commands
+## Slash Commands
 
-ACP Enhanced registers **58 slash commands** in VS Code Copilot via `.github/prompts/*.prompt.md` files. After bootstrapping, every `/acp-*` command is available in the Copilot chat autocomplete — type `/acp-` and press Tab to browse.
+ACP Enhanced registers **58 slash commands** across two tools — available after bootstrapping:
 
-> **Not using VS Code Copilot?** Use `@acp.*` dot notation instead — e.g. `@acp.init`, `@acp.proceed`. Or tell your agent: *"Read and execute `agent/commands/acp.init.md`"*. Both work identically on any agent (Cursor, Claude Code, Windsurf, CLI).
+| Tool | How to invoke | Source files |
+|---|---|---|
+| VS Code Copilot | `/acp-*` — autocomplete in Copilot Chat | `.github/prompts/*.prompt.md` |
+| opencode | `/acp-*` — autocomplete in opencode TUI | `.opencode/commands/*.md` |
+| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` |
 
 ```text
 /acp-init          /acp-proceed       /acp-plan          /acp-status
@@ -73,9 +77,8 @@ ACP Enhanced registers **58 slash commands** in VS Code Copilot via `.github/pro
 /acp-design-*      /acp-artifact-*    /git-commit        /git-init
 ```
 
-These are VS Code-specific. In other editors or CLI agents, invoke commands by telling the agent to read the command file directly: `Read and execute agent/commands/acp.proceed.md`.
-
-> Requires GitHub Copilot with agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.
+> VS Code Copilot requires agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.  
+> opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.
 
 ---
 
@@ -389,10 +392,9 @@ Once ACP is installed, use these commands with your AI agent:
 
 ### Start Working on a Project
 
-Type: **`/acp-init`** (or `@acp.init` on non-VS Code agents)
+Type: **`/acp-init`** in VS Code Copilot or opencode.
 
-> **Not using VS Code Copilot?** Use `@acp.init` or tell your agent:
-> *"Read and execute `agent/commands/acp.init.md`"*
+> **Other agents?** Tell your agent: *"Read and execute `agent/commands/acp.init.md`"*
 
 This will:
 - Check for ACP updates
@@ -432,12 +434,12 @@ This will:
 
 ### Available Commands
 
-**Workflow Commands** (`/acp-*` in VS Code Copilot | `@acp.*` on any agent):
-- **`/acp-resume`** / **`@acp.resume`** ⭐ - Resume work (init + report + proceed)
-- **`/acp-init`** / **`@acp.init`** - Initialize agent context
-- **`/acp-proceed`** / **`@acp.proceed`** - Continue with next task
-- **`/acp-status`** / **`@acp.status`** - Display project status
-- **`/acp-sync`** / **`@acp.sync`** - Sync documentation with code
+**Workflow Commands** (`/acp-*` in VS Code Copilot or opencode | manual read on any agent):
+- **`/acp-resume`** ⭐ - Resume work (init + report + proceed)
+- **`/acp-init`** - Initialize agent context
+- **`/acp-proceed`** - Continue with next task
+- **`/acp-status`** - Display project status
+- **`/acp-sync`** - Sync documentation with code
 - **`/acp-validate`** - Validate ACP structure
 - **`/acp-audit`** - Audit task completion status, bugs, and improvement opportunities
 - **`/acp-report`** - Generate session report
@@ -478,8 +480,8 @@ This will:
 - **`/acp-sessions`** - Manage and view active agent sessions across projects
 
 **Git Commands**:
-- **`@git.commit`** - Intelligent version-aware commits
-- **`@git.init`** - Initialize git repository
+- **`/git-commit`** - Intelligent version-aware commits
+- **`/git-init`** - Initialize git repository
 
 See [AGENT.md](./AGENT.md) for complete command documentation and methodology.
 
