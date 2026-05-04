@@ -1,5 +1,5 @@
 ---
-id: task-010
+id: route-010
 title: Fix namespace placeholder refs in 7 command files body text
 task_type: command-doc-update
 milestone: M26-audit

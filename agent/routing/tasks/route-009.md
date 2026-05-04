@@ -1,5 +1,5 @@
 ---
-id: task-009
+id: route-009
 title: Fix set_preference round-trip + migrate production pref files
 task_type: bash-script-fix
 milestone: M26-audit
