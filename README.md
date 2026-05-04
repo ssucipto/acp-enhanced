@@ -64,6 +64,8 @@ Only files that changed since last install are updated. Locally modified files a
 
 ACP Enhanced registers **58 slash commands** in VS Code Copilot via `.github/prompts/*.prompt.md` files. After bootstrapping, every `/acp-*` command is available in the Copilot chat autocomplete — type `/acp-` and press Tab to browse.
 
+> **Not using VS Code Copilot?** Use `@acp.*` dot notation instead — e.g. `@acp.init`, `@acp.proceed`. Or tell your agent: *"Read and execute `agent/commands/acp.init.md`"*. Both work identically on any agent (Cursor, Claude Code, Windsurf, CLI).
+
 ```text
 /acp-init          /acp-proceed       /acp-plan          /acp-status
 /acp-resume        /acp-report        /acp-audit         /acp-handoff
@@ -387,7 +389,10 @@ Once ACP is installed, use these commands with your AI agent:
 
 ### Start Working on a Project
 
-Type: **`/acp-init`** (or `AGENT.md: Initialize`)
+Type: **`/acp-init`** (or `@acp.init` on non-VS Code agents)
+
+> **Not using VS Code Copilot?** Use `@acp.init` or tell your agent:
+> *"Read and execute `agent/commands/acp.init.md`"*
 
 This will:
 - Check for ACP updates
@@ -427,12 +432,12 @@ This will:
 
 ### Available Commands
 
-**Workflow Commands**:
-- **`/acp-resume`** ⭐ - Resume work (init + report + proceed)
-- **`/acp-init`** - Initialize agent context
-- **`/acp-proceed`** - Continue with next task
-- **`/acp-status`** - Display project status
-- **`/acp-sync`** - Sync documentation with code
+**Workflow Commands** (`/acp-*` in VS Code Copilot | `@acp.*` on any agent):
+- **`/acp-resume`** / **`@acp.resume`** ⭐ - Resume work (init + report + proceed)
+- **`/acp-init`** / **`@acp.init`** - Initialize agent context
+- **`/acp-proceed`** / **`@acp.proceed`** - Continue with next task
+- **`/acp-status`** / **`@acp.status`** - Display project status
+- **`/acp-sync`** / **`@acp.sync`** - Sync documentation with code
 - **`/acp-validate`** - Validate ACP structure
 - **`/acp-audit`** - Audit task completion status, bugs, and improvement opportunities
 - **`/acp-report`** - Generate session report
