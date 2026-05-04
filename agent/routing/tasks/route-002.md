@@ -1,5 +1,5 @@
 ---
-id: task-002
+id: route-002
 title: Migrate .agent/ to agent/ — unify directory layout
 task_type: bash-script-refactor
 milestone: none
@@ -38,7 +38,7 @@ cost_actual_usd:
 created: 2026-05-03
 completed: 2026-05-03
 override_reason:
-depends_on: task-001  # prefer completing syntax unification first (simpler rollback)
+depends_on: route-001  # prefer completing syntax unification first (simpler rollback)
 ---
 
 ## Recommendation & Rationale

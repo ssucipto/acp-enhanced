@@ -1,5 +1,5 @@
 ---
-id: task-005
+id: route-005
 title: Auto-migrate legacy .agent/ on install/update
 task_type: shell-scripting
 milestone: none

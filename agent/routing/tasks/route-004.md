@@ -1,5 +1,5 @@
 ---
-id: task-004
+id: route-004
 title: Fix e2e test assertions and skill files for /acp-* syntax
 task_type: e2e-test-write
 milestone: none
@@ -39,7 +39,7 @@ cost_actual_usd:
 created: 2026-05-03
 completed: 2026-05-03
 override_reason:
-depends_on: task-001  # task-001 changes command file content — these tests must match
+depends_on: route-001  # task-001 changes command file content — these tests must match
 ---
 
 ## Context

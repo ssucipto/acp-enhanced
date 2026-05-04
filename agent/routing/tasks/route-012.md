@@ -1,5 +1,5 @@
 ---
-id: task-012
+id: route-012
 title: Add all prompt.md blocks to acp-bootstrap.sh
 task_type: bash-script-fix
 milestone: none

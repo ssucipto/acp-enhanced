@@ -372,6 +372,15 @@ List of files/directories this milestone produces
 
 **Purpose**: Break milestones into actionable, verifiable work items.
 
+> **Two task systems coexist — they are NOT the same:**
+>
+> | System | Location | Purpose | Tracked in |
+> | --- | --- | --- | --- |
+> | Milestone tasks | `agent/tasks/milestone-XX-*/task-NNN-title.md` | What to build — work descriptions, acceptance criteria | `progress.yaml` (ground truth) |
+> | Routing records | `agent/routing/tasks/route-NNN.md` | How to assign — executor, token estimates, cost tracking | Not in progress.yaml |
+>
+> When someone says "the task file", they mean `agent/tasks/`. When `/acp-route` creates a file, it goes in `agent/routing/tasks/` as `route-NNN.md`.
+
 **Structure**:
 ```markdown
 # Task {N}: {Name}

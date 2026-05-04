@@ -1,5 +1,5 @@
 ---
-id: task-011
+id: route-011
 title: Fix 12 pre-existing e2e test failures (investigation + fixes)
 task_type: shell-scripting
 milestone: M26-audit

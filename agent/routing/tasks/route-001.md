@@ -1,5 +1,5 @@
 ---
-id: task-001
+id: route-001
 title: Unify command invocation syntax to /acp-<command>
 task_type: design-document
 milestone: none
@@ -32,7 +32,7 @@ cost_actual_usd:
 created: 2026-05-03
 completed: 2026-05-03
 override_reason:
-precedes: task-002  # must complete before directory migration
+precedes: route-002  # must complete before directory migration
 ---
 
 ## Context

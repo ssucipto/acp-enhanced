@@ -14,7 +14,7 @@ files_affected:
   - agent/commands/acp.route.md               # update file creation path/name format
   - AGENT.md                                  # add "Two Task Systems" explanation note
 created: 2026-05-04
-completed:
+completed: 2026-05-04
 ---
 
 ## Objective
