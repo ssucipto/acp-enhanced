@@ -500,7 +500,24 @@ milestones:
       Greenfield TanStack Start app in new repo (agent-context-protocol-visualizer).
       P0 MVP: table view, tree view, search, filter, file-watcher auto-refresh.
       Tech: TanStack Start (React), Tailwind CSS, @tanstack/react-table, fuse.js, js-yaml.
-      P1 (kanban, GitHub remote, multi-project) = M26.
+      P1 (kanban, GitHub remote, multi-project) = separate milestone (not M26).
+
+  M26:
+    name: ACP Protocol Usability Improvements
+    priority: 4
+    status: not_started
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 2
+    tasks_completed: 0
+    tasks_total: 5
+    file: agent/milestones/milestone-26-protocol-usability-improvements.md
+    notes: |
+      Addresses systemic gaps from audit-002 (2026-05-04) and critical review.
+      Focus: self-maintaining docs, token budget rationale, invocation clarity, session safety.
+      No new features — improves reliability and usability of existing protocol.
+      Can run concurrently with M25 (no dependency).
 
 tasks:
   M1:
@@ -2493,6 +2510,7 @@ progress:
   M23: 100
   M24: 100
   M25: 0
+  M26: 0
 
   M24:
     - id: task-133
@@ -2646,6 +2664,62 @@ progress:
       actual_hours: null
       completed_date: null
       notes: Create agent/commands/acp.visualize.md in ACP core; add to AGENT.md Core Commands.
+
+  M26:
+    - id: task-145
+      name: "Auto-stamp `completed:` on routing task files in /acp-commit"
+      priority: 5
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-26-protocol-usability-improvements/task-145-auto-stamp-completed-in-acp-commit.md
+      estimated_hours: 2-3
+      actual_hours: null
+      completed_date: null
+      notes: Add step to git.commit.md to auto-set completed field on routing task files; eliminates BUG-01 class omissions.
+
+    - id: task-146
+      name: "Standardize task status format — deprecate **Status**: in favour of YAML completed:"
+      priority: 4
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-26-protocol-usability-improvements/task-146-standardize-task-status-format.md
+      estimated_hours: 3-4
+      actual_hours: null
+      completed_date: null
+      notes: Update acp.task-create.md and task template to use YAML completed: field; deprecate markdown Status field.
+
+    - id: task-147
+      name: Document token budget as discipline, not technical necessity
+      priority: 3
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-26-protocol-usability-improvements/task-147-document-token-budget-rationale.md
+      estimated_hours: 1-2
+      actual_hours: null
+      completed_date: null
+      notes: Add rationale to AGENTS.md and constraints.yml explaining budget is for reproducibility/focus, not context window limits.
+
+    - id: task-148
+      name: "Resolve @acp.* vs /acp-* dual-syntax confusion in AGENT.md and README"
+      priority: 4
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-26-protocol-usability-improvements/task-148-resolve-dual-syntax-confusion.md
+      estimated_hours: 1-2
+      actual_hours: null
+      completed_date: null
+      notes: Add Command Invocation Styles section to AGENT.md and README; clarify VS Code vs generic agent usage.
+
+    - id: task-149
+      name: Add concurrent modification warning to sessions system
+      priority: 3
+      status: not_started
+      started: null
+      file: agent/tasks/milestone-26-protocol-usability-improvements/task-149-concurrent-modification-warning.md
+      estimated_hours: 2-3
+      actual_hours: null
+      completed_date: null
+      notes: Add overlap heuristic to acp.sessions.md and acp.init.md; warn when two sessions target same milestone/task.
 
   M18:
     - id: task-120
@@ -4662,7 +4736,8 @@ recent_work:
 next_steps:
   - "▶️ M25 planned: 8 tasks ready (task-137 → task-144) — run @acp.proceed to start"
   - "📋 M25 P0: TanStack Start dashboard for progress.yaml (3 weeks, ~22-32h estimated)"
-  - "📋 M26 next: P1 features (kanban, GitHub remote loading, multi-project support)"
+  - "📋 M26 planned: 5 tasks ready (task-145 → task-149) — protocol usability improvements"
+  - "📋 M26: run concurrently with M25 — no dependency between them"
 
 notes:
   - Using flat directory structure with dot notation (acp.status.md)
