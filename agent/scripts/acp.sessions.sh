@@ -78,7 +78,7 @@ iso_to_epoch() {
         echo "0"
         return
     fi
-    date -d "$ts" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" +%s 2>/dev/null || echo "0"
+    date -d "$ts" +%s 2>/dev/null || date -j -u -f "%Y-%m-%dT%H:%M:%SZ" "$ts" +%s 2>/dev/null || echo "0"
 }
 
 # Format seconds as relative time (e.g., "2m ago", "1h ago")
