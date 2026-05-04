@@ -290,6 +290,112 @@ Installed packages land in `agent/commands/`, `agent/scripts/`, and `agent/schem
 
 ---
 
+## ACP Enhanced vs Original ACP — The Memory Layer Explained
+
+This section explains what ACP Enhanced adds beyond the original ACP, and specifically what happens automatically vs. what requires your input. This is the most important thing to understand before using ACP Enhanced for the first time.
+
+### What the Original ACP Gives You
+
+The original ACP gives you command documents (`agent/commands/*.md`) and bash scripts that the agent treats as executable directives. You get a structured planning workflow (clarifications → design → plan → proceed) and YAML-based progress tracking. That's it — there is no memory between sessions.
+
+### What ACP Enhanced Adds
+
+ACP Enhanced adds a **memory and context management layer** on top of everything the original ACP provides. The layer has four components:
+
+---
+
+#### 1. Session Memory (`agent/memory/sessions.md`)
+
+**What it is**: A YAML list of session summaries. Each entry records what was done, what was deferred, and the most important thing learned.
+
+**Automatic**:
+- Loaded automatically at session start by `/acp-resume` (last 3 entries only — never the whole file)
+- Each entry includes a `key_fact` field the agent populates itself
+
+**Requires your action**:
+- You must run **`/acp-commit` at the end of every session** for an entry to be written. If you skip this, the session is lost. No session = no memory = next session starts cold.
+- The session summary content is AI-generated, but you should review it for accuracy before closing
+
+**Without this**: Every session starts from zero. You re-explain what you've been building, what decisions were made, and what the next step is — every single time.
+
+**With this**: After 2–3 sessions, `/acp-resume` loads a paragraph of real project history. After 2 weeks, the agent knows your last 3 work sessions without you saying a word.
+
+---
+
+#### 2. Correction Log (`agent/memory/lessons.md`)
+
+**What it is**: A running list of mistakes the agent made and what the correct behaviour is. Each entry records `task_type`, `mistake`, and `correction`.
+
+**Automatic**:
+- Loaded at session start, but **filtered** — only entries matching the current `task_type` (or marked `priority: high`) are loaded. Never the full file.
+- The dispatch script uses `task_type` to filter lessons before building context
+
+**Requires your action**:
+- You must correct the agent and explicitly say **"log this"** or the correction is not written. The agent does not log its own mistakes silently — you have to trigger it.
+- Format: just say what went wrong. Example: *"That's wrong — we never use `set -e` without an error trap in bash. Log it."* The agent appends the lesson immediately.
+
+**Without this**: The agent makes the same class of mistakes across sessions. You correct the same bash pattern or the same naming convention repeatedly.
+
+**With this**: After 5–10 corrections, the agent consistently avoids those patterns for the relevant task types.
+
+---
+
+#### 3. Architectural Decisions (`agent/memory/decisions.md`)
+
+**What it is**: An ADR (Architectural Decision Record) log. Each entry captures what was decided, why, what alternatives were considered, and a **"DO NOT re-open"** marker.
+
+**Automatic**:
+- The agent loads only the ADR sections relevant to the current task (by ID), not the whole file
+- `/acp-commit` checks if a decision was made during the session and prompts you to create an ADR
+
+**Requires your action**:
+- You run **`/acp-decide "decision title"`** to initiate an ADR. The agent drafts it; you confirm.
+- You mark which decisions are settled. Unmarked decisions can still be re-debated.
+
+**Without this**: The agent re-debates settled architecture every few sessions. "Should we use Firebase or Supabase?" gets re-litigated when enough context has faded. Time and tokens wasted.
+
+**With this**: Settled decisions are permanently referenced. The agent will not re-open a decision marked "DO NOT re-open" unless you explicitly override it.
+
+---
+
+#### 4. Pattern Library (`agent/memory/patterns.md`)
+
+**What it is**: Reusable solutions that worked. Patterns are loaded on tasks where they're relevant.
+
+**Automatic**:
+- `/acp-commit` checks if the session produced a reusable pattern and prompts if yes
+- Patterns are loaded as part of Layer 3 context for matching task types
+
+**Requires your action**:
+- Confirming whether to write a pattern during `/acp-commit`. You can decline.
+- Writing the pattern description yourself if the AI's draft isn't accurate
+
+**Without this**: A solution you found once (e.g., how to safely write BSD-compatible `sed` on macOS) has to be rediscovered the next time it's needed.
+
+**With this**: After a few weeks, the agent's first draft already uses solutions that previously required multiple correction rounds.
+
+---
+
+### Automatic vs Manual — Summary
+
+| Feature | Happens Automatically | Requires Your Action |
+|---|---|---|
+| Session memory loaded | Yes — on every `/acp-resume` | Running `/acp-commit` to write it |
+| Lessons loaded | Yes — filtered by task type | Saying "log this" after a correction |
+| ADRs loaded | Yes — by reference in tasks | Running `/acp-decide` to create them |
+| Patterns loaded | Yes — for matching task types | Confirming pattern write at `/acp-commit` |
+| Model routing | Yes — taxonomy classifies automatically | Running `/acp-route` to trigger classification |
+| Slash commands | Yes — autocomplete on `/` | Nothing — registered on bootstrap |
+| Cost ledger | Yes — dispatch appends after every call | Setting up OpenRouter key once |
+
+### The One Rule
+
+**Run `/acp-commit` at the end of every session.**
+
+Everything else in the memory system compounds from that single action. If you skip it, the session evaporates. If you run it consistently, ACP Enhanced becomes measurably faster and cheaper every week.
+
+---
+
 ## The Key File Index
 
 The key file index lets you tell the agent which files are most important to read during `/acp-plan` and `/acp-proceed`.
