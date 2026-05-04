@@ -116,13 +116,13 @@ When developer runs /acp-route "[task description]":
 1. Read `agent/routing/taxonomy.yml` and `agent/routing/rules.md`
 2. Classify the task into a task_type
 3. Identify executor and context_required from taxonomy
-4. Create `agent/routing/tasks/task-[next-id].md` with full frontmatter
-5. Output: "Task created: task-[ID] | executor: [executor] | est. [N] tokens"
+4. Create `agent/routing/tasks/route-[next-id].md` with full frontmatter
+5. Output: "Route created: route-[ID] | executor: [executor] | est. [N] tokens"
 
 Task file format:
 ```yaml
 ---
-id: task-[NNN]
+id: route-[NNN]
 title: [task title]
 task_type: [from taxonomy]
 milestone: [current milestone or none]
