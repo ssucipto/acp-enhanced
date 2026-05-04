@@ -9,7 +9,7 @@ files_affected:
   - agent/commands/git.commit.md
   - agent/routing/tasks/ (runtime — not a static file)
 created: 2026-05-04
-completed:
+completed: 2026-05-04
 ---
 
 ## Objective
