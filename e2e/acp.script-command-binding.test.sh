@@ -228,7 +228,7 @@ test_shared_utility_reference_counting() {
     assert_file_exists "$test_dir/agent/scripts/test.common.sh" "common utility should be installed"
     
     # Count occurrences (should be exactly 1)
-    local count=$(find "$test_dir/agent/scripts" -name "test.common.sh" 2>/dev/null | wc -l)
+    local count=$(find "$test_dir/agent/scripts" -name "test.common.sh" 2>/dev/null | wc -l | tr -d ' ')
     assert_equals "1" "$count" "common utility should be installed exactly once"
     
     rm -rf "$test_dir" "$pkg_dir"
@@ -279,7 +279,7 @@ test_no_commands_no_scripts() {
     "${PROJECT_ROOT}/agent/scripts/acp.package-install.sh" --repo "$pkg_dir" --patterns -y >/dev/null 2>&1 || true
     
     # Verify no scripts installed
-    local script_count=$(find "$test_dir/agent/scripts" -name "test.*.sh" 2>/dev/null | wc -l)
+    local script_count=$(find "$test_dir/agent/scripts" -name "test.*.sh" 2>/dev/null | wc -l | tr -d ' ')
     assert_equals "0" "$script_count" "no test scripts should be installed"
     
     rm -rf "$test_dir" "$pkg_dir"
@@ -307,7 +307,7 @@ test_all_commands_all_scripts() {
     assert_file_exists "$test_dir/agent/scripts/test.common.sh" "common utility should be installed"
     
     # Count total test scripts (should be 4)
-    local script_count=$(find "$test_dir/agent/scripts" -name "test.*.sh" 2>/dev/null | wc -l)
+    local script_count=$(find "$test_dir/agent/scripts" -name "test.*.sh" 2>/dev/null | wc -l | tr -d ' ')
     assert_equals "4" "$script_count" "all 4 test scripts should be installed"
     
     rm -rf "$test_dir" "$pkg_dir"
