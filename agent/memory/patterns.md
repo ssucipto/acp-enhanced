@@ -40,3 +40,21 @@
     sub(/^  /, "", key)
     sub(/:.*/, "", key)
     # key now holds the value between the indent and the colon
+
+- date: 2026-05-04
+  name: gitignore-instance-data-separation
+  task_type: repo-hygiene
+  code_ref: agent/.gitignore (instance-data rules block)
+  description: |
+    ACP repos contain two kinds of content: protocol machinery (commands, scripts, schemas,
+    templates — distributable) and instance data (tasks, milestones, progress.yaml, memory
+    run-logs, routing records — project-specific, local-only).
+    Rule: if ACP generated it at runtime, gitignore it. Keep only the template.
+    Pattern: ignore the directory glob, whitelist .gitkeep + *.template.* files.
+  template: |
+    # In agent/.gitignore:
+    some-dir/**
+    !some-dir/.gitkeep
+    !some-dir/name-{placeholder}.template.md
+    # This pattern ignores all real content while preserving
+    # the directory structure and template scaffold for new users.
