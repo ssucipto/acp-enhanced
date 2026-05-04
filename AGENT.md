@@ -972,6 +972,17 @@ Commands are markdown files in [`agent/commands/`](agent/commands/) that contain
 - **Self-Documenting**: Each command file contains complete documentation
 - **Autocomplete-Friendly**: Type `/acp-` to see all ACP commands
 
+### Command Invocation Styles
+
+ACP commands can be invoked in two ways depending on your editor or agent:
+
+| Style | When to use | Example |
+|-------|-------------|---------|
+| `/acp-*` (slash command) | VS Code with GitHub Copilot | `/acp-init` |
+| `@acp.*` (dot notation) | Any agent — Cursor, Claude Code, Windsurf, CLI | `@acp.init` |
+
+Both styles execute the same command. The `/acp-*` slash command style requires the `.github/prompts/` directory (created by `acp-bootstrap.sh`). On any other agent, use `@acp.*` notation or tell your agent: *"Read and execute `agent/commands/acp.init.md`"* — both work identically.
+
 ### Core Commands
 
 Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`](agent/commands/):
