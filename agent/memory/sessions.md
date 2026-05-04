@@ -2,6 +2,32 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-05-04
+  executor: Persona A (Copilot)
+  tasks: [task-011, task-012]
+  done:
+    - fix-task-011-bash-3.2-compat-declare-A-declare-n-package-install
+    - fix-task-011-sessions-utc-bug-date-j-u-flag-macos
+    - fix-task-011-projects-sync-top-level-local-invalid-bash
+    - fix-task-011-yaml-get-array-wc-l-whitespace-tr-d-space
+    - fix-task-011-script-command-binding-wc-l-whitespace
+    - fix-task-011-projects-sync-e2e-local-in-subshell
+    - all-e2e-groups-passing-a-b-c-f-g
+    - add-50-prompt-md-files-vs-code-slash-command-autocomplete
+    - update-acp-bootstrap-sh-57-prompt-blocks-section-6-7
+    - bump-version-6.2.5-to-6.3.0
+    - pushed-599d267-and-a9b74a0-to-origin-mainline
+  deferred:
+    - task-011-project-update-workflow-2-pre-existing-failures: confirmed-pre-existing-not-fixed
+    - untracked-test-fixtures-gitignore: BUG-09-minor
+  key_fact: |
+    macOS BSD date parses UTC ISO timestamps as LOCAL time without -u flag. On UTC+8,
+    a freshly-created session timestamp like 2026-05-04T00:43:44Z was parsed 8 hours
+    earlier than actual — making it appear past REMOVE_THRESHOLD (7200s) and triggering
+    do_clean to delete it. Fix: `date -j -u -f "%Y-%m-%dT%H:%M:%SZ"` (add -u flag).
+    VS Code Copilot autocomplete requires .prompt.md files in .github/prompts/ — plain
+    .md files in agent/commands/ do NOT register as slash commands.
+
 - date: 2026-05-03
   executor: Persona A (Copilot)
   tasks: [audit-001]
