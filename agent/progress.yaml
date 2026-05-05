@@ -582,17 +582,17 @@ milestones:
     name: AGENT.md Protocol Documentation
     priority: 3
     status: in_progress
-    progress: 25
+    progress: 50
     started: 2026-05-05
     completed: null
     estimated_weeks: 1
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 4
     file: agent/milestones/milestone-32-agent-md-protocol-documentation.md
     notes: |
       Adds 4 sections to AGENT.md: Metadata Markers, Specs, Command Invocation, DR-IDs.
       task-167: metadata markers section — completed 2026-05-05
-      task-168: specs section
+      task-168: specs section — completed 2026-05-05
       task-169: command invocation naming table
       task-170: DR-IDs and stacked/yolo proceed modes
 
