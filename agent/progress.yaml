@@ -670,6 +670,22 @@ milestones:
       task-182: acp-prompts.yaml + baseline-prompts.yaml (15 prompts each)
       task-183: verify.sh + .github/workflows/benchmarks.yml
 
+  M37:
+    name: Audit-007 Fixes — gitignore Completeness
+    priority: 5
+    status: not_started
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 0
+    tasks_completed: 0
+    tasks_total: 2
+    file: agent/milestones/milestone-37-audit-007-fixes.md
+    notes: |
+      Fix two actionable findings from audit-007 before next push.
+      task-185: fix bare agent/drafts/ in acp.project-create.md sample gitignore
+      task-186: git rm --cached lessons.md + decisions.md (stop tracking gitignored files)
+
   M25:
     name: ACP Progress Visualizer (P0 MVP)
     priority: 5
@@ -5037,8 +5053,9 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "🔥 M30 FIRST: Fixes live bug — agent/drafts/ directory missing (task-159–161)"
-  - "📋 M34 concurrently: Pure docs, 0.5 day — naming convention pattern (task-176–177)"
+  - "🔥 M37 NEXT: Audit-007 fixes before push — gitignore completeness (task-185–186)"
+  - "✅ M30 DONE: agent/drafts/ convention fix (task-159–161)"
+  - "✅ M34 DONE: command naming convention pattern (task-176–177)"
   - "📋 M29: Upstream integration audit — parity matrix before any porting (task-155–158)"
   - "📋 M31: E2E test coverage for meta-scan, spec, sync, script-bound commands (task-162–166)"
   - "📋 M32: AGENT.md protocol documentation — 4 new sections (task-167–170)"
