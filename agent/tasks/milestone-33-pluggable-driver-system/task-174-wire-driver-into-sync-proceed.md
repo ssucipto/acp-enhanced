@@ -2,13 +2,13 @@
 id: task-174
 milestone: M33
 title: Wire driver hooks into acp.sync.md and acp.proceed.md
-status: not_started
+status: completed
 priority: 2
 complexity: low
 estimated_hours: 2
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-06T00:00:00Z
+completed: 2026-05-06
 ---
 
 ## Objective
