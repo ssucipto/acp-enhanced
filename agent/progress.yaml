@@ -564,11 +564,11 @@ milestones:
     name: E2E Test Coverage (Marker + Spec)
     priority: 3
     status: in_progress
-    progress: 40
+    progress: 60
     started: 2026-05-05
     completed: null
     estimated_weeks: 1
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 5
     notes: |
       E2E tests for acp.meta-scan.sh, @acp.spec, @acp.sync, and 8 script-bound commands.
