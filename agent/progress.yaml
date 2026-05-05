@@ -6,7 +6,7 @@ project:
   version: 6.3.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M28
+  current_milestone: M29
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M24 complete: AGENT.md fully updated with
@@ -507,12 +507,12 @@ milestones:
   M28:
     name: opencode Command Parity
     priority: 4
-    status: in_progress
-    progress: 0
+    status: completed
+    progress: 100
     started: 2026-05-04
-    completed: null
+    completed: 2026-05-05
     estimated_weeks: 1
-    tasks_completed: 0
+    tasks_completed: 5
     tasks_total: 5
     file: agent/milestones/milestone-28-opencode-command-parity.md
     notes: |
@@ -2988,56 +2988,56 @@ progress:
     - id: task-71
       name: Generate .opencode/commands/ from .github/prompts/
       priority: 4
-      status: in_progress
+      status: completed
       started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-28-opencode-command-parity/task-71-generate-opencode-commands.md
       estimated_hours: 1.0
-      actual_hours: null
-      completed_date: null
+      actual_hours: 1.0
+      completed_date: 2026-05-04T00:00:00Z
       notes: Create .opencode/commands/ directory with one .md file per slash command, mirroring all 58 .github/prompts/ files. Strip mode:agent frontmatter field (VS Code-specific). Delegation commands keep same body; meta commands (commit/route/decide/cost-report/memory-sync/wiki-update) embed content inline.
 
     - id: task-72
       name: Update acp-bootstrap.sh to generate .opencode/commands/
       priority: 4
-      status: not_started
-      started: null
+      status: completed
+      started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-28-opencode-command-parity/task-72-update-acp-bootstrap.md
       estimated_hours: 1.0
-      actual_hours: null
-      completed_date: null
+      actual_hours: 1.0
+      completed_date: 2026-05-04T00:00:00Z
       notes: Add a generation step to acp-bootstrap.sh that creates .opencode/commands/ from .github/prompts/ so new installs get opencode support automatically.
 
     - id: task-73
       name: Update acp.install.sh to create .opencode/commands/
       priority: 4
-      status: not_started
-      started: null
+      status: completed
+      started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-28-opencode-command-parity/task-73-update-install-sh.md
       estimated_hours: 0.5
-      actual_hours: null
-      completed_date: null
+      actual_hours: 0.5
+      completed_date: 2026-05-04T00:00:00Z
       notes: Add .opencode/commands/ directory creation to acp.install.sh so project-level ACP installs also get opencode support.
 
     - id: task-74
       name: Update AGENT.md invocation-style table for opencode
       priority: 3
-      status: not_started
-      started: null
+      status: completed
+      started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-28-opencode-command-parity/task-74-update-agent-md.md
       estimated_hours: 0.25
-      actual_hours: null
-      completed_date: null
+      actual_hours: 0.25
+      completed_date: 2026-05-04T00:00:00Z
       notes: Add opencode row to the dual-syntax invocation table. Clarify /acp-* works in both Copilot (.github/prompts/) and opencode (.opencode/commands/). Remove any remaining @acp.* references.
 
     - id: task-75
       name: Add E2E parity test for opencode commands
       priority: 3
-      status: not_started
-      started: null
+      status: completed
+      started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-28-opencode-command-parity/task-75-e2e-parity-test.md
       estimated_hours: 0.5
-      actual_hours: null
-      completed_date: null
+      actual_hours: 0.5
+      completed_date: 2026-05-04T00:00:00Z
       notes: New e2e/acp.opencode-commands.test.sh — verify every .github/prompts/acp-*.prompt.md has a matching .opencode/commands/acp-*.md. Also verify opencode files don't have mode:agent frontmatter field.
 
   M18:
@@ -5053,16 +5053,16 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "🔥 M37 NEXT: Audit-007 fixes before push — gitignore completeness (task-185–186)"
-  - "✅ M30 DONE: agent/drafts/ convention fix (task-159–161)"
+  - "🔥 M29 NEXT: Upstream integration audit — parity matrix before any porting (task-155–158)"
+  - "✅ M37 DONE: audit-007 gitignore fixes (task-185–186)"
   - "✅ M34 DONE: command naming convention pattern (task-176–177)"
-  - "📋 M29: Upstream integration audit — parity matrix before any porting (task-155–158)"
+  - "✅ M30 DONE: agent/drafts/ convention fix (task-159–161)"
+  - "✅ M28 DONE: opencode command parity — 58 commands, E2E test, bootstrap (task-71–75)"
   - "📋 M31: E2E test coverage for meta-scan, spec, sync, script-bound commands (task-162–166)"
   - "📋 M32: AGENT.md protocol documentation — 4 new sections (task-167–170)"
   - "📋 M35: acp-validate.ts enhancement — placeholder + frontmatter + parity (task-178–180)"
   - "📋 M33 OPTIONAL: Pluggable driver system — only if MCP integration needed (task-171–175)"
   - "📋 M36 OPTIONAL: saas-platform benchmark suite (task-181–183)"
-  - "📋 M28 IN PROGRESS: opencode command parity (5 tasks, current_milestone)"
   - "📋 M25 planned: 8 tasks ready (task-137 → task-144) — TanStack Start dashboard"
   - "📋 M26 planned: 5 tasks ready (task-145 → task-149) — protocol usability improvements"
 
