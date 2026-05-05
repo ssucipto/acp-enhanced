@@ -4,7 +4,7 @@
 topic: upstream, integration, audit, parity, porting
 description: Document the full feature parity state between upstream v7.2.0 and ACP Enhanced; create durable porting artifacts.
 tasks: task-155..task-158
-status: draft
+status: completed
 updated: 2026-05-05
 @acp.meta.end -->
 
