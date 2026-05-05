@@ -2,13 +2,14 @@
 id: task-155
 milestone: M29
 title: Create upstream v7.2.0 feature parity matrix
-status: not_started
+status: completed
 priority: 3
 complexity: medium
 estimated_hours: 4
+actual_hours: 3
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-05
+completed: 2026-05-05
 ---
 
 ## Objective
