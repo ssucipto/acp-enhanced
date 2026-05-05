@@ -2,13 +2,13 @@
 id: task-159
 milestone: M30
 title: Create agent/drafts/ directory with gitkeep and template
-status: not_started
+status: completed
 priority: 4
 complexity: trivial
 estimated_hours: 0.5
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-05T00:00:00Z
+completed: 2026-05-05
 ---
 
 ## Objective

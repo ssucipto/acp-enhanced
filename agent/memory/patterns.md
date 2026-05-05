@@ -2,6 +2,29 @@
 # Populated automatically by /acp-commit when patterns are identified
 # Format: date-stamped YAML entries, max 60 days active
 
+- date: 2026-05-05
+  name: local-star-exclusion-case-loop
+  task_type: shell-scripting
+  code_ref: agent/scripts/acp.install.sh (skills copy block, task-184)
+  description: |
+    Bash 3.2-safe pattern to copy a directory of .md files while skipping any
+    file whose basename starts with "local.". Use when an install/upgrade script
+    must distribute baseline files without clobbering project-local extensions.
+    Includes glob safety guard to handle empty directories (no match = no loop body).
+    Cleans loop variables with unset to avoid polluting surrounding script scope.
+  template: |
+    if [ -d "$SRC_DIR" ]; then
+        for _file in "$SRC_DIR/"*.md; do
+            [ -e "$_file" ] || continue          # glob safety: skip if no match
+            _base=$(basename "$_file")
+            case "$_base" in
+                local.*) continue ;;             # never overwrite project-local files
+            esac
+            cp "$_file" "$DEST_DIR/"
+        done
+        unset _file _base
+    fi
+
 - date: 2026-05-03
   name: legacy-dir-migration-create-if-absent
   task_type: shell-scripting
