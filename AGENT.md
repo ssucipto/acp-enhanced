@@ -814,11 +814,11 @@ All personas share the same three-layer context architecture. The layers determi
 
 | Layer | Content | Size | Caching |
 |-------|---------|------|---------|
-| **Layer 1 — Core** | `agent/core/identity.yml`, `constraints.yml`, `routing.yml` | ~180 tokens | Cached after first call |
-| **Layer 2 — Skills** | One `agent/skills/*.md` file matching the task type | ~240–350 tokens | Semi-static per task type |
+| **Layer 1 — Core** | `agent/core/identity.yml`, `constraints.yml`, `routing.yml` | ~875 tokens | Cached after first call |
+| **Layer 2 — Skills** | One `agent/skills/*.md` file matching the task type | ~475–660 tokens | Semi-static per task type |
 | **Layer 3 — Ephemeral** | Session memory (last 3 entries), filtered lessons, active task file, one wiki section | ~1,200–1,700 tokens per task | Never cached |
 
-**Total context per task**: ~1,680–2,230 tokens — compared to 10,000–18,000 tokens for unstructured all-Claude baseline usage.
+**Total context per task**: ~2,550–3,235 tokens — compared to 10,000–18,000 tokens for unstructured all-Claude baseline usage.
 
 Layer 1 and Layer 2 are prompt-cached by supported providers (Claude, Gemini), meaning repeated calls within a session cost a fraction of a new call. Layer 3 rotates per task, keeping the window lean and task-specific.
 
