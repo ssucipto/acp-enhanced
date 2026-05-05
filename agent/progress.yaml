@@ -545,12 +545,12 @@ milestones:
   M30:
     name: Drafts Convention Fix
     priority: 5
-    status: not_started
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 33
+    started: 2026-05-05
     completed: null
     estimated_weeks: 0
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 3
     file: agent/milestones/milestone-30-drafts-convention-fix.md
     notes: |
