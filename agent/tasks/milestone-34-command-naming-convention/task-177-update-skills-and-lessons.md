@@ -2,13 +2,13 @@
 id: task-177
 milestone: M34
 title: Update skills/commands.md and lessons.md with naming convention link
-status: not_started
+status: completed
 priority: 3
 complexity: trivial
 estimated_hours: 0.5
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-05T00:00:00Z
+completed: 2026-05-05
 ---
 
 ## Objective
