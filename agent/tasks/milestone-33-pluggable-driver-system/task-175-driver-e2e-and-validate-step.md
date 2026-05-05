@@ -2,13 +2,13 @@
 id: task-175
 milestone: M33
 title: Create driver e2e tests and acp.validate Step 11.5
-status: not_started
+status: completed
 priority: 2
 complexity: medium
 estimated_hours: 3
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-06T00:00:00Z
+completed: 2026-05-06
 ---
 
 ## Objective
