@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.2] — 2026-05-05
+
+### Fixed
+- `agent/scripts/acp.install.sh` — protect `local.*` skill files from being silently overwritten on upgrade; extends the existing `local.*` convention (already applied to `agent/index/` and `agent/patterns/`) to `agent/skills/`; uses a `case … esac` loop (bash 3.2-safe, macOS-compatible)
+
+### Agent
+- `agent/tasks/milestone-29-upstream-integration-audit/task-184-install-skill-local-exclusion.md` — completed
+- `agent/progress.yaml` — M29 progress: 0% → 20% (1/5 tasks done)
+
+---
+
 ## [6.4.1] — 2026-05-04
 
 ### Added
