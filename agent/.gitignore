@@ -5,7 +5,9 @@
 reports/
 clarifications/
 feedback/
-drafts/
+drafts/**
+!drafts/.gitkeep
+!drafts/draft.template.md
 preferences/
 
 # ── Instance data — project-specific, local-only ──────────────────────────
