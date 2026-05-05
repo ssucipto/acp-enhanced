@@ -526,11 +526,11 @@ milestones:
     name: Upstream Integration Audit
     priority: 3
     status: in_progress
-    progress: 60
+    progress: 80
     started: 2026-05-05
     completed: null
     estimated_weeks: 1
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 5
     file: agent/milestones/milestone-29-upstream-integration-audit.md
     notes: |
@@ -3167,13 +3167,13 @@ progress:
     - id: task-157
       name: Upstream integration runbook
       priority: 3
-      status: not_started
-      started: null
+      status: completed
+      started: 2026-05-05T00:00:00Z
       file: agent/tasks/milestone-29-upstream-integration-audit/task-157-upstream-integration-runbook.md
       estimated_hours: 2
-      actual_hours: null
-      completed_date: null
-      notes: Step-by-step runbook for DIVERGED handling + no-git-merge rules
+      actual_hours: 0.5
+      completed_date: 2026-05-05
+      notes: Runbook created at agent/patterns/local.upstream-integration-runbook.md (67 lines). Covers DIVERGED handling, no-git-merge rule, naming translation, 9-step process, ADR-7/ADR-8 refs.
 
     - id: task-158
       name: Wiki domain sync
