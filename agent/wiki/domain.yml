@@ -1,13 +1,13 @@
 # Domain Entity Model — ACP Protocol project
 # Load ONE section at a time — never load the entire file
-# last_verified: 2026-05-04
+# last_verified: 2026-05-05
 
 commands:
-  count: 51
+  count: 58
   location: agent/commands/
   naming: "acp.{command-name}.md — dot notation, acp namespace for core"
   categories:
-    core: [acp.audit, acp.handoff, acp.index, acp.init, acp.plan, acp.proceed, acp.report, acp.resume, acp.sessions, acp.spec, acp.status, acp.sync, acp.task-create, acp.update, acp.validate]
+    core: [acp.audit, acp.commit, acp.decide, acp.handoff, acp.index, acp.init, acp.memory-sync, acp.plan, acp.proceed, acp.report, acp.resume, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task-create, acp.update, acp.validate, acp.wiki-update]
     artifact: [acp.artifact-glossary, acp.artifact-reference, acp.artifact-research]
     clarification: [acp.clarification-address, acp.clarification-capture, acp.clarification-create]
     design: [acp.command-create, acp.design-create, acp.design-reference, acp.pattern-create]
@@ -15,11 +15,18 @@ commands:
     project: [acp.project-create, acp.project-info, acp.project-list, acp.project-remove, acp.project-set, acp.project-update, acp.projects-restore, acp.projects-sync]
     preferences: [acp.preferences-create, acp.preferences-get, acp.preferences-set, acp.preferences-show, acp.preferences-validate]
     version: [acp.version-check, acp.version-check-for-updates, acp.version-update]
+    local: [acp.cost-report]
     git: [git.commit, git.init]
   entries:
     - command: acp.audit
       category: core
       purpose: Deep-dive investigation of a subject, producing a structured report in agent/reports/.
+    - command: acp.commit
+      category: core
+      purpose: Persist session work into the ACP memory layer — write session summary, stamp completed routing tasks, check for reusable patterns and new ADRs, compact old sessions.
+    - command: acp.decide
+      category: core
+      purpose: Record a significant architectural decision as an ADR in agent/memory/decisions.md with a DO-NOT-re-open condition to prevent future agents from relitigating settled choices.
     - command: acp.handoff
       category: core
       purpose: Generate a context-aware handoff report for transferring work to an agent in a different context.
@@ -29,6 +36,9 @@ commands:
     - command: acp.init
       category: core
       purpose: Initialize agent context by loading all documentation, reviewing source code, and preparing for work.
+    - command: acp.memory-sync
+      category: core
+      purpose: Compress old session history into monthly summaries, flag stale patterns, and check wiki files for re-verification — keeps the memory layer lean without losing history.
     - command: acp.plan
       category: core
       purpose: Plan milestones or tasks for undefined items in progress.yaml or new requirements.
@@ -41,6 +51,9 @@ commands:
     - command: acp.resume
       category: core
       purpose: Resume work on a project by initializing context, reviewing recent progress, and continuing with the next task.
+    - command: acp.route
+      category: core
+      purpose: Route a task to the cheapest capable AI executor by classifying it against the taxonomy and creating a route file with cost estimates.
     - command: acp.sessions
       category: core
       purpose: Manage and view active agent sessions across projects.
@@ -62,6 +75,9 @@ commands:
     - command: acp.validate
       category: core
       purpose: Validate all ACP documents for structure, consistency, correctness, and namespace conventions.
+    - command: acp.wiki-update
+      category: core
+      purpose: Keep wiki files accurate after project evolution — update only the affected section without rewriting the entire file.
     - command: acp.artifact-glossary
       category: artifact
       purpose: Create and maintain project glossaries through auto-extraction and interactive refinement.
@@ -169,6 +185,10 @@ commands:
     - command: acp.version-update
       category: version
       purpose: Update ACP files (AGENT.md, templates, scripts) to the latest version.
+    - command: acp.cost-report
+      category: local
+      local_only: true
+      purpose: Read the routing ledger, group spend by executor, calculate actual vs. baseline cost (vs. all-Claude-Sonnet baseline), and produce taxonomy improvement suggestions.
     - command: git.commit
       category: git
       purpose: Automate version detection, changelog updates, and git commits with proper semantic versioning.
@@ -290,6 +310,12 @@ test_suites:
     - suite: acp.package-update.test.sh
       coverage: acp.package-update command — update scenarios (check-only, force, skip-modified)
       test_count: 9
+    - suite: acp.drafts.test.sh
+      coverage: Validates presence and structure of agent/drafts/ directory — .gitkeep, draft.template.md, and required 3-question template structure
+      test_count: 4
+    - suite: acp.opencode-commands.test.sh
+      coverage: Verifies 1:1 parity between .github/prompts/acp-*.prompt.md files and .opencode/commands/ entries; validates opencode file format (no mode: agent, has description)
+      test_count: 6
     - suite: acp.plan-with-preferences.test.sh
       coverage: acp.plan preference and preset resolution (project-level, preset override, CLI override, missing preset)
       test_count: 4
