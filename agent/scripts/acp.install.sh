@@ -161,7 +161,15 @@ if [ -d "$TEMP_DIR/agent/core" ]; then
     cp "$TEMP_DIR/agent/core/"*.yml "$TARGET_DIR/agent/core/" 2>/dev/null || true
 fi
 if [ -d "$TEMP_DIR/agent/skills" ]; then
-    cp "$TEMP_DIR/agent/skills/"*.md "$TARGET_DIR/agent/skills/" 2>/dev/null || true
+    for _skill_file in "$TEMP_DIR/agent/skills/"*.md; do
+        [ -e "$_skill_file" ] || continue  # glob safety: skip if no match
+        _skill_basename=$(basename "$_skill_file")
+        case "$_skill_basename" in
+            local.*) continue ;;  # never overwrite project-local skill extensions
+        esac
+        cp "$_skill_file" "$TARGET_DIR/agent/skills/"
+    done
+    unset _skill_file _skill_basename
 fi
 if [ -d "$TEMP_DIR/agent/wiki" ]; then
     cp "$TEMP_DIR/agent/wiki/"*.yml "$TARGET_DIR/agent/wiki/" 2>/dev/null || true
