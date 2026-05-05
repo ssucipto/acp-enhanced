@@ -116,3 +116,16 @@ task_types:
     context_required: [wiki/architecture.md, memory/sessions.md, memory/decisions.md]
     tokens_est: 12000
     skill: scripts
+
+  # ── UPSTREAM SYNC ─────────────────────────────────────────────
+  upstream-sync:
+    executor: claude-sonnet
+    complexity: high
+    context_required: [memory/decisions.md, wiki/architecture.md]
+    tokens_est: 22000
+    skill: upstream-sync
+    notes: >
+      High token estimate: must read upstream AGENT.md (76 KB), all upstream command
+      files, all upstream script files, and upstream milestones before making any
+      HAVE/PARTIAL/PORT/DEFER decision. CHANGELOG is cross-reference only (loaded last).
+      See agent/skills/upstream-sync.md for mandatory source priority order.
