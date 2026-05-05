@@ -2,13 +2,13 @@
 id: task-184
 milestone: M29
 title: Add local.* exclusion to install script skills copy
-status: not_started
+status: completed
 priority: 3
 complexity: low
 estimated_hours: 1
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-05T00:00:00Z
+completed: 2026-05-05
 ---
 
 ## Objective
