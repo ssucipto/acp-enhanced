@@ -1,4 +1,9 @@
 <skill name="commands">
+
+> **Naming convention**: Before writing any command references, read  
+> `agent/patterns/local.command-naming-convention.md` for the canonical  
+> naming table, invocation format, and upstream porting rules.
+
 <rules>
 - Every command file MUST begin with the 🤖 Agent Directive block (see pattern below)
 - The directive block title must match the filename: `acp.foo.md` → `# Command: foo`
