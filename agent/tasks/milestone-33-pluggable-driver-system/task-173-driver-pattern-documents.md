@@ -2,13 +2,13 @@
 id: task-173
 milestone: M33
 title: Create driver dispatch and workflow override pattern docs
-status: not_started
+status: completed
 priority: 2
 complexity: low
 estimated_hours: 2
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-06T00:00:00Z
+completed: 2026-05-06
 ---
 
 ## Objective
