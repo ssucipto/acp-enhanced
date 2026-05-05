@@ -2,13 +2,13 @@
 id: task-171
 milestone: M33
 title: Create driver.schema.yaml and driver.template.yaml
-status: not_started
+status: completed
 priority: 2
 complexity: low
 estimated_hours: 2
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-05T00:00:00Z
+completed: 2026-05-05
 ---
 
 ## Objective
