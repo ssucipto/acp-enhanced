@@ -44,14 +44,54 @@ ACP Enhanced forked from upstream at v1.0.3 (2026-02-13). Upstream released v7.2
 
 ## Implementation
 
-1. Read `prmichaelsen/agent-context-protocol` CHANGELOG from v1.0.3 to v7.2.0 to enumerate all features
-2. For each feature, check ACP Enhanced codebase for equivalent implementation
-3. Assign HAVE / PARTIAL / PORT / DEFER with one-line rationale
-4. Create `agent/design/local.upstream-parity-matrix.md` with:
-   - Header table: Feature | Upstream Version | ACP Enhanced Status | Decision | Rationale
-   - Grouped by category (Traceability, Workflow, Testing, Benchmarks, Infrastructure)
-   - Summary section: counts by decision code
-   - "Confirmed Gaps" section: PORT items with estimated effort
+**Source Priority Order** — read ALL sources before assigning HAVE/PARTIAL/PORT/DEFER:
+
+1. **Upstream `AGENT.md`** (canonical feature documentation, 2100+ lines):
+   `https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/AGENT.md`
+   Read in full — this is the definitive description of every feature, command, and subsystem.
+
+2. **Upstream `agent/commands/*.md`** (actual command implementations):
+   Directory listing: `https://github.com/prmichaelsen/agent-context-protocol/tree/mainline/agent/commands`
+   Read every `.md` file to understand each command's steps, arguments, flags, and integration points.
+   Do NOT rely on CHANGELOG descriptions alone — command files are the source of truth for behaviour.
+
+3. **Upstream `agent/scripts/*.sh`** (actual shell implementations):
+   Directory listing: `https://github.com/prmichaelsen/agent-context-protocol/tree/mainline/agent/scripts`
+   Read every `.sh` file to understand what helpers, subcommands, and logic are present.
+
+4. **Upstream `agent/milestones/*.md`** (planned and completed feature phases):
+   Directory listing: `https://github.com/prmichaelsen/agent-context-protocol/tree/mainline/agent/milestones`
+   Read all milestone files to understand feature scope, deliverables, and rationale per phase.
+
+5. **Upstream `agent/tasks/`** (granular feature breakdowns):
+   Directory listing: `https://github.com/prmichaelsen/agent-context-protocol/tree/mainline/agent/tasks`
+   Sample representative tasks — read at minimum 2–3 tasks per active milestone to understand
+   implementation detail that does not appear in the milestone file or CHANGELOG.
+
+6. **Upstream `agent/design/*.md`** (architectural decisions and design rationale):
+   Directory listing: `https://github.com/prmichaelsen/agent-context-protocol/tree/mainline/agent/design`
+   Read designs for: pluggable driver system, key-file index, benchmark suite, metadata markers,
+   spec system, and any feature marked PORT or needing deeper understanding.
+
+7. **Upstream `CHANGELOG.md`** (version timeline and cross-reference only):
+   `https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/CHANGELOG.md`
+   Use this to pin version numbers, find when a feature first appeared, and cross-check that
+   nothing in the CHANGELOG is missing from the sources above. Not a substitute for reading code.
+
+**Analysis steps (after reading all sources above):**
+
+8. For each feature discovered across all sources, search the ACP Enhanced codebase for equivalent
+   implementation: read actual ACP Enhanced command files, script files, and templates — do not
+   infer HAVE from directory names or task titles alone.
+
+9. Assign HAVE / PARTIAL / PORT / DEFER with a one-line rationale grounded in actual code observed
+   (quote the file and key evidence where helpful).
+
+10. Create `agent/design/local.upstream-parity-matrix.md` with:
+    - Header table: Feature | Upstream Source File | Upstream Version Introduced | ACP Enhanced Status | Decision | Rationale
+    - Grouped by category (Commands, Scripts, Traceability, Workflow, Testing, Benchmarks, Schemas, Infrastructure)
+    - Summary section: counts by decision code
+    - "Confirmed Gaps" section: PORT items with estimated effort
 
 ## Expected Output
 
@@ -59,8 +99,15 @@ ACP Enhanced forked from upstream at v1.0.3 (2026-02-13). Upstream released v7.2
 - `agent/design/local.upstream-parity-matrix.md`
 
 ## Verification
-- [ ] Matrix covers all upstream features mentioned in CHANGELOG v1.0.3→v7.2.0
-- [ ] Every row has a HAVE/PARTIAL/PORT/DEFER decision
+- [ ] Upstream `AGENT.md` was read in full (2100+ lines) before any assignments
+- [ ] All upstream `agent/commands/*.md` files were listed and each read individually (not inferred from CHANGELOG titles)
+- [ ] All upstream `agent/scripts/*.sh` files were listed and each read individually
+- [ ] All upstream `agent/milestones/*.md` files were read
+- [ ] At least 2–3 upstream task files per active milestone were sampled and read
+- [ ] Upstream `agent/design/` was listed and key design docs were read
+- [ ] CHANGELOG was used for version cross-reference only (not as sole source)
+- [ ] Matrix covers features from ALL sources above (AGENT.md + commands + scripts + milestones + tasks + designs)
+- [ ] Every row has a HAVE/PARTIAL/PORT/DEFER decision backed by actual code evidence
 - [ ] Every PORT decision has an effort estimate
 - [ ] Summary section shows total counts
 - [ ] `agent/design/local.upstream-parity-matrix.md` passes `grep "HAVE\|PORT\|DEFER\|PARTIAL"` with ≥10 matches

@@ -26,7 +26,7 @@ ACP Enhanced has hard constraints that upstream does not share:
 ## Implementation
 
 For each PORT item from task-155:
-1. **macOS compat check**: Does the implementation use bash 4+ features or GNU-only coreutils? If yes, note the specific incompatibility and whether a POSIX workaround exists.
+1. **macOS compat check**: Read the actual upstream `agent/scripts/*.sh` source for the feature being audited. Identify specific bash 4+ constructs in the code (e.g., `mapfile`, `readarray`, `declare -A` associative arrays, `[[ =~ ]]` regex matching, `printf '%q'`, `${!var[@]}` nameref expansion). Do NOT guess incompatibility from feature names — cite the specific line and construct. If the script is pure POSIX awk or uses only bash 3.2-compatible syntax, mark it ✅ without further comment.
 2. **Dependency check**: Does it require external tools? If yes, is there a pure-bash alternative?
 3. **Token budget check**: Estimate the token cost of adding this feature to the command loading chain. Would it bust the 5,000 token cap?
 4. **Naming convention check**: Does the upstream code use `@acp.` invocations that need global replacement with `/acp-`?
