@@ -2,13 +2,13 @@
 id: task-172
 milestone: M33
 title: Port acp.driver-yaml.sh (8 POSIX helpers, macOS-safe)
-status: not_started
+status: completed
 priority: 2
 complexity: medium
 estimated_hours: 4
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-05T00:00:00Z
+completed: 2026-05-06
 ---
 
 ## Objective
