@@ -2,13 +2,13 @@
 id: task-167
 milestone: M32
 title: Add Metadata Markers section to AGENT.md
-status: not_started
+status: completed
 priority: 3
 complexity: low
 estimated_hours: 2
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-05T00:00:00Z
+completed: 2026-05-05
 ---
 
 ## Objective
