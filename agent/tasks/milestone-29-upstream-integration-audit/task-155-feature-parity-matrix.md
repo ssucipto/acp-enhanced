@@ -20,9 +20,10 @@ Create `agent/design/local.upstream-parity-matrix.md` — a complete feature par
 ACP Enhanced forked from upstream at v1.0.3 (2026-02-13). Upstream released v7.2.0 (2026-05-04). A code-level audit on 2026-05-05 (see ADR-7, ADR-8) revealed that ACP Enhanced independently implemented most upstream features through parallel development. The parity matrix makes this permanent and discoverable for future sync cycles.
 
 **Feature decision codes:**
-- `HAVE` — ACP Enhanced has a full equivalent implementation
+- `HAVE` — ACP Enhanced has a full equivalent implementation (verified by reading BOTH upstream AND ACP Enhanced source files)
 - `PARTIAL` — ACP Enhanced has part of the feature; gaps documented
-- `PORT` — Feature is genuinely missing; should be ported (with compat check)
+- `DIVERGED` — Both upstream and ACP Enhanced have an implementation but they are intentionally different; the ACP Enhanced version must NOT be overwritten. Document what diverged and why.
+- `PORT` — Feature is genuinely missing; should be ported (with compat check + post-port safety gate)
 - `DEFER` — Feature exists upstream but does not apply to ACP Enhanced (e.g., driver system if not needed)
 
 **Confirmed HAVE (from 2026-05-05 code audit):**
@@ -80,18 +81,21 @@ ACP Enhanced forked from upstream at v1.0.3 (2026-02-13). Upstream released v7.2
 
 **Analysis steps (after reading all sources above):**
 
-8. For each feature discovered across all sources, search the ACP Enhanced codebase for equivalent
-   implementation: read actual ACP Enhanced command files, script files, and templates — do not
-   infer HAVE from directory names or task titles alone.
+8. For each feature discovered across all sources, search the ACP Enhanced codebase for the
+   equivalent file. Open and read that ACP Enhanced file — do NOT infer HAVE or DIVERGED from
+   directory names or task titles alone. Compare the upstream implementation against the ACP
+   Enhanced implementation line-by-line where the features overlap.
 
-9. Assign HAVE / PARTIAL / PORT / DEFER with a one-line rationale grounded in actual code observed
-   (quote the file and key evidence where helpful).
+9. Assign HAVE / PARTIAL / DIVERGED / PORT / DEFER with a one-line rationale citing BOTH the
+   upstream source file AND the ACP Enhanced equivalent file. For DIVERGED items: state explicitly
+   what is different and why ACP Enhanced's version must not be overwritten.
 
 10. Create `agent/design/local.upstream-parity-matrix.md` with:
-    - Header table: Feature | Upstream Source File | Upstream Version Introduced | ACP Enhanced Status | Decision | Rationale
+    - Header table: Feature | Upstream Source File | ACP Enhanced File | Upstream Version Introduced | Decision | Rationale
     - Grouped by category (Commands, Scripts, Traceability, Workflow, Testing, Benchmarks, Schemas, Infrastructure)
-    - Summary section: counts by decision code
+    - Summary section: counts by decision code (HAVE / PARTIAL / DIVERGED / PORT / DEFER)
     - "Confirmed Gaps" section: PORT items with estimated effort
+    - "Intentional Divergences" section: DIVERGED items with one-line explanation of what differs
 
 ## Expected Output
 
@@ -107,10 +111,13 @@ ACP Enhanced forked from upstream at v1.0.3 (2026-02-13). Upstream released v7.2
 - [ ] Upstream `agent/design/` was listed and key design docs were read
 - [ ] CHANGELOG was used for version cross-reference only (not as sole source)
 - [ ] Matrix covers features from ALL sources above (AGENT.md + commands + scripts + milestones + tasks + designs)
-- [ ] Every row has a HAVE/PARTIAL/PORT/DEFER decision backed by actual code evidence
+- [ ] Every row has a HAVE/PARTIAL/DIVERGED/PORT/DEFER decision backed by actual code evidence
+- [ ] Every HAVE and DIVERGED decision cites both the upstream source file AND the ACP Enhanced equivalent file
 - [ ] Every PORT decision has an effort estimate
-- [ ] Summary section shows total counts
-- [ ] `agent/design/local.upstream-parity-matrix.md` passes `grep "HAVE\|PORT\|DEFER\|PARTIAL"` with ≥10 matches
+- [ ] Every DIVERGED decision has an explanation of what is intentionally different
+- [ ] Summary section shows counts for all 5 codes
+- [ ] "Intentional Divergences" section is present if any DIVERGED items exist
+- [ ] `agent/design/local.upstream-parity-matrix.md` passes `grep "HAVE\|PORT\|DEFER\|PARTIAL\|DIVERGED"` with ≥10 matches
 
 ## User-Observable Acceptance
 Running `/acp-sync` after this task produces an up-to-date picture of ACP Enhanced vs upstream feature parity. Future upstream integration work references this matrix instead of re-reading the full CHANGELOG.
