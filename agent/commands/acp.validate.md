@@ -375,6 +375,23 @@ Validate links between documents.
 
 **Expected Outcome**: All links are valid  
 
+### 11.5. Driver Binding Consistency (skip if `agent/driver.yaml` absent)
+
+> This step is a no-op if `agent/driver.yaml` does not exist.
+
+If `agent/driver.yaml` exists:
+
+**Actions**:
+1. Source `agent/scripts/acp.driver-yaml.sh`
+2. Run `driver_validate` — collect any validation errors
+3. For each driver of type `mcp`: verify `server:` and `method:` are present
+4. For each driver of type `http`: verify `url:` is present
+5. Check that `overrides:` keys reference known command names in `agent/commands/`
+6. Report: "Driver binding: N drivers configured, M errors found"
+7. Non-blocking: validation failures are warnings, not fatal errors
+
+**Expected Outcome**: Driver binding summary reported; issues appear as warnings only.
+
 ### 12. Generate Validation Report
 
 Summarize validation results.
