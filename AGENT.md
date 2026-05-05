@@ -68,7 +68,7 @@ The following capabilities are **ACP Enhanced additions** that do not exist in t
 | **Clarification Capture** | `/acp-clarification-*` commands for capturing, deduplicating, and synthesizing stakeholder clarifications into design/task/pattern creation. | M15 |
 | **Design Reference System** | `/acp-design-reference` directive for cross-referencing design elements (D-IDs) into task creation and implementation. | M16 |
 | **Artifact Commands** | `/acp-artifact-research`, `/acp-artifact-glossary`, `/acp-artifact-reference` — commands for creating long-lived, living reference documents. | M17 |
-| **Metadata Markers** | Machine-readable `/acp-meta.*` sentinel system for R<N> spec requirements and D<N> design units. Powers `/acp-sync` spec↔task↔code traceability. | M18 |
+| **Metadata Markers** | Machine-readable `@acp.meta.*` sentinel system for R<N> spec requirements and D<N> design units. Powers `/acp-sync` spec↔task↔code traceability. | M18 |
 | **Specs System** | `agent/specs/` formal specification documents with R<N> requirement IDs. `/acp-task-create` auto-populates `Spec Coverage` from matching specs. | M14–M18 |
 | **Benchmark Suite** | `agent/benchmarks/` automated E2E suite measuring ACP vs baseline outcomes across 6 task types (simple → complex). LLM rubric evaluation and HTML reports. | M11 |
 | **YAML Parser** | Pure-bash generic YAML parser (`acp.yaml-parser.sh`) with AST, path expressions, and full CRUD API. Zero external dependencies. | M4 |
@@ -531,164 +531,34 @@ current_blockers:
 
 ## Metadata Markers
 
-ACP documents (and optionally source code files) carry machine-readable **metadata markers** that let orchestrators map the repo in one pass instead of reading every file. A single awk script parses markers across any language — markdown, TypeScript, Python, Rust, SQL, shell, YAML — so spec→task→code traceability works uniformly.
+ACP uses language-agnostic metadata blocks for traceability. Any file (markdown, TypeScript, Python, shell, SQL, YAML…) can carry markers that the scanner reads in one pass.
 
-### Sentinel syntax
+**Sentinel syntax** — wrap opening/closing in the host language's comment characters:
 
-Every marker has two literal sentinels:
-
-- **Opening**: `/acp-meta.<kind>` where `<kind>` is one of: `spec`, `task`, `design`, `milestone`, `pattern`, `clarification`, `artifact`, `code`
-- **Closing**: `/acp-meta.end`
-
-Authors wrap both sentinels and each body line in the host language's comment syntax. The parser strips the comment characters before extracting fields.
-
-### Per-language forms
-
-Same marker, five languages:
-
-**Markdown** (`<!-- ... -->`):
 ```markdown
-<!-- /acp-meta.task
-topic: wire awk parser into sync
-milestone: M3
-covers: R31, R32
-status: in_progress
-updated: 2026-04-27
-/acp-meta.end -->
+<!-- @acp.meta.spec
+topic: auth, sessions
+requirements: R1..R10
+status: draft
+updated: 2026-05-05
+@acp.meta.end -->
 ```
 
-**TypeScript / JS / Rust / Go** (`// ...`):
-```ts
-// /acp-meta.code
-// topic: marker parser util
-// implements: R31, R32
-// spec: agent/specs/local.marker-system.md
-// file_role: util
-// status: implemented
-// updated: 2026-04-27
-// /acp-meta.end
-```
+**8 marker kinds**: `spec`, `task`, `milestone`, `design`, `pattern`, `clarification`, `code`, `artifact`
 
-**Python / Shell / YAML** (`# ...`):
-```python
-# /acp-meta.code
-# topic: backfill legacy files
-# implements: R40
-# file_role: cli
-# status: draft
-# updated: 2026-04-27
-# /acp-meta.end
-```
+**Common fields** (all optional unless noted):
+- `topic:` — comma-separated keywords
+- `description:` — one-line summary ≤150 chars
+- `status:` — `draft | active | deprecated`
+- `updated:` — YYYY-MM-DD
 
-**SQL / Haskell** (`-- ...`):
-```sql
--- /acp-meta.code
--- topic: migration for spec_coverage table
--- implements: R42
--- file_role: migration
--- status: implemented
--- updated: 2026-04-27
--- /acp-meta.end
-```
+**Kind-specific fields**: `requirements:` (spec), `covers:` (task — R-IDs from spec), `incorporates:` (task — D-IDs from design), `implements:` (code — R-IDs)
 
-**Lisp / Clojure** (`;; ...`) and **OCaml / Elm** (`(* ... *)`) follow the same pattern.
+**Scanner**: `./agent/scripts/acp.meta-scan.sh [--kind <kind>] [root]`  
+Outputs a flat stream of `file:` / `kind:` / `key:` lines, `---` between blocks.
 
-### Body fields
-
-Each field is `key: value` on its own line. List values use comma-separated inline form (`covers: R10, R11, R12`). No YAML block syntax — keep the parser trivial.
-
-### Field catalog per kind
-
-| kind | required | optional |
-|---|---|---|
-| `spec` | topic, description, requirements, status, updated | phases, supersedes, depends_on |
-| `task` | topic, description, milestone, spec, covers, status, updated | design, incorporates, depends_on |
-| `design` | topic, description, informs, status, updated | decisions, depends_on |
-| `milestone` | topic, description, tasks, status, updated | spec |
-| `pattern` | topic, description, applies_to, status, updated | — |
-| `clarification` | topic, resolves, status, updated | resolved |
-| `artifact` | topic, last_verified, confidence, status, updated | — |
-| `code` | topic, implements, spec, file_role, status, updated | — |
-
-`status` enum (shared): `draft | active | in_progress | complete | deprecated | superseded` (plus `implemented | verified` for code). `updated` is ISO 8601 date.
-
-**Requirement IDs and Design IDs.** Specs and designs both carry addressable units:
-
-- `R<N>` (specs): each requirement in `## Requirements` has an ID like `R1`, `R2`, ..., `R<N>`. Tasks declare which requirements they implement via `covers: R10, R11` in the task marker. The spec's marker `requirements:` field records the ID range.
-- `D<N>` (designs): any atomic, addressable design unit — a key decision, code snippet, schema, interface, algorithm, formula, key invariant, or diagram — gets a `D<N>` label. Tasks declare which design units they inline via `incorporates: D1, D3`. The design's marker `decisions:` field records the ID range.
-
-See "D-IDs for designs" below for labeling conventions.
-
-### The parser
-
-[`agent/scripts/acp.meta-scan.sh`](agent/scripts/acp.meta-scan.sh) is the single source of truth. Commands invoke it rather than reimplementing awk inline.
-
-```bash
-# Scan everything
-./agent/scripts/acp.meta-scan.sh agent/
-
-# Filter by kind
-./agent/scripts/acp.meta-scan.sh --kind task agent/tasks/
-./agent/scripts/acp.meta-scan.sh --kind spec,code .
-```
-
-Output is a flat stream of `file:` / `kind:` / `key:` lines, with `---` between blocks. Any downstream consumer (another awk, shell, or an LLM prompt) parses it directly.
-
-### What markers enable
-
-- **`/acp-task-create`** invokes the scanner to find a matching spec for a new task and auto-populates the task's `Spec Coverage` section from the spec's declared `requirements:` range.
-- **`/acp-sync`** invokes the scanner to build a spec ↔ task ↔ code cross-reference map in one pass, surfacing:
-  - Unclaimed requirements (spec R<N> with no task `covers:` it) → planning gap
-  - Unimplemented claims (task `covers: R<N>` but no code `implements: R<N>`) → completion drift
-  - Stale markers (`status: complete` but `updated:` > 6 months ago) → possibly out-of-date
-- **Code markers** are opt-in. Only source files claiming to implement a spec requirement need one. A file may carry multiple `kind: code` blocks (one per function/module implementing a separate requirement).
-
-### D-IDs for designs
-
-Designs carry **atomic, addressable units** labeled `D<N>` so tasks can reference them exactly (mirroring how tasks `covers: R10, R11` specific requirements in specs).
-
-**What gets a D-ID:**
-
-- **Key decisions** — `### D1: Use SM-2 for scheduling`
-- **Code / schema snippets** — `**D2: user_study_list table**` above a fenced SQL/TS block
-- **Interfaces / type signatures** — `**D3: WordDefinition contract**`
-- **Algorithms / formulas** — `**D4: Effective priority calculation**`
-- **Key invariants or rules** — `**D5: Markers supersede prose frontmatter**`
-- **Diagrams** — `**D6: Character switching flow**` above an ASCII / mermaid / image block
-
-The rule is functional: if a chunk is atomic enough that a task could legitimately inline it verbatim and reference it by ID, give it a D-ID. Prose context around an atomic unit does NOT need a D-ID.
-
-**Numbering:** sequential (`D1, D2, D3, ...`) across the whole document, regardless of section.
-
-**Task incorporation:** when `/acp-task-create` inlines design content, it records the specific D-IDs in the task marker's `incorporates:` field. `/acp-validate` then confirms each claimed D-ID is actually reflected in the task body.
-
-**Migration:** legacy designs don't have D-IDs. `/acp-sync` Pass C scans each design for candidate atomic units and proposes D-ID labels for user approval. Never silent.
-
-### Authoring
-
-- Markers are auto-populated by creation commands at file creation (`/acp-task-create`, `/acp-spec`, `/acp-design-create`, etc.).
-- Hand-authored edits are welcome. `/acp-sync` updates `updated:` timestamps when it detects content changes.
-- `/acp-sync` can backfill markers into legacy files (prompts for user confirmation; never silently writes).
-
-### Markers supersede prose frontmatter
-
-Markers are the **source of truth** for any field they carry — they do not coexist with a parallel prose copy. Templates have been stripped of the duplicated fields:
-
-| Field | Carried in marker | Prose removed from |
-|---|---|---|
-| `status` | all kinds | spec, task, design, milestone, pattern, clarification, research/glossary/reference |
-| `updated` (was **Last Updated**) | all kinds | spec |
-| `last_verified` | artifact | research/glossary/reference |
-| `confidence` | artifact | research/glossary/reference |
-| `milestone` | task | task |
-| `depends_on` (was **Dependencies**) | task, milestone, spec, design | task, milestone |
-| `applies_to` (was **Applicable To**) | pattern | pattern |
-
-Prose fields that remain are content-specific and structural, not machine-tracked state: `**Namespace**`, `**Version**`, `**Created**` (immutable dates), `**Design Reference**`, `**Estimated Time**`, `**Goal**`, `**Concept**`, `**Purpose**`, `**Category**`, `**Type**`, `**Sources**`, `**Total Terms**`.
-
-Task lifecycle (Not Started / In Progress / Completed) is tracked in `agent/progress.yaml` — that's authoritative for task-completion state; the marker's `status` field reflects the document's own state (draft/active/deprecated), not the work-item state.
-
-If a pre-marker file still carries a duplicated prose field (`**Status**`, `**Last Updated**`, etc.), `/acp-sync` Step 1.4 flags it and proposes removal.
+See [`acp.sync.md`](agent/commands/acp.sync.md) (Steps 1.3–1.6) for how markers feed the traceability system.  
+See [`acp.spec.md`](agent/commands/acp.spec.md) for the full field catalog per kind.
 
 ---
 
