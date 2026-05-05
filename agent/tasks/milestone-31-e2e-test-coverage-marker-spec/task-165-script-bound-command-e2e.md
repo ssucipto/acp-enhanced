@@ -2,13 +2,13 @@
 id: task-165
 milestone: M31
 title: E2E tests for 8 script-bound commands with zero coverage
-status: not_started
+status: completed
 priority: 3
 complexity: medium
 estimated_hours: 5
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-05T00:00:00Z
+completed: 2026-05-05
 ---
 
 ## Objective
