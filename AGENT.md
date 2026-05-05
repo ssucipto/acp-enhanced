@@ -18,11 +18,12 @@
 5. [Directory Structure](#directory-structure)
 6. [Core Components](#core-components)
 7. [Metadata Markers](#metadata-markers)
-8. [How to Use ACP Enhanced](#how-to-use-acp-enhanced)
-9. [Three-Persona Deployment Model](#three-persona-deployment-model)
-10. [Pattern Significance & Impact](#pattern-significance--impact)
-11. [Problems This Pattern Solves](#problems-this-pattern-solves)
-12. [ACP Commands](#acp-commands)
+8. [Specs](#specs)
+9. [How to Use ACP Enhanced](#how-to-use-acp-enhanced)
+10. [Three-Persona Deployment Model](#three-persona-deployment-model)
+11. [Pattern Significance & Impact](#pattern-significance--impact)
+12. [Problems This Pattern Solves](#problems-this-pattern-solves)
+13. [ACP Commands](#acp-commands)
 13. [ACP Preferences System](#acp-preferences-system)
 14. [Global Package Discovery](#global-package-discovery)
 15. [Project Registry System](#project-registry-system)
@@ -559,6 +560,35 @@ Outputs a flat stream of `file:` / `kind:` / `key:` lines, `---` between blocks.
 
 See [`acp.sync.md`](agent/commands/acp.sync.md) (Steps 1.3–1.6) for how markers feed the traceability system.  
 See [`acp.spec.md`](agent/commands/acp.spec.md) for the full field catalog per kind.
+
+---
+
+## Specs
+
+Specifications live in `agent/specs/` and are created via `/acp-spec`. They define requirements with numbered IDs:
+
+```markdown
+## Requirements
+
+- **R1** — The system must authenticate users before accessing protected routes.
+- **R2** — Session tokens must expire after 24 hours.
+```
+
+**FR-IDs** (`R<N>`): Every requirement gets a unique ID. Tasks reference them via `covers:` in their marker. Code references them via `implements:`.
+
+**Behavior Table** (required in every spec):
+
+| Scenario | Input | Expected Output |
+|---|---|---|
+| Valid login | correct credentials | 200 + session token |
+| Invalid login | wrong password | 401 |
+
+**Traceability chain**: Spec R-IDs → `covers: R1, R2` in task marker → `implements: R1` in code marker → `/acp-sync` validates all R-IDs are covered.
+
+**Create a spec**: `/acp-spec --from-clarification <file>` or `/acp-spec --interactive`
+
+See [`agent/specs/spec.template.md`](agent/specs/spec.template.md) for the full template.  
+See [`acp.spec.md`](agent/commands/acp.spec.md) for the `/acp-spec` command reference.
 
 ---
 
