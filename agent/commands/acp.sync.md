@@ -71,6 +71,15 @@ Load all design documents to understand documented architecture.
 
 Run the canonical marker parser once and hold its output for the rest of the sync cycle. Every subsequent step that needs spec/task/code/design metadata consumes this stream instead of re-reading files.
 
+**1.3.0 — Driver check** (no-op if `agent/driver.yaml` absent):
+
+> This step is a no-op if `agent/driver.yaml` does not exist.
+
+If `agent/driver.yaml` exists:
+- Source `agent/scripts/acp.driver-yaml.sh`
+- Check `driver_is_native shell` — if false, the shell driver is delegated; use the configured backend to run scan scripts
+- Log: "Driver config active: shell → [type]" when non-native
+
 **Actions**:
 - Invoke the parser:
   ```sh
