@@ -11,7 +11,7 @@
 ACP Enhanced consists of two layers built on top of the original ACP:
 
 1. **Original ACP** — command documents (`agent/commands/*.md`), bash scripts (`agent/scripts/*.sh`), YAML schemas (`agent/schemas/*.yaml`), the full planning and package workflow.
-2. **Enhanced Framework Layer** — a structured `agent/` directory that gives the AI agent a 2,800-token context budget system with tiered memory, skill routing, a task taxonomy, and a self-improving correction log.
+2. **Enhanced Framework Layer** — a structured `agent/` directory that gives the AI agent a 5,000-token context budget system with tiered memory, skill routing, a task taxonomy, and a self-improving correction log.
 
 The framework layer solves a specific problem: as your project grows, the AI agent starts every session with zero context. ACP Enhanced makes the agent systematically load only what it needs, in priority order, within a strict token budget.
 
@@ -36,9 +36,14 @@ The framework layer solves a specific problem: as your project grows, the AI age
 curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/scripts/acp-bootstrap.sh | bash
 ```
 
-This runs in two phases:
-1. **Framework layer** — creates `agent/` directory structure and `AGENTS.md`
-2. **Commands + scripts** — downloads and installs `agent/commands/`, `agent/scripts/`, `agent/schemas/`
+This runs in seven steps:
+1. **Core layer** — creates `agent/` directory structure, `AGENTS.md`, and core YAML files (`identity.yml`, `constraints.yml`, `routing.yml`)
+2. **Skill files** — installs one skill file per task domain into `agent/skills/`
+3. **Memory + wiki stubs** — creates `agent/memory/` and `agent/wiki/` with empty starter files
+4. **Routing layer** — installs `agent/routing/taxonomy.yml`, `rules.md`, and routing task template
+5. **Prompt files** — generates `.github/prompts/*.prompt.md` for VS Code Copilot
+6. **opencode commands** — mirrors all prompts to `.opencode/commands/*.md` for opencode TUI
+7. **Commands + scripts** — downloads and installs `agent/commands/`, `agent/scripts/`, `agent/schemas/`
 
 After it completes, **customize** `agent/core/identity.yml` for your project (name, stack, team, repo URL).
 
@@ -68,7 +73,7 @@ ACP Enhanced registers **58 slash commands** across two tools — available afte
 |---|---|---|
 | VS Code Copilot | `/acp-*` — autocomplete in Copilot Chat | `.github/prompts/*.prompt.md` |
 | opencode | `/acp-*` — autocomplete in opencode TUI | `.opencode/commands/*.md` |
-| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` |
+| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (58 commands) |
 
 ```text
 /acp-init          /acp-proceed       /acp-plan          /acp-status
@@ -78,7 +83,8 @@ ACP Enhanced registers **58 slash commands** across two tools — available afte
 ```
 
 > VS Code Copilot requires agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.  
-> opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.
+> opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.  
+> **Note**: 6 framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`) are defined in prompt/opencode files only — not in `agent/commands/*.md`. Use VS Code Copilot or opencode to run these.
 
 ---
 
@@ -201,7 +207,9 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Cost tracking | None | Per-task token + USD ledger via dispatch |
 | Install | `curl \| bash` from original repo | Single bootstrap script from this fork |
 
-The ACP command and workflow system (clarifications → design → plan → proceed) is identical to the original.
+The ACP command and workflow system (clarifications → design → plan → proceed) is identical to the original at the time of the fork.
+
+> **Note**: The upstream [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol) continues to evolve independently. This comparison reflects our fork point. The upstream now has its own extended features (v7.x+) and the two implementations have diverged. Check the upstream README for its current capabilities.
 
 **Is ACP Enhanced worth it without the routing/dispatch system?** Yes — the memory layer is the primary value. Without memory, every AI session starts cold and you re-explain context every time. With ACP Enhanced, sessions compound: corrections are remembered by task type, architectural decisions never get re-debated, and session summaries load automatically. Routing is additive on top of that.
 

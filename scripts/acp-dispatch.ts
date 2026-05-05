@@ -15,7 +15,7 @@ import path from "path";
 // ============================================================
 
 const OPENROUTER_BASE = "https://openrouter.ai/api/v1";
-const AGENT_DIR = ".agent";
+const AGENT_DIR = "agent";
 
 // ── Model Configuration ─────────────────────────────────────
 const MODEL_MAP: Record<string, { model: string; inputCost: number; outputCost: number }> = {
