@@ -81,3 +81,26 @@
     !some-dir/name-{placeholder}.template.md
     # This pattern ignores all real content while preserving
     # the directory structure and template scaffold for new users.
+
+- date: 2026-05-05
+  name: install-script-gitignore-heredoc-sync
+  task_type: shell-scripting
+  code_ref: agent/scripts/acp.install.sh (embedded .gitignore heredoc, task-160)
+  description: |
+    Install scripts that write a .gitignore via heredoc must use the same patterns
+    as the tracked agent/.gitignore — especially `dir/**` + `!exception` form.
+    Bare `dir/` in a heredoc-written .gitignore causes the same bug as in the
+    source file: all `!exception` rules are silently blocked.
+    Rule: whenever you fix agent/.gitignore, grep install scripts for heredocs
+    that write .gitignore and apply the same fix there too.
+  template: |
+    # In install script heredoc — WRONG:
+    cat > "$TARGET/agent/.gitignore" << 'EOF'
+    drafts/
+    EOF
+    # CORRECT (mirrors agent/.gitignore source):
+    cat > "$TARGET/agent/.gitignore" << 'EOF'
+    drafts/**
+    !drafts/.gitkeep
+    !drafts/draft.template.md
+    EOF

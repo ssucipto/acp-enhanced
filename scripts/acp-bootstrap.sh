@@ -26,6 +26,7 @@ mkdir -p agent/routing
 mkdir -p agent/routing/tasks
 mkdir -p agent/tasks
 mkdir -p agent/milestones
+mkdir -p agent/drafts
 mkdir -p .github/prompts
 mkdir -p scripts
 echo -e "${GREEN}✓ Directories created${NC}"
@@ -259,6 +260,13 @@ TODO: Add things the agent should NEVER do in this codebase
 </skill>
 SKILL
   echo -e "${YELLOW}✓ Skill stub created (agent/skills/backend.md) — populate with your project rules${NC}"
+fi
+
+# Copy drafts template (idempotent — only if absent)
+ACP_DRAFTS_SRC="${SCRIPT_DIR}/../agent/drafts/draft.template.md"
+if [ -f "${ACP_DRAFTS_SRC}" ] && [ ! -f "agent/drafts/draft.template.md" ]; then
+  cp "${ACP_DRAFTS_SRC}" "agent/drafts/draft.template.md"
+  echo -e "${GREEN}✓ draft.template.md copied to agent/drafts/${NC}"
 fi
 
 # --- 4. Memory + Wiki Stubs ---
