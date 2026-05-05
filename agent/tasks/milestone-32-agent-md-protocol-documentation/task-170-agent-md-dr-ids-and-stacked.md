@@ -2,13 +2,13 @@
 id: task-170
 milestone: M32
 title: Update AGENT.md with DR-IDs and stacked/yolo proceed modes
-status: not_started
+status: completed
 priority: 3
 complexity: low
 estimated_hours: 1.5
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-05T00:00:00Z
+completed: 2026-05-05
 ---
 
 ## Objective

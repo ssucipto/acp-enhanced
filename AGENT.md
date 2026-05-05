@@ -292,6 +292,15 @@ What are the downsides or limitations?
 **Recommendation**: What should be done
 ```
 
+**Design Atomic Units (DR-IDs)**: As you write a design, label key decisions and implementation units with `D<N>` IDs:
+
+```markdown
+**D1: Authentication Strategy** — Use JWT with RS256 for stateless auth.
+**D2: Session Schema** — { userId, expiresAt, scopes[] } stored in Redis.
+```
+
+Tasks inline these units via `/acp-task-create` and declare `incorporates: D1, D3` in their marker. `/acp-validate` Probe 2 verifies the inlining happened.
+
 ### 2. Specs (`agent/specs/`)
 
 **Purpose**: Formal, testable specifications. Where design documents describe *how* a feature works and *why* it was designed that way, specs define *what must be true* about the finished feature — unambiguous requirements, precise behavior, concrete test cases.
@@ -932,6 +941,8 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 **Workflow**
 - **[`/acp-init`](agent/commands/acp.init.md)** - Initialize agent context; loads key files, registers session, reports global packages
 - **[`/acp-proceed`](agent/commands/acp.proceed.md)** - Continue with next task (single-task or autonomous multi-task mode)
+
+  **Key modes**: `/acp-proceed` (single task) · `--turbo`/`--yolo` (autonomous, no prompt) · `--stacked` (full milestone as sequential stacked worktrees) · `--worktrees` (parallel sub-agents). **Step 3.5** (automatic): post-completion 7-part audit; spawns remediation sub-agent if drift found. See `acp.proceed.md` for full argument reference (A1–A11).
 - **[`/acp-plan`](agent/commands/acp.plan.md)** - Plan project milestones and tasks from requirements
 - **[`/acp-status`](agent/commands/acp.status.md)** - Display project status and active sessions
 - **[`/acp-report`](agent/commands/acp.report.md)** - Generate a completion report; deregisters session
