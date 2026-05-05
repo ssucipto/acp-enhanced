@@ -6,7 +6,7 @@ project:
   version: 6.3.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M32
+  current_milestone: M33
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M24 complete: AGENT.md fully updated with
@@ -581,20 +581,20 @@ milestones:
   M32:
     name: AGENT.md Protocol Documentation
     priority: 3
-    status: in_progress
-    progress: 75
+    status: completed
+    progress: 100
     started: 2026-05-05
-    completed: null
+    completed: 2026-05-05
     estimated_weeks: 1
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 4
     file: agent/milestones/milestone-32-agent-md-protocol-documentation.md
     notes: |
-      Adds 4 sections to AGENT.md: Metadata Markers, Specs, Command Invocation, DR-IDs.
-      task-167: metadata markers section — completed 2026-05-05
-      task-168: specs section — completed 2026-05-05
-      task-169: command invocation naming table — completed 2026-05-05
-      task-170: DR-IDs and stacked/yolo proceed modes
+      ✅ M32 COMPLETE! All 4 AGENT.md protocol documentation sections added.
+      task-167: Metadata Markers section (condensed + fixed @acp.meta.* syntax) — commit 9abff8f
+      task-168: Specs section (FR-IDs, Behavior Table, traceability chain) — commit fa5f1c0
+      task-169: Command Invocation section (naming table, chain, critical rules) — commit 77cfd76
+      task-170: DR-IDs in Designs + proceed modes (--stacked, --yolo, Step 3.5)
 
   M33:
     name: Pluggable Driver System
