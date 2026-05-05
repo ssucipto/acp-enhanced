@@ -2,13 +2,13 @@
 id: task-161
 milestone: M30
 title: Update AGENT.md directory tree and add acp.drafts.test.sh
-status: not_started
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 1
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-05T00:00:00Z
+completed: 2026-05-05
 ---
 
 ## Objective
