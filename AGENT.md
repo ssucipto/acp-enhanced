@@ -221,6 +221,9 @@ project-root/
 │   ├── clarifications/             # Clarification documents
 │   │   └── clarification-{N}-{title}.md   # Created by /acp-clarification-create
 │   │
+│   ├── drafts/                     # local-only planning drafts (gitignored content; template tracked)
+│   │   └── draft.template.md       # 3-question draft template for /acp-plan
+│   │
 │   ├── feedback/                   # Agent feedback and improvement notes
 │   │
 │   ├── configurables/              # Preference definitions
