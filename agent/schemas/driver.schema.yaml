@@ -1,0 +1,45 @@
+# driver.schema.yaml — validation schema for agent/driver.yaml
+# Validate with: acp.driver-yaml.sh validate
+# See: agent/patterns/local.driver-dispatch-directive.md
+---
+required:
+  - drivers
+
+properties:
+  drivers:
+    type: object
+    description: "Map of tool-name to driver configuration"
+    additionalProperties:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum: [native, mcp, http, custom]
+          description: >
+            Driver dispatch type:
+              native — run locally (default, no config needed)
+              mcp    — delegate to an MCP server (requires: server, method)
+              http   — delegate to an HTTP endpoint (requires: url)
+              custom — run an arbitrary shell command (requires: command)
+        server:
+          type: string
+          description: "MCP server name as declared in the host IDE's MCP config (required for type: mcp)"
+        method:
+          type: string
+          description: "MCP method to invoke (required for type: mcp)"
+        url:
+          type: string
+          description: "HTTP endpoint URL (required for type: http)"
+        command:
+          type: string
+          description: "Shell command to run instead of default tool (required for type: custom)"
+        timeout_ms:
+          type: integer
+          description: "Optional timeout in milliseconds for the driver call (default: 30000)"
+        env:
+          type: object
+          description: "Optional environment variables to inject into the driver call"
+          additionalProperties:
+            type: string
