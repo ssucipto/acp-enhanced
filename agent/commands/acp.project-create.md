@@ -289,7 +289,9 @@ desktop.ini
 agent/reports/
 agent/clarifications/
 agent/feedback/
-agent/drafts/
+agent/drafts/**
+!agent/drafts/.gitkeep
+!agent/drafts/draft.template.md
 
 # Logs
 *.log
