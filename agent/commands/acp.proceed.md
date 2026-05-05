@@ -262,6 +262,14 @@ Display the following informational header, then continue immediately:
 
 These updates MUST be written to progress.yaml before moving to Step 2. Do not defer them.
 
+**Driver delegation** (when `agent/driver.yaml` present):
+
+> This section is a no-op if `agent/driver.yaml` does not exist.
+
+- Before invoking `git` operations, check `driver_is_native git` (source `agent/scripts/acp.driver-yaml.sh` first)
+- If not native, delegate to the configured backend via `driver_query git server` / `driver_query git method`
+- If `--verbose` flag is set, log the delegation decision: "Delegating git → [type] [server]::[method]"
+
 **DO NOT spend time analyzing or planning. MOVE TO STEP 2 IMMEDIATELY.**
 
 ### 1.5. Read Contextual Key Files
