@@ -525,12 +525,12 @@ milestones:
   M29:
     name: Upstream Integration Audit
     priority: 3
-    status: in_progress
-    progress: 80
+    status: completed
+    progress: 100
     started: 2026-05-05
-    completed: null
+    completed: 2026-05-05
     estimated_weeks: 1
-    tasks_completed: 4
+    tasks_completed: 5
     tasks_total: 5
     file: agent/milestones/milestone-29-upstream-integration-audit.md
     notes: |
@@ -3178,13 +3178,18 @@ progress:
     - id: task-158
       name: Wiki domain sync
       priority: 3
-      status: not_started
-      started: null
+      status: completed
+      started: 2026-05-05T00:00:00Z
       file: agent/tasks/milestone-29-upstream-integration-audit/task-158-wiki-domain-sync.md
       estimated_hours: 1
-      actual_hours: null
-      completed_date: null
-      notes: Sync agent/wiki/domain.yml with upstream additions; mark ACP Enhanced-only entries
+      actual_hours: 0.5
+      completed_date: 2026-05-05
+      notes: >-
+        Synced agent/wiki/domain.yml to actual codebase state. Added 6 missing
+        commands (acp.commit, acp.cost-report, acp.decide, acp.memory-sync,
+        acp.route, acp.wiki-update), added local: category for LOCAL-ONLY commands,
+        updated count 51→58, added 2 missing E2E test suites (acp.drafts,
+        acp.opencode-commands), updated last_verified to 2026-05-05.
 
     - id: task-184
       name: acp.install.sh local.* exclusion for skills
