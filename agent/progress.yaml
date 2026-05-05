@@ -6,7 +6,7 @@ project:
   version: 6.3.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M33
+  current_milestone: M35
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M24 complete: AGENT.md fully updated with
@@ -599,12 +599,12 @@ milestones:
   M33:
     name: Pluggable Driver System
     priority: 2
-    status: in_progress
-    progress: 80
+    status: completed
+    progress: 100
     started: 2026-05-05
-    completed: null
+    completed: 2026-05-06
     estimated_weeks: 2
-    tasks_completed: 4
+    tasks_completed: 5
     tasks_total: 5
     file: agent/milestones/milestone-33-pluggable-driver-system.md
     notes: |
