@@ -33,11 +33,12 @@ Create `agent/patterns/local.upstream-integration-runbook.md` with sections:
 1. Read upstream CHANGELOG since last sync version (look for `key_fact` in sessions.md for last checked version)
 2. For each new feature: check ACP Enhanced codebase before assuming it's missing
 3. Run code-level audit: `grep -r "feature-keyword" agent/commands/ agent/scripts/`
-4. For any genuine gap: check the 4 constraints (macOS, no-deps, token budget, naming)
-5. Assign HAVE/PARTIAL/PORT/DEFER in parity matrix
-6. Update `agent/design/local.upstream-parity-matrix.md`
-7. For PORT items: create tasks in next available milestone
-8. Update ADR-7 and ADR-8 if integration strategy changes
+4. For features that exist in BOTH: open both the upstream file AND the ACP Enhanced file and compare line-by-line. If they differ intentionally → assign DIVERGED (not HAVE) and document the divergence. If they are equivalent → assign HAVE with a citation of both files.
+5. For any genuine gap: check the 4 constraints (macOS, no-deps, token budget, naming)
+6. Assign HAVE/PARTIAL/DIVERGED/PORT/DEFER in parity matrix
+7. Update `agent/design/local.upstream-parity-matrix.md`
+8. For PORT items: create tasks in next available milestone; each task must include the post-port safety gate: run `bash run-e2e-tests.sh` and verify the ported code itself is bash 3.2-compatible
+9. Update ADR-7 and ADR-8 if integration strategy changes
 
 ### 3. Naming Translation Rule
 ```
@@ -47,8 +48,10 @@ Rule: globally replace @acp.<name> → /acp-<name>
       @acp-<name> is NEVER valid — hyphen after @ is wrong
 ```
 
-### 4. Why No Git Merge
-- Upstream rewrote history at v6.0.0 (no shared ancestry)
+### 4. Why No Git Merge — CRITICAL
+- **NEVER run `git merge upstream/mainline`** — upstream rewrote history at v6.0.0; no shared ancestor exists; merge will corrupt the ACP Enhanced repository
+- **NEVER `git cherry-pick` upstream commits** — ACP Enhanced has diverged significantly across every subsystem; cherry-pick without bidirectional analysis will silently overwrite intentional differences
+- All upstream integration is manual: read upstream files → compare with ACP Enhanced files → port only after analysis
 - See ADR-7 for full context
 
 ### 5. Reference Documents
@@ -62,9 +65,11 @@ Rule: globally replace @acp.<name> → /acp-<name>
 - `agent/patterns/local.upstream-integration-runbook.md`
 
 ## Verification
-- [ ] File exists and is ≤60 lines
+- [ ] File exists and is ≤80 lines
 - [ ] Naming translation rule section is present and correct
-- [ ] Step-by-step process has ≥7 steps
+- [ ] Step-by-step process has ≥8 steps (including DIVERGED comparison step and post-port safety gate)
+- [ ] "Why No Git Merge" section explicitly states NEVER git merge and NEVER git cherry-pick
+- [ ] DIVERGED decision code is defined
 - [ ] References to ADR-7, ADR-8, and parity matrix are present
 
 ## User-Observable Acceptance

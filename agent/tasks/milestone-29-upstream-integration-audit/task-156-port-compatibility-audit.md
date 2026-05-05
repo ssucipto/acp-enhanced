@@ -37,6 +37,10 @@ Add a "Compatibility" section to `agent/design/local.upstream-parity-matrix.md` 
 |---|---|---|---|---|---|
 | driver.yaml system | ✅ | ✅ | ✅ | needs rename | PORT with renaming |
 
+**Post-port safety gate** (required before closing any PORT implementation task):
+
+5. After implementing the ported feature in ACP Enhanced: run `bash run-e2e-tests.sh` and confirm ≥95% pass rate. Verify the ported code itself is macOS bash 3.2-compatible — the upstream compat check above proves the upstream original is compatible, NOT that your ACP Enhanced port is. Read the ACP Enhanced implementation you wrote and apply the same bash 4+ construct checklist to it.
+
 ## Expected Output
 
 ### Files Updated
@@ -47,6 +51,7 @@ Add a "Compatibility" section to `agent/design/local.upstream-parity-matrix.md` 
 - [ ] Every macOS incompatibility has a POSIX workaround noted (or escalated to DEFER)
 - [ ] Any feature with no viable workaround is downgraded from PORT to DEFER
 - [ ] Final verdict column is one of: `PORT as-is`, `PORT with changes`, `DEFER`
+- [ ] Post-port safety gate documented: `run-e2e-tests.sh` pass requirement stated for each PORT item
 
 ## User-Observable Acceptance
 `agent/design/local.upstream-parity-matrix.md` has a Compatibility section with verdict for every PORT item. No PORT item proceeds to implementation without a GREEN macOS + No-Deps verdict.
