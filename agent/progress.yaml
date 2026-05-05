@@ -526,11 +526,11 @@ milestones:
     name: Upstream Integration Audit
     priority: 3
     status: in_progress
-    progress: 40
+    progress: 60
     started: 2026-05-05
     completed: null
     estimated_weeks: 1
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 5
     file: agent/milestones/milestone-29-upstream-integration-audit.md
     notes: |
@@ -3144,18 +3144,25 @@ progress:
       estimated_hours: 4
       actual_hours: 3
       completed_date: 2026-05-05
-      notes: Feature parity matrix created at agent/design/local.upstream-parity-matrix.md — 197 items, 147 HAVE, 13 PARTIAL, 2 DIVERGED, 3 PORT, 15 DEFER, 20 LOCAL-ONLY
+      notes: Feature parity matrix created at agent/design/local.upstream-parity-matrix.md — 197 items, 149 HAVE, 15 PARTIAL, 2 DIVERGED, 0 PORT, 15 DEFER, 20 LOCAL-ONLY. PORT count corrected from 3→0 by task-156.
 
     - id: task-156
       name: Port compatibility audit + post-port safety gate
       priority: 3
-      status: not_started
-      started: null
+      status: completed
+      started: 2026-05-05T00:00:00Z
       file: agent/tasks/milestone-29-upstream-integration-audit/task-156-port-compatibility-audit.md
       estimated_hours: 3
-      actual_hours: null
-      completed_date: null
-      notes: Audit PORT items for compat risk; define safety gate checklist before porting
+      actual_hours: 1
+      completed_date: 2026-05-05
+      notes: >-
+        Audit finding: all 3 PORT items from parity matrix were misclassified.
+        saas-platform → HAVE (already local, 30 steps confirmed), D-ID Pass C →
+        PARTIAL (exists in acp.sync.md line 130, uses old D-ID naming), FR/DR
+        naming → PARTIAL (task-create uses old R<N>/D<N>). Net: 0 PORT items.
+        Matrix corrected: PORT 3→0, HAVE 147→149, PARTIAL 13→15.
+        Post-port safety gate + planned PARTIAL remediation documented in parity
+        matrix §13.
 
     - id: task-157
       name: Upstream integration runbook

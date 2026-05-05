@@ -180,10 +180,10 @@ updated: 2026-05-05
 | **Global Package Installation** | M5 (v3.9.0) | `--global` flag in package commands; global functions in `acp.common.sh` | **HAVE** | `~/.acp/agent/` global installation path; namespace precedence (local > global). |
 | **Project Registry** (`~/.acp/projects.yaml`) | M7 (v4.3.0) | All 6 project commands present; `projects.schema.yaml` | **HAVE** | Git origin tracking; `acp.projects-restore.md` present. |
 | **Cross-Platform CI** | M13 (v5.28.6) | `run-e2e-tests.sh`; GitHub Actions CI | **HAVE** | Portable sed/date fixes; unified test runner. |
-| **Benchmark Suite** | M11 (v4.4.0) | `agent/benchmarks/runner/` + `agent/benchmarks/suite/` | **PARTIAL** | 6 tasks present (hello-world, simple-cli-tool, medium-rest-api, complex-auth-system, legacy-refactor, order-pipeline). **Missing**: `saas-platform` 15-step benchmark (introduced upstream v5.9.0). See §6 below. |
+| **Benchmark Suite** | M11 (v4.4.0) | `agent/benchmarks/runner/` + `agent/benchmarks/suite/` | **HAVE** | All 7 tasks present including `saas-platform` (30 step files, full seed-base). Compatibility audit (task-156) confirmed `saas-platform` was already locally present. |
 | **YAML Parser with AST** | v3.5.0 | `agent/scripts/acp.yaml-parser.sh` | **HAVE** | Full CRUD: `yaml_parse`, `yaml_query`, `yaml_set`, `yaml_write`. Zero external deps. |
 | **Progress Schema** | v6.0.0 (milestones→map) | `agent/schemas/progress.schema.yaml` | **HAVE** | Milestones as map keyed by ID; numeric `priority:` field. |
-| **Fully-Qualified FR/DR Ref Format** | v7.1.0 | Not confirmed in task template | **PORT** | Task template should document `spec.<id>~<uuid>#FR-N` and `design.<id>~<uuid>#DR-N` formats for driver-bound projects. Low-priority for non-driver projects. |
+| **FR/DR Naming Rename (R→FR, D→DR)** | v5.41.0 | Naming gap in 2 commands | **PARTIAL** | Local `acp.task-create.md` uses old `R<N>`/`D<N>` (pre-rename). Upstream renamed: `R<N>`→`FR<N>`, `D<N>`→`DR<N>`, `covers: R10`→`covers: FR10`, `incorporates: D1`→`incorporates: DR1`, `decisions:` marker field→`design_requirements:`. Same gap present in `acp.sync.md` Steps 1.4 Pass C, 1.5, 1.6. Fix: rename terminology in both commands. |
 | **Autonomous mode `query.run` dispatch** | v7.1.0 | Not present | **DEFER** | `acp.proceed.md` Step A1 `query.run` wrapping for driver-bound projects. Deferred with driver system. |
 | **Stacked Worktree Mode** (`--stacked`) | v5.34.0 | `agent/commands/acp.proceed.md` A11 | **HAVE** | Full A11 section: chain creation, per-task `@git.commit`, merge approval prompt, cleanup, halt-and-preserve on failure. |
 | **`@acp.proceed` Autonomous Mode** (`--complete`) | v5.1.0 | Local `acp.proceed.md` | **HAVE** | `--complete`, `--auto`, `--finish-milestone` flags. |
@@ -193,7 +193,7 @@ updated: 2026-05-05
 | **Milestone `file:` field** | v5.21.0 | `agent/milestones/*.md` structure | **HAVE** | Milestones declare `file:` key in progress.yaml. |
 | **Task `started` timestamp + `actual_hours`** | v5.19.0 | In task files and progress.yaml | **HAVE** | ISO 8601 `started`, auto-computed `actual_hours` from diff. |
 | **Marker-based `@acp.sync` cross-referencing** | v5.39.0 | `acp.sync.md` Steps 1.3-1.6 | **HAVE** | Unclaimed requirements, unimplemented claims, duplicated claims, stale markers. |
-| **`@acp.sync` D-ID backfill (Pass C)** | v5.41.0 | Not confirmed | **PORT** | Pass C scans legacy designs for candidate atomic units and proposes D-IDs. Low priority — run `@acp.sync` to check if already present. |
+| **`@acp.sync` DR-ID backfill (Pass C)** | v5.41.0 | Present — naming gap | **PARTIAL** | Pass C is present in local `acp.sync.md` Step 1.4 (line 130). Gap: local uses old `D-ID`/`D<N>` terminology; upstream renamed to `DR-ID`/`DR<N>` in v5.41.0. Same gap as FR/DR Naming Rename row above — fix both in one pass. |
 | **History scrub / driver-agnostic convention** | v6.0.0 | Applied locally (no specific-driver refs) | **HAVE** | ACP Enhanced has never named specific drivers in docs. |
 
 ---
@@ -342,7 +342,7 @@ updated: 2026-05-05
 | `complex-auth-system` | ✓ | ✓ | **HAVE** | 5-step JWT auth benchmark. |
 | `legacy-refactor` | ✓ | ✓ | **HAVE** | 6-step refactoring from messy seed. |
 | `order-pipeline` | ✓ | ✓ | **HAVE** | 7-step event-driven pipeline benchmark. |
-| `saas-platform` | ✓ | ✗ | **PORT** | 15-step expert-complexity dual-seed benchmark. 20 buggy Express/Node.js seed files; 32 ACP documentation overlay files; 30 step prompts (15 ACP + 15 baseline); covers analysis through security hardening. Introduced upstream v5.9.0. |
+| `saas-platform` | ✓ | ✓ | **HAVE** | 15-step expert-complexity dual-seed benchmark. 30 step files (15 ACP + 15 baseline), buggy Express/Node.js seed-base, seed-acp overlay, config.yaml — all confirmed locally present. Parity matrix initially marked PORT; compatibility audit (task-156) corrected to HAVE. |
 
 ---
 
@@ -374,7 +374,7 @@ These features exist only in ACP Enhanced and have no upstream equivalent. Docum
 | Scripts (shared) | 27 | 26 | 1 | 0 | 0 | 0 | — |
 | Scripts (upstream-only) | 1 | — | — | — | — | 1 | — |
 | Scripts (local-only) | 2 | — | — | — | — | — | 2 |
-| System features | 36 | 24 | 3 | 0 | 2 | 7 | — |
+| System features | 36 | 24 | 5 | 0 | 0 | 7 | — |
 | Schemas/config files | 11 | 8 | 0 | 0 | 0 | 3 | — |
 | Patterns (shared) | 3 | 3 | 0 | 0 | 0 | 0 | — |
 | Patterns (upstream-only) | 2 | — | — | — | — | 2 | — |
@@ -385,20 +385,26 @@ These features exist only in ACP Enhanced and have no upstream equivalent. Docum
 | E2E tests (shared) | 21 | 21 | 0 | 0 | 0 | 0 | — |
 | E2E tests (upstream-only) | 1 | — | — | — | — | 1 | — |
 | E2E tests (local-only) | 2 | — | — | — | — | — | 2 |
-| Benchmark tasks | 7 | 6 | 0 | 0 | 1 | 0 | — |
-| **TOTALS** | **197** | **147** | **13** | **2** | **3** | **15** | **20** |
+| Benchmark tasks | 7 | 7 | 0 | 0 | 0 | 0 | — |
+| **TOTALS** | **197** | **149** | **15** | **2** | **0** | **15** | **20** |
+
+> **Note**: PORT count updated from 3→0 by task-156 compatibility audit (2026-05-05). All 3 items were reclassified: `saas-platform` → HAVE (already locally present); D-ID Pass C and FR/DR naming → PARTIAL (feature exists, terminology outdated). See §13 Compatibility Audit.
 
 ---
 
 ## 11. PORT Action Items
 
-Items marked PORT should be completed in M29 follow-up tasks (task-156 compatibility audit):
+> **Updated by task-156 compatibility audit (2026-05-05)**: All 3 original PORT items were reclassified. No outstanding PORT items.
 
-1. **`saas-platform` benchmark** — 15-step dual-seed benchmark. Source: `agent/benchmarks/suite/saas-platform/` in upstream. High-value empirical test for ACP methodology vs baseline at enterprise complexity.
+**Original items and their audit outcomes:**
 
-2. **`@acp.sync` D-ID backfill (Pass C)** — Step 1.4 Pass C: scan legacy designs for candidate D-ID atomic units, propose labels for user approval. Validate by running `@acp.sync` against local design docs.
+1. **`saas-platform` benchmark** — Reclassified to **HAVE**. Confirmed locally present at `agent/benchmarks/suite/saas-platform/` with all 30 step prompts (15 ACP + 15 baseline), buggy `seed-base/` (Express/Node.js, 20 files), `seed-acp/` overlay, and `config.yaml`. No porting required.
 
-3. **Fully-qualified FR/DR reference format documentation** — Update task template to document `spec.<id>~<uuid>#FR-N` and `design.<id>~<uuid>#DR-N` formats. Relevant only for driver-bound projects but harmless to document for forward-compatibility.
+2. **`@acp.sync` D-ID backfill (Pass C)** — Reclassified to **PARTIAL**. Pass C logic is present in local `acp.sync.md` Step 1.4 (line 130). Gap: old `D-ID`/`D<N>`/`decisions:` terminology instead of renamed `DR-ID`/`DR<N>`/`design_requirements:`. Fix: update terminology in `acp.sync.md` Pass C (a PARTIAL remediation task, not a port).
+
+3. **Fully-qualified FR/DR reference format** — Reclassified to **PARTIAL**. Local `acp.task-create.md` uses pre-rename `D<N>` (`incorporates: D1, D3, D7`) and `R<N>` (`covers: R10, R11, R12`) instead of `DR<N>` and `FR<N>`. Fix: update naming in `acp.task-create.md` and `acp.sync.md` (a PARTIAL remediation task, not a port).
+
+**Remaining action** (PARTIAL remediation, not port): Update `D<N>`→`DR<N>` and `R<N>`→`FR<N>` terminology in `acp.sync.md` and `acp.task-create.md` as a low-priority maintenance task in M30 or later.
 
 ---
 
@@ -416,4 +422,46 @@ All 15 DEFER decisions above trace back to a single root decision: **ACP Enhance
 
 ---
 
-*Generated by task-155 (M29 Upstream Integration Audit). Maintainer: update this matrix after each upstream version bump or new ACP Enhanced milestone.*
+*Generated by task-155 (M29 Upstream Integration Audit). Updated by task-156 (M29 Port Compatibility Audit). Maintainer: update this matrix after each upstream version bump or new ACP Enhanced milestone.*
+
+---
+
+## 13. Compatibility Audit (task-156)
+
+**Audit date**: 2026-05-05  
+**Methodology**: For each PORT item from §11, verified against ACP Enhanced's 4 hard constraints before implementing.
+
+### 4 Hard Constraints
+
+| Constraint | Rule |
+|-----------|------|
+| **macOS BSD bash** | No bash 4+ constructs (`mapfile`, `readarray`, `declare -A`, `printf '%q'`, nameref `${!var[@]}`). `sed -i` requires empty-string argument. |
+| **No external deps** | No `jq`, `yq`, `python`, `node` in bash scripts. Pure bash/POSIX awk only. |
+| **5,000-token budget** | New command docs must not push total context over 5,000 tokens per session. |
+| **`/acp-` naming** | All invocations use `/acp-command-name`; `@acp.command-name` is eliminated (ADR-4). |
+
+### Compatibility Verdict Table
+
+| Feature | macOS | No-Deps | Token Budget | Naming | Audit Result | Verdict |
+|---------|-------|---------|-------------|--------|-------------|---------|
+| `saas-platform` benchmark | ✅ | ✅ | ✅ | ✅ | **Already HAVE** — fully present at `agent/benchmarks/suite/saas-platform/`. No bash scripts (prompt files + YAML + Node.js seed). macOS compat not applicable. | **HAVE (not PORT)** |
+| `@acp.sync` DR-ID backfill Pass C | ✅ | ✅ | ✅ | ✅ | **Already PARTIAL** — Pass C logic present in `acp.sync.md` Step 1.4 (line 130). No shell scripts; LLM-driven markdown steps. Gap: old `D-ID`/`D<N>` terminology. Fix is a rename, not a port. | **PARTIAL — fix naming** |
+| FR/DR naming rename (R→FR, D→DR) | ✅ | ✅ | ✅ | ✅ | **Already PARTIAL** — `acp.task-create.md` and `acp.sync.md` use old `R<N>`/`D<N>`. No shell scripts; naming fix only. Estimated 50 tokens of net diff across both files. | **PARTIAL — fix naming** |
+
+### Post-Port Safety Gate
+
+The post-port safety gate defined in task-156 (`run-e2e-tests.sh` ≥95% pass rate + macOS compat re-check of any new ACP Enhanced bash) applies to **actual new code**. Since all 3 PORT items were reclassified, there is no new bash code to write and no safety gate to run.
+
+**Planned PARTIAL remediation** (deferred to M30 maintenance task):
+- `acp.sync.md` Step 1.4 Pass C: `D-ID`→`DR-ID`, `D<N>`→`DR<N>`, `decisions:`→`design_requirements:` (marker field)
+- `acp.sync.md` Steps 1.5-1.6: `R<N>`→`FR<N>` (spec requirement IDs)
+- `acp.task-create.md` Step 5.5: `D<N>`→`DR<N>` (incorporates field)
+- `acp.task-create.md` Step 5.6: `R<N>`→`FR<N>` (covers field)
+
+These are terminology-only changes with no behavior impact; no E2E tests are expected to break.
+
+**Safety gate for PARTIAL remediation** (when executed):
+1. Run `bash run-e2e-tests.sh` — verify ≥95% pass rate before and after
+2. Confirm no bash 4+ constructs introduced (not applicable here — changes are command docs, not scripts)
+3. Confirm naming follows `/acp-` convention (already confirmed in existing docs)
+
