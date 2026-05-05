@@ -1,0 +1,42 @@
+# ACP Driver Configuration
+# Routes ACP tool invocations (git, shell, lint, etc.) to MCP servers or custom backends.
+# Leave type: native (or omit the driver entirely) to use local tools — the default.
+#
+# This file is optional. Delete it if you do not need MCP or custom backend routing.
+# See: agent/patterns/local.driver-dispatch-directive.md
+# See: agent/patterns/local.workflow-override-directive.md
+# See: agent/schemas/driver.schema.yaml (validation schema)
+---
+drivers:
+  git:
+    type: native   # default — run git locally
+    # To delegate to an MCP git server, uncomment:
+    # type: mcp
+    # server: git-mcp         # MCP server name from IDE config
+    # method: git_exec        # MCP method to call
+
+  shell:
+    type: native   # default — run shell commands locally
+    # type: mcp
+    # server: shell-mcp
+    # method: shell_exec
+
+  lint:
+    type: native   # default — run linters locally
+    # type: mcp
+    # server: lint-mcp
+    # method: lint_file
+
+  # Example: route HTTP checks to a custom script
+  # http-check:
+  #   type: custom
+  #   command: "scripts/http-check.sh"
+  #   timeout_ms: 5000
+
+  # Example: delegate test execution to an HTTP service
+  # test:
+  #   type: http
+  #   url: "http://localhost:8080/run-tests"
+  #   timeout_ms: 60000
+  #   env:
+  #     TEST_SUITE: "unit"
