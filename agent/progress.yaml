@@ -6,7 +6,7 @@ project:
   version: 6.3.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M31
+  current_milestone: M32
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M24 complete: AGENT.md fully updated with
@@ -563,19 +563,19 @@ milestones:
   M31:
     name: E2E Test Coverage (Marker + Spec)
     priority: 3
-    status: in_progress
-    progress: 80
+    status: completed
+    progress: 100
     started: 2026-05-05
-    completed: null
+    completed: 2026-05-05
     estimated_weeks: 1
-    tasks_completed: 4
+    tasks_completed: 5
     tasks_total: 5
     notes: |
-      E2E tests for acp.meta-scan.sh, @acp.spec, @acp.sync, and 8 script-bound commands.
-      task-162: meta-scan e2e tests
-      task-163: spec command e2e tests
-      task-164: sync command e2e tests
-      task-165: script-bound command e2e tests
+      ✅ M31 COMPLETE! All 7 new E2E test files wired into run-e2e-tests.sh runner.
+      task-162: meta-scan e2e tests (23 assertions) — commit 86996ae
+      task-163: spec command e2e tests (10 assertions) — commit ec4bcf4
+      task-164: sync command e2e tests (8 assertions) — commit 22aea56
+      task-165: script-bound command e2e tests (30 assertions) — commit 122eddf
       task-166: wire new tests into run-e2e-tests.sh runner
 
   M32:
