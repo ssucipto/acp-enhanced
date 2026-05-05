@@ -620,12 +620,12 @@ milestones:
   M34:
     name: Command Naming Convention
     priority: 4
-    status: not_started
-    progress: 0
-    started: null
-    completed: null
+    status: completed
+    progress: 100
+    started: 2026-05-05
+    completed: 2026-05-05
     estimated_weeks: 0
-    tasks_completed: 0
+    tasks_completed: 2
     tasks_total: 2
     file: agent/milestones/milestone-34-command-naming-convention.md
     notes: |
