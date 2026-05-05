@@ -128,6 +128,7 @@ touch "$TARGET_DIR/agent/milestones/.gitkeep"
 touch "$TARGET_DIR/agent/patterns/.gitkeep"
 touch "$TARGET_DIR/agent/tasks/.gitkeep"
 touch "$TARGET_DIR/agent/clarifications/.gitkeep"
+touch "$TARGET_DIR/agent/drafts/.gitkeep"
 touch "$TARGET_DIR/agent/index/.gitkeep"
 touch "$TARGET_DIR/agent/specs/.gitkeep"
 touch "$TARGET_DIR/agent/artifacts/.gitkeep"
@@ -141,7 +142,9 @@ cat > "$TARGET_DIR/agent/.gitignore" << 'EOF'
 reports/
 clarifications/
 feedback/
-drafts/
+drafts/**
+!drafts/.gitkeep
+!drafts/draft.template.md
 preferences/
 EOF
 
@@ -225,6 +228,11 @@ fi
 # Copy artifact templates
 if [ -d "$TEMP_DIR/agent/artifacts" ]; then
     find "$TEMP_DIR/agent/artifacts" -maxdepth 1 -name "*.template.md" -exec cp {} "$TARGET_DIR/agent/artifacts/" \;
+fi
+
+# Copy drafts template (idempotent — only if absent)
+if [ -d "$TEMP_DIR/agent/drafts" ] && [ ! -f "$TARGET_DIR/agent/drafts/draft.template.md" ]; then
+    cp "$TEMP_DIR/agent/drafts/draft.template.md" "$TARGET_DIR/agent/drafts/draft.template.md" 2>/dev/null || true
 fi
 
 # Copy configurables (preference schema definitions)
