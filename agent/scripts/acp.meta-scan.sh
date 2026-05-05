@@ -74,8 +74,8 @@ if [ -z "$files" ]; then
 fi
 
 # Pipe file list to awk as stdin; awk reads filenames and processes each.
-# Using xargs ensures proper handling of paths with spaces or newlines.
-printf '%s\n' "$files" | xargs -d '\n' awk -v kinds="$kinds" '
+# Use xargs -0 (null-separated) for macOS BSD compatibility — xargs -d is GNU-only.
+printf '%s\n' "$files" | tr '\n' '\0' | xargs -0 awk -v kinds="$kinds" '
     function strip(s) {
         # Strip a leading run of comment characters + whitespace.
         # Handles: <!-- // -- # ;; * (*
