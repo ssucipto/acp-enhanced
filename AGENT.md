@@ -19,11 +19,12 @@
 6. [Core Components](#core-components)
 7. [Metadata Markers](#metadata-markers)
 8. [Specs](#specs)
-9. [How to Use ACP Enhanced](#how-to-use-acp-enhanced)
-10. [Three-Persona Deployment Model](#three-persona-deployment-model)
-11. [Pattern Significance & Impact](#pattern-significance--impact)
-12. [Problems This Pattern Solves](#problems-this-pattern-solves)
-13. [ACP Commands](#acp-commands)
+9. [Command Invocation](#command-invocation)
+10. [How to Use ACP Enhanced](#how-to-use-acp-enhanced)
+11. [Three-Persona Deployment Model](#three-persona-deployment-model)
+12. [Pattern Significance & Impact](#pattern-significance--impact)
+13. [Problems This Pattern Solves](#problems-this-pattern-solves)
+14. [ACP Commands](#acp-commands)
 13. [ACP Preferences System](#acp-preferences-system)
 14. [Global Package Discovery](#global-package-discovery)
 15. [Project Registry System](#project-registry-system)
@@ -589,6 +590,38 @@ Specifications live in `agent/specs/` and are created via `/acp-spec`. They defi
 
 See [`agent/specs/spec.template.md`](agent/specs/spec.template.md) for the full template.  
 See [`acp.spec.md`](agent/commands/acp.spec.md) for the `/acp-spec` command reference.
+
+---
+
+## Command Invocation
+
+Every ACP command has **three files** (all must exist):
+
+| Surface | File location | Format | Example |
+|---|---|---|---|
+| Command directive | `agent/commands/acp.NAME.md` | dot | `acp.plan.md` |
+| VS Code slash cmd | `.github/prompts/acp-NAME.prompt.md` | hyphen | `acp-plan.prompt.md` |
+| opencode cmd | `.opencode/commands/acp-NAME.md` | hyphen | `acp-plan.md` |
+| User invocation | `/acp-NAME` in chat | slash + hyphen | `/acp-plan` |
+| Body references | `/acp-NAME` in command docs | slash + hyphen | `/acp-plan` |
+
+**Invocation chain**:
+```
+user types /acp-plan
+  → IDE reads .github/prompts/acp-plan.prompt.md (or .opencode/commands/acp-plan.md)
+    → prompt says "Read and execute agent/commands/acp.plan.md"
+      → agent executes acp.plan.md steps
+```
+
+**Critical rules**:
+- ✅ `/acp-plan` — correct user invocation
+- ✅ `acp.plan.md` — correct dot-notation filename
+- ❌ `@acp-plan` — NEVER valid (dash after `@` is wrong)
+- ❌ `@acp plan` — NEVER valid (space is wrong)
+
+**Porting rule**: Upstream uses `@acp.<name>` as invocation syntax. When porting upstream content: replace every `@acp.<name>` → `/acp-<name>`.
+
+See ADR-4 (naming convention) and ADR-6 (triple-file architecture) in [`agent/memory/decisions.md`](agent/memory/decisions.md).
 
 ---
 
