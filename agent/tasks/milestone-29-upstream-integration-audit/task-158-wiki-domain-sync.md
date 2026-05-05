@@ -2,13 +2,13 @@
 id: task-158
 milestone: M29
 title: Sync agent/wiki/domain.yml to current codebase state
-status: not_started
+status: completed
 priority: 3
 complexity: low
 estimated_hours: 1
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-05T00:00:00Z
+completed: 2026-05-05
 ---
 
 ## Objective
