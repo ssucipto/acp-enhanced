@@ -2,7 +2,42 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
-- date: 2026-05-05
+- date: 2026-05-06
+  executor: copilot
+  tasks: [task-141, task-142, task-143, task-144]
+  done:
+    - create-TaskList-tsx-task-rows-status-badge-hours
+    - create-MilestoneTree-tsx-expand-collapse-hierarchy-expand-all-collapse-all
+    - update-milestones-route-table-tree-tab-toggle
+    - create-search-ts-fuse-js-index-threshold-0.35-milestone-task-weights
+    - create-SearchBar-tsx-controlled-input
+    - create-FilterBar-tsx-all-in-progress-completed-not-started-tabs
+    - create-search-route-tsx-slash-search-q-results-page-grouped-milestones-tasks
+    - wire-filter-bar-into-milestones-route-status-filter-composes-with-table-tree
+    - create-NextSteps-tsx-blue-callout-next-steps-array
+    - create-ProjectHeader-tsx-name-version-status-description
+    - create-OverallProgress-tsx-milestone-completion-bar-counts
+    - update-root-tsx-gray-900-sidebar-searchbar-header-outlet-layout
+    - update-index-tsx-polished-home-page-replaces-raw-json
+    - create-acp-visualize-md-command-doc-launch-tanstack-start-dashboard
+    - update-agent-md-add-acp-visualize-to-workflow-commands
+    - mark-M25-completed-100pct-8of8-tasks-2026-05-06
+    - bump-version-6.4.8-to-6.4.12-four-increments
+    - commit-e86406d-task-141-visualizer
+    - commit-e913c3d-task-142-visualizer
+    - commit-936ba37-task-143-visualizer
+    - commit-42e13fd-task-141-acp-enhanced-tracking
+    - commit-d4f13fe-task-142-acp-enhanced-tracking
+    - commit-b67bc24-task-143-acp-enhanced-tracking
+    - commit-7a99f46-task-144-and-M25-complete-acp-enhanced
+  deferred: {}
+  key_fact: |
+    TanStack Start v1.167.64: `createAPIFileRoute` from `@tanstack/react-start/api`
+    does NOT exist — that subpath has no export. Use `createServerFn` with
+    `.inputValidator()` (NOT `.input()`). Import from root `@tanstack/react-start`.
+    Pattern saved to patterns.md as `tanstack-start-v1-server-fn`.
+
+
   executor: copilot
   tasks: [task-156, task-157, task-158]
   done:
