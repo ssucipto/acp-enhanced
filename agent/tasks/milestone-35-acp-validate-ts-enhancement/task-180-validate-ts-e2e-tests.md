@@ -2,13 +2,13 @@
 id: task-180
 milestone: M35
 title: Write acp.validate-ts.test.sh with ≥10 assertions
-status: not_started
+status: completed
 priority: 3
 complexity: medium
 estimated_hours: 2
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-06T00:00:00Z
+completed: 2026-05-06
 ---
 
 ## Objective
