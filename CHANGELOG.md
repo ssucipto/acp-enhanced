@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.12] — 2026-05-06
+
+### Added
+- `agent/commands/acp.visualize.md` — `@acp.visualize` command: launch TanStack Start dashboard for current project
+
+### Changed
+- `AGENT.md` — `@acp.visualize` added to Workflow commands section
+- `agent/progress.yaml` — M25 complete: 87% → 100% (8/8 tasks); status: in_progress → completed
+
+### Milestone
+- ✅ **M25 ACP Progress Visualizer (P0 MVP)** — COMPLETE
+  - task-137: Bootstrap + TanStack Start app
+  - task-138: YAML parser + TypeScript data model
+  - task-139: Server functions + file-watcher auto-refresh
+  - task-140: Milestone table view (@tanstack/react-table)
+  - task-141: Milestone tree view with expand/collapse
+  - task-142: Fuse.js search + status filter
+  - task-143: Dashboard shell (sidebar, ProjectHeader, OverallProgress, NextSteps)
+  - task-144: @acp.visualize command
+
+---
+
 ## [6.4.11] — 2026-05-06
 
 ### Added
