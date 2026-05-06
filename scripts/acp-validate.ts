@@ -1,7 +1,89 @@
 import matter from "gray-matter";
 import yaml from "js-yaml";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, existsSync, readdirSync } from "fs";
 import path from "path";
+
+// ── Shared types ─────────────────────────────────────────────
+interface ValidationError {
+  file: string;
+  line: number;
+  message: string;
+  severity: "error" | "warning";
+}
+
+// ── Placeholder detection ─────────────────────────────────────
+const COMMANDS_DIR = path.join("agent", "commands");
+
+function validatePlaceholders(filePath: string): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(filePath)) return errors;
+
+  const lines = readFileSync(filePath, "utf8").split("\n");
+  let inCodeBlock = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // Track fenced code blocks
+    if (/^```/.test(line)) {
+      inCodeBlock = !inCodeBlock;
+      continue;
+    }
+    if (inCodeBlock) continue;
+
+    // Only check lines 3 and 4 (0-indexed: 2 and 3)
+    if (i === 2 || i === 3) {
+      const placeholderPattern = /\{[A-Za-z_][A-Za-z0-9_]*\}/g;
+      const matches = line.match(placeholderPattern);
+      if (matches) {
+        for (const match of matches) {
+          errors.push({
+            file: filePath,
+            line: i + 1,
+            message: `Unresolved placeholder: ${match}`,
+            severity: "error",
+          });
+        }
+      }
+    }
+  }
+
+  return errors;
+}
+
+function runPlaceholderScan(): void {
+  if (!existsSync(COMMANDS_DIR)) {
+    console.log(`Placeholder check: ${COMMANDS_DIR} not found — skipped`);
+    return;
+  }
+
+  const commandFiles = readdirSync(COMMANDS_DIR)
+    .filter((f) => f.endsWith(".md") && !f.endsWith(".template.md"))
+    .map((f) => path.join(COMMANDS_DIR, f));
+
+  let totalErrors = 0;
+  const allErrors: ValidationError[] = [];
+
+  for (const file of commandFiles) {
+    const errs = validatePlaceholders(file);
+    allErrors.push(...errs);
+    totalErrors += errs.length;
+  }
+
+  if (totalErrors === 0) {
+    console.log(
+      `Placeholder check: ${commandFiles.length} files checked, 0 errors found ✓`
+    );
+  } else {
+    console.error(
+      `Placeholder check: ${commandFiles.length} files checked, ${totalErrors} errors found`
+    );
+    for (const err of allErrors) {
+      console.error(`  ✗ ${err.file}:${err.line} — ${err.message}`);
+    }
+    process.exitCode = 1;
+  }
+}
 
 // ============================================================
 // ACP Enhanced — Task Validator
@@ -105,8 +187,9 @@ function validateTaskFile(taskFilePath: string): string[] {
 // ── Main ───────────────────────────────────────────────────
 const args = process.argv.slice(2);
 if (args.length === 0) {
-  console.error("Usage: ts-node acp-validate.ts <task-file.md> [task-file-2.md ...]");
-  process.exit(1);
+  // No args: run placeholder scan across all command files
+  runPlaceholderScan();
+  process.exit(process.exitCode ?? 0);
 }
 
 let overallFailed = false;
