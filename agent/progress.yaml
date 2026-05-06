@@ -636,9 +636,9 @@ milestones:
   M35:
     name: acp-validate.ts Enhancement
     priority: 3
-    status: not_started
+    status: in_progress
     progress: 0
-    started: null
+    started: 2026-05-06
     completed: null
     estimated_weeks: 1
     tasks_completed: 0
@@ -654,12 +654,12 @@ milestones:
   M36:
     name: saas-platform Benchmark Suite
     priority: 1
-    status: not_started
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 33
+    started: 2026-05-06
     completed: null
     estimated_weeks: 1
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 3
     file: agent/milestones/milestone-36-saas-platform-benchmark.md
     notes: |
