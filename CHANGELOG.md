@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.10] — 2026-05-06
+
+### Added
+- `src/lib/search.ts` (visualizer) — Fuse.js index builder (threshold 0.35, milestone + task search)
+- `src/components/SearchBar.tsx` (visualizer) — controlled text input
+- `src/components/FilterBar.tsx` (visualizer) — All|In Progress|Completed|Not Started status filter
+- `src/routes/search.tsx` (visualizer) — `/search?q=...` results page
+
+### Changed
+- `src/routes/milestones.tsx` (visualizer) — FilterBar wired; status filter composes with Table/Tree
+
+### Agent
+- `agent/progress.yaml` — M25: 62% → 75% (6/8 tasks)
+
+---
+
 ## [6.4.9] — 2026-05-06
 
 ### Added
