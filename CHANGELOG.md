@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.4] — 2026-05-06
+
+### Added
+- `scripts/acp-validate.ts` — `validateFrontmatter()`: checks every `agent/commands/*.md` for required inline bold markers (`**Namespace**:`, `**Version**:`, `**Status**:`, `**Scripts**:`); reports warnings for missing fields
+- `scripts/acp-validate.ts` — `runFrontmatterScan()`: no-arg scan of all command files; reports "N files checked, M warnings"
+- `scripts/acp-validate.ts` — `runParityCheck()`: triple-file parity check across `agent/commands/acp.*.md`, `.github/prompts/acp-*.prompt.md`, `.opencode/commands/acp-*.md`; reports counts and mismatches as warnings
+- `scripts/acp-validate.ts` — no-arg entry point now runs all 3 checks: placeholder scan, frontmatter scan, parity check
+
+### Agent
+- `agent/tasks/milestone-35-acp-validate-ts-enhancement/task-179-header-format-validation.md` — completed
+- `agent/progress.yaml` — M35: 33% → 67% (2/3 tasks)
+
+---
+
 ## [6.4.3] — 2026-05-06
 
 ### Added
