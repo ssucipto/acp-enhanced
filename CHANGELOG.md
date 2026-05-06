@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.9] — 2026-05-06
+
+### Added
+- `src/components/TaskList.tsx` (visualizer) — task rows with id, name, StatusBadge, estimated/actual hours
+- `src/components/MilestoneTree.tsx` (visualizer) — expandable milestone → task hierarchy with Expand All/Collapse All
+- `src/routes/milestones.tsx` (visualizer) — Table/Tree tab toggle
+
+### Agent
+- `agent/tasks/milestone-25-acp-progress-visualizer/task-141-milestone-tree-view.md` — completed
+- `agent/progress.yaml` — M25: 50% → 62% (5/8 tasks)
+
+---
+
 ## [6.4.8] — 2026-05-06
 
 ### Added
