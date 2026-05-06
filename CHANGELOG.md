@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.5] — 2026-05-06
+
+### Added
+- `tests/acp.validate-ts.test.sh` — 13 assertions covering all M35 checks:
+  - Placeholder detection: valid file clean, line 3+4 flagged, code-block excluded, numeric braces excluded
+  - Frontmatter: missing Status warned, multiple missing fields produce multiple warnings
+  - Parity: 7/7/7 in sync, 6/7 mismatch detected
+  - Summary lines verified: all 3 check headers present in output
+- `scripts/acp-validate.ts` — `ACP_COMMANDS_DIR`, `ACP_PROMPTS_DIR`, `ACP_OPENCODE_DIR` env var overrides for testability
+
+### Agent
+- `agent/tasks/milestone-35-acp-validate-ts-enhancement/task-180-validate-ts-e2e-tests.md` — completed
+- `agent/progress.yaml` — M35: 67% → 100% (3/3 tasks), status: completed, current_milestone → M36
+
+---
+
 ## [6.4.4] — 2026-05-06
 
 ### Added
