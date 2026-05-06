@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.7] — 2026-05-06
+
+### Added
+- `server/routes/api/progress.ts` (visualizer) — `fetchProgress()` server function reads + parses progress.yaml from filesystem
+- `server/routes/api/watch.ts` (visualizer) — `fetchWatchToken()` returns file mtime for polling-based change detection
+- `src/lib/data-source.ts` (visualizer) — `useProgressData()` hook with 2s polling auto-refresh
+- `src/routes/index.tsx` (visualizer) — live JSON render via `useProgressData()` hook
+
+### Agent
+- `agent/tasks/milestone-25-acp-progress-visualizer/task-139-server-route-file-watcher.md` — completed
+- `agent/progress.yaml` — M25: 25% → 37% (3/8 tasks)
+
+---
+
 ## [6.4.6] — 2026-05-06
 
 ### Added
