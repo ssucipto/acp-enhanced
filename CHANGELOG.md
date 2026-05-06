@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.3] — 2026-05-06
+
+### Added
+- `scripts/acp-validate.ts` — `validatePlaceholders()` function: scans lines 3–4 of every `agent/commands/*.md` for unresolved `{PLACEHOLDER}` patterns; excludes fenced code blocks; reports file path, line number, and placeholder name
+- `scripts/acp-validate.ts` — `runPlaceholderScan()`: no-arg entry point; reports "N files checked, M errors found"; sets `process.exitCode = 1` when errors found
+
+### Agent
+- `agent/tasks/milestone-35-acp-validate-ts-enhancement/task-178-placeholder-detection.md` — completed
+- `agent/progress.yaml` — M35: not_started → in_progress, 0% → 33% (1/3 tasks)
+- `scripts/package.json` — dependencies installed via npm install
+
+---
+
 ## [6.4.2] — 2026-05-05
 
 ### Fixed
