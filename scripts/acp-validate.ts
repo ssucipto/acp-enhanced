@@ -85,6 +85,109 @@ function runPlaceholderScan(): void {
   }
 }
 
+// ── Frontmatter field validation ──────────────────────────────
+// Command files use inline bold markers: **Namespace**: acp
+const REQUIRED_FRONTMATTER_FIELDS = ["Namespace", "Version", "Status", "Scripts"];
+
+function validateFrontmatter(filePath: string): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(filePath)) return errors;
+
+  const content = readFileSync(filePath, "utf8");
+
+  for (const field of REQUIRED_FRONTMATTER_FIELDS) {
+    // Match inline bold marker pattern: **Field**:
+    if (!new RegExp(`^\\*\\*${field}\\*\\*:`, "m").test(content)) {
+      errors.push({
+        file: filePath,
+        line: 1,
+        message: `Missing required field: **${field}**:`,
+        severity: "warning",
+      });
+    }
+  }
+
+  return errors;
+}
+
+function runFrontmatterScan(): void {
+  if (!existsSync(COMMANDS_DIR)) {
+    console.log(`Frontmatter check: ${COMMANDS_DIR} not found — skipped`);
+    return;
+  }
+
+  const commandFiles = readdirSync(COMMANDS_DIR)
+    .filter((f) => f.endsWith(".md") && !f.endsWith(".template.md"))
+    .map((f) => path.join(COMMANDS_DIR, f));
+
+  const allErrors: ValidationError[] = [];
+
+  for (const file of commandFiles) {
+    const errs = validateFrontmatter(file);
+    allErrors.push(...errs);
+  }
+
+  const warningCount = allErrors.filter((e) => e.severity === "warning").length;
+
+  if (warningCount === 0) {
+    console.log(
+      `Frontmatter check: ${commandFiles.length} files checked, 0 warnings ✓`
+    );
+  } else {
+    console.warn(
+      `Frontmatter check: ${commandFiles.length} files checked, ${warningCount} warnings`
+    );
+    for (const err of allErrors) {
+      console.warn(`  ⚠ ${err.file}:${err.line} — ${err.message}`);
+    }
+  }
+}
+
+// ── Triple-file parity check ──────────────────────────────────
+const PROMPTS_DIR = path.join(".github", "prompts");
+const OPENCODE_DIR = path.join(".opencode", "commands");
+
+function runParityCheck(): void {
+  const commandFiles = existsSync(COMMANDS_DIR)
+    ? readdirSync(COMMANDS_DIR).filter(
+        (f) => f.startsWith("acp.") && f.endsWith(".md") && !f.endsWith(".template.md")
+      )
+    : [];
+
+  const promptFiles = existsSync(PROMPTS_DIR)
+    ? readdirSync(PROMPTS_DIR).filter(
+        (f) => f.startsWith("acp-") && f.endsWith(".prompt.md")
+      )
+    : [];
+
+  const opencodeFiles = existsSync(OPENCODE_DIR)
+    ? readdirSync(OPENCODE_DIR).filter(
+        (f) => f.startsWith("acp-") && f.endsWith(".md")
+      )
+    : [];
+
+  const cc = commandFiles.length;
+  const pc = promptFiles.length;
+  const oc = opencodeFiles.length;
+
+  const mismatches: string[] = [];
+  if (cc !== pc) {
+    mismatches.push(`${cc} commands vs ${pc} prompts (.github/prompts/)`);
+  }
+  if (cc !== oc) {
+    mismatches.push(`${cc} commands vs ${oc} opencode (.opencode/commands/)`);
+  }
+
+  if (mismatches.length === 0) {
+    console.log(`Parity check: ${cc} commands / ${pc} prompts / ${oc} opencode — in sync ✓`);
+  } else {
+    console.warn(`Parity check: ${cc} commands / ${pc} prompts / ${oc} opencode — ${mismatches.length} mismatch(es)`);
+    for (const m of mismatches) {
+      console.warn(`  ⚠ ${m}`);
+    }
+  }
+}
+
 // ============================================================
 // ACP Enhanced — Task Validator
 // Usage: npx ts-node scripts/acp-validate.ts agent/routing/tasks/task-NNN.md
@@ -187,8 +290,10 @@ function validateTaskFile(taskFilePath: string): string[] {
 // ── Main ───────────────────────────────────────────────────
 const args = process.argv.slice(2);
 if (args.length === 0) {
-  // No args: run placeholder scan across all command files
+  // No args: run all command-file scans
   runPlaceholderScan();
+  runFrontmatterScan();
+  runParityCheck();
   process.exit(process.exitCode ?? 0);
 }
 
