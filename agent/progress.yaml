@@ -6,7 +6,7 @@ project:
   version: 6.3.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M36
+  current_milestone: M25
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M24 complete: AGENT.md fully updated with
@@ -636,12 +636,12 @@ milestones:
   M35:
     name: acp-validate.ts Enhancement
     priority: 3
-    status: in_progress
-    progress: 0
+    status: completed
+    progress: 100
     started: 2026-05-06
-    completed: null
+    completed: 2026-05-06
     estimated_weeks: 1
-    tasks_completed: 0
+    tasks_completed: 3
     tasks_total: 3
     file: agent/milestones/milestone-35-acp-validate-ts-enhancement.md
     notes: |
@@ -688,12 +688,12 @@ milestones:
   M25:
     name: ACP Progress Visualizer (P0 MVP)
     priority: 5
-    status: not_started
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 13
+    started: 2026-05-06
     completed: null
     estimated_weeks: 3
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 8
     file: agent/milestones/milestone-25-acp-progress-visualizer.md
     notes: |
