@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.8] — 2026-05-06
+
+### Added
+- `src/components/StatusBadge.tsx` (visualizer) — color-coded status badge (completed/in_progress/not_started)
+- `src/components/ProgressBar.tsx` (visualizer) — proportional bar with % label
+- `src/components/MilestoneTable.tsx` (visualizer) — sortable 9-column table using @tanstack/react-table
+- `src/routes/milestones.tsx` (visualizer) — `/milestones` route with live data
+
+### Agent
+- `agent/tasks/milestone-25-acp-progress-visualizer/task-140-milestone-table-view.md` — completed
+- `agent/progress.yaml` — M25: 37% → 50% (4/8 tasks)
+
+---
+
 ## [6.4.7] — 2026-05-06
 
 ### Added
