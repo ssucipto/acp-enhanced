@@ -6,7 +6,7 @@ project:
   version: 6.3.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M35
+  current_milestone: M36
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M24 complete: AGENT.md fully updated with
@@ -654,12 +654,12 @@ milestones:
   M36:
     name: saas-platform Benchmark Suite
     priority: 1
-    status: in_progress
-    progress: 67
+    status: completed
+    progress: 100
     started: 2026-05-06
-    completed: null
+    completed: 2026-05-06
     estimated_weeks: 1
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 3
     file: agent/milestones/milestone-36-saas-platform-benchmark.md
     notes: |
