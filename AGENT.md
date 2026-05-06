@@ -1,7 +1,7 @@
 # Agent Context Protocol Enhanced (ACP Enhanced)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.4.11
+**Version**: 6.4.12
 **Fork of**: [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol)
 **Maintained by**: [ssucipto/acp-enhanced](https://github.com/ssucipto/acp-enhanced)
 **Created**: 2026-02-11
@@ -945,6 +945,7 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
   **Key modes**: `/acp-proceed` (single task) · `--turbo`/`--yolo` (autonomous, no prompt) · `--stacked` (full milestone as sequential stacked worktrees) · `--worktrees` (parallel sub-agents). **Step 3.5** (automatic): post-completion 7-part audit; spawns remediation sub-agent if drift found. See `acp.proceed.md` for full argument reference (A1–A11).
 - **[`/acp-plan`](agent/commands/acp.plan.md)** - Plan project milestones and tasks from requirements
 - **[`/acp-status`](agent/commands/acp.status.md)** - Display project status and active sessions
+- **[`/acp-visualize`](agent/commands/acp.visualize.md)** - Launch the browser-based ACP Progress Visualizer dashboard *(ACP Enhanced)*
 - **[`/acp-report`](agent/commands/acp.report.md)** - Generate a completion report; deregisters session
 - **[`/acp-handoff`](agent/commands/acp.handoff.md)** - Prepare handoff documentation for another agent
 - **[`/acp-resume`](agent/commands/acp.resume.md)** - Resume a project — init + review recent progress + proceed in one step
