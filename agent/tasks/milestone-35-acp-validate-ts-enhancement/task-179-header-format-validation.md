@@ -2,13 +2,13 @@
 id: task-179
 milestone: M35
 title: Add header format and command/prompt/opencode parity check to acp-validate.ts
-status: not_started
+status: completed
 priority: 3
 complexity: medium
 estimated_hours: 2
 created: 2026-05-05
-started:
-completed:
+started: 2026-05-06T00:00:00Z
+completed: 2026-05-06
 ---
 
 ## Objective
