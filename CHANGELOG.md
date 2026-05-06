@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.6] — 2026-05-06
+
+### Added
+- `src/lib/types.ts` (visualizer) — ProgressData, ProjectMetadata, Milestone, Task, WorkEntry TypeScript interfaces
+- `src/lib/yaml-loader.ts` (visualizer) — `parseProgressYaml()` normalises raw YAML → typed data (milestone id + task milestoneId injected)
+- `src/lib/yaml-loader.test.ts` (visualizer) — 10 unit tests, all pass
+- `test/fixtures/sample-progress.yaml` (visualizer) — representative test fixture
+
+### Agent
+- `agent/tasks/milestone-25-acp-progress-visualizer/task-138-yaml-parser-data-model.md` — completed
+- `agent/progress.yaml` — M25: 13% → 25% (2/8 tasks)
+
+---
+
 ## [6.4.5] — 2026-05-06
 
 ### Added
