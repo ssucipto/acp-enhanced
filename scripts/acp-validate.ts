@@ -12,7 +12,8 @@ interface ValidationError {
 }
 
 // ── Placeholder detection ─────────────────────────────────────
-const COMMANDS_DIR = path.join("agent", "commands");
+// Env var ACP_COMMANDS_DIR overrides default — used in tests
+const COMMANDS_DIR = process.env["ACP_COMMANDS_DIR"] ?? path.join("agent", "commands");
 
 function validatePlaceholders(filePath: string): ValidationError[] {
   const errors: ValidationError[] = [];
@@ -144,8 +145,9 @@ function runFrontmatterScan(): void {
 }
 
 // ── Triple-file parity check ──────────────────────────────────
-const PROMPTS_DIR = path.join(".github", "prompts");
-const OPENCODE_DIR = path.join(".opencode", "commands");
+// Env vars ACP_PROMPTS_DIR / ACP_OPENCODE_DIR override defaults — used in tests
+const PROMPTS_DIR = process.env["ACP_PROMPTS_DIR"] ?? path.join(".github", "prompts");
+const OPENCODE_DIR = process.env["ACP_OPENCODE_DIR"] ?? path.join(".opencode", "commands");
 
 function runParityCheck(): void {
   const commandFiles = existsSync(COMMANDS_DIR)
