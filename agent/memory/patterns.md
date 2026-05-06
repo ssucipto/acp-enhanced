@@ -2,6 +2,35 @@
 # Populated automatically by /acp-commit when patterns are identified
 # Format: date-stamped YAML entries, max 60 days active
 
+- date: 2026-05-06
+  name: tanstack-start-v1-server-fn
+  task_type: typescript
+  code_ref: server/routes/api/progress.ts (task-139, agent-context-protocol-visualizer)
+  description: |
+    TanStack Start v1.x (tested on v1.167.64) does NOT export `createAPIFileRoute`
+    from `@tanstack/react-start/api` — that subpath does not exist. The correct
+    pattern for server-side data fetching is `createServerFn` with `.inputValidator()`.
+    Note: the method is `.inputValidator()`, NOT `.input()`. Import from the root
+    `@tanstack/react-start` package. Works for both GET and POST handlers.
+  template: |
+    import { createServerFn } from '@tanstack/react-start';
+    import { readFileSync } from 'node:fs';
+
+    export const fetchMyData = createServerFn({ method: 'GET' })
+      .inputValidator((input: { param?: string }) => input)  // NOT .input()
+      .handler(async ({ data }) => {
+        const val = data.param ?? 'default';
+        try {
+          return { data: doSomething(val), error: null };
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : 'Unknown error';
+          return { data: null, error: message };
+        }
+      });
+
+    // Client-side usage:
+    // const result = await fetchMyData({ data: { param: 'value' } });
+
 - date: 2026-05-05
   name: local-star-exclusion-case-loop
   task_type: shell-scripting
