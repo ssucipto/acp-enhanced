@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.11] — 2026-05-06
+
+### Added
+- `src/components/ProjectHeader.tsx` (visualizer) — project name, version, status, description
+- `src/components/OverallProgress.tsx` (visualizer) — milestone completion bar + counts
+- `src/components/NextSteps.tsx` (visualizer) — blue callout for next_steps array
+
+### Changed
+- `src/routes/__root.tsx` (visualizer) — full sidebar layout (gray-900 sidebar + header SearchBar)
+- `src/routes/index.tsx` (visualizer) — polished home page replacing raw JSON placeholder
+
+### Agent
+- `agent/progress.yaml` — M25: 75% → 87% (7/8 tasks)
+
+---
+
 ## [6.4.10] — 2026-05-06
 
 ### Added
