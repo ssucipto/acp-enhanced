@@ -6,7 +6,7 @@ project:
   version: 6.3.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M25
+  current_milestone: M25-complete
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M24 complete: AGENT.md fully updated with
@@ -688,17 +688,18 @@ milestones:
   M25:
     name: ACP Progress Visualizer (P0 MVP)
     priority: 5
-    status: in_progress
-    progress: 87
+    status: completed
+    progress: 100
     started: 2026-05-06
-    completed: null
+    completed: 2026-05-06
     estimated_weeks: 3
-    tasks_completed: 7
+    tasks_completed: 8
     tasks_total: 8
     file: agent/milestones/milestone-25-acp-progress-visualizer.md
     notes: |
-      Greenfield TanStack Start app in new repo (agent-context-protocol-visualizer).
-      P0 MVP: table view, tree view, search, filter, file-watcher auto-refresh.
+      ✅ M25 COMPLETE! TanStack Start dashboard in agent-context-protocol-visualizer.
+      P0 MVP delivered: table view, tree view, search + filter, file-watcher auto-refresh,
+      dashboard shell with sidebar navigation, @acp.visualize command added.
       Tech: TanStack Start (React), Tailwind CSS, @tanstack/react-table, fuse.js, js-yaml.
       P1 (kanban, GitHub remote, multi-project) = separate milestone (not M26).
 
