@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.4.13] — 2026-05-09
+
+### Added
+- `agent/reports/audit-008-feedback-001-knowledge-preservation.md` — audit report on TikrFlow knowledge loss incident (3 sessions lost to context overflow); 6 findings, 5 decisions (R1–R4 adopted, R5 deferred)
+- `agent/milestones/milestone-38-protocol-knowledge-preservation.md` — M38: feedback-001 protocol fixes milestone
+- Mid-Session Commit Triggers section in `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` — 7 proactive memory-write triggers; WAL (write-ahead logging) approach to prevent knowledge loss
+
+### Changed
+- `agent/core/constraints.yml` — replaced `never_skip_acp_commit` with 6 granular knowledge-preservation rules: `write_lessons_at_discovery`, `write_session_at_phase_boundary`, `write_patterns_at_discovery`, `write_adr_at_decision`, `context_overflow_commit_first`, `validate_prior_session_at_start`
+- `agent/commands/acp.commit.md` — v1.0.0 → v1.1.0: frequency changed to "every phase boundary AND session end"; added overflow risk warning; added proactive trigger event list
+- `AGENTS.md` / `CLAUDE.md` / `.github/copilot-instructions.md` — Step 4 gap-check: new substep 2 (compare session date vs today, surface deferred items, note knowledge gaps from git commits post-dating last sessions.md entry)
+- `agent/memory/lessons.md` — prepended high-priority `acp-knowledge-gap` postmortem (2026-05-09, task_type: all); documents 3-session TikrFlow loss, 5 correction points
+
+### Protocol
+- ✅ **M38 Protocol Knowledge Preservation** — COMPLETE
+  - Proactive 7-trigger commit system: milestone phase done, audit creation, ADR, new pattern, correction, context overflow, >5-file commit
+  - Commit `4e00a90` (2026-05-09)
+
+---
+
 ## [6.4.12] — 2026-05-06
 
 ### Added
