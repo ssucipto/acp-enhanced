@@ -74,6 +74,27 @@ LAYER 3 — EPHEMERAL (session-specific, filtered, ~1,200 tokens)
   agent/wiki/architecture.md  (one section at a time)
 ```
 
+## Session Memory Write Protocol (v6.4.13+)
+
+sessions.md is treated as a WAL (write-ahead log) — written at the **moment of discovery**, not
+deferred to session end. Context overflow is silent: a session can terminate at any point without
+a final turn, permanently losing any knowledge not written to disk.
+
+**7 proactive write triggers** (any one fires → write sessions.md immediately):
+
+| Trigger | Action |
+|---------|--------|
+| Milestone phase completes | Write sessions.md entry NOW |
+| Audit report created (`audit-N.md` committed) | Capture findings in lessons.md |
+| Architectural decision made | Create ADR in decisions.md |
+| New reusable pattern found | Append to patterns.md |
+| Correction given by developer | Append to lessons.md (Correction Protocol) |
+| Context approaching overflow | Write sessions.md BEFORE overflow |
+| git commit touching >5 files | Treat as phase boundary → write sessions.md |
+
+**Corollary**: `/acp-commit` is NOT an end-of-session-only command. It runs at every phase boundary.
+The session-end `/acp-commit` finalises a session that already has most entries written.
+
 ## Dispatch Script Flow (Persona B/C)
 
 ```

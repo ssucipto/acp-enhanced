@@ -371,3 +371,24 @@ test_suites:
     - suite: yaml-array-operations.test.sh
       coverage: yaml_array_append operations — empty array, append, multi-append, conversion
       test_count: 4
+
+session_memory_protocol:
+  # Added: 2026-05-09 (v6.4.13, feedback-001 fixes, audit-008)
+  description: >
+    sessions.md is a WAL (write-ahead log) for agent session knowledge.
+    Write at the MOMENT OF DISCOVERY. Do NOT defer to session end.
+    Context overflow is silent — the session can terminate at any turn
+    without a final message, permanently losing any unwritten knowledge.
+  write_triggers:
+    - milestone_phase_completes: "Write sessions.md entry immediately"
+    - audit_report_created: "Capture key findings in lessons.md"
+    - architectural_decision_made: "Create ADR in decisions.md immediately"
+    - new_reusable_pattern_found: "Append to patterns.md immediately"
+    - correction_given: "Append to lessons.md immediately (Correction Protocol)"
+    - context_approaching_overflow: "Write sessions.md BEFORE summarisation"
+    - git_commit_over_5_files: "Treat as phase boundary — write sessions.md"
+  command: "/acp-commit"
+  command_doc: "agent/commands/acp.commit.md"
+  version_introduced: "6.4.13"
+  related_feedback: "agent/feedback/feedback-001-proactive-commit-and-knowledge-preservation.md"
+  related_audit: "agent/reports/audit-008-feedback-001-knowledge-preservation.md"
