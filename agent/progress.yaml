@@ -3,15 +3,16 @@
 
 project:
   name: agent-context-protocol
-  version: 6.3.0
+  version: 6.4.13
   started: 2026-02-16
   status: in_progress
-  current_milestone: M25-complete
+  current_milestone: M38-complete
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
-    of prmichaelsen/agent-context-protocol. M24 complete: AGENT.md fully updated with
-    missing commands, Three-Persona section, modernized Conclusion and Sample Prompts.
-    Version 6.2.5.
+    of prmichaelsen/agent-context-protocol. M38 complete: proactive commit triggers +
+    knowledge-preservation protocol (feedback-001 fixes). All milestones M1–M38 complete.
+    Version 6.4.13. 58 slash commands. TanStack Start progress visualizer. Proactive
+    7-trigger WAL session memory system.
 
 milestones:
   M1:
@@ -684,6 +685,25 @@ milestones:
       Fix two actionable findings from audit-007 before next push.
       task-185: fix bare agent/drafts/ in acp.project-create.md sample gitignore
       task-186: git rm --cached lessons.md + decisions.md (stop tracking gitignored files)
+
+  M38:
+    name: Protocol Knowledge Preservation (feedback-001 fixes)
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-05-09
+    completed: 2026-05-09
+    estimated_weeks: 0
+    tasks_completed: 1
+    tasks_total: 1
+    file: agent/milestones/milestone-38-protocol-knowledge-preservation.md
+    notes: |
+      Implements all fixes from feedback-001 (consumer-project — 3 sessions of knowledge lost to context overflow).
+      Root cause: /acp-commit was passive/end-of-session only. Fix: proactive 7-trigger WAL approach.
+      Delivered in commit 4e00a90: AGENTS.md/CLAUDE.md/copilot-instructions.md Mid-Session Commit Triggers,
+      constraints.yml 6 new rules, acp.commit.md v1.1.0, lessons.md postmortem prepended.
+      audit-009 retroactively fixed 6 process compliance gaps from this session (route-013, milestone-38,
+      sessions.md entry, CHANGELOG [6.4.13], AGENT.md update, wiki update).
 
   M25:
     name: ACP Progress Visualizer (P0 MVP)
@@ -5121,18 +5141,21 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "🔥 M29 NEXT: Upstream integration audit — parity matrix before any porting (task-155–158)"
+  - "✅ M38 DONE: protocol knowledge preservation — feedback-001 proactive commit triggers (2026-05-09)"
   - "✅ M37 DONE: audit-007 gitignore fixes (task-185–186)"
+  - "✅ M36 DONE: saas-platform benchmark suite (task-181–183)"
+  - "✅ M35 DONE: acp-validate.ts enhancement — placeholder + frontmatter + parity (task-178–180)"
   - "✅ M34 DONE: command naming convention pattern (task-176–177)"
+  - "✅ M33 DONE: pluggable driver system (task-171–175)"
+  - "✅ M32 DONE: AGENT.md protocol documentation (task-167–170)"
+  - "✅ M31 DONE: E2E test coverage (task-162–166)"
   - "✅ M30 DONE: agent/drafts/ convention fix (task-159–161)"
-  - "✅ M28 DONE: opencode command parity — 58 commands, E2E test, bootstrap (task-71–75)"
-  - "📋 M31: E2E test coverage for meta-scan, spec, sync, script-bound commands (task-162–166)"
-  - "📋 M32: AGENT.md protocol documentation — 4 new sections (task-167–170)"
-  - "📋 M35: acp-validate.ts enhancement — placeholder + frontmatter + parity (task-178–180)"
-  - "📋 M33 OPTIONAL: Pluggable driver system — only if MCP integration needed (task-171–175)"
-  - "📋 M36 OPTIONAL: saas-platform benchmark suite (task-181–183)"
-  - "📋 M25 planned: 8 tasks ready (task-137 → task-144) — TanStack Start dashboard"
-  - "📋 M26 planned: 5 tasks ready (task-145 → task-149) — protocol usability improvements"
+  - "✅ M29 DONE: upstream integration audit (task-155–158)"
+  - "✅ M28 DONE: opencode command parity — 58 commands (task-71–75)"
+  - "✅ M26 DONE: protocol usability improvements (task-145–149)"
+  - "✅ M25 DONE: ACP Progress Visualizer TanStack Start dashboard (task-137–144)"
+  - "📋 FUTURE: M39 — P1 visualizer (kanban, GitHub remote, multi-project)"
+  - "📋 FUTURE: additional feedback-driven protocol improvements"
 
 notes:
   - Using flat directory structure with dot notation (acp.status.md)
