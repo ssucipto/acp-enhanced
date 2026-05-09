@@ -51,7 +51,11 @@ Do NOT load multiple skill files unless the task explicitly spans two domains.
 
 ### Step 4 — Load Working Memory (filtered)
 1. Read last 3 entries from `agent/memory/sessions.md` only
-2. Read `agent/memory/lessons.md` — filter to entries where
+2. **Gap check**: Compare the most recent session's `date:` against today. If the most
+   recent entry has `deferred:` items, surface them now — they are your current backlog.
+   If recent git commits exist that post-date the last `sessions.md` entry by more than
+   a day, note the potential knowledge gap in your session-start response.
+3. Read `agent/memory/lessons.md` — filter to entries where
    `trigger` matches current task_type OR `priority: high`
    Load maximum 5 lesson entries.
 
@@ -67,6 +71,33 @@ Only if the task requires it:
 Before starting the task, output one line:
 `[ACP] Loaded: [files loaded] | est. [N] tokens | executor: [executor value]`
 Then proceed with the task.
+
+---
+
+## Mid-Session Commit Triggers (Proactive — do NOT wait for /acp-commit)
+
+> **Why this section exists**: Context window overflow is silent — it terminates sessions
+> without warning and without a final turn. Any knowledge not written to disk at the moment
+> of discovery is permanently lost. The `/acp-commit` command is for **finalising** a session
+> that already has most of its entries written, not for capturing everything at the end.
+>
+> **Write at the moment of discovery. Compact later.**
+
+The agent MUST proactively write memory entries WITHOUT waiting for the developer to run
+`/acp-commit` whenever ANY of these events occur:
+
+| Trigger | Action |
+|---------|--------|
+| A milestone phase completes (task group or audit done) | Write `sessions.md` entry immediately |
+| An audit report is created (`audit-N.md` committed) | Capture key findings in `lessons.md` |
+| An architectural decision is made | Create ADR in `decisions.md` immediately |
+| A new reusable pattern is discovered | Append to `patterns.md` immediately |
+| A correction is given by the developer | Append to `lessons.md` immediately (Correction Protocol) |
+| Context window is approaching capacity (summarisation imminent) | Write session entry NOW, before overflow |
+| A `git commit` is made touching more than 5 files | Treat as phase boundary — write session entry |
+
+**The rule**: ACP memory writes happen at the **moment of discovery**, not at session end.
+`sessions.md` entries are written **incrementally per phase**, not as one end-of-session dump.
 
 ---
 

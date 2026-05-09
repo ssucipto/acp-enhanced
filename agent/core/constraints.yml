@@ -6,7 +6,20 @@ rules:
   - never_load_full_sessions: last 3 entries only
   - never_load_all_lessons: filter by task_type first
   - never_load_full_decisions: load by ADR ID only
-  - never_skip_acp_commit: required at end of every session
+  - never_skip_acp_commit: required at every phase boundary and end of every session
+  # Knowledge preservation rules — added 2026-05-09 after feedback-001 postmortem
+  - write_lessons_at_discovery: never defer lesson logging to end-of-session; write
+      immediately when a bug/mistake/finding is confirmed
+  - write_session_at_phase_boundary: write a sessions.md entry when a milestone phase,
+      audit, or task group completes — do NOT wait for /acp-commit
+  - write_patterns_at_discovery: when a reusable pattern emerges, append to patterns.md
+      before continuing
+  - write_adr_at_decision: when an architectural decision is made, create the ADR entry
+      immediately in decisions.md
+  - context_overflow_commit_first: if the context window is nearing capacity, write all
+      pending ACP entries BEFORE working on implementation
+  - validate_prior_session_at_start: on session start (Step 4), check if the most recent
+      sessions.md entry covers recent git commits — if not, note the gap in your response
   - never_reopen_closed_adrs: respect DO NOT re-open flags
   - never_use_set_e_without_trap: always trap ERR in bash scripts
   - never_break_macos: test BSD sed and date compatibility before committing
