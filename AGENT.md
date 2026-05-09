@@ -1,7 +1,7 @@
 # Agent Context Protocol Enhanced (ACP Enhanced)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.4.12
+**Version**: 6.4.13
 **Fork of**: [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol)
 **Maintained by**: [ssucipto/acp-enhanced](https://github.com/ssucipto/acp-enhanced)
 **Created**: 2026-02-11
@@ -946,10 +946,13 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`/acp-plan`](agent/commands/acp.plan.md)** - Plan project milestones and tasks from requirements
 - **[`/acp-status`](agent/commands/acp.status.md)** - Display project status and active sessions
 - **[`/acp-visualize`](agent/commands/acp.visualize.md)** - Launch the browser-based ACP Progress Visualizer dashboard *(ACP Enhanced)*
+- **[`/acp-commit`](agent/commands/acp.commit.md)** - Write session memory entry + stamp routing task files + compact sessions *(ACP Enhanced)*
 - **[`/acp-report`](agent/commands/acp.report.md)** - Generate a completion report; deregisters session
 - **[`/acp-handoff`](agent/commands/acp.handoff.md)** - Prepare handoff documentation for another agent
 - **[`/acp-resume`](agent/commands/acp.resume.md)** - Resume a project — init + review recent progress + proceed in one step
 - **[`/acp-audit`](agent/commands/acp.audit.md)** - Audit ACP files for consistency and drift
+
+> **⚡ Proactive Session Memory** *(ACP Enhanced v6.4.13+)*: `/acp-commit` runs proactively at **7 trigger events** — do NOT wait for session end. Triggers: milestone phase done, audit created, ADR made, new pattern found, correction given, context approaching overflow, any commit touching >5 files. See [Mid-Session Commit Triggers](AGENTS.md) in `AGENTS.md`. This prevents permanent knowledge loss from silent context overflow.
 
 **Planning**
 - **[`/acp-design-create`](agent/commands/acp.design-create.md)** - Create a design document
