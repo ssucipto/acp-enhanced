@@ -4,9 +4,9 @@
 > Pretend this command was entered with this additional context: "Execute directive `/acp-commit` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-05-05  
-**Last Updated**: 2026-05-05  
+**Last Updated**: 2026-05-09  
 **Status**: Active  
 **Scripts**: None  
 
@@ -14,7 +14,7 @@
 
 **Purpose**: End-of-session memory commit — write session summary, stamp completed tasks, compact memory if needed  
 **Category**: Memory  
-**Frequency**: End of every session — required, never skip  
+**Frequency**: At every phase boundary AND at session end — required, never skip  
 
 ---
 
@@ -26,12 +26,25 @@ None. Context is inferred from the current conversation.
 
 ## What This Command Does
 
+> **CRITICAL — Context Window Overflow Risk**: If a session ends due to context window
+> overflow before `/acp-commit` is run, all session knowledge is permanently lost. Do
+> not defer commits to the end of a long session. Write incrementally.
+
 Persists the session's work into the ACP memory layer so future sessions start with accurate context. This is the single most important habit in ACP Enhanced — skipping it means the next session starts cold.
 
 **Use this when**:
 - Closing VS Code / opencode at end of a work session
 - Handing off to another agent or executor
 - Completing a milestone phase before switching focus
+- **PROACTIVE (do not wait for /acp-commit command)**:
+  - After any audit report is created
+  - After a git commit touching >5 files
+  - After any architectural decision is made
+  - When a correction is given by the developer
+  - Whenever the context window is approaching capacity
+
+Each of these events triggers an **immediate partial commit** — you do not wait for the
+developer to type `/acp-commit`.
 
 ---
 
@@ -115,9 +128,20 @@ Prepend a YAML entry to `agent/memory/sessions.md`:
 
 **Namespace**: acp  
 **Command**: commit  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-05-05  
-**Last Updated**: 2026-05-05  
+**Last Updated**: 2026-05-09  
 **Status**: Active  
 **Compatibility**: ACP 6.0.0+  
 **Author**: ACP Project  
+
+---
+
+## v1.1.0 Changelog (2026-05-09)
+
+- Frequency changed from "end of session" to "phase boundary" (proactive)
+- Added context-window overflow risk warning to "What This Command Does"
+- Clarified that agent must commit immediately at phase events, not wait for `/acp-commit`
+- Root cause: feedback-001 from consumer-project project — 3 sessions of work lost to context overflow;
+  retroactive reconstruction required a full additional session. Lesson: `acp-knowledge-gap`
+  in lessons.md.
