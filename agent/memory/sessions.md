@@ -2,6 +2,48 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-05-09
+  executor: copilot
+  tasks: [audit-009]
+  done:
+    - created-audit-009-report-6-findings-all-fixed
+    - created-route-013-retroactive-route-for-audit-008-work
+    - created-milestone-38-protocol-knowledge-preservation
+    - wrote-sessions-md-entry-for-2026-05-09-audit-008-session
+    - updated-changelog-md-6.4.13-entry-proactive-commit-triggers
+    - updated-progress-yaml-version-6.4.13-current-milestone-M38-complete
+    - updated-agent-md-add-acp-commit-to-workflow-proactive-session-memory-note
+    - updated-wiki-architecture-md-session-memory-write-protocol-section
+    - updated-wiki-domain-yml-session-memory-protocol-section
+    - bumped-version-6.4.12-to-6.4.13-AGENT-md-identity-yml-package-yaml
+  deferred: {}
+  key_fact: |
+    When audit-008 was executed, 6 ACP process compliance gaps were created: no route file,
+    no sessions.md entry, stale progress.yaml, no CHANGELOG entry, AGENT.md not updated,
+    wiki not updated. All 6 were retroactively fixed in audit-009. Key pattern: even work
+    that fixes process gaps can itself violate process — always run /acp-route BEFORE
+    starting and /acp-commit IMMEDIATELY after each >5-file commit.
+
+- date: 2026-05-09
+  executor: copilot
+  tasks: [route-013, M38]
+  done:
+    - investigated-feedback-001-tikrflow-3-sessions-context-overflow-knowledge-loss
+    - created-audit-008-report-6-findings-5-decisions-R1-R4-adopted-R5-rejected
+    - updated-AGENTS-md-CLAUDE-md-copilot-instructions-step4-gap-check-substep
+    - added-mid-session-commit-triggers-7-triggers-proactive-WAL-approach
+    - updated-constraints-yml-6-new-knowledge-preservation-rules
+    - bumped-acp-commit-md-v1.0.0-to-v1.1.0-phase-boundary-frequency
+    - prepended-acp-knowledge-gap-postmortem-to-lessons-md-priority-high
+    - commit-4e00a90-fix-protocol-proactive-commit-triggers-feedback-001
+  deferred: {}
+  key_fact: |
+    Context overflow is silent — sessions terminate without warning, and any work not
+    written to disk at the moment of discovery is permanently lost. Fix: treat sessions.md
+    like a WAL (write-ahead log). 7 trigger events require IMMEDIATE memory writes, not
+    deferred end-of-session dumps. The >5-file commit trigger was immediately violated by
+    the same commit that introduced it — caught and fixed in audit-009.
+
 - date: 2026-05-06
   executor: copilot
   tasks: []
