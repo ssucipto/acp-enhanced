@@ -1,5 +1,6 @@
 version: "1.0"
 default_model: claude-sonnet
+# Update last_verified in each model entry whenever prices are checked against provider pricing pages
 
 models:
   claude-sonnet:
@@ -7,6 +8,7 @@ models:
     model_id: anthropic/claude-sonnet-4-5
     cost_input_per_1m: 3.00
     cost_output_per_1m: 15.00
+    last_verified: 2026-05-11
     use_for: [architecture-plan, design-document, complex-bash-script, security-review]
 
   deepseek-v4-flash:
@@ -14,6 +16,7 @@ models:
     model_id: deepseek/deepseek-v4-flash
     cost_input_per_1m: 0.14
     cost_output_per_1m: 0.28
+    last_verified: 2026-05-11
     use_for: [command-doc-update, yaml-schema, documentation-sync, typescript-feature, bash-script-fix, e2e-test-write, bug-fix-simple]
 
   deepseek-v4-pro:
@@ -21,6 +24,7 @@ models:
     model_id: deepseek/deepseek-v4-pro
     cost_input_per_1m: 0.435
     cost_output_per_1m: 0.87
+    last_verified: 2026-05-11
     use_for: [bash-script-create, command-doc-write, preference-system]
 
   gemini-flash:
@@ -28,12 +32,14 @@ models:
     model_id: google/gemini-2.0-flash-exp
     cost_input_per_1m: 0.075
     cost_output_per_1m: 0.30
+    last_verified: 2026-05-11
     use_for: []
 
   local-script:
     provider: local
     cost_input_per_1m: 0.00
     cost_output_per_1m: 0.00
+    last_verified: 2026-05-11
     use_for: [test-run, lint, e2e-run]
 
 complexity_thresholds:
