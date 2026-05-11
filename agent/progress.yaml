@@ -6,7 +6,7 @@ project:
   version: 6.6.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M42-not-started
+  current_milestone: M42-complete
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M38 complete: proactive commit triggers +
@@ -110,6 +110,7 @@ milestones:
     completed: 2026-02-22
     estimated_weeks: 1-2
     tasks_completed: 7
+  completed: 2026-05-11
     tasks_total: 7
     notes: |
       ✅ Milestone 5: Global Package Installation - Complete!
@@ -744,12 +745,12 @@ milestones:
   M42:
     name: Dispatch Integrity + Validation Hardening
     priority: 5
-    status: not-started
-    progress: 0
-    started:
-    completed:
+    status: completed
+    progress: 100
+    started: 2026-05-11
+    completed: 2026-05-11
     estimated_weeks: 1-2
-    tasks_completed: 0
+    tasks_completed: 7
     tasks_total: 7
     file: agent/milestones/milestone-42-dispatch-integrity-and-validation-hardening.md
     notes: |
