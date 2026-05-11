@@ -1,13 +1,13 @@
 # Domain Entity Model — ACP Protocol project
 # Load ONE section at a time — never load the entire file
-# last_verified: 2026-05-05
+# last_verified: 2026-05-11
 
 commands:
-  count: 58
+  count: 63  # 63 verified 2026-05-11: 61 acp.* + 2 git.*; added acp.dispatch, acp.feedback, acp.install, acp.task (routes 024-027)
   location: agent/commands/
   naming: "acp.{command-name}.md — dot notation, acp namespace for core"
   categories:
-    core: [acp.audit, acp.commit, acp.decide, acp.handoff, acp.index, acp.init, acp.memory-sync, acp.plan, acp.proceed, acp.report, acp.resume, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task-create, acp.update, acp.validate, acp.wiki-update]
+    core: [acp.audit, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.memory-sync, acp.plan, acp.proceed, acp.report, acp.resume, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
     artifact: [acp.artifact-glossary, acp.artifact-reference, acp.artifact-research]
     clarification: [acp.clarification-address, acp.clarification-capture, acp.clarification-create]
     design: [acp.command-create, acp.design-create, acp.design-reference, acp.pattern-create]
@@ -27,7 +27,12 @@ commands:
     - command: acp.decide
       category: core
       purpose: Record a significant architectural decision as an ADR in agent/memory/decisions.md with a DO-NOT-re-open condition to prevent future agents from relitigating settled choices.
-    - command: acp.handoff
+    - command: acp.dispatch
+      category: core
+      purpose: Invoke the ACP dispatch engine (Persona B/C) to execute a routing task via OpenRouter API, assembling context-optimised prompts and streaming LLM responses.
+    - command: acp.feedback
+      category: core
+      purpose: Capture structured developer feedback about ACP system failures, protocol gaps, or improvement suggestions; write to agent/feedback/feedback-NNN.md.
       category: core
       purpose: Generate a context-aware handoff report for transferring work to an agent in a different context.
     - command: acp.index
@@ -36,7 +41,9 @@ commands:
     - command: acp.init
       category: core
       purpose: Initialize agent context by loading all documentation, reviewing source code, and preparing for work.
-    - command: acp.memory-sync
+    - command: acp.install
+      category: core
+      purpose: Install or upgrade ACP Enhanced in the current project directory; copies static ACP files while preserving user state.
       category: core
       purpose: Compress old session history into monthly summaries, flag stale patterns, and check wiki files for re-verification — keeps the memory layer lean without losing history.
     - command: acp.plan
@@ -66,6 +73,9 @@ commands:
     - command: acp.sync
       category: core
       purpose: Synchronize documentation with source code by identifying and updating stale documentation.
+    - command: acp.task
+      category: core
+      purpose: Create, list, read, and stamp routing task files in agent/routing/tasks/ (CRUD wrapper for the routing task layer).
     - command: acp.task-create
       category: core
       purpose: Create task files with proper structure, milestone linking, and automatic progress.yaml updates.
