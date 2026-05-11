@@ -2,6 +2,65 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-05-11
+  executor: copilot
+  tasks: [route-014, route-015, route-016, route-017, route-018, route-019, route-020, route-021]
+  done:
+    - completed-M39-git-branch-awareness-4-routes-version-6.4.13-to-6.5.0
+    - route-014-optional-git-workflow-commented-block-in-identity-yml
+    - route-015-step-1b-git-branch-safety-check-added-to-agents-claude-copilot-instructions
+    - route-016-acp-commit-md-v1.2.0-step-0-branch-guard-branch-field-in-sessions-schema
+    - route-017-milestone-39-created-wiki-architecture-domain-updated
+    - completed-M40-pre-impl-audit-protocol-4-routes-version-6.5.0-to-6.6.0
+    - route-018-audit-carryovers-md-created-new-memory-layer-carryovers-key-schema
+    - route-019-acp-audit-md-v1.1.0-pre-impl-flag-4-phases-step-3b-carryover-write-all-modes
+    - route-020-step-4.4-audit-carryovers-check-added-to-all-3-protocol-files
+    - route-021-quality-gate-comment-task-template-milestone-40-created-wiki-updated
+    - bumped-version-6.4.13-to-6.5.0-then-6.6.0-across-identity-agent-md-package-yaml-changelog
+    - 2-git-commits-f677583-M39-413d27d-M40
+  deferred: {}
+  key_fact: |
+    force-add is required for gitignored instance files in this repo (milestones/, routing/tasks/,
+    progress.yaml, memory/). This repo is the ACP development repo and tracks these as examples —
+    but agent/.gitignore excludes them by default for consumer projects. Always use `git add -f`
+    for these paths when committing in acp-enhanced itself. Pattern: same `created: YYYY-MM-DD`
+    appears in all route files, so stamp `completed:` by appending the date to that line.
+
+- date: 2026-05-11
+  executor: copilot
+  tasks: [audit-011]
+  done:
+    - read-all-8-route-files-014-through-021
+    - cross-referenced-against-identity-yml-agents-md-progress-yaml-milestone-format
+    - found-6-gaps-3-high-3-medium-low-across-routes-015-017-018-019-020-021
+    - created-audit-011-report-6-findings-9-recommended-fixes
+    - applied-all-9-fixes-to-route-files-directly
+  deferred: {}
+  key_fact: |
+    3 high gaps in routes pre-implementation: (1) route-017 title referenced deferred acp-bootstrap.sh
+    work — title corrected; (2) route-017 milestone task list omitted route-017 itself; (3) route-019
+    acceptance criteria said "Steps 0-5 unchanged" but Step 4 IS changed (carryover write added to all
+    modes). Also: both wrap-up routes (017 + 021) omitted wiki file updates — same gap pattern that
+    created audit-009 compliance fixes. All 9 fixes applied before implementation begins.
+
+- date: 2026-05-11
+  executor: copilot
+  tasks: [audit-010]
+  done:
+    - read-feedback-002-git-branch-awareness-5-recommendations
+    - read-feedback-003-pre-implementation-audit-protocol-4-recommendations
+    - verified-no-implementations-exist-in-acp-enhanced-for-either-feedback
+    - created-audit-010-report-9-findings-2-milestone-plan-M39-M40
+  deferred:
+    - implement-M39-git-branch-awareness → not-yet-routed
+    - implement-M40-pre-impl-audit-enhancement → not-yet-routed
+  key_fact: |
+    feedback-002: ACP context-loading (Steps 1-6) has no git branch check, identity.yml
+    has no git_workflow field, acp.commit.md has no branch guard. All 3 are high severity.
+    feedback-003: acp.audit.md has single mode (no --pre-impl), no audit-carryovers.md
+    exists (pending fixes are silently lost), task template has no verification quality gate.
+    M39 (branch awareness, 4 tasks, ~45min) and M40 (pre-impl audit, 4 tasks, ~1hr) defined.
+
 - date: 2026-05-09
   executor: copilot
   tasks: [audit-009]
