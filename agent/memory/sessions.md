@@ -4,6 +4,29 @@
 
 - date: 2026-05-11
   executor: copilot
+  tasks: [route-029, route-030, route-031, route-032, route-033, route-034, route-035]
+  done:
+    - completed-M41b-stabilisation-sprint-7-structural-gap-fixes
+    - route-029-deleted-scripts-scripts-package-json-duplicate-GAP-001-bf92e15
+    - route-030-added-QUICKSTART-link-to-README-hero-section-GAP-002-ecf5587
+    - route-031-documented-git-workflow-branch-safety-README-QUICKSTART-GAP-003-b85393d
+    - route-032-added-AGENTS-md-pre-commit-sync-hook-to-acp-bootstrap-sh-GAP-004-f3d5f17
+    - route-033-added-Windows-WSL2-install-docs-to-README-QUICKSTART-GAP-005-d96f1d3
+    - route-034-added-last-verified-2026-05-11-to-all-5-models-routing-config-yml-OBS-002-3c7083b
+    - route-035-set-Persona-A-defaults-routing-yml-executor-copilot-model-github-copilot-OBS-004-263b3b2
+    - M41-wrap-up-version-6.6.0-to-6.7.0-identity-package-AGENT-CHANGELOG-milestone-completed
+    - M41-100-percent-14-of-14-tasks-all-routes-022-to-035-stamped
+  deferred: []
+  key_fact: |
+    M41 Stabilisation Sprint COMPLETE (14/14, 6.7.0). Key patterns confirmed:
+    acp-bootstrap.sh step 8 (8/8) installs pre-commit hook — idempotent (checks ACP marker before append).
+    BSD-safe hook install: use `printf '%s\n' "$VAR" > file` (not heredoc with variable) to avoid
+    quoting issues. routing.yml Persona A defaults: executor: copilot, model: github-copilot —
+    acp-dispatch.ts overwrites at runtime for Persona B/C.
+    QUICKSTART Step 0 is Windows/WSL2 setup (new pattern for platform-specific prerequisite steps).
+
+- date: 2026-05-11
+  executor: copilot
   tasks: [route-022, route-023, route-024, route-025, route-026, route-027, route-028]
   done:
     - completed-M41a-stabilisation-sprint-7-bug-fixes
