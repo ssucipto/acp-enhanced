@@ -50,6 +50,15 @@ priorities: [code-quality, cost-efficiency, mobile-performance]
 repo: github.com/your-handle/yourproject
 ```
 
+**Recommended**: Enable branch safety by uncommenting the `git_workflow:` block in `agent/core/identity.yml`:
+```yaml
+git_workflow:
+  default_working_branch: mainline   # branch you commit to daily
+  production_branch: main            # branch that deploys to prod
+  branch_model: trunk                # trunk | gitflow-lite | github-flow
+```
+When configured, ACP checks your git branch at the start of every session and warns if you're on the production branch before any work begins.
+
 ---
 
 ## Step 3 — Bootstrap Domain Knowledge (20 minutes)
