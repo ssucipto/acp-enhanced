@@ -6,7 +6,7 @@ project:
   version: 6.6.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M40-complete
+  current_milestone: M41-in-progress
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M38 complete: proactive commit triggers +
@@ -740,6 +740,25 @@ milestones:
       constraints.yml 6 new rules, acp.commit.md v1.1.0, lessons.md postmortem prepended.
       audit-009 retroactively fixed 6 process compliance gaps from this session (route-013, milestone-38,
       sessions.md entry, CHANGELOG [6.4.13], AGENT.md update, wiki update).
+
+  M41:
+    name: Stabilisation Sprint — Audit-014 External Feedback Fixes
+    priority: 5
+    status: in_progress
+    progress: 0
+    started: 2026-05-11
+    completed:
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 14
+    file: agent/milestones/milestone-41-stabilisation-sprint.md
+    notes: |
+      Addresses all 13 actionable findings from audit-014 (Perplexity AI external structural audit).
+      M41a (routes 022-028): BUG-001 sessions.md fix, BUG-002 HTTP-Referer fix, BUG-003 4 missing
+      command docs (acp.feedback, acp.task, acp.install, acp.dispatch), BUG-004 domain.yml count.
+      M41b (routes 029-035): GAP-001 duplicate package.json, GAP-002 QUICKSTART link, GAP-003
+      git_workflow docs, GAP-004 pre-commit hook, GAP-005 Windows/WSL docs, OBS-002 config.yml
+      freshness, OBS-004 routing.yml Persona A defaults. Target version: 6.7.0.
 
   M25:
     name: ACP Progress Visualizer (P0 MVP)
@@ -5193,7 +5212,8 @@ next_steps:
   - "✅ M38 DONE: protocol knowledge preservation — feedback-001 proactive commit triggers (2026-05-09)"
   - "✅ M39 DONE: git branch awareness — Step 1b + git_workflow + acp.commit.md v1.2.0 (2026-05-11)"
   - "✅ M40 DONE: pre-impl audit protocol — --pre-impl mode + audit-carryovers.md + Step 4.4 + quality gate (2026-05-11)"
-  - "📋 FUTURE: M41 — P1 visualizer (kanban, GitHub remote, multi-project)"
+  - "� IN PROGRESS: M41 — Stabilisation Sprint (audit-014 fixes, routes 022-035, target 6.7.0)"
+  - "📋 FUTURE: M42 — P1 visualizer (kanban, GitHub remote, multi-project)"
   - "📋 FUTURE: additional feedback-driven protocol improvements"
 
 notes:
