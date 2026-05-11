@@ -392,6 +392,26 @@ If `agent/driver.yaml` exists:
 
 **Expected Outcome**: Driver binding summary reported; issues appear as warnings only.
 
+### 11.6. TypeScript Validator Health Checks (requires `scripts/` dependencies)
+
+Run the TypeScript validator to check structural health outside the document layer.
+
+**Prerequisites**: `cd scripts && npm install` (one-time, installs ts-node + js-yaml)
+
+**Command**: `(cd scripts && npx ts-node acp-validate.ts)` — run from repo root
+
+**Actions** (all run automatically when invoked with no arguments):
+1. **Placeholder scan** — detects `{PLACEHOLDER}` / `{TODO}` / `{EXAMPLE}` in command files
+2. **Frontmatter scan** — validates required YAML fields in routing task files (`agent/routing/tasks/route-*.md`)
+3. **Triple-file parity check** — diffs `agent/commands/*.md`, `.github/prompts/*.prompt.md`, `.opencode/commands/*.md` per filename; prints `❌` for mismatches, `✓` for clean
+4. **Staleness check** (informational, non-blocking) — warns if `agent/routing/taxonomy.yml` `last_updated` field is >90 days old, or any model `last_verified` in `agent/routing/config.yml` is >180 days old
+5. **AGENTS.md size guard** — checks `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` byte sizes against `agents_md_rules` in `agent/core/constraints.yml` (hard limit: 15KB, warn: 12KB); exits 1 if exceeded
+6. **sessions.md structure** — validates that each entry in `agent/memory/sessions.md` has required keys (`date`, `executor`, `tasks`, `done`) and that `date` values match YYYY-MM-DD format; exits 1 if malformed
+
+Exit code: 0 if size guard + sessions check pass; 1 otherwise. Staleness is informational and does not affect exit code.
+
+**Expected Outcome**: Report from each check. Failures on size guard or sessions structure are errors; staleness warnings are informational.
+
 ### 12. Generate Validation Report
 
 Summarize validation results.
@@ -463,6 +483,7 @@ Cross-References:
 - [ ] Reserved names checked
 - [ ] Key file index validated (schema, paths, limits, artifact kind supported)
 - [ ] No broken internal links
+- [ ] TypeScript validator executed: size guard and sessions structure passed
 - [ ] Validation report generated
 
 ---
