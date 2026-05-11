@@ -468,3 +468,13 @@ audit_carryovers:
     remove: "Safe to delete entry once verified_in_audit is set"
   protocol_step: "Step 4.4 — Audit Carryover Check (conditional)"
   version_introduced: "6.6.0"
+
+ux_review:
+  # Added: 2026-05-11 (v6.8.0, M42, STRUCT-003)
+  description: >
+    UX analysis of ACP workflow — command surface, cognitive load, interaction patterns,
+    comparison vs alternatives, token saving estimates. Originally at scripts/FINAL-REVIEW.md;
+    moved to agent/design/ so it is discoverable by the context-loading protocol.
+  file: "agent/design/acp-ux-review.md"
+  category: design
+  version_introduced: "6.8.0"

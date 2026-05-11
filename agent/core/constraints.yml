@@ -33,6 +33,15 @@ context_budget:
   layer2_max_tokens: 1000
   layer3_max_tokens: 3500
   total_max_tokens: 5000
+
+agents_md_rules:
+  max_bytes: 15000        # ~15KB hard limit — exceeding this may break tool auto-load
+  warn_at_bytes: 12000   # ~12KB soft warning threshold
+  rationale: "AGENTS.md, CLAUDE.md, and copilot-instructions.md are auto-loaded by some tools; must stay compact"
+  files_to_check:
+    - AGENTS.md
+    - CLAUDE.md
+    - .github/copilot-instructions.md
   warning_threshold: 0.80
 
 bash_rules:

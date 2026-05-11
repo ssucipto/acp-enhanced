@@ -369,3 +369,20 @@
     pattern, grep agent/commands/ for embedded gitignore blocks too, not just agent/scripts/.
     git rm --cached removes files from git index without deleting on disk. Use to stop tracking
     files that were committed before a gitignore rule was applied.
+
+- date: 2026-05-11
+  executor: copilot
+  tasks: [route-036, route-037, route-038, route-039, route-040, route-041, route-042]
+  done:
+    - dispatch-sigint-handler-and-order-fix
+    - validate-sessions-memory-check
+    - validate-agents-md-size-guard
+    - validate-parity-diff-filenames
+    - taxonomy-9-new-types-plus-last-updated
+    - getSkillFile-crosscut-types-mapping
+    - lessons-archive-mechanism-and-filter
+    - staleness-check-taxonomy-and-models
+    - final-review-moved-to-agent-design
+    - m42-milestone-complete-6.8.0-released
+  deferred: []
+  key_fact: "validateSessionsMemory + validateAgentsMdSize + checkStaleness + improved runParityCheck added to acp-validate.ts; getSkillFile + getFilteredLessons improved in acp-dispatch.ts; 9 new taxonomy task types; FINAL-REVIEW.md moved to agent/design/acp-ux-review.md; all 9 audit-015 carryovers closed; version 6.7.0 -> 6.8.0"
