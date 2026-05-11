@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.7.0] — 2026-05-11
+
+### Added
+- `agent/commands/acp.feedback.md` — new command doc for capturing structured feedback (M41a, route-024)
+- `agent/commands/acp.task.md` — new command doc for creating/reading/updating routing task files (M41a, route-025)
+- `agent/commands/acp.install.md` — new command doc for ACP installation (M41a, route-026)
+- `agent/commands/acp.dispatch.md` — new command doc for Persona B/C dispatch flow (M41a, route-027)
+- Companion prompt + opencode files for all 4 new commands (12 new files total)
+- `scripts/acp-bootstrap.sh`: Step 8 — installs `.git/hooks/pre-commit` to auto-sync `AGENTS.md` → `CLAUDE.md` + `.github/copilot-instructions.md` on commit (M41b, route-032)
+- `#### Windows (WSL2) Setup` subsection in `README.md` Requirements — WSL2 install command and native Windows TypeScript note (M41b, route-033)
+- `Step 0 — Platform Setup` in `scripts/QUICKSTART.md` for Windows users (M41b, route-033)
+- `last_verified: 2026-05-11` field in all 5 model entries in `agent/routing/config.yml` (M41b, route-034)
+- `## Branch Safety` section in `README.md` explaining `git_workflow:` config and Step 1b (M41b, route-031)
+
+### Fixed
+- `agent/memory/sessions.md`: orphaned YAML block at line ~151 repaired (missing `- date:` header) (M41a, route-022)
+- `scripts/acp-dispatch.ts`: replaced hardcoded `HTTP-Referer` placeholder with dynamic values from `identity.yml` (M41a, route-023)
+- `agent/wiki/domain.yml`: command count corrected from 58 → 63 to match actual command files (M41a, route-028)
+- `agent/core/routing.yml`: `executor: unset` / `model: unset` replaced with Persona A defaults (`copilot` / `github-copilot`) (M41b, route-035)
+- `scripts/scripts-package.json`: deleted duplicate file (identical to `scripts/package.json`) (M41b, route-029)
+
+### Docs
+- `scripts/QUICKSTART.md`: Step 1 expanded with `git_workflow:` recommendation and example config (M41b, route-031)
+- `README.md`: prominent QUICKSTART link added to Install and Quick Start sections (M41b, route-030)
+- `agent/skills/typescript.md`: corrected reference from `scripts-package.json` → `scripts/package.json` (M41b, route-029)
+
+---
+
 ## [6.6.0] — 2026-05-11
 
 ### Added
