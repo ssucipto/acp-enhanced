@@ -3,16 +3,18 @@
 
 project:
   name: agent-context-protocol
-  version: 6.5.0
+  version: 6.6.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M39
+  current_milestone: M40-complete
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M38 complete: proactive commit triggers +
-    knowledge-preservation protocol (feedback-001 fixes). M39–M40 in progress: git branch
-    awareness + pre-impl audit protocol. Version 6.4.13 → 6.6.0. 58 slash commands.
-    TanStack Start progress visualizer. Proactive 7-trigger WAL session memory system.
+    knowledge-preservation protocol (feedback-001 fixes). M39 complete: git branch
+    awareness (Step 1b, git_workflow block, acp.commit.md v1.2.0). M40 complete:
+    pre-impl audit protocol (--pre-impl mode, audit-carryovers.md, Step 4.4). Version
+    6.4.13 → 6.6.0. 58 slash commands. TanStack Start progress visualizer. Proactive
+    7-trigger WAL session memory system.
 
 milestones:
   M1:
@@ -706,12 +708,12 @@ milestones:
   M40:
     name: Pre-Implementation Audit Protocol (feedback-003 fixes)
     priority: 5
-    status: not_started
-    progress: 0
-    started:
-    completed:
+    status: completed
+    progress: 100
+    started: 2026-05-11
+    completed: 2026-05-11
     estimated_weeks: 0
-    tasks_completed: 0
+    tasks_completed: 4
     tasks_total: 4
     file: agent/milestones/milestone-40-pre-impl-audit-protocol.md
     notes: |
