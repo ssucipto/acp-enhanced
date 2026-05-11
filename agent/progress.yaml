@@ -745,11 +745,11 @@ milestones:
     name: Stabilisation Sprint — Audit-014 External Feedback Fixes
     priority: 5
     status: in_progress
-    progress: 21
+    progress: 29
     started: 2026-05-11
     completed:
     estimated_weeks: 1
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 14
     file: agent/milestones/milestone-41-stabilisation-sprint.md
     notes: |
