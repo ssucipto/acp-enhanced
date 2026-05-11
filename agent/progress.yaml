@@ -6,7 +6,7 @@ project:
   version: 6.6.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M41-in-progress
+  current_milestone: M42-not-started
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M38 complete: proactive commit triggers +
@@ -740,6 +740,26 @@ milestones:
       constraints.yml 6 new rules, acp.commit.md v1.1.0, lessons.md postmortem prepended.
       audit-009 retroactively fixed 6 process compliance gaps from this session (route-013, milestone-38,
       sessions.md entry, CHANGELOG [6.4.13], AGENT.md update, wiki update).
+
+  M42:
+    name: Dispatch Integrity + Validation Hardening
+    priority: 5
+    status: not-started
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 1-2
+    tasks_completed: 0
+    tasks_total: 7
+    file: agent/milestones/milestone-42-dispatch-integrity-and-validation-hardening.md
+    notes: |
+      Resolves all 9 pending findings from audit-015 (external final audit + M41 verification).
+      Routes 036-042: BUG-003 dispatch.ts updateRoutingYml() order + SIGINT handler, MEMORY-002
+      sessions.md YAML check, VALIDATE-001 AGENTS.md byte-size guard + constraints.yml rule,
+      VALIDATE-002 parity diff filenames, ROUTING-001 9 missing taxonomy task types, ROUTING-002
+      getSkillFile() crosscutTypes mapping, MEMORY-001 lessons.md archive mechanism, ROUTING-003
+      taxonomy.yml last_updated + staleness check, STRUCT-003 FINAL-REVIEW.md move to agent/design/.
+      Target version: 6.7.0 → 6.8.0.
 
   M41:
     name: Stabilisation Sprint — Audit-014 External Feedback Fixes
@@ -5212,8 +5232,8 @@ next_steps:
   - "✅ M38 DONE: protocol knowledge preservation — feedback-001 proactive commit triggers (2026-05-09)"
   - "✅ M39 DONE: git branch awareness — Step 1b + git_workflow + acp.commit.md v1.2.0 (2026-05-11)"
   - "✅ M40 DONE: pre-impl audit protocol — --pre-impl mode + audit-carryovers.md + Step 4.4 + quality gate (2026-05-11)"
-  - "� IN PROGRESS: M41 — Stabilisation Sprint (audit-014 fixes, routes 022-035, target 6.7.0)"
-  - "📋 FUTURE: M42 — P1 visualizer (kanban, GitHub remote, multi-project)"
+  - "✅ M41 DONE: stabilisation sprint — audit-014 external feedback fixes (routes 022-035, v6.7.0, 2026-05-11)"
+  - "📋 NEXT: M42 — dispatch integrity + validation hardening (routes 036-042, target v6.8.0) — 9 audit-015 findings"
   - "📋 FUTURE: additional feedback-driven protocol improvements"
 
 notes:
