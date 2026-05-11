@@ -1,9 +1,16 @@
 # Correction Log — Filtered by task_type before loading
 # Populated automatically when developer says "log it" or "wrong, log this"
 # Max 5 entries loaded per session, filtered to current task_type + priority:high
+#
+# Optional fields added in v6.8.0:
+#   status: active       # Default if absent. active = load normally
+#   status: archived     # Archived lessons are skipped by getFilteredLessons()
+#   superseded_by: "constraints.yml:key"  # Reference to what now encodes this knowledge
 
 - date: 2026-05-09
   task_type: all
+  status: archived
+  superseded_by: "constraints.yml:context_overflow_commit_first"
   mistake: >
     Multiple sessions of knowledge (audit reports, ADRs, bug fix docs, patterns) were
     permanently lost when context window overflow terminated sessions before /acp-commit

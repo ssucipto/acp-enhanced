@@ -159,8 +159,8 @@ carryovers:
       with no work done. Also: SIGINT during streaming loses the ledger row — tokens
       billed but not recorded.
     fix_target: Move updateRoutingYml() to after appendLedger(); add SIGINT handler to flush partial ledger
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
 
@@ -173,8 +173,8 @@ carryovers:
       Malformed sessions.md entries go undetected across full milestones.
       BUG-001 was present for one full milestone without detection.
     fix_target: Add validateSessionsMemory() function to no-args validate path
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
 
@@ -187,8 +187,8 @@ carryovers:
       AGENTS.md is 11,043 bytes (safe). But no guard exists. If content from AGENT.md
       (90,368 bytes) is accidentally merged, it silently exceeds tool auto-load limits.
     fix_target: Add validateAgentsMdSize() to acp-validate.ts + agents_md_rules to constraints.yml
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
 
@@ -202,8 +202,8 @@ carryovers:
       audit-run, milestone-create, route-create, upstream-parity-check. Sessions data
       confirms these occur regularly across M29–M40.
     fix_target: Add 9 entries to taxonomy.yml with correct executor, context_required, tokens_est, skill
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
 
@@ -216,8 +216,8 @@ carryovers:
       priority:high lessons load for every task type, forever. TikrFlow overflow lesson
       is redundant — its fix is codified in constraints.yml as context_overflow_commit_first.
     fix_target: Add status/superseded_by fields; update getFilteredLessons() to skip status:archived
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
 
@@ -228,8 +228,8 @@ carryovers:
     finding: getSkillFile() has no explicit mapping for 7 of the 9 new task types — silent crosscut fallthrough
     description: After ROUTING-001 taxonomy entries are added, getSkillFile() needs explicit mapping so fallback is intentional.
     fix_target: Add explicit crosscutTypes array in getSkillFile() after ROUTING-001 is done
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
 
@@ -240,8 +240,8 @@ carryovers:
     finding: taxonomy.yml has no parseable last_updated date field; acp-validate.ts staleness check not implemented
     description: config.yml last_verified was added (route-034) but taxonomy.yml header has comment-only date, no YAML field.
     fix_target: Add last_updated: field to taxonomy.yml header; add checkStaleness() to acp-validate.ts
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
 
@@ -252,8 +252,8 @@ carryovers:
     finding: Parity check shows count mismatch only — does not show which specific files are missing
     description: At 63 commands, count-only output is unhelpful. Developer must manually diff directories.
     fix_target: Compute symmetric difference in runParityCheck() and print missing filenames
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
 
@@ -263,7 +263,7 @@ carryovers:
     file: scripts/FINAL-REVIEW.md
     finding: FINAL-REVIEW.md has useful UX analysis but is outside agent/ tree — never loaded by context protocol
     fix_target: Move to agent/design/acp-ux-review.md; add to domain.yml design entries
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null

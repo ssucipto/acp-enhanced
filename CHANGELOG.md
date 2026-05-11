@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.8.0] — 2026-05-11
+
+### Fixed
+- `scripts/acp-dispatch.ts`: `updateRoutingYml()` moved after `appendLedger()` — ledger entry now always written before routing.yml update even on partial runs (M42, route-036, BUG-003)
+- `scripts/acp-dispatch.ts`: SIGINT handler added — ensures partial ledger row is flushed on Ctrl+C, prevents silent data loss on interrupted dispatches (M42, route-036, BUG-003)
+
+### Added
+- `validateSessionsMemory()` in `scripts/acp-validate.ts` — validates `sessions.md` entry structure (required keys, date format); integrated into no-args validate path (M42, route-037, MEMORY-002)
+- `validateAgentsMdSize()` in `scripts/acp-validate.ts` — byte-size guard for AGENTS.md, CLAUDE.md, copilot-instructions.md against `agents_md_rules` thresholds in constraints.yml (M42, route-038, VALIDATE-001)
+- `checkStaleness()` in `scripts/acp-validate.ts` — informational check: warns if `taxonomy.yml` is >90 days old or if any config.yml model `last_verified` is >180 days ago (M42, route-041, ROUTING-003)
+- `agents_md_rules` block in `agent/core/constraints.yml` — defines `max_bytes: 15000`, `warn_at_bytes: 12000`, and `files_to_check` list for AGENTS.md size enforcement (M42, route-038, VALIDATE-001)
+- 9 new task types in `agent/routing/taxonomy.yml` (`wiki-update`, `memory-write`, `changelog-update`, `progress-update`, `adr-write`, `audit-run`, `milestone-create`, `route-create`, `upstream-parity-check`); `last_updated: 2026-05-11` header field added (M42, route-039, ROUTING-001/002)
+- `agent/design/acp-ux-review.md` — UX analysis document (moved from `scripts/FINAL-REVIEW.md`) (M42, route-042, STRUCT-003)
+
+### Changed
+- `runParityCheck()` in `scripts/acp-validate.ts` — rewritten from count-only to Set-based diff; now prints per-filename `❌` for each unmatched command doc or prompt file (M42, route-038, VALIDATE-002)
+- `getSkillFile()` in `scripts/acp-dispatch.ts` — `crosscutTypes` list expanded with 9 new task types to match taxonomy additions (M42, route-039, ROUTING-002)
+- `getFilteredLessons()` in `scripts/acp-dispatch.ts` — skips lessons with `status: archived`; `agent/memory/lessons.md` archive schema documented in header comment (M42, route-040, MEMORY-001)
+
+### Moved
+- `scripts/FINAL-REVIEW.md` → `agent/design/acp-ux-review.md` — UX analysis now inside `agent/` tree and discoverable by context-loading protocol (M42, route-042, STRUCT-003)
+
+---
+
 ## [6.7.0] — 2026-05-11
 
 ### Added
