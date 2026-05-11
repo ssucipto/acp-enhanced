@@ -2,7 +2,7 @@
 <rules>
 - TypeScript files live in `scripts/` (dispatch, validate, etc.)
 - Use strict TypeScript: `"strict": true` in tsconfig (no implicit any)
-- Use `fs` built-in — no third-party file I/O libraries beyond what's in scripts-package.json
+- Use `fs` built-in — no third-party file I/O libraries beyond what's in `scripts/package.json`
 - YAML parsing in TS: use `js-yaml` (already a dependency)
 - Frontmatter parsing: use `gray-matter` (already a dependency)
 - OpenRouter API: use the `openai` SDK pointed at OPENROUTER_BASE
