@@ -207,6 +207,13 @@ async function dispatch(taskPath: string) {
   // Update routing.yml so context window knows current executor
   updateRoutingYml(executor, modelConfig.model);
 
+  // Read project identity for OpenRouter attribution headers
+  const identity = (yaml.load(readAgent("core/identity.yml")) ?? {}) as Record<string, unknown>;
+  const repoField = (identity.repo as string) ?? "ssucipto/acp-enhanced";
+  const repoUrl = (identity.homepage as string) ??
+    (repoField.startsWith("http") ? repoField : `https://${repoField}`);
+  const projectName = (identity.project as string) ?? "ACP Enhanced";
+
   const prompt = buildContext(meta, taskContent);
   const systemTokens = estimateTokens(prompt.system);
   const userTokens = estimateTokens(prompt.user);
@@ -218,8 +225,8 @@ async function dispatch(taskPath: string) {
     baseURL: OPENROUTER_BASE,
     apiKey: process.env.OPENROUTER_API_KEY!,
     defaultHeaders: {
-      "HTTP-Referer": "https://github.com/your-handle/your-repo",
-      "X-Title": "ACP Enhanced Dispatch",
+      "HTTP-Referer": repoUrl,
+      "X-Title": projectName,
     },
   });
 
