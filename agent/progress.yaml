@@ -5187,10 +5187,13 @@ next_steps:
   - "✅ M31 DONE: E2E test coverage (task-162–166)"
   - "✅ M30 DONE: agent/drafts/ convention fix (task-159–161)"
   - "✅ M29 DONE: upstream integration audit (task-155–158)"
-  - "✅ M28 DONE: opencode command parity — 58 commands (task-71–75)"
+  - "✅ M28 DONE: opencode command parity — 59 commands (task-71–75)"
   - "✅ M26 DONE: protocol usability improvements (task-145–149)"
   - "✅ M25 DONE: ACP Progress Visualizer TanStack Start dashboard (task-137–144)"
-  - "📋 FUTURE: M39 — P1 visualizer (kanban, GitHub remote, multi-project)"
+  - "✅ M38 DONE: protocol knowledge preservation — feedback-001 proactive commit triggers (2026-05-09)"
+  - "✅ M39 DONE: git branch awareness — Step 1b + git_workflow + acp.commit.md v1.2.0 (2026-05-11)"
+  - "✅ M40 DONE: pre-impl audit protocol — --pre-impl mode + audit-carryovers.md + Step 4.4 + quality gate (2026-05-11)"
+  - "📋 FUTURE: M41 — P1 visualizer (kanban, GitHub remote, multi-project)"
   - "📋 FUTURE: additional feedback-driven protocol improvements"
 
 notes:
