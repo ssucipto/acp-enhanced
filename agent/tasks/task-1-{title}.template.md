@@ -196,6 +196,16 @@ Create TypeScript configuration, build scripts, and other config files.
 
 ---
 
+<!-- QUALITY GATE (required for backend and frontend tasks):
+     Before writing verification checklist items, cross-reference against the actual codebase:
+     1. Field names  — read the Pydantic model / DB schema; confirm every field name used here exists
+     2. Enum values  — read the enum definition; confirm values are valid members (not free strings)
+     3. Import paths — read the file tree; confirm all import sources exist (frontend tasks)
+     4. HTTP methods — read the route decorator; confirm method + path match exactly
+     5. Response shape — read the API endpoint; confirm response field names match what you verify
+     Checklist items with wrong names or methods create implementation bugs that silently
+     pass during review but fail at runtime.                                                 -->
+
 ## Verification
 
 [Provide a checklist of items to verify the task is complete. Each item should be objectively verifiable.]
