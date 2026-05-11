@@ -31,6 +31,25 @@ Read these files in order. They are small and always relevant:
 2. `agent/core/constraints.yml` — hard rules and context budget
 3. `agent/core/routing.yml` — which executor you are this session
 
+### Step 1b — Git Branch Safety Check (conditional)
+Only run this step if `agent/core/identity.yml` contains a `git_workflow:` block.
+
+Run: `git branch --show-current`  
+Compare to `identity.yml → git_workflow.default_working_branch`.
+
+- **Matches default_working_branch** → proceed normally
+- **Is the production_branch (e.g. `main`)** → output warning and stop:
+  ```
+  ⚠️ [ACP] You are on `main` (production branch).
+  All work should target the default working branch. Switch with:
+    git checkout [default_working_branch]
+  Do not commit until you are on the correct branch.
+  ```
+  Output the warning and stop. Do not continue any task steps. The developer
+  must switch branches and re-invoke the session.
+- **Is `feature/*`, `fix/*`, or other** → note it in session, proceed normally
+- **`git_workflow` not defined in identity.yml** → skip this step entirely
+
 ### Step 2 — Identify Task Domain
 From the developer's request, determine the task_type by reading:
 `agent/routing/taxonomy.yml`
