@@ -74,6 +74,27 @@ LAYER 3 — EPHEMERAL (session-specific, filtered, ~1,200 tokens)
   agent/wiki/architecture.md  (one section at a time)
 ```
 
+## Context Loading Protocol — Step 1b Git Branch Safety Check
+
+Added in v6.5.0 (M39). Step 1b is a **conditional** step that runs between Step 1 (Load Core)
+and Step 2 (Identify Task Domain) when `agent/core/identity.yml` contains a `git_workflow:` block.
+
+**Purpose**: Prevent accidental direct commits to the production branch by halting the session
+before any task steps run.
+
+**Trigger condition**: `git_workflow:` block present and uncommented in `identity.yml`.
+
+**Flow**:
+1. Run `git branch --show-current`
+2. Compare result to `git_workflow.default_working_branch`
+3. If on `default_working_branch` → proceed normally
+4. If on `production_branch` → output warning, **STOP** — developer must switch branch
+5. If on `feature/*`, `fix/*`, or other → note in session, proceed normally
+6. If `git_workflow` not defined → skip silently (no-op)
+
+**Safe no-op by default**: `git_workflow:` is commented out in the identity.yml template.
+Projects that don't configure it skip Step 1b entirely. No behavioral change for existing projects.
+
 ## Session Memory Write Protocol (v6.4.13+)
 
 sessions.md is treated as a WAL (write-ahead log) — written at the **moment of discovery**, not
