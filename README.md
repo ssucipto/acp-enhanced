@@ -67,13 +67,13 @@ Only files that changed since last install are updated. Locally modified files a
 
 ## Slash Commands
 
-ACP Enhanced registers **58 slash commands** across two tools — available after bootstrapping:
+ACP Enhanced registers **59 slash commands** across two tools — available after bootstrapping:
 
 | Tool | How to invoke | Source files |
 |---|---|---|
 | VS Code Copilot | `/acp-*` — autocomplete in Copilot Chat | `.github/prompts/*.prompt.md` |
 | opencode | `/acp-*` — autocomplete in opencode TUI | `.opencode/commands/*.md` |
-| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (58 commands) |
+| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (59 commands) |
 
 ```text
 /acp-init          /acp-proceed       /acp-plan          /acp-status
@@ -84,7 +84,7 @@ ACP Enhanced registers **58 slash commands** across two tools — available afte
 
 > VS Code Copilot requires agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.  
 > opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.  
-> **Note**: 6 framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`) are defined in prompt/opencode files only — not in `agent/commands/*.md`. Use VS Code Copilot or opencode to run these.
+> **Note**: All 59 commands are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.
 
 ---
 
@@ -200,16 +200,63 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Memory | None — every session starts cold | sessions.md + lessons.md + ADRs + patterns |
 | Task routing | None | Taxonomy-based routing to skill files |
 | Mistake learning | None | Correction log appended per task type |
-| VS Code commands | Manual file reference | 58 slash commands with autocomplete |
-| opencode support | None | 58 slash commands in `.opencode/commands/` |
+| VS Code commands | Manual file reference | 59 slash commands with autocomplete |
+| opencode support | None | 59 slash commands in `.opencode/commands/` |
 | Preferences | None | 4-level hierarchy (project > workspace > user > default) |
 | Project registry | None | Global `~/.acp/projects.yaml` for multi-project tracking |
 | Cost tracking | None | Per-task token + USD ledger via dispatch |
+| Knowledge preservation | None | Proactive 7-trigger WAL system — writes session/lessons at moment of discovery, not only at session end |
+| Git branch safety | None | Step 1b branch guard — warns if working on production branch; configurable via `git_workflow:` in `identity.yml` |
+| Pre-impl audit | None | `/acp-audit --pre-impl` — 4-phase readiness check before coding: plan correctness, code cross-reference, carryover validation, operational completeness |
+| Audit carryovers | None | `agent/memory/audit-carryovers.md` — tracks unresolved findings across sessions; surfaced at session start via Step 4.4 |
 | Install | `curl \| bash` from original repo | Single bootstrap script from this fork |
 
 The ACP command and workflow system (clarifications → design → plan → proceed) is identical to the original at the time of the fork.
 
 > **Note**: The upstream [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol) continues to evolve independently. This comparison reflects our fork point. The upstream now has its own extended features (v7.x+) and the two implementations have diverged. Check the upstream README for its current capabilities.
+
+### Recent Protocol Enhancements (v6.4–v6.6)
+
+Three milestones shipped in May 2026 added significant protocol improvements on top of the base memory system:
+
+#### M38 — Knowledge Preservation (v6.4.13)
+Solved the "context overflow kills memory" problem. Previously, `/acp-commit` was framed as a passive end-of-session act. If context overflow terminated a session before commit, all in-session knowledge was permanently lost.
+
+**Fix**: Proactive 7-trigger Write-Ahead Log (WAL) system. The agent now writes memory entries at the **moment of discovery**, not at session end:
+- After every audit report is created → write session entry + lessons immediately
+- After every git commit touching >5 files → treat as phase boundary → write session entry
+- When a correction is given → write lesson immediately
+- When a new pattern emerges → append to `patterns.md` before continuing
+- When context window approaches capacity → write all pending ACP entries first
+
+#### M39 — Git Branch Awareness (v6.5.0)
+Prevents accidental commits to production branches. Configurable via `identity.yml`:
+
+```yaml
+# agent/core/identity.yml — uncomment to enable
+git_workflow:
+  default_working_branch: develop
+  production_branch: main
+  branch_model: gitflow-lite
+```
+
+When enabled:
+- **Step 1b** in context-loading protocol warns if the agent is on the production branch and stops execution
+- **Step 0** in `/acp-commit` blocks commits to the production branch
+- `branch:` field added to sessions.md entry schema for session-level branch tracking
+
+#### M40 — Pre-Implementation Audit Protocol (v6.6.0)
+Catches implementation bugs before coding starts — wrong field names, missing imports, stale carryovers.
+
+**`/acp-audit --pre-impl <route-or-task-file>`** runs 4 phases before implementation:
+1. **Plan Correctness** — route file complete, `files_affected` accurate, no open blockers
+2. **Code Cross-Reference** — reads actual codebase files and verifies field names, enums, HTTP methods, response shapes match
+3. **Carryover Check** — reads `agent/memory/audit-carryovers.md` for pending items from prior audits
+4. **Operational Completeness** — version bump planned, wiki updates planned if introducing new protocol
+
+**`agent/memory/audit-carryovers.md`** — new persistent memory layer that tracks unresolved audit findings across sessions. The agent reads this at every session start (Step 4.4) and surfaces pending items before any work begins.
+
+---
 
 **Is ACP Enhanced worth it without the routing/dispatch system?** Yes — the memory layer is the primary value. Without memory, every AI session starts cold and you re-explain context every time. With ACP Enhanced, sessions compound: corrections are remembered by task type, architectural decisions never get re-debated, and session summaries load automatically. Routing is additive on top of that.
 
