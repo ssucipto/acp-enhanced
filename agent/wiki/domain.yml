@@ -392,3 +392,24 @@ session_memory_protocol:
   version_introduced: "6.4.13"
   related_feedback: "agent/feedback/feedback-001-proactive-commit-and-knowledge-preservation.md"
   related_audit: "agent/reports/audit-008-feedback-001-knowledge-preservation.md"
+
+git_branch_awareness:
+  # Added: 2026-05-11 (v6.5.0, feedback-002 fixes, M39)
+  description: >
+    Optional git branch safety system. When identity.yml contains a git_workflow: block,
+    Step 1b of the context-loading protocol checks the current branch and halts if on
+    the production branch. Safe no-op by default (git_workflow is commented out).
+  identity_yml_field:
+    name: git_workflow
+    optional: true
+    default: commented_out
+    fields:
+      default_working_branch: "Branch agent commits to by default (e.g. develop, mainline)"
+      production_branch: "Never commit directly to this branch (e.g. main)"
+      branch_model: "gitflow-lite | trunk | github-flow — intent, not enforced"
+  protocol_step: "Step 1b — Git Branch Safety Check (conditional)"
+  commit_guard: "Step 0 in acp.commit.md v1.2.0 — Pre-commit Branch Guard"
+  session_schema_field: "branch: (optional in sessions.md entry — omit if git_workflow not configured)"
+  version_introduced: "6.5.0"
+  related_feedback: "agent/feedback/feedback-002-acp-git-branch-awareness.md"
+  related_audit: "agent/reports/audit-010-feedback-002-003-implementation-plan.md"

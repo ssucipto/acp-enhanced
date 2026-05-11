@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.5.0] — 2026-05-11
+
+### Added
+- **Git Branch Awareness** (M39): Step 1b in context-loading protocol — warns if working
+  on production branch (conditional on `git_workflow:` block in `identity.yml`)
+- `git_workflow:` optional block added to `agent/core/identity.yml` with fields:
+  `default_working_branch`, `production_branch`, `branch_model`
+- Step 0 pre-commit branch guard in `acp.commit.md` (v1.2.0) — STOP if on production branch
+- Optional `branch:` field in sessions.md entry schema
+
+### Protocol
+- ✅ **M39 Git Branch Awareness** — COMPLETE
+  - route-014: `git_workflow:` block in `identity.yml`
+  - route-015: Step 1b branch safety check in AGENTS.md/CLAUDE.md/copilot-instructions.md
+  - route-016: `acp.commit.md` v1.2.0 — Step 0 guard + `branch:` in session schema
+  - route-017: milestone-39 file, version bump, wiki updates
+
+---
+
 ## [6.4.13] — 2026-05-09
 
 ### Added
