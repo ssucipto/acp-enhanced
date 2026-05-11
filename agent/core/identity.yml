@@ -28,7 +28,7 @@ priorities:
 
 fork_of: github.com/prmichaelsen/agent-context-protocol
 repo: github.com/ssucipto/acp-enhanced
-version: 6.6.0
+version: 6.7.0
 
 # Optional: configure git branch awareness (uncomment to enable)
 # When set, Step 1b will warn if working on the production branch.
