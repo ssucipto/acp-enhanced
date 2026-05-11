@@ -3,6 +3,26 @@
 
 ---
 
+## Step 0 — Platform Setup (Windows only)
+
+**macOS / Linux**: Skip this step. Bash is already available.
+
+**Windows**: Shell scripts require Bash 4+. Use WSL2:
+```bash
+# From Windows terminal (PowerShell or cmd) — one-time install
+wsl --install -d Ubuntu-22.04
+```
+Then run all bootstrap and shell script commands from the **WSL terminal**.
+
+TypeScript tooling (`acp-dispatch.ts`, `acp-validate.ts`) runs natively on Windows — no WSL required:
+```bash
+# From a regular Windows terminal (cmd or PowerShell)
+cd scripts && npm install
+npx ts-node acp-dispatch.ts agent/routing/tasks/route-NNN.md
+```
+
+---
+
 ## What You Have After Bootstrap
 
 ```
