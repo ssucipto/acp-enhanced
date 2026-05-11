@@ -99,7 +99,7 @@ ACP Enhanced registers **63 slash commands** across two tools — available afte
 |---|---|---|
 | VS Code Copilot | `/acp-*` — autocomplete in Copilot Chat | `.github/prompts/*.prompt.md` |
 | opencode | `/acp-*` — autocomplete in opencode TUI | `.opencode/commands/*.md` |
-| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (59 commands) |
+| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (63 commands) |
 
 ```text
 /acp-init          /acp-proceed       /acp-plan          /acp-status
@@ -110,7 +110,7 @@ ACP Enhanced registers **63 slash commands** across two tools — available afte
 
 > VS Code Copilot requires agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.  
 > opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.  
-> **Note**: All 59 commands are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.
+> **Note**: All 63 commands are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.
 
 ---
 
@@ -226,8 +226,8 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Memory | None — every session starts cold | sessions.md + lessons.md + ADRs + patterns |
 | Task routing | None | Taxonomy-based routing to skill files |
 | Mistake learning | None | Correction log appended per task type |
-| VS Code commands | Manual file reference | 59 slash commands with autocomplete |
-| opencode support | None | 59 slash commands in `.opencode/commands/` |
+| VS Code commands | Manual file reference | 63 slash commands with autocomplete |
+| opencode support | None | 63 slash commands in `.opencode/commands/` |
 | Preferences | None | 4-level hierarchy (project > workspace > user > default) |
 | Project registry | None | Global `~/.acp/projects.yaml` for multi-project tracking |
 | Cost tracking | None | Per-task token + USD ledger via dispatch |
@@ -241,9 +241,9 @@ The ACP command and workflow system (clarifications → design → plan → proc
 
 > **Note**: The upstream [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol) continues to evolve independently. This comparison reflects our fork point. The upstream now has its own extended features (v7.x+) and the two implementations have diverged. Check the upstream README for its current capabilities.
 
-### Recent Protocol Enhancements (v6.4–v6.6)
+### Recent Protocol Enhancements (v6.4–v6.8)
 
-Three milestones shipped in May 2026 added significant protocol improvements on top of the base memory system:
+Five milestones shipped in May 2026 added significant protocol improvements on top of the base memory system:
 
 #### M38 — Knowledge Preservation (v6.4.13)
 Solved the "context overflow kills memory" problem. Previously, `/acp-commit` was framed as a passive end-of-session act. If context overflow terminated a session before commit, all in-session knowledge was permanently lost.
@@ -281,6 +281,27 @@ Catches implementation bugs before coding starts — wrong field names, missing 
 4. **Operational Completeness** — version bump planned, wiki updates planned if introducing new protocol
 
 **`agent/memory/audit-carryovers.md`** — new persistent memory layer that tracks unresolved audit findings across sessions. The agent reads this at every session start (Step 4.4) and surfaces pending items before any work begins.
+
+#### M41 — Command Infrastructure Expansion (v6.7.0)
+Added 4 new command docs (feedback, task, install, dispatch), expanded bootstrap with a pre-commit sync hook, and hardened routing config.
+
+- **4 new commands**: `/acp-feedback`, `/acp-task`, `/acp-install`, `/acp-dispatch` — each with companion `.prompt.md` and `.opencode` files (12 new files)
+- **Pre-commit hook**: `acp-bootstrap.sh` now installs a git hook that auto-syncs `AGENTS.md` → `CLAUDE.md` + `.github/copilot-instructions.md` on every commit
+- **Windows/WSL2 docs**: Added setup section for Windows users in README and QUICKSTART
+- **Routing config hardened**: `last_verified:` dates added to all 5 model entries in `config.yml`; Persona A defaults set in `routing.yml`
+
+#### M42 — Dispatch Integrity + Validation Hardening (v6.8.0)
+Closed 9 findings from audit-015. Focused on correctness and observability in `acp-dispatch.ts` and `acp-validate.ts`.
+
+- **BUG-003 fixed**: `updateRoutingYml()` now always runs after `appendLedger()` — ledger is never skipped on interrupted dispatches. SIGINT handler flushes a partial row on Ctrl+C.
+- **4 new validate checks** in `acp-validate.ts` (run via `npx ts-node scripts/acp-validate.ts`):
+  - `validateSessionsMemory()` — validates `sessions.md` entry structure (required keys, date format)
+  - `validateAgentsMdSize()` — byte-size guard for `AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md` against thresholds in `constraints.yml`
+  - `checkStaleness()` — informational: warns if `taxonomy.yml` is >90 days old or any model's `last_verified` is >180 days
+  - `runParityCheck()` — rewritten to diff per filename, not just count
+- **9 new task types** in `taxonomy.yml` (`wiki-update`, `memory-write`, `changelog-update`, `progress-update`, `adr-write`, `audit-run`, `milestone-create`, `route-create`, `upstream-parity-check`)
+- **lessons.md archive mechanism**: entries can be marked `status: archived` and are skipped by `getFilteredLessons()`
+- **UX review document** moved from `scripts/FINAL-REVIEW.md` → `agent/design/acp-ux-review.md` (now inside `agent/` tree, discoverable by context protocol)
 
 ---
 
