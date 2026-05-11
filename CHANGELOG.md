@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.6.0] — 2026-05-11
+
+### Added
+- `agent/memory/audit-carryovers.md` — new memory layer for tracking unresolved audit findings across sessions (M40, route-018)
+- `/acp-audit --pre-impl` flag — 4-phase pre-implementation readiness mode: plan correctness, code cross-reference, carryover check, operational completeness (M40, route-019)
+- Step 4.4 in AGENTS.md, CLAUDE.md, .github/copilot-instructions.md — audit-carryovers.md check at session start; surfaces pending findings with ⚠️ warning before any work begins (M40, route-020)
+- Quality gate HTML comment in `agent/tasks/task-1-{title}.template.md` — enforces pre-write cross-reference of field names, enums, imports, HTTP methods before verification checklist items are written (M40, route-021)
+- `agent/milestones/milestone-40-pre-impl-audit-protocol.md` — M40 milestone record
+
+### Changed
+- `agent/commands/acp.audit.md` — v1.0.0 → v1.1.0: added --pre-impl mode (Step 3b), carryover write in Step 4 for all modes, updated verification checklist
+- `agent/wiki/architecture.md` — Pre-Implementation Audit Protocol section added
+- `agent/wiki/domain.yml` — audit_carryovers memory layer entry added; --pre-impl flag documented
+
+---
+
 ## [6.5.0] — 2026-05-11
 
 ### Added
