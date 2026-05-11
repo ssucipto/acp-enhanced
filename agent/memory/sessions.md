@@ -4,6 +4,29 @@
 
 - date: 2026-05-11
   executor: copilot
+  tasks: [route-022, route-023, route-024, route-025, route-026, route-027, route-028]
+  done:
+    - completed-M41a-stabilisation-sprint-7-bug-fixes
+    - route-022-fixed-sessions-md-yaml-orphaned-entry-missing-date-header-BUG-001
+    - route-023-fixed-acp-dispatch-ts-HTTP-Referer-hardcoded-placeholder-BUG-002
+    - route-024-created-acp-feedback-md-command-doc-v1.0.0-plus-companions-BUG-003a
+    - route-025-created-acp-task-md-command-doc-v1.0.0-plus-companions-BUG-003b
+    - route-026-created-acp-install-md-command-doc-v1.0.0-plus-companions-BUG-003c
+    - route-027-created-acp-dispatch-md-command-doc-v1.0.0-plus-companions-BUG-003d
+    - route-028-updated-domain-yml-count-58-to-63-BUG-004
+    - M41-progress-0-to-7-tasks-50-percent-complete
+  deferred:
+    - M41b-routes-029-035-GAP-and-OBS-fixes → separate-acp-proceed-invocation
+  key_fact: |
+    4 missing command docs: acp.feedback, acp.task, acp.install, acp.dispatch (BUG-003a-d).
+    acp.install.sh has NO --global/--local/--upgrade/--check flags — document actual script
+    behaviour. domain.yml count was 58; actual verified count is 63 after M41a (61 acp.* + 2 git.*).
+    Command doc trio pattern: every new command needs 3 files atomically: agent/commands/acp.{cmd}.md,
+    .github/prompts/acp-{cmd}.prompt.md, .opencode/commands/acp-{cmd}.md.
+    5 commits this session: b99ff1c, 4765a35, 9420f67, 3cb3573, 67a96cd, 0fb669d, 93bcf16.
+
+- date: 2026-05-11
+  executor: copilot
   tasks: [route-014, route-015, route-016, route-017, route-018, route-019, route-020, route-021]
   done:
     - completed-M39-git-branch-awareness-4-routes-version-6.4.13-to-6.5.0
