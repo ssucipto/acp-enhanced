@@ -95,6 +95,57 @@ before any task steps run.
 **Safe no-op by default**: `git_workflow:` is commented out in the identity.yml template.
 Projects that don't configure it skip Step 1b entirely. No behavioral change for existing projects.
 
+## Context Loading Protocol — Step 4.4 Audit Carryover Check
+
+Added in v6.6.0 (M40). Step 4.4 is a sub-step that runs at the end of Step 4 (Load Working Memory)
+to surface unresolved audit findings from previous sessions before any work begins.
+
+**Purpose**: Prevent re-discovering fixed or stale issues that were already found in prior audits.
+
+**File read**: `agent/memory/audit-carryovers.md` (if it exists)
+
+**Flow**:
+1. If file does not exist → skip silently (no-op for projects without audits)
+2. Read `carryovers:` list from the file
+3. If all entries are `status: fixed` or list is empty → skip silently
+4. If any entries have `status: pending` → output before starting any work:
+   ```
+   ⚠️ [ACP] Open audit carryovers: [N] pending items require attention.
+   [finding_id]: [one-line finding description]
+   Review before starting to avoid re-discovering fixed or stale items.
+   ```
+
+**Carryover file lifecycle**:
+- **Written by**: `/acp-audit` (end of any audit with actionable findings — standard AND --pre-impl)
+- **Read by**: Step 4.4 at every session start
+- **Updated by**: Agent — set `status: fixed` and `fix_applied_date` when fix applied
+- **Verified by**: Next audit — set `verified_in_audit` when fix confirmed
+- **Removed**: Safe to delete entry once `verified_in_audit` is set
+
+## Pre-Implementation Audit Protocol (v6.6.0)
+
+Added in v6.6.0 (M40). The `/acp-audit --pre-impl` flag triggers a 4-phase structured readiness
+check before implementation begins. Run before any coding task to catch invisible gaps.
+
+**Purpose**: Catch field name mismatches, missing imports, stale carryovers, and planning gaps
+that would cause bugs or rework once coding starts.
+
+**Invocation**: `/acp-audit --pre-impl route-NNN` or `/acp-audit --pre-impl <subject>`
+
+**4 Phases** (execute after standard investigation, before generating report):
+
+| Phase | Name | Checks |
+|-------|------|--------|
+| 1 | Plan Correctness | Route/task file completeness, files_affected accuracy, open blockers |
+| 2 | Code Cross-Reference | Field names, enum values, import paths, HTTP methods vs. actual codebase |
+| 3 | Carryover Check | Reads `carryovers:` from audit-carryovers.md; surfaces pending as blocking |
+| 4 | Operational Completeness | Version bump planned? Wiki update planned? Route file exists? |
+
+**Verdict**: READY or BLOCKED — single-sentence summary of overall readiness.
+
+**Report**: Adds `## Pre-Implementation Readiness` section to standard audit report.
+Standard report sections + readiness section are both included in output.
+
 ## Session Memory Write Protocol (v6.4.13+)
 
 sessions.md is treated as a WAL (write-ahead log) — written at the **moment of discovery**, not
