@@ -1,6 +1,6 @@
 import matter from "gray-matter";
 import yaml from "js-yaml";
-import { readFileSync, existsSync, readdirSync } from "fs";
+import { readFileSync, existsSync, readdirSync, statSync } from "fs";
 import path from "path";
 
 // ── Shared types ─────────────────────────────────────────────
@@ -168,24 +168,61 @@ function runParityCheck(): void {
       )
     : [];
 
+  // Build normalized name sets (strip prefix/suffix for comparison)
+  const commandsSet = new Set(
+    commandFiles.map((f) => f.replace(/^\.?acp\./, "").replace(/\.md$/, ""))
+  );
+  const promptsSet = new Set(
+    promptFiles.map((f) => f.replace(/^acp-/, "").replace(/\.prompt\.md$/, ""))
+  );
+  const opencodeSet = new Set(
+    opencodeFiles.map((f) => f.replace(/^acp-/, "").replace(/\.md$/, ""))
+  );
+
+  const missingItems: string[] = [];
+
+  // Commands missing prompt or opencode companion
+  for (const name of commandsSet) {
+    if (!promptsSet.has(name)) {
+      missingItems.push(
+        `❌ Parity: acp.${name}.md has no prompt companion (.github/prompts/acp-${name}.prompt.md)`
+      );
+    }
+    if (!opencodeSet.has(name)) {
+      missingItems.push(
+        `❌ Parity: acp.${name}.md has no opencode companion (.opencode/commands/acp-${name}.md)`
+      );
+    }
+  }
+
+  // Prompts with no matching command doc
+  for (const name of promptsSet) {
+    if (!commandsSet.has(name)) {
+      missingItems.push(
+        `❌ Parity: .github/prompts/acp-${name}.prompt.md has no command doc (agent/commands/acp.${name}.md)`
+      );
+    }
+  }
+
+  // Opencode files with no matching command doc
+  for (const name of opencodeSet) {
+    if (!commandsSet.has(name)) {
+      missingItems.push(
+        `❌ Parity: .opencode/commands/acp-${name}.md has no command doc (agent/commands/acp.${name}.md)`
+      );
+    }
+  }
+
   const cc = commandFiles.length;
   const pc = promptFiles.length;
   const oc = opencodeFiles.length;
 
-  const mismatches: string[] = [];
-  if (cc !== pc) {
-    mismatches.push(`${cc} commands vs ${pc} prompts (.github/prompts/)`);
-  }
-  if (cc !== oc) {
-    mismatches.push(`${cc} commands vs ${oc} opencode (.opencode/commands/)`);
-  }
-
-  if (mismatches.length === 0) {
-    console.log(`Parity check: ${cc} commands / ${pc} prompts / ${oc} opencode — in sync ✓`);
+  if (missingItems.length === 0) {
+    console.log(`✅ Parity: ${cc} commands × 3 surfaces — all matched`);
   } else {
-    console.warn(`Parity check: ${cc} commands / ${pc} prompts / ${oc} opencode — ${mismatches.length} mismatch(es)`);
-    for (const m of mismatches) {
-      console.warn(`  ⚠ ${m}`);
+    console.warn(`Parity check: ${cc} commands / ${pc} prompts / ${oc} opencode — ${missingItems.length} mismatch(es)`);
+    for (const m of missingItems) {
+      console.warn(`  ${m}`);
     }
   }
 }
@@ -289,6 +326,175 @@ function validateTaskFile(taskFilePath: string): string[] {
   return errors;
 }
 
+// ── Staleness checks (ROUTING-003) ───────────────────────────
+function checkStaleness(): boolean {
+  const TAXONOMY_PATH_LOCAL = path.join("agent", "routing", "taxonomy.yml");
+  const CONFIG_PATH_LOCAL = path.join("agent", "routing", "config.yml");
+  const DAY_MS = 1000 * 60 * 60 * 24;
+  const now = Date.now();
+  let hasWarnings = false;
+
+  // taxonomy.yml last_updated check (warn after 90 days)
+  if (!existsSync(TAXONOMY_PATH_LOCAL)) {
+    console.warn("⚠️  taxonomy.yml: file not found — staleness unknown");
+    hasWarnings = true;
+  } else {
+    const taxonomy = yaml.load(readFileSync(TAXONOMY_PATH_LOCAL, "utf-8")) as Record<string, any>;
+    const lastUpdated: string | undefined = taxonomy?.last_updated;
+    if (!lastUpdated) {
+      console.warn("⚠️  taxonomy.yml: no last_updated field — staleness unknown");
+      hasWarnings = true;
+    } else {
+      const d = new Date(lastUpdated);
+      if (isNaN(d.getTime())) {
+        console.warn(`⚠️  taxonomy.yml: invalid last_updated value "${lastUpdated}"`);
+        hasWarnings = true;
+      } else {
+        const days = Math.floor((now - d.getTime()) / DAY_MS);
+        if (days > 90) {
+          console.warn(`⚠️  taxonomy.yml: last_updated is ${days} days ago — verify task types are current`);
+          hasWarnings = true;
+        } else {
+          // will include in summary below
+        }
+      }
+    }
+  }
+
+  // config.yml model last_verified check (warn after 180 days)
+  const modelWarnings: string[] = [];
+  const modelOk: string[] = [];
+  if (!existsSync(CONFIG_PATH_LOCAL)) {
+    console.warn("⚠️  routing/config.yml: file not found — model freshness unknown");
+    hasWarnings = true;
+  } else {
+    const config = yaml.load(readFileSync(CONFIG_PATH_LOCAL, "utf-8")) as Record<string, any>;
+    const models = config?.models as Record<string, any> | undefined;
+    if (models) {
+      for (const [modelName, modelData] of Object.entries(models)) {
+        const lastVerified: string | undefined = modelData?.last_verified;
+        if (!lastVerified) {
+          modelWarnings.push(`  ⚠️  ${modelName}: no last_verified date`);
+          hasWarnings = true;
+        } else {
+          const d = new Date(lastVerified);
+          if (isNaN(d.getTime())) {
+            modelWarnings.push(`  ⚠️  ${modelName}: invalid last_verified "${lastVerified}"`);
+            hasWarnings = true;
+          } else {
+            const days = Math.floor((now - d.getTime()) / DAY_MS);
+            if (days > 180) {
+              modelWarnings.push(`  ⚠️  routing/config.yml: ${modelName} last_verified ${days} days ago — check pricing/availability`);
+              hasWarnings = true;
+            } else {
+              modelOk.push(modelName);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  for (const w of modelWarnings) {
+    console.warn(w);
+  }
+
+  if (!hasWarnings) {
+    const taxonomy2 = yaml.load(readFileSync(TAXONOMY_PATH_LOCAL, "utf-8")) as Record<string, any>;
+    const lu = taxonomy2?.last_updated ?? "unknown";
+    const d2 = new Date(lu);
+    const days2 = isNaN(d2.getTime()) ? "?" : Math.floor((now - d2.getTime()) / DAY_MS);
+    console.log(`✅ Staleness: taxonomy.yml ${days2} days old, all models verified within 180 days`);
+  }
+  return !hasWarnings;
+}
+
+// ── Validate AGENTS.md / CLAUDE.md byte size (VALIDATE-001) ─
+function validateAgentsMdSize(): boolean {
+  const constraintsPath = path.join("agent", "core", "constraints.yml");
+  if (!existsSync(constraintsPath)) {
+    console.warn("⚠️  constraints.yml not found — skipping AGENTS.md size check");
+    return true;
+  }
+
+  const constraints = yaml.load(readFileSync(constraintsPath, "utf-8")) as Record<string, any>;
+  const rules = constraints?.agents_md_rules;
+  if (!rules) {
+    console.warn("⚠️  constraints.yml: agents_md_rules not defined — skipping size check");
+    return true;
+  }
+
+  const maxBytes: number = rules.max_bytes ?? 15000;
+  const warnBytes: number = rules.warn_at_bytes ?? 12000;
+  const filesToCheck: string[] = rules.files_to_check ?? ["AGENTS.md", "CLAUDE.md", ".github/copilot-instructions.md"];
+
+  let allOk = true;
+  for (const file of filesToCheck) {
+    if (!existsSync(file)) {
+      console.warn(`⚠️  ${file}: not found — skipping size check`);
+      continue;
+    }
+    const size = statSync(file).size;
+    if (size > maxBytes) {
+      console.error(`❌ ${file}: ${size} bytes — exceeds ${maxBytes} byte limit`);
+      allOk = false;
+    } else if (size > warnBytes) {
+      console.warn(`⚠️  ${file}: ${size} bytes — approaching ${maxBytes} byte limit`);
+    } else {
+      console.log(`✅ ${file}: ${size} bytes`);
+    }
+  }
+  return allOk;
+}
+
+// ── Validate sessions.md YAML structure (MEMORY-002) ─────────
+function validateSessionsMemory(): boolean {
+  const sessionsPath = path.join("agent", "memory", "sessions.md");
+  if (!existsSync(sessionsPath)) {
+    console.warn("⚠️  sessions.md: file not found — skipping structure check");
+    return true;
+  }
+
+  const raw = readFileSync(sessionsPath, "utf-8");
+  // Strip leading YAML comments/blank lines before splitting
+  const stripped = raw.replace(/^(#[^\n]*\n|\s*\n)*/m, "");
+  if (stripped.trim() === "") {
+    console.log("✅ sessions.md: 0 entries (empty)");
+    return true;
+  }
+
+  // Split on `\n- date:` — same pattern as getLastNSessions() in acp-dispatch.ts
+  const parts = stripped.split(/\n(?=- date:)/);
+  const entries = parts.filter((p) => p.trim().startsWith("- date:"));
+
+  const requiredKeys = ["date:", "executor:", "tasks:", "done:"];
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+  let hasErrors = false;
+
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    for (const key of requiredKeys) {
+      if (!entry.includes(key)) {
+        console.error(`❌ sessions.md: Entry #${i + 1} missing required key: ${key.replace(":", "")}`);
+        hasErrors = true;
+      }
+    }
+    // Warn on malformed date
+    const dateMatch = entry.match(/date:\s*([^\n]+)/);
+    if (dateMatch) {
+      const dateVal = dateMatch[1].trim();
+      if (!datePattern.test(dateVal)) {
+        console.warn(`⚠️  sessions.md: Entry #${i + 1} has non-standard date format: "${dateVal}"`);
+      }
+    }
+  }
+
+  if (!hasErrors) {
+    console.log(`✅ sessions.md: ${entries.length} ${entries.length === 1 ? "entry" : "entries"} — all valid`);
+  }
+  return !hasErrors;
+}
+
 // ── Main ───────────────────────────────────────────────────
 const args = process.argv.slice(2);
 if (args.length === 0) {
@@ -296,7 +502,10 @@ if (args.length === 0) {
   runPlaceholderScan();
   runFrontmatterScan();
   runParityCheck();
-  process.exit(process.exitCode ?? 0);
+  checkStaleness(); // informational — non-blocking, does not affect exit code
+  const sizeOk = validateAgentsMdSize();
+  const sessionsValid = validateSessionsMemory();
+  process.exit(sizeOk && sessionsValid && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
 
 let overallFailed = false;
