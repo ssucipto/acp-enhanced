@@ -1,6 +1,7 @@
 # ACP Protocol Task Taxonomy
 # Maps task types to executor + context required
 # Generated 2026-05-01 — update weekly via /acp-cost-report suggestions
+last_updated: 2026-05-11
 
 task_types:
 
@@ -129,3 +130,76 @@ task_types:
       files, all upstream script files, and upstream milestones before making any
       HAVE/PARTIAL/PORT/DEFER decision. CHANGELOG is cross-reference only (loaded last).
       See agent/skills/upstream-sync.md for mandatory source priority order.
+
+  # ── CROSS-CUTTING / MEMORY / PROCESS ─────────────────────────
+  wiki-update:
+    executor: deepseek-v4-flash
+    complexity: low
+    context_required: [wiki/domain.yml, wiki/architecture.md]
+    tokens_est: 4000
+    skill: crosscut
+    description: Updates to agent/wiki/ files (domain.yml, architecture.md, glossary)
+
+  memory-write:
+    executor: copilot
+    complexity: low
+    context_required: [memory/sessions.md, memory/lessons.md]
+    tokens_est: 2000
+    skill: crosscut
+    description: Writing or updating memory layer files (sessions.md, lessons.md, patterns.md)
+
+  changelog-update:
+    executor: deepseek-v4-flash
+    complexity: low
+    context_required: [CHANGELOG.md]
+    tokens_est: 2000
+    skill: crosscut
+    description: Writing version entries to CHANGELOG.md
+
+  progress-update:
+    executor: deepseek-v4-flash
+    complexity: low
+    context_required: [progress.yaml]
+    tokens_est: 3000
+    skill: crosscut
+    description: Updating agent/progress.yaml milestone and task status
+
+  adr-write:
+    executor: copilot
+    complexity: low
+    context_required: [memory/decisions.md]
+    tokens_est: 3000
+    skill: crosscut
+    description: Writing architectural decision records to agent/memory/decisions.md
+
+  audit-run:
+    executor: copilot
+    complexity: high
+    context_required: [commands/acp.audit.md, memory/audit-carryovers.md]
+    tokens_est: 8000
+    skill: crosscut
+    description: Running /acp-audit against a milestone or codebase
+
+  milestone-create:
+    executor: copilot
+    complexity: medium
+    context_required: [milestones/milestone-1-{title}.template.md, progress.yaml]
+    tokens_est: 5000
+    skill: crosscut
+    description: Creating milestone planning documents in agent/milestones/
+
+  route-create:
+    executor: copilot
+    complexity: low
+    context_required: [routing/taxonomy.yml, routing/rules.md]
+    tokens_est: 3000
+    skill: crosscut
+    description: Creating routing task files in agent/routing/tasks/
+
+  upstream-parity-check:
+    executor: deepseek-v4-flash
+    complexity: medium
+    context_required: [wiki/architecture.md, patterns/local.upstream-integration-runbook.md]
+    tokens_est: 6000
+    skill: crosscut
+    description: Checking fork divergence against upstream prmichaelsen/agent-context-protocol

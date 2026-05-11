@@ -49,9 +49,13 @@ function getFilteredLessons(taskType: string): string {
   const entries = content.split("\n- date:").filter(Boolean);
   const relevant = entries.filter(
     (e) =>
-      e.includes(`task_type: ${taskType}`) ||
-      e.includes("task_type: all") ||
-      e.includes("priority: high")
+      // Skip archived lessons (see lessons.md schema comment)
+      !e.includes("status: archived") &&
+      (
+        e.includes(`task_type: ${taskType}`) ||
+        e.includes("task_type: all") ||
+        e.includes("priority: high")
+      )
   );
   return relevant
     .slice(-5)
@@ -90,11 +94,17 @@ function getSkillFile(taskType: string): string {
   const schemaTypes = ["yaml-schema"];
   const testTypes = ["e2e-test-write", "test-run"];
   const tsTypes = ["typescript-feature"];
+  const crosscutTypes = [
+    "wiki-update", "memory-write", "changelog-update", "progress-update",
+    "adr-write", "audit-run", "milestone-create", "route-create",
+    "upstream-parity-check", "documentation-sync", "crosscut",
+  ];
   if (commandTypes.includes(taskType)) return "skills/commands.md";
   if (scriptTypes.includes(taskType)) return "skills/scripts.md";
   if (schemaTypes.includes(taskType)) return "skills/schemas.md";
   if (testTypes.includes(taskType)) return "skills/testing.md";
   if (tsTypes.includes(taskType)) return "skills/typescript.md";
+  if (crosscutTypes.includes(taskType)) return "skills/crosscut.md";
   return "skills/crosscut.md";
 }
 
@@ -204,9 +214,6 @@ async function dispatch(taskPath: string) {
   const modelConfig = MODEL_MAP[executor] ?? MODEL_MAP["claude-sonnet"];
   console.log(`[ACP] Dispatching ${meta.id} → ${executor} (${modelConfig.model})`);
 
-  // Update routing.yml so context window knows current executor
-  updateRoutingYml(executor, modelConfig.model);
-
   // Read project identity for OpenRouter attribution headers
   const identity = (yaml.load(readAgent("core/identity.yml")) ?? {}) as Record<string, unknown>;
   const repoField = (identity.repo as string) ?? "ssucipto/acp-enhanced";
@@ -234,6 +241,14 @@ async function dispatch(taskPath: string) {
   let output = "";
   let inputTokens = 0;
   let outputTokens = 0;
+
+  // SIGINT handler: flush partial ledger row, do NOT update routing.yml
+  const sigintHandler = () => {
+    process.stderr.write("\n[dispatch] Interrupted — flushing partial ledger row\n");
+    appendLedger(meta, 0, 0, 0);
+    process.exit(130);
+  };
+  process.on("SIGINT", sigintHandler);
 
   try {
     const stream = await client.chat.completions.create({
@@ -266,7 +281,10 @@ async function dispatch(taskPath: string) {
   const costOutput = (outputTokens * modelConfig.outputCost) / 1_000_000;
   const totalCost = costInput + costOutput;
 
+  process.off("SIGINT", sigintHandler);
+
   appendLedger(meta, inputTokens, outputTokens, totalCost);
+  updateRoutingYml(executor, modelConfig.model);
 
   console.log(`\n\n[ACP] ✓ Done in ${elapsed}ms`);
   console.log(
