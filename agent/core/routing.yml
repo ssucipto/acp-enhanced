@@ -2,6 +2,6 @@
 # DO NOT mix static and dynamic content in the same file
 
 session:
-  executor: unset        # updated by acp-dispatch.ts at runtime
-  model: unset           # updated by acp-dispatch.ts at runtime
+  executor: copilot      # Persona A default; updated by acp-dispatch.ts at runtime for B/C
+  model: github-copilot  # Persona A default; updated by acp-dispatch.ts at runtime for B/C
   persona: A             # A = Copilot only, B = DeepSeek/OpenRouter, C = mixed
