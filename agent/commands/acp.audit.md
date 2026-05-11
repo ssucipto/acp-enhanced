@@ -5,9 +5,9 @@
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-03-15  
-**Last Updated**: 2026-03-15  
+**Last Updated**: 2026-05-11  
 **Status**: Active  
 **Scripts**: None  
 
@@ -24,12 +24,14 @@
 **CLI-Style Arguments**:
 - `<subject>` (positional) - The subject to audit (topic, path, keyword, or description)
 - `--output <path>` or `-o <path>` - Custom report output path (default: `agent/reports/`)
+- `--pre-impl` - Pre-implementation readiness mode (see Step 3b)
 
 **Natural Language Arguments**:
 - `/acp-audit the install system` - Audit a named subject
 - `/acp-audit src/auth/` - Audit a directory
 - `/acp-audit everything related to sessions` - Audit by description
 - `/acp-audit` - Infer subject from current context
+- `/acp-audit --pre-impl route-022` - Pre-implementation audit of route-022 before starting work
 
 **Argument Mapping**:
 The agent infers intent from context:
@@ -37,6 +39,7 @@ The agent infers intent from context:
 2. If natural language describes a topic → derive subject from description
 3. If no arguments → infer from current task, milestone, or recent conversation context
 4. If still ambiguous → ask the user
+5. If `--pre-impl` present → execute general audit AND Step 3b before generating report
 
 ---
 
@@ -69,6 +72,7 @@ Use this when you need a thorough understanding of a subject before acting — r
     /acp-audit                     Infer subject from context
     /acp-audit <subject>           Audit a named subject or path
     /acp-audit --output <path>     Custom report output path
+    /acp-audit --pre-impl <route>  Pre-implementation readiness check (adds Step 3b)
 
   Related:
     /acp-init      Broad context loading (not deep dives)
@@ -120,6 +124,75 @@ Perform the deep dive. The agent uses judgment on scope and depth based on the s
 - The goal is understanding, not validation
 
 **Expected Outcome**: Comprehensive understanding of the subject across the project  
+
+### 3b. Pre-Implementation Readiness Protocol (--pre-impl only)
+
+This step runs ONLY when the `--pre-impl` flag is passed. It extends the investigation with a structured readiness check before implementation begins. Skip this step entirely for standard audits.
+
+**Purpose**: Catch implementation gaps that are invisible in planning but cause bugs or rework once coding starts — wrong field names, missing imports, mismatched API shapes, stale carryovers.
+
+**Actions**:
+
+**Phase 1 — Plan Correctness**
+- Verify the route/task file exists and acceptance criteria are unambiguous
+- Confirm `files_affected` list is complete and all listed files exist (or will be created)
+- Check for any open questions or deferred decisions that would block implementation
+
+**Phase 2 — Code Cross-Reference** (key phase — do not skip)
+For each file listed in `files_affected`, read the actual file and verify:
+- Field names match exactly (no assumption — read the actual schema or model)
+- Enum/constant values are valid members of the actual definition
+- Import paths and file references exist in the codebase
+- HTTP methods, route paths, and response shapes match the actual implementation
+- Any content being added does not conflict with existing content in the file
+
+**Phase 3 — Carryover Check**
+Read the `carryovers:` list from `agent/memory/audit-carryovers.md` (if the file exists):
+- If file does not exist → skip silently
+- If `carryovers: []` or all entries are `status: fixed` → note "No open carryovers"
+- If any entries have `status: pending` → surface them as blocking items in the report
+
+**Phase 4 — Operational Completeness**
+- Confirm the task has a corresponding route file if required by convention
+- Confirm version bump and CHANGELOG entry are planned if this task completes a milestone
+- Confirm wiki/docs updates are planned if the task introduces a new protocol concept
+
+**Report additions** (append to standard report when `--pre-impl` was used):
+
+```markdown
+## Pre-Implementation Readiness ({subject})
+
+**Mode**: --pre-impl  
+
+### Phase 1 — Plan Correctness
+| Check | Result | Notes |
+|-------|--------|-------|
+| Route/task file complete | ✅ / ⚠️ / ❌ | {note} |
+| files_affected accurate | ✅ / ⚠️ / ❌ | {note} |
+| Open blockers | ✅ None / ❌ {list} | |
+
+### Phase 2 — Code Cross-Reference
+| File | Field/Value Checked | Result | Notes |
+|------|---------------------|--------|-------|
+| {path} | {what was verified} | ✅ / ❌ | {note} |
+
+### Phase 3 — Carryover Check
+| Carryover | Severity | Status | Blocks? |
+|-----------|----------|--------|---------|
+| {finding_id}: {finding} | {severity} | pending | Yes / No |
+
+### Phase 4 — Operational Completeness
+| Check | Result | Notes |
+|-------|--------|-------|
+| Route file exists | ✅ / ❌ | {note} |
+| Version bump planned | ✅ / N/A | {note} |
+| Wiki update planned | ✅ / N/A | {note} |
+
+### Readiness Verdict
+**READY** / **BLOCKED** — {one-sentence summary}
+```
+
+**Expected Outcome**: Implementation gaps and stale carryovers identified before any code is written
 
 ### 4. Generate Report
 
@@ -179,6 +252,16 @@ Create a structured report capturing findings efficiently.
 
 **Expected Outcome**: Report file created with structured findings  
 
+**Carryover write** (ALL modes — standard and --pre-impl):
+After the report is created, check if any findings are actionable and unresolved:
+- For each finding that requires a follow-up fix in a future session:
+  - Append an entry to the `carryovers:` list in `agent/memory/audit-carryovers.md`
+  - Set `status: pending`, `fix_applied_date: null`, `verified_in_audit: null`
+  - If `agent/memory/audit-carryovers.md` does not exist, create it using the schema at the top of this command's Steps section as a guide
+- If all findings are informational only (no action required) → skip this write silently
+
+**Expected Outcome**: Actionable unresolved findings written to audit-carryovers.md for future session pickup
+
 ### 5. Report Success
 
 Display what was produced.
@@ -210,7 +293,9 @@ Next steps:
 - [ ] Report uses tables and structured data, not walls of prose
 - [ ] Code pointers use `file:line` format
 - [ ] Git history included where relevant
-- [ ] No files modified other than the new report
+- [ ] If `--pre-impl`: Steps 3b phases completed and readiness verdict included in report
+- [ ] Actionable unresolved findings appended to `agent/memory/audit-carryovers.md` (or skipped if all informational)
+- [ ] No files modified other than the new report (and audit-carryovers.md if findings written)
 
 ---
 
@@ -220,7 +305,7 @@ Next steps:
 - `agent/reports/audit-{N}-{subject-slug}.md` - Audit report
 
 ### Files Modified
-- None (read-only investigation)
+- `agent/memory/audit-carryovers.md` (appended, if actionable findings exist)
 
 ### Console Output
 ```
@@ -354,9 +439,28 @@ Code pointers: 15
 
 ---
 
+---
+
+## Changelog
+
+### v1.1.0 — 2026-05-11
+- Added `--pre-impl` flag: pre-implementation readiness mode (Step 3b)
+  - Phase 1: Plan Correctness — route/task file, files_affected, open blockers
+  - Phase 2: Code Cross-Reference — verify field names, enums, imports, HTTP methods against actual codebase
+  - Phase 3: Carryover Check — reads `agent/memory/audit-carryovers.md` carryovers list
+  - Phase 4: Operational Completeness — version bump, wiki update, route file checks
+  - Report extended with `## Pre-Implementation Readiness` section and readiness verdict
+- Added carryover write step (Step 4, all modes): actionable findings appended to `agent/memory/audit-carryovers.md`
+- Updated Verification checklist and Expected Output to reflect audit-carryovers.md writes
+
+### v1.0.0 — 2026-03-15
+- Initial release
+
+---
+
 **Namespace**: acp  
 **Command**: audit  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-03-15  
 **Last Updated**: 2026-03-15  
 **Status**: Active  
