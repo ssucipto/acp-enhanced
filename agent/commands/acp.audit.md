@@ -188,6 +188,15 @@ Read the `carryovers:` list from `agent/memory/audit-carryovers.md` (if the file
 | Version bump planned | ✅ / N/A | {note} |
 | Wiki update planned | ✅ / N/A | {note} |
 
+### Phase Summary
+| Phase | Findings | Highest Severity |
+|-------|----------|-----------------|
+| Phase 1 — Plan Correctness | {N} | {critical/high/medium/low/none} |
+| Phase 2 — Code Cross-Reference | {N} | {critical/high/medium/low/none} |
+| Phase 3 — Carryover Check | {N} | {critical/high/medium/low/none} |
+| Phase 4 — Operational Completeness | {N} | {critical/high/medium/low/none} |
+| **Total** | **{N}** | |
+
 ### Readiness Verdict
 **READY** / **BLOCKED** — {one-sentence summary}
 ```
