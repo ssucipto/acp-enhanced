@@ -77,6 +77,16 @@ Do NOT load multiple skill files unless the task explicitly spans two domains.
 3. Read `agent/memory/lessons.md` — filter to entries where
    `trigger` matches current task_type OR `priority: high`
    Load maximum 5 lesson entries.
+4. Check `agent/memory/audit-carryovers.md` (if it exists):
+   - If the file does not exist → skip silently
+   - If the file exists, read the `carryovers:` list. If any entries have `status: pending`:
+     Output before starting any work:
+     ```
+     ⚠️ [ACP] Open audit carryovers: [N] pending items require attention.
+     [finding_id]: [one-line finding description]
+     Review before starting to avoid re-discovering fixed or stale items.
+     ```
+   - If all entries are `status: fixed` → skip silently
 
 ### Step 5 — Load Reference (section only, if needed)
 Only if the task requires it:
