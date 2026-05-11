@@ -413,3 +413,48 @@ git_branch_awareness:
   version_introduced: "6.5.0"
   related_feedback: "agent/feedback/feedback-002-acp-git-branch-awareness.md"
   related_audit: "agent/reports/audit-010-feedback-002-003-implementation-plan.md"
+
+pre_impl_audit_protocol:
+  # Added: 2026-05-11 (v6.6.0, feedback-003 fixes, M40)
+  description: >
+    Structured pre-implementation readiness check triggered by /acp-audit --pre-impl.
+    Runs 4 phases before implementation begins to catch field name mismatches, missing
+    imports, stale carryovers, and planning gaps that cause bugs or rework.
+  flag: "--pre-impl"
+  command: "acp.audit.md v1.1.0+"
+  phases:
+    - "1 — Plan Correctness: route/task file, files_affected list, open blockers"
+    - "2 — Code Cross-Reference: field names, enum values, import paths, HTTP methods vs. codebase"
+    - "3 — Carryover Check: reads carryovers: key from audit-carryovers.md"
+    - "4 — Operational Completeness: version bump, wiki update, route file existence"
+  verdict: "READY or BLOCKED — single-sentence summary"
+  version_introduced: "6.6.0"
+  related_feedback: "agent/feedback/feedback-003-pre-implementation-audit.md"
+  related_audit: "agent/reports/audit-010-feedback-002-003-implementation-plan.md"
+
+audit_carryovers:
+  # Added: 2026-05-11 (v6.6.0, feedback-003 fixes, M40)
+  description: >
+    Memory layer for tracking unresolved audit findings that require follow-up across sessions.
+    Written by /acp-audit (all modes) when actionable findings exist. Read by Step 4.4 of the
+    context-loading protocol at every session start. Zero noise when empty or all fixed.
+  file: "agent/memory/audit-carryovers.md"
+  root_key: "carryovers:"
+  schema_fields:
+    audit_id: "Source audit number (integer)"
+    finding_id: "Phase+number code from source audit (e.g. P2-1)"
+    severity: "critical | high | medium | low"
+    file: "Path to the file containing the issue"
+    finding: "One-line description of what needs to be fixed"
+    status: "pending | in-progress | fixed"
+    fix_applied_date: "YYYY-MM-DD when status changed to fixed (null until fixed)"
+    verified_in_audit: "Audit ID that confirmed the fix worked (null until verified)"
+    escalated_to: "Audit ID if re-discovered in a later audit (null by default)"
+  lifecycle:
+    write: "At end of /acp-audit, for each actionable unresolved finding"
+    check: "Step 4.4 reads carryovers: list at every session start"
+    update: "Set status: fixed + fix_applied_date when fix applied"
+    verify: "Set verified_in_audit after next audit confirms fix"
+    remove: "Safe to delete entry once verified_in_audit is set"
+  protocol_step: "Step 4.4 — Audit Carryover Check (conditional)"
+  version_introduced: "6.6.0"
