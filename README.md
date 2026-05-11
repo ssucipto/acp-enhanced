@@ -509,7 +509,24 @@ The steps below describe the original ACP bootstrap from the upstream repository
 - **Git**: 2.x+
 - **Windows**: Shell scripts require Bash 4+. Use WSL2 (Ubuntu 22.04 recommended). TypeScript tooling (`acp-dispatch.ts`, `acp-validate.ts`) runs natively on Windows — no WSL required.
 
-### Bootstrap a New Project (Original ACP)
+#### Windows (WSL2) Setup
+
+```bash
+# Install WSL2 with Ubuntu (one-time, from Windows terminal)
+wsl --install -d Ubuntu-22.04
+
+# Then run bootstrap from the WSL terminal
+bash scripts/acp-bootstrap.sh
+```
+
+TypeScript tooling runs natively on Windows — no WSL required:
+```bash
+# From a regular Windows terminal (PowerShell or cmd)
+cd scripts && npm install
+npx ts-node acp-dispatch.ts agent/routing/tasks/route-NNN.md
+```
+
+> macOS note: The default `/bin/bash` on macOS is 3.2. ACP Enhanced scripts are tested against bash 3.2 for compatibility — no Homebrew bash required. Homebrew's bash (`/opt/homebrew/bin/bash`) is typically 5.x and also works.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.install.sh | bash
