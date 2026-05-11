@@ -29,6 +29,8 @@ The framework layer solves a specific problem: as your project grows, the AI age
 
 ## Install ACP Enhanced in a New Project
 
+> **New user?** See [scripts/QUICKSTART.md](scripts/QUICKSTART.md) for the full setup guide — covers Persona selection, identity configuration, dispatch setup, and first task in 3–4 hours.
+
 ### One command — installs everything
 
 ```bash
@@ -472,7 +474,7 @@ many reasons I recommend Claude over any other agent provider).
 
 ## Quick Start
 
-> **Using ACP Enhanced?** See the [Install ACP Enhanced in a New Project](#install-acp-enhanced-in-a-new-project) section above.
+> **Using ACP Enhanced?** See the [Install ACP Enhanced in a New Project](#install-acp-enhanced-in-a-new-project) section above, or jump straight to [scripts/QUICKSTART.md](scripts/QUICKSTART.md) for the full onboarding guide.
 
 The steps below describe the original ACP bootstrap from the upstream repository.
 
@@ -481,8 +483,7 @@ The steps below describe the original ACP bootstrap from the upstream repository
 - **OS**: Linux or macOS
 - **Shell**: Bash 3.2+ (macOS system bash works; Bash 4+ recommended for best compatibility)
 - **Git**: 2.x+
-
-> macOS note: The default `/bin/bash` on macOS is 3.2. ACP Enhanced scripts are tested against bash 3.2 for compatibility — no Homebrew bash required. Homebrew's bash (`/opt/homebrew/bin/bash`) is typically 5.x and also works.
+- **Windows**: Shell scripts require Bash 4+. Use WSL2 (Ubuntu 22.04 recommended). TypeScript tooling (`acp-dispatch.ts`, `acp-validate.ts`) runs natively on Windows — no WSL required.
 
 ### Bootstrap a New Project (Original ACP)
 
