@@ -4,9 +4,9 @@
 > Pretend this command was entered with this additional context: "Execute directive `/acp-commit` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
-**Version**: 1.1.0  
+**Version**: 1.2.0  
 **Created**: 2026-05-05  
-**Last Updated**: 2026-05-09  
+**Last Updated**: 2026-05-11  
 **Status**: Active  
 **Scripts**: None  
 
@@ -58,6 +58,16 @@ developer to type `/acp-commit`.
 
 ## Steps
 
+### 0. Pre-commit Branch Guard (conditional)
+Only run if `agent/core/identity.yml` contains `git_workflow:`.
+
+1. Run `git branch --show-current`
+2. Read `git_workflow.production_branch` from `identity.yml` (e.g., `main`)
+3. If current branch equals production_branch:  
+   Output: `⚠️ [ACP] Refusing to commit on \`[production_branch]\` (production). Switch to \`[default_working_branch]\` first.`  
+   STOP. Do not write sessions.md. Do not make a git commit.
+4. If current branch equals default_working_branch or is `feature/*` / `fix/*` → proceed to Step 1
+
 ### 1. Identify Completed Tasks
 
 Ask: "Which task IDs were completed this session?" if not obvious from context.
@@ -69,6 +79,7 @@ Prepend a YAML entry to `agent/memory/sessions.md`:
 ```yaml
 - date: [today]
   executor: [executor used this session]
+  branch: [current branch — omit if git_workflow not configured in identity.yml]
   tasks: [list of route IDs completed, e.g. route-012, route-013]
   done:
     - [kebab-case-summary-of-task-1]
@@ -136,6 +147,12 @@ Prepend a YAML entry to `agent/memory/sessions.md`:
 **Author**: ACP Project  
 
 ---
+
+## v1.2.0 Changelog (2026-05-11)
+
+- Added Step 0 Pre-commit Branch Guard (conditional on `git_workflow:` in identity.yml)
+- Added optional `branch:` field to sessions.md YAML entry schema
+- Root cause: feedback-002 — git branch awareness. Prevents accidental commits to production branch.
 
 ## v1.1.0 Changelog (2026-05-09)
 
