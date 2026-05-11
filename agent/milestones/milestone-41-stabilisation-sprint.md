@@ -1,9 +1,9 @@
 <!-- @acp.meta.milestone
 id: M41
 title: Stabilisation Sprint — Audit-014 External Feedback Fixes
-status: planned
+status: completed
 tasks: route-022, route-023, route-024, route-025, route-026, route-027, route-028, route-029, route-030, route-031, route-032, route-033, route-034, route-035
-completed:
+completed: 2026-05-11
 version_introduced: 6.7.0
 feedback_source: agent/feedback/acp-enhanced-full-audit-v2.md
 audit_source: agent/reports/audit-014-external-feedback-quality-and-improvement-plan.md
@@ -11,7 +11,8 @@ audit_source: agent/reports/audit-014-external-feedback-quality-and-improvement-
 
 # Milestone 41: Stabilisation Sprint
 
-**Status**: Planned  
+**Status**: Completed
+**Completed**: 2026-05-11  
 **Target Version**: 6.6.0 → 6.7.0  
 **Feedback Source**: [acp-enhanced-full-audit-v2.md](../feedback/acp-enhanced-full-audit-v2.md) (Perplexity AI external audit)  
 **Audit**: [audit-014](../reports/audit-014-external-feedback-quality-and-improvement-plan.md)  
@@ -110,14 +111,14 @@ Addresses all 13 actionable findings from audit-014 (external Perplexity AI stru
 - [ ] Comment added: `# Update last_verified whenever prices are checked`
 
 ### Route-035 — Set Persona A defaults in routing.yml + wrap-up (OBS-004)
-- [ ] `agent/core/routing.yml`: `executor: copilot`, `model: github-copilot` (from `unset`)
-- [ ] Comment preserved: "updated by acp-dispatch.ts at runtime" — Persona B/C will overwrite
-- [ ] Version bumped 6.6.0 → 6.7.0 (identity.yml, package.yaml, AGENT.md, progress.yaml)
-- [ ] `CHANGELOG.md`: [6.7.0] entry added for M41
-- [ ] `agent/progress.yaml`: M41 status → completed (14/14), `domain.yml` count updated to 63
-- [ ] `agent/wiki/domain.yml`: 4 new commands documented (feedback, task, install, dispatch)
-- [ ] `agent/wiki/architecture.md`: AGENTS.md sync hook documented
-- [ ] Route files 022–035 stamped `completed: [date]`
+- [x] `agent/core/routing.yml`: `executor: copilot`, `model: github-copilot` (from `unset`)
+- [x] Comment preserved: "updated by acp-dispatch.ts at runtime" — Persona B/C will overwrite
+- [x] Version bumped 6.6.0 → 6.7.0 (identity.yml, package.yaml, AGENT.md, progress.yaml)
+- [x] `CHANGELOG.md`: [6.7.0] entry added for M41
+- [x] `agent/progress.yaml`: M41 status → completed (14/14), `domain.yml` count updated to 63
+- [x] `agent/wiki/domain.yml`: 4 new commands documented (feedback, task, install, dispatch)
+- [x] `agent/wiki/architecture.md`: AGENTS.md sync hook documented
+- [x] Route files 022–035 stamped `completed: [date]`
 
 ---
 
