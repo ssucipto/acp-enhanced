@@ -67,9 +67,33 @@ Only files that changed since last install are updated. Locally modified files a
 
 ---
 
+## Branch Safety
+
+ACP Enhanced includes a built-in guard that **warns if your AI agent is working on the wrong git branch** — preventing accidental commits to `main` or other production branches.
+
+Configure in `agent/core/identity.yml` (uncomment the block):
+
+```yaml
+git_workflow:
+  default_working_branch: mainline   # branch you commit to daily
+  production_branch: main            # branch that deploys to prod
+  branch_model: trunk                # trunk | gitflow-lite | github-flow
+```
+
+When configured:
+- **Step 1b** in the ACP context-loading protocol checks `git branch --show-current` at the start of every session
+- If on the production branch → outputs a warning and stops. No work proceeds until you switch branches
+- If on a feature branch → notes the branch and continues normally
+
+This catches the most common AI coding mistake: letting the agent commit directly to `main` without a PR.
+
+> See [M39 — Git Branch Awareness (v6.5.0)](#m39--git-branch-awareness-v650) for full implementation details.
+
+---
+
 ## Slash Commands
 
-ACP Enhanced registers **59 slash commands** across two tools — available after bootstrapping:
+ACP Enhanced registers **63 slash commands** across two tools — available after bootstrapping:
 
 | Tool | How to invoke | Source files |
 |---|---|---|
