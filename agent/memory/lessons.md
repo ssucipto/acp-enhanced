@@ -112,3 +112,46 @@
     (Scripts: None) should at minimum have a smoke test that checks the command
     doc is well-formed and the directive header is correct.
   priority: normal
+
+- date: 2026-05-11
+  task_type: command-doc-update
+  mistake: >
+    During M39 acp-commit, routes 014-017 were force-added to git before their
+    `completed:` field was stamped. The stamp step in /acp-commit auto-stamps
+    routing task files, but the git add had already captured the unstamped state.
+    Routes 018-021 (M40) were correctly stamped before commit.
+  correction: >
+    Always stamp `completed: [date]` in all route files BEFORE running `git add`.
+    The correct order: (1) fill in `completed:` in each route-NNN.md, (2) git add -f,
+    (3) git commit. Never add route files to staging before stamps are applied.
+    Verify with: grep "^completed:" agent/routing/tasks/route-*.md before committing.
+  priority: high
+
+- date: 2026-05-11
+  task_type: command-doc-update
+  mistake: >
+    When implementing acp.audit.md v1.1.0 --pre-impl mode (route-019), the
+    "Phase Summary" table (finding counts per phase) was omitted from the report
+    format template in Step 3b. The route-019 acceptance criteria explicitly required
+    "--pre-impl report format adds 'Phase Summary' table (finding counts per phase)".
+    This was only caught by the pre-push audit (#12).
+  correction: >
+    When implementing a command doc that specifies a report format, read ALL
+    acceptance criteria line-by-line and verify each table/section mentioned is
+    present in the implementation before closing the route. For --pre-impl mode:
+    Phase Summary table must appear after Phase 4 and before Readiness Verdict.
+  priority: normal
+
+- date: 2026-05-11
+  task_type: command-doc-update
+  mistake: >
+    acp.visualize.md was added to agent/commands/ but no corresponding
+    .github/prompts/acp-visualize.prompt.md or .opencode/commands/acp-visualize.md
+    was created. The command was therefore invisible to VS Code Copilot and opencode
+    users. Caught during audit-013 milestone completion check.
+  correction: >
+    Every new command doc in agent/commands/*.md MUST have a matching prompt file
+    in .github/prompts/ and .opencode/commands/. When creating a command file,
+    immediately create both companion files as part of the same task. Verify with:
+    diff <(ls agent/commands/*.md | grep -v template | ...) <(ls .github/prompts/...)
+  priority: high
