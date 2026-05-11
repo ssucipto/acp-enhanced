@@ -3,16 +3,16 @@
 
 project:
   name: agent-context-protocol
-  version: 6.4.13
+  version: 6.5.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M38-complete
+  current_milestone: M39
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M38 complete: proactive commit triggers +
-    knowledge-preservation protocol (feedback-001 fixes). All milestones M1–M38 complete.
-    Version 6.4.13. 58 slash commands. TanStack Start progress visualizer. Proactive
-    7-trigger WAL session memory system.
+    knowledge-preservation protocol (feedback-001 fixes). M39–M40 in progress: git branch
+    awareness + pre-impl audit protocol. Version 6.4.13 → 6.6.0. 58 slash commands.
+    TanStack Start progress visualizer. Proactive 7-trigger WAL session memory system.
 
 milestones:
   M1:
@@ -685,6 +685,40 @@ milestones:
       Fix two actionable findings from audit-007 before next push.
       task-185: fix bare agent/drafts/ in acp.project-create.md sample gitignore
       task-186: git rm --cached lessons.md + decisions.md (stop tracking gitignored files)
+
+  M39:
+    name: Git Branch Awareness (feedback-002 fixes)
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-05-11
+    completed: 2026-05-11
+    estimated_weeks: 0
+    tasks_completed: 4
+    tasks_total: 4
+    file: agent/milestones/milestone-39-git-branch-awareness.md
+    notes: |
+      Implements all fixes from feedback-002 (git branch awareness). Adds Step 1b git branch
+      safety check to context-loading protocol, optional git_workflow: block to identity.yml,
+      Step 0 branch guard to acp.commit.md (v1.2.0), and optional branch: field to sessions.md
+      entry schema. Tasks: route-014, route-015, route-016, route-017.
+
+  M40:
+    name: Pre-Implementation Audit Protocol (feedback-003 fixes)
+    priority: 5
+    status: not_started
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 0
+    tasks_completed: 0
+    tasks_total: 4
+    file: agent/milestones/milestone-40-pre-impl-audit-protocol.md
+    notes: |
+      Implements all fixes from feedback-003 (pre-implementation audit protocol). Adds --pre-impl
+      4-phase mode to /acp-audit, creates audit-carryovers.md memory layer, adds Step 4.4
+      carryover check to context-loading protocol, and adds verification quality gate to task
+      template. Tasks: route-018, route-019, route-020, route-021.
 
   M38:
     name: Protocol Knowledge Preservation (feedback-001 fixes)
