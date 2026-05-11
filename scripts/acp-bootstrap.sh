@@ -1145,7 +1145,7 @@ done
 echo -e "${GREEN}✓ ${_oc_count} opencode slash commands generated in .opencode/commands/${NC}"
 
 # --- 7. Install agent/ commands, scripts and schemas ---
-echo -e "${YELLOW}[7/7] Installing ACP commands, scripts and schemas (agent/ directory)...${NC}"
+echo -e "${YELLOW}[7/8] Installing ACP commands, scripts and schemas (agent/ directory)...${NC}"
 
 if [ -d "agent/commands" ] && [ -d "agent/scripts" ]; then
   echo -e "${GREEN}✓ agent/ already present (running from local ACP Enhanced clone)${NC}"
@@ -1164,6 +1164,44 @@ else
 fi
 echo ""
 
+# --- 8. Install pre-commit hook for AGENTS.md sync ---
+echo -e "${YELLOW}[8/8] Installing AGENTS.md sync pre-commit hook...${NC}"
+
+ACP_HOOK_MARKER="# ACP: auto-sync AGENTS.md"
+HOOK_FILE=".git/hooks/pre-commit"
+
+ACP_HOOK_BLOCK='#!/bin/bash
+# ACP: auto-sync AGENTS.md → CLAUDE.md + .github/copilot-instructions.md
+if git diff --cached --name-only | grep -q "^AGENTS\.md$"; then
+  cp AGENTS.md CLAUDE.md
+  cp AGENTS.md .github/copilot-instructions.md
+  git add CLAUDE.md .github/copilot-instructions.md
+  echo "[ACP] CLAUDE.md and copilot-instructions.md synced from AGENTS.md"
+fi'
+
+if [ -d ".git" ]; then
+  if [ -f "$HOOK_FILE" ]; then
+    # Hook exists — check if ACP block already present
+    if grep -q "$ACP_HOOK_MARKER" "$HOOK_FILE" 2>/dev/null; then
+      echo -e "${GREEN}✓ pre-commit hook already has ACP sync block — skipped${NC}"
+    else
+      # Append ACP block to existing hook
+      printf '\n%s\n' "$ACP_HOOK_BLOCK" >> "$HOOK_FILE"
+      chmod +x "$HOOK_FILE"
+      echo -e "${GREEN}✓ ACP sync block appended to existing pre-commit hook${NC}"
+    fi
+  else
+    # No hook yet — create new
+    printf '%s\n' "$ACP_HOOK_BLOCK" > "$HOOK_FILE"
+    chmod +x "$HOOK_FILE"
+    echo -e "${GREEN}✓ pre-commit hook installed (.git/hooks/pre-commit)${NC}"
+  fi
+  echo -e "${YELLOW}  Hook auto-syncs CLAUDE.md + copilot-instructions.md whenever AGENTS.md is committed${NC}"
+else
+  echo -e "${YELLOW}  No .git directory found — pre-commit hook not installed (run after git init)${NC}"
+fi
+echo ""
+
 # --- Summary ---
 echo ""
 echo -e "${BLUE}=== Bootstrap Complete ===${NC}"
@@ -1171,6 +1209,7 @@ echo ""
 echo "Next steps:"
 echo "  1. Edit AGENTS.md — fill in the 'Who You Are' section with your project description"
 echo "  2. Edit agent/core/identity.yml — fill in project name, stack, repo URL"
+echo "  2b. Optional: uncomment git_workflow: in identity.yml to enable branch safety checks"
 echo "  3. Run /acp-init in Copilot chat to extract domain knowledge from your source files"
 echo "  4. Write 3 ADRs: /acp-decide for your top architectural decisions"
 echo "  5. Edit agent/routing/taxonomy.yml — replace generic task types with your project's domains"
