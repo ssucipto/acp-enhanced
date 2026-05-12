@@ -6,7 +6,7 @@ project:
   version: 6.6.0
   started: 2026-02-16
   status: in_progress
-  current_milestone: M42-complete
+  current_milestone: M43-complete
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
     of prmichaelsen/agent-context-protocol. M38 complete: proactive commit triggers +
@@ -745,12 +745,12 @@ milestones:
   M43:
     name: Taxonomy Gap Fixes + Routing Hygiene
     priority: 4
-    status: in_progress
-    progress: 67
+    status: completed
+    progress: 100
     started: 2026-05-12
-    completed: null
+    completed: 2026-05-12
     estimated_weeks: 0.5
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 3
     file: agent/milestones/milestone-43-taxonomy-gap-fixes-and-routing-hygiene.md
     notes: |
@@ -5253,7 +5253,7 @@ next_steps:
   - "✅ M40 DONE: pre-impl audit protocol — --pre-impl mode + audit-carryovers.md + Step 4.4 + quality gate (2026-05-11)"
   - "✅ M41 DONE: stabilisation sprint — audit-014 external feedback fixes (routes 022-035, v6.7.0, 2026-05-11)"
   - "✅ M42 DONE: dispatch integrity + validation hardening (routes 036-042, v6.8.0, 2026-05-11)"
-  - "📋 NEXT: M43 — taxonomy gap fixes + routing hygiene (routes 043-045, target v6.8.1) — audit-017 findings"
+  - "✅ M43 DONE: taxonomy gap fixes + routing hygiene (routes 043-045, v6.8.1, 2026-05-12)"
   - "📋 FUTURE: additional feedback-driven protocol improvements"
 
 notes:
