@@ -281,3 +281,17 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-017 FINDINGS ──────────────────────────────────────────────────────
+
+  - audit_id: 17
+    finding_id: GAP-001
+    severity: high
+    file: agent/routing/taxonomy.yml
+    finding: task_type shell-scripting used in route-005 and route-011 but not registered in taxonomy.yml — dispatcher falls back to claude-sonnet (most expensive)
+    description: Two routes use task_type shell-scripting which has no executor mapping in taxonomy.yml. acp-dispatch.ts falls back to config.yml default_model (claude-sonnet) — 10-20x more expensive than the correct deepseek-v4-flash executor.
+    fix_target: Add shell-scripting entry to taxonomy.yml aliasing to bash-script-fix (deepseek-v4-flash, tokens_est 4000), or update route-005 task_type to bash-script-create and route-011 to bash-script-fix
+    status: fixed
+    fix_applied_date: 2026-05-12
+    verified_in_audit: null
+    escalated_to: null
