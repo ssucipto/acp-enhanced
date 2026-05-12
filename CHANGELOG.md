@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.8.1] — 2026-05-12
+
+### Fixed
+- `agent/routing/taxonomy.yml`: Added `shell-scripting` entry (executor: deepseek-v4-flash, tokens_est: 4000) — prevents silent fallback to `claude-sonnet` for route-005 and route-011 which use this task type (M43, route-043, audit-017 GAP-001)
+- `scripts/acp-validate.ts`: Moved `checkStaleness()` call to after `validateAgentsMdSize()` and `validateSessionsMemory()` in the no-args main block — informational staleness output now appears after blocking validation checks (M43, route-045, audit-016 OBS-001)
+
+### Added
+- `agent/routing/ledger.md`: Comment header explaining why `executor: copilot` rows always have blank token/cost data — copilot tasks run inside VS Code with no write-back to ledger; only acp-dispatch.ts tasks populate actuals (M43, route-044, audit-017 R2)
+- `agent/routing/rules.md`: Threshold rule for `command-doc-write` vs `command-doc-update` — new protocol sections > 20 lines → write; corrections < 20 net new lines → update; rewriting > 50% → write (M43, route-045, audit-017 R3)
+
+---
+
 ## [6.8.0] — 2026-05-11
 
 ### Fixed
