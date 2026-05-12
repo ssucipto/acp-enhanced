@@ -277,8 +277,8 @@ carryovers:
     finding: checkStaleness() runs before validateAgentsMdSize() and validateSessionsMemory() in the no-args main block — informational output appears before blocking checks
     description: Cosmetic ordering issue. Users see staleness warnings intermixed before blocking validation results. Low priority but confusing when staleness warns while validate ultimately exits 0.
     fix_target: Move checkStaleness() call to after validateAgentsMdSize() and validateSessionsMemory() in the no-args main block (acp-validate.ts ~line 503-509)
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-05-12
     verified_in_audit: null
     escalated_to: null
 
