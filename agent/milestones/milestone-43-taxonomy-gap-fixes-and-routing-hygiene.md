@@ -1,9 +1,9 @@
 <!-- @acp.meta.milestone
 id: M43
 title: Taxonomy Gap Fixes + Routing Hygiene
-status: not-started
+status: completed
 tasks: route-043, route-044, route-045
-completed:
+completed: 2026-05-12
 version_introduced: 6.8.1
 feedback_source: null
 audit_source: agent/reports/audit-017-taxonomy-improvement-suggestions.md
@@ -11,7 +11,7 @@ audit_source: agent/reports/audit-017-taxonomy-improvement-suggestions.md
 
 # Milestone 43: Taxonomy Gap Fixes + Routing Hygiene
 
-**Status**: Not Started  
+**Status**: Completed — 2026-05-12  
 **Target Version**: 6.8.0 → 6.8.1  
 **Audit**: [audit-017](../reports/audit-017-taxonomy-improvement-suggestions.md)  
 **Estimated Duration**: 1–2 hours  
