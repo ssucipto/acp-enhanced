@@ -16,7 +16,7 @@ tokens_actual:
 cost_est_usd: 0.00
 cost_actual_usd:
 created: 2026-05-12
-completed:
+completed: 2026-05-12
 override_reason:
 ---
 
