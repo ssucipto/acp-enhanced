@@ -502,9 +502,9 @@ if (args.length === 0) {
   runPlaceholderScan();
   runFrontmatterScan();
   runParityCheck();
-  checkStaleness(); // informational — non-blocking, does not affect exit code
   const sizeOk = validateAgentsMdSize();
   const sessionsValid = validateSessionsMemory();
+  checkStaleness(); // informational — non-blocking, does not affect exit code
   process.exit(sizeOk && sessionsValid && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
 
