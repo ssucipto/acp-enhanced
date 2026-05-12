@@ -24,3 +24,9 @@ When a task could be either command-doc-write or bash-script-create:
 When uncertain between deepseek-v4-flash and deepseek-v4-pro:
   - Prefer flash for tasks ≤ 3 files and no cross-component reasoning
   - Prefer pro for tasks touching acp.common.sh or the YAML parser
+
+When uncertain between command-doc-write and command-doc-update:
+  - Adding a new protocol section with > 20 lines of new directive text → command-doc-write
+  - Updating/correcting existing content (< 20 net new lines) → command-doc-update
+  - Rewriting > 50% of an existing command doc → command-doc-write
+  - New route with no existing command doc at all → command-doc-write
