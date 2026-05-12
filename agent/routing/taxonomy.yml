@@ -1,7 +1,7 @@
 # ACP Protocol Task Taxonomy
 # Maps task types to executor + context required
 # Generated 2026-05-01 — update weekly via /acp-cost-report suggestions
-last_updated: 2026-05-11
+last_updated: 2026-05-12
 
 task_types:
 
@@ -41,6 +41,16 @@ task_types:
     context_required: [wiki/architecture.md, memory/decisions.md]
     tokens_est: 12000
     skill: scripts
+
+  shell-scripting:
+    executor: deepseek-v4-flash
+    complexity: low
+    context_required: [memory/sessions.md]
+    tokens_est: 4000
+    skill: scripts
+    description: >
+      Legacy alias for bash-script-fix. Used in early routes (route-005, route-011).
+      New routes should use bash-script-fix, bash-script-create, or bash-script-refactor.
 
   # ── YAML SCHEMAS ─────────────────────────────────────────────
   yaml-schema:

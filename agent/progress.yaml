@@ -745,12 +745,12 @@ milestones:
   M43:
     name: Taxonomy Gap Fixes + Routing Hygiene
     priority: 4
-    status: not-started
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 33
+    started: 2026-05-12
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 3
     file: agent/milestones/milestone-43-taxonomy-gap-fixes-and-routing-hygiene.md
     notes: |
