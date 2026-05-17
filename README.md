@@ -38,14 +38,15 @@ The framework layer solves a specific problem: as your project grows, the AI age
 curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/scripts/acp-bootstrap.sh | bash
 ```
 
-This runs in seven steps:
-1. **Core layer** — creates `agent/` directory structure, `AGENTS.md`, and core YAML files (`identity.yml`, `constraints.yml`, `routing.yml`)
-2. **Skill files** — installs one skill file per task domain into `agent/skills/`
-3. **Memory + wiki stubs** — creates `agent/memory/` and `agent/wiki/` with empty starter files
-4. **Routing layer** — installs `agent/routing/taxonomy.yml`, `rules.md`, and routing task template
-5. **Prompt files** — generates `.github/prompts/*.prompt.md` for VS Code Copilot
-6. **opencode commands** — mirrors all prompts to `.opencode/commands/*.md` for opencode TUI
+This runs in eight steps:
+1. **Directory structure** — creates the full `agent/` directory tree
+2. **AGENTS.md** — writes the context-loading protocol into `AGENTS.md` (also synced to `CLAUDE.md` and `.github/copilot-instructions.md`)
+3. **Core layer + skills** — creates `agent/core/` YAML files (`identity.yml`, `constraints.yml`, `routing.yml`) and copies skill files into `agent/skills/`
+4. **Memory + wiki stubs** — creates `agent/memory/` and `agent/wiki/` with empty starter files
+5. **Routing layer** — installs `agent/routing/taxonomy.yml`, `rules.md`, and routing task template
+6. **Prompt files + opencode commands** — generates `.github/prompts/*.prompt.md` for VS Code Copilot and mirrors them to `.opencode/commands/*.md` for opencode TUI
 7. **Commands + scripts** — downloads and installs `agent/commands/`, `agent/scripts/`, `agent/schemas/`
+8. **Pre-commit hook** — installs a git hook that auto-syncs `AGENTS.md` → `CLAUDE.md` + `.github/copilot-instructions.md` on every commit
 
 After it completes, **customize** `agent/core/identity.yml` for your project (name, stack, team, repo URL).
 
@@ -241,7 +242,7 @@ The ACP command and workflow system (clarifications → design → plan → proc
 
 > **Note**: The upstream [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol) continues to evolve independently. This comparison reflects our fork point. The upstream now has its own extended features (v7.x+) and the two implementations have diverged. Check the upstream README for its current capabilities.
 
-### Recent Protocol Enhancements (v6.4–v6.8)
+### Recent Protocol Enhancements (v6.4–v6.8.1)
 
 Five milestones shipped in May 2026 added significant protocol improvements on top of the base memory system:
 
@@ -302,6 +303,14 @@ Closed 9 findings from audit-015. Focused on correctness and observability in `a
 - **9 new task types** in `taxonomy.yml` (`wiki-update`, `memory-write`, `changelog-update`, `progress-update`, `adr-write`, `audit-run`, `milestone-create`, `route-create`, `upstream-parity-check`)
 - **lessons.md archive mechanism**: entries can be marked `status: archived` and are skipped by `getFilteredLessons()`
 - **UX review document** moved from `scripts/FINAL-REVIEW.md` → `agent/design/acp-ux-review.md` (now inside `agent/` tree, discoverable by context protocol)
+
+#### M43 — Taxonomy + Validation Hygiene (v6.8.1)
+Patch release closing three findings from audit-016 and audit-017. No new features — targeted correctness fixes.
+
+- **GAP-001 fixed**: `shell-scripting` task type added to `agent/routing/taxonomy.yml` (executor: `deepseek-v4-flash`, tokens_est: 4000) — prevents silent fallback to `claude-sonnet` for tasks using this type (e.g. routes 005 and 011), which was causing 10–20× cost overruns
+- **OBS-001 fixed**: `checkStaleness()` call moved to after `validateAgentsMdSize()` and `validateSessionsMemory()` in `acp-validate.ts` — informational staleness warnings now appear after blocking validation checks, not before
+- **R2**: Ledger comment header added to `agent/routing/ledger.md` explaining why `executor: copilot` rows always have blank token/cost data (Copilot tasks run inside VS Code with no write-back to ledger)
+- **R3**: Threshold rule added to `agent/routing/rules.md` — `command-doc-write` when >20 net new lines or >50% rewritten; `command-doc-update` for smaller edits to existing command docs
 
 ---
 

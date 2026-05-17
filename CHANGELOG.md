@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.8.2] — 2026-05-17
+
+### Fixed
+- `scripts/acp-bootstrap.sh`: Step progress counters corrected from `[1/7]`–`[6b/7]` → `[1/8]`–`[6b/8]` — counters were stale since Step 8 was added in M41 (route-032); output now accurately reflects all 8 steps (audit-018, F-002)
+- `README.md`: Bootstrap step count corrected from "seven steps" to "eight steps"; step list rewritten to match actual script structure — skills are bundled in Step 3, Step 8 is the pre-commit hook (audit-018, F-001/F-004)
+- `.gitignore`: Added `IP_REGISTER.md` to root gitignore (legal document, not for version control)
+
+### Added
+- `README.md`: M43 (v6.8.1) subsection added to "Recent Protocol Enhancements" — covers `shell-scripting` taxonomy entry, `checkStaleness` order fix, ledger header, and `command-doc-write` threshold rule (audit-018, F-003)
+- `README.md`: Section header updated from "v6.4–v6.8" to "v6.4–v6.8.1" to reflect current version coverage (audit-018, F-003)
+
+---
+
 ## [6.8.1] — 2026-05-12
 
 ### Fixed
