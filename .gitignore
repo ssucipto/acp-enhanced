@@ -1,5 +1,8 @@
 # Agent Context Protocol - Root .gitignore
 
+# Legal documents (sensitive — not for version control)
+IP_REGISTER.md
+
 # Debug files (created during development/debugging)
 debug.sh
 debug-output.txt

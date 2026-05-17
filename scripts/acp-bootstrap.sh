@@ -17,7 +17,7 @@ echo "Setting up Agent Context Protocol Enhanced in: $(pwd)"
 echo ""
 
 # --- 1. Directory Structure ---
-echo -e "${YELLOW}[1/7] Creating directory structure...${NC}"
+echo -e "${YELLOW}[1/8] Creating directory structure...${NC}"
 mkdir -p agent/core
 mkdir -p agent/skills
 mkdir -p agent/memory
@@ -32,7 +32,7 @@ mkdir -p scripts
 echo -e "${GREEN}✓ Directories created${NC}"
 
 # --- 2. Create AGENTS.md from template ---
-echo -e "${YELLOW}[2/7] Creating AGENTS.md context loading protocol...${NC}"
+echo -e "${YELLOW}[2/8] Creating AGENTS.md context loading protocol...${NC}"
 if [ ! -f AGENTS.md ]; then
   # Try to copy from ACP Enhanced scripts/ if available alongside this script
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -173,7 +173,7 @@ echo -e "${YELLOW}  Note: CLAUDE.md and copilot-instructions.md are copies of AG
 echo -e "${YELLOW}  When you update AGENTS.md, re-run: cp AGENTS.md CLAUDE.md && cp AGENTS.md .github/copilot-instructions.md${NC}"
 
 # --- 3. Core Layer Files ---
-echo -e "${YELLOW}[3/7] Creating core layer files...${NC}"
+echo -e "${YELLOW}[3/8] Creating core layer files...${NC}"
 
 [ -f agent/core/identity.yml ] || cat > agent/core/identity.yml << 'YAML'
 # DO NOT add dynamic content to this file (no dates, no task IDs)
@@ -270,7 +270,7 @@ if [ -f "${ACP_DRAFTS_SRC}" ] && [ ! -f "agent/drafts/draft.template.md" ]; then
 fi
 
 # --- 4. Memory + Wiki Stubs ---
-echo -e "${YELLOW}[4/7] Creating memory and wiki stubs...${NC}"
+echo -e "${YELLOW}[4/8] Creating memory and wiki stubs...${NC}"
 
 [ -f agent/memory/sessions.md ] || cat > agent/memory/sessions.md << 'MD'
 # Session Memory
@@ -356,7 +356,7 @@ MD
 echo -e "${GREEN}✓ Memory and wiki stubs created${NC}"
 
 # --- 5. Routing Layer ---
-echo -e "${YELLOW}[5/7] Creating routing layer...${NC}"
+echo -e "${YELLOW}[5/8] Creating routing layer...${NC}"
 
 cat > agent/routing/config.yml << 'YAML'
 version: "1.0"
@@ -526,7 +526,7 @@ MD
 echo -e "${GREEN}✓ Routing layer created${NC}"
 
 # --- 6. Prompt Files ---
-echo -e "${YELLOW}[6/7] Creating Copilot prompt files...${NC}"
+echo -e "${YELLOW}[6/8] Creating Copilot prompt files...${NC}"
 
 cat > .github/prompts/acp-route.prompt.md << 'MD'
 ---
@@ -1126,7 +1126,7 @@ MD
 echo -e "${GREEN}✓ Prompt files created${NC}"
 
 # --- 6b. Generate opencode commands from Copilot prompts ---
-echo -e "${YELLOW}[6b/7] Generating opencode slash commands...${NC}"
+echo -e "${YELLOW}[6b/8] Generating opencode slash commands...${NC}"
 mkdir -p .opencode/commands
 _oc_count=0
 for _oc_src in .github/prompts/*.prompt.md; do
