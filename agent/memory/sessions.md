@@ -2,6 +2,24 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-05-17
+  executor: copilot
+  tasks: [audit-018]
+  done:
+    - audit-018-readme-accuracy-vs-implementation
+    - fixed-readme-seven-to-eight-steps-F-001
+    - fixed-bootstrap-counter-1-7-to-1-8-all-six-echoes-F-002
+    - added-M43-subsection-to-recent-protocol-enhancements-F-003
+    - updated-section-header-v6.4-v6.8-to-v6.4-v6.8.1-F-003
+    - rewrote-bootstrap-step-list-to-match-actual-script-F-004
+    - generated-IP_REGISTER.md-via-ip-register-prompt
+  deferred: []
+  key_fact: |
+    audit-018: README said "seven steps" but bootstrap has 8 ([8/8] = pre-commit hook, added M41).
+    Script counters [1/7]–[6/7] were stale — updated to [1/8]–[6/8]. M43 (v6.8.1) was missing
+    from "Recent Protocol Enhancements". All 5 findings fixed immediately — no pending carryovers.
+    All previous audit carryovers remain at status:fixed (0 pending).
+
 - date: 2026-05-13
   executor: copilot
   tasks: [plan(M43), route-043, route-044, route-045]
