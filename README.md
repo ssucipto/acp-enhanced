@@ -42,6 +42,8 @@ The framework layer solves a specific problem: as your project grows, the AI age
 
 ### One command — installs everything
 
+> **⚠️ First, `cd` to your target project root.** This script creates files in the current directory.
+
 ```bash
 # From your target project root
 curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/scripts/acp-bootstrap.sh | bash

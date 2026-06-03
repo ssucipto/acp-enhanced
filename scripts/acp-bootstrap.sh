@@ -1,11 +1,78 @@
 #!/bin/bash
 # =============================================================================
 # ACP Enhanced Bootstrap Script
-# Run once from your project root: bash scripts/acp-bootstrap.sh
+# Run from your project root: bash scripts/acp-bootstrap.sh
+# Or: curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/scripts/acp-bootstrap.sh | bash
+# =============================================================================
+# ⚠️  Safety: Before the curl pipe, cd to your target project directory first.
+#    This script will create files in $(pwd) and cannot be undone automatically.
 # =============================================================================
 
 set -e
-trap 'echo "Bootstrap failed at line $LINENO — check output above for details." >&2; exit 1' ERR
+trap 'echo "Bootstrap failed at line $LINENO — check output above for details." >&2; cleanup_on_failure; exit 1' ERR
+
+# ── Pre-flight Safety Checks ───────────────────────────────────
+# curl-pipe-bash mode: stdin is consumed by curl, so interactive prompts don't
+# work. Instead, we validate the environment and abort with a clear message.
+
+# Check 1: Already installed?
+if [ -f "agent/core/identity.yml" ] && [ -f "AGENTS.md" ]; then
+    echo "ACP Enhanced is already installed in: $(pwd)"
+    echo "To reinstall, remove AGENTS.md and agent/ first."
+    echo "To update, use:"
+    echo "  ./agent/scripts/acp.version-update.sh"
+    echo "  # or: /acp-version-update in Copilot chat"
+    exit 0
+fi
+
+# Check 2: Is this a project directory? Look for common indicators.
+HAS_GIT="-z"
+HAS_PROJECT_FILE=""
+if [ -d ".git" ]; then HAS_GIT="yes"; fi
+for _pf in package.json Cargo.toml go.mod pyproject.toml requirements.txt \
+           Makefile CMakeLists.txt pom.xml build.gradle *.sln *.csproj \
+           Gemfile Dockerfile docker-compose.yml; do
+    # shellcheck disable=SC2086
+    [ -f "$_pf" ] 2>/dev/null && HAS_PROJECT_FILE="yes" && break
+done
+if [ "$HAS_GIT" != "yes" ] && [ -z "$HAS_PROJECT_FILE" ]; then
+    echo ""
+    echo "⚠️  WARNING: No project files detected in $(pwd)"
+    echo "   This script sets up ACP Enhanced in the CURRENT directory."
+    echo "   It creates files in: $(pwd)"
+    echo ""
+    echo "   If you intended to install in a different project:"
+    echo "     1. Press Ctrl+C now"
+    echo "     2. cd /path/to/your/project"
+    echo "     3. Run the curl command again"
+    echo ""
+    if [ "$SKIP_WARNING" != "true" ]; then
+        echo "   If this IS your target directory, wait 5 seconds or pass --yes"
+        echo "   Continuing in 5 seconds..."
+        sleep 5
+    else
+        echo "   --yes passed, skipping delay."
+    fi
+fi
+
+# ── Cleanup function ────────────────────────────────────────────
+_BOOTSTRAP_START_DIR="$(pwd)"
+_BOOTSTRAP_CREATED=()
+cleanup_on_failure() {
+    local _rc=$?
+    if [ "$_rc" -ne 0 ] && [ -n "$_BOOTSTRAP_START_DIR" ]; then
+        echo ""
+        echo "Cleaning up partial installation in $_BOOTSTRAP_START_DIR..."
+        # Remove files created by this bootstrap run
+        for _f in AGENTS.md CLAUDE.md .github/copilot-instructions.md; do
+            [ -f "$_f" ] && rm -f "$_f" && echo "  Removed $_f"
+        done
+        for _d in agent/ .opencode/; do
+            [ -d "$_d" ] && rm -rf "$_d" && echo "  Removed $_d/"
+        done
+        echo "Cleanup complete."
+    fi
+}
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -24,6 +91,7 @@ echo ""
 TEAM_SIZE="small"
 GENERATE_PROMPTS="false"
 GENERATE_OPENCODE="true"
+SKIP_WARNING=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -37,6 +105,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --no-opencode)
             GENERATE_OPENCODE="false"
+            shift
+            ;;
+        --yes|-y)
+            SKIP_WARNING=true
             shift
             ;;
         *)
@@ -1226,10 +1298,15 @@ if [ -d "agent/commands" ] && [ -d "agent/scripts" ]; then
 else
   INSTALL_URL="https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh"
   echo "Downloading ACP installer..."
+  INSTALL_TMP=$(mktemp)
   if command -v curl >/dev/null 2>&1; then
-    curl -fsSL "$INSTALL_URL" | bash
+    curl -fsSL -o "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (curl)"; rm -f "$INSTALL_TMP"; exit 1; }
+    bash "$INSTALL_TMP"
+    rm -f "$INSTALL_TMP"
   elif command -v wget >/dev/null 2>&1; then
-    wget -q "$INSTALL_URL" -O - | bash
+    wget -q -O "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (wget)"; rm -f "$INSTALL_TMP"; exit 1; }
+    bash "$INSTALL_TMP"
+    rm -f "$INSTALL_TMP"
   else
     echo -e "${YELLOW}WARNING: curl and wget not found.${NC}"
     echo "Install agent/ manually after bootstrap:"
