@@ -4,12 +4,16 @@
 
 - date: 2026-06-03
   executor: copilot
-  tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, audit-027, audit-028, audit-029, plan-044, route-047, route-048, route-052, route-053, route-054, route-055, route-056, route-057, route-058, route-059]
+  tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, audit-027, audit-028, audit-029, audit-030, plan-044, route-047, route-048, route-052, route-053, route-054, route-055, route-056, route-057, route-058, route-059]
   done:
-    - 12-audits-9-protocol-files-rewritten-2-design-docs
-    - R1-light-mode-R2-auto-lessons-R5-three-copy-R7-manifest-vs-progress
-    - R3-R4-bootstrap-scaffold-flags-with-team-size
-    - R6-skills-at-mention-full-implementation
+    - 13-audits-10-protocol-files-rewritten-2-design-docs
+    - R1-through-R9-all-implemented-M44-100-percent
+    - README-fully-synced-with-all-v6-8-2-features
+    - M44-section-added-to-README-recent-enhancements
+    - differences-table-updated-with-5-new-rows
+    - update-command-corrected-to-acp-version-update
+    - agent-layer-table-expanded-to-7-directories
+    - 4-commits-all-pushed-to-mainline
     - R9-parallel-tasks-full-implementation
     - R8-observability-auto-population-on-commit
     - M44-100-percent-complete-10-routes-implemented
