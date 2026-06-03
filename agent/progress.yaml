@@ -19,27 +19,16 @@ milestones:
     name: Feedback-Driven Improvements (v6.9.0)
     priority: 5
     status: in_progress
-    progress: 30
+    progress: 64
     started: 2026-06-03
     estimated_weeks: 2-3
-    tasks_completed: 3
-    tasks_total: 10
+    tasks_completed: 9
+    tasks_total: 14
     file: agent/milestones/milestone-44-feedback-driven-improvements.md
     notes: |
-      📋 Milestone 44: Feedback-Driven Improvements — 3 of 10 routes done (30%).
-      ✅ R7 (route-052): Manifest-vs-progress docs in AGENT.md
-      ✅ R5 (route-047): Three-copy architecture documented
-      ✅ R3/R4 (routes 046/049): Scaffold config in manifest.yaml
-      
-      📐 R6 — Skills → @-mention (designed, 3 sub-tasks):
-        route-053: Taxonomy catalog (P1)
-        route-054: Context protocol update (P2)
-        route-055: Skill headers + docs (P3)
-      
-      📐 R9 — Parallelization (designed, 3 sub-tasks):
-        route-056: Taxonomy + schema (P1)
-        route-057: Proceed spawning + validation (P2, HIGH complexity)
-        route-058: AGENT.md + README.md docs (P3)
+      📋 Milestone 44: 9 of 14 routes done (64%).
+      ✅ R5 (047), R7 (052), R6 sub-tasks (053-055), R9 sub-tasks (056-058), R3/R4 bash (059)
+      ⏳ Route 048: Observability write mechanism (design pending)
 
   M1:
     name: ACP Commands Infrastructure

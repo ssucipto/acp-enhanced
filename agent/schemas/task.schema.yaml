@@ -1,0 +1,52 @@
+# Sub-Task Schema for parallel + orchestrator-workers task types
+# Added v6.8.2 (audit-022 R9, route-056)
+
+# A parallel task decomposes into sub_tasks that form a DAG:
+# - depends_on: [] means the sub-task can run immediately (parallel)
+# - depends_on: [route-NNN] means wait for route-NNN to complete first
+# - Circular dependencies are invalid (validator rejects them)
+
+sub_task:
+  id:
+    type: string
+    required: true
+    pattern: "^route-[0-9]{3}[a-z]?$"
+    description: Unique sub-task identifier
+
+  title:
+    type: string
+    required: true
+    description: Human-readable sub-task name
+
+  executor:
+    type: string
+    required: false
+    default: "deepseek-v4-flash"
+    description: Model to use for this sub-task. Defaults to parent task's sub_task_default_executor.
+
+  depends_on:
+    type: array
+    required: false
+    default: []
+    items:
+      type: string
+      pattern: "^route-[0-9]{3}[a-z]?$"
+    description: List of sub-task IDs this sub-task depends on. Empty = can run immediately.
+
+  context_required:
+    type: array
+    required: false
+    items:
+      type: string
+    description: Files the sub-task executor must read before starting.
+
+  tokens_est:
+    type: integer
+    required: false
+    description: Estimated token budget for this sub-task.
+
+# Validation rules:
+# 1. All depends_on references must point to existing sub_task ids
+# 2. No circular dependencies (detected by DFS)
+# 3. At least one sub_task must have depends_on: []
+# 4. Sub-task ids must be unique within the parent task
