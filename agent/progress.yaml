@@ -9,8 +9,8 @@ project:
   current_milestone: M47
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.8.2 with 46 completed
-    milestones. M46 (v6.8.4) delivered parallel test runner. 35 audit reports,
-    16 unit tests (71 assertions).
+    milestones. M46 (v6.8.4) delivered parallel test runner. Companion visualizer
+    at v1.4.2. 40 audit reports, 16 unit tests (71 assertions).
 
 milestones:
   M44:
@@ -3324,22 +3324,15 @@ tasks:
 recent_work:
   - date: 2026-06-03
     description: |
-      ✅ audits 036→037→038→039 COMPLETE: Install + update system fully audited and hardened.
-      Four audit passes on bootstrap.sh, version-update.sh, and README. 26 findings total,
-      all fixed. The curl-pipe-bash install path is now safe, idempotent, and error-handled.
+      ✅ M46 COMPLETE: Parallel test runner. 3 routes (071-073), all done.
+      README visualizer section promoted to full feature showcase.
     items:
-      - "✅ audit-036: 9 findings — safety checks, idempotency, F-004 dead sed"
-      - "✅ audit-037: 5 bugs in 036's fixes — cleanup ordering, rm -rf guard"
-      - "✅ audit-038: 5 bugs — --yes dead flag, missing error exits, pipefail"
-      - "✅ audit-039: 7 README inaccuracies — false conflict flagging, missing warnings"
-      - "✅ Bootstrap now has: pre-flight checks, idempotency guard, cleanup on failure"
-      - "✅ Bootstrap now has: argument parsing before safety checks (--yes works)"
-      - "✅ Update script: F-004 fixed (acp-core entry created if missing)"
-      - "✅ Update script: pre-installation check for incomplete ACP installations"
-      - "✅ README: update description corrected (no longer claims false behavior)"
-      - "✅ README: safety warnings added to all curl-pipe-bash examples"
-      - "✅ All smoke/security/performance tests still passing (9+8+4=21 assertions)"
-      - "✅ 8 git commits pushed to mainline today (audit-035 through audit-039)"
+      - "✅ Route 071: --parallel flag in run-e2e-tests.sh (background subshells)"
+      - "✅ Route 072: --help flag + argument validation"
+      - "✅ Route 073: CI e2e-tests.yaml → --parallel 4 --skip-network"
+      - "✅ run-e2e-tests.sh: ~200 lines, serial + parallel, macOS + Linux"
+      - "✅ README: visualizer v1.4.2 full features, 4 categories, companion callout"
+      - "✅ 46/46 milestones complete (M1-M46, all 100%)"
   - date: 2026-06-03
     description: |
       ✅ audit-019 COMPLETE: Updating system clarity — verified no confusion between
@@ -5285,19 +5278,19 @@ recent_work:
 
 next_steps:
   - "📋 Maintain documentation currency — re-run audit-020 check quarterly"
-  - "📋 Refresh artifact Last Verified dates (4 artifacts currently stale)"
+  - "📋 Refresh artifact Last Verified dates"
   - "📋 Address any new external feedback"
 
 notes:
-  - 45 milestones complete (M1–M45, 100%), v6.8.2 (2026-06-03)
-  - 48 command docs in agent/commands/ (verified 2026-06-03)
-  - 27 scripts in agent/scripts/ (verified 2026-05-01)
-  - 63 slash commands across .github/prompts/ + .opencode/commands/
-  - 35 audit reports in agent/reports/ (audit-001 through audit-039)
+  - 46 milestones complete (M1–M46, 100%), v6.8.2 (2026-06-03)
+  - 48 command docs... (remaining notes unchanged)
+  - 40 audit reports in agent/reports/ (audit-001 through audit-040)
   - Install system: 4-audit hardened (036-039), 26 findings fixed
   - Bootstrap: safe, idempotent, with pre-flight checks and cleanup
   - Update: F-004 dead sed fixed, pre-installation checks added
-  - README now accurate re: update behavior (no false claims)
+  - README: visualizer v1.4.2 featured prominently
+  - run-e2e-tests.sh: --parallel flag, --help, argument validation
+  - CI: e2e-tests.yaml uses --parallel 4
 
 current_blockers: []
 
