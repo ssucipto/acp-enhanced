@@ -650,6 +650,24 @@ FOR each remaining task in planned order:
 END FOR
 ```
 
+### A3.1. Parallel Task Decomposition (v6.8.2, R9)
+
+When the current task has `task_type: parallel` or `task_type: orchestrator-workers`:
+
+1. **Read sub_tasks from route file** — parse the `sub_tasks:` array
+2. **Resolve dependency DAG**:
+   - Sub-tasks with `depends_on: []` → spawn immediately (concurrent)
+   - Sub-tasks with `depends_on: [route-NNN]` → wait for dependency to complete
+3. **Spawn sub-agents**: For each ready sub-task, spawn a sub-agent with the sub-task context. Use the sub-task's `executor` field (defaults to parent's `sub_task_default_executor`).
+4. **Wait for completion**: Poll sub-agents until all complete.
+5. **Aggregate outputs**: Collect all sub-task outputs. Verify all deliverables exist.
+6. **Mark parent complete**: Set `completed:` on the parent route file.
+
+**Dependency validation** (in `scripts/acp-validate.ts`):
+- All `depends_on` values must reference existing sub-task IDs
+- No circular dependencies (DFS detection)
+- At least one sub-task must have `depends_on: []`
+
 ### A3.5. Milestone Completion Sweep
 
 **After ALL tasks in the autonomous loop are done, perform a final deliverables audit:**
