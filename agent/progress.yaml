@@ -67,6 +67,25 @@ milestones:
       run-e2e-tests.sh: ~200 lines, supports serial + parallel modes
       macOS + Linux compatible, no GNU parallel dependency
 
+  M47:
+    name: Memory Integrity & Feedback-Driven Improvements (v6.9.0)
+    priority: 5
+    status: planned
+    progress: 0
+    started: 2026-06-04
+    estimated_weeks: 1-2
+    tasks_completed: 0
+    tasks_total: 11
+    file: agent/milestones/milestone-47-memory-integrity-feedback.md
+    notes: |
+      📋 M47 planned — 11 routes from feedback-001/002 (consumer-project production review).
+      P0 (routes 074-078): commit auto-sync (sessions + patterns + re-sync + repair
+      tools), memory YAML validation.
+      P1 (routes 079-081): version-update guard, YAML quoting directives, schema alignment.
+      P2 (routes 082-084): dual-store wiki docs, pattern promotion enforcement, command
+      onboarding.
+      Target: v6.9.0 — Memory Integrity Release.
+
   M1:
     name: ACP Commands Infrastructure
     priority: 5
@@ -3320,6 +3339,111 @@ tasks:
       actual_hours: 0.5
       completed_date: 2026-05-05T00:00:00Z
       notes: Direction B safety gate — local.* skill files excluded from upstream overwrites
+
+  M47:
+    - id: route-074
+      name: "/acp-commit step 2b — auto-sync sessions documents from registry"
+      priority: 5
+      status: planned
+      file: agent/routing/tasks/route-074.md
+      estimated_hours: 3-4
+      notes: |
+        P0: Extend /acp-commit with auto-sync of agent/sessions/ from
+        memory/sessions.md registry. Idempotent, --no-sync opt-out.
+
+    - id: route-075
+      name: "/acp-commit step 3b — auto-sync patterns documents from registry"
+      priority: 5
+      status: planned
+      file: agent/routing/tasks/route-075.md
+      estimated_hours: 3-4
+      notes: |
+        P0: Extend /acp-commit with auto-sync of agent/patterns/ from
+        memory/patterns.md registry. Idempotent, respects namespace conventions.
+
+    - id: route-076
+      name: "/acp-commit step 6b — re-sync session documents after compaction"
+      priority: 5
+      status: planned
+      file: agent/routing/tasks/route-076.md
+      estimated_hours: 1-2
+      notes: |
+        P0: Re-sync session documents after weekly compaction replaces entries.
+
+    - id: route-077
+      name: "/acp-pattern-sync and /acp-session-sync — manual repair tools"
+      priority: 5
+      status: planned
+      file: agent/routing/tasks/route-077.md
+      estimated_hours: 2-3
+      notes: |
+        P0: Standalone sync commands for repair. --dry-run, --all flags.
+
+    - id: route-078
+      name: "/acp-validate --memory — YAML lint for memory registries"
+      priority: 5
+      status: planned
+      file: agent/routing/tasks/route-078.md
+      estimated_hours: 2-3
+      notes: |
+        P0: YAML-parse patterns.md, sessions.md, progress.yaml. Fail on
+        syntax errors with line numbers.
+
+    - id: route-079
+      name: "/acp-version-update guard — protect project-specific core files"
+      priority: 4
+      status: planned
+      file: agent/routing/tasks/route-079.md
+      estimated_hours: 2-3
+      notes: |
+        P1: --diff, --preserve-project-core flags. Warn before overwriting
+        identity.yml, domain.yml, taxonomy.yml.
+
+    - id: route-080
+      name: "YAML quoting directives in commit and update commands"
+      priority: 4
+      status: planned
+      file: agent/routing/tasks/route-080.md
+      estimated_hours: 1-2
+      notes: |
+        P1: Agent directives to quote scalars containing ':' in key_fact,
+        key_facts, and notes fields.
+
+    - id: route-081
+      name: "Schema alignment — 'tasks' vs 'tasks_completed' field name"
+      priority: 4
+      status: planned
+      file: agent/routing/tasks/route-081.md
+      estimated_hours: 0.5-1
+      notes: |
+        P1: Align commit output schema with visualizer expectations.
+
+    - id: route-082
+      name: "Dual-store wiki documentation — patterns and sessions"
+      priority: 3
+      status: planned
+      file: agent/routing/tasks/route-082.md
+      estimated_hours: 1-2
+      notes: |
+        P2: Document registry vs document directories in architecture.md.
+
+    - id: route-083
+      name: "Pattern promotion enforcement in commit step 3"
+      priority: 3
+      status: planned
+      file: agent/routing/tasks/route-083.md
+      estimated_hours: 1-2
+      notes: |
+        P2: Prompt when key_fact looks like a reusable pattern.
+
+    - id: route-084
+      name: "Command onboarding in /acp-init — top 5 for current phase"
+      priority: 3
+      status: planned
+      file: agent/routing/tasks/route-084.md
+      estimated_hours: 1-2
+      notes: |
+        P2: Show phase-appropriate commands on init.
 
 recent_work:
   - date: 2026-06-03
