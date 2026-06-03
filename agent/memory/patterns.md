@@ -2,6 +2,19 @@
 # Populated automatically by /acp-commit when patterns are identified
 # Format: date-stamped YAML entries, max 60 days active
 
+- date: 2026-06-04
+  name: dual-store-registry-to-document-sync
+  task_type: architecture-design
+  code_ref: agent/commands/acp.commit.md (steps 2b, 3b, 6b)
+  description: |
+    Dual-store architecture where a compact YAML registry (source of truth) is
+    synced to human-readable markdown documents on every commit. Registry is
+    optimized for diffing and version control; documents are optimized for agent
+    and visualizer consumption. Sync is idempotent (skip unchanged, update changed)
+    with an escape hatch (--no-sync). Repair tools provide bulk reconciliation.
+    Pattern mirrors Git checkout (object store → working tree) and database
+    checkpointing (WAL → data files).
+
 - date: 2026-05-06
   name: tanstack-start-v1-server-fn
   task_type: typescript
