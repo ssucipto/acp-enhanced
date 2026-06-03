@@ -6,17 +6,41 @@ project:
   version: 6.8.2
   started: 2026-02-16
   status: in_progress
-  current_milestone: M43-complete
+  current_milestone: M44
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — a fork and significant extension
-    of prmichaelsen/agent-context-protocol. M38 complete: proactive commit triggers +
-    knowledge-preservation protocol (feedback-001 fixes). M39 complete: git branch
-    awareness (Step 1b, git_workflow block, acp.commit.md v1.2.0). M40 complete:
-    pre-impl audit protocol (--pre-impl mode, audit-carryovers.md, Step 4.4). Version
-    6.4.13 → 6.6.0. 58 slash commands. TanStack Start progress visualizer. Proactive
-    7-trigger WAL session memory system.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.8.2 with 43 completed
+    milestones. 7 audits in one session (018–024) cross-referenced 4 weeks of
+    production feedback. P0 complete: R1 light-mode protocol + R2 auto-lessons +
+    13 gap fixes. M44 targets v6.9.0 with remaining 7 recommendations (R3–R9).
+    63 slash commands, 19 audit reports, zero prmichaelsen refs in scripts.
 
 milestones:
+  M44:
+    name: Feedback-Driven Improvements (v6.9.0)
+    priority: 5
+    status: in_progress
+    progress: 30
+    started: 2026-06-03
+    estimated_weeks: 2-3
+    tasks_completed: 3
+    tasks_total: 10
+    file: agent/milestones/milestone-44-feedback-driven-improvements.md
+    notes: |
+      📋 Milestone 44: Feedback-Driven Improvements — 3 of 10 routes done (30%).
+      ✅ R7 (route-052): Manifest-vs-progress docs in AGENT.md
+      ✅ R5 (route-047): Three-copy architecture documented
+      ✅ R3/R4 (routes 046/049): Scaffold config in manifest.yaml
+      
+      📐 R6 — Skills → @-mention (designed, 3 sub-tasks):
+        route-053: Taxonomy catalog (P1)
+        route-054: Context protocol update (P2)
+        route-055: Skill headers + docs (P3)
+      
+      📐 R9 — Parallelization (designed, 3 sub-tasks):
+        route-056: Taxonomy + schema (P1)
+        route-057: Proceed spawning + validation (P2, HIGH complexity)
+        route-058: AGENT.md + README.md docs (P3)
+
   M1:
     name: ACP Commands Infrastructure
     priority: 5
