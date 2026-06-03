@@ -5,3 +5,203 @@ session:
   executor: copilot      # Persona A default; updated by acp-dispatch.ts at runtime for B/C
   model: github-copilot  # Persona A default; updated by acp-dispatch.ts at runtime for B/C
   persona: A             # A = Copilot only, B = DeepSeek/OpenRouter, C = mixed
+
+# ── Context Loading Modes ──────────────────────────────────────
+# Added v6.8.2 (audit-022, R1). Agents skip the full 6-step protocol in daily
+# use (~800 tokens of mostly-stale context). Light mode loads only the files
+# agents actually consult: identity + progress + recent sessions (~200 tokens).
+#
+# Mode selection:
+#   light = default for all daily development sessions
+#   full  = /acp-init, architecture sessions, new workspace, new executor
+#
+# Mode switching:
+#   light → full: run /acp-init (or agent auto-recommends for architecture/ADR tasks)
+#   full → light: restart session (light is default) or agent notes "light mode sufficient"
+#
+# Current mode is tracked here so the agent can report it.
+
+context_modes:
+  current: light           # Set by agent at session start; persists across session
+  light:
+    steps:
+      - load_identity       # agent/core/identity.yml
+      - load_progress       # agent/progress.yaml (most-consulted file — 12/14 sessions)
+      - load_recent         # last 3 entries from agent/memory/sessions.md
+      - confirm             # output banner + mode recommendation (see below)
+    budget_limit_tokens: 800
+    confirm_output: "[ACP] light | executor: {executor} | last session: {date} | est. ~200 tokens | mode: light"
+    recommend_full_for:
+      - architecture-design
+      - data-schema
+      - adr-write
+      - milestone-create
+      - upstream-parity-check
+    recommendation_text: "💡 This task may benefit from full context. Run /acp-init to switch."
+
+  full:
+    steps:
+      - load_core           # identity.yml + constraints.yml + routing.yml
+      - load_taxonomy       # routing/taxonomy.yml
+      - load_skill          # one matching skill file
+      - load_memory         # last 3 sessions + filtered lessons (max 5)
+      - load_reference      # wiki section (only if task requires it)
+      - confirm             # output budget + executor + mode
+    budget_limit_tokens: 2800
+    confirm_output: "[ACP] full | executor: {executor} | est. ~800 tokens | files: {count} | mode: full"
+    recommend_light_for:
+      - bug-fix
+      - command-doc-update
+      - docs-update
+      - changelog-update
+      - progress-update
+      - audit-run
+      - memory-write
+    recommendation_text: "💡 Light mode would be sufficient for this task type. Next session will default to light."
+
+mode_selection:
+  default: light
+  auto_full_triggers:       # Must mirror recommend_full_for above
+    - command: acp.init
+    - first_session: true
+    - task_type: [architecture-design, data-schema, adr-write, milestone-create, upstream-parity-check]
+
+# ── Command Discoverability ────────────────────────────────────
+# Added v6.8.2 (audit-024). 43 of 48 commands never invoked in 14 sessions of
+# production use. Users don't know what's available. This section defines
+# command relationships so the agent can suggest related commands after each
+# invocation — similar to VS Code "Related" section in command palette.
+#
+# How it works:
+#   After completing any command, the agent shows up to 3 related commands
+#   with a one-line description of when to use each, drawn from this map.
+#
+# Format:
+#   command_name:
+#     - related_command: when to use it
+
+command_suggestions:
+  acp-audit:
+    - acp-commit: "Save audit findings to session memory"
+    - acp-update: "Update progress.yaml with audit results"
+    - acp-status: "Check overall project status after audit"
+
+  acp-commit:
+    - acp-status: "Verify session entry was written correctly"
+    - git-commit: "Commit session memory changes to git"
+    - acp-cost-report: "Review cost and token usage trends"
+
+  acp-init:
+    - acp-proceed: "Continue with the current or next task"
+    - acp-status: "Quick status check without full init"
+    - acp-resume: "Init + report + proceed in one command"
+
+  acp-proceed:
+    - acp-status: "Check progress after completing a task"
+    - acp-commit: "Write session memory after a milestone phase"
+    - acp-update: "Update progress.yaml with completed work"
+
+  acp-plan:
+    - acp-clarification-create: "Create clarifications before planning"
+    - acp-design-create: "Create design doc from clarifications"
+    - acp-proceed: "Implement the plan after approval"
+
+  acp-status:
+    - acp-update: "Update progress.yaml with latest work"
+    - acp-report: "Generate a detailed progress report"
+    - acp-init: "Full context init if status shows gaps"
+
+  acp-update:
+    - acp-status: "Verify progress.yaml update was applied"
+    - acp-commit: "Commit updated progress.yaml to memory"
+    - acp-cost-report: "Track cost trends alongside progress"
+
+  acp-package-install:
+    - acp-package-list: "See all installed packages"
+    - acp-package-info: "View details of the installed package"
+    - acp-package-search: "Discover more packages to install"
+
+  git-commit:
+    - acp-commit: "Also write ACP session memory entry"
+    - acp-status: "Check project status after committing"
+    - acp-version-check: "Verify version after version-bump commit"
+
+  acp-version-update:
+    - acp-version-check: "Verify new version after update"
+    - acp-init: "Reload context with updated framework files"
+    - acp-status: "Check project state after framework update"
+
+  acp-package-update:
+    - acp-package-list: "See updated package versions"
+    - acp-package-info: "View details of updated packages"
+    - acp-status: "Check impact of package updates"
+
+  acp-route:
+    - acp-proceed: "Execute the task after routing"
+    - acp-dispatch: "Auto-dispatch the routed task"
+    - acp-cost-report: "Track costs from dispatched tasks"
+
+  acp-cost-report:
+    - acp-route: "Re-route expensive task types to cheaper models"
+    - acp-commit: "Commit cost findings to session memory"
+    - acp-dispatch: "Apply routing changes to new dispatches"
+
+  acp-decide:
+    - acp-commit: "Commit ADR to decisions.md"
+    - acp-init: "Reload context with new architectural decision"
+    - acp-status: "Check project impact of decision"
+
+  acp-feedback:
+    - acp-commit: "Save feedback findings to sessions.md"
+    - acp-audit: "Deep-dive investigation of feedback topics"
+    - acp-report: "Generate comprehensive feedback report"
+
+  acp-task:
+    - acp-proceed: "Execute the created task"
+    - acp-plan: "Plan a milestone around multiple tasks"
+    - acp-status: "Check task status after creation"
+
+  acp-report:
+    - acp-commit: "Commit report findings to session memory"
+    - acp-audit: "Deep-dive a specific finding from the report"
+    - acp-status: "Quick status check vs detailed report"
+
+  acp-sync:
+    - acp-status: "Verify sync results"
+    - acp-update: "Update progress after syncing docs"
+    - acp-validate: "Validate structure after sync"
+
+  acp-validate:
+    - acp-audit: "Investigate validation failures in depth"
+    - acp-sync: "Sync after fixing validation issues"
+    - acp-status: "Check project health after validation"
+
+  acp-resume:
+    - acp-proceed: "Jump straight to the current task"
+    - acp-status: "Quick check without full resume"
+    - acp-commit: "Commit at end of resumed session"
+
+  acp-handoff:
+    - acp-commit: "Commit session before handoff"
+    - acp-report: "Generate handoff report for next developer"
+    - acp-status: "Include status snapshot in handoff"
+
+  acp-install:
+    - acp-version-check: "Verify ACP version after install"
+    - acp-init: "Initialize context in newly installed project"
+    - acp-package-install: "Install packages into new ACP project"
+
+  acp-memory-sync:
+    - acp-commit: "Commit synced memory entries"
+    - acp-audit: "Audit memory quality after sync"
+    - acp-status: "Check lessons.md growth after sync"
+
+  acp-wiki-update:
+    - acp-validate: "Validate wiki structure after update"
+    - acp-status: "Check project state after wiki changes"
+    - acp-commit: "Commit wiki updates to session memory"
+
+  acp-dispatch:
+    - acp-cost-report: "Review dispatch costs and trends"
+    - acp-route: "Re-route if dispatch costs are high"
+    - acp-commit: "Commit dispatch results to session"

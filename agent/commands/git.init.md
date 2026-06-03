@@ -1,11 +1,11 @@
 # Command: init
 
-> **🤖 Agent Directive**: If you are reading this file, the command `@git.init` has been invoked. Follow the steps below to execute this command.
+> **🤖 Agent Directive**: If you are reading this file, the command `/git-init` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: git  
 **Version**: 1.0.0  
 **Created**: 2026-02-16  
-**Last Updated**: 2026-02-16  
+**Last Updated**: 2026-06-03  
 **Status**: Active  
 **Scripts**: None  
 
@@ -47,7 +47,7 @@ The command is smart about .gitignore - it evaluates your project to determine w
 Display the following informational header, then continue immediately:
 
 ```
-⚡ @git.init
+⚡ /git-init
   Initialize a git repository with intelligent .gitignore based on project type
 
   Related:

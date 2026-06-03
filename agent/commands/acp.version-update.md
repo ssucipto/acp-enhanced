@@ -19,11 +19,39 @@
 
 ## What This Command Does
 
-This command updates your ACP installation to the latest version by running the update script. It downloads the latest AGENT.md, template files, and utility scripts from the ACP repository, replacing your current versions while preserving your project-specific files.
+This command updates your ACP Enhanced installation to the latest version by running the update script. It downloads the latest AGENT.md, template files, command docs, and utility scripts from the ACP Enhanced repository, replacing your current framework versions while **preserving your project-specific files**.
 
-Use this command when `@acp-version-check-for-updates` reports that updates are available, or when you want to get the latest ACP improvements. The update process is git-friendly and reversible.
+Use this command when `/acp-version-check-for-updates` reports that updates are available, or when you want to get the latest ACP improvements. The update process is git-friendly and reversible.
 
-Unlike `@acp-version-check-for-updates` which only checks, this command actually applies the updates. It's recommended to commit your changes before updating so you can revert if needed.
+**⚠️ What gets overwritten (framework files):**
+- `AGENT.md` — the ACP Enhanced protocol document
+- `agent/commands/*.md` — all command docs (including any local customizations!)
+- `agent/scripts/*.sh` — all utility scripts
+- `agent/core/*.yml` — identity, constraints, routing config
+- `agent/skills/*.md` — skill files
+- `agent/wiki/*` — reference docs
+- `agent/routing/taxonomy.yml`, `rules.md`, `config.yml` — routing config
+- `agent/*.template.*` — all template files
+- `.opencode/commands/*.md` — opencode slash commands
+
+**🛡️ What is preserved (your data — NEVER overwritten):**
+- `agent/memory/*` — sessions, lessons, decisions, patterns
+- `agent/routing/tasks/route-*.md` — your task route files
+- `agent/routing/ledger.md` — cost tracking ledger
+- `agent/progress.yaml` — milestone + task progress
+- `agent/manifest.yaml` — package manifest (acp-core version updated, rest untouched)
+- `agent/design/*.md` — your design documents (non-template)
+- `agent/milestones/*.md` — your milestone documents (non-template)
+- `agent/patterns/*.md` — your pattern documents (non-template)
+- `agent/preferences/` — your preference overrides
+- `agent/configurables/` — your configurable definitions
+- `agent/drafts/` — your draft documents
+- `agent/clarifications/` — your clarification documents
+- `agent/artifacts/` — your research artifacts
+- `agent/specs/` — your specs
+- `agent/index/` — your key file index
+
+> **Important**: If you've customized `AGENT.md` or any files in `agent/commands/`, commit your changes before updating so you can recover them via `git diff` / `git checkout`. The update script does not diff or warn about local modifications to these files.
 
 ---
 
