@@ -113,6 +113,13 @@ Recalculate and update milestone progress percentages.
 
 Add entry to `recent_work` section documenting what was done.
 
+> **YAML quoting rule**: When writing `notes:` values or milestone `notes:` fields,
+> if the value contains a colon (`:`), wrap the entire scalar in double quotes.
+> Bad: `notes: CO-124 resolved: fixed the thing`
+> Good: `notes: "CO-124 resolved: fixed the thing"`
+> Unquoted colons in YAML scalar values cause js-yaml parse failures that render
+> the entire progress.yaml unreadable by the visualizer.
+
 **Actions**:
 - Add new entry with today's date
 - Write clear description of work completed

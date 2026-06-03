@@ -92,11 +92,46 @@ Display the following informational header, then continue immediately:
 ⚡ /acp-version-update
   Update ACP files (AGENT.md, templates, scripts) to the latest version
 
+  Usage:
+    /acp-version-update                             Standard update (warns on core file changes)
+    /acp-version-update --diff                      Preview changes without applying
+    /acp-version-update --preserve-project-core     Skip identity.yml, domain.yml, taxonomy.yml
+    /acp-version-update --force                     Skip all confirmation prompts
+
   Related:
     /acp-version-check-for-updates   Check before updating
     /acp-version-check               Verify version after updating
     /acp-init                        Reload context after updating
 ```
+
+### 0b. Handle --diff Flag
+
+> **If `--diff` was passed, run this step only and exit.**
+
+**Actions**:
+- Compare current `agent/core/identity.yml`, `domain.yml`, `taxonomy.yml` against
+  what the latest framework version would write
+- Show a diff summary of what files would change
+- List which core files would be overwritten vs preserved
+- Exit without applying any changes
+
+**Output**:
+```
+[Dry Run] The following files would be updated:
+  agent/core/identity.yml (project-modified — would be overwritten)
+  agent/core/routing.yml (unchanged from framework — safe)
+  AGENTS.md (framework update)
+  agent/commands/*.md (N files)
+  agent/scripts/*.sh (N files)
+
+The following project-specific files would be preserved:
+  agent/progress.yaml, agent/memory/*, agent/design/*, ...
+
+💡 Use --preserve-project-core to skip overwriting identity.yml,
+   domain.yml, and taxonomy.yml.
+```
+
+**Expected Outcome**: User sees what would change; no files modified.
 
 ### 1. Verify Prerequisites
 
@@ -114,8 +149,19 @@ Check that update can proceed safely.
 
 Execute the update script.
 
+> **If `--force` was passed**: Skip all confirmation prompts below.
+> **If `--preserve-project-core` was passed**: The update script skips
+> `agent/core/identity.yml`, `domain.yml`, and `taxonomy.yml`.
+
 **Actions**:
 - Run `./agent/scripts/acp.version-update.sh`
+- **Before overwriting core files**: If `agent/core/identity.yml`, `domain.yml`,
+  or `taxonomy.yml` differ from framework defaults (and `--preserve-project-core`
+  was NOT passed), warn and confirm:
+  ```
+  ⚠️ agent/core/identity.yml has been modified from framework defaults.
+  Overwrite? (y/N)
+  ```
 - Script will:
   - Clone latest ACP repository
   - Update AGENT.md
