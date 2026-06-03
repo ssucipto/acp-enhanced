@@ -446,7 +446,7 @@ Run the TypeScript validator to check structural health outside the document lay
 3. **Triple-file parity check** — diffs `agent/commands/*.md`, `.github/prompts/*.prompt.md`, `.opencode/commands/*.md` per filename; prints `❌` for mismatches, `✓` for clean
 4. **Staleness check** (informational, non-blocking) — warns if `agent/routing/taxonomy.yml` `last_updated` field is >90 days old, or any model `last_verified` in `agent/routing/config.yml` is >180 days old
 5. **AGENTS.md size guard** — checks `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` byte sizes against `agents_md_rules` in `agent/core/constraints.yml` (hard limit: 15KB, warn: 12KB); exits 1 if exceeded
-6. **sessions.md structure** — validates that each entry in `agent/memory/sessions.md` has required keys (`date`, `executor`, `tasks`, `done`) and that `date` values match YYYY-MM-DD format; exits 1 if malformed
+6. **sessions.md structure** — validates that each entry in `agent/memory/sessions.md` has required keys (`date`, `executor`, `tasks_completed`, `done`) and that `date` values match YYYY-MM-DD format; exits 1 if malformed
 
 Exit code: 0 if size guard + sessions check pass; 1 otherwise. Staleness is informational and does not affect exit code.
 
