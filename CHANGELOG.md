@@ -7,16 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [6.8.2] — 2026-05-17
+## [6.8.2] — 2026-06-03
 
 ### Fixed
-- `scripts/acp-bootstrap.sh`: Step progress counters corrected from `[1/7]`–`[6b/7]` → `[1/8]`–`[6b/8]` — counters were stale since Step 8 was added in M41 (route-032); output now accurately reflects all 8 steps (audit-018, F-002)
-- `README.md`: Bootstrap step count corrected from "seven steps" to "eight steps"; step list rewritten to match actual script structure — skills are bundled in Step 3, Step 8 is the pre-commit hook (audit-018, F-001/F-004)
-- `.gitignore`: Added `IP_REGISTER.md` to root gitignore (legal document, not for version control)
+- `scripts/acp-bootstrap.sh`: Step progress counters corrected from `[1/7]`–`[6b/7]` → `[1/8]`–`[6b/8]` (audit-018)
+- `README.md`: Bootstrap step count "seven steps" → "eight steps" (audit-018)
+- `.gitignore`: Added `IP_REGISTER.md` (legal document, not for version control)
+- `README.md`: Install/update curl commands corrected from `prmichaelsen/agent-context-protocol` → `ssucipto/acp-enhanced` (audit-019)
+- `agent/commands/git.commit.md`: Version 1.0.0 → 2.0.0, `@git.commit` → `/git-commit` (audit-021)
 
 ### Added
-- `README.md`: M43 (v6.8.1) subsection added to "Recent Protocol Enhancements" — covers `shell-scripting` taxonomy entry, `checkStaleness` order fix, ledger header, and `command-doc-write` threshold rule (audit-018, F-003)
-- `README.md`: Section header updated from "v6.4–v6.8" to "v6.4–v6.8.1" to reflect current version coverage (audit-018, F-003)
+- **Light-mode context protocol (R1)**: Two-way mode switching with recommendations. Light mode (~200 tokens) loads identity + progress + recent sessions. Full mode (~800 tokens) for `/acp-init` and architecture sessions. Config in `agent/core/routing.yml → context_modes`. (audit-022, audit-023)
+- **Auto-populate lessons from key_facts (R2)**: `/acp-commit` Step 3b auto-migrates session key_facts to `lessons.md` with scope inference, priority detection, and dedup. (audit-022)
+- **Command discoverability**: 24 `command_suggestions` entries in routing.yml. Post-command protocol surfaces 2–3 related commands with "when to use" descriptions. Underused-command detection. Getting-started check. (audit-024)
+- **Skills → @-mention (R6)**: 7 skills invocable via `@{skill-name}` in chat. `skills_catalog` in taxonomy.yml. Context protocol Step 3 replaced. (audit-022, routes 053–055)
+- **Parallel task support (R9)**: `task_type: parallel` and `orchestrator-workers` with DAG-based sub-tasks. A3.1 spawning in `/acp-proceed`. Sub-task schema at `agent/schemas/task.schema.yaml`. (audit-022, routes 056–058)
+- **Bootstrap scaffold flags (R3/R4)**: `--team-size solo|small|team` and `--generate-prompts` flags. Manifest `scaffold` config block. (routes 046, 049, 059)
+- **Observability dashboard (R8)**: Auto-populated `observability:` section in progress.yaml on `/acp-commit`. Per-executor breakdown, weekly trends. (route-048)
+- **Three-copy architecture documented (R5)**: Sync headers on CLAUDE.md and copilot-instructions.md. Rationale documented in AGENT.md. (route-047)
+- **Manifest-vs-progress docs (R7)**: "Core Project Files" table in AGENT.md. (route-052)
+- `README.md`: shields.io banner (v6.8.2, production pattern, 44/44 milestones, 63 commands). Full ACP Enhanced directory tree. (audit-020)
+
+### Changed
+- `agent/progress.yaml`: Version 6.6.0 → 6.8.2. M44 added (100% complete). Recent work refreshed.
+- `scripts/PRD-MAIN.md`: Status "Ready for Implementation" → "Implemented — 44 milestones complete"
+- `agent/core/routing.yml`: context_modes, command_suggestions, mode_selection added
+- `.github/copilot-instructions.md`: Light mode protocol, post-command discoverability, @-mention skills Step 3, observability Step 3c, R2 auto-lessons, variable population instructions
 
 ---
 
