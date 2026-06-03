@@ -26,11 +26,13 @@ The framework layer solves a specific problem: as your project grows, the AI age
 
 | Directory | Purpose |
 |---|---|
-| `agent/core/` | Identity, hard constraints, token budget — loaded every session |
-| `agent/skills/` | Domain-specific guidance (scripts, schemas, testing, TypeScript, etc.) — one file per session |
-| `agent/routing/` | Task taxonomy and routing rules — classifies what type of work this session is |
+| `agent/core/` | Identity, hard constraints, routing config — loaded every session |
+| `agent/skills/` | Domain-specific guidance (7 skills) — invoked via `@{skill-name}` |
+| `agent/routing/` | Task taxonomy, routing rules, cost ledger, task files |
 | `agent/memory/` | Session log, lessons learned, patterns, architectural decisions |
 | `agent/wiki/` | Reference docs loaded section-by-section (never all at once) |
+| `agent/commands/` | 63 self-documenting slash commands (`/acp-init`, `/acp-audit`, etc.) |
+| `agent/scripts/` | 29 bash scripts + TypeScript tooling for dispatch and validation |
 
 ---
 
@@ -66,9 +68,11 @@ After it completes, **customize** `agent/core/identity.yml` for your project (na
 ### Update when this fork changes
 
 ```
-/acp-package-update acp-enhanced
-
-> Repository: <https://github.com/ssucipto/acp-enhanced>
+/acp-version-update
+```
+Or run the update script directly:
+```bash
+./agent/scripts/acp.version-update.sh
 ```
 
 Only files that changed since last install are updated. Locally modified files are flagged as conflicts.
@@ -244,14 +248,30 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Pre-impl audit | None | `/acp-audit --pre-impl` — 4-phase readiness check before coding: plan correctness, code cross-reference, carryover validation, operational completeness |
 | Audit carryovers | None | `agent/memory/audit-carryovers.md` — tracks unresolved findings across sessions; surfaced at session start via Step 4.4 |
 | Install | `curl \| bash` from original repo | Single bootstrap script from this fork |
+| Light mode | Full protocol every session | Default ~200-token light mode; full mode for architecture sessions |
+| Skill invocation | None | 7 skills invocable via `@{skill-name}` in chat |
+| Parallel tasks | None | `task_type: parallel` with DAG sub-tasks + orchestrator-workers |
+| Command discovery | Manual doc reading | Post-command suggestions with "when to use" descriptions |
+| Observability | None | Auto-populated cost/token/latency tracking on `/acp-commit` |
 
 The ACP command and workflow system (clarifications → design → plan → proceed) is identical to the original at the time of the fork.
 
 > **Note**: The upstream [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol) continues to evolve independently. This comparison reflects our fork point. The upstream now has its own extended features (v7.x+) and the two implementations have diverged. Check the upstream README for its current capabilities.
 
-### Recent Protocol Enhancements (v6.4–v6.8.1)
+### Recent Protocol Enhancements (v6.4–v6.8.2)
 
-Five milestones shipped in May 2026 added significant protocol improvements on top of the base memory system:
+Six milestones shipped in May–June 2026 added significant protocol improvements on top of the base memory system:
+
+#### M44 — Feedback-Driven Improvements (v6.8.2, June 2026)
+Cross-referenced 4 weeks of production feedback (ChoreHive: 34 milestones, 54 audits, 14 sessions). Key finding: only 10% of system surface area sees active use. 9 recommendations (R1–R9) implemented.
+
+- **Light-mode context protocol** — Default ~200-token load (identity + progress + recent sessions). Two-way switching with auto-recommendations. Agents skipped the full protocol 0/14 times in production — light mode fixes this.
+- **Auto-populate lessons** — `/acp-commit` auto-migrates session key_facts to `lessons.md` with scope inference and dedup.
+- **Skills → @-mention** — 7 skills invocable via `@{commands}`, `@{testing}`, etc. No longer auto-loaded and silently skipped.
+- **Parallel task support** — DAG-based sub-tasks with concurrent spawning. Completes ACP against Anthropic's 6 agent workflows.
+- **Command discoverability** — Post-command related suggestions, underused-command detection, getting-started tips.
+- **Bootstrap flags** — `--team-size solo|small|team` (30/80/310 files). Prompt wrappers now opt-in.
+- **Observability** — Auto-populated cost/token/latency tracking in progress.yaml on `/acp-commit`.
 
 #### M38 — Knowledge Preservation (v6.4.13)
 Solved the "context overflow kills memory" problem. Previously, `/acp-commit` was framed as a passive end-of-session act. If context overflow terminated a session before commit, all in-session knowledge was permanently lost.
