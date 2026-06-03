@@ -46,6 +46,16 @@ else
     FAIL=$((FAIL+1))
 fi
 
+# Each @{mention} value in skills_catalog is unique (no duplicate entries)
+dup_mentions=$(sed -n '/^skills_catalog:/,/^[a-z]/p' "$TX" 2>/dev/null | grep -o '\@{[^}]*}' | sort | uniq -d | wc -l | tr -d ' ')
+if [ "$dup_mentions" -eq 0 ]; then
+    echo "  ✓ All @{mention} values in skills_catalog are unique"
+    PASS=$((PASS+1))
+else
+    echo "  ✗ Found $dup_mentions duplicate @{mention} values in catalog"
+    FAIL=$((FAIL+1))
+fi
+
 # Each skill file has mention attribute
 mention_count=$(grep -l 'mention=' "$PROJECT_ROOT"/agent/skills/*.md | wc -l | tr -d ' ')
 if [ "$mention_count" -ge 7 ]; then
