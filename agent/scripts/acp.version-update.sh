@@ -52,6 +52,14 @@ if [ ! -f "AGENT.md" ]; then
     exit 1
 fi
 
+# Check for complete ACP installation (audit-036)
+if [ ! -f "agent/core/identity.yml" ] || [ ! -f "agent/core/routing.yml" ]; then
+    echo "${YELLOW}Warning: Incomplete ACP installation detected.${NC}"
+    echo "  Missing agent/core/identity.yml or agent/core/routing.yml."
+    echo "  Run scripts/acp-bootstrap.sh first to install ACP Enhanced."
+    echo "  Continuing with partial update (may overwrite existing files)..."
+fi
+
 # Create temporary directory
 TEMP_DIR=$(mktemp -d)
 trap "rm -rf $TEMP_DIR" EXIT
@@ -220,11 +228,19 @@ if [ -f "agent/manifest.yaml" ]; then
     NEW_VERSION=$(grep "^\*\*Version\*\*:" "AGENT.md" | sed 's/.*: //' | head -1)
     UPDATE_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
     
-    # Update acp-core version and timestamps
-    _sed_i "/^  acp-core:/,/^  [a-z]/ {
-        s/package_version: .*/package_version: ${NEW_VERSION}/
-        s/updated_at: .*/updated_at: ${UPDATE_DATE}/
-    }" agent/manifest.yaml
+    # Update acp-core version in manifest — create entry if missing (FIX F-004, audit-036)
+    if grep -q "^  acp-core:" agent/manifest.yaml 2>/dev/null; then
+        _sed_i "s/package_version: .*/package_version: ${NEW_VERSION}/" agent/manifest.yaml
+        _sed_i "s/updated_at: .*/updated_at: ${UPDATE_DATE}/" agent/manifest.yaml
+    else
+        # Append acp-core entry before scaffold block
+        _sed_i "/^scaffold:/i\\
+  acp-core:
+    package_version: ${NEW_VERSION}
+    updated_at: ${UPDATE_DATE}
+    source: https://github.com/ssucipto/acp-enhanced.git
+" agent/manifest.yaml
+    fi
 
     # Update manifest timestamp
     _sed_i "s/^last_updated: .*/last_updated: ${UPDATE_DATE}/" agent/manifest.yaml
