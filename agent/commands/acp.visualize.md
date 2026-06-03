@@ -1,11 +1,12 @@
 # Command: visualize
 
-> **🤖 Agent Directive**: If you are reading this file, `@acp.visualize` has been invoked.
+> **🤖 Agent Directive**: If you are reading this file, the command `/acp-visualize` has been invoked.
 > Follow the steps below to launch the ACP Progress Visualizer.
 
 **Namespace**: acp  
 **Version**: 1.0.0  
 **Created**: 2026-05-06  
+**Last Updated**: 2026-06-03  
 **Status**: Active  
 **Requires**: agent-context-protocol-visualizer repository cloned locally
 
@@ -45,7 +46,7 @@ Check for the visualizer in these locations (in order):
 If not found, display:
 ```
 ⚠️  Visualizer not found. Install it:
-  git clone https://github.com/rygandev01/agent-context-protocol-visualizer ~/.acp/visualizer
+  git clone https://github.com/ssucipto/agent-context-protocol-visualizer ~/.acp/visualizer
   cd ~/.acp/visualizer && npm install
 ```
 

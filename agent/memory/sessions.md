@@ -4,10 +4,15 @@
 
 - date: 2026-06-03
   executor: copilot
-  tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, audit-027, audit-028, audit-029, audit-030, audit-031, init-001, plan-044, route-047, route-048, route-052, route-053, route-054, route-055, route-056, route-057, route-058, route-059]
+  tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, audit-027, audit-028, audit-029, audit-030, audit-031, audit-032, init-001, plan-044, route-047, route-048, route-052, route-053, route-054, route-055, route-056, route-057, route-058, route-059]
   done:
-    - 14-audits-wiki-refreshed-README-fully-synced-M44-100-percent
-    - all-9-recommendations-implemented-20-gaps-fixed
+    - 15-audits-visualizer-repo-fixed-M44-100-percent
+    - visualizer-remote-transferred-to-ssucipto
+    - acp-visualize-command-updated-to-ssucipto-clone-url
+    - ACP-agent-directory-added-to-visualizer-repo
+    - README-visualizer-links-cleaned-all-ssucipto
+    - bootstrap-syntax-bug-fixed-fi-else-ordering
+    - 6-commits-pushed-today
     - 5-git-commits-all-pushed-to-mainline
   deferred:
     - F-004-dead-acp-core-manifest-sed → low
