@@ -18,6 +18,9 @@ Thumbs.db
 *.swo
 *~
 
+# Generated reports (audit findings, cost reports, etc.)
+reports/
+
 # Temporary files
 *.tmp
 *.temp
