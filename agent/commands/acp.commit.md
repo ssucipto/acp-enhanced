@@ -196,6 +196,24 @@ the corresponding markdown document in `agent/patterns/`:
        tasks_completed: [count]
      ```
 
+### 6b. Re-Sync After Compaction (NEW — v1.3.0)
+
+> **Skip this step if `--no-sync` was passed.**
+
+After compaction replaces 10 individual entries with a weekly-summary block,
+the corresponding `agent/sessions/{date}-{slug}.md` files for the compacted
+entries are now orphaned. Clean them up:
+
+1. **Identify compacted entries**: Track which individual entries were replaced
+   by the weekly-summary block (the oldest 10 that were compacted).
+2. **Remove orphaned session documents**: For each compacted entry, if an
+   `agent/sessions/{date}-{slug}.md` file exists, remove it. These entries
+   are now represented by the weekly-summary block only.
+3. **Generate weekly-summary document** (optional): Create a
+   `agent/sessions/weekly-{start-date}-to-{end-date}.md` file summarizing the
+   compacted period.
+4. **Confirmation**: Report how many documents were removed after compaction.
+
 ### 7. Confirm
 
 ```
