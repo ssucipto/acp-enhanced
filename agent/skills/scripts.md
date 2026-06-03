@@ -1,4 +1,4 @@
-<skill name="scripts">
+<skill name="scripts" mention="@{scripts}">
 <rules>
 - Always use `set -euo pipefail` at the top of every script
 - Always trap errors: `trap 'echo "Error on line $LINENO"; exit 1' ERR`

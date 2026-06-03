@@ -1,4 +1,4 @@
-<skill name="commands">
+<skill name="commands" mention="@{commands}">
 
 > **Naming convention**: Before writing any command references, read  
 > `agent/patterns/local.command-naming-convention.md` for the canonical  

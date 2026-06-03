@@ -1,4 +1,4 @@
-<skill name="crosscut">
+<skill name="crosscut" mention="@{crosscut}">
 <rules>
 - AGENT.md is the primary human-facing documentation — update it when adding commands, patterns, or changing the directory structure
 - README.md is for external consumers — update it when public-facing behaviour changes
