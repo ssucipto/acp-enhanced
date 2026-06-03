@@ -1,4 +1,4 @@
-<skill name="upstream-sync">
+<skill name="upstream-sync" mention="@{upstream}">
 <rules>
 - Read ALL upstream source files before making any HAVE/PARTIAL/PORT/DEFER/DIVERGED assignment — no exceptions
 - Source priority order (mandatory, in sequence): (1) AGENT.md (2) agent/commands/*.md (3) agent/scripts/*.sh (4) agent/milestones/*.md (5) sample agent/tasks/ at least 2-3 per active milestone (6) agent/design/*.md for complex features (7) CHANGELOG.md as cross-reference only
