@@ -3,7 +3,7 @@
 # last_verified: 2026-06-03
 
 commands:
-  count: 63  # 63 verified 2026-06-03: 61 acp.* + 2 git.*
+  count: 64  # 64 total: 61 acp.* + 2 git.* + 1 command.template.md (verified 2026-06-03)
   location: agent/commands/
   naming: "acp.{command-name}.md — dot notation, acp namespace for core; git.{command}.md for git namespace"
   categories:
