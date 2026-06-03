@@ -3,7 +3,7 @@
 
 project:
   name: agent-context-protocol
-  version: 6.6.0
+  version: 6.8.2
   started: 2026-02-16
   status: in_progress
   current_milestone: M43-complete
@@ -3317,6 +3317,49 @@ progress:
       notes: Direction B safety gate — local.* skill files excluded from upstream overwrites
 
 recent_work:
+  - date: 2026-06-03
+    description: |
+      ✅ audit-020 COMPLETE: Documentation currency — 9 findings across 4 files, all fixed.
+      README now has shields.io banner (v6.8.2, production pattern, 43/43 milestones, 63 commands).
+      PRD-MAIN.md status updated from "Ready for Implementation" → "Implemented".
+      progress.yaml version bumped 6.6.0 → 6.8.2.
+    items:
+      - "✅ README.md: Added version/status/milestones/commands/license/fork banner (F-001)"
+      - "✅ README.md: Directory tree replaced with full ACP Enhanced layout (F-002)"
+      - "✅ README.md: Template files table updated to current templates (F-003)"
+      - "✅ scripts/PRD-MAIN.md: Status → Implemented with 2026-06-03 note (F-004)"
+      - "✅ scripts/PRD-MAIN.md: Skills list updated to actual skills (F-005)"
+      - "✅ scripts/PRD-MAIN.md: Directory tree + prompts count + opencode (F-006)"
+      - "✅ agent/progress.yaml: Version bumped 6.6.0 → 6.8.2 (F-008)"
+      - "✅ docs/README.md: Added upstream registry note (F-009)"
+      - "⚠️ 4 artifacts stale (no Last Verified dates)"
+      - "📋 audit-020 report: agent/reports/audit-020-documentation-currency.md"
+  - date: 2026-06-03
+    description: |
+      ✅ audit-019 COMPLETE: Updating system clarity — verified no confusion between
+      /acp-version-update and /acp-package-update. Scripts are clean. Fixed README.md
+      install/update curl commands pointing to prmichaelsen instead of ssucipto.
+    items:
+      - "✅ Verified all 4 scripts use ssucipto/acp-enhanced (not prmichaelsen)"
+      - "✅ README.md: Fixed install curl prmichaelsen → ssucipto (F-001)"
+      - "✅ README.md: Fixed update curl prmichaelsen → ssucipto (F-002)"
+      - "✅ README.md: Added \"Manual Install\" section header (F-003)"
+      - "📋 F-004 deferred: dead acp-core manifest sed in version-update.sh"
+      - "📋 audit-019 report: agent/reports/audit-019-updating-system-clarity.md"
+  - date: 2026-06-03
+    description: |
+      ✅ audit-018 COMPLETE: README accuracy vs implementation — 5 findings, all fixed.
+      README said "seven steps" but bootstrap has 8. Version bumped to 6.8.2.
+      IP_REGISTER.md generated and gitignored.
+    items:
+      - "✅ README.md: Fixed bootstrap step count seven → eight (F-001)"
+      - "✅ scripts/acp-bootstrap.sh: Counters [1/7]–[6b/7] → [1/8]–[6b/8] (F-002)"
+      - "✅ README.md: Added M43 subsection to Recent Protocol Enhancements (F-003)"
+      - "✅ README.md: Rewrote bootstrap step list to match script (F-004)"
+      - "✅ .gitignore: Added IP_REGISTER.md exclusion"
+      - "✅ Version bumped 6.8.1 → 6.8.2 (AGENT.md, identity.yml, package.yaml, CHANGELOG)"
+      - "✅ IP_REGISTER.md generated and gitignored"
+      - "📋 Committed: 0639768 (8 files, +61/-18)"
   - date: 2026-05-01
     description: |
       ✅ task-136 COMPLETE: Housekeeping, version bump to 6.2.5, M24 COMPLETE (4/4 tasks)
@@ -5235,41 +5278,22 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "✅ M38 DONE: protocol knowledge preservation — feedback-001 proactive commit triggers (2026-05-09)"
-  - "✅ M37 DONE: audit-007 gitignore fixes (task-185–186)"
-  - "✅ M36 DONE: saas-platform benchmark suite (task-181–183)"
-  - "✅ M35 DONE: acp-validate.ts enhancement — placeholder + frontmatter + parity (task-178–180)"
-  - "✅ M34 DONE: command naming convention pattern (task-176–177)"
-  - "✅ M33 DONE: pluggable driver system (task-171–175)"
-  - "✅ M32 DONE: AGENT.md protocol documentation (task-167–170)"
-  - "✅ M31 DONE: E2E test coverage (task-162–166)"
-  - "✅ M30 DONE: agent/drafts/ convention fix (task-159–161)"
-  - "✅ M29 DONE: upstream integration audit (task-155–158)"
-  - "✅ M28 DONE: opencode command parity — 59 commands (task-71–75)"
-  - "✅ M26 DONE: protocol usability improvements (task-145–149)"
-  - "✅ M25 DONE: ACP Progress Visualizer TanStack Start dashboard (task-137–144)"
-  - "✅ M38 DONE: protocol knowledge preservation — feedback-001 proactive commit triggers (2026-05-09)"
-  - "✅ M39 DONE: git branch awareness — Step 1b + git_workflow + acp.commit.md v1.2.0 (2026-05-11)"
-  - "✅ M40 DONE: pre-impl audit protocol — --pre-impl mode + audit-carryovers.md + Step 4.4 + quality gate (2026-05-11)"
-  - "✅ M41 DONE: stabilisation sprint — audit-014 external feedback fixes (routes 022-035, v6.7.0, 2026-05-11)"
-  - "✅ M42 DONE: dispatch integrity + validation hardening (routes 036-042, v6.8.0, 2026-05-11)"
-  - "✅ M43 DONE: taxonomy gap fixes + routing hygiene (routes 043-045, v6.8.1, 2026-05-12)"
-  - "📋 FUTURE: additional feedback-driven protocol improvements"
+  - "📋 Maintain documentation currency — re-run audit-020 check quarterly"
+  - "📋 Consider F-004 fix: remove dead acp-core manifest sed in version-update.sh"
+  - "📋 Refresh artifact Last Verified dates (4 artifacts currently stale)"
+  - "📋 Address any new feedback from external review"
 
 notes:
-  - Using flat directory structure with dot notation (acp.status.md)
-  - Namespace prefix makes autocomplete explicit
-  - Commands are self-documenting, no central README
-  - Reserved acp namespace for core commands
-  - Reserved local namespace for non-package projects
-  - Template-based creation for consistency
-  - Milestones 1-18 complete (100%), Milestone 6 (Preferences) planned (0%)
+  - 43 milestones complete (M1–M43, 100%), v6.8.2 (2026-06-03)
+  - 48 command docs in agent/commands/ (verified 2026-06-03)
   - 27 scripts in agent/scripts/ (verified 2026-05-01)
-  - 48 command docs in agent/commands/ (verified 2026-05-01, includes command.template.md)
+  - 63 slash commands across .github/prompts/ + .opencode/commands/
+  - 19 audit reports in agent/reports/ (audit-001 through audit-020)
+  - README now has shields.io banner with version + status + milestones + commands
+  - PRD-MAIN.md status updated to "Implemented" with current-state note
+  - Upstream URLs in README install/update sections corrected to ssucipto/acp-enhanced
   - Complete package development workflow operational
-  - Milestone 5: Global package installation complete with --global flag and auto-initialization
-  - Milestone 6: Preferences system with multi-level configuration and presets
-  - ACP Enhanced scaffolding complete (agent/ three-layer context system, routing, dispatch)
+  - ACP Enhanced framework complete: 3-layer context model, routing, dispatch, memory
 
 current_blockers: []
 
