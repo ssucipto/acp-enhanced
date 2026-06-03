@@ -192,7 +192,7 @@ the corresponding markdown document in `agent/patterns/`:
 
 ### 5. Stamp Completed Route Files
 
-- For each route ID in `tasks:` above:
+- For each route ID in `tasks_completed:` above:
   - Read `agent/routing/tasks/route-[NNN].md`
   - If `completed:` field is blank → set `completed: [today]`
   - If already set → skip (never overwrite)
@@ -252,7 +252,7 @@ entries are now orphaned. Clean them up:
 - [ ] `agent/sessions/{date}-{slug}.md` exists and matches registry entry (unless `--no-sync`)
 - [ ] Re-running commit without registry changes does not rewrite session documents (idempotent)
 - [ ] `--no-sync` skips step 2b and shows `sync: skipped` in confirmation
-- [ ] All route files from `tasks:` list are stamped with `completed:` date
+- [ ] All route files from `tasks_completed:` list are stamped with `completed:` date
 - [ ] If sessions.md has > 15 entries, oldest 10 were compacted
 - [ ] No session data was lost (key_facts preserved in patterns.md if applicable)
 
