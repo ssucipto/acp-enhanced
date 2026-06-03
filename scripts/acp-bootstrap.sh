@@ -1315,7 +1315,7 @@ fi
 echo -e "${YELLOW}[7/8] Installing ACP commands, scripts and schemas (agent/ directory)...${NC}"
 
 if [ -d "agent/commands" ] && [ -d "agent/scripts" ]; then
-  echo -e "${GREEN}✓ agent/ already present (running from local ACP Enhanced clone)${NC}"
+  echo -e "${GREEN}✓ agent/commands + agent/scripts already present — skipping download${NC}"
 else
   INSTALL_URL="https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh"
   echo "Downloading ACP installer..."
