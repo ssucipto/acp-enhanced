@@ -1,12 +1,55 @@
 # System Architecture
 # Update monthly or when service boundaries change
 # Load ONE section at a time — never fully loaded
-# last_verified: 2026-05-04
+# last_verified: 2026-06-03
 
 ## Command → Script Binding
 
-Commands in `agent/commands/` are LLM directives — they tell the agent WHAT to do.
-Scripts in `agent/scripts/` are bash implementations — they DO the work.
+Commands in `agent/commands/` (63 files) are LLM directives — they tell the agent WHAT to do.
+Scripts in `agent/scripts/` (29 files) are bash implementations — they DO the work.
+Binding: command frontmatter lists scripts in **Scripts**: field; package.yaml
+contents.commands[].scripts array is the authoritative source.
+
+## Context Loading Protocol (v6.8.2)
+
+Two modes defined in `agent/core/routing.yml → context_modes`:
+- **Light mode** (default): identity.yml + progress.yaml + last 3 sessions (~200 tokens)
+- **Full mode** (/acp-init): all 6 steps including skills, taxonomy, memory, wiki (~800 tokens)
+- Mode switching: light→full via /acp-init; full→light via new session
+- Mode tracked in routing.yml → context_modes.current
+
+## Package Management
+
+`package.yaml` → defines package contents (commands, scripts, patterns, designs, files)
+`agent/manifest.yaml` → tracks installed packages with versions and checksums
+Key scripts: acp.package-install.sh, acp.package-update.sh, acp.package-remove.sh
+
+## YAML Parser Chain
+
+acp.yaml-parser.sh → pure-bash AST-based parser (zero dependencies)
+  ├─ yaml_parse(file) → build AST
+  ├─ yaml_get(file, path) → query via dot-path
+  ├─ yaml_set(file, path, value) → update in-place
+  └─ sourced by: acp.common.sh → all package/project/preferences scripts
+
+## Routing + Dispatch
+
+taxonomy.yml → task_type → executor + context_required + mention
+routing.yml → session config + context_modes + command_suggestions
+ledger.md → cost tracking per task
+acp-dispatch.ts → TypeScript dispatch engine (OpenRouter API)
+
+## Skills System (v6.8.2, R6)
+
+7 skill files in agent/skills/ — invoked via @{skill-name} in chat:
+@{commands} @{scripts} @{schemas} @{testing} @{typescript} @{crosscut} @{upstream}
+Catalog in taxonomy.yml → skills_catalog maps mentions to files and triggers.
+
+## Parallel Tasks (v6.8.2, R9)
+
+task_type: parallel — sub-tasks form DAG via depends_on
+Schema: agent/schemas/task.schema.yaml
+Spawning: acp.proceed.md A3.1 — independent sub-tasks run concurrently
 
 Each command's `**Scripts**:` field lists which bash scripts it invokes.
 Example: `acp.package-install.md` binds to `acp.package-install.sh`.
