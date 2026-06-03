@@ -2,6 +2,46 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-06-04
+  executor: copilot
+  tasks_completed: [plan-047, audit-041, route-074, route-075, route-076, route-077, route-078, route-079, route-080, route-081, route-082, route-083, route-084, audit-042, acp-update]
+  done:
+    - m47-memory-integrity-v6-9-0-full-lifecycle
+    - plan-feedback-review-16-of-20-findings-addressed
+    - audit-041-pre-impl-readiness-10-findings-3-fixed-before-start
+    - route-074-commit-step-2b-auto-sync-sessions-documents
+    - route-075-commit-step-3b-auto-sync-patterns-documents
+    - route-076-commit-step-6b-re-sync-after-compaction
+    - route-077-pattern-sync-and-session-sync-repair-tools
+    - route-078-validate-memory-yaml-lint-flag
+    - route-079-version-update-guard-diff-preserve-force
+    - route-080-yaml-quoting-directives-commit-and-update
+    - route-081-schema-alignment-tasks-to-tasks-completed
+    - route-082-dual-store-wiki-architecture-md
+    - route-083-pattern-promotion-enforcement-step-3
+    - route-084-command-onboarding-phase-guide
+    - audit-042-post-impl-review-4-gaps-found-and-fixed
+    - progress-yaml-synced-v6-9-0-47-milestones-66-commands
+    - 6-git-commits-all-committed-to-mainline
+  deferred:
+    - "E2E tests for commit auto-sync → M48"
+    - "Atomicity in sync operations → M48"
+    - "F-05 registry schema lint → M48"
+    - "CHANGELOG.md v6.9.0 update → M48"
+  key_fact: |
+    M47 (v6.9.0 Memory Integrity Release) completed end-to-end in a single session:
+    /acp-plan → /acp-audit (pre-impl) → /acp-proceed --complete --yes (11 routes
+    autonomous) → /acp-audit (post-impl) → /acp-update. The full ACP workflow was
+    exercised: feedback-driven planning, pre-implementation audit with carryover
+    tracking, autonomous milestone completion with per-task commits, post-implementation
+    gap analysis, and progress synchronization. Core deliverable: /acp-commit now
+    auto-syncs session and pattern documents from registries (steps 2b, 3b, 6b) with
+    --no-sync escape hatch, idempotent design, and repair tools. Supporting work:
+    --memory YAML validation, version-update guard (--diff/--preserve/--force),
+    YAML quoting directives, schema alignment, dual-store wiki, pattern promotion
+    enforcement, command onboarding. 6 git commits. 2 audit reports. 4 carryovers
+    deferred to M48. Industry alignment: dual-store = Git checkout/DB checkpointing.
+
 - date: 2026-06-03
   executor: copilot
   tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, audit-027, audit-028, audit-029, audit-030, audit-031, audit-032, init-001, plan-044, route-047, route-048, route-052, route-053, route-054, route-055, route-056, route-057, route-058, route-059]
