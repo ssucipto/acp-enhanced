@@ -18,6 +18,28 @@
     - F-004-dead-acp-core-manifest-sed → low
     - README-fully-synced-with-all-v6-8-2-features
     - M44-section-added-to-README-recent-enhancements
+
+- date: 2026-06-03
+  executor: copilot
+  tasks: [route-063, route-064, route-065, route-066, route-067, route-068, route-069, route-070]
+  done:
+    - m45-test-package-8-routes-all-completed
+    - tests-acp-light-mode-test-sh-10-assertions
+    - tests-acp-at-mention-test-sh-10-assertions
+    - tests-acp-parallel-test-sh-5-assertions
+    - tests-acp-bootstrap-flags-test-sh-10-assertions
+    - tests-acp-security-test-sh-8-assertions
+    - tests-acp-runner-ci-test-sh-6-assertions
+    - tests-acp-e2e-workflow-test-sh-8-assertions
+    - tests-acp-smoke-test-sh-9-assertions-verified
+    - tests-acp-performance-test-sh-4-assertions-verified
+    - all-60-assertions-passing
+    - gitignore-reports-added
+    - route-files-stamped-completed
+    - progress-yaml-m45-marked-completed
+  deferred:
+    - run-e2e-tests-sh-parallel-flag → M46
+    - github-actions-ci-workflow-setup → infra-track
     - differences-table-updated-with-5-new-rows
     - update-command-corrected-to-acp-version-update
     - agent-layer-table-expanded-to-7-directories
