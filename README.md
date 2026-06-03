@@ -2,9 +2,9 @@
 
 [![Version](https://img.shields.io/badge/version-6.8.2-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
-[![Milestones](https://img.shields.io/badge/milestones-45%2F45%20complete-brightgreen)](https://github.com/ssucipto/acp-enhanced)
+[![Milestones](https://img.shields.io/badge/milestones-46%2F46%20complete-brightgreen)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-64%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
-[![Visualizer](https://img.shields.io/badge/visualizer-v1.2.0-6e47ff)](https://github.com/ssucipto/ACPEnhanced-Visual)
+[![Visualizer](https://img.shields.io/badge/visualizer-v1.4.2-6e47ff)](https://github.com/ssucipto/ACPEnhanced-Visual)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Fork](https://img.shields.io/badge/fork%20of-prmichaelsen%2Facp-orange)](https://github.com/prmichaelsen/agent-context-protocol)
 
@@ -35,7 +35,7 @@ The framework layer solves a specific problem: as your project grows, the AI age
 | `agent/commands/` | 64 self-documenting slash commands (`/acp-init`, `/acp-audit`, etc.) |
 | `agent/scripts/` | 29 bash scripts + TypeScript tooling for dispatch and validation |
 
-> 🖥️ **Companion**: [ACP Enhanced Visualizer](https://github.com/ssucipto/ACPEnhanced-Visual) — a local web dashboard for `agent/progress.yaml`. Interactive milestone table, tree view, fuzzy search, auto-refresh. Run `/acp-visualize` in Copilot chat or clone the repo directly.
+> 🖥️ **Companion Tool**: [**ACP Enhanced Visualizer**](https://github.com/ssucipto/ACPEnhanced-Visual) (v1.4.2) — a full-featured local web dashboard that brings your `agent/progress.yaml` to life. Monitors milestones, tasks, sessions, ADRs, lessons, patterns, packages, and audit reports — all from a single interactive UI. **Multi-project tab support, GitHub remote read, and zero-config `npx acp-visualizer` CLI.** [See full feature list below →](#visualize-your-project)
 
 ---
 
@@ -622,27 +622,59 @@ Or run the update script directly:
 
 ## Visualize Your Project
 
-> Companion tool: **[ACP Enhanced Visualizer](https://github.com/ssucipto/ACPEnhanced-Visual)** — a local web dashboard for `agent/progress.yaml`.
+> **[ACP Enhanced Visualizer](https://github.com/ssucipto/ACPEnhanced-Visual)** (v1.4.2) — the companion dashboard for ACP Enhanced projects. 9 milestones, 43 tests, fully open-source (MIT).
 
-See your milestones, tasks, and progress in a live interactive dashboard:
+### Quick Start
 
 ```bash
 git clone https://github.com/ssucipto/ACPEnhanced-Visual
 cd ACPEnhanced-Visual
 npm install
-
-# Point at your ACP Enhanced project and open browser:
 PROGRESS_YAML_PATH=../acp-enhanced/agent/progress.yaml npm run visualize
 ```
 
-Or the one-liner:
+Or zero-install via npx:
 ```bash
-npx acp-visualizer /path/to/your/project/agent/progress.yaml
+npx acp-visualizer /path/to/agent/progress.yaml
 ```
 
-**Features**: Sortable milestone table, expandable tree view, fuse.js fuzzy search, status filtering, 2s auto-refresh on file change, progress bars per milestone and overall project completion.
+Or from Copilot chat in any ACP Enhanced project:
+```
+/acp-visualize
+```
 
-**Quick integration with ACP Enhanced**: Run `/acp-visualize` in Copilot chat to get setup instructions, or add the visualizer as a companion to any ACP Enhanced project.
+### Features
+
+**Core Dashboard**
+- 📊 Sortable milestone table (ID, name, status, progress, tasks, priority)
+- 🌳 Expandable milestone → task tree with collapse/expand all
+- 🔍 Fuzzy search across milestones and tasks (fuse.js)
+- 🏷️ Status filtering by active, in-progress, completed, not-started
+- 🔄 Adaptive auto-refresh (2s local, 10s remote) — no WebSocket needed
+- 📈 Progress bars per milestone and overall completion
+
+**Multi-Project**
+- 📑 Tabbed dashboard — monitor multiple projects simultaneously
+- 🏠 Aggregate home with cross-project stats
+- ➕ Add/remove projects at runtime, no restart needed
+- 🔗 URL-driven state — bookmarkable tabs (`?tab=project-name`)
+
+**Remote Sources**
+- 🌐 GitHub remote read — fetch `progress.yaml` from any public/private repo
+- 🔐 GITHUB_TOKEN support for private repos
+- 📡 ETag caching — 304 responses don't count toward rate limits
+
+**Extended ACP Visualizations**
+- 📅 Session timeline — collapsible entries with key facts
+- 📋 ADR browser — filterable by status, re-open trigger highlights
+- 📝 Lessons feed — grouped by task_type with mistake/correction pairs
+- 🧩 Pattern library — searchable catalog with code references
+- 📦 Package inventory — installed ACP packages table
+- 📊 Audit index — report table with finding counts + severity badges
+
+**How it works**: The visualizer reads your `agent/progress.yaml` (and optionally `agent/memory/` files) and renders everything as a single-page application. It auto-refreshes when files change, so you can watch progress update live as agents work.
+
+> The visualizer is an independent companion tool — it does not modify your ACP project files in any way. It's read-only.
 
 ---
 
