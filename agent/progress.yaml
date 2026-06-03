@@ -70,11 +70,12 @@ milestones:
   M47:
     name: Memory Integrity & Feedback-Driven Improvements (v6.9.0)
     priority: 5
-    status: in_progress
-    progress: 45
+    status: completed
+    progress: 100
     started: 2026-06-04
+    completed: 2026-06-04
     estimated_weeks: 1-2
-    tasks_completed: 5
+    tasks_completed: 11
     tasks_total: 11
     file: agent/milestones/milestone-47-memory-integrity-feedback.md
     notes: |
@@ -3402,7 +3403,9 @@ tasks:
     - id: route-079
       name: "/acp-version-update guard — protect project-specific core files"
       priority: 4
-      status: planned
+      status: completed
+      started: 2026-06-04
+      completed_date: 2026-06-04
       file: agent/routing/tasks/route-079.md
       estimated_hours: 2-3
       notes: |
@@ -3412,7 +3415,9 @@ tasks:
     - id: route-080
       name: "YAML quoting directives in commit and update commands"
       priority: 4
-      status: planned
+      status: completed
+      started: 2026-06-04
+      completed_date: 2026-06-04
       file: agent/routing/tasks/route-080.md
       estimated_hours: 1-2
       notes: |
@@ -3422,7 +3427,9 @@ tasks:
     - id: route-081
       name: "Schema alignment — 'tasks' vs 'tasks_completed' field name"
       priority: 4
-      status: planned
+      status: completed
+      started: 2026-06-04
+      completed_date: 2026-06-04
       file: agent/routing/tasks/route-081.md
       estimated_hours: 0.5-1
       notes: |
@@ -3431,7 +3438,9 @@ tasks:
     - id: route-082
       name: "Dual-store wiki documentation — patterns and sessions"
       priority: 3
-      status: planned
+      status: completed
+      started: 2026-06-04
+      completed_date: 2026-06-04
       file: agent/routing/tasks/route-082.md
       estimated_hours: 1-2
       notes: |
@@ -3440,7 +3449,9 @@ tasks:
     - id: route-083
       name: "Pattern promotion enforcement in commit step 3"
       priority: 3
-      status: planned
+      status: completed
+      started: 2026-06-04
+      completed_date: 2026-06-04
       file: agent/routing/tasks/route-083.md
       estimated_hours: 1-2
       notes: |
@@ -3449,7 +3460,9 @@ tasks:
     - id: route-084
       name: "Command onboarding in /acp-init — top 5 for current phase"
       priority: 3
-      status: planned
+      status: completed
+      started: 2026-06-04
+      completed_date: 2026-06-04
       file: agent/routing/tasks/route-084.md
       estimated_hours: 1-2
       notes: |

@@ -24,6 +24,45 @@ Two modes defined in `agent/core/routing.yml → context_modes`:
 `agent/manifest.yaml` → tracks installed packages with versions and checksums
 Key scripts: acp.package-install.sh, acp.package-update.sh, acp.package-remove.sh
 
+## Memory Layer — Dual-Store Architecture (v6.9.0+)
+
+ACP Enhanced maintains a **two-tier storage model** for patterns and sessions:
+
+### Registry (source of truth)
+- `agent/memory/patterns.md` — YAML list of all pattern entries
+- `agent/memory/sessions.md` — YAML list of all session entries
+- Written by `/acp-commit` steps 2 and 3
+- Compact representation, suitable for diffing and version control
+
+### Document Directories (consumption layer)
+- `agent/patterns/{name}.md` — Individual pattern documents
+- `agent/sessions/{date}-{slug}.md` — Individual session documents
+- **Auto-synced** from registries by `/acp-commit` steps 2b/3b (v6.9+)
+- Consumed by `/acp-init`, `/acp-plan`, `/acp-proceed`, and the visualizer
+- Human-readable markdown, one file per entry
+
+### Sync Flow
+```
+/acp-commit
+  Step 2  → writes agent/memory/sessions.md (registry)
+  Step 2b → auto-syncs agent/sessions/*.md (documents) [v6.9+]
+  Step 3  → writes agent/memory/patterns.md (registry)
+  Step 3b → auto-syncs agent/patterns/*.md (documents) [v6.9+]
+  Step 6  → compact sessions (>15 entries)
+  Step 6b → re-sync affected documents after compaction [v6.9+]
+```
+
+### Repair Path
+- `/acp-pattern-sync --all` — regenerate all pattern documents from registry
+- `/acp-session-sync --all` — regenerate all session documents from registry
+- Use when documents drift from registry (e.g., manual edits, pre-v6.9 projects)
+- Both support `--dry-run` to preview without writing
+
+### YAML Integrity
+- `/acp-validate --memory` — YAML-lint registries before syncing
+- Commit steps include quoting directives for colons in scalar values
+- Weekly-summary compaction quotes `key_facts` items containing `:`
+
 ## YAML Parser Chain
 
 acp.yaml-parser.sh → pure-bash AST-based parser (zero dependencies)

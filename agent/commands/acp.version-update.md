@@ -3,9 +3,9 @@
 > **🤖 Agent Directive**: If you are reading this file, the command `/acp-version-update` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-02-16  
-**Last Updated**: 2026-06-03  
+**Last Updated**: 2026-06-04  
 **Status**: Active  
 **Scripts**: acp.version-update.sh, acp.common.sh  
 
@@ -14,6 +14,18 @@
 **Purpose**: Update ACP files (AGENT.md, templates, scripts) to the latest version  
 **Category**: Maintenance  
 **Frequency**: When Updates Available  
+
+---
+
+## Arguments
+
+| Flag | Description |
+|------|-------------|
+| `--diff` | Show what files would change without applying any updates |
+| `--preserve-project-core` | Skip overwriting project-specific core files (identity.yml, domain.yml, taxonomy.yml) |
+| `--force` | Skip all confirmation prompts; overwrite everything without asking |
+
+**Default behavior**: Before overwriting any `agent/core/*.yml` file that differs from the framework template, warn and ask for confirmation.
 
 ---
 
@@ -51,7 +63,12 @@ Use this command when `/acp-version-check-for-updates` reports that updates are 
 - `agent/specs/` — your specs
 - `agent/index/` — your key file index
 
-> **Important**: If you've customized `AGENT.md` or any files in `agent/commands/`, commit your changes before updating so you can recover them via `git diff` / `git checkout`. The update script does not diff or warn about local modifications to these files.
+> **Important**: If you've customized `AGENT.md` or any files in `agent/commands/`, commit your changes before updating so you can recover them via `git diff` / `git checkout`.
+>
+> **🔒 Project Core Files (v1.1.0+)**: Before overwriting `agent/core/identity.yml`,
+> `agent/core/domain.yml`, or `agent/core/taxonomy.yml`, the update now warns if these
+> files differ from framework defaults. Use `--diff` to preview changes, or
+> `--preserve-project-core` to skip these files entirely.
 
 ---
 
