@@ -658,6 +658,36 @@ Ready to proceed with task-2 completion.
 
 ---
 
+## Commands for Your Current Phase (v6.9.0+)
+
+After completing the init steps, display a contextual command guide based on the
+project's current state. This helps users discover relevant commands — 61 are
+available but only ~8 are commonly used.
+
+**Phase detection** (based on `agent/progress.yaml → current_milestone` status):
+
+| Phase | Detection | Recommended Commands |
+|-------|-----------|---------------------|
+| **New project** | No milestones completed | `/acp-plan`, `/acp-design-create`, `/acp-task-create`, `/acp-audit`, `/acp-init` |
+| **Active milestone** | `in_progress` milestone | `/acp-proceed`, `/acp-update`, `/acp-commit`, `/acp-audit`, `/acp-validate --memory` |
+| **Post-milestone** | Just completed | `/acp-commit`, `/acp-audit`, `/acp-plan`, `/acp-update`, `/acp-sync` |
+| **Maintenance** | No active milestone | `/acp-validate --memory`, `/acp-audit`, `/acp-sync`, `/acp-pattern-sync`, `/acp-status` |
+
+**Display format**:
+```
+💡 Commands for your current phase ({phase}):
+
+  /acp-proceed   Start implementing next task
+  /acp-update    Sync progress.yaml after completing work
+  /acp-commit    Save session memory (with auto-sync)
+  /acp-audit     Run pre-impl audit before starting new work
+  /acp-validate  Check consistency (add --memory for YAML lint)
+
+📋 61 commands available. Run /acp-help for the full list.
+```
+
+---
+
 **Namespace**: acp  
 **Command**: init  
 **Version**: 1.1.0  
