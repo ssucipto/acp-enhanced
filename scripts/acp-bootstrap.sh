@@ -9,6 +9,37 @@
 # =============================================================================
 
 set -e
+set -o pipefail
+
+# ── Argument Parsing (must be before pre-flight checks) ─────────
+TEAM_SIZE="small"
+GENERATE_PROMPTS="false"
+GENERATE_OPENCODE="true"
+SKIP_WARNING=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --team-size)
+            TEAM_SIZE="$2"
+            shift 2
+            ;;
+        --generate-prompts)
+            GENERATE_PROMPTS="true"
+            shift
+            ;;
+        --no-opencode)
+            GENERATE_OPENCODE="false"
+            shift
+            ;;
+        --yes|-y)
+            SKIP_WARNING=true
+            shift
+            ;;
+        *)
+            shift
+            ;;
+    esac
+done
 
 # ── Cleanup Definition (must be before trap) ────────────────────
 _BOOTSTRAP_START_DIR="$(pwd)"
@@ -95,6 +126,7 @@ fi
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+RED='\033[0;31m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
@@ -104,39 +136,9 @@ echo ""
 
 # ── Scaffold Configuration ─────────────────────────────────────
 # Added v6.8.2 (audit-022 R3+R4, M44 route-059). Controls what gets
-# generated. Override via flags: --team-size solo|small|team, --generate-prompts
-# Also reads agent/manifest.yaml → scaffold block if present.
+# generated. Also reads agent/manifest.yaml → scaffold block if present.
 
-TEAM_SIZE="small"
-GENERATE_PROMPTS="false"
-GENERATE_OPENCODE="true"
-SKIP_WARNING=false
-
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        --team-size)
-            TEAM_SIZE="$2"
-            shift 2
-            ;;
-        --generate-prompts)
-            GENERATE_PROMPTS="true"
-            shift
-            ;;
-        --no-opencode)
-            GENERATE_OPENCODE="false"
-            shift
-            ;;
-        --yes|-y)
-            SKIP_WARNING=true
-            shift
-            ;;
-        *)
-            shift
-            ;;
-    esac
-done
-
-# Read manifest overrides if present
+# Read manifest overrides if present (args already parsed above)
 if [ -f "agent/manifest.yaml" ]; then
     MANIFEST_TEAM=$(grep -A5 "^scaffold:" agent/manifest.yaml 2>/dev/null | grep "team_size:" | awk '{print $2}' || echo "")
     MANIFEST_PROMPTS=$(grep -A5 "^scaffold:" agent/manifest.yaml 2>/dev/null | grep "generate_prompts:" | awk '{print $2}' || echo "")
@@ -294,7 +296,7 @@ When the developer corrects your output, IMMEDIATELY:
 
 ## Session Commit Protocol (/acp-commit)
 
-When developer runs /acp-commit or /acp-commit:
+When developer runs /acp-commit:
 1. Write session summary to `agent/memory/sessions.md` in YAML format:
 ```yaml
 - date: [today]
@@ -1327,9 +1329,10 @@ else
     bash "$INSTALL_TMP"
     rm -f "$INSTALL_TMP"
   else
-    echo -e "${YELLOW}WARNING: curl and wget not found.${NC}"
-    echo "Install agent/ manually after bootstrap:"
-    echo "  curl -fsSL $INSTALL_URL | bash"
+    echo -e "${RED}ERROR: Neither curl nor wget available. Cannot download installer.${NC}"
+    echo "Install agent/ manually from a local ACP Enhanced clone:"
+    echo "  bash /path/to/acp-enhanced/agent/scripts/acp.install.sh"
+    exit 1
   fi
 fi
 echo ""
