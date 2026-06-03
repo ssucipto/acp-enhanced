@@ -9,6 +9,33 @@
 # =============================================================================
 
 set -e
+
+# ── Cleanup Definition (must be before trap) ────────────────────
+_BOOTSTRAP_START_DIR="$(pwd)"
+cleanup_on_failure() {
+    local _rc=$?
+    if [ "$_rc" -ne 0 ] && [ -n "$_BOOTSTRAP_START_DIR" ] && [ "$_BOOTSTRAP_START_DIR" != "/" ]; then
+        echo ""
+        echo "Cleaning up partial installation in $_BOOTSTRAP_START_DIR..."
+        # Only remove files bootstrap itself creates — never touch user data
+        for _f in AGENTS.md CLAUDE.md .github/copilot-instructions.md; do
+            [ -f "$_BOOTSTRAP_START_DIR/$_f" ] && rm -f "$_BOOTSTRAP_START_DIR/$_f" 2>/dev/null && echo "  Removed $_f"
+        done
+        # Only remove agent/ if we created it (directory is empty or only has our stubs)
+        if [ -d "$_BOOTSTRAP_START_DIR/agent" ]; then
+            # Check if agent/ only contains bootstrap-created subdirs
+            _user_files=$(find "$_BOOTSTRAP_START_DIR/agent" -maxdepth 2 -type f 2>/dev/null | grep -v "template\|stub\|\.md$\|\.yml$" | head -1 || true)
+            if [ -z "$_user_files" ]; then
+                rm -rf "$_BOOTSTRAP_START_DIR/agent" 2>/dev/null && echo "  Removed agent/"
+            else
+                echo "  ⚠️  agent/ contains user files — skipping removal"
+            fi
+        fi
+        [ -d "$_BOOTSTRAP_START_DIR/.opencode" ] && rm -rf "$_BOOTSTRAP_START_DIR/.opencode" 2>/dev/null && echo "  Removed .opencode/"
+        echo "Cleanup complete."
+    fi
+}
+
 trap 'echo "Bootstrap failed at line $LINENO — check output above for details." >&2; cleanup_on_failure; exit 1' ERR
 
 # ── Pre-flight Safety Checks ───────────────────────────────────
@@ -25,8 +52,19 @@ if [ -f "agent/core/identity.yml" ] && [ -f "AGENTS.md" ]; then
     exit 0
 fi
 
+# Check for partial installation (one exists but not the other)
+if [ -f "agent/core/identity.yml" ] || [ -f "AGENTS.md" ]; then
+    echo ""
+    echo "⚠️  Partial ACP installation detected in: $(pwd)"
+    echo "   Some ACP files exist but installation is incomplete."
+    echo "   This bootstrap will attempt to complete the installation."
+    echo "   If you encounter issues, remove agent/ and AGENTS.md manually,"
+    echo "   then re-run this script."
+    echo ""
+fi
+
 # Check 2: Is this a project directory? Look for common indicators.
-HAS_GIT="-z"
+HAS_GIT=""
 HAS_PROJECT_FILE=""
 if [ -d ".git" ]; then HAS_GIT="yes"; fi
 for _pf in package.json Cargo.toml go.mod pyproject.toml requirements.txt \
@@ -54,25 +92,6 @@ if [ "$HAS_GIT" != "yes" ] && [ -z "$HAS_PROJECT_FILE" ]; then
         echo "   --yes passed, skipping delay."
     fi
 fi
-
-# ── Cleanup function ────────────────────────────────────────────
-_BOOTSTRAP_START_DIR="$(pwd)"
-_BOOTSTRAP_CREATED=()
-cleanup_on_failure() {
-    local _rc=$?
-    if [ "$_rc" -ne 0 ] && [ -n "$_BOOTSTRAP_START_DIR" ]; then
-        echo ""
-        echo "Cleaning up partial installation in $_BOOTSTRAP_START_DIR..."
-        # Remove files created by this bootstrap run
-        for _f in AGENTS.md CLAUDE.md .github/copilot-instructions.md; do
-            [ -f "$_f" ] && rm -f "$_f" && echo "  Removed $_f"
-        done
-        for _d in agent/ .opencode/; do
-            [ -d "$_d" ] && rm -rf "$_d" && echo "  Removed $_d/"
-        done
-        echo "Cleanup complete."
-    fi
-}
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
