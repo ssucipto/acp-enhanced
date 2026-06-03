@@ -2,7 +2,7 @@
 **Version:** 2.0 FINAL (Implemented)
 **Date:** 2026-05-01 (updated 2026-06-03)
 **Author:** Project Owner
-**Status:** ✅ Implemented — 43 milestones complete as of v6.8.2 (M1–M43, May 2026)
+**Status:** ✅ Implemented — 44 milestones complete as of v6.8.2 (M1–M44, June 2026)
 **Forked from:** prmichaelsen/agent-context-protocol
 
 > **Note (2026-06-03):** This PRD describes the original vision for ACP Enhanced as of May 2026.
