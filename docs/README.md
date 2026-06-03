@@ -1,5 +1,7 @@
 # ACP Package Browser
 
+> **Note:** This is the upstream [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol) package registry browser. ACP Enhanced packages are discoverable through the same registry via the `acp-package` topic.
+
 This directory contains the GitHub Pages site for browsing ACP packages.
 
 ## Features
@@ -25,7 +27,7 @@ python3 -m http.server 8000 --directory docs
 
 This site is automatically deployed to GitHub Pages from the `docs/` directory.
 
-**URL**: https://prmichaelsen.github.io/agent-context-protocol/
+**URL**: https://prmichaelsen.github.io/agent-context-protocol/ (upstream registry)
 
 ## How It Works
 
