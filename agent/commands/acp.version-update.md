@@ -5,7 +5,7 @@
 **Namespace**: acp  
 **Version**: 1.0.0  
 **Created**: 2026-02-16  
-**Last Updated**: 2026-02-16  
+**Last Updated**: 2026-06-03  
 **Status**: Active  
 **Scripts**: acp.version-update.sh, acp.common.sh  
 
