@@ -100,12 +100,40 @@ ACP Enhanced retains 100% backward compatibility with the original pattern. Proj
 5. **Patterns** - Reusable architectural and coding patterns
 6. **Progress Tracking** - YAML-based progress monitoring and status updates
 
+### Core Project Files
+
+ACP Enhanced uses two key files for project state. They serve different purposes:
+
+| File | Purpose | Update Frequency | Content |
+|------|---------|:---:|---------|
+| `agent/manifest.yaml` | Static project identity — name, version, stack, constraints, packages | Rarely (team changes, new platform) | Packages installed, framework version, metadata |
+| `agent/progress.yaml` | Live tracking — milestones, tasks, recent work, next steps, blockers | Daily (`/acp-update`, `/acp-proceed`) | All 43 milestones, task status, observability |
+
+**Rule of thumb**: Manifest is "set once and forget." Progress is "update daily."
+
 This pattern enables:
 - **Agent Continuity**: New agents can pick up where previous agents left off
 - **Knowledge Preservation**: Design decisions and rationale are never lost
 - **Systematic Development**: Complex projects are broken into manageable pieces
 - **Quality Assurance**: Clear success criteria and verification steps
 - **Collaboration**: Multiple agents (or humans) can work on the same project
+
+### Why Three Protocol Files Exist
+
+ACP Enhanced maintains three protocol files, not one:
+
+| File | Role | Loaded By |
+|------|------|-----------|
+| `.github/copilot-instructions.md` | **Canonical source** — edit here | GitHub Copilot, Cursor |
+| `CLAUDE.md` | Auto-synced copy | Claude Code |
+| `AGENT.md` | User-facing documentation (this file) | Human readers |
+
+This is not an anti-pattern — it's inherent to multi-platform support. Each platform reads a different file:
+- GitHub Copilot reads `.github/copilot-instructions.md`
+- Claude Code reads `CLAUDE.md`
+- A pre-commit hook keeps `CLAUDE.md` in sync with the canonical source
+
+> **Do not merge these files.** AGENT.md is 2300+ lines of user documentation. CLAUDE.md and copilot-instructions.md are ~360 lines of agent protocol. Redirecting Claude to AGENT.md would load irrelevant user docs into every session.
 
 ---
 
