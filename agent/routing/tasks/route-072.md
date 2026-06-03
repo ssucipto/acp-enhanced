@@ -14,7 +14,7 @@ tokens_actual:
 cost_est_usd:
 cost_actual_usd:
 created: 2026-06-03
-completed:
+completed: 2026-06-03
 depends_on: [route-071]
 ---
 
