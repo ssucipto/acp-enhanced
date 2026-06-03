@@ -6,11 +6,11 @@ project:
   version: 6.8.2
   started: 2026-02-16
   status: active
-  current_milestone: M46
+  current_milestone: M47
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.8.2 with 45 completed
-    milestones. M46 (v6.8.4) planned: parallel test runner for run-e2e-tests.sh.
-    35 audit reports, 16 unit tests (71 assertions).
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.8.2 with 46 completed
+    milestones. M46 (v6.8.4) delivered parallel test runner. 35 audit reports,
+    16 unit tests (71 assertions).
 
 milestones:
   M44:
@@ -52,18 +52,20 @@ milestones:
   M46:
     name: Parallel Test Runner + Runner Improvements (v6.8.4)
     priority: 4
-    status: planned
-    progress: 0
+    status: completed
+    progress: 100
     estimated_weeks: 0.5
-    tasks_completed: 0
+    tasks_completed: 3
     tasks_total: 3
     file: agent/milestones/milestone-46-parallel-test-runner.md
     design: agent/design/local.parallel-test-runner.md
     notes: |
-      📋 Milestone 46: Add --parallel flag to run-e2e-tests.sh.
-      Design: agent/design/local.parallel-test-runner.md
-      Routes: 071 (--parallel impl), 072 (--help + robustness), 073 (CI update)
-      Target: ~5 min test runs (vs 15-20 min serial) with 4 workers.
+      ✅ M46 COMPLETE! 3 routes, all done (2026-06-03).
+      Route 071: --parallel flag + background subshells + result ordering
+      Route 072: --help flag + argument validation (merge with 071)
+      Route 073: CI workflows updated to use --parallel 4
+      run-e2e-tests.sh: ~200 lines, supports serial + parallel modes
+      macOS + Linux compatible, no GNU parallel dependency
 
   M1:
     name: ACP Commands Infrastructure
@@ -5282,7 +5284,6 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "📋 M46 planned: parallel test runner — 3 routes (071-073), design ready"
   - "📋 Maintain documentation currency — re-run audit-020 check quarterly"
   - "📋 Refresh artifact Last Verified dates (4 artifacts currently stale)"
   - "📋 Address any new external feedback"
