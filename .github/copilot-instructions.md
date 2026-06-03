@@ -96,16 +96,18 @@ From the developer's request, determine the task_type by reading:
 Match the request to the closest task_type entry.
 If uncertain between two types, choose the one with the higher-risk executor.
 
-### Step 3 — Load Skill (one file only)
-Based on task_type, load EXACTLY ONE skill file:
-- Command doc writing/updating → `agent/skills/commands.md`
-- Bash shell scripting → `agent/skills/scripts.md`
-- YAML schema / config design → `agent/skills/schemas.md`
-- E2E or unit test writing → `agent/skills/testing.md`
-- TypeScript tooling → `agent/skills/typescript.md`
-- Docs, AGENT.md, README, cross-cutting → `agent/skills/crosscut.md`
+### Step 3 — Skills are Now @-Mention Invoked (v6.8.2, R6)
 
-Do NOT load multiple skill files unless the task explicitly spans two domains.
+Skill files are no longer auto-loaded by task_type. Instead, they are invoked explicitly:
+
+- User types `@{skill-name}` in chat (e.g., `@{testing}`, `@{commands}`)
+- Agent reads the corresponding `agent/skills/{skill-name}.md`
+- Agent applies conventions from the skill file to the current task
+- Brief acknowledgement: `[@testing] Loaded testing conventions.`
+
+> See `agent/core/routing.yml → skills_catalog` for the full list of 7 @-mentions.
+> The auto-load mechanism (Step 3 in pre-v6.8.2) is deprecated. Skill files
+> remain available for direct reading when needed.
 
 ### Step 4 — Load Working Memory (filtered)
 1. Read last 3 entries from `agent/memory/sessions.md` only

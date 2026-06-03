@@ -16,18 +16,86 @@ echo -e "${BLUE}=== ACP Enhanced Bootstrap ===${NC}"
 echo "Setting up Agent Context Protocol Enhanced in: $(pwd)"
 echo ""
 
-# --- 1. Directory Structure ---
-echo -e "${YELLOW}[1/8] Creating directory structure...${NC}"
+# ── Scaffold Configuration ─────────────────────────────────────
+# Added v6.8.2 (audit-022 R3+R4, M44 route-059). Controls what gets
+# generated. Override via flags: --team-size solo|small|team, --generate-prompts
+# Also reads agent/manifest.yaml → scaffold block if present.
+
+TEAM_SIZE="small"
+GENERATE_PROMPTS="false"
+GENERATE_OPENCODE="true"
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --team-size)
+            TEAM_SIZE="$2"
+            shift 2
+            ;;
+        --generate-prompts)
+            GENERATE_PROMPTS="true"
+            shift
+            ;;
+        --no-opencode)
+            GENERATE_OPENCODE="false"
+            shift
+            ;;
+        *)
+            shift
+            ;;
+    esac
+done
+
+# Read manifest overrides if present
+if [ -f "agent/manifest.yaml" ]; then
+    MANIFEST_TEAM=$(grep -A5 "^scaffold:" agent/manifest.yaml 2>/dev/null | grep "team_size:" | awk '{print $2}' || echo "")
+    MANIFEST_PROMPTS=$(grep -A5 "^scaffold:" agent/manifest.yaml 2>/dev/null | grep "generate_prompts:" | awk '{print $2}' || echo "")
+    MANIFEST_OPENCODE=$(grep -A5 "^scaffold:" agent/manifest.yaml 2>/dev/null | grep "generate_opencode:" | awk '{print $2}' || echo "")
+    [ -n "$MANIFEST_TEAM" ] && TEAM_SIZE="$MANIFEST_TEAM"
+    [ -n "$MANIFEST_PROMPTS" ] && GENERATE_PROMPTS="$MANIFEST_PROMPTS"
+    [ -n "$MANIFEST_OPENCODE" ] && GENERATE_OPENCODE="$MANIFEST_OPENCODE"
+fi
+
+echo -e "${BLUE}Scaffold: team_size=${TEAM_SIZE} prompts=${GENERATE_PROMPTS} opencode=${GENERATE_OPENCODE}${NC}"
+echo ""
+
+# ── Directory Creation ─────────────────────────────────────────
+# solo: core + memory + wiki + routing + 10 essential commands
+# small: + skills + scripts + milestones + design + index + schemas
+# team: all 20+ directories
+
+echo -e "${YELLOW}[1/8] Creating directory structure (${TEAM_SIZE})...${NC}"
 mkdir -p agent/core
-mkdir -p agent/skills
 mkdir -p agent/memory
 mkdir -p agent/wiki
 mkdir -p agent/routing
 mkdir -p agent/routing/tasks
 mkdir -p agent/tasks
-mkdir -p agent/milestones
-mkdir -p agent/drafts
-mkdir -p .github/prompts
+
+if [ "$TEAM_SIZE" != "solo" ]; then
+    mkdir -p agent/skills
+    mkdir -p agent/design
+    mkdir -p agent/milestones
+    mkdir -p agent/index
+    mkdir -p agent/schemas
+fi
+
+if [ "$TEAM_SIZE" = "team" ]; then
+    mkdir -p agent/artifacts
+    mkdir -p agent/clarifications
+    mkdir -p agent/drafts
+    mkdir -p agent/feedback
+    mkdir -p agent/preferences
+    mkdir -p agent/configurables
+    mkdir -p agent/patterns
+    mkdir -p agent/specs
+    mkdir -p agent/reports
+    mkdir -p agent/benchmarks/runner
+    mkdir -p agent/benchmarks/suite
+fi
+
+mkdir -p agent/commands
+mkdir -p agent/scripts
+mkdir -p .github
 mkdir -p scripts
 echo -e "${GREEN}✓ Directories created${NC}"
 
@@ -160,7 +228,9 @@ fi
 
 # Wire AGENTS.md to other IDEs
 # Use cp (not symlinks) — symlinks break on Windows and WSL cross-drive setups
-mkdir -p .github/prompts
+if [ "$GENERATE_PROMPTS" = "true" ]; then
+  mkdir -p .github/prompts
+fi
 if [ ! -f CLAUDE.md ]; then
   cp AGENTS.md CLAUDE.md
   echo -e "${GREEN}✓ CLAUDE.md created (Claude Code auto-load)${NC}"
@@ -526,7 +596,8 @@ MD
 echo -e "${GREEN}✓ Routing layer created${NC}"
 
 # --- 6. Prompt Files ---
-echo -e "${YELLOW}[6/8] Creating Copilot prompt files...${NC}"
+if [ "$GENERATE_PROMPTS" = "true" ]; then
+echo -e "${YELLOW}[6/8] Creating Copilot prompt files (opt-in)...${NC}"
 
 cat > .github/prompts/acp-route.prompt.md << 'MD'
 ---
@@ -1143,6 +1214,10 @@ for _oc_src in .github/prompts/*.prompt.md; do
   _oc_count=$((_oc_count + 1))
 done
 echo -e "${GREEN}✓ ${_oc_count} opencode slash commands generated in .opencode/commands/${NC}"
+fi  # end GENERATE_PROMPTS (prompts + opencode)
+else
+echo -e "${YELLOW}[6/8] Skipping prompt files (opt-in via --generate-prompts or manifest)${NC}"
+fi
 
 # --- 7. Install agent/ commands, scripts and schemas ---
 echo -e "${YELLOW}[7/8] Installing ACP commands, scripts and schemas (agent/ directory)...${NC}"
