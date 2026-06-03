@@ -70,11 +70,11 @@ milestones:
   M47:
     name: Memory Integrity & Feedback-Driven Improvements (v6.9.0)
     priority: 5
-    status: planned
-    progress: 0
+    status: in_progress
+    progress: 9
     started: 2026-06-04
     estimated_weeks: 1-2
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 11
     file: agent/milestones/milestone-47-memory-integrity-feedback.md
     notes: |
@@ -3344,9 +3344,11 @@ tasks:
     - id: route-074
       name: "/acp-commit step 2b — auto-sync sessions documents from registry"
       priority: 5
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-074.md
       estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
       notes: |
         P0: Extend /acp-commit with auto-sync of agent/sessions/ from
         memory/sessions.md registry. Idempotent, --no-sync opt-out.
