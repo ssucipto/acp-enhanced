@@ -4,15 +4,15 @@
 > Pretend this command was entered with this additional context: "Execute directive `/acp-commit` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
-**Version**: 1.2.0  
+**Version**: 1.3.0  
 **Created**: 2026-05-05  
-**Last Updated**: 2026-05-11  
+**Last Updated**: 2026-06-04  
 **Status**: Active  
 **Scripts**: None  
 
 ---
 
-**Purpose**: End-of-session memory commit — write session summary, stamp completed tasks, compact memory if needed  
+**Purpose**: End-of-session memory commit — write session summary, stamp completed tasks, compact memory if needed, auto-sync session and pattern documents  
 **Category**: Memory  
 **Frequency**: At every phase boundary AND at session end — required, never skip  
 
@@ -20,7 +20,11 @@
 
 ## Arguments
 
-None. Context is inferred from the current conversation.
+None required. Context is inferred from the current conversation.
+
+| Flag | Description |
+|------|-------------|
+| `--no-sync` | Skip auto-sync of session and pattern documents (steps 2b, 3b, 6b). Use for debugging only — document directories may drift from registries |
 
 ---
 
@@ -88,6 +92,44 @@ Prepend a YAML entry to `agent/memory/sessions.md`:
   key_fact: [single most important thing learned, or null]
 ```
 
+### 2b. Auto-Sync Session Document (NEW — v1.3.0)
+
+> **Skip this step if `--no-sync` was passed.**
+
+After writing the session entry to `agent/memory/sessions.md` (Step 2), auto-generate
+the corresponding markdown document in `agent/sessions/`:
+
+1. **Identify the entry just written**: The top entry in `agent/memory/sessions.md`
+   with today's date.
+2. **Generate filename**: `agent/sessions/{date}-{slug}.md` where:
+   - `{date}` = the entry's `date:` field (YYYY-MM-DD format)
+   - `{slug}` = kebab-case of the first `done:` item (stop at ~50 chars), or
+     the executor name if `done:` is empty
+3. **Create directory** if `agent/sessions/` does not exist.
+4. **Write session document** in markdown format:
+
+   ```markdown
+   # Session: {date}
+   
+   **Executor**: {executor}
+   **Branch**: {branch or "N/A"}
+   **Tasks**: {tasks_completed list}
+   
+   ## Completed
+   {one done: item per line as a bullet list}
+   
+   ## Deferred
+   {one deferred item per line, or "None"}
+   
+   ## Key Fact
+   {key_fact or "None"}
+   ```
+
+5. **Idempotency**: If a file at the target path already exists with identical
+   content, skip it. If the registry entry has changed since the last sync,
+   update the file to match. Track this by comparing the file's content hash
+   against the registry entry's content.
+
 ### 3. Check for Reusable Patterns
 
 - Did this session produce a reusable code pattern, architectural insight, or repeatable workflow?
@@ -123,14 +165,21 @@ Prepend a YAML entry to `agent/memory/sessions.md`:
 ### 7. Confirm
 
 ```
-[ACP] Session committed | [N] entries in sessions.md | compacted: [y/n]
+[ACP] Session committed | [N] entries in sessions.md | sessions: [X] created, [Y] updated | patterns: [X] created, [Y] updated | compacted: [y/n]
 ```
+
+> **Sync counts**: `sessions: X created, Y updated` and `patterns: X created, Y updated`
+> are shown only when sync was not skipped (`--no-sync` was not passed). When `--no-sync`
+> is active, show: `sync: skipped (--no-sync)`.
 
 ---
 
 ## Verification
 
 - [ ] sessions.md has a new entry at top with today's date
+- [ ] `agent/sessions/{date}-{slug}.md` exists and matches registry entry (unless `--no-sync`)
+- [ ] Re-running commit without registry changes does not rewrite session documents (idempotent)
+- [ ] `--no-sync` skips step 2b and shows `sync: skipped` in confirmation
 - [ ] All route files from `tasks:` list are stamped with `completed:` date
 - [ ] If sessions.md has > 15 entries, oldest 10 were compacted
 - [ ] No session data was lost (key_facts preserved in patterns.md if applicable)
@@ -139,14 +188,23 @@ Prepend a YAML entry to `agent/memory/sessions.md`:
 
 **Namespace**: acp  
 **Command**: commit  
-**Version**: 1.1.0  
+**Version**: 1.3.0  
 **Created**: 2026-05-05  
-**Last Updated**: 2026-05-09  
+**Last Updated**: 2026-06-04  
 **Status**: Active  
-**Compatibility**: ACP 6.0.0+  
+**Compatibility**: ACP 6.9.0+  
 **Author**: ACP Project  
 
 ---
+
+## v1.3.0 Changelog (2026-06-04)
+
+- Added `--no-sync` flag — skip auto-sync of session/pattern documents (debug only, warns about drift)
+- Added Step 2b: Auto-Sync Session Document — generates `agent/sessions/{date}-{slug}.md` from registry
+  after every successful commit (route-074, M47)
+- Updated Step 7 confirmation output to report sync counts
+- Root cause: feedback-001/002 from FIFOZ project — sessions documents not auto-generated,
+  agents and visualizer read from empty document directory
 
 ## v1.2.0 Changelog (2026-05-11)
 
