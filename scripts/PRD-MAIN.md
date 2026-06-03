@@ -1,9 +1,16 @@
 # ACP Enhanced — Product Requirements Document
-**Version:** 2.0 FINAL
-**Date:** 2026-05-01
+**Version:** 2.0 FINAL (Implemented)
+**Date:** 2026-05-01 (updated 2026-06-03)
 **Author:** Project Owner
-**Status:** Ready for Implementation
+**Status:** ✅ Implemented — 43 milestones complete as of v6.8.2 (M1–M43, May 2026)
 **Forked from:** prmichaelsen/agent-context-protocol
+
+> **Note (2026-06-03):** This PRD describes the original vision for ACP Enhanced as of May 2026.
+> All 43 milestones (M1–M43) have been completed. The implementation matches the architecture
+> described below with some naming differences: `/acp-` prefix (not `@acp-`), skills are
+> domain-specific (commands, scripts, schemas, testing, typescript, crosscut, upstream-sync),
+> and the directory layout uses `agent/routing/tasks/` (not `agent/tasks/`). See README.md
+> and CHANGELOG.md for current state.
 
 ---
 
@@ -138,26 +145,21 @@ taxonomy.yml assigns: executor + context_required
 ├── CLAUDE.md → AGENTS.md             ← symlink for Claude Code
 ├── .github/
 │   ├── copilot-instructions.md → ../AGENTS.md   ← symlink for Copilot
-│   └── prompts/                       ← Copilot slash commands
-│       ├── acp-init.prompt.md         ← /acp-init
-│       ├── acp-route.prompt.md        ← /acp-route
-│       ├── acp-commit.prompt.md       ← /acp-commit
-│       ├── acp-cost-report.prompt.md  ← /acp-cost-report
-│       ├── acp-memory-sync.prompt.md  ← /acp-memory-sync
-│       ├── acp-decide.prompt.md       ← /acp-decide
-│       └── acp-wiki-update.prompt.md  ← /acp-wiki-update
+│   └── prompts/                       ← 63 Copilot slash commands (*.prompt.md)
+├── .opencode/commands/                ← 63 opencode slash commands (*.md)
 ├── agent/
 │   ├── core/                          ← Layer 1: always loaded, cached
 │   │   ├── identity.yml
 │   │   ├── constraints.yml
 │   │   └── routing.yml
 │   ├── skills/                        ← Layer 2: one per task session
-│   │   ├── ui.md
-│   │   ├── data.md
-│   │   ├── deploy.md
-│   │   ├── gamification.md
-│   │   ├── auth.md
-│   │   └── crosscut.md
+│   │   ├── commands.md
+│   │   ├── scripts.md
+│   │   ├── schemas.md
+│   │   ├── testing.md
+│   │   ├── typescript.md
+│   │   ├── crosscut.md
+│   │   └── upstream-sync.md
 │   ├── memory/                        ← Layer 3: ephemeral, session-specific
 │   │   ├── sessions.md
 │   │   ├── decisions.md
