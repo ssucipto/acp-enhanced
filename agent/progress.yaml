@@ -71,10 +71,10 @@ milestones:
     name: Memory Integrity & Feedback-Driven Improvements (v6.9.0)
     priority: 5
     status: in_progress
-    progress: 18
+    progress: 45
     started: 2026-06-04
     estimated_weeks: 1-2
-    tasks_completed: 2
+    tasks_completed: 5
     tasks_total: 11
     file: agent/milestones/milestone-47-memory-integrity-feedback.md
     notes: |
@@ -3368,27 +3368,33 @@ tasks:
     - id: route-076
       name: "/acp-commit step 6b — re-sync session documents after compaction"
       priority: 5
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-076.md
       estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
       notes: |
         P0: Re-sync session documents after weekly compaction replaces entries.
 
     - id: route-077
       name: "/acp-pattern-sync and /acp-session-sync — manual repair tools"
       priority: 5
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-077.md
       estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
       notes: |
         P0: Standalone sync commands for repair. --dry-run, --all flags.
 
     - id: route-078
       name: "/acp-validate --memory — YAML lint for memory registries"
       priority: 5
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-078.md
       estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
       notes: |
         P0: YAML-parse patterns.md, sessions.md, progress.yaml. Fail on
         syntax errors with line numbers.
