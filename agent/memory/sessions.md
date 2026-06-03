@@ -4,39 +4,94 @@
 
 - date: 2026-06-03
   executor: copilot
-  tasks: [audit-018, audit-019, audit-020]
+  tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, plan-044, route-047, route-052, route-046, route-049]
   done:
-    - audit-018-readme-accuracy-vs-implementation
-    - fixed-readme-bootstrap-step-count-seven-to-eight
-    - fixed-bootstrap-script-counters-1-7-to-1-8
-    - added-m43-subsection-to-recent-protocol-enhancements
-    - rewrote-bootstrap-step-list-to-match-script
-    - generated-IP_REGISTER-via-ip-register-prompt
-    - committed-v6.8.2-8-files-changed
-    - audit-019-updating-system-clarity
-    - verified-all-version-scripts-use-ssucipto-acp-enhanced
-    - fixed-readme-install-curl-prmichaelsen-to-ssucipto
-    - fixed-readme-update-curl-prmichaelsen-to-ssucipto
-    - added-manual-install-section-header-to-readme
-    - audit-020-documentation-currency
-    - added-shields-io-banner-to-readme
-    - updated-readme-directory-tree-to-full-enhanced-layout
-    - updated-readme-template-files-table
-    - updated-prd-main-status-to-implemented
-    - fixed-prd-skills-list-to-actual-skills
-    - fixed-prd-directory-tree-and-prompts-count
-    - bumped-progress-yaml-version-to-6-8-2
-    - added-upstream-note-to-docs-readme
-    - ran-acp-update-added-recent-work-and-refreshed-next-steps
+    - 9-audits-018-through-026-system-review-and-gap-detection
+    - implemented-R1-light-mode-two-way-switching-with-recommendations
+    - implemented-R2-auto-populate-lessons-from-key-facts
+    - implemented-R5-three-copy-architecture-documented-with-sync-headers
+    - implemented-R7-manifest-vs-progress-docs-table-in-agent-md
+    - implemented-R3-R4-scaffold-config-in-manifest-yaml
+    - designed-R6-skills-at-mention-pattern-design-doc
+    - designed-R9-parallel-task-support-design-doc
+    - planned-M44-10-routes-3-done-6-planned-1-deferred
+    - created-routes-053-through-058-sub-task-breakdowns
+    - fixed-13-gaps-GAP-001-through-GAP-013-mode-switching-and-discoverability
+    - added-command-suggestions-24-entries-post-execution-discoverability
+    - fixed-README-upstream-urls-banner-directory-tree-templates
+    - fixed-PRD-status-skills-directory-tree
+    - fixed-git-commit-git-init-command-docs-prefix-and-version
+    - bumped-progress-yaml-6-6-0-to-6-8-2
+    - synced-CLAUDE-md-from-copilot-instructions-md
+    - committed-2-git-commits-docs-and-audit-fixes
+  deferred:
+    - F-004-dead-acp-core-manifest-sed → low
+    - route-048-observability-write-mechanism → P1
+    - route-050-R6-skills-at-mention-implementation → planned (053-055)
+    - route-051-R9-parallelization-implementation → planned (056-058)
+    - R3-R4-bash-script-flag-parsing → P1 (config done, script pending)
+  key_fact: |
+    Single-session transformation: 9 audits, 4 protocol files rewritten, 24
+    command relationships mapped, 2 design docs, 10 M44 routes. Root causes
+    found and fixed: 43/48 commands unused because users didn't know they
+    existed (→ post-command discoverability), context protocol skipped 0/14
+    times because it was too heavy (→ light mode), mode switching was one-way
+    (→ two-way with recommendations), R2 dedup was an LLM-impossible "80%
+    similar" (→ practical "read last 10, skip same topic"), R5 three-copy
+    was going to break Claude Code (→ documented in pre-impl and fixed).
+    Industry aligned with VS Code palette / npm tips / Anthropic simplicity.
+    No reusable patterns — all work was documentation/correctness hygiene.
+    - audit-023-second-round-mode-switching-gaps
+    - fixed-GAP-001-reverse-switch-full-to-light
+    - fixed-GAP-002-mode-tracking-current-field-in-routing-yml
+    - fixed-GAP-003-auto-full-triggers-with-explicit-recommendation-logic
+    - fixed-GAP-004-unified-output-formats-light-and-full-banners
+    - fixed-GAP-005-added-est-tokens-to-light-banner
+    - fixed-GAP-006-added-confirm-output-templates-to-routing-yml
+    - fixed-GAP-007-R2-dedup-threshold-80-percent
+    - fixed-GAP-008-R2-scope-inference-from-task-type
   deferred:
     - F-004-dead-acp-core-manifest-sed-in-version-update-sh → low
+    - R3-team-size-flag → P1
+    - R5-three-copy-redirects → P1
+    - R8-observability-dashboard → P1
+    - R4-optional-prompt-wrappers → P2
+    - R6-skills-at-mention → P2
+    - R9-parallelization → P2
+    - R7-manifest-vs-progress-docs → P3
   key_fact: |
-    3 audits completed in one session (018–020). All 43 milestones done (M1–M43,
-    v6.8.2). README now has shields.io banner and full enhanced directory tree.
-    All scripts correctly use ssucipto/acp-enhanced. PRD-MAIN.md status updated
-    from "Ready for Implementation" → "Implemented". progress.yaml version bumped
-    to 6.8.2 and recent work entries refreshed. No architectural decisions made.
-    No new reusable patterns discovered (all fixes were documentation hygiene).
+    6 audits completed (018–023). audit-023 caught 8 critical gaps in audit-022's
+    R1/R2 implementation that would block real-world adoption: no reverse switching
+    (full→light impossible), no mode tracking, auto-full triggers were passive YAML
+    with no agent action, output formats were inconsistent between modes, and R2
+    had no dedup threshold or scope inference. All gaps fixed in routing.yml +
+    copilot-instructions.md + CLAUDE.md. Light mode is now a complete two-way
+    protocol with mode awareness, recommendation, and consistent banners.
+  deferred:
+    - F-004-dead-acp-core-manifest-sed-in-version-update-sh → low
+    - R3-team-size-flag → P1 (this week)
+    - R5-three-copy-redirects → P1 (this week)
+    - R8-observability-dashboard → P1 (this week)
+    - R4-optional-prompt-wrappers → P2 (backlog)
+    - R6-skills-at-mention → P2 (backlog)
+    - R9-parallelization → P2 (backlog)
+    - R7-manifest-vs-progress-docs → P3 (docs only)
+  key_fact: |
+    7 audits completed (018–024). v6.8.2 delivers: R1 light-mode protocol with
+    two-way switching + mode recommendation, R2 auto-populate lessons from key_facts
+    with scope + dedup, R3 post-command discoverability (24 command relationships
+    surfacing related commands after each invocation). Root cause of 43/48 commands
+    never used: users don't know what's available. Fix: agent now suggests related
+    commands with "when to use" descriptions after each command, detects underused
+    commands during repetitive work, and shows getting-started tips. Industry aligned
+    with VS Code palette / npm tips / Rails scaffolds / Copilot chat patterns.
+    v6.8.2. Key insight: only 10% of system surface area sees active use. Context
+    loading protocol executed 0/14 times — agents skip it because ~800 tokens of
+    mostly-stale context adds no value when conversation context exists. P0 fixes
+    implemented: R1 light-mode protocol (identity + progress + recent sessions,
+    ~200 tokens) added to routing.yml + copilot-instructions.md + CLAUDE.md. R2
+    auto-populate lessons from key_facts added to /acp-commit protocol with scope
+    inference + dedup. 7 remaining recommendations prioritized for phased rollout.
 
 - date: 2026-05-17
   executor: copilot
