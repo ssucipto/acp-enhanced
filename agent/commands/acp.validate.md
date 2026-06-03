@@ -5,9 +5,9 @@
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document.
 
 **Namespace**: acp  
-**Version**: 2.1.0  
+**Version**: 2.2.0  
 **Created**: 2026-02-16  
-**Last Updated**: 2026-03-17  
+**Last Updated**: 2026-06-04  
 **Status**: Active  
 **Scripts**: None  
 
@@ -44,6 +44,10 @@ Unlike `/acp-sync` which compares docs to code, `/acp-validate` checks the inter
 ```
 ⚡ /acp-validate
   Validate all ACP documents for structure, consistency, correctness, and namespace conventions
+
+  Usage:
+    /acp-validate                    Standard validation (all steps except 2b)
+    /acp-validate --memory           Standard + memory YAML lint (step 2b)
 
   Related:
     /acp-package-validate  Package-specific validation
@@ -82,6 +86,42 @@ Check YAML syntax and required fields.
 - Validate status values (not_started, in_progress, completed)
 
 **Expected Outcome**: progress.yaml is valid  
+
+### 2b. Validate Memory YAML (--memory flag only)
+
+> **This step runs ONLY when `--memory` is passed.** Without `--memory`, skip to Step 3.
+
+YAML-parse the memory registry files and fail on syntax errors with line numbers.
+This complements the existing Step 11.6 structural validation (required keys, date
+format) by adding raw YAML syntax checking.
+
+**Actions**:
+
+1. **Validate `agent/memory/patterns.md`**:
+   - Parse as YAML
+   - Check for: duplicate mapping keys, bad indentation, unquoted colons in scalar values
+   - If parse fails → report `FAIL: agent/memory/patterns.md: line N: {error message}`
+   - If parse succeeds → report `PASS: agent/memory/patterns.md: N entries`
+
+2. **Validate `agent/memory/sessions.md`**:
+   - Parse as YAML
+   - Handle both regular entries and `type: weekly-summary` blocks
+   - Same error reporting as patterns.md
+
+3. **Validate `agent/progress.yaml`** (enhanced — currently structural only):
+   - Parse as YAML (full syntax validation, not just field checking)
+   - Check for unquoted colons in `notes:` and `key_fact:` values
+   - Report line numbers for syntax errors
+
+4. **Schema checks** (optional, non-blocking warnings):
+   - Verify each pattern entry has required fields: `date:`, `name:`
+   - Verify each session entry has `date:` or `type:` field
+   - Warn on unquoted colons in scalar values
+
+**Exit code**: 1 if any YAML parse fails; 0 if all parse successfully.
+Schema warnings are informational and do not affect exit code.
+
+**Expected Outcome**: Memory files are valid YAML; syntax errors reported with line numbers  
 
 ### 3. Validate Design Documents
 
