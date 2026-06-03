@@ -1,5 +1,6 @@
 # ACP Enhanced — Agent Context Protocol
 
+> **Auto-synced from .github/copilot-instructions.md — do not edit directly.**
 > This file is auto-loaded by GitHub Copilot, Cursor, and Claude Code.
 > Do NOT add project content here. This file contains ONLY the context
 > loading protocol. All content lives in agent/ subdirectories.
@@ -22,6 +23,44 @@ This project is the ACP protocol itself — you build and maintain:
 ---
 
 ## Context Loading Protocol
+
+**Mode selection** (read `agent/core/routing.yml → context_modes`):
+
+- **Light mode** (default for daily dev): Load identity.yml + progress.yaml + last 3 sessions (~200 tokens). Use this for bug fixes, CRUD, UI components, audits, and routine tasks.
+- **Full mode** (triggered by `/acp-init`, architecture sessions, new workspace): Load all 6 steps (~800 tokens). Use this for design documents, schema changes, ADRs, and first sessions.
+
+### Light Mode (default — most sessions)
+
+1. Read `agent/core/identity.yml` — project identity and stack
+2. Read `agent/progress.yaml` — current milestone, recent work, next steps
+3. Read last 3 entries from `agent/memory/sessions.md` — session history + deferred items
+4. Output the confirm banner (MUST be the first output before any task work), populating variables
+   from the actual loaded data:
+   - `{executor}` = from `agent/core/routing.yml → session.executor`
+   - `{date}` = from last entry in sessions.md
+   - `{mode}` = `light`
+
+```
+[ACP] light | executor: [executor] | last session: [date] | est. ~200 tokens
+```
+
+5. **Set current mode**: Update `agent/core/routing.yml → context_modes.current` to `light`.
+
+5. **Mode recommendation**: After outputting the banner, check the task_type against
+   `agent/core/routing.yml → context_modes.light.recommend_full_for`. If the task matches
+   one of those types (architecture-design, data-schema, adr-write, milestone-create,
+   upstream-parity-check), append:
+   ```
+   💡 This task may benefit from full context. Run /acp-init to switch.
+   ```
+
+> **Mode switching**: To switch from light to full, run `/acp-init`. Light mode is the
+> default for all new sessions — no action needed to stay in light mode.
+
+> **Checking your mode**: Run `/acp-status` — the mode banner is shown at session start.
+> You can also check `agent/core/routing.yml → context_modes.current`.
+
+### Full Mode (`/acp-init` or auto-triggered)
 
 **Run this protocol at the START of every session, before any task.**
 
@@ -97,9 +136,25 @@ Only if the task requires it:
 **Never load an entire wiki file. Load one section at a time.**
 
 ### Step 6 — Confirm and Proceed
-Before starting the task, output one line:
-`[ACP] Loaded: [files loaded] | est. [N] tokens | executor: [executor value]`
-Then proceed with the task.
+Before starting the task, output one line, populating variables from loaded data:
+- `{executor}` = from `agent/core/routing.yml → session.executor`
+- `{count}` = number of files loaded in steps 1–5
+- `{mode}` = `full`
+
+`[ACP] full | executor: [executor] | est. ~800 tokens | files: [N] | mode: full`
+
+Then update `agent/core/routing.yml → context_modes.current` to `full`.
+
+Then check the task_type against `agent/core/routing.yml → context_modes.full.recommend_light_for`.
+If the task matches a light-sufficient type (bug-fix, command-doc-update, docs-update,
+changelog-update, progress-update, audit-run, memory-write), append:
+```
+💡 Light mode would be sufficient for this task type. Next session will default to light.
+```
+
+> **Mode switching**: Full mode is triggered by `/acp-init`, first sessions, or architecture
+> tasks. To return to light mode, simply start a new session — light is the default. No
+> explicit command is needed to switch back.
 
 ---
 
@@ -127,6 +182,49 @@ The agent MUST proactively write memory entries WITHOUT waiting for the develope
 
 **The rule**: ACP memory writes happen at the **moment of discovery**, not at session end.
 `sessions.md` entries are written **incrementally per phase**, not as one end-of-session dump.
+
+---
+
+## Post-Command Discoverability (added v6.8.2, audit-024)
+
+> **Why this exists**: 43 of 48 commands were never invoked in 14 sessions of production
+> use. Users don't know what's available. This section ensures the agent surfaces relevant
+> commands contextually — similar to how VS Code's command palette shows "Related" commands
+> and npm shows "Did you know?" tips after install.
+
+### Rule: Suggest Related Commands After Every Command
+
+After completing ANY command execution (reading and executing a command doc), display
+2–3 related commands from `agent/core/routing.yml → command_suggestions`. Each suggestion
+MUST include:
+
+1. The command name (in `/acp-command` format)
+2. A one-line description of **when** to use it (not what it does)
+
+Format:
+```
+📋 Related: /acp-xxx (when to use it) · /acp-yyy (when to use it) · /acp-zzz (when to use it)
+```
+
+If the invoked command is not in `command_suggestions`, use your best judgment to suggest
+2–3 logically related commands based on what was just completed.
+
+### Rule: Surface Underused Commands Proactively
+
+When a session involves repetitive work (same task type 3+ times), suggest a command
+that could automate or improve that workflow:
+
+```
+💡 Tip: /acp-xxx can [benefit]. You've done this 3 times manually this session.
+```
+
+### Rule: "Getting Started" Check
+
+If this is the user's first session with ACP Enhanced, or they haven't used it in >7 days,
+suggest:
+```
+👋 New to ACP Enhanced? Try /acp-status to see your project state, then /acp-proceed to start working.
+```
 
 ---
 
@@ -194,6 +292,21 @@ When developer runs /acp-commit:
    - If any files were stamped, note them: `auto-stamped: route-NNN, route-NNN`
 3. Check: did this session produce a reusable pattern? If yes, append to
    `agent/memory/patterns.md`
+3b. **Auto-populate lessons from key_fact** (added v6.8.2, audit-022 R2):
+   If this session's `key_fact` contains a reusable lesson, auto-append to
+   `agent/memory/lessons.md`:
+   ```yaml
+   - date: [today]
+     scope: [inferred from task_type, e.g. backend-python, frontend-react-native, testing]
+     task_type: [from session]
+     lesson: [key_fact text]
+     priority: [high if contains CRITICAL/SECURITY/BROKEN/CRASH/CORRUPTION/never/must/always/IDOR, else normal]
+     source: session-key-fact
+   ```
+   Before writing, check for duplicates by reading the last 10 entries in lessons.md.
+   If any existing lesson covers the same topic (same technology, same problem category,
+   same root cause), skip it — do not write a near-duplicate lesson.
+   Only write if the lesson is materially new.
 4. Check: did you make an architectural decision? If yes, prompt:
    "An architectural decision was made: [decision]. Create ADR? (y/n)"
 5. Count entries in sessions.md. If > 15, auto-compact oldest 10 entries:
@@ -215,7 +328,7 @@ When developer runs /acp-route "[task description]":
 Task file format:
 ```yaml
 ---
-id: task-[NNN]
+id: route-[NNN]
 title: [task title]
 task_type: [from taxonomy]
 milestone: [current milestone or none]
