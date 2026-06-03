@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.9.0] — 2026-06-04
+
+### Added (M47 — Memory Integrity Release)
+- **Commit-integrated document auto-sync**: `/acp-commit` now automatically generates `agent/sessions/{date}-{slug}.md` and `agent/patterns/{name}.md` from registries on every successful commit (steps 2b, 3b). Re-syncs affected documents after weekly compaction (step 6b). Idempotent design — re-running without registry changes does not rewrite files.
+- **`--no-sync` flag** on `/acp-commit`: Skips auto-sync steps for debugging. Warns that document directories may drift from registries.
+- **`/acp-pattern-sync`**: Manual repair tool — sync pattern documents from `agent/memory/patterns.md` registry. Supports `--dry-run`, `--all`, `--name <name>`.
+- **`/acp-session-sync`**: Manual repair tool — sync session documents from `agent/memory/sessions.md` registry. Supports `--dry-run`, `--all`, `--date <YYYY-MM-DD>`.
+- **`/acp-validate --memory`**: YAML-lint `agent/memory/patterns.md`, `agent/memory/sessions.md`, and `agent/progress.yaml`. Fails with line numbers on syntax errors. Complements existing Step 11.6 structural validation.
+- **`/acp-version-update` guards**: `--diff` previews changes without applying. `--preserve-project-core` skips `identity.yml`, `domain.yml`, `taxonomy.yml`. `--force` skips confirmation prompts. Default behavior now warns before overwriting modified core files.
+- **YAML quoting directives**: Agent directives in `/acp-commit` (steps 2, 6) and `/acp-update` (step 5) requiring quoted scalars when values contain `:` to prevent js-yaml parse failures.
+- **Dual-store architecture wiki**: Documented registry-to-document sync model, repair paths, and YAML integrity in `agent/wiki/architecture.md`.
+- **Pattern promotion enforcement**: `/acp-commit` step 3 now actively prompts when `key_fact` contains code patterns, architectural insights, or repeatable processes.
+- **Command onboarding**: `/acp-init` now shows phase-aware command recommendations (new project, active milestone, post-milestone, maintenance).
+- **ADR-9**: Dual-store architecture decision — registry as source of truth, documents as consumption layer, commit as sync trigger.
+
+### Changed
+- **Schema alignment**: `/acp-commit` session entry field `tasks:` renamed to `tasks_completed:` for consistency with visualizer expectations and weekly-summary blocks. `/acp-validate` Step 11.6 updated to match.
+- `/acp-commit` version bumped to 1.3.0. `/acp-validate` version bumped to 2.2.0. `/acp-version-update` version bumped to 1.1.0.
+
+### Fixed
+- Stale `tasks:` references in `/acp-commit` step 5 and verification section (audit-042, GAP-042-01)
+- Missing YAML quoting directive in `/acp-update` step 5 (audit-042, GAP-042-02)
+- Triple-file parity: Added `.github/prompts/` and `.opencode/commands/` wrappers for new `pattern-sync` and `session-sync` commands (audit-042, GAP-042-03)
+- `--diff` flag integrated into `/acp-version-update` steps — previously documented in arguments only (audit-042, GAP-042-04)
+- `agent/core/identity.yml`, `domain.yml`, `taxonomy.yml` now protected from silent overwrite during version updates
+
+### Source
+- consumer-project feedback-001 (pattern memory visualizer gaps)
+- consumer-project feedback-002 (next release review + audit-066 addendum)
+- 42 audit reports (audit-001 through audit-042)
+
+---
+
 ## [6.8.2] — 2026-06-03
 
 ### Added (M46)
