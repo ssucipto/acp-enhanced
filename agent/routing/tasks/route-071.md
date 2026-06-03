@@ -10,6 +10,7 @@ context_required:
   - run-e2e-tests.sh
 files_affected:
   - run-e2e-tests.sh
+  - CHANGELOG.md
 tokens_est: 4000
 tokens_actual:
 cost_est_usd:
