@@ -3,20 +3,21 @@
 
 project:
   name: agent-context-protocol
-  version: 6.8.2
+  version: 6.9.0
   started: 2026-02-16
   status: active
-  current_milestone: M47
+  current_milestone: null
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.8.2 with 46 completed
-    milestones. M46 (v6.8.4) delivered parallel test runner. Companion visualizer
-    at v1.5.0. 40 audit reports, 16 unit tests (71 assertions).
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.0 with 47 completed
+    milestones. M47 (v6.9.0) delivered memory integrity: commit auto-sync,
+    repair tools, YAML validation, and dual-store architecture. Companion
+    visualizer at v1.5.0. 42 audit reports, 16 unit tests (71 assertions).
 
 milestones:
   M44:
     name: Feedback-Driven Improvements (v6.9.0)
     priority: 5
-    status: in_progress
+    status: completed
     progress: 100
     started: 2026-06-03
     completed: 2026-06-03
@@ -79,13 +80,14 @@ milestones:
     tasks_total: 11
     file: agent/milestones/milestone-47-memory-integrity-feedback.md
     notes: |
-      📋 M47 planned — 11 routes from feedback-001/002 (FIFOZ production review).
-      P0 (routes 074-078): commit auto-sync (sessions + patterns + re-sync + repair
-      tools), memory YAML validation.
-      P1 (routes 079-081): version-update guard, YAML quoting directives, schema alignment.
-      P2 (routes 082-084): dual-store wiki docs, pattern promotion enforcement, command
-      onboarding.
-      Target: v6.9.0 — Memory Integrity Release.
+      🎉 M47 COMPLETE! 11 routes, all done (2026-06-04).
+      P0 (routes 074-078): commit auto-sync (steps 2b/3b/6b), repair tools
+      (pattern-sync, session-sync), memory YAML validation (--memory flag).
+      P1 (routes 079-081): version-update guard (--diff/--preserve/--force),
+      YAML quoting directives, schema alignment (tasks→tasks_completed).
+      P2 (routes 082-084): dual-store wiki, pattern promotion, command onboarding.
+      Post-audit (042): 4 gaps found and fixed — all clean.
+      Target: v6.9.0 — Memory Integrity Release. 4 carryovers → M48.
 
   M1:
     name: ACP Commands Infrastructure
@@ -3469,6 +3471,24 @@ tasks:
         P2: Show phase-appropriate commands on init.
 
 recent_work:
+  - date: 2026-06-04
+    description: |
+      🎉 M47 COMPLETE: Memory Integrity & Feedback-Driven Improvements (v6.9.0).
+      11 routes, 5 git commits, 1 autonomous session. All FIFOZ feedback addressed.
+    items:
+      - "✅ P0: /acp-commit steps 2b/3b/6b — auto-sync sessions + patterns from registries"
+      - "✅ P0: /acp-pattern-sync + /acp-session-sync — manual repair tools"
+      - "✅ P0: /acp-validate --memory — YAML lint for memory registries"
+      - "✅ P1: /acp-version-update --diff/--preserve-project-core/--force"
+      - "✅ P1: YAML quoting directives in commit, update, and plan commands"
+      - "✅ P1: Schema alignment — tasks → tasks_completed across commit + validate"
+      - "✅ P2: Dual-store architecture wiki in architecture.md"
+      - "✅ P2: Pattern promotion enforcement in commit step 3"
+      - "✅ P2: Command onboarding in /acp-init (phase-aware recommendations)"
+      - "✅ Audit-041: pre-impl readiness (10 findings, 3 fixed before start)"
+      - "✅ Audit-042: post-impl review (4 gaps found, all fixed)"
+      - "📋 4 carryovers → M48: E2E tests, atomicity, F-05 schema lint, CHANGELOG"
+
   - date: 2026-06-03
     description: |
       ✅ M46 COMPLETE: Parallel test runner. 3 routes (071-073), all done.
@@ -5424,20 +5444,23 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "📋 Maintain documentation currency — re-run audit-020 check quarterly"
+  - "📋 Plan M48 for 4 carryover items (E2E tests, atomicity, F-05 schema lint, CHANGELOG)"
+  - "📋 Push 5 M47 commits to remote"
+  - "📋 Run /acp-validate --memory to test new YAML linting"
+  - "📋 Update CHANGELOG.md for v6.9.0 release"
   - "📋 Refresh artifact Last Verified dates"
-  - "📋 Address any new external feedback"
 
 notes:
-  - 46 milestones complete (M1–M46, 100%), v6.8.2 (2026-06-03)
-  - 48 command docs... (remaining notes unchanged)
-  - 40 audit reports in agent/reports/ (audit-001 through audit-040)
+  - 47 milestones complete (M1–M47, 100%), v6.9.0 (2026-06-04)
+  - 66 command docs (2 new: pattern-sync, session-sync)
+  - 42 audit reports in agent/reports/ (audit-001 through audit-042)
   - Install system: 4-audit hardened (036-039), 26 findings fixed
   - Bootstrap: safe, idempotent, with pre-flight checks and cleanup
   - Update: F-004 dead sed fixed, pre-installation checks added
   - README: visualizer v1.5.0 featured prominently
   - run-e2e-tests.sh: --parallel flag, --help, argument validation
   - CI: e2e-tests.yaml uses --parallel 4
+  - M47: commit auto-sync (2b/3b/6b), repair tools, --memory validation
 
 current_blockers: []
 
