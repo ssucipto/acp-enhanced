@@ -6,13 +6,11 @@ project:
   version: 6.8.2
   started: 2026-02-16
   status: active
-  current_milestone: M45
+  current_milestone: M46
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.8.2 with 45 completed
-    milestones. M45 (v6.8.3) delivered comprehensive test package covering
-    all v6.8.2 features: light-mode, @-mention, parallel tasks, bootstrap
-    flags, observability, security, and workflow integration. 63 slash commands,
-    35 audit reports, 12 unit tests (71 assertions).
+    milestones. M46 (v6.8.4) planned: parallel test runner for run-e2e-tests.sh.
+    35 audit reports, 16 unit tests (71 assertions).
 
 milestones:
   M44:
@@ -50,6 +48,22 @@ milestones:
         070 (performance ✅)
       Phase 3 — Infra: 067 (CI runner ✅)
       Total: 71 assertions, all passing (post audit-035: +1 at-mention dup check, perf test bug fix)
+
+  M46:
+    name: Parallel Test Runner + Runner Improvements (v6.8.4)
+    priority: 4
+    status: planned
+    progress: 0
+    estimated_weeks: 0.5
+    tasks_completed: 0
+    tasks_total: 3
+    file: agent/milestones/milestone-46-parallel-test-runner.md
+    design: agent/design/local.parallel-test-runner.md
+    notes: |
+      📋 Milestone 46: Add --parallel flag to run-e2e-tests.sh.
+      Design: agent/design/local.parallel-test-runner.md
+      Routes: 071 (--parallel impl), 072 (--help + robustness), 073 (CI update)
+      Target: ~5 min test runs (vs 15-20 min serial) with 4 workers.
 
   M1:
     name: ACP Commands Infrastructure
@@ -5268,10 +5282,9 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
+  - "📋 M46 planned: parallel test runner — 3 routes (071-073), design ready"
   - "📋 Maintain documentation currency — re-run audit-020 check quarterly"
-  - "📋 F-004 resolved: dead sed in version-update.sh fixed (audit-036)"
   - "📋 Refresh artifact Last Verified dates (4 artifacts currently stale)"
-  - "📋 Add --parallel flag to run-e2e-tests.sh (M46 candidate)"
   - "📋 Address any new external feedback"
 
 notes:
