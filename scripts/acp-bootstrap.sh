@@ -1214,7 +1214,6 @@ for _oc_src in .github/prompts/*.prompt.md; do
   _oc_count=$((_oc_count + 1))
 done
 echo -e "${GREEN}✓ ${_oc_count} opencode slash commands generated in .opencode/commands/${NC}"
-fi  # end GENERATE_PROMPTS (prompts + opencode)
 else
 echo -e "${YELLOW}[6/8] Skipping prompt files (opt-in via --generate-prompts or manifest)${NC}"
 fi
