@@ -4,7 +4,7 @@
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
 [![Milestones](https://img.shields.io/badge/milestones-46%2F46%20complete-brightgreen)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-64%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
-[![Visualizer](https://img.shields.io/badge/visualizer-v1.4.2-6e47ff)](https://github.com/ssucipto/ACPEnhanced-Visual)
+[![Visualizer](https://img.shields.io/badge/visualizer-v1.5.0-6e47ff)](https://github.com/ssucipto/ACPEnhanced-Visual)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Fork](https://img.shields.io/badge/fork%20of-prmichaelsen%2Facp-orange)](https://github.com/prmichaelsen/agent-context-protocol)
 
@@ -35,7 +35,7 @@ The framework layer solves a specific problem: as your project grows, the AI age
 | `agent/commands/` | 64 self-documenting slash commands (`/acp-init`, `/acp-audit`, etc.) |
 | `agent/scripts/` | 29 bash scripts + TypeScript tooling for dispatch and validation |
 
-> 🖥️ **Companion Tool**: [**ACP Enhanced Visualizer**](https://github.com/ssucipto/ACPEnhanced-Visual) (v1.4.2) — a full-featured local web dashboard that brings your `agent/progress.yaml` to life. Monitors milestones, tasks, sessions, ADRs, lessons, patterns, packages, and audit reports — all from a single interactive UI. **Multi-project tab support, GitHub remote read, and zero-config `npx acp-visualizer` CLI.** [See full feature list below →](#visualize-your-project)
+> 🖥️ **Companion Tool**: [**ACP Enhanced Visualizer**](https://github.com/ssucipto/ACPEnhanced-Visual) (v1.5.0) — a full-featured local web dashboard that brings your `agent/progress.yaml` to life. Monitors milestones, tasks, sessions, ADRs, lessons, patterns, packages, and audit reports — all from a single interactive UI. **Multi-project tab support, GitHub remote read, and zero-config `npx acp-visualizer` CLI.** [See full feature list below →](#visualize-your-project)
 
 ---
 
@@ -622,7 +622,7 @@ Or run the update script directly:
 
 ## Visualize Your Project
 
-> **[ACP Enhanced Visualizer](https://github.com/ssucipto/ACPEnhanced-Visual)** (v1.4.2) — the companion dashboard for ACP Enhanced projects. 9 milestones, 43 tests, fully open-source (MIT).
+> **[ACP Enhanced Visualizer](https://github.com/ssucipto/ACPEnhanced-Visual)** (v1.5.0) — the companion dashboard for ACP Enhanced projects. 9 milestones, 43 tests, fully open-source (MIT).
 
 ### Quick Start
 
