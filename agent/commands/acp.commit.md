@@ -80,11 +80,17 @@ Ask: "Which task IDs were completed this session?" if not obvious from context.
 
 Prepend a YAML entry to `agent/memory/sessions.md`:
 
+> **YAML quoting rule**: When writing `key_fact` or `key_facts` values, if the value
+> contains a colon (`:`), wrap the entire scalar in double quotes or use a literal
+> block scalar (`|`). Example: `key_fact: "M_KDF: react-native-quick-crypto..."`
+> or use `key_fact: |` with indented content. Unquoted colons cause js-yaml parse
+> failures that render the entire registry unreadable.
+
 ```yaml
 - date: [today]
   executor: [executor used this session]
   branch: [current branch — omit if git_workflow not configured in identity.yml]
-  tasks: [list of route IDs completed, e.g. route-012, route-013]
+  tasks_completed: [list of route IDs completed, e.g. route-012, route-013]
   done:
     - [kebab-case-summary-of-task-1]
     - [kebab-case-summary-of-task-2]
@@ -133,7 +139,16 @@ the corresponding markdown document in `agent/sessions/`:
 ### 3. Check for Reusable Patterns
 
 - Did this session produce a reusable code pattern, architectural insight, or repeatable workflow?
+- **Active prompt**: Read the session's `key_fact` from the entry just written (Step 2).
+  If `key_fact` contains code snippets (``` blocks), architectural insights, workflow
+  patterns, or repeatable processes, actively prompt the user:
+  "This session's key_fact contains a potential reusable pattern. Promote to patterns.md? (y/n)"
 - If yes → append to `agent/memory/patterns.md` with `date:` and `code_ref:` fields
+- **Heuristics for pattern detection**:
+  - Contains code blocks (```) → likely a code pattern
+  - Contains phrases like "pattern:", "template:", "repeatable", "workaround"
+  - Contains references to specific files/lines (code_ref)
+  - Is not purely a status update or task list
 
 ### 3b. Auto-Sync Pattern Document (NEW — v1.3.0)
 
@@ -189,6 +204,11 @@ the corresponding markdown document in `agent/patterns/`:
 - If count > 15 → compact oldest 10 entries:
   1. Extract all `key_fact` values → check if any belong in `patterns.md` or `decisions.md`
   2. Replace the 10 entries with a single weekly summary block:
+
+     > **YAML quoting for compaction**: Each item in `key_facts` list must be
+     > quoted if it contains `:`. Bad: `- M_KDF: react-native-quick-crypto...`
+     > Good: `- "M_KDF: react-native-quick-crypto..."`
+
      ```yaml
      - type: weekly-summary
        week: [date range]
