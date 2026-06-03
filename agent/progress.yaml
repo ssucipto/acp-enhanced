@@ -12,7 +12,7 @@ project:
     milestones. M45 (v6.8.3) delivered comprehensive test package covering
     all v6.8.2 features: light-mode, @-mention, parallel tasks, bootstrap
     flags, observability, security, and workflow integration. 63 slash commands,
-    30 audit reports, 12 unit tests (71 assertions).
+    35 audit reports, 12 unit tests (71 assertions).
 
 milestones:
   M44:
@@ -3353,20 +3353,22 @@ progress:
 recent_work:
   - date: 2026-06-03
     description: |
-      ✅ audit-035 COMPLETE: M45 post-implementation review — 5 findings, all fixed.
-      Found critical bug in performance test (undefined id_chars/prog_chars variables
-      causing silent false pass). Milestone doc still showed Status: planned. All gaps
-      fixed, M45 tests confirmed at 71 assertions, 100% pass rate.
+      ✅ audits 036→037→038→039 COMPLETE: Install + update system fully audited and hardened.
+      Four audit passes on bootstrap.sh, version-update.sh, and README. 26 findings total,
+      all fixed. The curl-pipe-bash install path is now safe, idempotent, and error-handled.
     items:
-      - "🔴 BUG-001: Performance test undefined vars (id_chars/prog_chars) — fixed with global capture"
-      - "🔴 DOC-001: Milestone doc Status: planned → completed + Actual Results section"
-      - "🟡 GAP-001: Full mode perf test scope widened (sessions+wiki now included)"
-      - "🟢 GAP-002: @-mention catalog duplicate detection added (skills_catalog-scoped)"
-      - "🟢 GAP-003: Milestone doc now has actual metrics table"
-      - "✅ All 9 M45 test files pass: 71 assertions, 0 failures"
-      - "✅ Commit 73e7f36 pushed to mainline"
-      - "📋 audit-035 report: agent/reports/audit-035-m45-post-impl-review.md"
-      - "✓ All artifacts current (only 1 content artifact — glossary — verified 2026-05-04, within 180-day window; 3 template files have placeholder dates, expected)"
+      - "✅ audit-036: 9 findings — safety checks, idempotency, F-004 dead sed"
+      - "✅ audit-037: 5 bugs in 036's fixes — cleanup ordering, rm -rf guard"
+      - "✅ audit-038: 5 bugs — --yes dead flag, missing error exits, pipefail"
+      - "✅ audit-039: 7 README inaccuracies — false conflict flagging, missing warnings"
+      - "✅ Bootstrap now has: pre-flight checks, idempotency guard, cleanup on failure"
+      - "✅ Bootstrap now has: argument parsing before safety checks (--yes works)"
+      - "✅ Update script: F-004 fixed (acp-core entry created if missing)"
+      - "✅ Update script: pre-installation check for incomplete ACP installations"
+      - "✅ README: update description corrected (no longer claims false behavior)"
+      - "✅ README: safety warnings added to all curl-pipe-bash examples"
+      - "✅ All smoke/security/performance tests still passing (9+8+4=21 assertions)"
+      - "✅ 8 git commits pushed to mainline today (audit-035 through audit-039)"
   - date: 2026-06-03
     description: |
       ✅ audit-019 COMPLETE: Updating system clarity — verified no confusion between
@@ -5312,23 +5314,21 @@ recent_work:
 
 next_steps:
   - "📋 Maintain documentation currency — re-run audit-020 check quarterly"
-  - "📋 Consider F-004 fix: remove dead acp-core manifest sed in version-update.sh"
+  - "📋 F-004 resolved: dead sed in version-update.sh fixed (audit-036)"
   - "📋 Refresh artifact Last Verified dates (4 artifacts currently stale)"
-  - "📋 Address any new feedback from external review"
   - "📋 Add --parallel flag to run-e2e-tests.sh (M46 candidate)"
-  - "📋 Add --list flag to run-e2e-tests.sh for test self-discovery (M46 candidate)"
+  - "📋 Address any new external feedback"
 
 notes:
-  - 44 milestones complete (M1–M44, 100%), v6.8.2 (2026-06-03)
+  - 45 milestones complete (M1–M45, 100%), v6.8.2 (2026-06-03)
   - 48 command docs in agent/commands/ (verified 2026-06-03)
   - 27 scripts in agent/scripts/ (verified 2026-05-01)
   - 63 slash commands across .github/prompts/ + .opencode/commands/
-  - 19 audit reports in agent/reports/ (audit-001 through audit-020)
-  - README now has shields.io banner with version + status + milestones + commands
-  - PRD-MAIN.md status updated to "Implemented" with current-state note
-  - Upstream URLs in README install/update sections corrected to ssucipto/acp-enhanced
-  - Complete package development workflow operational
-  - ACP Enhanced framework complete: 3-layer context model, routing, dispatch, memory
+  - 35 audit reports in agent/reports/ (audit-001 through audit-039)
+  - Install system: 4-audit hardened (036-039), 26 findings fixed
+  - Bootstrap: safe, idempotent, with pre-flight checks and cleanup
+  - Update: F-004 dead sed fixed, pre-installation checks added
+  - README now accurate re: update behavior (no false claims)
 
 current_blockers: []
 
