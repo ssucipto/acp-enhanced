@@ -4,10 +4,13 @@
 
 - date: 2026-06-03
   executor: copilot
-  tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, audit-027, audit-028, audit-029, audit-030, plan-044, route-047, route-048, route-052, route-053, route-054, route-055, route-056, route-057, route-058, route-059]
+  tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, audit-027, audit-028, audit-029, audit-030, audit-031, init-001, plan-044, route-047, route-048, route-052, route-053, route-054, route-055, route-056, route-057, route-058, route-059]
   done:
-    - 13-audits-10-protocol-files-rewritten-2-design-docs
-    - R1-through-R9-all-implemented-M44-100-percent
+    - 14-audits-wiki-refreshed-README-fully-synced-M44-100-percent
+    - all-9-recommendations-implemented-20-gaps-fixed
+    - 5-git-commits-all-pushed-to-mainline
+  deferred:
+    - F-004-dead-acp-core-manifest-sed → low
     - README-fully-synced-with-all-v6-8-2-features
     - M44-section-added-to-README-recent-enhancements
     - differences-table-updated-with-5-new-rows
