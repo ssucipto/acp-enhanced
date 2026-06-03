@@ -1,103 +1,214 @@
 #!/usr/bin/env bash
 # Unified E2E Test Runner for Agent Context Protocol
 # Usage:
-#   bash run-e2e-tests.sh                    # Run all E2E tests
-#   bash run-e2e-tests.sh sessions           # Run only tests matching "sessions"
-#   bash run-e2e-tests.sh --skip-network     # Skip tests marked ACP_NETWORK_TEST=true
-#   bash run-e2e-tests.sh sessions --skip-network
+#   bash run-e2e-tests.sh                           # Run all tests (serial)
+#   bash run-e2e-tests.sh sessions                  # Filter: tests matching "sessions"
+#   bash run-e2e-tests.sh --skip-network            # Skip network tests
+#   bash run-e2e-tests.sh --parallel 4              # Run 4 tests at once
+#   bash run-e2e-tests.sh --parallel                # Auto-detect CPU count
+#   bash run-e2e-tests.sh --parallel 4 sessions --skip-network  # Combined
+#   bash run-e2e-tests.sh --help                    # Show usage
 
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Parse arguments
+# ── Argument Parsing ─────────────────────────────────────────────
 FILTER=""
 SKIP_NETWORK=false
-for arg in "$@"; do
-    case "$arg" in
-        --skip-network) SKIP_NETWORK=true ;;
-        --*) ;;  # ignore unknown flags
-        *) FILTER="$arg" ;;
+PARALLEL=0
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --help|-h)
+            echo "Usage: bash run-e2e-tests.sh [options] [filter]"
+            echo ""
+            echo "Options:"
+            echo "  --parallel [N]    Run N tests concurrently (default: CPU count)"
+            echo "  --skip-network    Skip tests marked ACP_NETWORK_TEST=true"
+            echo "  --help, -h        Show this help"
+            echo ""
+            echo "Filter: substring match on test filename (e.g. 'sessions')"
+            echo ""
+            echo "Examples:"
+            echo "  bash run-e2e-tests.sh                            # All tests, serial"
+            echo "  bash run-e2e-tests.sh --parallel 4               # All tests, 4 workers"
+            echo "  bash run-e2e-tests.sh --parallel sessions        # Filtered, parallel"
+            echo "  bash run-e2e-tests.sh --parallel --skip-network   # Skip network tests"
+            exit 0
+            ;;
+        --parallel)
+            if [[ "${2:-}" =~ ^[0-9]+$ ]]; then
+                PARALLEL="$2"; shift 2
+            else
+                PARALLEL=$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
+                shift
+            fi
+            ;;
+        --parallel=*)
+            PARALLEL="${1#*=}"
+            if ! [[ "$PARALLEL" =~ ^[1-9][0-9]*$ ]]; then
+                echo "ERROR: --parallel requires a positive integer, got '$PARALLEL'" >&2
+                exit 1
+            fi
+            shift
+            ;;
+        --skip-network)
+            SKIP_NETWORK=true; shift
+            ;;
+        --*)
+            echo "Unknown flag: $1 (use --help for usage)" >&2
+            exit 1
+            ;;
+        *)
+            FILTER="$1"; shift
+            ;;
     esac
 done
 
+# Validate parallel value
+if [[ "$PARALLEL" -gt 0 ]] && [[ "$PARALLEL" -lt 1 ]]; then
+    echo "ERROR: --parallel must be >= 1, got $PARALLEL" >&2
+    exit 1
+fi
+
+# ── Test File Collection ─────────────────────────────────────────
 # Per-test timeout in seconds (macOS-compatible: no GNU timeout)
 TIMEOUT_SECS=30
-
+total=0
 passed=0
 failed=0
 skipped=0
 timed_out=0
 failed_tests=()
-total=0
 
-echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  ACP E2E Test Runner"
-if [[ "$SKIP_NETWORK" == "true" ]]; then
-    echo "  (network tests skipped — pass without --skip-network to include)"
-fi
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
-
+# Collect test files into ordered array (before forking)
+test_files=()
+test_names=()
 for test_file in "$SCRIPT_DIR"/e2e/*.test.sh "$SCRIPT_DIR"/tests/*.test.sh; do
     test_name="$(basename "$test_file")"
 
-    # Apply filter if provided
-    if [[ -n "$FILTER" ]] && [[ "$test_name" != *"$FILTER"* ]]; then
-        skipped=$((skipped + 1))
-        continue
-    fi
+    [[ -n "$FILTER" ]] && [[ "$test_name" != *"$FILTER"* ]] && continue
+    [[ "$SKIP_NETWORK" == "true" ]] && grep -q "^# ACP_NETWORK_TEST=true" "$test_file" 2>/dev/null && continue
 
-    # Skip network tests if requested
-    if [[ "$SKIP_NETWORK" == "true" ]] && grep -q "^# ACP_NETWORK_TEST=true" "$test_file" 2>/dev/null; then
-        skipped=$((skipped + 1))
-        printf "  %-50s ⏭  SKIP (network)\n" "$test_name"
-        continue
-    fi
+    test_files+=("$test_file")
+    test_names+=("$test_name")
+done
 
-    total=$((total + 1))
-    printf "  %-50s " "$test_name"
+# ── Banner ────────────────────────────────────────────────────────
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+if [[ "$PARALLEL" -gt 1 ]]; then
+    echo "  ACP E2E Test Runner (parallel: ${PARALLEL} workers, ${#test_files[@]} tests)"
+else
+    echo "  ACP E2E Test Runner (${#test_files[@]} tests)"
+fi
+[[ "$SKIP_NETWORK" == "true" ]] && echo "  (network tests skipped)"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
 
-    # Run test with macOS-compatible timeout (background job + kill-guard)
+# ── Run a single test (used by both serial and parallel modes) ───
+# Outputs: result line to stdout, exit code for tracking
+run_one_test() {
+    local test_file="$1" test_name="$2"
+    local tmpout exit_code
+
     tmpout=$(mktemp)
     bash "$test_file" > "$tmpout" 2>&1 &
-    test_pid=$!
+    local test_pid=$!
     ( sleep "$TIMEOUT_SECS" && kill "$test_pid" 2>/dev/null ) &
-    guard_pid=$!
+    local guard_pid=$!
     wait "$test_pid" 2>/dev/null
     exit_code=$?
     kill "$guard_pid" 2>/dev/null
     wait "$guard_pid" 2>/dev/null
-    output=$(cat "$tmpout")
-    rm -f "$tmpout"
 
-    # Normalize timeout exit codes (SIGTERM=143, SIGKILL=137)
     if [[ $exit_code -eq 143 || $exit_code -eq 137 ]]; then
-        echo "⏱  TIMEOUT (${TIMEOUT_SECS}s)"
-        timed_out=$((timed_out + 1))
-        failed=$((failed + 1))
-        failed_tests+=("$test_name (TIMEOUT)")
-        continue
+        printf "  %-50s ⏱  TIMEOUT (%ss)\n" "$test_name" "$TIMEOUT_SECS"
+        rm -f "$tmpout"
+        return 124  # timeout exit code
     fi
 
     if [[ $exit_code -eq 0 ]]; then
-        echo "✅ PASS"
-        passed=$((passed + 1))
+        printf "  %-50s ✅ PASS\n" "$test_name"
+        rm -f "$tmpout"
+        return 0
     else
-        echo "❌ FAIL (exit $exit_code)"
-        failed=$((failed + 1))
-        failed_tests+=("$test_name")
-
-        # Show last 20 lines of output for debugging
+        printf "  %-50s ❌ FAIL (exit %d)\n" "$test_name" "$exit_code"
+        local output
+        output=$(cat "$tmpout")
         echo ""
         echo "    ── Output (last 20 lines) ──"
         echo "$output" | tail -20 | sed 's/^/    /'
         echo "    ────────────────────────────"
         echo ""
+        rm -f "$tmpout"
+        return "$exit_code"
     fi
-done
+}
 
+# ── Execution ─────────────────────────────────────────────────────
+_N="${#test_files[@]}"
+if [[ "$_N" -eq 0 ]]; then
+    echo "  No tests to run."
+    exit 0
+fi
+
+if [[ "$PARALLEL" -le 1 ]]; then
+    # ── Serial Mode ──────────────────────────────────────────────
+    for ((i=0; i<_N; i++)); do
+        printf "  %-50s " "${test_names[$i]}"
+        run_one_test "${test_files[$i]}" "${test_names[$i]}"
+        rc=$?
+        case $rc in
+            0)   passed=$((passed+1)) ;;
+            124) timed_out=$((timed_out+1)); failed=$((failed+1))
+                  failed_tests+=("${test_names[$i]} (TIMEOUT)") ;;
+            *)   failed=$((failed+1))
+                  failed_tests+=("${test_names[$i]}") ;;
+        esac
+        total=$((total+1))
+    done
+else
+    # ── Parallel Mode ────────────────────────────────────────────
+    PARALLEL=$(( PARALLEL < _N ? PARALLEL : _N ))  # cap at test count
+    _outdir=$(mktemp -d)
+    trap "rm -rf $_outdir" EXIT
+
+    # Round-robin distribute tests into batches
+    for ((w=0; w<PARALLEL; w++)); do
+        (
+            for ((i=w; i<_N; i+=PARALLEL)); do
+                run_one_test "${test_files[$i]}" "${test_names[$i]}"
+                echo $? > "$_outdir/rc-$i"
+            done
+        ) > "$_outdir/out-$w" 2>&1 &
+        _pids+=($!)
+    done
+
+    # Wait for all workers and collect results in order
+    for _pid in "${_pids[@]}"; do wait "$_pid"; done
+
+    for ((i=0; i<_N; i++)); do
+        _rc=$(cat "$_outdir/rc-$i" 2>/dev/null || echo 1)
+        sed -n "${i}p" <(sort "$_outdir"/out-*) 2>/dev/null || true
+
+        # Print the result line from the worker output
+        _result_line=$(grep "^  ${test_names[$i]} " "$_outdir"/out-* 2>/dev/null | head -1)
+        [ -n "$_result_line" ] && echo "$_result_line"
+
+        case $_rc in
+            0)   passed=$((passed+1)) ;;
+            124) timed_out=$((timed_out+1)); failed=$((failed+1))
+                  failed_tests+=("${test_names[$i]} (TIMEOUT)") ;;
+            *)   failed=$((failed+1))
+                  failed_tests+=("${test_names[$i]}") ;;
+        esac
+        total=$((total+1))
+    done
+fi
+
+# ── Results Summary ───────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Results"
