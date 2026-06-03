@@ -144,7 +144,6 @@ milestones:
     completed: 2026-02-22
     estimated_weeks: 1-2
     tasks_completed: 7
-  completed: 2026-05-11
     tasks_total: 7
     notes: |
       ✅ Milestone 5: Global Package Installation - Complete!
@@ -2822,45 +2821,6 @@ tasks:
         - "✅ Test coverage: list (10), info (13), remove (8), search (8), update (13)"
         - ✅ Fixed exit code capture in tests (removed || true, used set +e)
         - "📋 Bug found and fixed: Functions defined after use in update script"
-
-documentation:
-  design_documents: 11
-  milestone_documents: 12
-  pattern_documents: 4
-  task_documents: 94
-  command_documents: 36
-  last_updated: 2026-03-01
-
-progress:
-  planning: 100
-  implementation: 100
-  testing: 100
-  documentation: 100
-  overall: 95
-  M1: 100
-  M2: 100
-  M3: 100
-  M4: 100
-  M5: 100
-  M6: 100
-  M7: 100
-  M8: 100
-  M9: 100
-  M10: 100
-  M11: 100
-  M12: 100
-  M13: 100
-  M14: 100
-  M15: 100
-  M16: 100
-  M17: 100
-  M21: 100
-  M22: 100
-  M23: 100
-  M24: 100
-  M25: 0
-  M26: 0
-
   M24:
     - id: task-133
       name: Add Missing Commands to AGENT.md Core Commands
@@ -3024,8 +2984,6 @@ progress:
       actual_hours: 1.0
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-145-auto-stamp-completed-in-acp-commit.md
       estimated_hours: 2-3
-      actual_hours: null
-      completed_date: null
       notes: Add step to git.commit.md to auto-set completed field on routing task files; eliminates BUG-01 class omissions.
 
     - id: task-146
@@ -3037,9 +2995,7 @@ progress:
       actual_hours: 1.0
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-146-standardize-task-status-format.md
       estimated_hours: 3-4
-      actual_hours: null
-      completed_date: null
-      notes: Update acp.task-create.md and task template to use YAML completed: field; deprecate markdown Status field.
+      notes: "Update acp.task-create.md and task template to use YAML completed: field; deprecate markdown Status field."
 
     - id: task-147
       name: Document token budget as discipline, not technical necessity
@@ -3061,8 +3017,6 @@ progress:
       actual_hours: 0.5
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-148-resolve-dual-syntax-confusion.md
       estimated_hours: 1-2
-      actual_hours: null
-      completed_date: null
       notes: Add Command Invocation Styles section to AGENT.md and README; clarify VS Code vs generic agent usage.
 
     - id: task-149
@@ -3085,7 +3039,7 @@ progress:
       estimated_hours: 2-3
       actual_hours: 0.5
       completed_date: 2026-05-04
-      notes: Renamed 12 routing task files task-NNN.md → route-NNN.md; updated id:/precedes:/depends_on: fields; updated install.sh, version-update.sh, AGENTS.md, scripts/AGENTS.md, .github/copilot-instructions.md; added Two Task Systems note to AGENT.md.
+      notes: "Renamed 12 routing task files task-NNN.md → route-NNN.md; updated id:/precedes:/depends_on: fields; updated install.sh, version-update.sh, AGENTS.md, scripts/AGENTS.md, .github/copilot-instructions.md; added Two Task Systems note to AGENT.md."
 
   M27:
     - id: task-151
@@ -3119,7 +3073,8 @@ progress:
       estimated_hours: 2.0
       actual_hours: 0.5
       completed_date: 2026-05-04
-      notes: Fixed yaml_query to emit child_value (not child_key:) for keyless scalar array children. Root cause: bare array item scalars (e.g. "- production") have empty key, so "${child_key}:" rendered as ":". Also fixed path mismatch in test: setup used test/yaml-parser-fixtures/ but tests used tests/fixtures/ (7 occurrences updated). All 95 yaml-parser tests pass.
+      notes: |
+        Fixed yaml_query to emit child_value (not child_key:) for keyless scalar array children. Root cause: bare array item scalars (e.g. - production") have empty key, so "${child_key}:" rendered as ":". Also fixed path mismatch in test: setup used test/yaml-parser-fixtures/ but tests used tests/fixtures/ (7 occurrences updated). All 95 yaml-parser tests pass."
 
     - id: task-154
       name: Revise token budget from 2800 to 5000
