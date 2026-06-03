@@ -1,5 +1,12 @@
 # ACP Enhanced — Agent Context Protocol
 
+[![Version](https://img.shields.io/badge/version-6.8.2-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
+[![Milestones](https://img.shields.io/badge/milestones-43%2F43%20complete-brightgreen)](https://github.com/ssucipto/acp-enhanced)
+[![Commands](https://img.shields.io/badge/commands-63%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
+[![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+[![Fork](https://img.shields.io/badge/fork%20of-prmichaelsen%2Facp-orange)](https://github.com/prmichaelsen/agent-context-protocol)
+
 > **This is a fork of [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol) by [@prmichaelsen](https://github.com/prmichaelsen).**
 > ACP Enhanced adds a structured context management layer (`agent/` framework) on top of the original ACP command and script system.
 > The original ACP content — commands, scripts, schemas, and workflow — is preserved in full.
@@ -558,8 +565,12 @@ npx ts-node acp-dispatch.ts agent/routing/tasks/route-NNN.md
 
 > macOS note: The default `/bin/bash` on macOS is 3.2. ACP Enhanced scripts are tested against bash 3.2 for compatibility — no Homebrew bash required. Homebrew's bash (`/opt/homebrew/bin/bash`) is typically 5.x and also works.
 
+### Manual Install (Alternative to Bootstrap)
+
+If you prefer a lightweight install without the full bootstrap (no context layer, no routing, no pre-commit hook):
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh | bash
 ```
 
 ### Update an Existing Project
@@ -567,7 +578,7 @@ curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol
 You can update an existing project via `/acp-version-update` command or by running the update script directly:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/prmichaelsen/agent-context-protocol/mainline/agent/scripts/acp.version-update.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.version-update.sh | bash
 ```
 
 Or if you have ACP already installed locally:
@@ -870,46 +881,90 @@ See these repositories for real-world examples of ACP in action:
 
 ## Directory Structure
 
+### ACP Enhanced Layout (full `agent/` framework)
+
 ```
 project-root/
-├── AGENT.md                        # ACP documentation (this pattern)
-├── agent/                          # Agent directory
-│   ├── commands/                   # Command system
-│   │   ├── .gitkeep
-│   │   ├── command.template.md     # Command template
-│   │   ├── acp.init.md             # /acp-init
-│   │   ├── acp.proceed.md          # /acp-proceed
-│   │   ├── acp.status.md           # /acp-status
-│   │   └── ...                     # More commands
-│   │
+├── AGENT.md                        # ACP Enhanced protocol (loaded by all IDEs)
+├── CLAUDE.md                       # Symlink → AGENT.md (Claude Code)
+├── .github/
+│   ├── copilot-instructions.md     # Symlink → AGENT.md (GitHub Copilot)
+│   └── prompts/                    # 63 slash command prompts (*.prompt.md)
+├── .opencode/commands/             # 63 slash commands for opencode TUI
+├── agent/                          # Agent context directory
+│   ├── core/                       # Layer 1: always loaded, cached
+│   │   ├── identity.yml            # Project identity + stack
+│   │   ├── constraints.yml         # Hard rules + token budget
+│   │   └── routing.yml             # Session executor config
+│   ├── skills/                     # Layer 2: one per task session
+│   │   ├── commands.md             # Command doc writing
+│   │   ├── scripts.md              # Bash shell scripting
+│   │   ├── schemas.md              # YAML schema design
+│   │   ├── testing.md              # E2E + unit testing
+│   │   ├── typescript.md           # TypeScript tooling
+│   │   ├── crosscut.md             # Docs, README, cross-cutting
+│   │   └── upstream-sync.md        # Upstream integration
+│   ├── memory/                     # Layer 3: persistent memory
+│   │   ├── sessions.md             # Session log (last 3 loaded)
+│   │   ├── lessons.md              # Correction log (by task_type)
+│   │   ├── decisions.md            # Architecture Decision Records
+│   │   ├── patterns.md             # Reusable implementation patterns
+│   │   └── audit-carryovers.md     # Unresolved audit findings
+│   ├── wiki/                       # Layer 3: reference (section-loaded)
+│   │   ├── domain.yml              # Domain taxonomy
+│   │   └── architecture.md         # Integration patterns
+│   ├── routing/                    # Task routing system
+│   │   ├── taxonomy.yml            # Task type → executor mapping
+│   │   ├── config.yml              # Model + API config
+│   │   ├── rules.md                # Routing rules + conventions
+│   │   ├── ledger.md               # Cost + token tracking
+│   │   └── tasks/                  # Generated route files
+│   ├── commands/                   # 48 command docs (acp.*.md, git.*.md)
+│   ├── scripts/                    # 27 shell scripts + TypeScript tools
 │   ├── design/                     # Design documents
-│   │   ├── .gitkeep
-│   │   ├── design.template.md      # Template for design docs
-│   │   └── requirements.md         # Your project requirements
-│   │
-│   ├── milestones/                 # Project milestones
-│   │   ├── .gitkeep
-│   │   ├── milestone-1-{title}.template.md
-│   │   └── milestone-1-foundation.md
-│   │
-│   ├── patterns/                   # Architectural patterns
-│   │   ├── .gitkeep
-│   │   ├── pattern.template.md
-│   │   ├── bootstrap.template.md
-│   │   └── typescript/             # Language-specific patterns
-│   │       └── *.md
-│   │
-│   ├── tasks/                      # Granular tasks
-│   │   ├── .gitkeep
-│   │   ├── task-1-{title}.template.md
-│   │   └── task-1-setup.md
-│   │
+│   ├── milestones/                 # Milestone definitions
+│   ├── patterns/                   # Reusable code patterns
 │   ├── index/                      # Key file index
-│   │   ├── local.main.yaml         # Project's key files
-│   │   └── {pkg}.main.yaml         # Package-shipped indices
-│   │
+│   ├── schemas/                    # YAML schemas
+│   ├── drafts/                     # Work-in-progress drafts
+│   ├── clarifications/             # Clarification documents
+│   ├── reports/                    # Audit reports (gitignored)
+│   ├── feedback/                   # User feedback (gitignored)
+│   ├── preferences/                # Preference overrides
+│   ├── configurables/              # Configurable definitions
+│   ├── artifacts/                  # Research, glossary, reference
+│   ├── benchmarks/                 # ACP vs baseline benchmark suite
+│   ├── specs/                      # Feature specifications
+│   ├── manifest.yaml               # Package manifest
+│   ├── progress.yaml               # Progress tracking
+│   └── .gitignore                  # Excludes reports/, clarifications/, etc.
+├── scripts/                        # TypeScript dispatch + bootstrap
+│   ├── acp-bootstrap.sh            # One-command installer
+│   ├── acp-dispatch.ts             # Model routing dispatcher
+│   ├── acp-validate.ts             # Schema + consistency validator
+│   └── package.json                # Node.js dependencies
+├── e2e/                            # End-to-end test suite
+├── tests/                          # Unit tests
+├── docs/                           # GitHub Pages (package browser)
+├── package.yaml                    # ACP package definition
+├── CHANGELOG.md                    # Version history
+└── README.md                       # This file
+```
+
+### Original ACP Layout (preserved for compatibility)
+
+The directories below are the original ACP structure that ACP Enhanced preserves:
+
+```
+project-root/
+├── AGENT.md                        # ACP documentation
+├── agent/                          # Agent directory
+│   ├── commands/                   # Command system (48 docs)
+│   ├── design/                     # Design documents
+│   ├── milestones/                 # Project milestones
+│   ├── patterns/                   # Architectural patterns
+│   ├── index/                      # Key file index
 │   └── progress.yaml               # Progress tracking
-│
 └── (your project files)
 ```
 
@@ -917,20 +972,20 @@ project-root/
 
 ## Template Files
 
-ACP provides template files for each document type:
+ACP Enhanced provides templates for each document type in `agent/*/`:
 
-- **`design.template.md`** - Template for design documents
-- **`milestone-1-{title}.template.md`** - Template for milestone documents
-- **`task-1-{title}.template.md`** - Template for task documents
-- **`pattern.template.md`** - Template for pattern documents
-- **`bootstrap.template.md`** - Template for project bootstrap patterns
-- **`progress.template.yaml`** - Template for progress tracking
+| Directory | Template | Purpose |
+|-----------|----------|---------|
+| `agent/design/` | `*.template.md` | Design documents |
+| `agent/milestones/` | `*.template.md` | Milestone definitions |
+| `agent/patterns/` | `*.template.md` | Pattern documents |
+| `agent/commands/` | `command.template.md` | Command files |
+| `agent/clarifications/` | `clarification-{N}-{title}.template.md` | Clarification docs |
+| `agent/artifacts/` | `glossary.template.md`, `reference.template.md`, `research.template.md` | Research artifacts |
+| `agent/routing/tasks/` | `route-template.md` | Route task files |
+| `agent/` | `progress.template.yaml`, `manifest.template.yaml`, `package.template.yaml`, `driver.template.yaml`, `sessions.template.yaml`, `projects.template.yaml` | Config templates |
 
-Each template includes:
-- Section headers with descriptions
-- Example content showing proper usage
-- Guidance on what to include
-- Best practices and conventions
+Each template includes section headers with descriptions, example content, and best-practice guidance.
 
 ---
 

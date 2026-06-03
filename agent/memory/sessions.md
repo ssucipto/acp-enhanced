@@ -2,6 +2,42 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-06-03
+  executor: copilot
+  tasks: [audit-018, audit-019, audit-020]
+  done:
+    - audit-018-readme-accuracy-vs-implementation
+    - fixed-readme-bootstrap-step-count-seven-to-eight
+    - fixed-bootstrap-script-counters-1-7-to-1-8
+    - added-m43-subsection-to-recent-protocol-enhancements
+    - rewrote-bootstrap-step-list-to-match-script
+    - generated-IP_REGISTER-via-ip-register-prompt
+    - committed-v6.8.2-8-files-changed
+    - audit-019-updating-system-clarity
+    - verified-all-version-scripts-use-ssucipto-acp-enhanced
+    - fixed-readme-install-curl-prmichaelsen-to-ssucipto
+    - fixed-readme-update-curl-prmichaelsen-to-ssucipto
+    - added-manual-install-section-header-to-readme
+    - audit-020-documentation-currency
+    - added-shields-io-banner-to-readme
+    - updated-readme-directory-tree-to-full-enhanced-layout
+    - updated-readme-template-files-table
+    - updated-prd-main-status-to-implemented
+    - fixed-prd-skills-list-to-actual-skills
+    - fixed-prd-directory-tree-and-prompts-count
+    - bumped-progress-yaml-version-to-6-8-2
+    - added-upstream-note-to-docs-readme
+    - ran-acp-update-added-recent-work-and-refreshed-next-steps
+  deferred:
+    - F-004-dead-acp-core-manifest-sed-in-version-update-sh → low
+  key_fact: |
+    3 audits completed in one session (018–020). All 43 milestones done (M1–M43,
+    v6.8.2). README now has shields.io banner and full enhanced directory tree.
+    All scripts correctly use ssucipto/acp-enhanced. PRD-MAIN.md status updated
+    from "Ready for Implementation" → "Implemented". progress.yaml version bumped
+    to 6.8.2 and recent work entries refreshed. No architectural decisions made.
+    No new reusable patterns discovered (all fixes were documentation hygiene).
+
 - date: 2026-05-17
   executor: copilot
   tasks: [audit-018]
