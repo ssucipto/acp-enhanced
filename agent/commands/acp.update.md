@@ -19,6 +19,9 @@
 
 ## What This Command Does
 
+> **Not to be confused with `/acp-version-update` (updates ACP Enhanced framework) or `/acp-package-update` (updates third-party packages).**  
+> This command updates **only** `agent/progress.yaml` — your project's progress tracking.
+
 This command updates `agent/progress.yaml` with the latest project status. It's used after completing work to ensure progress tracking accurately reflects what's been accomplished. The command updates task statuses, milestone progress percentages, recent work entries, and next steps.
 
 Use this command when you've completed tasks, made significant progress, or need to ensure the progress tracking is current. It's particularly useful after finishing a work session or when transitioning between tasks.
