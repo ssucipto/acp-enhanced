@@ -69,6 +69,9 @@ After it completes, **customize** `agent/core/identity.yml` for your project (na
 
 ### Update when this fork changes
 
+> **⚠️ The update overwrites framework files.** Commit your changes first (`git commit`).
+> See `agent/commands/acp.version-update.md` for the full list of preserved vs overwritten files.
+
 ```
 /acp-version-update
 ```
@@ -77,7 +80,7 @@ Or run the update script directly:
 ./agent/scripts/acp.version-update.sh
 ```
 
-Only files that changed since last install are updated. Locally modified files are flagged as conflicts.
+All framework files (AGENT.md, agent/commands/, agent/scripts/, agent/core/, etc.) are replaced with the latest versions. Your data files (agent/memory/, agent/routing/tasks/, agent/design/, etc.) are preserved.
 
 ---
 
@@ -589,21 +592,24 @@ npx ts-node acp-dispatch.ts agent/routing/tasks/route-NNN.md
 
 ### Manual Install (Alternative to Bootstrap)
 
-If you prefer a lightweight install without the full bootstrap (no context layer, no routing, no pre-commit hook):
+> **⚠️ `cd` to your project root first.** This installs commands and scripts only (no routing, no pre-commit hook).
 
 ```bash
+# From your target project root
 curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh | bash
 ```
 
 ### Update an Existing Project
 
-You can update an existing project via `/acp-version-update` command or by running the update script directly:
+> **⚠️ Commit your changes first — the update overwrites framework files.**
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.version-update.sh | bash
+Via Copilot chat (recommended):
+
+```
+/acp-version-update
 ```
 
-Or if you have ACP already installed locally:
+Or run the update script directly:
 
 ```bash
 ./agent/scripts/acp.version-update.sh
