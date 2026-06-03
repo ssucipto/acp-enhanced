@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.8.2] — 2026-06-03
 
+### Added (M46)
+- **Parallel test runner**: `run-e2e-tests.sh --parallel [N]` runs tests concurrently using native bash background subshells. No GNU parallel dependency. Auto-detects CPU count. CI workflows updated to use `--parallel 4`.
+- `--help` flag on `run-e2e-tests.sh` documenting all options
+- Argument validation: rejects invalid `--parallel` values, unknown flags show hint
+
+### Changed
+- Bootstrap safety: pre-flight checks for wrong directory, idempotency guard, cleanup on failure (audits 036-038)
+- Update script F-004 dead sed fixed: `acp-core` manifest entry now created if missing
+- README: update description corrected, safety warnings added to all install paths
+- Visualizer companion: renamed to ACPEnhanced-Visual, updated install instructions
+
 ### Fixed
 - `scripts/acp-bootstrap.sh`: Step progress counters corrected from `[1/7]`–`[6b/7]` → `[1/8]`–`[6b/8]` (audit-018)
 - `README.md`: Bootstrap step count "seven steps" → "eight steps" (audit-018)
