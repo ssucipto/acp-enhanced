@@ -295,3 +295,53 @@ carryovers:
     fix_applied_date: 2026-05-12
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-041 FINDINGS (M47 Pre-Implementation) ──────────────────────────────
+
+  - audit_id: 41
+    finding_id: GAP-041-04
+    severity: low
+    file: agent/routing/tasks/route-078.md
+    finding: "Feedback-001 F-05 not covered — registry schema lint (require date: and name:; warn on unquoted colons)"
+    description: "F-05 from feedback-001 recommends schema-level linting of patterns.md and sessions.md entries beyond YAML syntax validation. route-078 covers YAML parsing but not field-level schema enforcement. Candidate for M48."
+    fix_target: "Create route in future milestone to add schema linting for memory registry entries"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 41
+    finding_id: GAP-041-06
+    severity: medium
+    file: "[no specific file]"
+    finding: "No CHANGELOG update route in M47 — v6.9.0 release needs release notes"
+    description: "M47 targets v6.9.0 but no route covers CHANGELOG.md update."
+    fix_target: "Add CHANGELOG.md update to M47 completion criteria or create route-085"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 41
+    finding_id: GAP-041-07
+    severity: medium
+    file: "[no specific file]"
+    finding: "No E2E test route in M47 — commit auto-sync, repair tools, validation are testable"
+    description: "Routes 074-078 produce user-facing features. Industry standard requires tests."
+    fix_target: "Create route for E2E tests covering commit auto-sync, repair tools, --memory validation"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 41
+    finding_id: GAP-041-08
+    severity: medium
+    file: agent/commands/acp.commit.md
+    finding: "Atomicity not addressed in commit auto-sync design — multi-file sync lacks transaction boundaries"
+    description: "If sync fails mid-operation, partial state possible. Idempotent design mitigates but doesn't prevent."
+    fix_target: "Consider temp-file+atomic-rename or all-or-nothing approach during route-074/075 implementation"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
