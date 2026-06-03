@@ -135,6 +135,40 @@ the corresponding markdown document in `agent/sessions/`:
 - Did this session produce a reusable code pattern, architectural insight, or repeatable workflow?
 - If yes → append to `agent/memory/patterns.md` with `date:` and `code_ref:` fields
 
+### 3b. Auto-Sync Pattern Document (NEW — v1.3.0)
+
+> **Skip this step if `--no-sync` was passed.**
+
+After appending to `agent/memory/patterns.md` (Step 3), auto-generate or update
+the corresponding markdown document in `agent/patterns/`:
+
+1. **Identify new/changed entries**: Compare the registry state before and after
+   Step 3. Track which `name:` values were added or modified.
+2. **Generate filename**: `agent/patterns/{name}.md` where `{name}` is the
+   pattern's `name:` field (kebab-case, from the registry entry).
+3. **Respect existing namespace**: If `agent/patterns/` already contains
+   `local.*.md` files (project-specific), new patterns use the `local.` prefix.
+   Package patterns use `{namespace}.{name}.md`.
+4. **Write pattern document** in markdown format:
+
+   ```markdown
+   # Pattern: {name}
+
+   **Date**: {date}
+   **Task Type**: {task_type or "N/A"}
+   **Code Ref**: {code_ref or "N/A"}
+
+   ## Description
+   {description}
+
+   ## Template
+   {template or "N/A"}
+   ```
+
+5. **Idempotency**: If a file at the target path already exists with identical
+   content, skip it. If the registry entry has changed since the last sync,
+   update the file to match.
+
 ### 4. Check for Architectural Decisions
 
 - Was an architectural decision made this session?
@@ -202,9 +236,11 @@ the corresponding markdown document in `agent/sessions/`:
 - Added `--no-sync` flag — skip auto-sync of session/pattern documents (debug only, warns about drift)
 - Added Step 2b: Auto-Sync Session Document — generates `agent/sessions/{date}-{slug}.md` from registry
   after every successful commit (route-074, M47)
-- Updated Step 7 confirmation output to report sync counts
-- Root cause: feedback-001/002 from consumer-project project — sessions documents not auto-generated,
-  agents and visualizer read from empty document directory
+- Added Step 3b: Auto-Sync Pattern Document — generates `agent/patterns/{name}.md` from registry
+  after every successful commit (route-075, M47)
+- Updated Step 7 confirmation output to report sync counts for both sessions and patterns
+- Root cause: feedback-001/002 from consumer-project project — sessions and patterns documents not auto-generated,
+  agents and visualizer read from empty document directories
 
 ## v1.2.0 Changelog (2026-05-11)
 
