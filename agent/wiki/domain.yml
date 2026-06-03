@@ -1,11 +1,11 @@
 # Domain Entity Model — ACP Protocol project
 # Load ONE section at a time — never load the entire file
-# last_verified: 2026-05-11
+# last_verified: 2026-06-03
 
 commands:
-  count: 63  # 63 verified 2026-05-11: 61 acp.* + 2 git.*; added acp.dispatch, acp.feedback, acp.install, acp.task (routes 024-027)
+  count: 63  # 63 verified 2026-06-03: 61 acp.* + 2 git.*
   location: agent/commands/
-  naming: "acp.{command-name}.md — dot notation, acp namespace for core"
+  naming: "acp.{command-name}.md — dot notation, acp namespace for core; git.{command}.md for git namespace"
   categories:
     core: [acp.audit, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.memory-sync, acp.plan, acp.proceed, acp.report, acp.resume, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
     artifact: [acp.artifact-glossary, acp.artifact-reference, acp.artifact-research]
@@ -207,7 +207,7 @@ commands:
       purpose: Initialize a git repository with an intelligent .gitignore based on detected project type.
 
 scripts:
-  count: 28
+  count: 29
   location: agent/scripts/
   naming: "acp.{feature}.sh"
   key_scripts:
@@ -275,7 +275,7 @@ scripts:
       implements: Validates YAML files against ACP schema definitions, reporting typed errors and warnings with pass/fail counts.
 
 schemas:
-  count: 3
+  count: 5
   location: agent/schemas/
   entries:
     - schema: package.schema.yaml
@@ -287,6 +287,12 @@ schemas:
     - schema: projects.schema.yaml
       validates: ~/.acp/projects.yaml — the global multi-project registry
       key_fields: [registry_version, last_updated, current_project, projects]
+    - schema: driver.schema.yaml
+      validates: agent/driver.yaml — pluggable driver configuration
+      key_fields: [name, type, server, method]
+    - schema: task.schema.yaml
+      validates: sub-task DAG for parallel + orchestrator-workers task types
+      key_fields: [id, title, executor, depends_on]
 
 test_suites:
   e2e_location: e2e/
