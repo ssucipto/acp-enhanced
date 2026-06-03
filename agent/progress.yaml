@@ -12,7 +12,7 @@ project:
     milestones. M45 (v6.8.3) delivered comprehensive test package covering
     all v6.8.2 features: light-mode, @-mention, parallel tasks, bootstrap
     flags, observability, security, and workflow integration. 63 slash commands,
-    30 audit reports, 12 unit tests (60 assertions).
+    30 audit reports, 12 unit tests (71 assertions).
 
 milestones:
   M44:
@@ -49,7 +49,7 @@ milestones:
       Phase 2 — Smoke+Workflow: 068 (smoke ✅), 069 (e2e workflow ✅),
         070 (performance ✅)
       Phase 3 — Infra: 067 (CI runner ✅)
-      Total: 60 assertions, all passing
+      Total: 71 assertions, all passing (post audit-035: +1 at-mention dup check, perf test bug fix)
 
   M1:
     name: ACP Commands Infrastructure
@@ -3353,21 +3353,20 @@ progress:
 recent_work:
   - date: 2026-06-03
     description: |
-      ✅ audit-020 COMPLETE: Documentation currency — 9 findings across 4 files, all fixed.
-      README now has shields.io banner (v6.8.2, production pattern, 43/43 milestones, 63 commands).
-      PRD-MAIN.md status updated from "Ready for Implementation" → "Implemented".
-      progress.yaml version bumped 6.6.0 → 6.8.2.
+      ✅ audit-035 COMPLETE: M45 post-implementation review — 5 findings, all fixed.
+      Found critical bug in performance test (undefined id_chars/prog_chars variables
+      causing silent false pass). Milestone doc still showed Status: planned. All gaps
+      fixed, M45 tests confirmed at 71 assertions, 100% pass rate.
     items:
-      - "✅ README.md: Added version/status/milestones/commands/license/fork banner (F-001)"
-      - "✅ README.md: Directory tree replaced with full ACP Enhanced layout (F-002)"
-      - "✅ README.md: Template files table updated to current templates (F-003)"
-      - "✅ scripts/PRD-MAIN.md: Status → Implemented with 2026-06-03 note (F-004)"
-      - "✅ scripts/PRD-MAIN.md: Skills list updated to actual skills (F-005)"
-      - "✅ scripts/PRD-MAIN.md: Directory tree + prompts count + opencode (F-006)"
-      - "✅ agent/progress.yaml: Version bumped 6.6.0 → 6.8.2 (F-008)"
-      - "✅ docs/README.md: Added upstream registry note (F-009)"
-      - "⚠️ 4 artifacts stale (no Last Verified dates)"
-      - "📋 audit-020 report: agent/reports/audit-020-documentation-currency.md"
+      - "🔴 BUG-001: Performance test undefined vars (id_chars/prog_chars) — fixed with global capture"
+      - "🔴 DOC-001: Milestone doc Status: planned → completed + Actual Results section"
+      - "🟡 GAP-001: Full mode perf test scope widened (sessions+wiki now included)"
+      - "🟢 GAP-002: @-mention catalog duplicate detection added (skills_catalog-scoped)"
+      - "🟢 GAP-003: Milestone doc now has actual metrics table"
+      - "✅ All 9 M45 test files pass: 71 assertions, 0 failures"
+      - "✅ Commit 73e7f36 pushed to mainline"
+      - "📋 audit-035 report: agent/reports/audit-035-m45-post-impl-review.md"
+      - "✓ All artifacts current (only 1 content artifact — glossary — verified 2026-05-04, within 180-day window; 3 template files have placeholder dates, expected)"
   - date: 2026-06-03
     description: |
       ✅ audit-019 COMPLETE: Updating system clarity — verified no confusion between
@@ -5316,6 +5315,8 @@ next_steps:
   - "📋 Consider F-004 fix: remove dead acp-core manifest sed in version-update.sh"
   - "📋 Refresh artifact Last Verified dates (4 artifacts currently stale)"
   - "📋 Address any new feedback from external review"
+  - "📋 Add --parallel flag to run-e2e-tests.sh (M46 candidate)"
+  - "📋 Add --list flag to run-e2e-tests.sh for test self-discovery (M46 candidate)"
 
 notes:
   - 44 milestones complete (M1–M44, 100%), v6.8.2 (2026-06-03)
