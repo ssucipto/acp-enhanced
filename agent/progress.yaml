@@ -10,7 +10,7 @@ project:
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.8.2 with 46 completed
     milestones. M46 (v6.8.4) delivered parallel test runner. Companion visualizer
-    at v1.4.2. 40 audit reports, 16 unit tests (71 assertions).
+    at v1.5.0. 40 audit reports, 16 unit tests (71 assertions).
 
 milestones:
   M44:
@@ -3331,7 +3331,7 @@ recent_work:
       - "✅ Route 072: --help flag + argument validation"
       - "✅ Route 073: CI e2e-tests.yaml → --parallel 4 --skip-network"
       - "✅ run-e2e-tests.sh: ~200 lines, serial + parallel, macOS + Linux"
-      - "✅ README: visualizer v1.4.2 full features, 4 categories, companion callout"
+      - "✅ README: visualizer v1.5.0 full features, 4 categories, companion callout"
       - "✅ 46/46 milestones complete (M1-M46, all 100%)"
   - date: 2026-06-03
     description: |
@@ -5288,7 +5288,7 @@ notes:
   - Install system: 4-audit hardened (036-039), 26 findings fixed
   - Bootstrap: safe, idempotent, with pre-flight checks and cleanup
   - Update: F-004 dead sed fixed, pre-installation checks added
-  - README: visualizer v1.4.2 featured prominently
+  - README: visualizer v1.5.0 featured prominently
   - run-e2e-tests.sh: --parallel flag, --help, argument validation
   - CI: e2e-tests.yaml uses --parallel 4
 
