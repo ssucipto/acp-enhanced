@@ -105,7 +105,7 @@ Skill files are no longer auto-loaded by task_type. Instead, they are invoked ex
 - Agent applies conventions from the skill file to the current task
 - Brief acknowledgement: `[@testing] Loaded testing conventions.`
 
-> See `agent/core/routing.yml → skills_catalog` for the full list of 7 @-mentions.
+> See `agent/routing/taxonomy.yml → skills_catalog` for the full list of 7 @-mentions.
 > The auto-load mechanism (Step 3 in pre-v6.8.2) is deprecated. Skill files
 > remain available for direct reading when needed.
 
@@ -309,6 +309,13 @@ When developer runs /acp-commit:
    If any existing lesson covers the same topic (same technology, same problem category,
    same root cause), skip it — do not write a near-duplicate lesson.
    Only write if the lesson is materially new.
+3c. **Auto-update observability** (added v6.8.2, audit-022 R8):
+   Read `agent/routing/ledger.md` and aggregate the latest session's data into
+   `agent/progress.yaml → observability`:
+   - `this_week`: sessions count, total tokens, total cost, top executor
+   - `by_executor`: per-model breakdown (tasks, tokens, cost, error rate)
+   - `weekly_trend`: append this week's totals to the trend array
+   If ledger is empty or unavailable, leave observability fields unchanged.
 4. Check: did you make an architectural decision? If yes, prompt:
    "An architectural decision was made: [decision]. Create ADR? (y/n)"
 5. Count entries in sessions.md. If > 15, auto-compact oldest 10 entries:
