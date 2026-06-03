@@ -135,6 +135,26 @@ This is not an anti-pattern — it's inherent to multi-platform support. Each pl
 
 > **Do not merge these files.** AGENT.md is 2300+ lines of user documentation. CLAUDE.md and copilot-instructions.md are ~360 lines of agent protocol. Redirecting Claude to AGENT.md would load irrelevant user docs into every session.
 
+### Parallel Tasks (v6.8.2)
+
+ACP Enhanced supports Anthropic's full 6 agent workflows, including parallelization and orchestrator-workers:
+
+| Workflow | Task Type | Use Case |
+|----------|-----------|----------|
+| **Parallel** | `task_type: parallel` | Independent sub-tasks run concurrently (e.g., "Add tests for endpoints A, B, C") |
+| **Orchestrator** | `task_type: orchestrator-workers` | Large refactors — orchestrator decomposes, dispatches to workers, aggregates |
+
+Sub-tasks form a DAG via `depends_on`:
+```yaml
+sub_tasks:
+  - id: route-051a
+    depends_on: []               # Runs immediately
+  - id: route-051b
+    depends_on: [route-051a]     # Waits for 051a
+```
+
+`/acp-proceed --complete` auto-detects parallel tasks, spawns sub-agents, resolves dependencies, and aggregates outputs.
+
 ---
 
 ## Why This Pattern Exists

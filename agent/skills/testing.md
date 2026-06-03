@@ -1,4 +1,4 @@
-<skill name="testing">
+<skill name="testing" mention="@{testing}">
 <rules>
 - E2E tests live in `e2e/acp.*.test.sh` — integration tests requiring full script chain
 - Unit tests live in `tests/acp.*.test.sh` — pure function tests, offline only

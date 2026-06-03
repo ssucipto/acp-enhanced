@@ -1,4 +1,4 @@
-<skill name="typescript">
+<skill name="typescript" mention="@{typescript}">
 <rules>
 - TypeScript files live in `scripts/` (dispatch, validate, etc.)
 - Use strict TypeScript: `"strict": true` in tsconfig (no implicit any)
