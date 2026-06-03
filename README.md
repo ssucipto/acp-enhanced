@@ -480,8 +480,12 @@ If your planning artifacts do not match your expectations, you must iterate
 on them or your agent will produce garbage. Therefore it is critical
 to interrogate the planning artifacts rigorously.
 
-You may consider using the [ACP visualizer](https://github.com/prmichaelsen/acp-visualizer)
-to review your planning artifacts by running `npx @prmichaelsen/acp-visualizer`
+You may consider using the [ACP Enhanced Visualizer](https://github.com/ssucipto/agent-context-protocol-visualizer)
+to review your planning artifacts. Clone and run locally:
+```bash
+git clone https://github.com/ssucipto/agent-context-protocol-visualizer
+cd agent-context-protocol-visualizer && npm install && npm run dev
+```
 in your project directory. This launches a web portal that ingests your
 `progress.yaml` and generates a project status dashboard. The dashboard includes
 milestone tree views, a kanban board, and dependency graphs. You can preview
@@ -542,13 +546,9 @@ many reasons I recommend Claude over any other agent provider).
 
 ## Useful References
 
-> *[Search ACP packages](https://prmichaelsen.github.io/agent-context-protocol/)*  
+> *[Search ACP packages](https://prmichaelsen.github.io/agent-context-protocol/)* (upstream registry)  
 
-> *[Visualize your project](https://github.com/prmichaelsen/agent-context-protocol-visualizer)*   - `yes | npx @prmichaelsen/acp-visualizer` 
-
-> *[CLI visualizer](https://github.com/prmichaelsen/acp-visualizer-tui)* - `npx acp-visualizer-tui` 
-
-> *[Project dashboard](https://viz.agentcontextprotocol.net/?repo=prmichaelsen%2Fagent-context-protocol)*
+> *[ACP Enhanced Visualizer](https://github.com/ssucipto/agent-context-protocol-visualizer)* — milestone dashboard for your project
 
 > *[Claude Code](https://code.claude.com/docs/en/overview) is ACP's preferred coding agent provider, however any provider will work out of the box.*
 ---
@@ -614,24 +614,24 @@ Or if you have ACP already installed locally:
 See your milestones, tasks, and progress in a live dashboard:
 
 ```bash
-npx @prmichaelsen/acp-visualizer
+git clone https://github.com/ssucipto/agent-context-protocol-visualizer
+cd agent-context-protocol-visualizer
+npm install
+npm run dev
 ```
 
-Runs a local dashboard that reads your `agent/progress.yaml` and renders it as an interactive admin panel with table/tree views, search, filtering, and auto-refresh.
+Runs a local dashboard that reads your `agent/progress.yaml` and renders it as an interactive admin panel with table/tree views, search, filtering, and auto-refresh. Point it at any project:
 
 ```bash
 # Run from any ACP project directory
 cd my-project
-npx @prmichaelsen/acp-visualizer
+npm run dev -- --path /path/to/my-project
 
-# Or point at a specific file
-npx @prmichaelsen/acp-visualizer /path/to/agent/progress.yaml
-
-# Custom port
-npx @prmichaelsen/acp-visualizer --port 4000
+# Or set VISUALIZER_PATH env var
+VISUALIZER_PATH=/path/to/my-project npm run dev
 ```
 
-**Features**: Sortable milestone table, expandable tree view, fuse.js fuzzy search, status filtering, SSE auto-refresh (updates live as agents work), lenient YAML parsing that handles agent-maintained drift.
+**Features**: Sortable milestone table, expandable tree view, fuse.js fuzzy search, status filtering, file-watcher auto-refresh (updates live as agents work), lenient YAML parsing.
 
 ---
 
