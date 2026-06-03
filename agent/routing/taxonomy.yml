@@ -1,7 +1,8 @@
 # ACP Protocol Task Taxonomy
 # Maps task types to executor + context required
 # Generated 2026-05-01 — update weekly via /acp-cost-report suggestions
-last_updated: 2026-05-12
+# Updated 2026-06-03: added skills_catalog + mention fields (audit-022 R6, route-053)
+last_updated: 2026-06-03
 
 task_types:
 
@@ -213,3 +214,81 @@ task_types:
     tokens_est: 6000
     skill: crosscut
     description: Checking fork divergence against upstream prmichaelsen/agent-context-protocol
+
+  # ── PARALLEL TASKS ───────────────────────────────────────────
+  # Added v6.8.2 (audit-022 R9, route-056). Completes ACP against
+  # Anthropic's 6 agent workflows (parallelization + orchestrator-workers).
+  parallel:
+    executor: deepseek-v4-pro     # Orchestrator — decomposes + aggregates
+    complexity: high
+    context_required: [agent/routing/taxonomy.yml]
+    tokens_est: 12000
+    skill: crosscut
+    mention: "@{crosscut}"
+    sub_task_default_executor: deepseek-v4-flash
+    description: >
+      Tasks with independent sub-tasks that can run concurrently.
+      Sub-tasks form a DAG via depends_on fields. Orchestrator (pro model)
+      decomposes, spawns workers (flash model), and aggregates results.
+
+  orchestrator-workers:
+    executor: deepseek-v4-pro     # Orchestrator
+    complexity: high
+    context_required: [agent/routing/taxonomy.yml]
+    tokens_est: 20000
+    skill: crosscut
+    mention: "@{crosscut}"
+    description: >
+      Large refactors spanning multiple domains. Orchestrator decomposes
+      the task, dispatches to specialized worker agents, and aggregates outputs.
+      Higher token budget for cross-domain reasoning.
+
+# ── Skills Catalog ──────────────────────────────────────────────
+# Added v6.8.2 (audit-022 R6, route-053). Skills are invoked via @-mention
+# (e.g., @{testing}) rather than auto-loaded. This catalog maps skill names
+# to their @-mention triggers, file paths, and applicable task types.
+#
+# Usage: User types @{skill-name} → Agent reads skill file → Applies conventions.
+
+skills_catalog:
+  - name: commands
+    mention: "@{commands}"
+    file: agent/skills/commands.md
+    description: Command doc writing conventions — structure, naming, directive patterns
+    triggers: [command-doc-write, command-doc-update]
+
+  - name: scripts
+    mention: "@{scripts}"
+    file: agent/skills/scripts.md
+    description: Bash shell scripting — POSIX compat, error trapping, macOS portability
+    triggers: [bash-script-create, bash-script-fix, bash-script-refactor, shell-scripting]
+
+  - name: schemas
+    mention: "@{schemas}"
+    file: agent/skills/schemas.md
+    description: YAML schema design — structure, validation rules, naming conventions
+    triggers: [yaml-schema]
+
+  - name: testing
+    mention: "@{testing}"
+    file: agent/skills/testing.md
+    description: E2E and unit testing — test structure, assertions, common patterns
+    triggers: [e2e-test-write, test-run]
+
+  - name: typescript
+    mention: "@{typescript}"
+    file: agent/skills/typescript.md
+    description: TypeScript tooling — dispatch, validation, project structure
+    triggers: [typescript-feature]
+
+  - name: crosscut
+    mention: "@{crosscut}"
+    file: agent/skills/crosscut.md
+    description: Cross-cutting concerns — docs, README, AGENT.md, wiki, memory
+    triggers: [design-document, architecture-plan, architecture-design, documentation-sync, wiki-update, memory-write, changelog-update, progress-update, adr-write, audit-run, milestone-create, route-create, upstream-parity-check]
+
+  - name: upstream-sync
+    mention: "@{upstream}"
+    file: agent/skills/upstream-sync.md
+    description: Upstream parity checking — divergence analysis, port safety gates
+    triggers: [upstream-sync]

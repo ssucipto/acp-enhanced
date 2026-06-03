@@ -1,4 +1,4 @@
-<skill name="schemas">
+<skill name="schemas" mention="@{schemas}">
 <rules>
 - All ACP schemas live in `agent/schemas/*.yaml` (not .yml)
 - Schema files use JSON Schema-compatible structure validated by acp.yaml-validate.sh

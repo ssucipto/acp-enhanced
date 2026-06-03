@@ -4,20 +4,20 @@
 
 - date: 2026-06-03
   executor: copilot
-  tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, plan-044, route-047, route-052, route-046, route-049]
+  tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, plan-044, route-047, route-052, route-053, route-054, route-055, route-056, route-057, route-058, route-059]
   done:
-    - 9-audits-018-through-026-system-review-and-gap-detection
-    - implemented-R1-light-mode-two-way-switching-with-recommendations
-    - implemented-R2-auto-populate-lessons-from-key-facts
-    - implemented-R5-three-copy-architecture-documented-with-sync-headers
-    - implemented-R7-manifest-vs-progress-docs-table-in-agent-md
-    - implemented-R3-R4-scaffold-config-in-manifest-yaml
-    - designed-R6-skills-at-mention-pattern-design-doc
-    - designed-R9-parallel-task-support-design-doc
-    - planned-M44-10-routes-3-done-6-planned-1-deferred
-    - created-routes-053-through-058-sub-task-breakdowns
-    - fixed-13-gaps-GAP-001-through-GAP-013-mode-switching-and-discoverability
-    - added-command-suggestions-24-entries-post-execution-discoverability
+    - 9-audits-4-protocol-files-rewritten-24-command-suggestions-2-design-docs
+    - R1-light-mode-two-way-switching-with-recommendations
+    - R2-auto-populate-lessons-from-key-facts-with-dedup
+    - R5-three-copy-architecture-documented
+    - R7-manifest-vs-progress-docs
+    - R3-R4-scaffold-config-and-bootstrap-flag-parsing
+    - R6-skills-at-mention-full-implementation-3-sub-tasks
+    - R9-parallelization-full-implementation-3-sub-tasks
+    - 9-M44-routes-implemented-1-deferred
+    - M44-64-percent-complete
+  deferred:
+    - route-048-observability-write-mechanism → P1 (design pending)
     - fixed-README-upstream-urls-banner-directory-tree-templates
     - fixed-PRD-status-skills-directory-tree
     - fixed-git-commit-git-init-command-docs-prefix-and-version
