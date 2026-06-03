@@ -6,13 +6,13 @@ project:
   version: 6.8.2
   started: 2026-02-16
   status: active
-  current_milestone: M44-complete
+  current_milestone: M45
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.8.2 with 43 completed
-    milestones. 7 audits in one session (018–024) cross-referenced 4 weeks of
-    production feedback. P0 complete: R1 light-mode protocol + R2 auto-lessons +
-    13 gap fixes. M44 targets v6.9.0 with remaining 7 recommendations (R3–R9).
-    63 slash commands, 19 audit reports, zero prmichaelsen refs in scripts.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.8.2 with 45 completed
+    milestones. M45 (v6.8.3) delivered comprehensive test package covering
+    all v6.8.2 features: light-mode, @-mention, parallel tasks, bootstrap
+    flags, observability, security, and workflow integration. 63 slash commands,
+    30 audit reports, 12 unit tests (60 assertions).
 
 milestones:
   M44:
@@ -31,6 +31,25 @@ milestones:
       R1 light-mode, R2 auto-lessons, R5 three-copy, R7 manifest-vs-progress,
       R3/R4 bootstrap flags, R6 @-mention, R9 parallel, R8 observability.
       Target: v6.9.0.
+
+  M45:
+    name: Comprehensive Test Package (v6.8.3)
+    priority: 5
+    status: completed
+    progress: 100
+    estimated_weeks: 1-2
+    tasks_completed: 8
+    tasks_total: 8
+    file: agent/milestones/milestone-45-comprehensive-test-package.md
+    notes: |
+      📋 Milestone 45: Test package for all v6.8.2 features. 8 routes.
+      ✅ All 8 routes completed (2026-06-03)
+      Phase 1 — Feature tests: 063 (light-mode ✅), 064 (@-mention+parallel ✅),
+        065 (bootstrap+observability ✅), 066 (security+accountability ✅)
+      Phase 2 — Smoke+Workflow: 068 (smoke ✅), 069 (e2e workflow ✅),
+        070 (performance ✅)
+      Phase 3 — Infra: 067 (CI runner ✅)
+      Total: 60 assertions, all passing
 
   M1:
     name: ACP Commands Infrastructure
