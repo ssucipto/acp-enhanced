@@ -4,15 +4,27 @@
 
 - date: 2026-06-03
   executor: copilot
-  tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, plan-044, route-047, route-052, route-053, route-054, route-055, route-056, route-057, route-058, route-059]
+  tasks: [audit-018, audit-019, audit-020, audit-021, audit-022, audit-023, audit-024, audit-025, audit-026, audit-027, audit-028, audit-029, plan-044, route-047, route-048, route-052, route-053, route-054, route-055, route-056, route-057, route-058, route-059]
   done:
-    - 9-audits-4-protocol-files-rewritten-24-command-suggestions-2-design-docs
-    - R1-light-mode-two-way-switching-with-recommendations
-    - R2-auto-populate-lessons-from-key-facts-with-dedup
-    - R5-three-copy-architecture-documented
-    - R7-manifest-vs-progress-docs
-    - R3-R4-scaffold-config-and-bootstrap-flag-parsing
-    - R6-skills-at-mention-full-implementation-3-sub-tasks
+    - 12-audits-9-protocol-files-rewritten-2-design-docs
+    - R1-light-mode-R2-auto-lessons-R5-three-copy-R7-manifest-vs-progress
+    - R3-R4-bootstrap-scaffold-flags-with-team-size
+    - R6-skills-at-mention-full-implementation
+    - R9-parallel-tasks-full-implementation
+    - R8-observability-auto-population-on-commit
+    - M44-100-percent-complete-10-routes-implemented
+    - 20-gaps-found-and-fixed
+    - CHANGELOG-updated-README-and-PRD-synced-44-milestones
+    - 3-git-commits
+  deferred:
+    - F-004-dead-acp-core-manifest-sed → low
+  key_fact: |
+    12 audits, 100% M44, 20 gaps fixed in single session. Core insight: only
+    10% of system surface area was used because users didn't know commands
+    existed (→ post-command discoverability) and the context protocol was
+    too heavy (→ light mode). Industry aligned with Anthropic 6 workflows,
+    LangChain Interpreters, CrewAI memory, and LangSmith observability.
+    No reusable code patterns — all work was protocol/documentation hygiene.
     - R9-parallelization-full-implementation-3-sub-tasks
     - 9-M44-routes-implemented-1-deferred
     - M44-64-percent-complete
