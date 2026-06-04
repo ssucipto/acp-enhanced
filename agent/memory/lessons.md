@@ -7,6 +7,20 @@
 #   status: archived     # Archived lessons are skipped by getFilteredLessons()
 #   superseded_by: "constraints.yml:key"  # Reference to what now encodes this knowledge
 
+- date: 2026-06-04
+  scope: cross-cutting
+  task_type: audit
+  lesson: |
+    Version bumps MUST update 8 files: AGENT.md, identity.yml, package.yaml,
+    progress.yaml, CHANGELOG.md, README.md, PRD-MAIN.md, IP_REGISTER.md. No
+    automated consistency check existed — 3 stale files found at 6.8.2 post-M48.
+    Fix: added Step 2c Version Consistency Check to acp.validate.md v2.3.0.
+    Hard requirements (AGENT, identity, package) fail on mismatch. Soft
+    requirements (README, CHANGELOG, PRD, IP_REGISTER) warn. Rule: always
+    run /acp-validate after version bumps.
+  priority: high
+  status: active
+
 - date: 2026-05-09
   task_type: all
   status: archived
