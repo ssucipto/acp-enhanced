@@ -6,7 +6,7 @@ project:
   version: 6.9.0
   started: 2026-02-16
   status: active
-  current_milestone: null
+  current_milestone: M48
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.0 with 47 completed
     milestones. M47 (v6.9.0) delivered memory integrity: commit auto-sync,
@@ -88,6 +88,25 @@ milestones:
       P2 (routes 082-084): dual-store wiki, pattern promotion, command onboarding.
       Post-audit (042): 4 gaps found and fixed — all clean.
       Target: v6.9.0 — Memory Integrity Release. 4 carryovers → M48.
+
+  M48:
+    name: Carryover Resolution & Workflow Hardening (v6.9.1)
+    priority: 4
+    status: planned
+    progress: 0
+    started: null
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 8
+    file: agent/milestones/milestone-48-carryover-resolution-workflow-hardening.md
+    notes: |
+      📋 M48 planned — 8 routes from M47 carryovers + B-066 deferred items.
+      P0 (routes 085-087): E2E tests (commit sync + repair tools + --memory),
+      atomicity in sync operations.
+      P1 (route 088): F-05 registry schema lint.
+      P2 (routes 089-092): audit-first workflow docs, --health check,
+      index bootstrap, carryover query.
+      Target: v6.9.1.
 
   M1:
     name: ACP Commands Infrastructure
@@ -3469,6 +3488,79 @@ tasks:
       estimated_hours: 1-2
       notes: |
         P2: Show phase-appropriate commands on init.
+
+  M48:
+    - id: route-085
+      name: "E2E tests — commit auto-sync document generation"
+      priority: 5
+      status: planned
+      file: agent/routing/tasks/route-085.md
+      estimated_hours: 2-3
+      notes: |
+        P0: Test commit auto-sync produces correct session + pattern docs.
+
+    - id: route-086
+      name: "E2E tests — repair tools and --memory validation"
+      priority: 5
+      status: planned
+      file: agent/routing/tasks/route-086.md
+      estimated_hours: 2-3
+      notes: |
+        P0: Test pattern-sync, session-sync, and --memory validation.
+
+    - id: route-087
+      name: "Atomicity in sync operations — temp-file + atomic rename"
+      priority: 5
+      status: planned
+      file: agent/routing/tasks/route-087.md
+      estimated_hours: 1-2
+      notes: |
+        P0: Add temp-file + atomic rename to prevent partial state.
+
+    - id: route-088
+      name: "Registry schema lint — require date:/name:, warn unquoted colons"
+      priority: 4
+      status: planned
+      file: agent/routing/tasks/route-088.md
+      estimated_hours: 1-2
+      notes: |
+        P1: F-05 schema-level linting for memory registry entries.
+
+    - id: route-089
+      name: "Audit-first workflow documentation in wiki"
+      priority: 3
+      status: planned
+      file: agent/routing/tasks/route-089.md
+      estimated_hours: 0.5-1
+      notes: |
+        P2: Document audit-first pattern (B-066-01).
+
+    - id: route-090
+      name: "/acp-status --health — YAML lint + progress.yaml git drift check"
+      priority: 3
+      status: planned
+      file: agent/routing/tasks/route-090.md
+      estimated_hours: 1-2
+      notes: |
+        P2: Health check for drift detection (B-066-02).
+
+    - id: route-091
+      name: "/acp-index init — bootstrap index from project patterns/commands"
+      priority: 3
+      status: planned
+      file: agent/routing/tasks/route-091.md
+      estimated_hours: 1-2
+      notes: |
+        P2: Auto-discover and bootstrap index (B-066-07).
+
+    - id: route-092
+      name: "Carryover query — CLI search for audit-carryovers.md"
+      priority: 3
+      status: planned
+      file: agent/routing/tasks/route-092.md
+      estimated_hours: 1-2
+      notes: |
+        P2: Search 5000+ line carryovers file (B-066-08).
 
 recent_work:
   - date: 2026-06-04
