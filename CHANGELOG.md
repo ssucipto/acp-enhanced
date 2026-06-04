@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.9.1] — 2026-06-04
+
+### Added (M48 — Carryover Resolution & Workflow Hardening)
+- **E2E tests for commit auto-sync**: `e2e/acp.commit-sync.test.sh` — 6 assertions verifying session/pattern document generation, idempotency, and --no-sync (route-085)
+- **E2E tests for repair tools + --memory**: `e2e/acp.repair-tools.test.sh` — 6 assertions covering --dry-run, --all, session-sync, and bad YAML detection (route-086)
+- **Atomicity in sync operations**: Temp-file + atomic rename pattern in `/acp-commit` steps 2b/3b preventing partial writes (route-087)
+- **Registry schema lint**: `/acp-validate --memory` now warns on missing `date:`/`name:` fields and unquoted colons in scalar values (route-088)
+- **Audit-first workflow wiki**: Documented in `agent/wiki/architecture.md` with pattern steps, when-to-use guidance, and production data (route-089)
+- **`/acp-status --health`**: YAML lint + git drift + uncommitted progress check (route-090)
+- **`/acp-index init`**: Bootstrap index from project patterns, commands, and designs (route-091)
+- **`/acp-carryover-query`**: Search 5000+ line `audit-carryovers.md` by status, severity, audit, or keyword (route-092)
+- **Triple-file parity**: `.github/prompts/` and `.opencode/` wrappers for carryover-query
+
+### Changed
+- `/acp-status` version bumped to 1.1.0
+- `/acp-index` updated with `init` subcommand
+
+### Fixed
+- All 8 carryover items from M47 audit-041/042 resolved
+- 3 pending carryovers marked in-progress with M48 route references
+- GAP-041-06 (CHANGELOG) marked fixed
+
+### Source
+- M47 carryovers: GAP-041-04, GAP-041-07, GAP-041-08
+- consumer-project feedback-002: B-066-01, B-066-02, B-066-07, B-066-08
+
+---
+
 ## [6.9.0] — 2026-06-04
 
 ### Added (M47 — Memory Integrity Release)
