@@ -1,12 +1,14 @@
 # ACP Enhanced — Product Requirements Document
-**Version:** 2.0 FINAL (Implemented)
-**Date:** 2026-05-01 (updated 2026-06-03)
+**Version:** 2.1 FINAL (Implemented)
+**Date:** 2026-05-01 (updated 2026-06-04)
 **Author:** Project Owner
-**Status:** ✅ Implemented — 45 milestones complete as of v6.8.2 (M1–M45, June 2026)
+**Status:** ✅ Implemented — 48 milestones complete as of v6.9.1 (M1–M48, June 2026)
 **Forked from:** prmichaelsen/agent-context-protocol
 
-> **Note (2026-06-03):** This PRD describes the original vision for ACP Enhanced as of May 2026.
-> All 45 milestones (M1–M45) have been completed. The implementation matches the architecture
+> **Note (2026-06-04):** This PRD describes the original vision for ACP Enhanced as of May 2026.
+> All 48 milestones (M1–M48) have been completed. M47 (v6.9.0) delivered memory integrity
+> with commit-integrated document auto-sync. M48 (v6.9.1) resolved all carryovers with
+> E2E tests, atomicity guarantees, and workflow tooling. The implementation matches the architecture
 > described below with some naming differences: `/acp-` prefix (not `@acp-`), skills are
 > domain-specific (commands, scripts, schemas, testing, typescript, crosscut, upstream-sync),
 > and the directory layout uses `agent/routing/tasks/` (not `agent/tasks/`). See README.md
