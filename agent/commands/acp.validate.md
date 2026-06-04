@@ -5,7 +5,7 @@
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document.
 
 **Namespace**: acp  
-**Version**: 2.2.0  
+**Version**: 2.3.0  
 **Created**: 2026-02-16  
 **Last Updated**: 2026-06-04  
 **Status**: Active  
@@ -131,6 +131,46 @@ format) by adding raw YAML syntax checking.
 Schema warnings are informational and do not affect exit code.
 
 **Expected Outcome**: Memory files are valid YAML; syntax errors reported with line numbers  
+
+### 2c. Validate Version Consistency (v6.9.1+)
+
+> **This step runs in ALL modes** (standard and --memory). Version drift across
+> 8+ files is a recurring bug — this check prevents it.
+
+Compare the canonical version in `agent/progress.yaml` against all other version-bearing files.
+
+**Actions**:
+
+1. **Read canonical version**: Extract `project.version` from `agent/progress.yaml`.
+2. **Check hard requirements** (ERROR if mismatch):
+   - `AGENT.md` → `**Version**: X.Y.Z` on the metadata line
+   - `agent/core/identity.yml` → `version: X.Y.Z`
+   - `package.yaml` → `version: X.Y.Z` (if file exists)
+3. **Check soft requirements** (WARN if mismatch):
+   - `README.md` → version badge in shields.io URL
+   - `CHANGELOG.md` → latest `## [X.Y.Z]` entry
+   - `scripts/PRD-MAIN.md` → `**Version:** X.Y`
+   - `IP_REGISTER.md` → `**Current Version** | X.Y.Z` (if file exists)
+4. **Report**:
+
+```
+🔍 Version Consistency (canonical: X.Y.Z from progress.yaml):
+
+  Hard requirements:
+    ✅ AGENT.md: X.Y.Z
+    ✅ identity.yml: X.Y.Z
+    ✅ package.yaml: X.Y.Z
+
+  Soft requirements:
+    ✅ README.md: X.Y.Z
+    ✅ CHANGELOG.md: X.Y.Z
+    ⚠️ PRD-MAIN.md: X.Y.W → expected X.Y.Z
+    ⚠️ IP_REGISTER.md: A.B.C → expected X.Y.Z
+```
+
+5. **Exit code**: Hard mismatches fail (exit 1). Soft mismatches warn only.
+
+**Expected Outcome**: All version-bearing files consistent; drift reported with expected value  
 
 ### 3. Validate Design Documents
 
