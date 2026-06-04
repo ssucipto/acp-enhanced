@@ -1,9 +1,9 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.8.2-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.9.1-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
-[![Milestones](https://img.shields.io/badge/milestones-46%2F46%20complete-brightgreen)](https://github.com/ssucipto/acp-enhanced)
-[![Commands](https://img.shields.io/badge/commands-64%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
+[![Milestones](https://img.shields.io/badge/milestones-48%2F48%20complete-brightgreen)](https://github.com/ssucipto/acp-enhanced)
+[![Commands](https://img.shields.io/badge/commands-67%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Visualizer](https://img.shields.io/badge/visualizer-v1.5.0-6e47ff)](https://github.com/ssucipto/ACPEnhanced-Visual)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Fork](https://img.shields.io/badge/fork%20of-prmichaelsen%2Facp-orange)](https://github.com/prmichaelsen/agent-context-protocol)
@@ -266,9 +266,26 @@ The ACP command and workflow system (clarifications → design → plan → proc
 
 > **Note**: The upstream [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol) continues to evolve independently. This comparison reflects our fork point. The upstream now has its own extended features (v7.x+) and the two implementations have diverged. Check the upstream README for its current capabilities.
 
-### Recent Protocol Enhancements (v6.4–v6.8.2)
+### Recent Protocol Enhancements (v6.4–v6.9.1)
 
-Six milestones shipped in May–June 2026 added significant protocol improvements on top of the base memory system:
+Eight milestones shipped in May–June 2026:
+
+#### M47 — Memory Integrity Release (v6.9.0, June 2026)
+Addressed feedback from consumer-project production usage (64 audits, 14 milestones, 36 patterns). Core deliverable: dual-store architecture with commit-integrated auto-sync.
+
+- **Commit auto-sync** — `/acp-commit` steps 2b/3b/6b auto-generate `agent/sessions/*.md` and `agent/patterns/*.md` from registries on every commit. Idempotent, `--no-sync` opt-out.
+- **Repair tools** — `/acp-pattern-sync` and `/acp-session-sync` for manual reconciliation with `--dry-run` and `--all`.
+- **Memory YAML validation** — `/acp-validate --memory` YAML-lints registries with line numbers.
+- **Version update guard** — `--diff`, `--preserve-project-core`, `--force` flags.
+- **Schema alignment** — `tasks:` → `tasks_completed:` across commit and validate.
+
+#### M48 — Carryover Resolution & Workflow Hardening (v6.9.1, June 2026)
+Resolved all M47 carryovers and deferred B-066 workflow findings.
+
+- **E2E tests** — 12 assertions for commit auto-sync and repair tools.
+- **Atomicity** — Temp-file + atomic rename in sync operations.
+- **Schema lint** — Registry field validation (date:/name: required, unquoted colon warnings).
+- **Workflow tooling** — `/acp-status --health`, `/acp-index init`, `/acp-carryover-query`, audit-first workflow wiki.
 
 #### M44 — Feedback-Driven Improvements (v6.8.2, June 2026)
 Cross-referenced 4 weeks of production feedback (consumer-project: 34 milestones, 54 audits, 14 sessions). Key finding: only 10% of system surface area sees active use. 9 recommendations (R1–R9) implemented.
