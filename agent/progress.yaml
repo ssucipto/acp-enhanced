@@ -10,7 +10,7 @@ project:
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.1 with 48 completed
     milestones. M48 (v6.9.1) delivered carryover resolution: E2E tests,
-    atomicity, schema lint, and workflow tooling.
+    atomicity, schema lint, and workflow tooling. 12 E2E assertions passing.
 
 milestones:
   M44:
@@ -101,6 +101,12 @@ milestones:
     file: agent/milestones/milestone-48-carryover-resolution-workflow-hardening.md
     notes: |
       🎉 M48 COMPLETE! 9 routes, all done (2026-06-04).
+      P0 (routes 085-087): E2E tests (12 assertions passing), atomicity.
+      P1 (route 088): Registry schema lint.
+      P2 (routes 089-093): audit-first wiki, --health, index init,
+      carryover query, version bump + CHANGELOG.
+      Post-audit (044): 3 gaps found and fixed — all clean.
+      All 8 M47 carryovers resolved. All 4 B-066 findings addressed.
       P0 (routes 085-087): E2E tests (commit sync + repair tools + --memory),
       atomicity in sync operations.
       P1 (route 088): F-05 registry schema lint.
@@ -3882,6 +3888,20 @@ tasks:
 recent_work:
   - date: 2026-06-04
     description: |
+      🎉 M48 COMPLETE: Carryover Resolution & Workflow Hardening (v6.9.1).
+      9 routes, 1 commit, 12 E2E assertions passing. All M47 carryovers resolved.
+    items:
+      - "✅ P0: E2E tests — commit auto-sync (6 assertions) + repair tools (6 assertions)"
+      - "✅ P0: Atomicity via temp-file + atomic rename in sync operations"
+      - "✅ P1: Registry schema lint (date:/name: required, unquoted colons)"
+      - "✅ P2: Audit-first workflow wiki, /acp-status --health, /acp-index init"
+      - "✅ P2: /acp-carryover-query — search 5000+ line carryovers file"
+      - "✅ P2: Version bump 6.9.0→6.9.1 + CHANGELOG entry"
+      - "✅ Audit-043: pre-impl readiness (8 findings, 6 fixed before start)"
+      - "✅ Audit-044: post-impl review (3 gaps, all fixed)"
+
+  - date: 2026-06-04
+    description: |
       🎉 M47 COMPLETE: Memory Integrity & Feedback-Driven Improvements (v6.9.0).
       11 routes, 5 git commits, 1 autonomous session. All consumer-project feedback addressed.
     items:
@@ -5853,16 +5873,17 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "📋 Plan M48 for 4 carryover items (E2E tests, atomicity, F-05 schema lint, CHANGELOG)"
-  - "📋 Push 5 M47 commits to remote"
-  - "📋 Run /acp-validate --memory to test new YAML linting"
-  - "📋 Update CHANGELOG.md for v6.9.0 release"
+  - "📋 Push remaining commits to remote"
+  - "📋 Run /acp-validate --memory to verify YAML integrity"
   - "📋 Refresh artifact Last Verified dates"
+  - "📋 Run /acp-carryover-query --pending to verify all resolved"
+  - "📋 Consider M49 for remaining deferred items if any"
 
 notes:
-  - 47 milestones complete (M1–M47, 100%), v6.9.0 (2026-06-04)
-  - 66 command docs (2 new: pattern-sync, session-sync)
-  - 42 audit reports in agent/reports/ (audit-001 through audit-042)
+  - 48 milestones complete (M1–M48, 100%), v6.9.1 (2026-06-04)
+  - 67 command docs (3 new: pattern-sync, session-sync, carryover-query)
+  - 43 audit reports in agent/reports/ (audit-001 through audit-044)
+  - 18 E2E test files (2 new: commit-sync, repair-tools — 12 assertions)
   - Install system: 4-audit hardened (036-039), 26 findings fixed
   - Bootstrap: safe, idempotent, with pre-flight checks and cleanup
   - Update: F-004 dead sed fixed, pre-installation checks added
