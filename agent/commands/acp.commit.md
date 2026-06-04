@@ -101,6 +101,11 @@ Prepend a YAML entry to `agent/memory/sessions.md`:
 ### 2b. Auto-Sync Session Document (NEW — v1.3.0)
 
 > **Skip this step if `--no-sync` was passed.**
+>
+> **Atomicity (v6.9.1+)**: Write to a temporary file first, then atomically rename.
+> Pattern: write → `.tmp.{date}-{slug}.md` → `mv` → `{date}-{slug}.md`.
+> On failure, `.tmp` files are cleaned up on next sync run. Prevents partial writes
+> from leaving corrupted documents visible to agents or the visualizer.
 
 After writing the session entry to `agent/memory/sessions.md` (Step 2), auto-generate
 the corresponding markdown document in `agent/sessions/`:
@@ -153,6 +158,8 @@ the corresponding markdown document in `agent/sessions/`:
 ### 3b. Auto-Sync Pattern Document (NEW — v1.3.0)
 
 > **Skip this step if `--no-sync` was passed.**
+>
+> **Atomicity (v6.9.1+)**: Same temp-file + atomic rename pattern as Step 2b.
 
 After appending to `agent/memory/patterns.md` (Step 3), auto-generate or update
 the corresponding markdown document in `agent/patterns/`:
