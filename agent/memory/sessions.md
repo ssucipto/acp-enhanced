@@ -4,31 +4,28 @@
 
 - date: 2026-06-04
   executor: copilot
-  tasks_completed: [plan-047, audit-041, route-074, route-075, route-076, route-077, route-078, route-079, route-080, route-081, route-082, route-083, route-084, audit-042, plan-048, audit-043, route-085, route-086, route-087, route-088, route-089, route-090, route-091, route-092, route-093, audit-044, acp-update, acp-sync, git-commit]
+  tasks_completed: [plan-047, audit-041, route-074, route-075, route-076, route-077, route-078, route-079, route-080, route-081, route-082, route-083, route-084, audit-042, plan-048, audit-043, route-085, route-086, route-087, route-088, route-089, route-090, route-091, route-092, route-093, audit-044, acp-update, acp-sync, git-commit, version-audit, validate-v2.3.0-version-consistency]
   done:
     - m47-m48-dual-milestone-full-lifecycle-v6-9-0-to-v6-9-1
-    - m47-memory-integrity-11-routes-plan-audit-implement
-    - m48-carryover-resolution-9-routes-plan-audit-implement
-    - 20-routes-total-5-audits-12-e2e-assertions
+    - 20-routes-5-audits-12-e2e-assertions
     - feedback-001-002-fully-addressed-16-of-20-findings
-    - 8-carryovers-all-resolved-4-b066-findings-addressed
-    - 12-git-commits-all-pushed-to-mainline
-    - readme-prd-synced-v6-9-1-48-milestones
+    - 8-carryovers-resolved-4-b066-findings-addressed
+    - readme-prd-agent-md-ip-register-all-synced
+    - 4-stale-version-files-found-and-fixed
+    - validate-v2-3-0-step-2c-version-consistency-check
+    - lesson-logged-version-drift-prevention-priority-high
+    - 16-git-commits-all-pushed-to-mainline
   deferred: []
   key_fact: |
-    Two full milestones (M47 + M48) delivered end-to-end in a single session using
-    the complete ACP workflow: /acp-plan → /acp-audit (pre-impl) → /acp-proceed
-    --complete --yes → /acp-audit (post-impl) → /acp-update → /acp-sync → /acp-commit.
-    M47 (v6.9.0): Memory integrity — commit-integrated document auto-sync bridging
-    the dual-store gap that made consumer-project's 36 patterns and 14 sessions invisible.
-    M48 (v6.9.1): Carryover resolution — E2E tests (12 assertions), atomicity,
-    schema lint, workflow tooling (--health, index init, carryover query). Total:
-    20 routes, 5 audits (041-044), 12 git commits. All 16 feedback findings from
-    consumer-project feedback-001/002 addressed. Industry alignment: dual-store = Git/DB
-    checkpointing, atomic rename = standard practice, audit-first = CI/CD pattern.
-    Key lesson: the full ACP workflow (plan→audit→proceed→audit→update→sync→commit)
-    catches gaps at every stage — 10 pre-impl findings, 4 post-impl M47 gaps,
-    8 pre-impl M48 gaps, 3 post-impl M48 gaps — all fixed before final commit.
+    Two full milestones (M47 + M48, v6.8.2→v6.9.1) delivered in a single session:
+    20 routes, 5 audits, 12 E2E assertions, 16 git commits. Post-session audit
+    found 3 stale version files still at 6.8.2 (AGENT.md, identity.yml, package.yaml)
+    — root cause was 8 version-bearing files with zero automated consistency checking.
+    Permanent fix: /acp-validate v2.3.0 Step 2c checks all 8 files against the
+    canonical version in progress.yaml (hard fail on AGENT/identity/package mismatch,
+    warn on README/CHANGELOG/PRD/IP_REGISTER). Lesson: always run /acp-validate
+    after version bumps. The full ACP workflow (plan→audit→proceed→audit→update→
+    sync→commit) caught 25+ gaps across 4 audit rounds — all fixed before final commit.
 
 - date: 2026-06-03
   executor: copilot
