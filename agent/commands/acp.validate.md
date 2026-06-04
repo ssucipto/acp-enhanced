@@ -113,10 +113,19 @@ format) by adding raw YAML syntax checking.
    - Check for unquoted colons in `notes:` and `key_fact:` values
    - Report line numbers for syntax errors
 
-4. **Schema checks** (optional, non-blocking warnings):
-   - Verify each pattern entry has required fields: `date:`, `name:`
-   - Verify each session entry has `date:` or `type:` field
-   - Warn on unquoted colons in scalar values
+4. **Schema checks** (v6.9.1+ — warnings, do not affect exit code):
+   - **Patterns**: Each entry MUST have `date:` and `name:` fields.
+     Warn if missing. Warn on unquoted colons in `description:` values.
+   - **Sessions**: Each entry MUST have `date:` or `type:` field.
+     Warn if neither present. Warn on unquoted colons in `key_fact:` values.
+   - **Progress**: Warn on unquoted colons in `notes:` values.
+   
+   Output format:
+   ```
+   ⚠️ agent/memory/patterns.md: entry 5 missing required field 'name:'
+   ⚠️ agent/memory/patterns.md: line 120 unquoted colon in 'description:'
+   ⚠️ agent/memory/sessions.md: entry 3 has neither 'date:' nor 'type:'
+   ```
 
 **Exit code**: 1 if any YAML parse fails; 0 if all parse successfully.
 Schema warnings are informational and do not affect exit code.
