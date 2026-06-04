@@ -78,6 +78,9 @@ Read `agent/memory/patterns.md` and parse all YAML entries.
 
 ### 3. Sync Pattern Documents
 
+> **Atomicity (v6.9.1+)**: Write to `.tmp.{name}.md` first, then atomically rename
+> to `{name}.md`. Prevents partial writes from leaving corrupted documents.
+
 For each pattern in scope:
 
 1. **Determine filename**: `agent/patterns/{name}.md` where `{name}` is the `name:` field
