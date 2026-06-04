@@ -31,6 +31,7 @@ This command supports both CLI-style subcommands and natural language arguments.
 | `add <path>` | Add a file to `agent/index/local.main.yaml` |
 | `remove <path>` | Remove a file from `agent/index/local.main.yaml` |
 | `explore` | Scan codebase and suggest key files to add |
+| `init` | Bootstrap index from project patterns, commands, and designs (v6.9.1+) |
 | `show` | Show full metadata for all entries |
 
 ### Natural Language (Fuzzy Matching)
@@ -49,6 +50,20 @@ This command supports both CLI-style subcommands and natural language arguments.
 - If a path is provided after `add`/`remove`, use it directly
 - If a description is given instead of path (e.g., "the testing pattern"), search the codebase for matching files
 - Default to `list` if no subcommand detected
+
+### init — Bootstrap Index (v6.9.1+)
+
+**Purpose**: Auto-discover project patterns, commands, and designs and generate a
+`local.main.yaml` index file.
+
+**Arguments**: `--dry-run` to preview without writing.
+
+**Actions**:
+1. Scan `agent/patterns/` for `local.*.md` files → index entries with `kind: pattern`
+2. Scan `agent/commands/` for `local.*.md` files → index entries with `kind: command`
+3. Scan `agent/design/` for `local.*.md` files → index entries with `kind: design`
+4. Write `agent/index/local.main.yaml` with discovered entries
+5. Output: `Index bootstrapped: N patterns, M commands, K designs`
 
 ---
 

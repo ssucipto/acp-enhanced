@@ -3,17 +3,25 @@
 > **🤖 Agent Directive**: If you are reading this file, the command `/acp-status` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-02-16  
-**Last Updated**: 2026-02-16  
+**Last Updated**: 2026-06-04  
 **Status**: Active  
 **Scripts**: None  
 
 ---
 
-**Purpose**: Display current project status including milestone progress, current task, recent work, and next steps  
+**Purpose**: Display current project status including milestone progress, current task, recent work, and next steps. With `--health`: run YAML validation and git drift checks.  
 **Category**: Workflow  
 **Frequency**: As Needed  
+
+---
+
+## Arguments
+
+| Flag | Description |
+|------|-------------|
+| `--health` | Run health checks: YAML lint memory files, check progress-vs-git drift |
 
 ---
 
@@ -298,11 +306,36 @@ No status changes - read-only operation
 
 ---
 
+## Health Check (--health flag only, v6.9.1+)
+
+> **This section runs ONLY when `--health` is passed.**
+
+Run diagnostic checks on project health:
+
+1. **YAML lint**: Run equivalent of `/acp-validate --memory` on `agent/memory/patterns.md`,
+   `agent/memory/sessions.md`, and `agent/progress.yaml`. Report pass/fail with line numbers.
+
+2. **Git drift check**: Compare `agent/progress.yaml` task completion dates against
+   `git log`. If tasks are marked `completed` but no corresponding commit exists within
+   24 hours, flag as potential drift.
+
+3. **Uncommitted progress**: If `agent/progress.yaml` has uncommitted changes, warn.
+
+**Output**:
+```
+🏥 Health Check:
+  YAML: ✅ All memory files valid
+  Git drift: ⚠️ route-085 marked completed but no commit found
+  Progress: ⚠️ progress.yaml has uncommitted changes — run /acp-commit
+```
+
+---
+
 **Namespace**: acp  
 **Command**: status  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-02-16  
-**Last Updated**: 2026-02-16  
+**Last Updated**: 2026-06-04  
 **Status**: Active  
-**Compatibility**: ACP 1.0.3+  
+**Compatibility**: ACP 6.9.0+  
 **Author**: ACP Project  
