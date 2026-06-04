@@ -3888,6 +3888,19 @@ tasks:
 recent_work:
   - date: 2026-06-04
     description: |
+      🔧 Post-session cleanup: version consistency sweep + prevention.
+      3 stale version files fixed, automated check added to /acp-validate.
+    items:
+      - "🔧 AGENT.md: 6.8.2 → 6.9.1 (Cursor Composer source)"
+      - "🔧 identity.yml: 6.8.2 → 6.9.1 (ACP agent source)"
+      - "🔧 package.yaml: 6.8.2 → 6.9.1 (package distribution)"
+      - "🔧 IP_REGISTER.md: 6.8.1 → 6.9.1 (legal register)"
+      - "✅ /acp-validate v2.3.0: Step 2c Version Consistency Check"
+      - "✅ lessons.md: version drift prevention logged (priority: high)"
+      - "📋 Rule: run /acp-validate after every version bump"
+
+  - date: 2026-06-04
+    description: |
       🎉 M48 COMPLETE: Carryover Resolution & Workflow Hardening (v6.9.1).
       9 routes, 1 commit, 12 E2E assertions passing. All M47 carryovers resolved.
     items:
@@ -5890,7 +5903,7 @@ notes:
   - README: visualizer v1.5.0 featured prominently
   - run-e2e-tests.sh: --parallel flag, --help, argument validation
   - CI: e2e-tests.yaml uses --parallel 4
-  - M47: commit auto-sync (2b/3b/6b), repair tools, --memory validation
+  - /acp-validate v2.3.0: Step 2c version consistency check added (prevents stale version drift)
 
 current_blockers: []
 
