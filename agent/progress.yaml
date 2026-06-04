@@ -3,15 +3,14 @@
 
 project:
   name: agent-context-protocol
-  version: 6.9.0
+  version: 6.9.1
   started: 2026-02-16
   status: active
   current_milestone: M48
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.0 with 47 completed
-    milestones. M47 (v6.9.0) delivered memory integrity: commit auto-sync,
-    repair tools, YAML validation, and dual-store architecture. Companion
-    visualizer at v1.5.0. 42 audit reports, 16 unit tests (71 assertions).
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.1 with 48 completed
+    milestones. M48 (v6.9.1) delivered carryover resolution: E2E tests,
+    atomicity, schema lint, and workflow tooling.
 
 milestones:
   M44:
@@ -92,15 +91,16 @@ milestones:
   M48:
     name: Carryover Resolution & Workflow Hardening (v6.9.1)
     priority: 4
-    status: planned
-    progress: 0
-    started: null
+    status: completed
+    progress: 100
+    started: 2026-06-04
+    completed: 2026-06-04
     estimated_weeks: 1
-    tasks_completed: 0
+    tasks_completed: 9
     tasks_total: 9
     file: agent/milestones/milestone-48-carryover-resolution-workflow-hardening.md
     notes: |
-      📋 M48 planned — 8 routes from M47 carryovers + B-066 deferred items.
+      🎉 M48 COMPLETE! 9 routes, all done (2026-06-04).
       P0 (routes 085-087): E2E tests (commit sync + repair tools + --memory),
       atomicity in sync operations.
       P1 (route 088): F-05 registry schema lint.
@@ -983,7 +983,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/task-51-pattern-reading-in-commands.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-05-01T00:30:00Z
       actual_hours: 0.5
       notes: |
@@ -1034,7 +1036,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-5-manifest-system.md
-      estimated_hours: 6-8
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 8
       completed_date: 2026-02-18
       notes: |
         ✅ Manifest system foundation complete!
@@ -1049,7 +1053,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-6-selective-installation.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       completed_date: 2026-02-18
       notes: |
         ✅ Selective installation complete!
@@ -1064,7 +1070,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-7-update-system.md
-      estimated_hours: 5-7
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 7
       completed_date: 2026-02-18
       notes: |
         ✅ Update system complete!
@@ -1081,7 +1089,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-8-package-list-command.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-02-18
       notes: |
         ✅ Package list command complete!
@@ -1097,7 +1107,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-9-package-remove-command.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-02-18
       notes: |
         ✅ Package remove command complete!
@@ -1113,7 +1125,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-10-package-info-command.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-02-18
       notes: |
         ✅ Package info command complete!
@@ -1129,7 +1143,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-11-package-search-command.md
-      estimated_hours: 6-8
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 8
       completed_date: 2026-02-18
       notes: |
         ✅ Package search command complete!
@@ -1145,7 +1161,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-12-dependency-checking.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-02-18
       notes: |
         ✅ Dependency checking complete!
@@ -1166,7 +1184,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-13-pure-bash-yaml-parser.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       completed_date: 2026-02-18
       notes: |
         ✅ YAML parser already implemented!
@@ -1181,7 +1201,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-65-script-command-binding.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       actual_hours: 0.5
       completed_date: 2026-02-24
       notes: |
@@ -1196,7 +1218,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-66-script-installation-logic.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 1
       completed_date: 2026-02-24
       notes: |
@@ -1213,7 +1237,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-67-script-validation-logic.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       actual_hours: 0.5
       completed_date: 2026-02-24
       notes: |
@@ -1230,7 +1256,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-68-update-existing-commands.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 1
       completed_date: 2026-02-24
       notes: |
@@ -1251,7 +1279,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-69-script-testing-documentation.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 4
       completed_date: 2026-02-25
       notes: |
@@ -1272,7 +1302,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-70-optimize-package-install-performance.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 1
       completed_date: 2026-02-26
       notes: |
@@ -1305,7 +1337,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-14-yaml-schema-system.md
-      estimated_hours: 6-8
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 8
       completed_date: 2026-02-20
       notes: |
         ✅ YAML Schema System complete!
@@ -1323,7 +1357,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-15-namespace-utilities.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-02-20
       notes: |
         ✅ Namespace utilities complete!
@@ -1340,7 +1376,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-16-readme-update-utilities.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-02-20
       notes: |
         ✅ README update utilities complete!
@@ -1358,7 +1396,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:30:00Z
       file: agent/tasks/task-17-pattern-create-command.md
-      estimated_hours: 6-8
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 8
       completed_date: 2026-05-01T00:45:00Z
       actual_hours: 0.2
       notes: |
@@ -1373,7 +1413,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-18-command-create-command.md
-      estimated_hours: 5-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       completed_date: 2026-02-21
       notes: |
         ✅ @acp.command-create complete!
@@ -1388,7 +1430,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-19-design-create-command.md
-      estimated_hours: 4-5
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 5
       completed_date: 2026-02-21
       notes: |
         ✅ @acp.design-create complete!
@@ -1402,7 +1446,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-20-package-validate-command.md
-      estimated_hours: 7-9
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 9
       completed_date: 2026-02-21
       notes: |
         ✅ @acp.package-validate complete!
@@ -1420,7 +1466,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-21-enhanced-acp-validate.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-02-21
       notes: |
         ✅ Enhanced @acp.validate complete!
@@ -1440,7 +1488,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-22-package-publish-command.md
-      estimated_hours: 8-10
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 10
       completed_date: 2026-02-21
       notes: |
         ✅ @acp.package-publish complete!
@@ -1470,7 +1520,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-23-package-create-rewrite.md
-      estimated_hours: 6-8
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 8
       completed_date: 2026-02-21
       notes: |
         ✅ @acp.package-create v2.0.0 complete!
@@ -1499,7 +1551,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-24-precommit-hook-system.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-02-21
       notes: |
         ✅ Pre-commit hook system complete!
@@ -1518,7 +1572,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-25-global-infrastructure.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-02-22
       notes: |
         ✅ Global infrastructure complete!
@@ -1541,7 +1597,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-26-global-installation.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-02-22
       notes: |
         ✅ Global installation complete!
@@ -1559,7 +1617,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-27-global-package-commands.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-02-22
       notes: |
         ✅ Global package commands complete!
@@ -1580,7 +1640,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-28-global-documentation.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       completed_date: 2026-02-22
       notes: |
         ✅ Documentation complete!
@@ -1599,7 +1661,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-29-global-acp-auto-initialization.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       completed_date: 2026-02-22
       notes: |
         ✅ Auto-initialization complete!
@@ -1620,7 +1684,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-45-package-script-bundling.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-02-22
       notes: |
         ✅ Package script bundling complete!
@@ -1639,7 +1705,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-49-acp-project-create-command.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       actual_hours: 1
       completed_date: 2026-02-22
       notes: |
@@ -1664,7 +1732,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-37-preference-loading-infrastructure.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       actual_hours: 1
       completed_date: 2026-05-01
       notes: |
@@ -1677,7 +1747,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-38-configurables-system-enhancement.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       actual_hours: 0.5
       completed_date: 2026-05-01
       notes: |
@@ -1690,7 +1762,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-39-command-integration-acp-plan.md
-      estimated_hours: 4-5
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 5
       actual_hours: 0.5
       completed_date: 2026-05-01
       notes: |
@@ -1703,7 +1777,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-40-preference-management-commands.md
-      estimated_hours: 8-10
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 10
       actual_hours: 0.5
       completed_date: 2026-05-01
       notes: |
@@ -1719,7 +1795,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-41-package-preference-support.md
-      estimated_hours: 4-5
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 5
       completed_date: 2026-05-01
       notes: |
         Enable packages to define configurables and provide presets.
@@ -1732,7 +1810,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-42-preset-configuration-system.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-05-01
       notes: |
         Implemented --preset flag: load_preset, get_preference_with_preset, list_presets
@@ -1745,7 +1825,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-43-preferences-testing-suite.md
-      estimated_hours: 6-8
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 8
       completed_date: 2026-05-01
       notes: |
         Created 3 new test files + 3 fixture files.
@@ -1760,7 +1842,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-44-preferences-documentation.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-05-01
       notes: |
         Updated AGENT.md (Preferences System section + dir structure).
@@ -1774,7 +1858,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-7-project-registry/task-52-registry-infrastructure.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: null
       completed_date: 2026-02-23
       notes: |
@@ -1791,7 +1877,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-7-project-registry/task-53-project-list.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 0.5
       completed_date: 2026-02-23
       notes: |
@@ -1809,7 +1897,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-7-project-registry/task-54-project-set.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 1.5
       completed_date: 2026-02-24
       notes: |
@@ -1835,7 +1925,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-7-project-registry/task-55-project-info.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       actual_hours: 0.5
       completed_date: 2026-02-25
       notes: |
@@ -1856,7 +1948,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-7-project-registry/task-56-project-update.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       actual_hours: 1
       completed_date: 2026-02-25
       notes: |
@@ -1878,7 +1972,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-7-project-registry/task-57-project-remove.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       actual_hours: 1
       completed_date: 2026-02-26
       notes: |
@@ -1901,7 +1997,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-7-project-registry/task-58-projects-sync.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 1.5
       completed_date: 2026-02-26
       notes: |
@@ -1924,7 +2022,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-7-project-registry/task-70-fix-yaml-array-operations.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 1.5
       completed_date: 2026-02-26
       notes: |
@@ -1941,7 +2041,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-7-project-registry/task-59-integration-testing.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       actual_hours: 2
       completed_date: 2026-02-26
       notes: |
@@ -1959,7 +2061,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-7-project-registry/task-60-documentation.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 0.5
       completed_date: 2026-02-26
       notes: |
@@ -1976,7 +2080,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-8-experimental-features/task-61-schema-validation.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 1
       completed_date: 2026-02-23
       notes: |
@@ -1992,7 +2098,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-8-experimental-features/task-62-installation-filtering.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       actual_hours: 1.5
       completed_date: 2026-02-23
       notes: |
@@ -2012,7 +2120,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-8-experimental-features/task-63-update-handling.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 1
       completed_date: 2026-02-23
       notes: |
@@ -2031,7 +2141,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-8-experimental-features/task-64-documentation.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       actual_hours: 1
       completed_date: 2026-02-23
       notes: |
@@ -2053,7 +2165,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-9-template-source-files/task-71-schema-extension.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-02-28
       notes: |
         ✅ Schema extension for template files complete!
@@ -2069,7 +2183,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-9-template-source-files/task-72-installation-system.md
-      estimated_hours: 6-8
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 8
       completed_date: 2026-02-28
       notes: |
         ✅ Template Installation System complete!
@@ -2089,7 +2205,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-9-template-source-files/task-73-manifest-tracking.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-02-28
       notes: |
         ✅ Manifest Tracking for Templates complete!
@@ -2108,7 +2226,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-9-template-source-files/task-74-command-updates.md
-      estimated_hours: 4-5
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 5
       completed_date: 2026-02-28
       notes: |
         ✅ Command Updates for Templates complete!
@@ -2124,7 +2244,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-9-template-source-files/task-75-testing-suite.md
-      estimated_hours: 6-8
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 8
       completed_date: 2026-02-28
       notes: |
         ✅ Testing Suite for Templates complete!
@@ -2141,7 +2263,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-9-template-source-files/task-76-documentation.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-02-28
       notes: |
         ✅ Documentation for Templates complete!
@@ -2156,7 +2280,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-9-template-source-files/task-77-support-agent-files-directory.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       completed_date: 2026-02-27
       notes: |
         ✅ Add agent/files/ to INSTALL_DIRS, fix manifest file tracking, warn on unrecognized dirs.
@@ -2168,7 +2294,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-10-command-enhancements/task-78-proceed-autonomous-completion.md
-      estimated_hours: 8-12
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 12
       actual_hours: 0.5
       completed_date: 2026-02-28
       notes: |
@@ -2192,7 +2320,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-79-runner-multi-turn-metrics.md
-      estimated_hours: 6-8
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 8
       actual_hours: 1.5
       completed_date: 2026-02-28
       notes: |
@@ -2205,7 +2335,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-80-simple-cli-tool-benchmark.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       actual_hours: 0.5
       completed_date: 2026-02-28
       notes: |
@@ -2217,7 +2349,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-81-medium-rest-api-benchmark.md
-      estimated_hours: 4-5
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 5
       actual_hours: 0.5
       completed_date: 2026-02-28
       notes: |
@@ -2229,7 +2363,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-82-complex-auth-system-benchmark.md
-      estimated_hours: 5-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       actual_hours: 0.5
       completed_date: 2026-02-28
       notes: |
@@ -2241,7 +2377,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-83-llm-evaluator.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       actual_hours: 0.5
       completed_date: 2026-02-28
       notes: |
@@ -2254,7 +2392,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-84-report-dashboard-enhancement.md
-      estimated_hours: 4-5
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 5
       actual_hours: 0.5
       completed_date: 2026-02-28
       notes: |
@@ -2266,7 +2406,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-85-github-actions-workflow.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 0.3
       completed_date: 2026-03-01
       notes: |
@@ -2279,7 +2421,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-86-documentation-historical-tracking.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       actual_hours: 0.3
       completed_date: 2026-03-01
       notes: |
@@ -2291,7 +2435,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-87-legacy-refactor-benchmark.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       actual_hours: 0.5
       completed_date: 2026-03-01
       notes: |
@@ -2304,7 +2450,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-88-order-pipeline-benchmark.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       actual_hours: 0.5
       completed_date: 2026-03-01
       notes: |
@@ -2317,7 +2465,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-89-enterprise-task-manager-benchmark.md
-      estimated_hours: 8-12
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 12
       actual_hours: 0.5
       completed_date: 2026-03-01
       notes: |
@@ -2331,7 +2481,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-90-acp-initialized-project-benchmark.md
-      estimated_hours: 8-12
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 12
       actual_hours: 0.5
       completed_date: 2026-03-01
       notes: |
@@ -2347,7 +2499,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-11-benchmark-suite/task-95-deliverables-verification-gate.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       actual_hours: 0.3
       completed_date: 2026-03-01
       notes: |
@@ -2364,7 +2518,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-12-sessions-system/task-91-sessions-infrastructure.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       completed_date: 2026-03-01
       notes: |
         ✅ Sessions infrastructure complete
@@ -2380,7 +2536,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-12-sessions-system/task-92-sessions-init-integration.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       completed_date: 2026-03-01
       notes: |
         ✅ Directive-level integration complete
@@ -2395,7 +2553,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-12-sessions-system/task-93-sessions-command.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-03-01
       notes: |
         ✅ @acp.sessions command complete
@@ -2411,7 +2571,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-12-sessions-system/task-94-sessions-testing-documentation.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-03-01
       notes: |
         ✅ Testing and documentation complete
@@ -2429,7 +2591,9 @@ tasks:
       status: completed
       started: 2026-03-20T12:00:00Z
       file: agent/tasks/milestone-13-cross-platform-ci/task-96-fix-macos-e2e-tests.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 0.2
       completed_date: 2026-03-20T12:10:00Z
       notes: |
@@ -2443,7 +2607,9 @@ tasks:
       status: completed
       started: 2026-03-20T12:10:00Z
       file: agent/tasks/milestone-13-cross-platform-ci/task-97-e2e-test-runner.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       actual_hours: 0.1
       completed_date: 2026-03-20T12:15:00Z
       notes: |
@@ -2461,7 +2627,9 @@ tasks:
       status: completed
       started: 2026-03-20T12:15:00Z
       file: agent/tasks/milestone-13-cross-platform-ci/task-98-github-actions-workflow.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       actual_hours: 0.1
       completed_date: 2026-03-20T12:20:00Z
       notes: |
@@ -2478,7 +2646,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-14-key-file-index-system/task-99-index-directory-infrastructure.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-03-02
       notes: |
         ✅ Created agent/index/ directory with .gitkeep
@@ -2491,7 +2661,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-14-key-file-index-system/task-100-command-directive-integration.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-03-02
       notes: |
         ✅ Updated @acp.init (step 2.8), @acp.proceed (step 1.5 + autonomous loop),
@@ -2504,7 +2676,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-14-key-file-index-system/task-101-creation-command-integration.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-03-02
       notes: |
         ✅ Updated @acp.design-create, @acp.task-create, @acp.pattern-create, @acp.command-create
@@ -2516,7 +2690,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-14-key-file-index-system/task-102-acp-index-command.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-03-02
       notes: |
         ✅ Created agent/commands/acp.index.md with list/add/remove/explore/show
@@ -2529,7 +2705,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-14-key-file-index-system/task-103-package-index-support.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-03-02
       notes: |
         ✅ Updated 5 package scripts for index file support:
@@ -2544,7 +2722,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-14-key-file-index-system/task-104-validation-documentation.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-03-02
       notes: |
         Added step 9 (Index Validation) to @acp.validate with schema, path, and limit checks.
@@ -2559,7 +2739,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-14-key-file-index-system/task-105-testing.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-03-02
       notes: |
         Created e2e/acp.index.test.sh with 16 tests, 51 assertions, 100% pass rate.
@@ -2576,7 +2758,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-15-clarification-capture/task-106-clarification-capture-directive.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-03-04
       notes: |
         ✅ Created agent/commands/acp.clarification-capture.md shared directive.
@@ -2589,7 +2773,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-15-clarification-capture/task-107-entity-template-key-decisions.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       completed_date: 2026-03-04
       notes: |
         ✅ Added optional Key Design Decisions section to all 4 entity templates:
@@ -2601,7 +2787,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-15-clarification-capture/task-108-integrate-capture-in-create-commands.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-03-04
       notes: |
         ✅ Updated all 4 create commands with capture step and arguments:
@@ -2614,7 +2802,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-15-clarification-capture/task-109-clarification-create-duplicate-awareness.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       completed_date: 2026-03-04
       notes: |
         ✅ Added Step 1.5 to acp.clarification-create.md:
@@ -2640,7 +2830,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-16-design-reference-system/task-111-design-reference-directive.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-03-07
       notes: |
         ✅ Created agent/commands/acp.design-reference.md shared directive.
@@ -2665,7 +2857,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-16-design-reference-system/task-113-task-create-design-cross-reference.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-03-07
       notes: |
         ✅ Added Step 5.5 to task-create invoking @acp.design-reference directive.
@@ -2678,7 +2872,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-16-design-reference-system/task-114-proceed-design-context-loading.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-03-07
       notes: |
         ✅ Added Step 1.7 to proceed: Load Design Context.
@@ -2692,7 +2888,9 @@ tasks:
       priority: 2
       status: completed
       file: agent/tasks/milestone-17-artifact-commands/task-115-artifact-templates.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-03-17
       notes: |
         Create agent/artifacts/ directory with three templates:
@@ -2706,7 +2904,9 @@ tasks:
       priority: 2
       status: completed
       file: agent/tasks/milestone-17-artifact-commands/task-116-artifact-research-command.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       completed_date: 2026-03-17
       notes: |
         Plan-first research methodology:
@@ -2722,7 +2922,9 @@ tasks:
       priority: 2
       status: completed
       file: agent/tasks/milestone-17-artifact-commands/task-117-artifact-glossary-command.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-03-17
       notes: |
         Auto-extraction with interactive refinement:
@@ -2737,7 +2939,9 @@ tasks:
       priority: 2
       status: completed
       file: agent/tasks/milestone-17-artifact-commands/task-118-artifact-reference-command.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-03-17
       notes: |
         Command-first sanity check:
@@ -2752,7 +2956,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-17-artifact-commands/task-119-artifact-integration.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-03-17
       notes: |
         Enhance existing commands for artifact awareness:
@@ -2768,7 +2974,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-30-fix-package-validation-non-package-files.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       completed_date: 2026-02-21
       notes: |
         ✅ Fixed @acp.package-validate namespace validation
@@ -2783,7 +2991,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-31-add-progress-yaml-to-packages.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       completed_date: 2026-02-21
       notes: |
         ✅ Added progress.yaml creation to @acp.package-create
@@ -2797,7 +3007,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-32-fix-package-yaml-schema-mismatch.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       completed_date: 2026-02-21
       notes: |
         ✅ Fixed package.yaml schema mismatch
@@ -2812,7 +3024,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-33-track-acp-core-in-manifest.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       completed_date: 2026-02-21
       notes: |
         ✅ ACP core installation now tracked in manifest.yaml
@@ -2826,7 +3040,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-34-build-generic-yaml-parser.md
-      estimated_hours: 80-160
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 160
       completed_date: 2026-02-21
       notes: |
         ✅ Generic YAML parser with AST complete!
@@ -2850,7 +3066,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-35-migrate-to-yaml-parser.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       completed_date: 2026-02-21
       notes: |
         ✅ Migration complete - old parser removed!
@@ -2867,7 +3085,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/task-36-test-package-commands.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       completed_date: 2026-02-22
       notes: |
         ✅ Comprehensive E2E testing complete!
@@ -2885,7 +3105,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-24-agent-md-completeness/task-133-add-missing-commands.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       actual_hours: 0.5
       completed_date: 2026-05-01T01:00:00Z
       notes: |
@@ -2899,7 +3121,9 @@ tasks:
       status: completed
       started: 2026-05-01T01:00:00Z
       file: agent/tasks/milestone-24-agent-md-completeness/task-134-three-persona-deployment-model.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 0.5
       completed_date: 2026-05-01T01:30:00Z
       notes: |
@@ -2917,7 +3141,9 @@ tasks:
       completed_date: 2026-05-01T02:30:00Z
       actual_hours: 0.5
       file: agent/tasks/milestone-24-agent-md-completeness/task-135-conclusion-and-sample-prompts.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: |
         Conclusion: "Agent Directory Pattern" → "ACP Enhanced" in opening sentence.
         Key Takeaways: added items 8 (Package Ecosystem) and 9 (Token Efficiency ≥60%).
@@ -2934,7 +3160,9 @@ tasks:
       completed_date: 2026-05-01T03:30:00Z
       actual_hours: 0.5
       file: agent/tasks/milestone-24-agent-md-completeness/task-136-session-memory-and-housekeeping.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: |
         Prepended M23 session memory entry to agent/memory/sessions.md.
         Created agent/milestones/milestone-17-artifact-commands-system.md retroactively.
@@ -2949,7 +3177,9 @@ tasks:
       status: completed
       started: 2026-05-06T00:00:00Z
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-137-bootstrap-repository.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       actual_hours: 1.5
       completed_date: 2026-05-06T12:00:00Z
       notes: Create agent-context-protocol-visualizer GitHub repo, init TanStack Start with Tailwind, verify npm run dev.
@@ -2960,7 +3190,9 @@ tasks:
       status: completed
       started: 2026-05-06T12:24:36Z
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-138-yaml-parser-data-model.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 0.5
       completed_date: 2026-05-06T12:35:00Z
       notes: TypeScript interfaces (ProgressData, Milestone, Task) + yaml-loader.ts with js-yaml, unit tests.
@@ -2971,7 +3203,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-139-server-route-file-watcher.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: null
       completed_date: null
       notes: TanStack Start server route reads progress.yaml; SSE file watcher triggers auto-refresh.
@@ -2982,7 +3216,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-140-milestone-table-view.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       actual_hours: null
       completed_date: null
       notes: "@tanstack/react-table with sortable columns, StatusBadge, ProgressBar components."
@@ -2993,7 +3229,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-141-milestone-tree-view.md
-      estimated_hours: 4-6
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 6
       actual_hours: null
       completed_date: null
       notes: Expandable/collapsible milestone → task hierarchy; shared route with table (tab toggle).
@@ -3004,7 +3242,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-142-search-and-filter.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       actual_hours: null
       completed_date: null
       notes: fuse.js search index across milestones + tasks; FilterBar with All/In Progress/Completed/Not Started.
@@ -3015,7 +3255,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-143-dashboard-shell.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       actual_hours: null
       completed_date: null
       notes: Root layout (sidebar nav), project header, overall progress bar, NextSteps panel.
@@ -3026,7 +3268,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-144-acp-visualize-command.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       actual_hours: null
       completed_date: null
       notes: Create agent/commands/acp.visualize.md in ACP core; add to AGENT.md Core Commands.
@@ -3040,7 +3284,9 @@ tasks:
       completed_date: 2026-05-04
       actual_hours: 1.0
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-145-auto-stamp-completed-in-acp-commit.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       notes: Add step to git.commit.md to auto-set completed field on routing task files; eliminates BUG-01 class omissions.
 
     - id: task-146
@@ -3051,7 +3297,9 @@ tasks:
       completed_date: 2026-05-04
       actual_hours: 1.0
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-146-standardize-task-status-format.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       notes: "Update acp.task-create.md and task template to use YAML completed: field; deprecate markdown Status field."
 
     - id: task-147
@@ -3060,7 +3308,9 @@ tasks:
       status: completed
       started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-147-document-token-budget-rationale.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       actual_hours: 0.5
       completed_date: 2026-05-04
       notes: Add rationale to AGENTS.md and constraints.yml explaining budget is for reproducibility/focus, not context window limits.
@@ -3073,7 +3323,9 @@ tasks:
       completed_date: 2026-05-04
       actual_hours: 0.5
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-148-resolve-dual-syntax-confusion.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: Add Command Invocation Styles section to AGENT.md and README; clarify VS Code vs generic agent usage.
 
     - id: task-149
@@ -3082,7 +3334,9 @@ tasks:
       status: completed
       started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-149-concurrent-modification-warning.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 0.5
       completed_date: 2026-05-04
       notes: Add overlap heuristic to acp.sessions.md and acp.init.md; warn when two sessions target same milestone/task.
@@ -3093,7 +3347,9 @@ tasks:
       status: completed
       started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-150-separate-routing-and-milestone-task-systems.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       actual_hours: 0.5
       completed_date: 2026-05-04
       notes: "Renamed 12 routing task files task-NNN.md → route-NNN.md; updated id:/precedes:/depends_on: fields; updated install.sh, version-update.sh, AGENTS.md, scripts/AGENTS.md, .github/copilot-instructions.md; added Two Task Systems note to AGENT.md."
@@ -3206,7 +3462,9 @@ tasks:
       priority: 2
       status: completed
       file: agent/tasks/milestone-18-index-semantic-entry-types/task-120-implement-index-semantic-entry-types.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       started: 2026-03-20T12:00:00Z
       completed_date: 2026-03-20T12:30:00Z
       actual_hours: 0.5
@@ -3220,7 +3478,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-19-preferences-bugfix/task-121-fix-yaml-query-api-misuse.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       started: 2026-05-01T00:00:00Z
       completed_date: 2026-05-01T01:00:00Z
       actual_hours: 1.0
@@ -3235,7 +3495,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/tasks/milestone-19-preferences-bugfix/task-122-fix-generate-preferences-and-option-validation.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       started: 2026-05-01T01:00:00Z
       completed_date: 2026-05-01T01:30:00Z
       actual_hours: 0.5
@@ -3251,7 +3513,9 @@ tasks:
       priority: 4
       status: completed
       file: agent/tasks/milestone-19-preferences-bugfix/task-123-fix-portability-and-safety.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       started: 2026-05-01T01:30:00Z
       completed_date: 2026-05-01T02:00:00Z
       actual_hours: 0.5
@@ -3268,7 +3532,9 @@ tasks:
       priority: 3
       status: completed
       file: agent/tasks/milestone-19-preferences-bugfix/task-124-fix-minor-bugs-and-metadata.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       started: 2026-05-01T02:00:00Z
       completed_date: 2026-05-01T02:15:00Z
       actual_hours: 0.25
@@ -3284,7 +3550,9 @@ tasks:
       priority: 4
       status: completed
       file: agent/tasks/milestone-19-preferences-bugfix/task-125-revalidate-m6-test-suite.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       started: 2026-05-01T02:15:00Z
       completed_date: 2026-05-01T02:30:00Z
       actual_hours: 0.25
@@ -3368,7 +3636,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/routing/tasks/route-074.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       started: 2026-06-04
       completed_date: 2026-06-04
       notes: |
@@ -3380,7 +3650,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/routing/tasks/route-075.md
-      estimated_hours: 3-4
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 4
       started: 2026-06-04
       completed_date: 2026-06-04
       notes: |
@@ -3392,7 +3664,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/routing/tasks/route-076.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       started: 2026-06-04
       completed_date: 2026-06-04
       notes: |
@@ -3403,7 +3677,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/routing/tasks/route-077.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       started: 2026-06-04
       completed_date: 2026-06-04
       notes: |
@@ -3414,7 +3690,9 @@ tasks:
       priority: 5
       status: completed
       file: agent/routing/tasks/route-078.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       started: 2026-06-04
       completed_date: 2026-06-04
       notes: |
@@ -3428,7 +3706,9 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-079.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       notes: |
         P1: --diff, --preserve-project-core flags. Warn before overwriting
         identity.yml, domain.yml, taxonomy.yml.
@@ -3440,7 +3720,9 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-080.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: |
         P1: Agent directives to quote scalars containing ':' in key_fact,
         key_facts, and notes fields.
@@ -3452,7 +3734,9 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-081.md
-      estimated_hours: 0.5-1
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 1
       notes: |
         P1: Align commit output schema with visualizer expectations.
 
@@ -3463,7 +3747,9 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-082.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: |
         P2: Document registry vs document directories in architecture.md.
 
@@ -3474,7 +3760,9 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-083.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: |
         P2: Prompt when key_fact looks like a reusable pattern.
 
@@ -3485,7 +3773,9 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-084.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: |
         P2: Show phase-appropriate commands on init.
 
@@ -3493,79 +3783,97 @@ tasks:
     - id: route-085
       name: "E2E tests — commit auto-sync document generation"
       priority: 5
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-085.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       notes: |
         P0: Test commit auto-sync produces correct session + pattern docs.
 
     - id: route-086
       name: "E2E tests — repair tools and --memory validation"
       priority: 5
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-086.md
-      estimated_hours: 2-3
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 3
       notes: |
         P0: Test pattern-sync, session-sync, and --memory validation.
 
     - id: route-087
       name: "Atomicity in sync operations — temp-file + atomic rename"
       priority: 5
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-087.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: |
         P0: Add temp-file + atomic rename to prevent partial state.
 
     - id: route-088
       name: "Registry schema lint — require date:/name:, warn unquoted colons"
       priority: 4
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-088.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: |
         P1: F-05 schema-level linting for memory registry entries.
 
     - id: route-089
       name: "Audit-first workflow documentation in wiki"
       priority: 3
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-089.md
-      estimated_hours: 0.5-1
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 1
       notes: |
         P2: Document audit-first pattern (B-066-01).
 
     - id: route-090
       name: "/acp-status --health — YAML lint + progress.yaml git drift check"
       priority: 3
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-090.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: |
         P2: Health check for drift detection (B-066-02).
 
     - id: route-091
       name: "/acp-index init — bootstrap index from project patterns/commands"
       priority: 3
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-091.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: |
         P2: Auto-discover and bootstrap index (B-066-07).
 
     - id: route-092
       name: "Carryover query — CLI search for audit-carryovers.md"
       priority: 3
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-092.md
-      estimated_hours: 1-2
+      started: 2026-06-04
+      completed_date: 2026-06-04
+      estimated_hours: 2
       notes: |
         P2: Search 5000+ line carryovers file (B-066-08).
 
     - id: route-093
       name: "Version bump 6.9.0 → 6.9.1 + CHANGELOG update"
       priority: 3
-      status: planned
+      status: completed
+      started: 2026-06-04
+      completed_date: 2026-06-04
       file: agent/routing/tasks/route-093.md
       estimated_hours: 0.5
       notes: |
