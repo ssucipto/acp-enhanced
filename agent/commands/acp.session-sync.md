@@ -77,6 +77,9 @@ Read `agent/memory/sessions.md` and parse all YAML entries. Skip `type: weekly-s
 
 ### 3. Sync Session Documents
 
+> **Atomicity (v6.9.1+)**: Write to `.tmp.{date}-{slug}.md` first, then atomically
+> rename to `{date}-{slug}.md`. Prevents partial writes.
+
 For each session in scope:
 
 1. **Determine filename**: `agent/sessions/{date}-{slug}.md` where:

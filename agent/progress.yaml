@@ -6,7 +6,7 @@ project:
   version: 6.9.1
   started: 2026-02-16
   status: active
-  current_milestone: M48
+  current_milestone: null
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.1 with 48 completed
     milestones. M48 (v6.9.1) delivered carryover resolution: E2E tests,
