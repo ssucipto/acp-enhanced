@@ -63,6 +63,29 @@ ACP Enhanced maintains a **two-tier storage model** for patterns and sessions:
 - Commit steps include quoting directives for colons in scalar values
 - Weekly-summary compaction quotes `key_facts` items containing `:`
 
+## Audit-First Workflow (v6.9.1+)
+
+ACP Enhanced supports an audit-first development pattern where `/acp-audit` serves as
+the primary planning and review mechanism:
+
+### Pattern
+1. `/acp-audit --pre-impl <route>` — catch gaps before coding
+2. Implement the task
+3. `/acp-audit` (post-impl) — verify deliverables and catch regressions
+4. Carryovers written to `agent/memory/audit-carryovers.md` for tracking
+
+### When to Use
+- High-complexity tasks with multiple files affected
+- Schema changes that affect multiple command docs
+- Feedback-driven improvements (validate external input before implementing)
+- Cross-cutting concerns that span multiple domains
+
+### Benefits
+- Pre-impl audits prevent bugs that would require full rework
+- Audit reports serve as durable knowledge artifacts (findable via `agent/reports/`)
+- Carryover tracking prevents findings from being lost between sessions
+- Production data (consumer-project): 64 audits prevented CI/CD bugs in pre-impl mode
+
 ## YAML Parser Chain
 
 acp.yaml-parser.sh → pure-bash AST-based parser (zero dependencies)
