@@ -6,7 +6,7 @@ project:
   version: 6.9.1
   started: 2026-02-16
   status: active
-  current_milestone: null
+  current_milestone: M49
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.1 with 48 completed
     milestones. M48 (v6.9.1) delivered carryover resolution: E2E tests,
@@ -101,18 +101,27 @@ milestones:
     file: agent/milestones/milestone-48-carryover-resolution-workflow-hardening.md
     notes: |
       🎉 M48 COMPLETE! 9 routes, all done (2026-06-04).
-      P0 (routes 085-087): E2E tests (12 assertions passing), atomicity.
-      P1 (route 088): Registry schema lint.
-      P2 (routes 089-093): audit-first wiki, --health, index init,
-      carryover query, version bump + CHANGELOG.
-      Post-audit (044): 3 gaps found and fixed — all clean.
-      All 8 M47 carryovers resolved. All 4 B-066 findings addressed.
-      P0 (routes 085-087): E2E tests (commit sync + repair tools + --memory),
-      atomicity in sync operations.
-      P1 (route 088): F-05 registry schema lint.
-      P2 (routes 089-092): audit-first workflow docs, --health check,
-      index bootstrap, carryover query.
-      Target: v6.9.1.
+      P0 (085-087): E2E tests (12 assertions), atomicity in sync.
+      P1 (088): Registry schema lint.
+      P2 (089-093): audit-first wiki, --health, index init, carryover query,
+      version bump + CHANGELOG.
+      Post-audit (044): 3 gaps found and fixed. 8 carryovers resolved.
+
+  M49:
+    name: Dogfooding Resolution (v6.9.2)
+    priority: 4
+    status: planned
+    progress: 0
+    started: null
+    estimated_weeks: 0.2
+    tasks_completed: 0
+    tasks_total: 5
+    file: agent/milestones/milestone-49-dogfooding-resolution.md
+    notes: |
+      📋 M49 planned — 5 routes from feedback-003 dogfooding analysis.
+      Routes 094-098: triple-file parity check, AGENTS.md version line,
+      --validate on commit, visualizer direct-path, .gitignore docs.
+      Target: v6.9.2.
 
   M1:
     name: ACP Commands Infrastructure
@@ -3884,6 +3893,52 @@ tasks:
       estimated_hours: 0.5
       notes: |
         P2: Version bump + CHANGELOG entry for M48 completion (audit-043, GAP-043-01).
+
+  M49:
+    - id: route-094
+      name: "Triple-file parity check in /acp-validate"
+      priority: 4
+      status: planned
+      file: agent/routing/tasks/route-094.md
+      estimated_hours: 0.5-1
+      notes: |
+        Warn when command doc exists without .github/prompts/ + .opencode/ wrappers.
+
+    - id: route-095
+      name: "Add version line to AGENTS.md header"
+      priority: 4
+      status: planned
+      file: agent/routing/tasks/route-095.md
+      estimated_hours: 0.5
+      notes: |
+        Add > v6.9.x version annotation to AGENTS.md.
+
+    - id: route-096
+      name: "Add --validate flag to /acp-commit"
+      priority: 4
+      status: planned
+      file: agent/routing/tasks/route-096.md
+      estimated_hours: 0.5-1
+      notes: |
+        Run /acp-validate before committing when --validate passed.
+
+    - id: route-097
+      name: "Visualizer: direct PROGRESS_YAML_PATH + React 19 fix"
+      priority: 3
+      status: planned
+      file: agent/routing/tasks/route-097.md
+      estimated_hours: 2-3
+      notes: |
+        Separate repo. Read env var directly, fix SSR error.
+
+    - id: route-098
+      name: "Document .gitignore rationale + framework dev mode"
+      priority: 3
+      status: planned
+      file: agent/routing/tasks/route-098.md
+      estimated_hours: 0.5-1
+      notes: |
+        Wiki section + --track-instance-data concept.
 
 recent_work:
   - date: 2026-06-04
