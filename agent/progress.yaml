@@ -3,7 +3,7 @@
 
 project:
   name: agent-context-protocol
-  version: 6.9.5
+  version: 6.10.0
   started: 2026-02-16
   status: active
   current_milestone: M52
@@ -186,12 +186,12 @@ milestones:
   M53:
     name: Cursor Slash Commands Bootstrap (v6.10.0)
     priority: 4
-    status: planned
-    progress: 0
-    started: null
-    completed: null
+    status: completed
+    progress: 100
+    started: 2026-06-07
+    completed: 2026-06-07
     estimated_weeks: 0.3
-    tasks_completed: 0
+    tasks_completed: 7
     tasks_total: 7
     file: agent/milestones/milestone-53-cursor-slash-commands.md
     notes: |
