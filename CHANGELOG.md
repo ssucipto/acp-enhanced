@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.10.0] — 2026-06-07
+
+### Added (M53 — Cursor Slash Commands Bootstrap)
+- **Cursor IDE slash-command parity**: `/acp-*` commands now available as native Cursor slash commands via `.cursor/commands/` auto-generation
+- `agent/scripts/acp.cursor-commands-sync.sh` — generates Cursor wrappers from `agent/commands/` sources (dots→hyphens naming)
+- Hooked into `acp.install.sh` and `acp.version-update.sh` for automatic regeneration
+- Bootstrap step 6b generates `.cursor/commands/` alongside `.opencode/commands/`
+- Post-install verification checks `.cursor/commands/` file count parity with source commands
+- `.cursor/rules/acp-slash-commands.mdc` — always-on agent execution protocol
+- `agent/wiki/cursor-integration.md` — Cursor integration guide
+- `e2e/acp.cursor-commands-sync.test.sh` — 10-assertion test (naming, parity, content, idempotency)
+
+### Fixed
+- Pre-existing `@acp.` occurrences in `acp.visualize.md` replaced with `/acp-` (route-129 hotfix)
+- Command-docs E2E test now 466/466 (was 465/466 with 1 `@acp.` failure)
+
+---
+
 ## [6.9.5] — 2026-06-07
 
 ### New Commands (M52 — Stakeholder Report + Carryovers)

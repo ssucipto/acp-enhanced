@@ -1339,6 +1339,12 @@ else
 fi
 fi
 
+# Generate Cursor slash commands from installed command docs (if sync script exists)
+if [ -f "agent/scripts/acp.cursor-commands-sync.sh" ]; then
+  echo -e "${YELLOW}Generating Cursor slash commands...${NC}"
+  bash agent/scripts/acp.cursor-commands-sync.sh
+fi
+
 # --- 7. Install agent/ commands, scripts and schemas ---
 echo -e "${YELLOW}[7/8] Installing ACP commands, scripts and schemas (agent/ directory)...${NC}"
 
@@ -1451,7 +1457,13 @@ else
   echo -e "  ${RED}❌ agent/scripts/: $_SCRIPT_COUNT files (expected 18+)${NC}"
 fi
 [ -d ".opencode/commands" ] && echo -e "  ${GREEN}✅ .opencode/commands/: present${NC}" || echo -e "  ${YELLOW}⚠️ .opencode/commands/: missing${NC}"
-[ -d ".cursor/commands" ] && echo -e "  ${GREEN}✅ .cursor/commands/: present${NC}" || echo -e "  ${YELLOW}⚠️ .cursor/commands/: missing${NC}"
+_CURSOR_COUNT=$(find .cursor/commands -maxdepth 1 -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+_CMD_SOURCE_COUNT=$(find agent/commands -maxdepth 1 \( -name "acp.*.md" -o -name "git.*.md" \) 2>/dev/null | wc -l | tr -d ' ')
+if [ "$_CURSOR_COUNT" -ge "$_CMD_SOURCE_COUNT" ] 2>/dev/null; then
+  echo -e "  ${GREEN}✅ .cursor/commands/: ${_CURSOR_COUNT} files${NC}"
+else
+  echo -e "  ${YELLOW}⚠️ .cursor/commands/: ${_CURSOR_COUNT} files (expected ≥${_CMD_SOURCE_COUNT})${NC}"
+fi
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
 # Exit non-zero if verification failed — prevents silent broken installs
