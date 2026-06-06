@@ -151,6 +151,11 @@ command_suggestions:
     - acp-init: "Reload context with new architectural decision"
     - acp-status: "Check project impact of decision"
 
+  acp-design-spec:
+    - acp-audit: "Verify spec against codebase (--audit flag)"
+    - acp-visualize: "Render Mermaid diagrams in Docs tab"
+    - acp-commit: "Save session when spec completes a milestone phase"
+
   acp-feedback:
     - acp-commit: "Save feedback findings to sessions.md"
     - acp-audit: "Deep-dive investigation of feedback topics"
@@ -164,6 +169,7 @@ command_suggestions:
   acp-report:
     - acp-commit: "Commit report findings to session memory"
     - acp-audit: "Deep-dive a specific finding from the report"
+    - acp-design-spec: "Generate interface spec (not progress report)"
     - acp-status: "Quick status check vs detailed report"
 
   acp-sync:
