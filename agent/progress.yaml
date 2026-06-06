@@ -3,14 +3,14 @@
 
 project:
   name: agent-context-protocol
-  version: 6.9.1
+  version: 6.9.2
   started: 2026-02-16
   status: active
   current_milestone: null
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.1 with 48 completed
-    milestones. M48 (v6.9.1) delivered carryover resolution: E2E tests,
-    atomicity, schema lint, and workflow tooling. 12 E2E assertions passing.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.2 with 49 completed
+    milestones. M49 (v6.9.2) delivered dogfooding resolution: install reliability,
+    Windows/Cursor support, and developer experience fixes.
 
 milestones:
   M44:
@@ -4007,6 +4007,16 @@ tasks:
         P2: --repair detects and fixes partial/broken installs.
 
 recent_work:
+  - date: 2026-06-06
+    description: |
+      🎉 M49 COMPLETE: Dogfooding + Install Resolution (v6.9.2).
+      12 routes addressing internal pain points + Windows/Cursor user feedback.
+    items:
+      - "✅ Dogfooding (094-098): parity check, AGENTS.md version, --validate, visualizer, .gitignore docs"
+      - "✅ Install (099-105): Windows hang fix, bootstrap self-heal, Cursor commands, verify, backup, docs, repair"
+      - "✅ Feedback-003: 5/5 pain points resolved"
+      - "✅ install-windows-cursor: 7/7 findings resolved"
+
   - date: 2026-06-04
     description: |
       🔧 Post-session cleanup: version consistency sweep + prevention.
@@ -6014,7 +6024,7 @@ next_steps:
   - "📋 Consider M49 for remaining deferred items if any"
 
 notes:
-  - 48 milestones complete (M1–M48, 100%), v6.9.1 (2026-06-04)
+  - 49 milestones complete (M1–M49, 100%), v6.9.2 (2026-06-06)
   - 67 command docs (3 new: pattern-sync, session-sync, carryover-query)
   - 43 audit reports in agent/reports/ (audit-001 through audit-044)
   - 18 E2E test files (2 new: commit-sync, repair-tools — 12 assertions)
