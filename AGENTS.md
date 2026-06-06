@@ -1,5 +1,7 @@
 # ACP Enhanced — Agent Context Protocol
 
+> v6.9.1 — Context Loading Protocol (light + full modes)
+>
 > This file is auto-loaded by GitHub Copilot, Cursor, and Claude Code.
 > Do NOT add project content here. This file contains ONLY the context
 > loading protocol. All content lives in agent/ subdirectories.
