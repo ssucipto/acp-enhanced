@@ -339,9 +339,9 @@ Summary:
 
 **Context**: Monthly update for stakeholders  
 
-**Invocation**: `/acp-report`  
+**Invocation**: `/acp-stakeholder-report`  
 
-**Result**: Executive-friendly report with high-level progress, key achievements, and timeline  
+**Result**: 1–2 page RAG summary with decisions required, ≤4 KPIs. For full detail, use `/acp-report`.  
 
 ---
 
@@ -352,6 +352,7 @@ Summary:
 - [`/acp-validate`](acp.validate.md) - Validate documentation before reporting
 - [`/acp-sync`](acp.sync.md) - Sync docs before generating report
 - [`/acp-design-spec`](acp.design-spec.md) - Interface & data-flow specification (not progress report)
+- [`/acp-stakeholder-report`](acp.stakeholder-report.md) - Weekly executive summary (not this full report)
 
 ---
 

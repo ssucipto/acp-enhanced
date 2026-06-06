@@ -1,6 +1,6 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.9.3-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.9.5-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
 [![Milestones](https://img.shields.io/badge/milestones-49%2F49%20complete-brightgreen)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-67%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
@@ -265,6 +265,24 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 The ACP command and workflow system (clarifications → design → plan → proceed) is identical to the original at the time of the fork.
 
 > **Note**: The upstream [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol) continues to evolve independently. This comparison reflects our fork point. The upstream now has its own extended features (v7.x+) and the two implementations have diverged. Check the upstream README for its current capabilities.
+
+### Five-Tier Reporting Model
+
+ACP Enhanced provides five report types, each for a different audience:
+
+| Tier | Command | Output | Audience | Length |
+|------|---------|--------|----------|--------|
+| 1 | `/acp-status` | Console snapshot | Developer (session) | ~20 lines |
+| 2 | `/acp-stakeholder-report` | Weekly exec summary (RAG) | Board, investors, PM | 1–2 pages |
+| 3 | `/acp-report` | Full project archive | Team, agents, records | 5–15 pages |
+| 4 | `/acp-design-spec` | Interface & data-flow spec | Engineering, QA | 10–30 pages |
+| 5 | `/acp-cost-report` | AI token spend | Dev / ops | ~1 page |
+
+**Artefact naming conventions**:
+- `stakeholder-report-YYYY-MM-DD.md` — weekly exec summary (`/acp-stakeholder-report`)
+- `report-YYYY-MM-DD.md` — full archive (`/acp-report`)
+- `design-spec-{subject}-v{N}.md` — interface spec (`/acp-design-spec`)
+- `roadmap-brief-{subject}-{date}.md` — one-off planning (not recurring)
 
 ### Recent Protocol Enhancements (v6.4–v6.9.3)
 

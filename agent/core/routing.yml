@@ -109,7 +109,14 @@ command_suggestions:
   acp-status:
     - acp-update: "Update progress.yaml with latest work"
     - acp-report: "Generate a detailed progress report"
+    - acp-stakeholder-report: "Friday stakeholder update"
     - acp-init: "Full context init if status shows gaps"
+
+  acp-stakeholder-report:
+    - acp-report: "Full archive when stakeholders need detail"
+    - acp-update: "Refresh progress.yaml before reporting"
+    - acp-cost-report: "Pair on Fridays — AI spend"
+    - acp-commit: "Save session after reporting phase"
 
   acp-update:
     - acp-status: "Verify progress.yaml update was applied"
