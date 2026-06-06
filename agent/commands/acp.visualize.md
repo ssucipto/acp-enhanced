@@ -107,8 +107,8 @@ Display:
 
 ## Related Commands
 
-- [`@acp.status`](acp.status.md) — Text-based status (no browser required)
-- [`@acp.report`](acp.report.md) — Generate a text report
+- [`/acp-status`](acp.status.md) — Text-based status (no browser required)
+- [`/acp-report`](acp.report.md) — Generate a text report
 
 ---
 
@@ -116,4 +116,4 @@ Display:
 
 - The visualizer auto-refreshes when `progress.yaml` changes — no manual reload needed
 - P1 features (GitHub remote, kanban, multi-project) are in a future milestone
-- To use with a different project: `@acp.visualize --path /path/to/other/agent/progress.yaml`
+- To use with a different project: `/acp-visualize --path /path/to/other/agent/progress.yaml`
