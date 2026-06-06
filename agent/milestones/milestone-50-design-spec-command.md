@@ -44,7 +44,7 @@ Integrate the `/acp-design-spec` command (v1.1.0) from upstream feedback-005 int
 | Route | Task | Priority | Effort |
 |-------|------|----------|--------|
 | 106 | Port `acp.design-spec.md` v1.1.0 from feedback to `agent/commands/` | P0 | Low |
-| 107 | Add cursor/opencode wrappers + `package.yaml` entry | P0 | Low |
+| 107 | Add prompt/opencode wrappers + `package.yaml` entry | P0 | Low |
 | 108 | Create `agent/templates/` directory + ship `design-spec.template.md` | P1 | Low |
 | 109 | Create E2E smoke test `e2e/acp.design-spec.test.sh` | P1 | Medium |
 | 110 | Add `command_suggestions` in `routing.yml` + `design-spec` task_type in `taxonomy.yml` | P1 | Low |
