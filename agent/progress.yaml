@@ -6,11 +6,11 @@ project:
   version: 6.9.3
   started: 2026-02-16
   status: active
-  current_milestone: M51
+  current_milestone: null
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.3 with 50 completed
-    milestones. M49 (v6.9.2) delivered dogfooding resolution: install reliability,
-    Windows/Cursor support, and developer experience fixes.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.3 with 51 completed
+    milestones. M50 delivered /acp-design-spec command (interface & data-flow specs).
+    M51 fixed critical bootstrap install bug (empty-dir false positive).
 
 milestones:
   M44:
@@ -4047,6 +4047,18 @@ tasks:
 recent_work:
   - date: 2026-06-06
     description: |
+      🎉 M50 + M51 COMPLETE: Design-Spec Command + Bootstrap Fix (v6.9.3).
+      11 routes, 4 audits, 2 E2E tests, feedback-005 upstream integration.
+    items:
+      - "✅ M50 (106-112): /acp-design-spec command — 19-section template, arc42/C4/IEEE/ISO standards"
+      - "✅ M51 (113-116): Bootstrap CRITICAL fix — dir check→file count, opencode extraction, verify exit code"
+      - "✅ E2E: acp.design-spec.test.sh (12/12) + acp.bootstrap.test.sh (8/8)"
+      - "✅ Audits: 044 (pre-impl), 045 (bootstrap bug), 046 (M51 post), 047 (M50 post)"
+      - "✅ Feedback-005: FIFOZ upstream command fully integrated into ACP Enhanced distribution"
+      - "✅ Version: 6.9.2→6.9.3, consistent across 6 files, CHANGELOG updated"
+
+  - date: 2026-06-06
+    description: |
       🎉 M49 COMPLETE: Dogfooding + Install Resolution (v6.9.2).
       12 routes addressing internal pain points + Windows/Cursor user feedback.
     items:
@@ -6055,16 +6067,16 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "📋 Push remaining commits to remote"
-  - "📋 Run /acp-validate --memory to verify YAML integrity"
-  - "📋 Refresh artifact Last Verified dates"
-  - "📋 Run /acp-carryover-query --pending to verify all resolved"
-  - "📋 Consider M49 for remaining deferred items if any"
+  - "📋 Push commits to remote (mainline)"
+  - "📋 Address audit-044 carryovers: index entry, domain.yml, README, P3 deferred items"
+  - "📋 Run /acp-commit to write session memory"
+  - "📋 Run /acp-validate to verify YAML integrity"
+  - "📋 Fix pre-existing @acp. occurrences in acp.visualize.md"
 
 notes:
-  - 49 milestones complete (M1–M49, 100%), v6.9.2 (2026-06-06)
-  - 67 command docs (3 new: pattern-sync, session-sync, carryover-query)
-  - 43 audit reports in agent/reports/ (audit-001 through audit-044)
+  - 51 milestones complete (M1–M51, 100%), v6.9.3 (2026-06-06)
+  - 68 command docs (1 new: acp.design-spec)
+  - 47 audit reports in agent/reports/ (audit-001 through audit-047)
   - 18 E2E test files (2 new: commit-sync, repair-tools — 12 assertions)
   - Install system: 4-audit hardened (036-039), 26 findings fixed
   - Bootstrap: safe, idempotent, with pre-flight checks and cleanup
