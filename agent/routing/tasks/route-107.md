@@ -21,7 +21,7 @@ completed:
 override_reason:
 ---
 
-# Route 107: Cursor/OpenCode Wrappers + Package Entry
+# Route 107: Prompt/OpenCode Wrappers + Package Entry
 
 ## Objective
 
@@ -29,29 +29,38 @@ Create the two wrapper files required by the triple-file architecture for every 
 
 ## Context
 
-Every `/acp-*` command requires exactly 3 files:
+Every `/acp-*` command requires exactly 3 files per `local.command-naming-convention.md`:
 1. Command directive: `agent/commands/acp.design-spec.md` (route-106)
-2. Cursor prompt wrapper: `.cursor/commands/acp-design-spec.md` (this route)
+2. VS Code prompt wrapper: `.github/prompts/acp-design-spec.prompt.md` (this route)
 3. OpenCode wrapper: `.opencode/commands/acp-design-spec.md` (this route)
+
+Note: `.cursor/commands/` is NOT part of the ACP triple-file architecture. The VS Code
+prompt surface is `.github/prompts/`. If Cursor IDE integration is needed separately,
+that is a distinct concern outside the ACP naming convention.
 
 ## Changes
 
-### 1. Create `.cursor/commands/acp-design-spec.md`
+### 1. Create `.github/prompts/acp-design-spec.prompt.md`
 
-Thin wrapper following existing pattern (see `.cursor/commands/acp-plan.md`):
+Follow the existing prompt wrapper pattern (see `.github/prompts/acp-plan.prompt.md`):
 
 ```markdown
-# /acp-design-spec
+---
+mode: agent
+description: Generate Application Interface & Data-Flow Design Specifications from the live codebase
+---
 
 Read and execute `agent/commands/acp.design-spec.md`.
 ```
 
 ### 2. Create `.opencode/commands/acp-design-spec.md`
 
-Same thin wrapper pattern:
+Follow the existing opencode wrapper pattern (see `.opencode/commands/acp-design-create.md`):
 
 ```markdown
-# /acp-design-spec
+---
+description: Generate Application Interface & Data-Flow Design Specifications from the live codebase
+---
 
 Read and execute `agent/commands/acp.design-spec.md`.
 ```
@@ -62,8 +71,8 @@ Add `acp.design-spec.md` to the command files list in `package.yaml` under the `
 
 ## Verification
 
-- [ ] `.cursor/commands/acp-design-spec.md` exists with correct content
-- [ ] `.opencode/commands/acp-design-spec.md` exists with correct content
+- [ ] `.github/prompts/acp-design-spec.prompt.md` exists with correct content + frontmatter
+- [ ] `.opencode/commands/acp-design-spec.md` exists with correct content + frontmatter
 - [ ] Wrapper files use hyphen separator (`acp-design-spec`) not dot
 - [ ] `package.yaml` includes `acp.design-spec.md` entry
 - [ ] Triple-file parity check passes (route-094 validation)
