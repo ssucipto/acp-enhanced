@@ -50,6 +50,7 @@ Test assertions (14 items):
 12. **Wrapper parity**: `.github/prompts/acp-stakeholder-report.prompt.md` exists
 13. **Wrapper parity**: `.opencode/commands/acp-stakeholder-report.md` exists
 14. **Template exists**: `agent/templates/stakeholder-report.template.md` with 9 sections
+15. **RAG/blocker business rule**: Command doc contains "not Green when `current_blockers` non-empty" or "Minimum 🟡 Amber" (automated grep test per feedback-006 §5 P1 item 11)
 
 ### Test structure
 
