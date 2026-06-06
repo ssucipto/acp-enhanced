@@ -395,3 +395,41 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-045 FINDINGS — BOOTSTRAP INSTALL FAILURE ──────────────────
+
+  - audit_id: 45
+    finding_id: BUG-045-01
+    severity: critical
+    file: scripts/acp-bootstrap.sh
+    finding: "Step 7 checks directory existence instead of file count — empty dirs from step 1 cause download skip"
+    description: "Step 1 creates empty agent/commands/ and agent/scripts/ directories. Step 7 checks [ -d agent/commands ] && [ -d agent/scripts ] — directory exists (true) even when empty, so the install download is always skipped on fresh installs. Every new user gets 0 command files and 0 script files."
+    fix_target: "Replace directory check with file count check using find ... | wc -l pattern (same as pre-flight check at line 89)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 45
+    finding_id: BUG-045-02
+    severity: high
+    file: scripts/acp-bootstrap.sh
+    finding: "OpenCode command generation nested inside GENERATE_PROMPTS block — skipped when prompts not generated"
+    description: "Step 6b (opencode/cursor command generation) is inside if [ GENERATE_PROMPTS = true ]. GENERATE_OPENCODE defaults to true but is never independently checked. When prompts are skipped, .opencode/commands/ and .cursor/commands/ are never created."
+    fix_target: "Extract opencode generation into separate if [ GENERATE_OPENCODE = true ] block independent of GENERATE_PROMPTS"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 45
+    finding_id: BUG-045-03
+    severity: medium
+    file: scripts/acp-bootstrap.sh
+    finding: "Post-install verification detects failures but exits 0 — no auto-repair or fix command"
+    description: "Verification correctly shows 0 files (red X) but bootstrap exits 0 and says Done. User sees failure but gets no remediation path."
+    fix_target: "Exit non-zero on verification failure; print remediation command (re-run bootstrap or curl acp.install.sh)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
