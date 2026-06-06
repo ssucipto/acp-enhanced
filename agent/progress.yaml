@@ -6,7 +6,7 @@ project:
   version: 6.9.1
   started: 2026-02-16
   status: active
-  current_milestone: M49
+  current_milestone: null
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.1 with 48 completed
     milestones. M48 (v6.9.1) delivered carryover resolution: E2E tests,
@@ -110,11 +110,12 @@ milestones:
   M49:
     name: Dogfooding Resolution (v6.9.2)
     priority: 4
-    status: in_progress
-    progress: 0
+    status: completed
+    progress: 100
     started: 2026-06-06
+    completed: 2026-06-06
     estimated_weeks: 0.2
-    tasks_completed: 0
+    tasks_completed: 12
     tasks_total: 12
     file: agent/milestones/milestone-49-dogfooding-resolution.md
     notes: |
@@ -3900,7 +3901,7 @@ tasks:
     - id: route-094
       name: "Triple-file parity check in /acp-validate"
       priority: 4
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-094.md
       estimated_hours: 0.5-1
       notes: |
@@ -3909,7 +3910,7 @@ tasks:
     - id: route-095
       name: "Add version line to AGENTS.md header"
       priority: 4
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-095.md
       estimated_hours: 0.5
       notes: |
@@ -3918,7 +3919,7 @@ tasks:
     - id: route-096
       name: "Add --validate flag to /acp-commit"
       priority: 4
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-096.md
       estimated_hours: 0.5-1
       notes: |
@@ -3927,7 +3928,7 @@ tasks:
     - id: route-097
       name: "Visualizer: direct PROGRESS_YAML_PATH + React 19 fix"
       priority: 3
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-097.md
       estimated_hours: 2-3
       notes: |
@@ -3936,7 +3937,7 @@ tasks:
     - id: route-098
       name: "Document .gitignore rationale + framework dev mode"
       priority: 3
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-098.md
       estimated_hours: 0.5-1
       notes: |
@@ -3945,7 +3946,7 @@ tasks:
     - id: route-099
       name: "acp.install.sh: fix Windows Git Bash hang (while-true loop safety)"
       priority: 5
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-099.md
       estimated_hours: 2-3
       notes: |
@@ -3954,7 +3955,7 @@ tasks:
     - id: route-100
       name: "acp-bootstrap.sh: detect and self-heal partial installs"
       priority: 5
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-100.md
       estimated_hours: 1-2
       notes: |
@@ -3963,7 +3964,7 @@ tasks:
     - id: route-101
       name: "Generate .cursor/commands/ for Cursor IDE slash autocomplete"
       priority: 4
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-101.md
       estimated_hours: 1
       notes: |
@@ -3972,7 +3973,7 @@ tasks:
     - id: route-102
       name: "Post-install verification — check command/script counts"
       priority: 4
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-102.md
       estimated_hours: 1
       notes: |
@@ -3981,7 +3982,7 @@ tasks:
     - id: route-103
       name: "Backup instruction + safe install/update with user warning"
       priority: 4
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-103.md
       estimated_hours: 1
       notes: |
@@ -3990,7 +3991,7 @@ tasks:
     - id: route-104
       name: "Windows install documentation + recovery path"
       priority: 3
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-104.md
       estimated_hours: 1
       notes: |
@@ -3999,7 +4000,7 @@ tasks:
     - id: route-105
       name: "Install recovery path — /acp-install --repair mode"
       priority: 3
-      status: planned
+      status: completed
       file: agent/routing/tasks/route-105.md
       estimated_hours: 1-2
       notes: |
@@ -5111,7 +5112,7 @@ recent_work:
       - ✅ All functions tested and working correctly
       - ✅ Functions are POSIX-compliant and handle errors gracefully
       - ✅ Infrastructure is idempotent (safe to run multiple times)
-      - "📋 Milestone 5 progress: 0% → 20% (1/5 tasks complete)"
+      - "📋 Milestone 5 progress: 100% → 20% (1/5 tasks complete)"
       - "📋 Ready for Task 26: Global Installation Implementation"
   
   - date: 2026-02-22
@@ -5590,7 +5591,7 @@ recent_work:
       - "📦 Milestone 4 scope — Rewrite: @acp.package-create with full ACP installation"
       - "📦 Milestone 4 scope — Hooks: Pre-commit validation hooks"
       - "⏱️ Estimated effort: 45-58 hours over 6-8 weeks"
-      - "📋 Project status: in_progress, current_milestone: M4"
+      - "📋 Project status: completed, current_milestone: M4"
       - "📋 Next: Begin Task 14 - YAML Schema System"
   
   - date: 2026-02-20
