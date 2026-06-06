@@ -70,6 +70,18 @@ acp:
         the design-to-task pipeline and clarification capture.
       applies: acp.design-create, acp.plan
 
+    - path: agent/commands/acp.design-spec.md
+      weight: 0.7
+      kind: command
+      description: |
+        Generate Application Interface & Data-Flow Design Specifications.
+        19-section template based on arc42, C4 Model, IEEE 1016, ISO 42010.
+        Stack-agnostic with detection tables for UI/store/API roots.
+      rationale: |
+        Required context when generating interface specs, documenting
+        data flows, or preparing QA verification matrices.
+      applies: acp.design-spec, acp.proceed, acp.plan
+
     - path: agent/commands/acp.clarification-create.md
       weight: 0.7
       kind: command
