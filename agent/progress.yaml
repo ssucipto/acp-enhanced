@@ -110,9 +110,9 @@ milestones:
   M49:
     name: Dogfooding Resolution (v6.9.2)
     priority: 4
-    status: planned
+    status: in_progress
     progress: 0
-    started: null
+    started: 2026-06-06
     estimated_weeks: 0.2
     tasks_completed: 0
     tasks_total: 12
