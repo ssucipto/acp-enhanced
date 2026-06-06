@@ -351,6 +351,7 @@ Summary:
 - [`/acp-update`](acp.update.md) - Update progress before generating report
 - [`/acp-validate`](acp.validate.md) - Validate documentation before reporting
 - [`/acp-sync`](acp.sync.md) - Sync docs before generating report
+- [`/acp-design-spec`](acp.design-spec.md) - Interface & data-flow specification (not progress report)
 
 ---
 
