@@ -148,12 +148,12 @@ milestones:
   M51:
     name: Bootstrap Install Fix (v6.9.4)
     priority: 5
-    status: planned
-    progress: 0
+    status: completed
+    progress: 100
     started: 2026-06-06
-    completed: null
+    completed: 2026-06-06
     estimated_weeks: 0.2
-    tasks_completed: 0
+    tasks_completed: 4
     tasks_total: 4
     file: agent/milestones/milestone-51-bootstrap-install-fix.md
     notes: |
