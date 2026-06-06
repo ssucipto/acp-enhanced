@@ -6,7 +6,7 @@ project:
   version: 6.9.3
   started: 2026-02-16
   status: active
-  current_milestone: null
+  current_milestone: M52
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.3 with 51 completed
     milestones. M50 delivered /acp-design-spec command (interface & data-flow specs).
@@ -163,6 +163,44 @@ milestones:
       BUG-045-03 (MEDIUM): Verify exit code + remediation (route-115).
       E2E bootstrap smoke test (route-116).
       Target: v6.9.4.
+
+  M52:
+    name: Stakeholder Report Command + Carryover Resolution (v6.9.5)
+    priority: 4
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 0.5
+    tasks_completed: 0
+    tasks_total: 7
+    file: agent/milestones/milestone-52-stakeholder-report-carryovers.md
+    notes: |
+      📋 M52 planned — 7 routes for /acp-stakeholder-report + carryovers.
+      Source: feedback-006 from consumer-project (v1.1.0 command, audit-071 hardened).
+      P0 (117-119): port command doc, wrappers, framework integration.
+      P1 (120-122): E2E test, five-tier model docs, audit-044 carryovers.
+      P2 (123): version bump 6.9.5 + CHANGELOG.
+      Target: v6.9.5.
+
+  M53:
+    name: Cursor Slash Commands Bootstrap (v6.10.0)
+    priority: 4
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 0.3
+    tasks_completed: 0
+    tasks_total: 7
+    file: agent/milestones/milestone-53-cursor-slash-commands.md
+    notes: |
+      📋 M53 planned — 7 routes for Cursor IDE slash-command parity.
+      Source: feedback-001 from SmartDojo (acp.cursor-commands-sync.sh).
+      P0 (124-126): port sync script, hook install/update, bootstrap step 6b.
+      P1 (127): E2E test (file parity, naming, content).
+      P2 (128-130): wiki guide, @acp. fix in visualize.md, version bump 6.10.0.
+      Target: v6.10.0.
 
   M1:
     name: ACP Commands Infrastructure
