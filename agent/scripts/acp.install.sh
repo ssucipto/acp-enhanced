@@ -200,6 +200,12 @@ if [ -d "$TEMP_DIR/.opencode/commands" ]; then
     mkdir -p "$TARGET_DIR/.opencode/commands"
     cp "$TEMP_DIR/.opencode/commands/"*.md "$TARGET_DIR/.opencode/commands/" 2>/dev/null || true
 fi
+# Generate Cursor slash commands (.cursor/commands/) from installed command docs
+if [ -f "$TARGET_DIR/agent/scripts/acp.cursor-commands-sync.sh" ]; then
+    echo "Generating Cursor slash commands..."
+    chmod +x "$TARGET_DIR/agent/scripts/acp.cursor-commands-sync.sh"
+    (cd "$TARGET_DIR" && bash agent/scripts/acp.cursor-commands-sync.sh)
+fi
 if [ -d "$TEMP_DIR/agent/routing" ]; then
     cp "$TEMP_DIR/agent/routing/taxonomy.yml" "$TARGET_DIR/agent/routing/" 2>/dev/null || true
     cp "$TEMP_DIR/agent/routing/rules.md"     "$TARGET_DIR/agent/routing/" 2>/dev/null || true
