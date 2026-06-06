@@ -309,6 +309,7 @@ If yes:
 - [`/acp-pattern-create`](acp.pattern-create.md) - Create patterns
 - [`/acp-command-create`](acp.command-create.md) - Create commands
 - [`/acp-package-validate`](acp.package-validate.md) - Validate package after creation
+- [`/acp-design-spec`](acp.design-spec.md) - Document implemented interfaces after build (not planning)
 
 ---
 

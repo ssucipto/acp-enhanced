@@ -92,6 +92,17 @@ task_types:
     tokens_est: 18000
     skill: crosscut
 
+  design-spec:
+    executor: copilot
+    complexity: medium
+    context_required: [commands/acp.design-spec.md, wiki/domain.yml, memory/decisions.md]
+    tokens_est: 15000
+    skill: crosscut
+    description: >
+      Generating Application Interface & Data-Flow Design Specifications
+      using /acp-design-spec. Scans codebase for routes, stores, APIs,
+      persistence; produces 19-section spec with Mermaid diagrams.
+
   architecture-plan:
     executor: claude-sonnet
     complexity: high
