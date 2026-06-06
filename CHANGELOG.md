@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.9.5] — 2026-06-07
+
+### New Commands (M52 — Stakeholder Report + Carryovers)
+- **`/acp-stakeholder-report`** — Generate concise weekly/monthly stakeholder progress summaries with RAG health indicator, ≤300-word executive summary, decisions required, and 2–4 KPI metrics. v1.1.0 hardened by audit-071 from FIFOZ production use.
+
+### Added
+- Five-tier reporting model documented in README (status → stakeholder → report → design-spec → cost-report)
+- `agent/templates/stakeholder-report.template.md` — 9-section output template
+- `e2e/acp.stakeholder-report.test.sh` — 15-assertion smoke test
+- `routing.yml` command_suggestions for acp-stakeholder-report
+- `taxonomy.yml` stakeholder-report task_type
+- Cross-links in acp.report.md (Example 3 updated), acp.cost-report.md, acp.status.md
+
+### Fixed
+- Audit-044 carryovers resolved: design-spec index entry (G-044-03), domain.yml entry (G-044-06), README mention (G-044-07), P3 deferred tracking (DEFER-044-01)
+- Pre-existing `@acp.` occurrences in `acp.visualize.md` replaced with `/acp-` (CARRY-047-01)
+
+---
+
 ## [6.9.4] — 2026-06-06
 
 ### Fixed (M51 — Bootstrap Install Fix)
