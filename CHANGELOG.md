@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.9.4] — 2026-06-06
+
+### Fixed (M51 — Bootstrap Install Fix)
+- **BUG-045-01 (CRITICAL)**: Step 7 now checks file count (`find | wc -l`) instead of directory existence (`-d`). Empty dirs from step 1 no longer cause download skip. Every fresh `curl | bash` install was silently broken with 0 command files.
+- **BUG-045-02 (HIGH)**: OpenCode command generation extracted from `GENERATE_PROMPTS` block. Now runs independently when `GENERATE_OPENCODE=true`. Graceful skip when no prompt files exist.
+- **BUG-045-03 (MEDIUM)**: Post-install verification exits non-zero on failure with clear remediation command.
+- **Bootstrap robustness**: `mkdir -p agent/drafts` before cp (was missing for small team-size scaffold).
+
+### Added
+- `e2e/acp.bootstrap.test.sh` — 8-assertion smoke test (fresh install in temp dir)
+
+---
+
 ## [6.9.3] — 2026-06-06
 
 ### New Commands (M50 — Design-Spec Command Integration)

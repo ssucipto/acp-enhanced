@@ -266,9 +266,32 @@ The ACP command and workflow system (clarifications → design → plan → proc
 
 > **Note**: The upstream [Agent Context Protocol](https://github.com/prmichaelsen/agent-context-protocol) continues to evolve independently. This comparison reflects our fork point. The upstream now has its own extended features (v7.x+) and the two implementations have diverged. Check the upstream README for its current capabilities.
 
-### Recent Protocol Enhancements (v6.4–v6.9.1)
+### Recent Protocol Enhancements (v6.4–v6.9.3)
 
-Eight milestones shipped in May–June 2026:
+Eleven milestones shipped in May–June 2026:
+
+#### M51 — Bootstrap Install Fix (v6.9.4, June 2026)
+Fixed a critical bug where `acp-bootstrap.sh` silently produced broken installs on all fresh curl-pipe-bash invocations. Every new user got 0 command files and 0 script files.
+
+- **Step 7 fix** — Directory check replaced with file count (`find | wc -l`) to prevent false-positive "already installed" detection on empty directories.
+- **OpenCode independence** — Command generation extracted from prompt generation block; now runs independently when `GENERATE_OPENCODE=true`.
+- **Verification hardening** — Post-install verification now exits non-zero on failure with a clear remediation command.
+- **E2E test** — `e2e/acp.bootstrap.test.sh` with 8 assertions, all passing.
+
+#### M50 — Design-Spec Command (v6.9.3, June 2026)
+Integrated `/acp-design-spec` from consumer-project production use — generates structured Application Interface & Data-Flow Design Specifications from the live codebase.
+
+- **19-section template** — Based on arc42, C4 Model, IEEE 1016, and ISO/IEC/IEEE 42010. Stable across projects with Mermaid diagram support.
+- **Stack-agnostic** — Auto-detects UI routes, state stores, API endpoints, and persistence layers regardless of framework.
+- **Quality gates** — Traceability reflects code (not progress.yaml), destructive behavior documented, verification matrix with regression rows.
+- **E2E test** — `e2e/acp.design-spec.test.sh` with 12 assertions, all passing.
+
+#### M49 — Dogfooding + Install Resolution (v6.9.2, June 2026)
+Closed two feedback loops: internal dogfooding pain points (5) and external Windows/Cursor install bugs (7).
+
+- **Triple-file parity** — `/acp-validate` warns on missing `.github/prompts/` and `.opencode/` wrappers.
+- **Windows/Cursor support** — Install hang fix, bootstrap self-heal, Cursor slash commands, post-install verification, backup warnings, `--repair` mode.
+- **AGENTS.md clarity** — Version visible in header for Copilot, Cursor, and Claude Code.
 
 #### M47 — Memory Integrity Release (v6.9.0, June 2026)
 Addressed feedback from consumer-project production usage (64 audits, 14 milestones, 36 patterns). Core deliverable: dual-store architecture with commit-integrated auto-sync.
