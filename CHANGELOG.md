@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.9.3] — 2026-06-06
+
+### New Commands (M50 — Design-Spec Command Integration)
+- **`/acp-design-spec`** — Generate Application Interface & Data-Flow Design Specifications from the live codebase. 19-section template based on arc42, C4 Model, IEEE 1016, and ISO 42010. Stack-agnostic with detection tables. Includes output template, E2E smoke test, and framework integration (routing.yml, taxonomy.yml).
+
+### Added
+- `agent/templates/` directory for output templates
+- `agent/templates/design-spec.template.md` — 19-section spec template
+- `e2e/acp.design-spec.test.sh` — 12-assertion smoke test (all passing)
+- `routing.yml` command_suggestions for `acp-design-spec`
+- `taxonomy.yml` `design-spec` task_type
+- Cross-links in `acp.report.md` and `acp.design-create.md` Related Commands
+- `package.yaml` entry for `acp.design-spec.md`
+
+---
+
 ## [6.9.2] — 2026-06-06
 
 ### Added (M49 — Dogfooding + Install Resolution)
