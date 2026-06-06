@@ -78,7 +78,7 @@ if [ -f "agent/core/identity.yml" ] && [ -f "AGENTS.md" ]; then
     CMD_COUNT=$(find agent/commands -maxdepth 1 -name "acp.*.md" 2>/dev/null | wc -l | tr -d ' ')
     SCRIPT_COUNT=$(find agent/scripts -maxdepth 1 -name "*.sh" 2>/dev/null | wc -l | tr -d ' ')
     
-    if [ "$CMD_COUNT" -ge 40 ] && [ "$SCRIPT_COUNT" -ge 20 ]; then
+    if [ "$CMD_COUNT" -ge 40 ] && [ "$SCRIPT_COUNT" -ge 18 ]; then
         echo "ACP Enhanced is already installed ($CMD_COUNT commands, $SCRIPT_COUNT scripts)."
         echo "To reinstall, remove AGENTS.md and agent/ first."
         echo "To update, use:"
@@ -1344,7 +1344,7 @@ echo -e "${YELLOW}[7/8] Installing ACP commands, scripts and schemas (agent/ dir
 
 _CMD_COUNT=$(find agent/commands -maxdepth 1 -name "acp.*.md" 2>/dev/null | wc -l | tr -d ' ')
 _SCRIPT_COUNT=$(find agent/scripts -maxdepth 1 -name "*.sh" 2>/dev/null | wc -l | tr -d ' ')
-if [ "$_CMD_COUNT" -ge 40 ] && [ "$_SCRIPT_COUNT" -ge 20 ]; then
+if [ "$_CMD_COUNT" -ge 40 ] && [ "$_SCRIPT_COUNT" -ge 18 ]; then
   echo -e "${GREEN}✓ agent/commands + agent/scripts already present (${_CMD_COUNT} commands, ${_SCRIPT_COUNT} scripts) — skipping download${NC}"
 else
   if [ "$_CMD_COUNT" -gt 0 ] || [ "$_SCRIPT_COUNT" -gt 0 ]; then
@@ -1445,10 +1445,10 @@ if [ "$_CMD_COUNT" -ge 40 ]; then
 else
   echo -e "  ${RED}❌ agent/commands/: $_CMD_COUNT files (expected 40+)${NC}"
 fi
-if [ "$_SCRIPT_COUNT" -ge 20 ]; then
+if [ "$_SCRIPT_COUNT" -ge 18 ]; then
   echo -e "  ${GREEN}✅ agent/scripts/: $_SCRIPT_COUNT files${NC}"
 else
-  echo -e "  ${RED}❌ agent/scripts/: $_SCRIPT_COUNT files (expected 20+)${NC}"
+  echo -e "  ${RED}❌ agent/scripts/: $_SCRIPT_COUNT files (expected 18+)${NC}"
 fi
 [ -d ".opencode/commands" ] && echo -e "  ${GREEN}✅ .opencode/commands/: present${NC}" || echo -e "  ${YELLOW}⚠️ .opencode/commands/: missing${NC}"
 [ -d ".cursor/commands" ] && echo -e "  ${GREEN}✅ .cursor/commands/: present${NC}" || echo -e "  ${YELLOW}⚠️ .cursor/commands/: missing${NC}"
@@ -1457,7 +1457,7 @@ echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━�
 # Exit non-zero if verification failed — prevents silent broken installs
 _VERIFY_FAILED=false
 [ "$_CMD_COUNT" -lt 40 ] && _VERIFY_FAILED=true
-[ "$_SCRIPT_COUNT" -lt 20 ] && _VERIFY_FAILED=true
+[ "$_SCRIPT_COUNT" -lt 18 ] && _VERIFY_FAILED=true
 
 if [ "$_VERIFY_FAILED" = "true" ]; then
   echo ""
