@@ -1,12 +1,12 @@
 # Agent Context Protocol Enhanced (ACP Enhanced)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.9.1
+**Version**: 6.9.2
 **Fork of**: [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol)
 **Maintained by**: [ssucipto/acp-enhanced](https://github.com/ssucipto/acp-enhanced)
 **Created**: 2026-02-11
-**Updated**: 2026-06-04
-**Status**: Production Pattern — 48 milestones complete
+**Updated**: 2026-06-06
+**Status**: Production Pattern — 49 milestones complete
 
 ---
 
