@@ -2,6 +2,32 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-06-07
+  executor: copilot
+  tasks: [route-129, route-117, route-118, route-119, route-120, route-121, route-122, route-123, route-124, route-125, route-126, route-127, route-128, route-130, audit-048, audit-049, acp-update, acp-sync]
+  done:
+    - m52-implemented-7-routes-stakeholder-report-v1-1-0
+    - m53-implemented-7-routes-cursor-slash-commands
+    - route-129-hotfix-acp-dot-in-visualize-md
+    - feedback-006-stakeholder-report-integrated
+    - feedback-001-cursor-commands-integrated
+    - audit-044-carryovers-all-4-resolved
+    - five-tier-reporting-model-documented-readme
+    - cursor-integration-wiki-guide-created
+    - bug-049-01-pipefail-crash-fixed-bootstrap-8-8-restored
+    - all-e2e-suites-green-518-518-assertions
+    - prd-readme-ip-register-changelog-synced-53-milestones
+  deferred:
+    - visualizer-stakeholder-card-email-export → P2
+    - cursor-prefs-disable-flag → G-048-06
+  key_fact: |
+    Dual-milestone M52+M53 session integrated two field feedbacks (006 from
+    consumer-project, 001 from SmartDojo) in a single implementation pass. The ACP command
+    integration pattern is now proven across 4 feedbacks (001/003/005/006).
+    518/518 E2E assertions across 5 test suites. The only implementation bug
+    (pipefail+find crash) was found by bootstrap E2E test, not manual review —
+    confirming the test-first approach. 53 milestones at v6.10.0.
+
 - date: 2026-06-06
   executor: copilot
   tasks_completed: [feedback-review-install-windows-cursor, plan-049, route-094, route-095, route-096, route-097, route-098, route-099, route-100, route-101, route-102, route-103, route-104, route-105, audit-m49-post, acp-update, acp-sync]
@@ -181,26 +207,36 @@
     mostly-stale context adds no value when conversation context exists. P0 fixes
     implemented: R1 light-mode protocol (identity + progress + recent sessions,
     ~200 tokens) added to routing.yml + copilot-instructions.md + CLAUDE.md. R2
-    auto-populate lessons from key_facts added to /acp-commit protocol with scope
-    inference + dedup. 7 remaining recommendations prioritized for phased rollout.
-
+# === Weekly Summary: 2026-05-09 – 2026-05-17 (10 sessions compacted 2026-06-07) ===
 - date: 2026-05-17
   executor: copilot
-  tasks: [audit-018]
-  done:
-    - audit-018-readme-accuracy-vs-implementation
-    - fixed-readme-seven-to-eight-steps-F-001
-    - fixed-bootstrap-counter-1-7-to-1-8-all-six-echoes-F-002
-    - added-M43-subsection-to-recent-protocol-enhancements-F-003
-    - updated-section-header-v6.4-v6.8-to-v6.4-v6.8.1-F-003
-    - rewrote-bootstrap-step-list-to-match-actual-script-F-004
-    - generated-IP_REGISTER.md-via-ip-register-prompt
-  deferred: []
-  key_fact: |
-    audit-018: README said "seven steps" but bootstrap has 8 ([8/8] = pre-commit hook, added M41).
-    Script counters [1/7]–[6/7] were stale — updated to [1/8]–[6/8]. M43 (v6.8.1) was missing
-    from "Recent Protocol Enhancements". All 5 findings fixed immediately — no pending carryovers.
-    All previous audit carryovers remain at status:fixed (0 pending).
+  compacted: true
+  tasks: [audit-018, audit-011, audit-010, audit-009, route-014..021, route-022..035, route-036..042, route-043..045, M39, M40, M41, M42, M43]
+  summary: |
+    Week of 2026-05-09 to 2026-05-17: M39-M43 delivered across 7 sessions.
+    M39 (v6.5.0): Git branch awareness — Step 1b guard, identity.yml git_workflow block.
+    M40 (v6.6.0): Pre-implementation audit protocol — --pre-impl flag, carryover tracking.
+    M41 (v6.7.0): 14-route stabilisation sprint — 4 missing command docs created, 7 structural
+    gap fixes, Windows/WSL2 docs, pre-commit hook in bootstrap step 8.
+    M42 (v6.8.0): Dispatch integrity + validation hardening — 5 new validate checks,
+    9 new taxonomy task types, sessions memory validation, AGENTS.md size guard.
+    M43 (v6.8.1): Taxonomy hygiene — shell-scripting task_type gap fix (was falling back to
+    10-20x more expensive executor), command-doc-write threshold rule, checkStaleness order fix.
+    audit-009: 6 process compliance gaps from audit-008 retroactively fixed.
+    audit-010: feedback-002 + feedback-003 reviewed, M39+M40 planned.
+    audit-011: 6 pre-impl gaps found in M39/M40 routes, all 9 fixes applied before coding.
+    audit-018: README accuracy — "seven steps"→8, stale counters [1/7]→[1/8], M43 section added.
+  key_facts_preserved:
+    - "force-add required for gitignored instance files in acp-enhanced dev repo"
+    - "4 missing command docs: acp.feedback, acp.task, acp.install, acp.dispatch"
+    - "add new task_types to taxonomy.yml IMMEDIATELY when first used in a route file"
+    - "shell-scripting task_type was absent — caused 10-20x cost increase via fallback executor"
+    - "command doc trio pattern: 3 files atomically per new command"
+    - "when audit work finds gaps, audit those gaps too — process compliance is recursive"
+    - "count actual command docs with find, not domain.yml — domain.yml was 58, actual was 63"
+
+# === Weekly Summary: 2026-05-01 – 2026-05-09 (10 sessions compacted 2026-05-13) ===
+- date: 2026-05-01
 
 - date: 2026-05-13
   executor: copilot
