@@ -39,10 +39,33 @@ Copy `agent/feedback/acp.design-spec.md` → `agent/commands/acp.design-spec.md`
 
 ### 2. Adapt references per upstream integration runbook
 
-- **Naming**: The command already uses `/acp-design-spec` format (not upstream `@acp.design-spec`). Verify all invocations use `/acp-` prefix.
-- **File references**: Ensure internal links point to `agent/commands/acp.*.md` (not relative paths that may break).
-- **Exemplar path**: Update the exemplar reference from FIFOZ path to note it's in `agent/feedback/` (not shipped in distribution).
-- **Visualizer reference**: Keep Visualizer integration notes but mark as "if ACP Visualizer is installed."
+Apply these 4 explicit adaptations:
+
+**a. Exemplar path**: The command references `agent/reports/design-spec-app-interfaces-m15-spine-v2.1.md`
+as the exemplar output. Change to note that the exemplar is in `agent/feedback/` (reference-only,
+not shipped in distribution):
+```
+**Exemplar output (FIFOZ):** `agent/feedback/design-spec-app-interfaces-m15-spine-v2.1.md` (reference only)
+```
+
+**b. Visualizer references**: The command mentions ACP Visualizer (`/acp-visualize`, `fad4492`, `v1.5.3+`).
+Keep these but mark as optional with conditional language:
+```
+> **If ACP Visualizer is installed:** Run `/acp-visualize --update` to render diagrams in Docs tab.
+```
+
+**c. `@acp.` notation check**: The v1.1.0 command already uses `/acp-` prefix throughout.
+Verify no `@acp.` dot notation remains (grep for `@acp\.`). If found, replace with `/acp-`.
+
+**d. Internal links**: Verify all cross-references resolve in ACP Enhanced:
+- `acp.design-create.md` → exists ✓
+- `acp.report.md` → exists ✓
+- `acp.audit.md` → exists ✓
+- `acp.visualize.md` → exists ✓
+- `agent/progress.yaml` → exists ✓
+- `agent/memory/audit-carryovers.md` → exists ✓
+- `agent/memory/decisions.md` → exists ✓
+- `agent/wiki/domain.yml` → exists ✓
 
 ### 3. Verify against command naming convention
 
