@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.9.2] — 2026-06-06
+
+### Added (M49 — Dogfooding + Install Resolution)
+- **Triple-file parity check**: `/acp-validate` Step 11.7 warns on missing `.github/prompts/` and `.opencode/` wrappers (route-094)
+- **AGENTS.md version line**: Protocol doc header now shows v6.9.2 for Copilot/Cursor/Claude (route-095)
+- **`--validate` flag**: `/acp-commit --validate` runs validation before committing (route-096)
+- **Windows + Cursor support**: `.cursor/commands/` auto-generated during bootstrap. Windows install docs with Git Bash recovery path (routes-101, 104)
+- **Post-install verification**: Command/script counts checked at end of bootstrap and install (route-102)
+- **Backup warning**: Install/update scripts now show overwrite vs preserve lists before making changes (route-103)
+- **`--repair` mode**: `/acp-install --repair` detects and fixes partial/broken installs (route-105)
+- **Instance Data wiki**: Documented `.gitignore` design rationale and framework dev mode (route-098)
+
+### Fixed
+- **Windows Git Bash hang**: 3 `while true` loops in `acp.install.sh` now have MAX_ITERATION safety caps (route-099)
+- **Bootstrap partial-install**: Completeness check replaces simple early-exit; auto-completes partial installs (route-100)
+
+### Source
+- feedback-003 (dogfooding analysis — 5 pain points)
+- install-windows-cursor-2026-06-06 (7 Windows/Cursor findings)
+
+---
+
 ## [6.9.1] — 2026-06-04
 
 ### Added (M48 — Carryover Resolution & Workflow Hardening)
