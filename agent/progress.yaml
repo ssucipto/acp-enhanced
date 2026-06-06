@@ -115,12 +115,14 @@ milestones:
     started: null
     estimated_weeks: 0.2
     tasks_completed: 0
-    tasks_total: 5
+    tasks_total: 12
     file: agent/milestones/milestone-49-dogfooding-resolution.md
     notes: |
-      📋 M49 planned — 5 routes from feedback-003 dogfooding analysis.
-      Routes 094-098: triple-file parity check, AGENTS.md version line,
-      --validate on commit, visualizer direct-path, .gitignore docs.
+      📋 M49 planned — 12 routes from feedback-003 + install-windows-cursor.
+      Dogfooding (094-098): triple-file parity, AGENTS.md version, --validate,
+      visualizer direct-path, .gitignore docs.
+      Install (099-105): Windows hang fix, bootstrap self-heal, Cursor commands,
+      post-install verify, backup warning, Windows docs, --repair mode.
       Target: v6.9.2.
 
   M1:
@@ -3939,6 +3941,69 @@ tasks:
       estimated_hours: 0.5-1
       notes: |
         Wiki section + --track-instance-data concept.
+
+    - id: route-099
+      name: "acp.install.sh: fix Windows Git Bash hang (while-true loop safety)"
+      priority: 5
+      status: planned
+      file: agent/routing/tasks/route-099.md
+      estimated_hours: 2-3
+      notes: |
+        P0: Safety cap + Windows detection + timeout for yaml_query loops.
+
+    - id: route-100
+      name: "acp-bootstrap.sh: detect and self-heal partial installs"
+      priority: 5
+      status: planned
+      file: agent/routing/tasks/route-100.md
+      estimated_hours: 1-2
+      notes: |
+        P0: Completeness check replaces simple early-exit. Auto-completes.
+
+    - id: route-101
+      name: "Generate .cursor/commands/ for Cursor IDE slash autocomplete"
+      priority: 4
+      status: planned
+      file: agent/routing/tasks/route-101.md
+      estimated_hours: 1
+      notes: |
+        P1: Mirror .opencode/ → .cursor/ during bootstrap + install.
+
+    - id: route-102
+      name: "Post-install verification — check command/script counts"
+      priority: 4
+      status: planned
+      file: agent/routing/tasks/route-102.md
+      estimated_hours: 1
+      notes: |
+        P1: verify_install() at end of bootstrap + install.
+
+    - id: route-103
+      name: "Backup instruction + safe install/update with user warning"
+      priority: 4
+      status: planned
+      file: agent/routing/tasks/route-103.md
+      estimated_hours: 1
+      notes: |
+        P1: Pre-install warning: what's overwritten vs preserved. --yes flag.
+
+    - id: route-104
+      name: "Windows install documentation + recovery path"
+      priority: 3
+      status: planned
+      file: agent/routing/tasks/route-104.md
+      estimated_hours: 1
+      notes: |
+        P2: README + QUICKSTART Windows/Cursor sections.
+
+    - id: route-105
+      name: "Install recovery path — /acp-install --repair mode"
+      priority: 3
+      status: planned
+      file: agent/routing/tasks/route-105.md
+      estimated_hours: 1-2
+      notes: |
+        P2: --repair detects and fixes partial/broken installs.
 
 recent_work:
   - date: 2026-06-04
