@@ -86,6 +86,14 @@ Total saved this period: $[X.XX] vs all-Claude baseline ([N]% savings)
 
 ---
 
+## Related Commands
+
+- [`/acp-stakeholder-report`](acp.stakeholder-report.md) — Pair on Fridays — exec summary + AI spend
+- [`/acp-route`](acp.route.md) — Re-route expensive task types to cheaper models
+- [`/acp-dispatch`](acp.dispatch.md) — Apply routing changes to new dispatches
+
+---
+
 ## Verification
 
 - [ ] Spend table includes all executors with at least one ledger entry

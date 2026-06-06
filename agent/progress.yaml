@@ -3,14 +3,14 @@
 
 project:
   name: agent-context-protocol
-  version: 6.9.3
+  version: 6.9.5
   started: 2026-02-16
   status: active
   current_milestone: M52
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.3 with 51 completed
-    milestones. M50 delivered /acp-design-spec command (interface & data-flow specs).
-    M51 fixed critical bootstrap install bug (empty-dir false positive).
+    milestones. M50 delivered /acp-design-spec command. M51 fixed critical
+    bootstrap install bug. M52+M53 planned for stakeholder-report + cursor commands.
 
 milestones:
   M44:
@@ -167,12 +167,12 @@ milestones:
   M52:
     name: Stakeholder Report Command + Carryover Resolution (v6.9.5)
     priority: 4
-    status: planned
-    progress: 0
-    started: null
-    completed: null
+    status: completed
+    progress: 100
+    started: 2026-06-07
+    completed: 2026-06-07
     estimated_weeks: 0.5
-    tasks_completed: 0
+    tasks_completed: 7
     tasks_total: 7
     file: agent/milestones/milestone-52-stakeholder-report-carryovers.md
     notes: |
