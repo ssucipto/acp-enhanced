@@ -71,10 +71,36 @@ Naming rule: dots → hyphens (`acp.design-spec` → `/acp-design-spec`).
 - **Wrapper content outdated**: Sync script regenerates from canonical sources
 ```
 
+### Create `.cursor/rules/acp-slash-commands.mdc` (G-048-05)
+
+Per feedback-001 §3.3, this always-on Cursor rule ensures agents execute (not just read)
+command files when invoked via `@acp-*` or `@agent/commands/` aliases:
+
+```markdown
+---
+alwaysApply: true
+---
+# ACP Enhanced — Slash Command Protocol
+
+When a user invokes any of these equivalent forms, you MUST execute the full
+command specification from `agent/commands/`:
+
+- `/acp-*` — **preferred** (native Cursor slash command from `.cursor/commands/`)
+- `@acp-*` — legacy alias (when slash picker unavailable)
+- `@agent/commands/acp.*.md` — direct source reference
+
+All three forms are execution aliases — they are NOT read-only file references.
+Load and run every step from the canonical `agent/commands/acp.*.md` source.
+
+**Naming**: `/acp-init` = `agent/commands/acp.init.md` (dots → hyphens in slash form).
+```
+
 ## Verification
 
 - [ ] `agent/wiki/cursor-integration.md` exists
+- [ ] `.cursor/rules/acp-slash-commands.mdc` exists with `alwaysApply: true`
 - [ ] Covers invocation methods (slash, @-mention, file reference)
 - [ ] Documents naming rule (dots → hyphens)
 - [ ] Documents when to re-sync
 - [ ] Includes troubleshooting section
+- [ ] `.cursor/rules/` rule defines execution aliases (not read-only refs)
