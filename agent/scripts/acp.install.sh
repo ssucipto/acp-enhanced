@@ -37,6 +37,24 @@ TARGET_DIR="$(pwd)"
 echo "Installing ACP to: $TARGET_DIR"
 echo ""
 
+# Backup + overwrite warning
+echo "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo "${BLUE}  What will be OVERWRITTEN:${NC}"
+echo "    • AGENTS.md, CLAUDE.md, copilot-instructions.md"
+echo "    • agent/commands/*.md, agent/scripts/*.sh"
+echo "    • agent/core/*.yml, agent/skills/*.md, agent/wiki/*"
+echo ""
+echo "${BLUE}  What will be PRESERVED:${NC}"
+echo "    • agent/memory/*, agent/design/*, agent/milestones/*"
+echo "    • agent/patterns/local.*, agent/progress.yaml"
+echo "    • agent/preferences/, agent/configurables/"
+echo ""
+echo "  💡 Backup customized files before continuing:"
+echo "    cp AGENTS.md AGENTS.md.bak"
+echo "    cp -r agent/commands agent/commands.bak"
+echo "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+
 # Check if agent directory already exists
 if [ -d "$TARGET_DIR/agent" ]; then
     echo "${YELLOW}Note: agent/ directory already exists${NC}"
@@ -335,7 +353,12 @@ if [ -d "$TEMP_DIR/agent/scripts" ]; then
         PACKAGE_COMMANDS=()
         REQUIRED_SCRIPTS=()
         cmd_index=0
+        MAX_ITERATIONS=200  # safety cap — prevents infinite loop on Windows Git Bash
         while true; do
+            if [ "$cmd_index" -gt "$MAX_ITERATIONS" ]; then
+                echo "ERROR: yaml_query loop exceeded $MAX_ITERATIONS iterations — falling back to copy-all" >&2
+                break 2  # break out of outer loop, fall through to copy-all path
+            fi
             cmd_name=$(yaml_query ".contents.commands[$cmd_index].name" 2>/dev/null || echo "")
             if [ -z "$cmd_name" ] || [ "$cmd_name" = "null" ]; then
                 break
@@ -348,7 +371,12 @@ if [ -d "$TEMP_DIR/agent/scripts" ]; then
 
                 # Collect scripts for this command
                 script_index=0
+                SCRIPT_MAX=50  # safety cap
                 while true; do
+                    if [ "$script_index" -gt "$SCRIPT_MAX" ]; then
+                        echo "WARN: script loop exceeded $SCRIPT_MAX — breaking" >&2
+                        break
+                    fi
                     script=$(yaml_query ".contents.commands[$cmd_index].scripts[$script_index]" 2>/dev/null || echo "")
                     if [ -z "$script" ] || [ "$script" = "null" ]; then
                         break
@@ -384,7 +412,12 @@ if [ -d "$TEMP_DIR/agent/scripts" ]; then
                 # Check if script is experimental by finding it in contents.scripts
                 is_exp="false"
                 script_check_index=0
+                SCRIPT_CHK_MAX=100  # safety cap
                 while true; do
+                    if [ "$script_check_index" -gt "$SCRIPT_CHK_MAX" ]; then
+                        echo "WARN: script check loop exceeded $SCRIPT_CHK_MAX" >&2
+                        break
+                    fi
                     s_name=$(yaml_query ".contents.scripts[$script_check_index].name" 2>/dev/null || echo "")
                     if [ -z "$s_name" ] || [ "$s_name" = "null" ]; then
                         break
@@ -479,3 +512,13 @@ echo ""
 echo "${BLUE}For AI agents:${NC}"
 echo "Type '${GREEN}/acp-init${NC}' to get started."
 echo ""
+
+# Post-install verification
+_CMD_COUNT=$(find agent/commands -maxdepth 1 -name "acp.*.md" 2>/dev/null | wc -l | tr -d ' ')
+_SCRIPT_COUNT=$(find agent/scripts -maxdepth 1 -name "*.sh" 2>/dev/null | wc -l | tr -d ' ')
+echo "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo "${BLUE}  Post-Install Verification${NC}"
+echo "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+[ "$_CMD_COUNT" -ge 40 ] && echo "${GREEN}✅ agent/commands/: $_CMD_COUNT files${NC}" || echo "${RED}❌ agent/commands/: $_CMD_COUNT files (expected 40+)${NC}"
+[ "$_SCRIPT_COUNT" -ge 20 ] && echo "${GREEN}✅ agent/scripts/: $_SCRIPT_COUNT files${NC}" || echo "${RED}❌ agent/scripts/: $_SCRIPT_COUNT files (expected 20+)${NC}"
+echo "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
