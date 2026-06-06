@@ -103,6 +103,17 @@ task_types:
       using /acp-design-spec. Scans codebase for routes, stores, APIs,
       persistence; produces 19-section spec with Mermaid diagrams.
 
+  stakeholder-report:
+    executor: copilot
+    complexity: low
+    context_required: [commands/acp.stakeholder-report.md, progress.yaml]
+    tokens_est: 5000
+    skill: crosscut
+    description: >
+      Generating weekly/monthly stakeholder progress summaries with RAG
+      health indicators. Reads progress.yaml, filters to business outcomes
+      (no task IDs), produces 1-2 page executive summary.
+
   architecture-plan:
     executor: claude-sonnet
     complexity: high
