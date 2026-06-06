@@ -90,10 +90,30 @@ Insert after `design-spec`:
 
 ### 4. Cross-links in peer commands
 
-**`acp.report.md`** — Add to Related Commands:
+**`acp.report.md`** — Add to Related Commands AND update Example 3:
+
+**Related Commands addition:**
 ```markdown
 - [`/acp-stakeholder-report`](acp.stakeholder-report.md) — Weekly executive summary (not this full report)
 ```
+
+**Example 3 update (line 338):** Change from:
+```markdown
+### Example 3: Stakeholder Update
+**Context**: Monthly update for stakeholders  
+**Invocation**: `/acp-report`  
+**Result**: Executive-friendly report with high-level progress...
+```
+To:
+```markdown
+### Example 3: Stakeholder Update
+**Context**: Monthly update for stakeholders  
+**Invocation**: `/acp-stakeholder-report`  
+**Result**: 1–2 page RAG summary with decisions required, ≤4 KPIs.
+            For full detail, use `/acp-report`.
+```
+This is a specific feedback-006 Phase B requirement — the example must
+point to the correct command to prevent agents from sending the wrong artifact.
 
 **`acp.cost-report.md`** — Add to Related Commands:
 ```markdown
