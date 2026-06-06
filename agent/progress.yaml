@@ -4083,6 +4083,22 @@ tasks:
         P2: --repair detects and fixes partial/broken installs.
 
 recent_work:
+  - date: 2026-06-07
+    description: |
+      🎉 M52 + M53 COMPLETE: Stakeholder Report + Cursor Commands (v6.10.0).
+      14 routes, 3 audits, 2 E2E tests, feedback-001/006 integrated.
+    items:
+      - "✅ M52 (117-123): /acp-stakeholder-report v1.1.0 — RAG, ≤300 words, 2-4 KPIs, five-tier model"
+      - "✅ M53 (124-130): Cursor slash commands — sync script, install/update hooks, bootstrap step 6b"
+      - "✅ Hotfix (129): @acp. → /acp- in acp.visualize.md (3 occurrences)"
+      - "✅ E2E: stakeholder-report (15/15) + cursor-sync (10/10)"
+      - "✅ Audits: 048 (pre-impl gap analysis), 049 (deep verification, BUG-049-01 fixed)"
+      - "✅ Feedback-006: FIFOZ stakeholder-report fully integrated"
+      - "✅ Feedback-001: SmartDojo cursor commands fully integrated"
+      - "✅ Carryovers: 4 audit-044 resolved + CARRY-047-01 (@acp. fix)"
+      - "✅ Bug: BUG-049-01 pipefail crash fixed (+ bootstrap 8/8 restored)"
+      - "✅ All E2E suites green: 518/518 (design-spec 12, stakeholder 15, cursor 10, bootstrap 8, cmd-docs 473)"
+
   - date: 2026-06-06
     description: |
       🎉 M50 + M51 COMPLETE: Design-Spec Command + Bootstrap Fix (v6.9.3).
@@ -6105,24 +6121,22 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "📋 Push commits to remote (mainline)"
-  - "📋 Address audit-044 carryovers: index entry, domain.yml, README, P3 deferred items"
   - "📋 Run /acp-commit to write session memory"
   - "📋 Run /acp-validate to verify YAML integrity"
-  - "📋 Fix pre-existing @acp. occurrences in acp.visualize.md"
+  - "📋 Address G-048-06: preferences/cursor.yml disable flag"
+  - "📋 Track P2 Visualizer items (stakeholder card, email export)"
 
 notes:
-  - 51 milestones complete (M1–M51, 100%), v6.9.3 (2026-06-06)
-  - 68 command docs (1 new: acp.design-spec)
-  - 47 audit reports in agent/reports/ (audit-001 through audit-047)
-  - 18 E2E test files (2 new: commit-sync, repair-tools — 12 assertions)
-  - Install system: 4-audit hardened (036-039), 26 findings fixed
-  - Bootstrap: safe, idempotent, with pre-flight checks and cleanup
-  - Update: F-004 dead sed fixed, pre-installation checks added
-  - README: visualizer v1.5.0 featured prominently
-  - run-e2e-tests.sh: --parallel flag, --help, argument validation
-  - CI: e2e-tests.yaml uses --parallel 4
-  - /acp-validate v2.3.0: Step 2c version consistency check added (prevents stale version drift)
+  - 53 milestones complete (M1–M53, 100%), v6.10.0 (2026-06-07)
+  - 69 command docs (2 new: acp.design-spec, acp.stakeholder-report)
+  - 49 audit reports in agent/reports/ (audit-001 through audit-049)
+  - 20 E2E test files (4 new: design-spec 12a, bootstrap 8a, stakeholder 15a, cursor-sync 10a)
+  - 518 total E2E assertions, all passing
+  - 4 feedbacks integrated: 001 (cursor), 003 (dogfooding), 005 (design-spec), 006 (stakeholder)
+  - All audit-044 carryovers resolved (G-044-03/06/07, DEFER-044-01)
+  - CARRY-047-01 (@acp. in visualize.md) fixed — command-docs 473/473
+  - Five-tier reporting model documented in README
+  - Cursor IDE parity: .cursor/commands/ auto-generated during install/update/bootstrap
 
 current_blockers: []
 
