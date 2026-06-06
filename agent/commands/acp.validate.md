@@ -501,6 +501,17 @@ Exit code: 0 if size guard + sessions check pass; 1 otherwise. Staleness is info
 
 **Expected Outcome**: Report from each check. Failures on size guard or sessions structure are errors; staleness warnings are informational.
 
+### 11.7. Validate Command Wrapper Parity (v6.9.2+)
+
+> **This step runs in ALL modes.** Warns when command docs lack prompt/opencode wrappers.
+
+For each `agent/commands/acp.*.md` (excluding templates and non-acp commands):
+- Check `.github/prompts/acp.{name}.prompt.md` exists → ✅ / ⚠️ MISSING
+- Check `.opencode/commands/acp.{name}.md` exists → ✅ / ⚠️ MISSING
+
+⚠️ Warnings only — do not affect exit code. Templates (`*.template.md`) and
+non-acp commands (`git.*`) are skipped.
+
 ### 12. Generate Validation Report
 
 Summarize validation results.

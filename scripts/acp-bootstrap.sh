@@ -75,12 +75,21 @@ trap 'echo "Bootstrap failed at line $LINENO — check output above for details.
 
 # Check 1: Already installed?
 if [ -f "agent/core/identity.yml" ] && [ -f "AGENTS.md" ]; then
-    echo "ACP Enhanced is already installed in: $(pwd)"
-    echo "To reinstall, remove AGENTS.md and agent/ first."
-    echo "To update, use:"
-    echo "  ./agent/scripts/acp.version-update.sh"
-    echo "  # or: /acp-version-update in Copilot chat"
-    exit 0
+    CMD_COUNT=$(find agent/commands -maxdepth 1 -name "acp.*.md" 2>/dev/null | wc -l | tr -d ' ')
+    SCRIPT_COUNT=$(find agent/scripts -maxdepth 1 -name "*.sh" 2>/dev/null | wc -l | tr -d ' ')
+    
+    if [ "$CMD_COUNT" -ge 40 ] && [ "$SCRIPT_COUNT" -ge 20 ]; then
+        echo "ACP Enhanced is already installed ($CMD_COUNT commands, $SCRIPT_COUNT scripts)."
+        echo "To reinstall, remove AGENTS.md and agent/ first."
+        echo "To update, use:"
+        echo "  ./agent/scripts/acp.version-update.sh"
+        echo "  # or: /acp-version-update in Copilot chat"
+        exit 0
+    else
+        echo "⚠️  Partial install detected ($CMD_COUNT commands, $SCRIPT_COUNT scripts)."
+        echo "   Completing installation..."
+        # Fall through to complete remaining steps
+    fi
 fi
 
 # Check for partial installation (one exists but not the other)
@@ -1307,6 +1316,18 @@ for _oc_src in .github/prompts/*.prompt.md; do
   _oc_count=$((_oc_count + 1))
 done
 echo -e "${GREEN}✓ ${_oc_count} opencode slash commands generated in .opencode/commands/${NC}"
+
+  # Generate Cursor command wrappers (same format as opencode)
+  echo -e "${YELLOW}Generating Cursor slash commands...${NC}"
+  mkdir -p .cursor/commands
+  _cursor_count=0
+  for _f in .opencode/commands/acp.*.md; do
+    [ -f "$_f" ] || continue
+    _cb=$(basename "$_f")
+    cp "$_f" ".cursor/commands/$_cb"
+    _cursor_count=$((_cursor_count + 1))
+  done
+  echo -e "${GREEN}✓ ${_cursor_count} Cursor slash commands generated in .cursor/commands/${NC}"
 else
 echo -e "${YELLOW}[6/8] Skipping prompt files (opt-in via --generate-prompts or manifest)${NC}"
 fi
@@ -1400,3 +1421,24 @@ echo ""
 echo "opencode slash commands: same /acp-* set (via .opencode/commands/)"
 echo ""
 echo -e "${GREEN}Done. ACP Enhanced is ready.${NC}"
+
+# Post-install verification
+_CMD_COUNT=$(find agent/commands -maxdepth 1 -name "acp.*.md" 2>/dev/null | wc -l | tr -d ' ')
+_SCRIPT_COUNT=$(find agent/scripts -maxdepth 1 -name "*.sh" 2>/dev/null | wc -l | tr -d ' ')
+echo ""
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BLUE}  Post-Install Verification${NC}"
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+if [ "$_CMD_COUNT" -ge 40 ]; then
+  echo -e "  ${GREEN}✅ agent/commands/: $_CMD_COUNT files${NC}"
+else
+  echo -e "  ${RED}❌ agent/commands/: $_CMD_COUNT files (expected 40+)${NC}"
+fi
+if [ "$_SCRIPT_COUNT" -ge 20 ]; then
+  echo -e "  ${GREEN}✅ agent/scripts/: $_SCRIPT_COUNT files${NC}"
+else
+  echo -e "  ${RED}❌ agent/scripts/: $_SCRIPT_COUNT files (expected 20+)${NC}"
+fi
+[ -d ".opencode/commands" ] && echo -e "  ${GREEN}✅ .opencode/commands/: present${NC}" || echo -e "  ${YELLOW}⚠️ .opencode/commands/: missing${NC}"
+[ -d ".cursor/commands" ] && echo -e "  ${GREEN}✅ .cursor/commands/: present${NC}" || echo -e "  ${YELLOW}⚠️ .cursor/commands/: missing${NC}"
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
