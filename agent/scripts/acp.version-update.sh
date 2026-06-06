@@ -217,6 +217,12 @@ if [ -d "$TEMP_DIR/.opencode/commands" ]; then
     cp "$TEMP_DIR/.opencode/commands/"*.md .opencode/commands/ 2>/dev/null || true
 fi
 
+# Regenerate Cursor slash commands from updated command docs
+if [ -f "agent/scripts/acp.cursor-commands-sync.sh" ]; then
+    echo "Regenerating Cursor slash commands..."
+    bash agent/scripts/acp.cursor-commands-sync.sh
+fi
+
 echo "${GREEN}✓${NC} ACP Enhanced context layer updated"
 echo ""
 

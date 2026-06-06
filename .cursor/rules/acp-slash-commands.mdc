@@ -1,0 +1,16 @@
+---
+alwaysApply: true
+---
+# ACP Enhanced — Slash Command Protocol
+
+When a user invokes any of these equivalent forms, you MUST execute the full
+command specification from `agent/commands/`:
+
+- `/acp-*` — **preferred** (native Cursor slash command from `.cursor/commands/`)
+- `@acp-*` — legacy alias (when slash picker unavailable)
+- `@agent/commands/acp.*.md` — direct source reference
+
+All three forms are execution aliases — they are NOT read-only file references.
+Load and run every step from the canonical `agent/commands/acp.*.md` source.
+
+**Naming**: `/acp-init` = `agent/commands/acp.init.md` (dots → hyphens in slash form).
