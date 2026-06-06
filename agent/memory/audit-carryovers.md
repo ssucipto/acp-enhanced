@@ -345,3 +345,53 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: "M48 route-087"
+
+  # ── AUDIT-044 FINDINGS — POST-IMPLEMENTATION ENHANCEMENTS ─────────────
+
+  - audit_id: 44
+    finding_id: G-044-03
+    severity: low
+    file: agent/index/acp.core.yaml
+    finding: "No index entry for new /acp-design-spec command — reduces contextual discoverability"
+    description: "The key-file index system maps commands to design docs. Adding an entry in agent/index/acp.core.yaml lets agents discover the command during acp.plan / acp.design-create / acp.proceed context loading."
+    fix_target: "Add acp.design-spec entry to agent/index/acp.core.yaml with weight 0.7, kind: command, applies: acp.design-spec, acp.proceed"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 44
+    finding_id: G-044-06
+    severity: low
+    file: agent/wiki/domain.yml
+    finding: "No domain.yml entry for design-spec command taxonomy"
+    description: "The wiki domain.yml tracks the command taxonomy. New commands should be registered for /acp-wiki-update consistency and cross-reference integrity."
+    fix_target: "Add design-spec entry to agent/wiki/domain.yml commands section"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 44
+    finding_id: G-044-07
+    severity: low
+    file: README.md
+    finding: "No README.md mention of /acp-design-spec — new user-facing command not listed"
+    description: "README lists recent enhancements and command categories. M50 adds a significant new command (19-section interface specs, Mermaid diagrams, industry standards) that deserves a mention."
+    fix_target: "Add /acp-design-spec to README recent enhancements or command listing section"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 44
+    finding_id: DEFER-044-01
+    severity: low
+    file: agent/milestones/milestone-50-design-spec-command.md
+    finding: "P3 items deferred without follow-up tracking — Visualizer preset and exemplar"
+    description: "Visualizer design-spec document type preset and abbreviated exemplar in agent/examples/ are deferred to later milestone but no carryover or future-milestone task exists."
+    fix_target: "Create a follow-up task or add to next milestone's deferred list. Include in M50 session commit deferred: field."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
