@@ -1342,32 +1342,30 @@ fi
 # --- 7. Install agent/ commands, scripts and schemas ---
 echo -e "${YELLOW}[7/8] Installing ACP commands, scripts and schemas (agent/ directory)...${NC}"
 
-if [ -d "agent/commands" ] && [ -d "agent/scripts" ]; then
-  _CMD_COUNT=$(find agent/commands -maxdepth 1 -name "acp.*.md" 2>/dev/null | wc -l | tr -d ' ')
-  _SCRIPT_COUNT=$(find agent/scripts -maxdepth 1 -name "*.sh" 2>/dev/null | wc -l | tr -d ' ')
-  if [ "$_CMD_COUNT" -ge 40 ] && [ "$_SCRIPT_COUNT" -ge 20 ]; then
-    echo -e "${GREEN}✓ agent/commands + agent/scripts already present (${_CMD_COUNT} commands, ${_SCRIPT_COUNT} scripts) — skipping download${NC}"
+_CMD_COUNT=$(find agent/commands -maxdepth 1 -name "acp.*.md" 2>/dev/null | wc -l | tr -d ' ')
+_SCRIPT_COUNT=$(find agent/scripts -maxdepth 1 -name "*.sh" 2>/dev/null | wc -l | tr -d ' ')
+if [ "$_CMD_COUNT" -ge 40 ] && [ "$_SCRIPT_COUNT" -ge 20 ]; then
+  echo -e "${GREEN}✓ agent/commands + agent/scripts already present (${_CMD_COUNT} commands, ${_SCRIPT_COUNT} scripts) — skipping download${NC}"
+else
+  if [ "$_CMD_COUNT" -gt 0 ] || [ "$_SCRIPT_COUNT" -gt 0 ]; then
+    echo -e "${YELLOW}⚠️  Partial install detected (${_CMD_COUNT} commands, ${_SCRIPT_COUNT} scripts) — downloading full set${NC}"
+  fi
+  INSTALL_URL="https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh"
+  echo "Downloading ACP installer..."
+  INSTALL_TMP=$(mktemp)
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL -o "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (curl)"; rm -f "$INSTALL_TMP"; exit 1; }
+    bash "$INSTALL_TMP"
+    rm -f "$INSTALL_TMP"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q -O "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (wget)"; rm -f "$INSTALL_TMP"; exit 1; }
+    bash "$INSTALL_TMP"
+    rm -f "$INSTALL_TMP"
   else
-    if [ "$_CMD_COUNT" -gt 0 ] || [ "$_SCRIPT_COUNT" -gt 0 ]; then
-      echo -e "${YELLOW}⚠️  Partial install detected (${_CMD_COUNT} commands, ${_SCRIPT_COUNT} scripts) — downloading full set${NC}"
-    fi
-    INSTALL_URL="https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh"
-    echo "Downloading ACP installer..."
-    INSTALL_TMP=$(mktemp)
-    if command -v curl >/dev/null 2>&1; then
-      curl -fsSL -o "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (curl)"; rm -f "$INSTALL_TMP"; exit 1; }
-      bash "$INSTALL_TMP"
-      rm -f "$INSTALL_TMP"
-    elif command -v wget >/dev/null 2>&1; then
-      wget -q -O "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (wget)"; rm -f "$INSTALL_TMP"; exit 1; }
-      bash "$INSTALL_TMP"
-      rm -f "$INSTALL_TMP"
-    else
-      echo -e "${RED}ERROR: Neither curl nor wget available. Cannot download installer.${NC}"
-      echo "Install agent/ manually from a local ACP Enhanced clone:"
-      echo "  bash /path/to/acp-enhanced/agent/scripts/acp.install.sh"
-      exit 1
-    fi
+    echo -e "${RED}ERROR: Neither curl nor wget available. Cannot download installer.${NC}"
+    echo "Install agent/ manually from a local ACP Enhanced clone:"
+    echo "  bash /path/to/acp-enhanced/agent/scripts/acp.install.sh"
+    exit 1
   fi
 fi
 echo ""
@@ -1434,7 +1432,6 @@ echo "  /acp-wiki-update Update wiki after changes"
 echo ""
 echo "opencode slash commands: same /acp-* set (via .opencode/commands/)"
 echo ""
-echo -e "${GREEN}Done. ACP Enhanced is ready.${NC}"
 
 # Post-install verification
 _CMD_COUNT=$(find agent/commands -maxdepth 1 -name "acp.*.md" 2>/dev/null | wc -l | tr -d ' ')
@@ -1475,3 +1472,5 @@ if [ "$_VERIFY_FAILED" = "true" ]; then
   echo ""
   exit 1
 fi
+
+echo -e "${GREEN}Done. ACP Enhanced is ready.${NC}"
