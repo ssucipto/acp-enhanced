@@ -192,6 +192,8 @@ All third-party components retain their original licences. No proprietary modifi
 | 2026-06-06 (v6.9.2) | M49 — Dogfooding + Install Resolution: triple-file parity, AGENTS.md version, Windows hang fix, bootstrap self-heal, Cursor commands, post-install verify, --repair mode |
 | 2026-06-06 (v6.9.3) | M50 — Design-Spec Command: /acp-design-spec integrated from FIFOZ, 19-section template (arc42/C4/IEEE/ISO), stack-agnostic, E2E smoke test (12 assertions) |
 | 2026-06-06 (v6.9.4) | M51 — Bootstrap Install Fix: CRITICAL step 7 file-count check, opencode extraction from prompts block, verification exit code + remediation, E2E bootstrap test (8 assertions) |
+| 2026-06-07 (v6.9.5) | M52 — Stakeholder Report: /acp-stakeholder-report v1.1.0 from FIFOZ, five-tier reporting model, 4 audit-044 carryovers resolved, E2E test (15 assertions) |
+| 2026-06-07 (v6.10.0) | M53 — Cursor Slash Commands: .cursor/commands/ auto-generation via sync script, install/update hooks, bootstrap step 6b, .cursor/rules/ agent protocol, E2E test (10 assertions), @acp. hotfix |
 | 2026-05-17 | Version 6.8.1; this IP Register created |
 
 ---
