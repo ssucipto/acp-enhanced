@@ -1457,8 +1457,8 @@ else
   echo -e "  ${RED}❌ agent/scripts/: $_SCRIPT_COUNT files (expected 18+)${NC}"
 fi
 [ -d ".opencode/commands" ] && echo -e "  ${GREEN}✅ .opencode/commands/: present${NC}" || echo -e "  ${YELLOW}⚠️ .opencode/commands/: missing${NC}"
-_CURSOR_COUNT=$(find .cursor/commands -maxdepth 1 -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
-_CMD_SOURCE_COUNT=$(find agent/commands -maxdepth 1 \( -name "acp.*.md" -o -name "git.*.md" \) 2>/dev/null | wc -l | tr -d ' ')
+_CURSOR_COUNT=$(find .cursor/commands -maxdepth 1 -name "*.md" 2>/dev/null | wc -l | tr -d ' ') || true
+_CMD_SOURCE_COUNT=$(find agent/commands -maxdepth 1 -name "acp.*.md" 2>/dev/null | wc -l | tr -d ' ') || true
 if [ "$_CURSOR_COUNT" -ge "$_CMD_SOURCE_COUNT" ] 2>/dev/null; then
   echo -e "  ${GREEN}✅ .cursor/commands/: ${_CURSOR_COUNT} files${NC}"
 else
