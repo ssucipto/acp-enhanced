@@ -6,7 +6,7 @@ project:
   version: 6.9.2
   started: 2026-02-16
   status: active
-  current_milestone: null
+  current_milestone: M50
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.9.2 with 49 completed
     milestones. M49 (v6.9.2) delivered dogfooding resolution: install reliability,
@@ -125,6 +125,25 @@ milestones:
       Install (099-105): Windows hang fix, bootstrap self-heal, Cursor commands,
       post-install verify, backup warning, Windows docs, --repair mode.
       Target: v6.9.2.
+
+  M50:
+    name: Design-Spec Command Integration (v6.9.3)
+    priority: 4
+    status: planned
+    progress: 0
+    started: 2026-06-06
+    completed: null
+    estimated_weeks: 0.5
+    tasks_completed: 0
+    tasks_total: 7
+    file: agent/milestones/milestone-50-design-spec-command.md
+    notes: |
+      📋 M50 planned — 7 routes for /acp-design-spec command integration.
+      Source: feedback-005 from consumer-project (v1.1.0 command, audit-070 validated).
+      P0 (106-107): port command doc, add wrappers + package.yaml entry.
+      P1 (108-110): template, E2E smoke test, routing.yml + taxonomy.yml.
+      P2 (111-112): cross-links, version bump to 6.9.3 + CHANGELOG.
+      Target: v6.9.3.
 
   M1:
     name: ACP Commands Infrastructure
