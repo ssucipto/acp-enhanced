@@ -25,6 +25,7 @@ None required. Context is inferred from the current conversation.
 | Flag | Description |
 |------|-------------|
 | `--no-sync` | Skip auto-sync of session and pattern documents (steps 2b, 3b, 6b). Use for debugging only — document directories may drift from registries |
+| `--validate` | Run `/acp-validate` before committing. Catches version drift, YAML errors, and parity gaps before they're committed (v6.9.2+) |
 
 ---
 
@@ -61,6 +62,17 @@ developer to type `/acp-commit`.
 ---
 
 ## Steps
+
+### 0a. Pre-commit Validation (--validate only, v6.9.2+)
+
+> **Skip this step if `--validate` was not passed.**
+
+Run `/acp-validate`. If validation fails (exit 1):
+- Report the failures to the user
+- Abort commit — fix issues before committing
+If validation passes with warnings only:
+- Show warnings
+- Proceed with commit
 
 ### 0. Pre-commit Branch Guard (conditional)
 Only run if `agent/core/identity.yml` contains `git_workflow:`.

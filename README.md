@@ -817,6 +817,37 @@ See [AGENT.md](./AGENT.md) for complete command documentation and methodology.
 
 ---
 
+## Windows + Cursor Setup
+
+### Windows (Git Bash)
+
+1. Open **Git Bash** in your project root (not PowerShell or CMD)
+2. Run the bootstrap:
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/scripts/acp-bootstrap.sh | bash
+   ```
+3. If the install hangs at "Resolving script dependencies", kill it (Ctrl+C) and recover:
+   ```bash
+   git clone --depth 1 -b mainline https://github.com/ssucipto/acp-enhanced.git $TEMP/acp-temp
+   cp $TEMP/acp-temp/agent/scripts/*.sh agent/scripts/
+   rm -rf $TEMP/acp-temp
+   ```
+4. Verify: `ls agent/commands/` should show 60+ files, `ls agent/scripts/` should show 25+ files
+
+### Cursor IDE
+
+After install, Cursor slash commands are auto-generated. Reload Cursor
+(`Ctrl+Shift+P` → "Developer: Reload Window"), then type `/` in Agent chat
+to see `/acp-init`, `/acp-proceed`, etc.
+
+If commands don't appear, manually copy:
+```powershell
+New-Item -ItemType Directory -Force -Path ".cursor\commands"
+Copy-Item ".opencode\commands\acp.*.md" ".cursor\commands\" -Force
+```
+
+---
+
 ## Global Package Installation
 
 Install packages globally to `~/.acp/agent/` for package development or global command libraries:

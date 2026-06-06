@@ -63,6 +63,24 @@ ACP Enhanced maintains a **two-tier storage model** for patterns and sessions:
 - Commit steps include quoting directives for colons in scalar values
 - Weekly-summary compaction quotes `key_facts` items containing `:`
 
+## Instance Data vs Framework Data (v6.9.2+)
+
+ACP Enhanced separates files into two categories:
+
+### Framework Data (committed to git)
+- `agent/commands/`, `agent/scripts/`, `agent/schemas/` — distributable
+- `agent/core/`, `agent/wiki/`, `agent/skills/` — protocol definitions
+
+### Instance Data (local only)
+- `agent/milestones/`, `agent/routing/tasks/` — project work items
+- `agent/memory/`, `agent/reports/` — session and audit records
+- `agent/feedback/`, `agent/clarifications/` — project communication
+
+### Framework Development Mode
+When developing ACP Enhanced itself, run `/acp-init --track-instance-data` to
+acknowledge that you're working on the framework, not using it as an end-user
+project. Instance data files should be force-added to git for traceability.
+
 ## Audit-First Workflow (v6.9.1+)
 
 ACP Enhanced supports an audit-first development pattern where `/acp-audit` serves as
