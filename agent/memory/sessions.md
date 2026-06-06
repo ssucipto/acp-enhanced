@@ -408,3 +408,27 @@
     - "Context overflow is silent — write sessions.md at moment of discovery, not end of session"
     - "POSIX awk only on macOS — gawk 3-arg match() is an extension, use sub() instead"
     - "Always update package.yaml scripts section at END of any milestone that adds commands"
+
+- date: 2026-06-06
+  executor: copilot
+  tasks: [route-106, route-107, route-108, route-109, route-110, route-111, route-112, route-113, route-114, route-115, route-116, route-094, route-095, route-096, route-097, route-098, route-099, route-100, route-101, route-102, route-103, route-104, route-105, audit-044, audit-045, audit-046, audit-047]
+  done:
+    - m50-planned-audited-implemented-7-routes-design-spec-command
+    - m51-planned-implemented-audited-4-routes-bootstrap-fix
+    - feedback-005-fully-integrated-acp-design-spec-v1-1-0
+    - bootstrap-install-crash-dual-bug-fixed-empty-dir-false-positive
+    - e2e-tests-created-design-spec-12-assertions-bootstrap-8-assertions
+    - 4-audits-044-pre-impl-045-bug-discovery-046-m51-post-047-m50-post
+    - prd-readme-ip-register-changelog-synced-51-milestones
+    - 8-git-commits-all-pushed
+  deferred:
+    - audit-044-carryovers-index-entry-domain-yml-readme-p3-deferred
+    - pre-existing-acp-dot-notation-in-acp-visualize-md
+  key_fact: |
+    Dual-milestone session (M50+M51) delivered two complete lifecycle cycles:
+    plan->audit->implement->verify-loop in a single session with 4 audits
+    and 2 E2E test suites. The bootstrap CRITICAL bug (BUG-045-01) was caught
+    by a user trying to install, not by our own test suite — this proves the
+    need for the e2e/acp.bootstrap.test.sh E2E test added in M51. The ACP
+    workflow is self-correcting: feedback (005) -> plan -> audit -> implement
+    -> verify -> post-audit -> commit. 51 milestones complete.
