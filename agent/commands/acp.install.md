@@ -24,6 +24,7 @@
 **CLI-Style Arguments**:
 - `--check` — verify install health without making changes (dry-run mode)
 - `--upgrade` — same as default install (the script always updates to latest; this flag is an explicit alias)
+- `--repair` — detect and fix partial/broken installs without full reinstall (v6.9.2+)
 
 **Note**: The install script always operates on the current working directory. There is no `--global` or `--local` distinction — ACP installs into `./agent/` in the current project.
 
