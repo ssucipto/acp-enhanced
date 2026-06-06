@@ -189,6 +189,9 @@ All third-party components retain their original licences. No proprietary modifi
 | May 2026 (v6.8.1) | M43 — Taxonomy + Validation Hygiene: `shell-scripting` type, `checkStaleness` order fix, ledger header, command-doc-write threshold rule |
 | 2026-06-04 (v6.9.0) | M47 — Memory Integrity: commit-integrated document auto-sync, repair tools, --memory YAML validation, version-update guard, schema alignment, dual-store wiki, pattern promotion, command onboarding |
 | 2026-06-04 (v6.9.1) | M48 — Carryover Resolution: E2E tests (12 assertions), atomicity in sync, registry schema lint, audit-first wiki, --health check, index init, carryover query |
+| 2026-06-06 (v6.9.2) | M49 — Dogfooding + Install Resolution: triple-file parity, AGENTS.md version, Windows hang fix, bootstrap self-heal, Cursor commands, post-install verify, --repair mode |
+| 2026-06-06 (v6.9.3) | M50 — Design-Spec Command: /acp-design-spec integrated from FIFOZ, 19-section template (arc42/C4/IEEE/ISO), stack-agnostic, E2E smoke test (12 assertions) |
+| 2026-06-06 (v6.9.4) | M51 — Bootstrap Install Fix: CRITICAL step 7 file-count check, opencode extraction from prompts block, verification exit code + remediation, E2E bootstrap test (8 assertions) |
 | 2026-05-17 | Version 6.8.1; this IP Register created |
 
 ---
