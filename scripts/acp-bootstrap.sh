@@ -437,6 +437,7 @@ fi
 # Copy drafts template (idempotent — only if absent)
 ACP_DRAFTS_SRC="${SCRIPT_DIR}/../agent/drafts/draft.template.md"
 if [ -f "${ACP_DRAFTS_SRC}" ] && [ ! -f "agent/drafts/draft.template.md" ]; then
+  mkdir -p agent/drafts
   cp "${ACP_DRAFTS_SRC}" "agent/drafts/draft.template.md"
   echo -e "${GREEN}✓ draft.template.md copied to agent/drafts/${NC}"
 fi
@@ -1297,9 +1298,14 @@ Read and execute `agent/commands/git.commit.md`.
 MD
 
 echo -e "${GREEN}✓ Prompt files created${NC}"
+else
+echo -e "${YELLOW}[6/8] Skipping prompt files (opt-in via --generate-prompts or manifest)${NC}"
+fi
 
-# --- 6b. Generate opencode commands from Copilot prompts ---
+# --- 6b. Generate opencode commands (independent of prompt generation) ---
+if [ "$GENERATE_OPENCODE" = "true" ]; then
 echo -e "${YELLOW}[6b/8] Generating opencode slash commands...${NC}"
+if ls .github/prompts/*.prompt.md >/dev/null 2>&1; then
 mkdir -p .opencode/commands
 _oc_count=0
 for _oc_src in .github/prompts/*.prompt.md; do
@@ -1329,31 +1335,39 @@ echo -e "${GREEN}✓ ${_oc_count} opencode slash commands generated in .opencode
   done
   echo -e "${GREEN}✓ ${_cursor_count} Cursor slash commands generated in .cursor/commands/${NC}"
 else
-echo -e "${YELLOW}[6/8] Skipping prompt files (opt-in via --generate-prompts or manifest)${NC}"
+  echo -e "${YELLOW}  (no prompt files found — run with --generate-prompts first, or generate prompts in Copilot chat)${NC}"
+fi
 fi
 
 # --- 7. Install agent/ commands, scripts and schemas ---
 echo -e "${YELLOW}[7/8] Installing ACP commands, scripts and schemas (agent/ directory)...${NC}"
 
 if [ -d "agent/commands" ] && [ -d "agent/scripts" ]; then
-  echo -e "${GREEN}✓ agent/commands + agent/scripts already present — skipping download${NC}"
-else
-  INSTALL_URL="https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh"
-  echo "Downloading ACP installer..."
-  INSTALL_TMP=$(mktemp)
-  if command -v curl >/dev/null 2>&1; then
-    curl -fsSL -o "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (curl)"; rm -f "$INSTALL_TMP"; exit 1; }
-    bash "$INSTALL_TMP"
-    rm -f "$INSTALL_TMP"
-  elif command -v wget >/dev/null 2>&1; then
-    wget -q -O "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (wget)"; rm -f "$INSTALL_TMP"; exit 1; }
-    bash "$INSTALL_TMP"
-    rm -f "$INSTALL_TMP"
+  _CMD_COUNT=$(find agent/commands -maxdepth 1 -name "acp.*.md" 2>/dev/null | wc -l | tr -d ' ')
+  _SCRIPT_COUNT=$(find agent/scripts -maxdepth 1 -name "*.sh" 2>/dev/null | wc -l | tr -d ' ')
+  if [ "$_CMD_COUNT" -ge 40 ] && [ "$_SCRIPT_COUNT" -ge 20 ]; then
+    echo -e "${GREEN}✓ agent/commands + agent/scripts already present (${_CMD_COUNT} commands, ${_SCRIPT_COUNT} scripts) — skipping download${NC}"
   else
-    echo -e "${RED}ERROR: Neither curl nor wget available. Cannot download installer.${NC}"
-    echo "Install agent/ manually from a local ACP Enhanced clone:"
-    echo "  bash /path/to/acp-enhanced/agent/scripts/acp.install.sh"
-    exit 1
+    if [ "$_CMD_COUNT" -gt 0 ] || [ "$_SCRIPT_COUNT" -gt 0 ]; then
+      echo -e "${YELLOW}⚠️  Partial install detected (${_CMD_COUNT} commands, ${_SCRIPT_COUNT} scripts) — downloading full set${NC}"
+    fi
+    INSTALL_URL="https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh"
+    echo "Downloading ACP installer..."
+    INSTALL_TMP=$(mktemp)
+    if command -v curl >/dev/null 2>&1; then
+      curl -fsSL -o "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (curl)"; rm -f "$INSTALL_TMP"; exit 1; }
+      bash "$INSTALL_TMP"
+      rm -f "$INSTALL_TMP"
+    elif command -v wget >/dev/null 2>&1; then
+      wget -q -O "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (wget)"; rm -f "$INSTALL_TMP"; exit 1; }
+      bash "$INSTALL_TMP"
+      rm -f "$INSTALL_TMP"
+    else
+      echo -e "${RED}ERROR: Neither curl nor wget available. Cannot download installer.${NC}"
+      echo "Install agent/ manually from a local ACP Enhanced clone:"
+      echo "  bash /path/to/acp-enhanced/agent/scripts/acp.install.sh"
+      exit 1
+    fi
   fi
 fi
 echo ""
@@ -1442,3 +1456,22 @@ fi
 [ -d ".opencode/commands" ] && echo -e "  ${GREEN}✅ .opencode/commands/: present${NC}" || echo -e "  ${YELLOW}⚠️ .opencode/commands/: missing${NC}"
 [ -d ".cursor/commands" ] && echo -e "  ${GREEN}✅ .cursor/commands/: present${NC}" || echo -e "  ${YELLOW}⚠️ .cursor/commands/: missing${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+
+# Exit non-zero if verification failed — prevents silent broken installs
+_VERIFY_FAILED=false
+[ "$_CMD_COUNT" -lt 40 ] && _VERIFY_FAILED=true
+[ "$_SCRIPT_COUNT" -lt 20 ] && _VERIFY_FAILED=true
+
+if [ "$_VERIFY_FAILED" = "true" ]; then
+  echo ""
+  echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  echo -e "${RED}  ⚠️  INSTALL INCOMPLETE${NC}"
+  echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  echo ""
+  echo "  The bootstrap completed but agent/ files are missing."
+  echo "  This is a known issue (audit-045). To complete the install:"
+  echo ""
+  echo "    curl -fsSL https://raw.githubusercontent.com/ssucipto/acp-enhanced/mainline/agent/scripts/acp.install.sh | bash"
+  echo ""
+  exit 1
+fi
