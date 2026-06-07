@@ -3,11 +3,11 @@
 # last_verified: 2026-06-03
 
 commands:
-  count: 70  # 70 total: 67 acp.* + 2 git.* + 1 command.template.md (verified 2026-06-07, M55)
+  count: 71  # 71 total: 68 acp.* + 2 git.* + 1 command.template.md (verified 2026-06-08, M56)
   location: agent/commands/
   naming: "acp.{command-name}.md — dot notation, acp namespace for core; git.{command}.md for git namespace"
   categories:
-    core: [acp.audit, acp.carryover-query, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.memory-sync, acp.plan, acp.proceed, acp.repair-tools, acp.report, acp.resume, acp.review, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
+    core: [acp.audit, acp.carryover-query, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.integrity, acp.memory-sync, acp.plan, acp.proceed, acp.repair-tools, acp.report, acp.resume, acp.review, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
     artifact: [acp.artifact-glossary, acp.artifact-reference, acp.artifact-research]
     clarification: [acp.clarification-address, acp.clarification-capture, acp.clarification-create]
     design: [acp.command-create, acp.design-create, acp.design-reference, acp.pattern-create]
@@ -202,6 +202,9 @@ commands:
       category: local
       local_only: true
       purpose: Read the routing ledger, group spend by executor, calculate actual vs. baseline cost (vs. all-Claude-Sonnet baseline), and produce taxonomy improvement suggestions.
+    - command: acp.integrity
+      category: core
+      purpose: Verify AI-generated code trustworthiness and provenance — detect malicious patterns, hidden Unicode, exfiltration, supply chain risks, and CI injection surfaces across 55 rules and 6 bash scripts.
     - command: acp.review
       category: core
       purpose: Enforce code quality, security, and consistency standards — 54 rules across OWASP Top 10:2025, TypeScript strictness, API conventions, and mobile MASVS v2.0.
