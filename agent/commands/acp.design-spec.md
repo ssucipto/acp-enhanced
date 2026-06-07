@@ -505,6 +505,7 @@ Section numbers are **stable** across projects. Omit sections only when truly N/
 - [`/acp-visualize`](acp.visualize.md) — Render spec diagrams in Visualizer (if installed)
 - [`/acp-validate`](acp.validate.md) — Schema validation before publishing spec
 - [`/acp-commit`](acp.commit.md) — Session memory when spec completes a phase
+- [`/acp-review`](acp.review.md) — Check code quality against spec assumptions after generating spec
 
 ---
 
