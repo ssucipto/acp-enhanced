@@ -20,6 +20,11 @@ This project is the ACP protocol itself — you build and maintain:
 - YAML schemas (`agent/schemas/*.yaml`)
 - E2E test suites (`e2e/*.test.sh`, `tests/*.test.sh`)
 - TypeScript tooling (`scripts/*.ts`)
+- CI/CD workflows (`.github/workflows/ci.yaml`, `.github/workflows/e2e-tests.yaml`)
+
+**Git workflow**: `develop` → `mainline` (gitflow-lite). All work happens on `develop`
+or feature branches. PRs merge `develop` → `mainline`. CI runs on every push and PR.
+See `agent/core/identity.yml → git_workflow` for branch safety rules.
 
 ---
 

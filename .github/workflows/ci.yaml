@@ -1,0 +1,60 @@
+name: CI Checks
+
+on:
+  push:
+    branches:
+      - '**'    # all branches — quick feedback during feature work
+  pull_request:
+    branches:
+      - mainline
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Syntax & Structure Validation ─────────────────────────────
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate YAML syntax and Markdown frontmatter
+        run: bash scripts/ci-validate.sh
+
+  # ── Shell Script Syntax Check ─────────────────────────────────
+  shellcheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+
+      - name: Run shellcheck on all shell scripts
+        run: |
+          echo "=== Running shellcheck ==="
+          SCRIPTS=$(find . -name '*.sh' -not -path './.git/*' | sort)
+          echo "Found $(echo "$SCRIPTS" | wc -l) shell scripts"
+          # Error-level issues fail the build; style warnings are advisory
+          shellcheck --shell=bash --severity=error "$SCRIPTS"
+          echo "✅ shellcheck passed (no errors)"
+
+  # ── E2E Test Smoke (single OS, quick) ─────────────────────────
+  e2e-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure git for tests
+        run: |
+          git config --global user.email "ci@test.example.com"
+          git config --global user.name "CI Test Runner"
+          git config --global init.defaultBranch main
+
+      - name: Run E2E smoke tests
+        run: bash run-e2e-tests.sh --skip-network
