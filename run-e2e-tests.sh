@@ -74,8 +74,9 @@ fi
 
 # ── Test File Collection ─────────────────────────────────────────
 # Per-test timeout in seconds (macOS-compatible: no GNU timeout)
-# Increased from 30 to 60 to accommodate slow tests (project-workflow, yaml-parser)
-TIMEOUT_SECS=60
+# 120s accommodates slow tests under parallel CPU contention (project-workflow,
+# preferences-validate, sessions). Tests take longer in --parallel 4 mode.
+TIMEOUT_SECS=120
 total=0
 passed=0
 failed=0
