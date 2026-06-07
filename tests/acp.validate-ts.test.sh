@@ -14,7 +14,7 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 source "${PROJECT_ROOT}/tests/common.sh"
 
-VALIDATE_CMD="npx --prefix ${PROJECT_ROOT}/scripts ts-node ${PROJECT_ROOT}/scripts/acp-validate.ts"
+VALIDATE_CMD="node ${PROJECT_ROOT}/scripts/node_modules/.bin/ts-node ${PROJECT_ROOT}/scripts/acp-validate.ts"
 
 # ── Fixture setup ─────────────────────────────────────────────
 
@@ -154,7 +154,7 @@ assert_true "missing-multi.md produces >=2 warnings" $(( namespace_count >= 2 ? 
 # ── Parity check (task-179) ───────────────────────────────────
 
 print_test_header "parity: equal counts (7/7/7) — in sync"
-assert_contains "${output}" "in sync" "parity check reports in sync when counts equal"
+assert_contains "${output}" "all matched" "parity check reports in sync when counts equal"
 
 print_test_header "parity: output contains count info"
 assert_contains "${output}" "commands" "parity check output mentions commands"
@@ -168,7 +168,7 @@ print_test_header "summary: frontmatter check line present"
 assert_contains "${output}" "Frontmatter check" "summary has frontmatter check line"
 
 print_test_header "summary: parity check line present"
-assert_contains "${output}" "Parity check" "summary has parity check line"
+assert_contains "${output}" "Parity:" "summary has parity check line"
 
 # ── Parity mismatch (task-179) ────────────────────────────────
 
