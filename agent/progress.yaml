@@ -223,6 +223,26 @@ milestones:
       Phase 3 (Pushed to remote): develop + mainline both on origin.
       Pending: branch protection rules on GitHub, milestone doc.
 
+  M55:
+    name: /acp-review — Code Review & Standards Enforcement Command (v6.11.0)
+    priority: 4
+    status: planned
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 1-1.5
+    tasks_completed: 0
+    tasks_total: 10
+    file: agent/milestones/milestone-55-acp-review-command.md
+    notes: |
+      📋 M55 planned — 10 routes for /acp-review command from feedback-006 v3.0.
+      Source: feedback-006 from framework initiative, audit-050 corrected verdict.
+      P0 (131-133): command doc, skill file, spec file — core deliverables.
+      P1 (134-136): taxonomy, routing, E2E smoke test.
+      P2 (137-140): cross-links, gaps, self-review appendix, mobile detection,
+        version bump + CHANGELOG.
+      Target: v6.11.0. Full 54-rule OWASP/TypeScript/MASVS ruleset for audience.
+
   M1:
     name: ACP Commands Infrastructure
     priority: 5
