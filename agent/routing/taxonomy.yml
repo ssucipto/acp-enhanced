@@ -2,7 +2,7 @@
 # Maps task types to executor + context required
 # Generated 2026-05-01 — update weekly via /acp-cost-report suggestions
 # Updated 2026-06-03: added skills_catalog + mention fields (audit-022 R6, route-053)
-last_updated: 2026-06-03
+last_updated: 2026-06-07
 
 task_types:
 
@@ -196,6 +196,16 @@ task_types:
     tokens_est: 3000
     skill: crosscut
     description: Updating agent/progress.yaml milestone and task status
+
+  ci-cd-setup:
+    executor: copilot
+    complexity: medium
+    context_required: [.github/workflows/, agent/core/identity.yml]
+    tokens_est: 6000
+    skill: crosscut
+    description: >
+      Setting up or modifying CI/CD pipelines, branch protection rules,
+      GitHub Actions workflows, and git branch strategies.
 
   adr-write:
     executor: copilot
