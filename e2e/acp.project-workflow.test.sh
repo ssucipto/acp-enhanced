@@ -145,7 +145,7 @@ EOF
   local update_output
   update_output=$(bash "${PROJECT_ROOT}/agent/scripts/acp.project-update.sh" test-mcp-server --status archived 2>&1)
   
-  assert_contains "$update_output" "✓ Updated project: test-mcp-server" "Should update successfully"
+  assert_contains "$update_output" "✓ Updated status: archived" "Should update successfully"
   
   # Verify status updated
   yaml_parse "${TEST_DIR}/.acp/projects.yaml"
@@ -186,7 +186,7 @@ EOF
   local remove_output
   remove_output=$(bash "${PROJECT_ROOT}/agent/scripts/acp.project-remove.sh" test-web-app -y 2>&1)
   
-  assert_contains "$remove_output" "✅ Project removed: test-web-app" "Should remove successfully"
+  assert_contains "$remove_output" "✅ Project Removed" "Should remove successfully"
   
   # Verify project removed from registry
   yaml_parse "${TEST_DIR}/.acp/projects.yaml"

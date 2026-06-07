@@ -175,6 +175,7 @@ else
     _outdir=$(mktemp -d)
     trap "rm -rf $_outdir" EXIT
 
+    typeset -a _pids=()
     # Round-robin distribute tests into batches
     for ((w=0; w<PARALLEL; w++)); do
         (
@@ -191,7 +192,6 @@ else
 
     for ((i=0; i<_N; i++)); do
         _rc=$(cat "$_outdir/rc-$i" 2>/dev/null || echo 1)
-        sed -n "${i}p" <(sort "$_outdir"/out-*) 2>/dev/null || true
 
         # Print the result line from the worker output
         _result_line=$(grep "^  ${test_names[$i]} " "$_outdir"/out-* 2>/dev/null | head -1)
