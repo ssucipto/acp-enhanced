@@ -230,18 +230,24 @@ milestones:
     progress: 0
     started:
     completed:
-    estimated_weeks: 1-1.5
+    estimated_weeks: 1.5-2
     tasks_completed: 0
-    tasks_total: 10
+    tasks_total: 11
     file: agent/milestones/milestone-55-acp-review-command.md
     notes: |
-      📋 M55 planned — 10 routes for /acp-review command from feedback-006 v3.0.
-      Source: feedback-006 from framework initiative, audit-050 corrected verdict.
-      P0 (131-133): command doc, skill file, spec file — core deliverables.
-      P1 (134-136): taxonomy, routing, E2E smoke test.
-      P2 (137-140): cross-links, gaps, self-review appendix, mobile detection,
-        version bump + CHANGELOG.
-      Target: v6.11.0. Full 54-rule OWASP/TypeScript/MASVS ruleset for audience.
+      📋 M55 planned — 11 routes for /acp-review command (revised audit-051).
+      Source: feedback-006 v3.0, audit-050 + audit-051.
+      P0 (131-133): command doc + --diff flag, skill file (copilot),
+        spec file — core deliverables.
+      P1 (134-136, 141): taxonomy + skill catalog, routing,
+        E2E 14 assertions, package.yaml entry.
+      P2 (137-140): cross-links (7 files), audit gaps + feedback loop,
+        self-review appendix, version bump + CHANGELOG (Keep a Changelog format).
+      Audit-051 fixes: F-001 (skill catalog), F-002 (Flash→copilot),
+        F-003 (package.yaml), F-004 (carryover E2E), F-005 (CHANGELOG format),
+        F-006 (acp.validate cross-link), F-008 (feedback loop), F-009 (--diff),
+        F-011 (CI format), F-012 (Flash disqualified in skill), F-013 (E2E integration).
+      Target: v6.11.0. Est. ~14 hours.
 
   M1:
     name: ACP Commands Infrastructure
