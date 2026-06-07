@@ -1017,7 +1017,9 @@ yaml_object_set() {
 # MAIN
 # ============================================================================
 
-trap cleanup_ast EXIT INT TERM
+# No EXIT trap here — subshells inherit traps and cleanup_ast would
+# delete AST_FILE on subshell exit, breaking the parent's AST state.
+# Cleanup happens in init_ast() → cleanup_ast() before each yaml_parse.
 
 # Only run main if script is executed directly (not sourced)
 if [ -n "${1:-}" ] && [ "${1:-}" != "-" ] && [ "${BASH_SOURCE[0]}" = "${0}" ]; then
