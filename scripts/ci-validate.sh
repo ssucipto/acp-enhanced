@@ -8,6 +8,13 @@ set -euo pipefail
 
 ERRORS=0
 
+# ── Prerequisites ─────────────────────────────────────────────
+if ! python3 -c "import yaml" 2>/dev/null; then
+  echo "[ci-validate] ❌ Python module 'yaml' (PyYAML) is not installed."
+  echo "  Install with: python3 -m pip install pyyaml"
+  exit 1
+fi
+
 # ── 1. YAML Syntax ────────────────────────────────────────────
 echo "[ci-validate] Checking YAML syntax..."
 
