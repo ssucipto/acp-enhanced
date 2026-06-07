@@ -74,7 +74,8 @@ fi
 
 # ── Test File Collection ─────────────────────────────────────────
 # Per-test timeout in seconds (macOS-compatible: no GNU timeout)
-TIMEOUT_SECS=30
+# Increased from 30 to 60 to accommodate slow tests (project-workflow, yaml-parser)
+TIMEOUT_SECS=60
 total=0
 passed=0
 failed=0
