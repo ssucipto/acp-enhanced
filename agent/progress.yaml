@@ -3,14 +3,15 @@
 
 project:
   name: agent-context-protocol
-  version: 6.10.0
+  version: 6.11.0
   started: 2026-02-16
   status: active
-  current_milestone: M54
+  current_milestone: M55
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.10.0 with 53 completed
-    milestones. M52 delivered /acp-stakeholder-report command. M53 delivered
-    Cursor IDE slash-command parity. All audit-044 carryovers resolved.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.11.0 with 54 completed
+    milestones. M54 delivered CI/CD pipeline and GitFlow-lite branching.
+    M55 delivered /acp-review code quality & security review command.
+    All audit-044 carryovers resolved.
 
 milestones:
   M44:
@@ -226,28 +227,24 @@ milestones:
   M55:
     name: /acp-review — Code Review & Standards Enforcement Command (v6.11.0)
     priority: 4
-    status: planned
-    progress: 0
-    started:
-    completed:
+    status: completed
+    progress: 100
+    started: 2026-06-07
+    completed: 2026-06-07
     estimated_weeks: 1.5-2
-    tasks_completed: 0
+    tasks_completed: 11
     tasks_total: 11
     file: agent/milestones/milestone-55-acp-review-command.md
     notes: |
-      📋 M55 planned — 11 routes for /acp-review command (revised audit-051).
+      🎉 M55 COMPLETE! /acp-review command shipped in v6.11.0.
+      Delivered: acp.review.md (54 rules, 7 categories), code-review.md
+      skill (copilot executor, Flash disqualified), taxonomy (4 task types
+      + skill catalog), routing suggestions, E2E test (14 assertions),
+      package.yaml entry, cross-links (6 files), feedback-006 response,
+      Appendix A self-review rules, version bump + CHANGELOG (Keep a Changelog).
+      Audit-051: all 13 findings resolved. Route-133 (spec file) merged
+      into command doc — the command doc IS the spec.
       Source: feedback-006 v3.0, audit-050 + audit-051.
-      P0 (131-133): command doc + --diff flag, skill file (copilot),
-        spec file — core deliverables.
-      P1 (134-136, 141): taxonomy + skill catalog, routing,
-        E2E 14 assertions, package.yaml entry.
-      P2 (137-140): cross-links (7 files), audit gaps + feedback loop,
-        self-review appendix, version bump + CHANGELOG (Keep a Changelog format).
-      Audit-051 fixes: F-001 (skill catalog), F-002 (Flash→copilot),
-        F-003 (package.yaml), F-004 (carryover E2E), F-005 (CHANGELOG format),
-        F-006 (acp.validate cross-link), F-008 (feedback loop), F-009 (--diff),
-        F-011 (CI format), F-012 (Flash disqualified in skill), F-013 (E2E integration).
-      Target: v6.11.0. Est. ~14 hours.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4132,6 +4129,32 @@ tasks:
 recent_work:
   - date: 2026-06-07
     description: |
+      🎉 M55 COMPLETE: /acp-review Code Quality & Security Review Command (v6.11.0).
+      11 routes, 2 audits, 1 E2E test (49 assertions), feedback-006 v3.0 integrated.
+      Audit-052 post-implementation gap analysis: 8 findings, all fixed in-session.
+    items:
+      - "✅ M55 (131-141): /acp-review command — 54 rules, 7 categories, OWASP+MASVS, copilot executor"
+      - "✅ Route 131: acp.review.md command doc with Agent Directive, --diff, Language Scope, Appendix A"
+      - "✅ Route 132: code-review.md skill file — copilot executor, Flash disqualified, chunking strategy"
+      - "✅ Route 134: taxonomy.yml — 4 task types (full, targeted, security, ci) + skill catalog entry"
+      - "✅ Route 135: core/routing.yml — acp-review, carryover-query, validate command suggestions"
+      - "✅ Route 136: E2E test — 49/49 assertions (36 structural + 13 behavioral with fixture violations)"
+      - "✅ Route 141: package.yaml entry for acp.review.md"
+      - "✅ Route 137: Cross-links to 10 files (audit, validate, stakeholder, design-spec, pattern-create, carryover-query, commit, domain.yml, README, routing)"
+      - "✅ Route 138: feedback-006-response.md + G-001–G-006 gap closure"
+      - "✅ Route 139: Version bump 6.10.0→6.11.0 + CHANGELOG (Keep a Changelog format)"
+      - "✅ Route 133: Merged into command doc — acp.review.md IS the spec (audit-052 decision)"
+      - "✅ Audit-050: Scope correction — full TypeScript-first ruleset (not scoped down)"
+      - "✅ Audit-051: 13 readiness findings, all resolved pre-implementation"
+      - "✅ Audit-052: Post-implementation gap analysis — 8 findings, all fixed (zero carryovers)"
+      - "✅ routing/rules.md: Code Review Priority section added"
+      - "✅ routing/config.yml: 4 new model entries (copilot, composer-2.5, kimi-k2.6, qwen3-235b)"
+      - "✅ E2E behavioral smoke: EH-02 (empty catch), SC-01 (hardcoded secret), TS-01 (any type) fixtures"
+      - "✅ Version consistency across AGENT.md, package.yaml, identity.yml, CHANGELOG, README"
+      - "✅ Milestone-55 updated: route-133 merge decision documented"
+
+  - date: 2026-06-07
+    description: |
       🎉 M52 + M53 COMPLETE: Stakeholder Report + Cursor Commands (v6.10.0).
       14 routes, 3 audits, 2 E2E tests, feedback-001/006 integrated.
     items:
@@ -6168,22 +6191,24 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "📋 Run /acp-commit to write session memory"
-  - "📋 Run /acp-validate to verify YAML integrity"
+  - "📋 Run /acp-commit to write session memory for M55 + audit-052"
+  - "📋 Run /acp-review --rules security to dogfood the new command on ACP codebase"
+  - "📋 M54: Set up GitHub branch protection rules (develop→mainline)"
   - "📋 Address G-048-06: preferences/cursor.yml disable flag"
   - "📋 Track P2 Visualizer items (stakeholder card, email export)"
 
 notes:
-  - 53 milestones complete (M1–M53, 100%), v6.10.0 (2026-06-07)
-  - 69 command docs (2 new: acp.design-spec, acp.stakeholder-report)
-  - 49 audit reports in agent/reports/ (audit-001 through audit-049)
-  - 20 E2E test files (4 new: design-spec 12a, bootstrap 8a, stakeholder 15a, cursor-sync 10a)
-  - 518 total E2E assertions, all passing
-  - 4 feedbacks integrated: 001 (cursor), 003 (dogfooding), 005 (design-spec), 006 (stakeholder)
+  - 54 milestones complete (M1–M55, 100%), v6.11.0 (2026-06-07)
+  - 70 command docs (3 new: acp.design-spec, acp.stakeholder-report, acp.review)
+  - 50 audit reports in agent/reports/ (audit-001 through audit-052)
+  - 21 E2E test files (1 new: acp.review.test.sh — 49 assertions)
+  - 518+ total E2E assertions, all passing
+  - 5 feedbacks integrated: 001 (cursor), 003 (dogfooding), 005 (design-spec), 006 (stakeholder + review)
   - All audit-044 carryovers resolved (G-044-03/06/07, DEFER-044-01)
   - CARRY-047-01 (@acp. in visualize.md) fixed — command-docs 473/473
   - Five-tier reporting model documented in README
   - Cursor IDE parity: .cursor/commands/ auto-generated during install/update/bootstrap
+  - M55 /acp-review: 54 rules (EH, TS, NC, AP, CH, SC), OWASP Top 10:2025 + MASVS v2.0, copilot primary executor
 
 current_blockers: []
 

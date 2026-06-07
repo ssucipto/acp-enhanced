@@ -288,6 +288,15 @@ entries are now orphaned. Clean them up:
 
 ---
 
+## Related Commands
+
+- [`/acp-status`](acp.status.md) — Verify session entry was written correctly
+- [`/acp-review`](acp.review.md) — Run code quality & security review before committing (pre-commit hook)
+- [`/acp-validate`](acp.validate.md) — Schema validation before commit (`--validate` flag)
+- [`/acp-cost-report`](acp.cost-report.md) — Review cost and token usage trends
+
+---
+
 ## v1.3.0 Changelog (2026-06-04)
 
 - Added `--no-sync` flag — skip auto-sync of session/pattern documents (debug only, warns about drift)
