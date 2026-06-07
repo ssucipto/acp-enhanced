@@ -6,7 +6,7 @@ project:
   version: 6.10.0
   started: 2026-02-16
   status: active
-  current_milestone: null
+  current_milestone: M54
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.10.0 with 53 completed
     milestones. M52 delivered /acp-stakeholder-report command. M53 delivered
@@ -201,6 +201,27 @@ milestones:
       P1 (127): E2E test (file parity, naming, content).
       P2 (128-130): wiki guide, @acp. fix in visualize.md, version bump 6.10.0.
       Target: v6.10.0.
+
+  M54:
+    name: CI/CD Pipeline + GitFlow-Lite Branch Model (v6.10.1)
+    priority: 4
+    status: active
+    progress: 30
+    started: 2026-06-07
+    completed:
+    estimated_weeks: 0.2
+    tasks_completed: 0
+    tasks_total: 0
+    file: agent/milestones/milestone-54-ci-cd-gitflow.md
+    notes: |
+      🚀 M54 — CI/CD infrastructure and gitflow-lite branching model.
+      Phase 1 (CI setup): e2e-tests.yaml updated for develop+mainline,
+        ci.yaml added (validate, shellcheck, e2e-smoke on all branches),
+        scripts/ci-validate.sh — YAML/frontmatter/shell validator.
+      Phase 2 (Branch model): develop branch created from mainline HEAD,
+        git_workflow enabled in identity.yml, protocol files updated.
+      Phase 3 (Pushed to remote): develop + mainline both on origin.
+      Pending: branch protection rules on GitHub, milestone doc.
 
   M1:
     name: ACP Commands Infrastructure
