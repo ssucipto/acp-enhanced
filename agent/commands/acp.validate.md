@@ -734,6 +734,7 @@ Recommendations:
 - [`/acp-update`](acp.update.md) - Update progress tracking
 - [`/acp-report`](acp.report.md) - Generate comprehensive report including validation results
 - [`/acp-init`](acp.init.md) - Can include validation as part of initialization
+- [`/acp-review`](acp.review.md) - ACP self-review — checks Agent Directive compliance, script conventions, YAML quality (use for framework code quality audit)
 
 ---
 

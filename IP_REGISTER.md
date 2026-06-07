@@ -21,7 +21,7 @@
 | **Name** | ACP Enhanced — Agent Context Protocol Enhanced |
 | **Type** | Proprietary Software — AI Agent Tooling Framework |
 | **Category** | Original Authorship — Computer Software |
-| **Current Version** | 6.10.0 |
+| **Current Version** | 6.11.0 |
 | **Repository** | `https://github.com/ssucipto/acp-enhanced` (public) |
 | **License** | MIT License (portions of original ACP: © Patrick Michaelsen) |
 
@@ -194,6 +194,8 @@ All third-party components retain their original licences. No proprietary modifi
 | 2026-06-06 (v6.9.4) | M51 — Bootstrap Install Fix: CRITICAL step 7 file-count check, opencode extraction from prompts block, verification exit code + remediation, E2E bootstrap test (8 assertions) |
 | 2026-06-07 (v6.9.5) | M52 — Stakeholder Report: /acp-stakeholder-report v1.1.0 from FIFOZ, five-tier reporting model, 4 audit-044 carryovers resolved, E2E test (15 assertions) |
 | 2026-06-07 (v6.10.0) | M53 — Cursor Slash Commands: .cursor/commands/ auto-generation via sync script, install/update hooks, bootstrap step 6b, .cursor/rules/ agent protocol, E2E test (10 assertions), @acp. hotfix |
+| 2026-06-07 (v6.10.1) | M54 — CI/CD Pipeline + GitFlow-Lite: GitHub Actions ci.yaml (validate, shellcheck, e2e-smoke) + e2e-tests.yaml (parallel ubuntu+macos), develop→mainline branching, YAML EXIT trap fix, 44/44 tests green |
+| 2026-06-07 (v6.11.0) | M55 — /acp-review Command: 54-rule code quality & security enforcement (OWASP Top 10:2025 + MASVS v2.0), TypeScript-first, copilot executor, 4 task types, 49-assertion E2E, audit-050/051/052 |
 | 2026-05-17 | Version 6.8.1; this IP Register created |
 
 ---
