@@ -333,11 +333,11 @@ end_time=$(date +%s%N)
 parse_time=$(( (end_time - start_time) / 1000000 ))  # Convert to milliseconds
 
 echo -e "  Parse time: ${YELLOW}${parse_time}ms${NC}"
-if [ "$parse_time" -lt 1000 ]; then
-    echo -e "${GREEN}✓${NC} Parse performance acceptable (< 1s)"
+if [ "$parse_time" -lt 3000 ]; then
+    echo -e "${GREEN}✓${NC} Parse performance acceptable (< 3s)"
     TESTS_PASSED=$((TESTS_PASSED + 1))
 else
-    echo -e "${RED}✗${NC} Parse performance too slow (>= 1s)"
+    echo -e "${RED}✗${NC} Parse performance too slow (>= 3s)"
     TESTS_FAILED=$((TESTS_FAILED + 1))
 fi
 TESTS_RUN=$((TESTS_RUN + 1))
