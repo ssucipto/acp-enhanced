@@ -20,6 +20,12 @@ platform_constraints:
   - yaml_parser: tests/acp.yaml-parser.sh — custom pure-bash parser
 
 team: solo-developer
+
+# Team member email addresses for /acp-integrity IG-37 commit author verification.
+# Add all developer email addresses that may appear in git commit logs.
+# Example: team_members: [dev1@example.com, dev2@example.com]
+team_members: []
+
 priorities:
   - correctness: command docs must be unambiguous for any LLM
   - shell_compat: every .sh must pass on macOS AND Linux
@@ -28,7 +34,7 @@ priorities:
 
 fork_of: github.com/prmichaelsen/agent-context-protocol
 repo: github.com/ssucipto/acp-enhanced
-version: 6.11.0
+version: 6.12.0
 
 # Git workflow — enables Step 1b branch safety checks in Context Loading Protocol
 # develop is the default working branch; mainline is the production branch.
