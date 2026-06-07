@@ -21,6 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Python yaml parser
+        run: |
+          python3 -m pip install --quiet pyyaml
+
       - name: Validate YAML syntax and Markdown frontmatter
         run: bash scripts/ci-validate.sh
 
