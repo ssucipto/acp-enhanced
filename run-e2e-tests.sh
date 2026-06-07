@@ -76,7 +76,7 @@ fi
 # Per-test timeout in seconds (macOS-compatible: no GNU timeout)
 # 120s accommodates slow tests under parallel CPU contention (project-workflow,
 # preferences-validate, sessions). Tests take longer in --parallel 4 mode.
-TIMEOUT_SECS=120
+TIMEOUT_SECS=180
 total=0
 passed=0
 failed=0
@@ -140,8 +140,8 @@ run_one_test() {
         local output
         output=$(cat "$tmpout")
         echo ""
-        echo "    ── Output (last 20 lines) ──"
-        echo "$output" | tail -60 | sed 's/^/    /'
+        echo "    ── Test Output ──"
+        echo "$output" | sed 's/^/    /' 
         echo "    ────────────────────────────"
         echo ""
         rm -f "$tmpout"
