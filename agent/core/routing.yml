@@ -112,6 +112,16 @@ command_suggestions:
     - acp-stakeholder-report: "Friday stakeholder update"
     - acp-init: "Full context init if status shows gaps"
 
+  git-push:
+    - acp-commit: "Write session memory before pushing"
+    - ci-check: "Verify CI passes on develop before pushing"
+    - acp-status: "Check overall project state after push"
+
+  git-pr:
+    - ci-check: "Verify CI passes before creating PR to mainline"
+    - acp-stakeholder-report: "Generate summary for PR description"
+    - acp-commit: "Ensure session is committed before PR"
+
   acp-stakeholder-report:
     - acp-report: "Full archive when stakeholders need detail"
     - acp-update: "Refresh progress.yaml before reporting"

@@ -2,9 +2,17 @@ name: E2E Tests
 
 on:
   push:
-    branches: [mainline]
+    branches:
+      - mainline
+      - develop
   pull_request:
-    branches: [mainline]
+    branches:
+      - mainline
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   e2e:
