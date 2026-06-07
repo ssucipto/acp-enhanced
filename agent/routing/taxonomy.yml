@@ -247,6 +247,49 @@ task_types:
     skill: crosscut
     description: Checking fork divergence against upstream prmichaelsen/agent-context-protocol
 
+  # ── CODE REVIEW ──────────────────────────────────────────────
+  # Added v6.11.0 (M55 — /acp-review command). Four variants by scope.
+  code-review-full:
+    executor: copilot
+    complexity: high
+    context_required: [commands/acp.review.md, skills/code-review.md]
+    tokens_est: 14000
+    skill: code-review
+    description: >
+      Full-project code review with all 54 rules across 7 categories.
+      Includes OWASP Top 10:2025, TypeScript strictness, and optional
+      MASVS v2.0 mobile rules. Produces agent/reports/review-NNN.md.
+
+  code-review-targeted:
+    executor: deepseek-v4-pro
+    complexity: medium
+    context_required: [commands/acp.review.md, skills/code-review.md]
+    tokens_est: 7000
+    skill: code-review
+    description: >
+      Targeted review with --rules flag limiting to 1-2 categories.
+      Cost-efficient for incremental PR reviews and mid-sprint checks.
+
+  code-review-security:
+    executor: copilot
+    complexity: high
+    context_required: [commands/acp.review.md, skills/code-review.md]
+    tokens_est: 9000
+    skill: code-review
+    description: >
+      Security-only review (--rules security). Enforces OWASP Top 10:2025
+      and MASVS v2.0 rules. CRITICAL findings bypass --severity filter.
+
+  code-review-ci:
+    executor: qwen3-235b
+    complexity: low
+    context_required: [commands/acp.review.md, skills/code-review.md]
+    tokens_est: 3000
+    skill: code-review
+    description: >
+      CI pipeline review with --ci flag. Compact output, exit 1 on
+      CRITICAL/HIGH findings. Safe for pre-commit hooks and GitHub Actions.
+
   # ── PARALLEL TASKS ───────────────────────────────────────────
   # Added v6.8.2 (audit-022 R9, route-056). Completes ACP against
   # Anthropic's 6 agent workflows (parallelization + orchestrator-workers).
@@ -324,3 +367,9 @@ skills_catalog:
     file: agent/skills/upstream-sync.md
     description: Upstream parity checking — divergence analysis, port safety gates
     triggers: [upstream-sync]
+
+  - name: code-review
+    mention: "@{code-review}"
+    file: agent/skills/code-review.md
+    description: Code quality & security review — OWASP Top 10:2025, TypeScript strictness, API conventions, mobile MASVS v2.0
+    triggers: [code-review-full, code-review-targeted, code-review-security, code-review-ci]

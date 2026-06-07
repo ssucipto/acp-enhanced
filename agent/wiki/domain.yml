@@ -3,11 +3,11 @@
 # last_verified: 2026-06-03
 
 commands:
-  count: 64  # 64 total: 61 acp.* + 2 git.* + 1 command.template.md (verified 2026-06-03)
+  count: 70  # 70 total: 67 acp.* + 2 git.* + 1 command.template.md (verified 2026-06-07, M55)
   location: agent/commands/
   naming: "acp.{command-name}.md — dot notation, acp namespace for core; git.{command}.md for git namespace"
   categories:
-    core: [acp.audit, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.memory-sync, acp.plan, acp.proceed, acp.report, acp.resume, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
+    core: [acp.audit, acp.carryover-query, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.memory-sync, acp.plan, acp.proceed, acp.repair-tools, acp.report, acp.resume, acp.review, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
     artifact: [acp.artifact-glossary, acp.artifact-reference, acp.artifact-research]
     clarification: [acp.clarification-address, acp.clarification-capture, acp.clarification-create]
     design: [acp.command-create, acp.design-create, acp.design-reference, acp.pattern-create]
@@ -195,10 +195,16 @@ commands:
     - command: acp.version-update
       category: version
       purpose: Update ACP files (AGENT.md, templates, scripts) to the latest version.
+    - command: acp.carryover-query
+      category: core
+      purpose: Search and filter audit carryovers from agent/memory/audit-carryovers.md by status, severity, audit, or keyword.
     - command: acp.cost-report
       category: local
       local_only: true
       purpose: Read the routing ledger, group spend by executor, calculate actual vs. baseline cost (vs. all-Claude-Sonnet baseline), and produce taxonomy improvement suggestions.
+    - command: acp.review
+      category: core
+      purpose: Enforce code quality, security, and consistency standards — 54 rules across OWASP Top 10:2025, TypeScript strictness, API conventions, and mobile MASVS v2.0.
     - command: git.commit
       category: git
       purpose: Automate version detection, changelog updates, and git commits with proper semantic versioning.
