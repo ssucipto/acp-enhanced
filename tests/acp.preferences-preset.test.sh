@@ -13,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # ── Fixture setup ─────────────────────────────────────────────────────────────
 
-FIXTURE_DIR="${SCRIPT_DIR}/tests/fixtures/preferences-preset"
+FIXTURE_DIR="$(mktemp -d)/acp_pref_preset_test"
 
 setup_fixtures() {
   mkdir -p "${FIXTURE_DIR}/agent/configurables"
