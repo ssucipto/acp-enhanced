@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.11.0] — 2026-06-07
+
+### Added (M55 — /acp-review Code Quality & Security Review Command)
+- **`/acp-review` command**: 54-rule standards enforcement covering TypeScript, OWASP Top 10:2025, OWASP MASVS v2.0, API conventions, naming, code health, and error handling
+- `agent/commands/acp.review.md` — full command document with 7 rule categories, quality gates, executor selection, and output format spec
+- `agent/skills/code-review.md` — compact skill file (copilot executor, Flash disqualified, OWASP→rule mapping)
+- Appendix A: 10 ACP self-review rules (SH-01–SH-04, YM-01–YM-03, AP-01–AP-03) auto-activate when `agent/commands/` detected
+- `--diff` flag: review only files changed since last commit (git diff integration)
+- `--carryover` integration: writes HIGH+ findings to `agent/memory/audit-carryovers.md`
+- `--ci` mode: compact output, exit 1 on CRITICAL/HIGH findings
+- 4 task types in taxonomy: `code-review-full`, `code-review-targeted`, `code-review-security`, `code-review-ci`
+- Skill catalog entry for `@{code-review}` @-mention invocation
+- E2E test: 14 assertions (7 structural + 7 behavioral) in `e2e/acp.review.test.sh`
+- [feedback-006](agent/feedback/feedback-006-acp-review-command-upstream-v3.md): `/acp-review` proposal accepted — ships full TypeScript-first ruleset (not scoped down)
+- Mobile MASVS v2.0 rules (SC-19–SC-23) for React Native/Expo projects
+- Executor selection: Composer 2.5 (preferred), DeepSeek V4 Pro, Kimi K2.6, Qwen3 235B; Flash/Flash-Max disqualified
+- Cross-links added to `acp.audit.md`, `acp.validate.md`, `acp.repair-tools.md`, `acp.stakeholder-report.md`, `acp.design-spec.md`, `acp.pattern-create.md`, `acp.carryover-query.md`
+- `agent/reports/audit-050-feedback-006-review-command-scope-analysis.md` — scope correction analysis
+- `agent/reports/audit-051-m55-readiness-gap-analysis.md` — 13 findings, all resolved
+
+### Changed
+- `agent/routing/taxonomy.yml`: added 4 code-review task types + skill catalog entry
+- `agent/core/routing.yml`: added acp-review, acp-carryover-query, acp-validate command suggestions
+- `package.yaml`: added acp.review.md entry
+
+---
+
 ## [6.10.0] — 2026-06-07
 
 ### Added (M53 — Cursor Slash Commands Bootstrap)
