@@ -158,6 +158,22 @@ command_suggestions:
     - acp-dispatch: "Auto-dispatch the routed task"
     - acp-cost-report: "Track costs from dispatched tasks"
 
+  acp-review:
+    - acp-audit: "Deep-dive a specific finding from review report"
+    - acp-repair-tools: "Resolve carryover findings from reviews"
+    - acp-commit: "Save session after fixing review findings"
+    - acp-stakeholder-report: "Include review health in Friday update"
+
+  acp-carryover-query:
+    - acp-review: "Re-run review after resolving carryovers"
+    - acp-repair-tools: "Auto-resolve carryover findings"
+    - acp-commit: "Commit after carryover resolution"
+
+  acp-validate:
+    - acp-review: "ACP self-review to check framework code quality"
+    - acp-audit: "Deep-dive on validation findings"
+    - acp-commit: "Commit after addressing validation issues"
+
   acp-cost-report:
     - acp-route: "Re-route expensive task types to cheaper models"
     - acp-commit: "Commit cost findings to session memory"
