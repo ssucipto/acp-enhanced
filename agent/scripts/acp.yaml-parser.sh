@@ -42,7 +42,9 @@ init_ast() {
     AST_FILE=$(mktemp)
     echo "0|map||root|-1|" > "$AST_FILE"
     AST_ROOT_ID=0
-    trap 'cleanup_ast' EXIT  # ensure temp file is removed even on unexpected exit
+    # Script-level trap cleanup_ast on EXIT is set at the bottom of this file.
+    # Do NOT set trap here — subshells ($(...)) inherit the trap and would
+    # delete AST_FILE on subshell exit, breaking the parent shell's AST state.
 }
 
 cleanup_ast() {
