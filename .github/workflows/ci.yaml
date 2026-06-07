@@ -62,5 +62,15 @@ jobs:
           git config --global user.name "CI Test Runner"
           git config --global init.defaultBranch main
 
+      - name: Generate manifest.yaml from template
+        run: |
+          if [ ! -f agent/manifest.yaml ]; then
+            cp agent/manifest.template.yaml agent/manifest.yaml
+          fi
+
+      - name: Install Node.js dependencies
+        run: |
+          cd scripts && npm install --silent
+
       - name: Run E2E smoke tests
         run: bash run-e2e-tests.sh --skip-network
