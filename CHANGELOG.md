@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.12.0] — 2026-06-07
+
+### Added (M56 — /acp-integrity v1.0 — AI Code Integrity & Malicious Code Detection)
+- **`/acp-integrity` command**: 55-rule trustworthiness verification — detects hidden Unicode, exfiltration, supply chain risks, CI injection
+- `agent/commands/acp.integrity.md` — full command doc with Agent Directive, LLM/Script Boundary Rule, Remediation Playbook, Standards References
+- `agent/skills/code-integrity.md` — slim skill file (≤800 tokens) with script table + confidence ceilings
+- `agent/wiki/integrity-rules.md` — full 70-rule catalogue (55 v1.0 + 15 deferred to v2.0)
+- **6 bash scripts**: `acp.unicode-scan.sh`, `acp.entropy-scan.sh`, `acp.manifest-hash.sh`, `acp.network-whitelist-validate.sh`, `acp.git-provenance.sh`, `acp.dependency-diff.sh`
+- `agent/core/network_whitelist.yml` — approved outbound domain whitelist schema
+- `agent/core/identity.yml` — `team_members:` field for git provenance verification
+- `acp-rule-file-audit` alias — 3-line wrappers → `acp-integrity --self --fast`
+- E2E test: 26/26 assertions (structural + behavioral + false-positive baseline)
+- LLM/Script Boundary Rule: deterministic tasks use bash scripts, not LLM reasoning
+- [feedback-007](agent/feedback/feedback-007-acp-integrity-command-upstream-v2.md): `/acp-integrity` proposal accepted with scope reduction (Phase 1 only)
+- [audit-053](agent/reports/audit-053-feedback-007-acp-integrity-suitability-analysis.md): suitability analysis — 4 CRITICAL gaps, scope reduction recommended
+- [audit-054](agent/feedback/audit-054-second-round-acp-integrity-consolidated.md): Perplexity second-round — all findings confirmed, 2 extra scripts, consolidated v1.0 scope
+- [audit-055](agent/reports/audit-055-m56-pre-implementation-gap-check.md): pre-impl gap check — 5 gaps + 2 inconsistencies, all fixed
+- M57 + M58 stubs created for deferred features (recurring tasks, semantic analysis)
+- Deferred to v2.0 (M58): taint flow (IG-45–50), semantic injection (IG-53/54/56/57), memory poisoning (IG-58–62)
+
+### Changed
+- `agent/routing/taxonomy.yml`: added `code-integrity-scan` task type + `@{code-integrity}` skill catalog entry
+- `agent/core/routing.yml`: added acp-integrity command suggestions
+- `package.yaml`: added acp.integrity.md entry with 6 scripts
+- `agent/core/identity.yml`: added `team_members:` field
+
+---
+
 ## [6.11.0] — 2026-06-07
 
 ### Added (M55 — /acp-review Code Quality & Security Review Command)

@@ -290,6 +290,20 @@ task_types:
       CI pipeline review with --ci flag. Compact output, exit 1 on
       CRITICAL/HIGH findings. Safe for pre-commit hooks and GitHub Actions.
 
+  # ── CODE INTEGRITY ────────────────────────────────────────────
+  # Added v6.12.0 (M56 — /acp-integrity command). Phase 1 pattern matching.
+  code-integrity-scan:
+    executor: copilot
+    complexity: high
+    context_required: [commands/acp.integrity.md, skills/code-integrity.md, wiki/integrity-rules.md]
+    tokens_est: 8000
+    skill: code-integrity
+    description: >
+      AI code integrity & trustworthiness verification. 55 rules across
+      11 categories. Phase 1 pattern matching with 6 bash scripts.
+      Detects hidden Unicode, exfiltration, supply chain risks, CI injection.
+      Deferred to v2.0 (M58): taint flow, semantic injection, memory poisoning.
+
   # ── PARALLEL TASKS ───────────────────────────────────────────
   # Added v6.8.2 (audit-022 R9, route-056). Completes ACP against
   # Anthropic's 6 agent workflows (parallelization + orchestrator-workers).
@@ -373,3 +387,9 @@ skills_catalog:
     file: agent/skills/code-review.md
     description: Code quality & security review — OWASP Top 10:2025, TypeScript strictness, API conventions, mobile MASVS v2.0
     triggers: [code-review-full, code-review-targeted, code-review-security, code-review-ci]
+
+  - name: code-integrity
+    mention: "@{code-integrity}"
+    file: agent/skills/code-integrity.md
+    description: AI code integrity & trustworthiness — hidden Unicode, exfiltration, supply chain, CI injection, Phase 1 pattern matching
+    triggers: [code-integrity-scan]
