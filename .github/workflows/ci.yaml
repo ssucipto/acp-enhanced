@@ -42,9 +42,11 @@ jobs:
         run: |
           echo "=== Running shellcheck ==="
           SCRIPTS=$(find . -name '*.sh' -not -path './.git/*' | sort)
-          echo "Found $(echo "$SCRIPTS" | wc -l) shell scripts"
+          COUNT=$(echo "$SCRIPTS" | wc -l | tr -d ' ')
+          echo "Found $COUNT shell scripts"
+          # shellcheck disable=SC2086
           # Error-level issues fail the build; style warnings are advisory
-          shellcheck --shell=bash --severity=error "$SCRIPTS"
+          echo "$SCRIPTS" | xargs shellcheck --shell=bash --severity=error
           echo "✅ shellcheck passed (no errors)"
 
   # ── E2E Test Smoke (single OS, quick) ─────────────────────────
