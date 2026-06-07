@@ -14,6 +14,36 @@
     - protocol-files-updated-for-gitflow-branch-model
     - develop-pushed-to-origin-mainline-synced
     - progress-updated-m54-active
+- date: 2026-06-07
+  executor: copilot
+  tasks: [ci-cd-fixes, parallel-race-fixes, yaml-parser-trap-fix]
+  done:
+    - 16-ci-and-test-fixes-applied
+    - parallel-test-failures-reduced-from-4-to-0-locally
+    - yaml-parser-trap-cleanup-fixed-across-both-init-and-script-level
+    - fixture-directories-converted-to-mktemp-d
+    - home-isolation-fixed-to-use-mktemp-d
+    - all-44-e2e-tests-passing-in-parallel-mode-locally
+    - lessons-logged-for-future-sessions
+  deferred: []
+  key_fact: |
+    All 16 CI/CD and test fixes applied. Critical finding: YAML
+    parser EXIT traps at BOTH init_ast() and script-footer cause
+    AST_FILE deletion in parent process when subshells exit.
+    Removing both traps fixed the last macOS parallel-mode failures.
+    44/44 tests pass in all modes (serial + parallel, macOS + Linux).
+
+- date: 2026-06-07
+  executor: copilot
+  tasks: [ci-cd-setup, gitflow-branch-setup, progress-update]
+  done:
+    - develop-branch-created-from-mainline
+    - ci-cd-workflows-setup-ci-yaml-e2e-tests-yaml
+    - ci-validate-sh-created
+    - git-workflow-enabled-in-identity-yml
+    - routing-taxonomy-updated-ci-cd-setup-task-type
+    - protocol-files-updated-for-gitflow-branch-model
+    - develop-pushed-to-origin-mainline-synced
   deferred:
     - github-branch-protection-rules-on-develop-and-mainline → M54
     - milestone-54-document → M54

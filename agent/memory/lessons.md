@@ -7,6 +7,52 @@
 #   status: archived     # Archived lessons are skipped by getFilteredLessons()
 #   superseded_by: "constraints.yml:key"  # Reference to what now encodes this knowledge
 
+- date: 2026-06-07
+  scope: backend-bash
+  task_type: ci-cd-setup
+  lesson: |
+    YAML parser EXIT traps delete AST_FILE in subshells. Both
+    init_ast() and the script-footer set 'trap cleanup_ast EXIT'.
+    When yaml_query/yaml_set ran inside $(...) subshells, the
+    subshell inherited the EXIT trap. On subshell exit, cleanup_ast
+    deleted AST_FILE — in the parent process. All subsequent YAML
+    operations failed with "No such file or directory". Fix: remove
+    ALL EXIT traps. Cleanup happens in init_ast() before each new
+    yaml_parse call. The final temp file leak is acceptable (OS
+    cleans /tmp/). This was macOS-specific (bash subshell trap
+    inheritance differs from GNU bash on Linux).
+  priority: high
+
+- date: 2026-06-07
+  scope: testing
+  task_type: ci-cd-setup
+  lesson: |
+    Shared fixture directories cause parallel E2E race conditions.
+    Tests writing to tests/fixtures/* subdirs corrupt each other's
+    data when run in parallel. Fix: use mktemp -d per test run,
+    not hardcoded paths. Four tests had this issue.
+  priority: high
+
+- date: 2026-06-07
+  scope: testing
+  task_type: ci-cd-setup
+  lesson: |
+    $$ (parent PID) is NOT unique across parallel workers. All
+    workers share the same parent PID. Tests using
+    HOME="/tmp/acp-test-$$-$RANDOM" could collide when $RANDOM
+    matched. Fix: use HOME="$(mktemp -d)/test-name" for truly
+    unique isolation. Four tests needed this fix.
+  priority: high
+
+- date: 2026-06-07
+  scope: testing
+  task_type: ci-cd-setup
+  lesson: |
+    Generated files (manifest.yaml, node_modules/) missing in CI
+    cause test failures. Add CI setup steps to generate them
+    (cp template → manifest, npm install) before running E2E.
+  priority: normal
+
 - date: 2026-06-04
   scope: cross-cutting
   task_type: audit
