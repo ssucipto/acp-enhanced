@@ -10,6 +10,14 @@
 6. Task runs tests locally → local-script
 7. Default → deepseek-v4-pro
 
+## Code Review Priority (v6.11.0, M55)
+When routing a code review task:
+1. Full-project review with all 54 rules + OWASP + MASVS → code-review-full (copilot)
+2. Security-only review (--rules security) → code-review-security (copilot)
+3. Targeted review with --rules flag (1-2 categories) → code-review-targeted (deepseek-v4-pro)
+4. CI pipeline review with --ci flag → code-review-ci (qwen3-235b)
+5. Flash/Flash-Max are DISQUALIFIED for all review tasks — cannot sustain cross-file reasoning
+
 ## Override Triggers
 - Developer adds `override_executor: [model]` to task frontmatter → use that model
 - Task has `risk: critical` → escalate to claude-sonnet regardless of other rules
