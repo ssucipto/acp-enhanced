@@ -6,6 +6,14 @@
 # Each package entry tracks source, version, and installed files
 packages: {}
 
+# ── Scaffold Configuration ─────────────────────────────────────
+# Controls what gets generated during bootstrap.
+# Solo = ~30 files, Small = ~80 files, Team = ~310 files.
+scaffold:
+  team_size: small            # solo | small | team
+  generate_prompts: false     # .github/prompts/ wrappers (opt-in)
+  generate_opencode: true     # .opencode/commands/ slash commands
+
 # Manifest format version (for future compatibility)
 manifest_version: 1.0.0
 
