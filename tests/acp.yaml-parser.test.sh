@@ -13,10 +13,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Create test YAML files
 setup_test_files() {
-    mkdir -p tests/fixtures
+    # Use unique temp directory to avoid parallel test conflicts
+    FIXTURE_DIR="${FIXTURE_DIR:-$(mktemp -d)}"
+    mkdir -p "$FIXTURE_DIR"
     
     # Simple YAML
-    cat > tests/fixtures/simple.yaml << 'EOF'
+    cat > "$FIXTURE_DIR/simple.yaml" << 'EOF'
 name: test-package
 version: 1.0.0
 description: Test package
@@ -24,7 +26,7 @@ author: Test Author
 EOF
     
     # Nested YAML
-    cat > tests/fixtures/nested.yaml << 'EOF'
+    cat > $FIXTURE_DIR/nested.yaml << 'EOF'
 project:
   name: test-project
   version: 1.0.0
@@ -34,7 +36,7 @@ project:
 EOF
     
     # Simple array YAML
-    cat > tests/fixtures/array.yaml << 'EOF'
+    cat > $FIXTURE_DIR/array.yaml << 'EOF'
 tags:
   - tag1
   - tag2
@@ -42,7 +44,7 @@ tags:
 EOF
     
     # Object array YAML
-    cat > tests/fixtures/object-array.yaml << 'EOF'
+    cat > $FIXTURE_DIR/object-array.yaml << 'EOF'
 contents:
   patterns:
     - name: namespace.pattern1.md
@@ -55,7 +57,7 @@ contents:
 EOF
     
     # Complex nested structure
-    cat > tests/fixtures/complex.yaml << 'EOF'
+    cat > $FIXTURE_DIR/complex.yaml << 'EOF'
 project:
   name: complex-project
   version: 2.5.0
@@ -72,7 +74,7 @@ project:
 EOF
     
     # Mixed structure
-    cat > tests/fixtures/mixed.yaml << 'EOF'
+    cat > $FIXTURE_DIR/mixed.yaml << 'EOF'
 name: mixed
 version: 1.0.0
 tags:
@@ -91,7 +93,9 @@ EOF
 
 # Cleanup test files
 cleanup_test_files() {
-    rm -rf tests/fixtures
+    if [ -n "${FIXTURE_DIR:-}" ] && [ -d "$FIXTURE_DIR" ]; then
+        rm -rf "$FIXTURE_DIR"
+    fi
 }
 
 # Test Suite
@@ -110,7 +114,7 @@ setup_test_files
 echo -e "${BLUE}${BOLD}Test Group 1: Simple Key-Value Pairs${NC}"
 echo ""
 
-yaml_parse "tests/fixtures/simple.yaml"
+yaml_parse "$FIXTURE_DIR/simple.yaml"
 result=$(yaml_query ".name")
 assert_equals "test-package" "$result" "Query simple key: .name"
 
@@ -131,7 +135,7 @@ echo ""
 echo -e "${BLUE}${BOLD}Test Group 2: Nested Objects${NC}"
 echo ""
 
-yaml_parse "tests/fixtures/nested.yaml"
+yaml_parse "$FIXTURE_DIR/nested.yaml"
 result=$(yaml_query ".project.name")
 assert_equals "test-project" "$result" "Query nested key: .project.name"
 
@@ -152,7 +156,7 @@ echo ""
 echo -e "${BLUE}${BOLD}Test Group 3: Simple Arrays${NC}"
 echo ""
 
-yaml_parse "tests/fixtures/array.yaml"
+yaml_parse "$FIXTURE_DIR/array.yaml"
 result=$(yaml_query ".tags[0]")
 assert_equals "tag1" "$result" "Query array index: .tags[0]"
 
@@ -170,7 +174,7 @@ echo ""
 echo -e "${BLUE}${BOLD}Test Group 4: Object Arrays${NC}"
 echo ""
 
-yaml_parse "tests/fixtures/object-array.yaml"
+yaml_parse "$FIXTURE_DIR/object-array.yaml"
 result=$(yaml_query ".contents.patterns[0].name")
 assert_equals "namespace.pattern1.md" "$result" "Query object array: .contents.patterns[0].name"
 
@@ -194,7 +198,7 @@ echo ""
 echo -e "${BLUE}${BOLD}Test Group 5: Complex Nested Structures${NC}"
 echo ""
 
-yaml_parse "tests/fixtures/complex.yaml"
+yaml_parse "$FIXTURE_DIR/complex.yaml"
 result=$(yaml_query ".project.name")
 assert_equals "complex-project" "$result" "Complex: .project.name"
 
@@ -224,7 +228,7 @@ echo ""
 echo -e "${BLUE}${BOLD}Test Group 6: Mixed Structures${NC}"
 echo ""
 
-yaml_parse "tests/fixtures/mixed.yaml"
+yaml_parse "$FIXTURE_DIR/mixed.yaml"
 result=$(yaml_query ".name")
 assert_equals "mixed" "$result" "Mixed: .name"
 
@@ -254,7 +258,7 @@ echo ""
 echo -e "${BLUE}${BOLD}Test Group 7: Edge Cases${NC}"
 echo ""
 
-yaml_parse "tests/fixtures/simple.yaml"
+yaml_parse "$FIXTURE_DIR/simple.yaml"
 
 # Nonexistent key — yaml_query returns exit 1 for not-found; || true prevents
 # set -e from aborting the test (we assert on the empty output, not exit code)
@@ -262,12 +266,12 @@ result=$(yaml_query ".nonexistent" 2>&1) || true
 assert_empty "$result" "Edge case: nonexistent key returns empty"
 
 # Out of bounds array index
-yaml_parse "tests/fixtures/array.yaml"
+yaml_parse "$FIXTURE_DIR/array.yaml"
 result=$(yaml_query ".tags[99]" 2>&1) || true
 assert_empty "$result" "Edge case: out of bounds array index returns empty"
 
 # Invalid path
-yaml_parse "tests/fixtures/simple.yaml"
+yaml_parse "$FIXTURE_DIR/simple.yaml"
 result=$(yaml_query ".name.invalid" 2>&1) || true
 assert_empty "$result" "Edge case: invalid nested path returns empty"
 
@@ -280,14 +284,14 @@ echo -e "${BLUE}${BOLD}Test Group 8: Backward Compatibility${NC}"
 echo ""
 
 # Test yaml_get wrapper
-result=$(yaml_get "tests/fixtures/simple.yaml" "name")
+result=$(yaml_get "$FIXTURE_DIR/simple.yaml" "name")
 assert_equals "test-package" "$result" "Backward compat: yaml_get"
 
 # Test yaml_get_nested wrapper
-result=$(yaml_get_nested "tests/fixtures/nested.yaml" "project.metadata.author")
+result=$(yaml_get_nested "$FIXTURE_DIR/nested.yaml" "project.metadata.author")
 assert_equals "Test Author" "$result" "Backward compat: yaml_get_nested"
 
-result=$(yaml_get_nested "tests/fixtures/object-array.yaml" "contents.patterns[0].name")
+result=$(yaml_get_nested "$FIXTURE_DIR/object-array.yaml" "contents.patterns[0].name")
 assert_equals "namespace.pattern1.md" "$result" "Backward compat: yaml_get_nested with array"
 
 echo ""
@@ -299,20 +303,20 @@ echo -e "${BLUE}${BOLD}Test Group 9: Update Operations${NC}"
 echo ""
 
 # Create test file for updates
-cp tests/fixtures/simple.yaml tests/fixtures/update-test.yaml
+cp $FIXTURE_DIR/simple.yaml $FIXTURE_DIR/update-test.yaml
 
-yaml_parse "tests/fixtures/update-test.yaml"
+yaml_parse "$FIXTURE_DIR/update-test.yaml"
 yaml_set ".version" "2.0.0"
 result=$(yaml_query ".version")
 assert_equals "2.0.0" "$result" "Update: yaml_set changes value in AST"
 
 # Write back and verify
-yaml_write "tests/fixtures/update-test.yaml"
-yaml_parse "tests/fixtures/update-test.yaml"
+yaml_write "$FIXTURE_DIR/update-test.yaml"
+yaml_parse "$FIXTURE_DIR/update-test.yaml"
 result=$(yaml_query ".version")
 assert_equals "2.0.0" "$result" "Update: yaml_write persists changes to file"
 
-rm tests/fixtures/update-test.yaml
+rm $FIXTURE_DIR/update-test.yaml
 
 echo ""
 
@@ -324,7 +328,7 @@ echo ""
 
 # Parse time test
 start_time=$(date +%s%N)
-yaml_parse "tests/fixtures/complex.yaml"
+yaml_parse "$FIXTURE_DIR/complex.yaml"
 end_time=$(date +%s%N)
 parse_time=$(( (end_time - start_time) / 1000000 ))  # Convert to milliseconds
 
@@ -364,7 +368,7 @@ echo ""
 echo -e "${BLUE}${BOLD}Test Group 11: AST Structure Tests${NC}"
 echo ""
 
-yaml_parse "tests/fixtures/simple.yaml"
+yaml_parse "$FIXTURE_DIR/simple.yaml"
 assert_not_empty "$AST_FILE" "AST: AST_FILE set after parse"
 assert_file_exists "$AST_FILE" "AST: AST_FILE points to existing file"
 assert_not_empty "$AST_ROOT_ID" "AST: Root ID set"
@@ -439,7 +443,7 @@ echo -e "${BLUE}${BOLD}Test Group 13: Real-World package.yaml${NC}"
 echo ""
 
 # Create realistic package.yaml
-cat > tests/fixtures/package.yaml << 'EOF'
+cat > $FIXTURE_DIR/package.yaml << 'EOF'
 name: acp-firebase
 version: 1.2.0
 description: Firebase patterns and commands for ACP
@@ -469,7 +473,7 @@ release:
   branch: main
 EOF
 
-yaml_parse "tests/fixtures/package.yaml"
+yaml_parse "$FIXTURE_DIR/package.yaml"
 result=$(yaml_query ".name")
 assert_equals "acp-firebase" "$result" "Real-world: package name"
 
@@ -506,7 +510,7 @@ echo -e "${BLUE}${BOLD}Test Group 14: Stress Tests${NC}"
 echo ""
 
 # Create large YAML file
-cat > tests/fixtures/large.yaml << 'EOF'
+cat > $FIXTURE_DIR/large.yaml << 'EOF'
 project:
   name: large-project
   items:
@@ -514,11 +518,11 @@ EOF
 
 # Add 50 items
 for i in $(seq 1 50); do
-    echo "    - name: item$i" >> tests/fixtures/large.yaml
-    echo "      value: $i" >> tests/fixtures/large.yaml
+    echo "    - name: item$i" >> $FIXTURE_DIR/large.yaml
+    echo "      value: $i" >> $FIXTURE_DIR/large.yaml
 done
 
-yaml_parse "tests/fixtures/large.yaml"
+yaml_parse "$FIXTURE_DIR/large.yaml"
 result=$(yaml_query ".project.items[0].name")
 assert_equals "item1" "$result" "Stress: First item in large array"
 
@@ -537,7 +541,7 @@ echo -e "${BLUE}${BOLD}Test Group 15: Error Handling${NC}"
 echo ""
 
 # Test parsing nonexistent file — yaml_parse returns 1; || true prevents set -e abort
-result=$(yaml_parse "tests/fixtures/nonexistent.yaml" 2>&1) || true
+result=$(yaml_parse "$FIXTURE_DIR/nonexistent.yaml" 2>&1) || true
 if echo "$result" | grep -q "Error"; then
     echo -e "${GREEN}✓${NC} Error handling: nonexistent file"
     TESTS_PASSED=$((TESTS_PASSED + 1))
@@ -568,8 +572,8 @@ echo ""
 echo -e "${BLUE}${BOLD}Test Group 16: Array Append Operations${NC}"
 echo ""
 
-cp tests/fixtures/array.yaml tests/fixtures/append-test-work.yaml
-yaml_parse "tests/fixtures/append-test-work.yaml"
+cp $FIXTURE_DIR/array.yaml $FIXTURE_DIR/append-test-work.yaml
+yaml_parse "$FIXTURE_DIR/append-test-work.yaml"
 
 # Append item (capture node ID to avoid printing to stdout)
 node_id=$(yaml_array_append ".tags" "tag4")
@@ -586,8 +590,8 @@ result=$(yaml_query ".tags[4]")
 assert_equals "tag5" "$result" "Array append: new item at index 4 (in AST)"
 
 # Write and verify persistence
-yaml_write "tests/fixtures/append-test-work.yaml"
-yaml_parse "tests/fixtures/append-test-work.yaml"
+yaml_write "$FIXTURE_DIR/append-test-work.yaml"
+yaml_parse "$FIXTURE_DIR/append-test-work.yaml"
 
 result=$(yaml_query ".tags[3]")
 assert_equals "tag4" "$result" "Array append: item 4 persisted to file"
@@ -595,7 +599,7 @@ assert_equals "tag4" "$result" "Array append: item 4 persisted to file"
 result=$(yaml_query ".tags[4]")
 assert_equals "tag5" "$result" "Array append: item 5 persisted to file"
 
-rm tests/fixtures/append-test-work.yaml
+rm $FIXTURE_DIR/append-test-work.yaml
 
 echo ""
 
@@ -605,8 +609,8 @@ echo ""
 echo -e "${BLUE}${BOLD}Test Group 17: Object Array Append${NC}"
 echo ""
 
-cp tests/fixtures/mixed.yaml tests/fixtures/object-append-work.yaml
-yaml_parse "tests/fixtures/object-append-work.yaml"
+cp $FIXTURE_DIR/mixed.yaml $FIXTURE_DIR/object-append-work.yaml
+yaml_parse "$FIXTURE_DIR/object-append-work.yaml"
 
 # Append new object (capture all node IDs)
 obj_node=$(yaml_array_append_object ".items")
@@ -621,8 +625,8 @@ result=$(yaml_query ".items[2].value")
 assert_equals "300" "$result" "Object append: new object value (in AST)"
 
 # Write and verify persistence
-yaml_write "tests/fixtures/object-append-work.yaml"
-yaml_parse "tests/fixtures/object-append-work.yaml"
+yaml_write "$FIXTURE_DIR/object-append-work.yaml"
+yaml_parse "$FIXTURE_DIR/object-append-work.yaml"
 
 result=$(yaml_query ".items[2].name")
 assert_equals "item3" "$result" "Object append: new object name (persisted)"
@@ -630,7 +634,7 @@ assert_equals "item3" "$result" "Object append: new object name (persisted)"
 result=$(yaml_query ".items[2].value")
 assert_equals "300" "$result" "Object append: new object value (persisted)"
 
-rm tests/fixtures/object-append-work.yaml
+rm $FIXTURE_DIR/object-append-work.yaml
 
 echo ""
 
@@ -640,8 +644,8 @@ echo ""
 echo -e "${BLUE}${BOLD}Test Group 18: Mixed Operations${NC}"
 echo ""
 
-cp tests/fixtures/mixed.yaml tests/fixtures/mixed-work.yaml
-yaml_parse "tests/fixtures/mixed-work.yaml"
+cp $FIXTURE_DIR/mixed.yaml $FIXTURE_DIR/mixed-work.yaml
+yaml_parse "$FIXTURE_DIR/mixed-work.yaml"
 
 # Read existing value
 result=$(yaml_query ".items[0].name")
@@ -656,8 +660,8 @@ field1=$(yaml_object_set "$obj_node" "name" "item3")
 field2=$(yaml_object_set "$obj_node" "value" "300")
 
 # Write and re-read
-yaml_write "tests/fixtures/mixed-work.yaml"
-yaml_parse "tests/fixtures/mixed-work.yaml"
+yaml_write "$FIXTURE_DIR/mixed-work.yaml"
+yaml_parse "$FIXTURE_DIR/mixed-work.yaml"
 
 # Verify modification
 result=$(yaml_query ".items[0].value")
@@ -671,7 +675,7 @@ assert_equals "item3" "$result" "Mixed: appended object persisted"
 result=$(yaml_query ".items[1].name")
 assert_equals "item2" "$result" "Mixed: original item 2 still present"
 
-rm tests/fixtures/mixed-work.yaml
+rm $FIXTURE_DIR/mixed-work.yaml
 
 echo ""
 
@@ -682,23 +686,23 @@ echo -e "${BLUE}${BOLD}Test Group 19: yaml_delete Function${NC}"
 echo ""
 
 # Test 1: Delete simple scalar
-cat > tests/fixtures/delete-test.yaml << 'EOF'
+cat > $FIXTURE_DIR/delete-test.yaml << 'EOF'
 name: test
 version: 1.0.0
 description: Test package
 EOF
 
-yaml_parse tests/fixtures/delete-test.yaml
+yaml_parse $FIXTURE_DIR/delete-test.yaml
 yaml_delete ".description"
-yaml_write tests/fixtures/delete-test.yaml
+yaml_write $FIXTURE_DIR/delete-test.yaml
 
-yaml_parse tests/fixtures/delete-test.yaml
+yaml_parse $FIXTURE_DIR/delete-test.yaml
 result=$(yaml_query ".description" 2>/dev/null || echo "")
 assert_equals "" "$result" "Delete: simple scalar removed"
 assert_equals "test" "$(yaml_query '.name')" "Delete: other fields remain"
 
 # Test 2: Delete nested field
-cat > tests/fixtures/delete-test.yaml << 'EOF'
+cat > $FIXTURE_DIR/delete-test.yaml << 'EOF'
 project:
   name: test
   version: 1.0.0
@@ -707,17 +711,17 @@ project:
     license: MIT
 EOF
 
-yaml_parse tests/fixtures/delete-test.yaml
+yaml_parse $FIXTURE_DIR/delete-test.yaml
 yaml_delete ".project.metadata.license"
-yaml_write tests/fixtures/delete-test.yaml
+yaml_write $FIXTURE_DIR/delete-test.yaml
 
-yaml_parse tests/fixtures/delete-test.yaml
+yaml_parse $FIXTURE_DIR/delete-test.yaml
 result=$(yaml_query ".project.metadata.license" 2>/dev/null || echo "")
 assert_equals "" "$result" "Delete: nested field removed"
 assert_equals "Test" "$(yaml_query '.project.metadata.author')" "Delete: sibling fields remain"
 
 # Test 3: Delete entire object
-cat > tests/fixtures/delete-test.yaml << 'EOF'
+cat > $FIXTURE_DIR/delete-test.yaml << 'EOF'
 projects:
   project1:
     name: Project 1
@@ -727,28 +731,28 @@ projects:
     type: cli
 EOF
 
-yaml_parse tests/fixtures/delete-test.yaml
+yaml_parse $FIXTURE_DIR/delete-test.yaml
 yaml_delete ".projects.project1"
-yaml_write tests/fixtures/delete-test.yaml
+yaml_write $FIXTURE_DIR/delete-test.yaml
 
-yaml_parse tests/fixtures/delete-test.yaml
+yaml_parse $FIXTURE_DIR/delete-test.yaml
 result=$(yaml_query ".projects.project1.name" 2>/dev/null || echo "")
 assert_equals "" "$result" "Delete: entire object removed"
 assert_equals "Project 2" "$(yaml_query '.projects.project2.name')" "Delete: other objects remain"
 
 # Test 4: Delete non-existent field (should error)
-cat > tests/fixtures/delete-test.yaml << 'EOF'
+cat > $FIXTURE_DIR/delete-test.yaml << 'EOF'
 name: test
 EOF
 
-yaml_parse tests/fixtures/delete-test.yaml
+yaml_parse $FIXTURE_DIR/delete-test.yaml
 set +e
 yaml_delete ".nonexistent" 2>/dev/null
 exit_code=$?
 set -e
 assert_not_equals 0 "$exit_code" "Delete: non-existent field returns error"
 
-rm -f tests/fixtures/delete-test.yaml
+rm -f $FIXTURE_DIR/delete-test.yaml
 
 echo ""
 
@@ -759,50 +763,50 @@ echo -e "${BOLD}Test Group 20: Array Operations${NC}"
 echo "Testing yaml_set with [] and yaml_array_append..."
 
 # Test 1: Create empty array with yaml_set
-cat > tests/fixtures/array-ops.yaml << 'EOF'
+cat > $FIXTURE_DIR/array-ops.yaml << 'EOF'
 project:
   name: test
   version: 1.0.0
 EOF
 
-yaml_parse tests/fixtures/array-ops.yaml
+yaml_parse $FIXTURE_DIR/array-ops.yaml
 yaml_set ".project.tags" "[]"
-yaml_write tests/fixtures/array-ops.yaml
+yaml_write $FIXTURE_DIR/array-ops.yaml
 
-yaml_parse tests/fixtures/array-ops.yaml
+yaml_parse $FIXTURE_DIR/array-ops.yaml
 # Check node type is array
 node_type=$(grep "tags" "$AST_FILE" | cut -d'|' -f2)
 assert_equals "array" "$node_type" "Array ops: yaml_set creates array node for []"
 
 # Test 2: Append to empty array
 yaml_array_append ".project.tags" "production"
-yaml_write tests/fixtures/array-ops.yaml
+yaml_write $FIXTURE_DIR/array-ops.yaml
 
-yaml_parse tests/fixtures/array-ops.yaml
+yaml_parse $FIXTURE_DIR/array-ops.yaml
 result=$(yaml_query ".project.tags")
 assert_contains "$result" "production" "Array ops: append to empty array works"
 
 # Test 3: Append second item
 yaml_array_append ".project.tags" "staging"
-yaml_write tests/fixtures/array-ops.yaml
+yaml_write $FIXTURE_DIR/array-ops.yaml
 
-yaml_parse tests/fixtures/array-ops.yaml
+yaml_parse $FIXTURE_DIR/array-ops.yaml
 result=$(yaml_query ".project.tags")
 assert_contains "$result" "production" "Array ops: first item preserved"
 assert_contains "$result" "staging" "Array ops: second item added"
 
 # Test 4: Convert existing scalar to empty array
-cat > tests/fixtures/array-ops.yaml << 'EOF'
+cat > $FIXTURE_DIR/array-ops.yaml << 'EOF'
 project:
   name: test
   tags: old-value
 EOF
 
-yaml_parse tests/fixtures/array-ops.yaml
+yaml_parse $FIXTURE_DIR/array-ops.yaml
 yaml_set ".project.tags" "[]"
-yaml_write tests/fixtures/array-ops.yaml
+yaml_write $FIXTURE_DIR/array-ops.yaml
 
-yaml_parse tests/fixtures/array-ops.yaml
+yaml_parse $FIXTURE_DIR/array-ops.yaml
 node_type=$(grep "tags" "$AST_FILE" | cut -d'|' -f2)
 assert_equals "array" "$node_type" "Array ops: convert scalar to array"
 
@@ -812,9 +816,9 @@ assert_not_contains "$result" "old-value" "Array ops: old scalar value removed"
 
 # Test 5: Append after conversion
 yaml_array_append ".project.tags" "new-tag"
-yaml_write tests/fixtures/array-ops.yaml
+yaml_write $FIXTURE_DIR/array-ops.yaml
 
-yaml_parse tests/fixtures/array-ops.yaml
+yaml_parse $FIXTURE_DIR/array-ops.yaml
 result=$(yaml_query ".project.tags")
 assert_contains "$result" "new-tag" "Array ops: append after conversion works"
 
@@ -822,15 +826,15 @@ assert_contains "$result" "new-tag" "Array ops: append after conversion works"
 yaml_array_append ".project.tags" "tag1"
 yaml_array_append ".project.tags" "tag2"
 yaml_array_append ".project.tags" "tag3"
-yaml_write tests/fixtures/array-ops.yaml
+yaml_write $FIXTURE_DIR/array-ops.yaml
 
-yaml_parse tests/fixtures/array-ops.yaml
+yaml_parse $FIXTURE_DIR/array-ops.yaml
 result=$(yaml_query ".project.tags")
 assert_contains "$result" "tag1" "Array ops: multiple appends - tag1"
 assert_contains "$result" "tag2" "Array ops: multiple appends - tag2"
 assert_contains "$result" "tag3" "Array ops: multiple appends - tag3"
 
-rm -f tests/fixtures/array-ops.yaml
+rm -f $FIXTURE_DIR/array-ops.yaml
 
 echo ""
 
