@@ -2,7 +2,63 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
-- date: 2026-06-07
+- date: 2026-06-08
+  executor: copilot
+  branch: develop
+  tasks: [route-142, route-143, route-144, route-145, route-146, route-147, route-148, route-149, audit-056, audit-057, audit-058, acp-validate, acp-sync]
+  done:
+    - m56-autonomous-implementation-all-8-routes-completed
+    - route-142-network-whitelist-yml-identity-yml-team-members
+    - route-143-unicode-scan-sh-entropy-scan-sh
+    - route-144-manifest-hash-sh-network-whitelist-validate-sh
+    - route-145-git-provenance-sh-dependency-diff-sh
+    - route-146-integrity-rules-md-wiki-code-integrity-md-skill
+    - route-147-acp-integrity-md-command-doc-agent-directive-55-rules
+    - route-148-wrappers-aliases-taxonomy-routing-package-yaml
+    - route-149-e2e-26-26-assertions-version-bump-6-12-0-changelog
+    - audit-056-round1-8-bugs-found-fixed-shell-injection-trap-err-regex-counter
+    - audit-057-round2-4-gaps-found-fixed-domain-yml-cross-links-dependency-injection
+    - audit-058-round3-1-gap-progress-yaml-m56-not-marked-completed
+    - 13-total-bugs-gaps-across-3-audit-rounds-all-fixed
+    - validate-version-consistency-8-files-all-6-12-0
+    - validate-cross-references-5-bidirectional-links-all-verified
+    - validate-wrapper-parity-6-wrappers-all-present
+    - validate-e2e-75-75-assertions-pass-26-integrity-49-review
+    - sync-readme-count-66-to-71-ip-register-m56-entries-added
+    - progress-yaml-m56-completed-100-percent-m57-current
+    - 6-bash-scripts-trap-err-env-var-injection-safe-bash-3-2-compat
+  deferred: []
+  key_fact: "Three rounds of post-implementation audit (056/057/058) caught 13 bugs and gaps that would have shipped to production — including CRITICAL shell injection vulnerabilities in Python subprocess calls. The discipline of auditing after implementation, not just before, is as important as pre-implementation audit. Without post-impl audit, 8 script bugs and 5 integration gaps would be live in v6.12.0."
+  executor: copilot
+  branch: develop
+  tasks: [audit-053, audit-054-review, m56-planning, audit-055, m57-stub, m58-stub, progress-update]
+  done:
+    - audit-053-feedback-007-suitability-analysis-4-critical-gaps-identified
+    - audit-054-perplexity-second-round-all-findings-confirmed-2-extra-scripts
+    - m56-milestone-created-8-routes-55-rules-6-scripts-llm-script-boundary-rule
+    - routes-142-149-created-build-order-scripts-first
+    - route-142-network-whitelist-yml-identity-yml-team-members
+    - route-143-unicode-scan-sh-entropy-scan-sh
+    - route-144-manifest-hash-sh-network-whitelist-validate-sh
+    - route-145-git-provenance-sh-dependency-diff-sh
+    - route-146-integrity-rules-md-wiki-code-integrity-md-skill
+    - route-147-acp-integrity-md-command-doc
+    - route-148-wrappers-aliases-taxonomy-routing-package-yaml
+    - route-149-e2e-test-cross-links-version-bump
+    - audit-055-m56-pre-impl-gap-check-5-gaps-2-inconsistencies-all-6-fixed
+    - gap-055-01-rule-count-44-to-55-fixed
+    - gap-055-02-m57-m58-milestone-stubs-created
+    - gap-055-03-unbacked-deterministic-rules-assigned
+    - gap-055-04-skill-token-target-clarified
+    - m57-recurring-tasks-scheduler-stub-created
+    - m58-acp-integrity-v2-semantic-analysis-stub-created
+    - progress-yaml-updated-m56-m57-m58-entries
+    - 4-open-questions-resolved-origin-default-phase2-deferral-alias-kept-fp-baseline
+  deferred:
+    - m56-implementation → route-142-through-149
+    - m57-implementation → after-m56
+    - m58-implementation → after-m56-plus-1-month-production-data
+  key_fact: "Three rounds of pre-implementation audit (053/054/055) caught 12 gaps before any code was written. The LLM/Script Boundary Rule — deterministic tasks must use bash scripts, not LLM reasoning — is the architectural principle that distinguishes /acp-integrity from /acp-review. Without this rule, the command would be an expensive, unreliable SAST pretender."
   executor: copilot
   branch: develop
   tasks: [route-131, route-132, route-134, route-135, route-136, route-137, route-138, route-139, route-141]
