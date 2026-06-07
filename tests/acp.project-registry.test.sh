@@ -9,7 +9,7 @@ source "${SCRIPT_DIR}/../agent/scripts/acp.common.sh"
 
 # Setup test environment (unique for each test)
 setup() {
-    export HOME="/tmp/acp-test-$$-$(date +%N)"
+    export HOME="$(mktemp -d)/acp_project_registry_test"
     mkdir -p "$HOME/.acp"
 }
 

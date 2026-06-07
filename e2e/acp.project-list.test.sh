@@ -9,7 +9,7 @@ source "${SCRIPT_DIR}/../agent/scripts/acp.common.sh"
 
 # Test setup
 setup() {
-    export HOME="/tmp/acp-test-$$-$RANDOM"
+    export HOME="$(mktemp -d)/acp_project_list_test"
     mkdir -p "$HOME/.acp"
     export SCRIPT_PATH="${SCRIPT_DIR}/../agent/scripts/acp.project-list.sh"
 }
