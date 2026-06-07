@@ -377,6 +377,7 @@ See `agent/templates/stakeholder-report.template.md` or:
 - [`/acp-cost-report`](acp.cost-report.md) — Weekly AI token spend
 - [`/acp-design-spec`](acp.design-spec.md) — Interface spec (not progress)
 - [`/acp-commit`](acp.commit.md) — Session memory after reporting phase
+- [`/acp-review`](acp.review.md) — Code quality & security review — include review health in stakeholder summary
 
 ---
 

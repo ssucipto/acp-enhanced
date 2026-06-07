@@ -111,3 +111,12 @@ Pending carryovers (--pending):
 **Invocation**: `/acp-carryover-query --severity high`  
 
 **Result**: Shows only HIGH-severity carryovers across all audits.
+
+---
+
+## Related Commands
+
+- [`/acp-audit`](acp.audit.md) — Creates audit reports and carryover entries
+- [`/acp-review`](acp.review.md) — Creates review carryovers via `--carryover` flag
+- [`/acp-repair-tools`](acp.repair-tools.md) — Auto-resolve carryover findings
+- [`/acp-status`](acp.status.md) — Project health check including carryover counts

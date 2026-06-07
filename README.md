@@ -1,6 +1,6 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.10.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.11.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
 [![Milestones](https://img.shields.io/badge/milestones-49%2F49%20complete-brightgreen)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-67%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
@@ -32,7 +32,7 @@ The framework layer solves a specific problem: as your project grows, the AI age
 | `agent/routing/` | Task taxonomy, routing rules, cost ledger, task files |
 | `agent/memory/` | Session log, lessons learned, patterns, architectural decisions |
 | `agent/wiki/` | Reference docs loaded section-by-section (never all at once) |
-| `agent/commands/` | 64 self-documenting slash commands (`/acp-init`, `/acp-audit`, etc.) |
+| `agent/commands/` | 66 self-documenting slash commands (`/acp-init`, `/acp-review`, `/acp-audit`, etc.) |
 | `agent/scripts/` | 29 bash scripts + TypeScript tooling for dispatch and validation |
 
 > 🖥️ **Companion Tool**: [**ACP Enhanced Visualizer**](https://github.com/ssucipto/ACPEnhanced-Visual) (v1.5.0) — a full-featured local web dashboard that brings your `agent/progress.yaml` to life. Monitors milestones, tasks, sessions, ADRs, lessons, patterns, packages, and audit reports — all from a single interactive UI. **Multi-project tab support, GitHub remote read, and zero-config `npx acp-visualizer` CLI.** [See full feature list below →](#visualize-your-project)

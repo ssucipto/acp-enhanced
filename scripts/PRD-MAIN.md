@@ -2,7 +2,7 @@
 **Version:** 2.2 FINAL (Implemented)
 **Date:** 2026-05-01 (updated 2026-06-06)
 **Author:** Project Owner
-**Status:** ✅ Implemented — 53 milestones complete as of v6.10.0 (M1–M53, June 2026)
+**Status:** ✅ Implemented — 54 milestones complete as of v6.11.0 (M1–M55, June 2026)
 **Forked from:** prmichaelsen/agent-context-protocol
 
 > **Note (2026-06-07):** This PRD describes the original vision for ACP Enhanced as of May 2026.
@@ -10,6 +10,8 @@
 > /acp-design-spec command. M51 (v6.9.4) fixed a critical bootstrap install bug.
 > M52 (v6.9.5) delivered /acp-stakeholder-report with five-tier reporting model.
 > M53 (v6.10.0) added Cursor IDE slash-command parity. The implementation matches the architecture
+> and design specification from M44. M54 (v6.10.1) established CI/CD with GitHub Actions and GitFlow-lite branching.
+> M55 (v6.11.0) delivered /acp-review — 54-rule code quality & security enforcement with OWASP and MASVS.
 > described below with some naming differences: `/acp-` prefix (not `@acp-`), skills are
 > domain-specific (commands, scripts, schemas, testing, typescript, crosscut, upstream-sync),
 > and the directory layout uses `agent/routing/tasks/` (not `agent/tasks/`). See README.md
