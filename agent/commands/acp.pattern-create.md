@@ -381,6 +381,7 @@ Version: 1.0.0
 - [`/acp-command-create`](acp.command-create.md) - Create commands
 - [`/acp-design-create`](acp.design-create.md) - Create designs
 - [`/acp-package-validate`](acp.package-validate.md) - Validate package after creation
+- [`/acp-review`](acp.review.md) - Enforce code quality standards on new patterns
 
 ---
 

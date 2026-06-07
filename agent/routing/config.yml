@@ -25,7 +25,7 @@ models:
     cost_input_per_1m: 0.435
     cost_output_per_1m: 0.87
     last_verified: 2026-05-11
-    use_for: [bash-script-create, command-doc-write, preference-system]
+    use_for: [bash-script-create, command-doc-write, preference-system, code-review-targeted]
 
   gemini-flash:
     provider: google
@@ -34,6 +34,38 @@ models:
     cost_output_per_1m: 0.30
     last_verified: 2026-05-11
     use_for: []
+
+  copilot:
+    provider: github
+    model_id: github/copilot
+    cost_input_per_1m: 0.00
+    cost_output_per_1m: 0.00
+    last_verified: 2026-06-07
+    use_for: [code-review-full, code-review-security, design-spec, stakeholder-report, adr-write, audit-run, milestone-create, route-create, memory-write, ci-cd-setup]
+
+  composer-2.5:
+    provider: cursor
+    model_id: cursor/composer-2.5
+    cost_input_per_1m: 0.00
+    cost_output_per_1m: 0.00
+    last_verified: 2026-06-07
+    use_for: [code-review-full, code-review-security]
+
+  kimi-k2.6:
+    provider: moonshot
+    model_id: moonshot/kimi-k2.6
+    cost_input_per_1m: 0.50
+    cost_output_per_1m: 1.00
+    last_verified: 2026-06-07
+    use_for: [code-review-full, code-review-security]
+
+  qwen3-235b:
+    provider: alibaba
+    model_id: alibaba/qwen3-235b-a22b
+    cost_input_per_1m: 0.05
+    cost_output_per_1m: 0.10
+    last_verified: 2026-06-07
+    use_for: [code-review-ci]
 
   local-script:
     provider: local
