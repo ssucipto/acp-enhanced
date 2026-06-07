@@ -214,7 +214,10 @@ main() {
         if [ -z "$current_tags" ] || [ "$current_tags" = "null" ]; then
           local registry_path
           registry_path=$(get_projects_registry_path)
-          _sed_i "/^  ${PROJECT_NAME}:/a\\    tags: []" "$registry_path"
+          # Cross-platform sed append (BSD/GNU): insert tags line after project header
+          local tmpf
+          tmpf=$(mktemp)
+          awk -v proj="${PROJECT_NAME}" '/^  '"${PROJECT_NAME}"':/ { print; print "    tags: []"; next } { print }' "$registry_path" > "$tmpf" && mv "$tmpf" "$registry_path"
           yaml_parse "$registry_path"
         fi
 
