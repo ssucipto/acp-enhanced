@@ -226,7 +226,7 @@ task_types:
   milestone-create:
     executor: copilot
     complexity: medium
-    context_required: [milestones/milestone-1-{title}.template.md, progress.yaml]
+    context_required: ['milestones/milestone-1-{title}.template.md', progress.yaml]
     tokens_est: 5000
     skill: crosscut
     description: Creating milestone planning documents in agent/milestones/
