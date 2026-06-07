@@ -176,26 +176,27 @@ else
     trap "rm -rf $_outdir" EXIT
 
     typeset -a _pids=()
-    # Round-robin distribute tests into batches
+    # Round-robin: each worker runs its batch of tests in background
     for ((w=0; w<PARALLEL; w++)); do
         (
             for ((i=w; i<_N; i+=PARALLEL)); do
-                run_one_test "${test_files[$i]}" "${test_names[$i]}"
+                # run_one_test prints result line + optional failure details
+                run_one_test "${test_files[$i]}" "${test_names[$i]}" > "$_outdir/out-$i" 2>&1
                 echo $? > "$_outdir/rc-$i"
             done
-        ) > "$_outdir/out-$w" 2>&1 &
+        ) &
         _pids+=($!)
     done
 
-    # Wait for all workers and collect results in order
-    for _pid in "${_pids[@]}"; do wait "$_pid"; done
+    # Wait for all workers
+    for _pid in "${_pids[@]}"; do wait "$_pid" 2>/dev/null; done
 
+    # Collect and display results in test order
     for ((i=0; i<_N; i++)); do
         _rc=$(cat "$_outdir/rc-$i" 2>/dev/null || echo 1)
 
-        # Print the result line from the worker output
-        _result_line=$(grep "^  ${test_names[$i]} " "$_outdir"/out-* 2>/dev/null | head -1)
-        [ -n "$_result_line" ] && echo "$_result_line"
+        # Print full test output (result line + failure details)
+        cat "$_outdir/out-$i" 2>/dev/null || true
 
         case $_rc in
             0)   passed=$((passed+1)) ;;
