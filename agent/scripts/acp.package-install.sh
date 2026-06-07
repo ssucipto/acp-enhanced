@@ -704,7 +704,7 @@ fi
 
 if [ -f "$TEMP_DIR/package.yaml" ] && [ ${#INSTALLED_COMMANDS[@]} -gt 0 ]; then
     echo "Resolving script dependencies..."
-    echo "  Installed commands: ${INSTALLED_COMMANDS[@]}"
+    echo "  Installed commands: ${INSTALLED_COMMANDS[*]}"
 
     # Collect required scripts from installed commands using YAML parser
     REQUIRED_SCRIPTS=()
@@ -748,7 +748,7 @@ if [ -f "$TEMP_DIR/package.yaml" ] && [ ${#INSTALLED_COMMANDS[@]} -gt 0 ]; then
         done
     done
 
-    echo "  Found ${#REQUIRED_SCRIPTS[@]} required script(s): ${REQUIRED_SCRIPTS[@]}"
+    echo "  Found ${#REQUIRED_SCRIPTS[@]} required script(s): ${REQUIRED_SCRIPTS[*]}"
 
     # Install required scripts and add to ALL_FILES_TO_INSTALL for batch manifest update
     SCRIPT_FILES_LIST=""
