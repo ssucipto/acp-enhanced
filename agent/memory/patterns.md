@@ -2,6 +2,19 @@
 # Populated automatically by /acp-commit when patterns are identified
 # Format: date-stamped YAML entries, max 60 days active
 
+- date: 2026-06-07
+  name: command-doc-as-spec
+  task_type: command-doc-write
+  code_ref: agent/commands/acp.review.md (route-133 merge decision)
+  description: |
+    When a command document contains its own complete specification (rules,
+    quality gates, output format, verification checklist), a separate spec file
+    creates version drift risk. The command doc serves as both documentation and
+    specification — self-documenting, verifiable, executable. Route 133
+    (code-quality.standards.md) was merged into acp.review.md per this pattern.
+    Use when: the command doc embeds a complete, verifiable ruleset.
+    Anti-pattern: separate spec file that duplicates command doc content.
+
 - date: 2026-06-04
   name: dual-store-registry-to-document-sync
   task_type: architecture-design
