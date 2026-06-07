@@ -141,7 +141,7 @@ run_one_test() {
         output=$(cat "$tmpout")
         echo ""
         echo "    ── Output (last 20 lines) ──"
-        echo "$output" | tail -20 | sed 's/^/    /'
+        echo "$output" | tail -60 | sed 's/^/    /'
         echo "    ────────────────────────────"
         echo ""
         rm -f "$tmpout"
