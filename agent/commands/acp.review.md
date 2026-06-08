@@ -328,6 +328,7 @@ Auto-activated when `agent/commands/` is detected in the project root.
 - `/acp-validate` — Check ACP framework structure (schemas, sessions, versions). Differs from `/acp-review` which checks user project code quality.
 - `/acp-repair-tools` — Resolve carryover findings from reviews
 - `/acp-commit` — Commit session after fixing review findings
+- `/acp-integrity` — Verify code trustworthiness and provenance (companion to review — quality vs trust)
 
 ---
 

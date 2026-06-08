@@ -3,6 +3,19 @@
 # Format: date-stamped YAML entries, max 60 days active
 
 - date: 2026-06-07
+  name: pre-implementation-audit-drill
+  task_type: audit-run
+  code_ref: M56 planning (audit-053 → audit-054 → audit-055)
+  description: |
+    Three rounds of audit before any implementation code is written:
+    Round 1 (suitability): Does this proposal fit our architecture? Scope?
+    Round 2 (second opinion): Independent review confirms/challenges Round 1.
+    Round 3 (pre-impl gap): Scan the final plan for inconsistencies.
+    Result: 12 gaps caught across 3 rounds. Zero blockers at implementation start.
+    Use when: receiving a large external feedback/proposal (>20 pages, new command).
+    Anti-pattern: single audit → implement → discover gaps during coding.
+
+- date: 2026-06-07
   name: command-doc-as-spec
   task_type: command-doc-write
   code_ref: agent/commands/acp.review.md (route-133 merge decision)
