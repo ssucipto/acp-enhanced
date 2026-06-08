@@ -169,10 +169,11 @@ command_suggestions:
     - acp-repair-tools: "Auto-resolve carryover findings"
     - acp-commit: "Commit after carryover resolution"
 
-  acp-validate:
-    - acp-review: "ACP self-review to check framework code quality"
-    - acp-audit: "Deep-dive on validation findings"
-    - acp-commit: "Commit after addressing validation issues"
+  acp-integrity:
+    - acp-review: "Code quality review after integrity scan passes"
+    - acp-audit: "Deep-dive a specific integrity finding"
+    - acp-commit: "Save session after addressing integrity findings"
+    - acp-rule-file-audit: "Fast pre-commit scan of ACP rule files"
 
   acp-cost-report:
     - acp-route: "Re-route expensive task types to cheaper models"
@@ -211,6 +212,8 @@ command_suggestions:
     - acp-validate: "Validate structure after sync"
 
   acp-validate:
+    - acp-review: "ACP self-review to check framework code quality"
+    - acp-integrity: "Scan ACP framework for Unicode injection and tampering"
     - acp-audit: "Investigate validation failures in depth"
     - acp-sync: "Sync after fixing validation issues"
     - acp-status: "Check project health after validation"

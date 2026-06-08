@@ -3,15 +3,14 @@
 
 project:
   name: agent-context-protocol
-  version: 6.11.0
+  version: 6.12.0
   started: 2026-02-16
   status: active
-  current_milestone: M55
+  current_milestone: M57
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.11.0 with 54 completed
-    milestones. M54 delivered CI/CD pipeline and GitFlow-lite branching.
-    M55 delivered /acp-review code quality & security review command.
-    All audit-044 carryovers resolved.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.12.0 with 56 completed
+    milestones. M55 shipped /acp-review. M56 shipped /acp-integrity v1.0.
+    M57 planned: recurring tasks scheduler + pre-commit hooks.
 
 milestones:
   M44:
@@ -245,6 +244,70 @@ milestones:
       Audit-051: all 13 findings resolved. Route-133 (spec file) merged
       into command doc — the command doc IS the spec.
       Source: feedback-006 v3.0, audit-050 + audit-051.
+
+  M56:
+    name: /acp-integrity — AI Code Integrity & Malicious Code Detection v1.0 (v6.12.0)
+    priority: 4
+    status: completed
+    progress: 100
+    started: 2026-06-07
+    completed: 2026-06-08
+    estimated_weeks: 1.5-2
+    tasks_completed: 8
+    tasks_total: 8
+    file: agent/milestones/milestone-56-acp-integrity-command.md
+    notes: |
+      🎉 M56 COMPLETE! /acp-integrity v1.0 shipped in v6.12.0.
+      Delivered: acp.integrity.md (55 rules, 11 categories), code-integrity.md
+      skill (LLM/Script Boundary Rule), integrity-rules.md wiki (70 rules),
+      6 bash scripts (unicode, entropy, manifest, network, git, dependency),
+      network_whitelist.yml, identity.yml team_members, 2 wrappers + 2 aliases,
+      taxonomy (code-integrity-scan), routing suggestions, package.yaml entry,
+      E2E test (26/26 assertions), cross-links (acp.review, acp.audit),
+      version bump 6.11.0→6.12.0, CHANGELOG (Keep a Changelog).
+      Audit-056 (8 bugs fixed): shell injection, trap ERR, regex, counters.
+      Audit-057 (4 gaps fixed): domain.yml, cross-links, dependency-diff injection.
+      12 total bugs/gaps found and fixed across 3 audit rounds.
+      Source: feedback-007 v2.0, audit-053 + audit-054 + audit-055.
+      Build order (non-negotiable): scripts → wiki → skill → command doc → alias → E2E.
+      False-positive baseline test on every CI push: assert zero CRITICAL/HIGH on clean codebase.
+      Target: v6.12.0.
+
+  M57:
+    name: Recurring Tasks Scheduler + Pre-Commit Hook Framework (v6.12.1)
+    priority: 3
+    status: planned
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 0
+    file: agent/milestones/milestone-57-recurring-tasks-scheduler.md
+    notes: |
+      📋 M57 planned — recurring tasks + pre-commit hooks (~6h).
+      Split from feedback-007 per audit-053 GAP-053-04.
+      Depends on M56 (acp-integrity v1.0 scripts must exist first).
+      Covers: progress.yaml recurring_tasks schema, AGENTS.md Step 4.5,
+      constraints.yml pre-commit hook defaults.
+
+  M58:
+    name: /acp-integrity v2.0 — Semantic Analysis & Deep Detection (v6.13.0)
+    priority: 3
+    status: planned
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 2-3
+    tasks_completed: 0
+    tasks_total: 0
+    file: agent/milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
+    notes: |
+      📋 M58 planned — Phase 2 semantic analysis (~18h).
+      Deferred from M56: taint flow (IG-45–50), semantic injection
+      (IG-53/54/56/57), memory poisoning (IG-58–62).
+      Depends on M56 completion + 1 month production data.
+      confidence: LOW ceiling for semantic rules; documented FNR caveats.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4129,6 +4192,28 @@ tasks:
 recent_work:
   - date: 2026-06-07
     description: |
+      📋 M56 PLANNED: /acp-integrity v1.0 — AI Code Integrity & Malicious Code Detection.
+      8 routes (142-149), 55 rules, 6 bash scripts, ~12h estimated.
+      Audit-053 + audit-054 + audit-055: 3 rounds of gap analysis, all findings resolved.
+      M57 + M58 milestone stubs created for deferred items.
+    items:
+      - "📋 M56 milestone: /acp-integrity v1.0 — 55 rules, 11 categories, LLM/Script Boundary Rule"
+      - "📋 Routes 142-149 created: scripts → wiki → skill → command doc → integration → E2E"
+      - "✅ Audit-053: feedback-007 suitability — 4 CRITICAL gaps identified, scope reduction recommended"
+      - "✅ Audit-054: Perplexity second-round — all findings confirmed, 2 extra scripts, consolidated plan"
+      - "✅ Audit-055: M56 pre-impl gap check — 5 gaps + 2 inconsistencies, all 6 fixed"
+      - "✅ GAP-055-01: Rule count corrected 44→55 across milestone + routes"
+      - "✅ GAP-055-02: M57 + M58 milestone stubs created (deferred items now tracked)"
+      - "✅ GAP-055-03: Unbacked deterministic rules assigned (IG-18→entropy, IG-20→unicode)"
+      - "✅ GAP-055-04: Skill token target clarified — ≤500 ideal, ≤800 acceptable"
+      - "✅ M57 stub: Recurring Tasks Scheduler + Pre-Commit Hooks (~6h)"
+      - "✅ M58 stub: /acp-integrity v2.0 — Taint Flow + Semantic Injection + Memory (~18h)"
+      - "✅ Feedback-007 v2.0 + companion files (acp.integrity.md, acp.rule-file-audit.md) reviewed"
+      - "✅ 4 open questions resolved (--origin default, Phase 2 deferral, alias kept, FP baseline)"
+      - "✅ progress.yaml: M56 + M57 + M58 entries added"
+
+  - date: 2026-06-07
+    description: |
       🎉 M55 COMPLETE: /acp-review Code Quality & Security Review Command (v6.11.0).
       11 routes, 2 audits, 1 E2E test (49 assertions), feedback-006 v3.0 integrated.
       Audit-052 post-implementation gap analysis: 8 findings, all fixed in-session.
@@ -6191,24 +6276,22 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "📋 Run /acp-commit to write session memory for M55 + audit-052"
-  - "📋 Run /acp-review --rules security to dogfood the new command on ACP codebase"
+  - "� /acp-proceed M56 — implement /acp-integrity v1.0 (8 routes, build scripts first)"
+  - "📋 Run /acp-commit to write session memory for M56 planning + audits"
   - "📋 M54: Set up GitHub branch protection rules (develop→mainline)"
   - "📋 Address G-048-06: preferences/cursor.yml disable flag"
-  - "📋 Track P2 Visualizer items (stakeholder card, email export)"
 
 notes:
-  - 54 milestones complete (M1–M55, 100%), v6.11.0 (2026-06-07)
-  - 70 command docs (3 new: acp.design-spec, acp.stakeholder-report, acp.review)
-  - 50 audit reports in agent/reports/ (audit-001 through audit-052)
-  - 21 E2E test files (1 new: acp.review.test.sh — 49 assertions)
-  - 518+ total E2E assertions, all passing
-  - 5 feedbacks integrated: 001 (cursor), 003 (dogfooding), 005 (design-spec), 006 (stakeholder + review)
-  - All audit-044 carryovers resolved (G-044-03/06/07, DEFER-044-01)
-  - CARRY-047-01 (@acp. in visualize.md) fixed — command-docs 473/473
-  - Five-tier reporting model documented in README
+  - 55 milestones (M1–M55 complete, M56–M58 planned), v6.11.0 (2026-06-07)
+  - 70 command docs (3 new in v6.11.0: acp.design-spec, acp.stakeholder-report, acp.review)
+  - 53 audit reports in agent/reports/ (audit-001 through audit-055)
+  - 21 E2E test files (acp.review.test.sh — 49 assertions)
+  - M56 planned: /acp-integrity v1.0 — 55 rules, 6 scripts, Phase 1 pattern matching
+  - M57 planned: Recurring tasks scheduler + pre-commit hooks (depends on M56)
+  - M58 planned: /acp-integrity v2.0 — taint flow, semantic injection, memory poisoning
+  - 5 feedbacks integrated: 001 (cursor), 003 (dogfooding), 005 (design-spec), 006 (stakeholder + review), 007 (integrity — planned)
+  - All audit-044 carryovers resolved
   - Cursor IDE parity: .cursor/commands/ auto-generated during install/update/bootstrap
-  - M55 /acp-review: 54 rules (EH, TS, NC, AP, CH, SC), OWASP Top 10:2025 + MASVS v2.0, copilot primary executor
 
 current_blockers: []
 
