@@ -371,6 +371,7 @@ Code pointers: 15
 - [`/acp-status`](acp.status.md) - Quick status snapshot (use for "where are we?", not "what is X?")
 - [`/acp-validate`](acp.validate.md) - Schema and consistency validation (use for correctness checks, not investigation)
 - [`/acp-review`](acp.review.md) - Standards enforcement — code quality, security, OWASP (use when audit finds a pattern needing systematic check)
+- [`/acp-integrity`](acp.integrity.md) - Code trustworthiness & provenance verification (use when audit finds suspicious or foreign code)
 
 ---
 
