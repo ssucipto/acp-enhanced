@@ -15,15 +15,13 @@ stack:
   - format: YAML (agent/schemas/*.yaml, agent/progress.yaml, package.yaml)
 
 platform_constraints:
-  - bash_compat: macOS (BSD sed, no date +%N) + Linux (GNU)
-  - no_external_deps: pure bash preferred; no jq, no yq, no python
-  - yaml_parser: tests/acp.yaml-parser.sh — custom pure-bash parser
+  - bash_compat: macOS (BSD sed) + Linux (GNU)
+  - no_external_deps: pure bash preferred
+  - yaml_parser: tests/acp.yaml-parser.sh — pure-bash parser
 
 team: solo-developer
 
-# Team member email addresses for /acp-integrity IG-37 commit author verification.
-# Add all developer email addresses that may appear in git commit logs.
-# Example: team_members: [dev1@example.com, dev2@example.com]
+# Team member emails for /acp-integrity IG-37 git author verification.
 team_members: []
 
 priorities:
@@ -36,10 +34,8 @@ fork_of: github.com/prmichaelsen/agent-context-protocol
 repo: github.com/ssucipto/acp-enhanced
 version: 6.12.0
 
-# Git workflow — enables Step 1b branch safety checks in Context Loading Protocol
-# develop is the default working branch; mainline is the production branch.
-# PRs from develop → mainline trigger full CI/CD. Feature branches target develop.
+# Git workflow — develop→mainline (gitflow-lite). PRs develop→mainline.
 git_workflow:
-  default_working_branch: develop    # branch agent commits to by default
-  production_branch: mainline        # never commit directly to this
-  branch_model: gitflow-lite         # gitflow-lite | trunk | github-flow
+  default_working_branch: develop
+  production_branch: mainline
+  branch_model: gitflow-lite
