@@ -3,14 +3,15 @@
 
 project:
   name: agent-context-protocol
-  version: 6.12.0
+  version: 6.12.1
   started: 2026-02-16
   status: active
-  current_milestone: M57
+  current_milestone: M58
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.12.0 with 56 completed
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.12.1 with 57 completed
     milestones. M55 shipped /acp-review. M56 shipped /acp-integrity v1.0.
-    M57 planned: recurring tasks scheduler + pre-commit hooks.
+    M57 shipped recurring tasks scheduler + pre-commit hooks.
+    M58 planned: /acp-integrity v2.0 semantic analysis.
 
 milestones:
   M44:
@@ -276,20 +277,22 @@ milestones:
   M57:
     name: Recurring Tasks Scheduler + Pre-Commit Hook Framework (v6.12.1)
     priority: 3
-    status: planned
-    progress: 0
-    started:
-    completed:
+    status: completed
+    progress: 100
+    started: 2026-06-08
+    completed: 2026-06-08
     estimated_weeks: 1
-    tasks_completed: 0
-    tasks_total: 0
+    tasks_completed: 5
+    tasks_total: 5
     file: agent/milestones/milestone-57-recurring-tasks-scheduler.md
     notes: |
-      📋 M57 planned — recurring tasks + pre-commit hooks (~6h).
-      Split from feedback-007 per audit-053 GAP-053-04.
-      Depends on M56 (acp-integrity v1.0 scripts must exist first).
-      Covers: progress.yaml recurring_tasks schema, AGENTS.md Step 4.5,
-      constraints.yml pre-commit hook defaults.
+      🎉 M57 COMPLETE! Recurring Tasks Scheduler shipped in v6.12.1.
+      Route 150: progress.yaml + template recurring_tasks (5 default tasks).
+      Route 151: AGENTS.md/CLAUDE.md/copilot-instructions.md Step 4.5.
+      Route 152: constraints.yml hooks block.
+      Route 153: acp.validate.md Step 2d recurring_tasks validation.
+      Route 154: E2E test (16 assertions PASS) + version bump 6.12.1 + CHANGELOG.
+      Target: v6.12.1.
 
   M58:
     name: /acp-integrity v2.0 — Semantic Analysis & Deep Detection (v6.13.0)
@@ -300,14 +303,16 @@ milestones:
     completed:
     estimated_weeks: 2-3
     tasks_completed: 0
-    tasks_total: 0
+    tasks_total: 4
     file: agent/milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
     notes: |
-      📋 M58 planned — Phase 2 semantic analysis (~18h).
-      Deferred from M56: taint flow (IG-45–50), semantic injection
-      (IG-53/54/56/57), memory poisoning (IG-58–62).
-      Depends on M56 completion + 1 month production data.
-      confidence: LOW ceiling for semantic rules; documented FNR caveats.
+      📋 M58 planned — 4 routes for /acp-integrity v2.0 (~18h).
+      Phase 2 semantic analysis: taint flow (IG-45–50), semantic injection
+      (IG-53/54/56/57), memory poisoning (IG-58–62). 15 rules un-deferred.
+      Research-first build order: calibrate → docs → scripts → E2E.
+      Confidence Ceiling Model: MEDIUM (taint), LOW (injection/memory).
+      Self-protection protocol: agent never self-halts.
+      Target: v6.13.0.
 
   M1:
     name: ACP Commands Infrastructure
@@ -6276,24 +6281,76 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "� /acp-proceed M56 — implement /acp-integrity v1.0 (8 routes, build scripts first)"
-  - "📋 Run /acp-commit to write session memory for M56 planning + audits"
-  - "📋 M54: Set up GitHub branch protection rules (develop→mainline)"
-  - "📋 Address G-048-06: preferences/cursor.yml disable flag"
+  - "/acp-proceed M58 route-155 — taint-flow accuracy research calibration"
+  - "Address 5 audit-062 carryovers (M59 candidates)"
+  - "M54: Set up GitHub branch protection rules (develop to mainline)"
+  - "Run first automated weekly integrity scan (M57 scheduler)"
+  - "Compact sessions.md (21 entries above 15 threshold)"
 
 notes:
-  - 55 milestones (M1–M55 complete, M56–M58 planned), v6.11.0 (2026-06-07)
-  - 70 command docs (3 new in v6.11.0: acp.design-spec, acp.stakeholder-report, acp.review)
-  - 53 audit reports in agent/reports/ (audit-001 through audit-055)
-  - 21 E2E test files (acp.review.test.sh — 49 assertions)
-  - M56 planned: /acp-integrity v1.0 — 55 rules, 6 scripts, Phase 1 pattern matching
-  - M57 planned: Recurring tasks scheduler + pre-commit hooks (depends on M56)
-  - M58 planned: /acp-integrity v2.0 — taint flow, semantic injection, memory poisoning
-  - 5 feedbacks integrated: 001 (cursor), 003 (dogfooding), 005 (design-spec), 006 (stakeholder + review), 007 (integrity — planned)
-  - All audit-044 carryovers resolved
+  - 57 milestones (M1-M57 complete, M58 planned), v6.12.1 (2026-06-15)
+  - 71 command docs (latest: acp.integrity, acp.review in M55/M56)
+  - 52 audit reports in agent/reports/ (audit-001 through audit-064)
+  - 40 E2E test files (91 assertions on M55-M57 core suites)
+  - M55 COMPLETE: /acp-review — 77 rules, copilot executor, 49-assertion E2E
+  - M56 COMPLETE: /acp-integrity v1.0 — 55 rules, 6 bash scripts, LLM/Script Boundary Rule
+  - M57 COMPLETE: Recurring tasks scheduler — 5 tasks, Step 4.5 protocol, pre-commit hooks
+  - M58 PLANNED: /acp-integrity v2.0 — taint flow, semantic injection, memory poisoning
+  - 7 feedbacks integrated: 001-007
+  - 5 open carryovers from audit-062 (M57 deep dive) — all medium severity
   - Cursor IDE parity: .cursor/commands/ auto-generated during install/update/bootstrap
 
 current_blockers: []
+
+# ── Recurring Tasks ──────────────────────────────────────────────
+# Added v6.12.1 (M57). Scheduled periodic reviews surfaced at
+# session start (AGENTS.md Step 4.5). Tracks cadence, not content.
+
+recurring_tasks:
+  - id: weekly-code-review
+    command: /acp-review --report --carryover
+    frequency: weekly
+    executor: copilot
+    last_run: 2026-06-08
+    next_due: 2026-06-15
+    status: current
+    description: "Weekly code quality review with carryover tracking"
+
+  - id: weekly-integrity-scan
+    command: /acp-integrity --self --report --carryover
+    frequency: weekly
+    executor: copilot
+    last_run: 2026-06-08
+    next_due: 2026-06-15
+    status: current
+    description: "Weekly ACP framework integrity scan"
+
+  - id: pre-commit-rule-audit
+    command: /acp-integrity --fast --ci
+    trigger: on-commit
+    executor: deepseek-v4-pro
+    last_run: null
+    next_due: null
+    status: current
+    description: "Pre-commit ACP rule file scan for Unicode injection"
+
+  - id: monthly-dependency-audit
+    command: /acp-integrity --rules dependencies
+    frequency: monthly
+    executor: deepseek-v4-pro
+    last_run: 2026-06-08
+    next_due: 2026-07-08
+    status: current
+    description: "Monthly dependency and supply chain audit"
+
+  - id: quarterly-deep-scan
+    command: /acp-integrity --rules taint-flow,memory --report
+    frequency: quarterly
+    executor: claude-sonnet
+    last_run: null
+    next_due: 2026-09-08
+    status: current
+    description: "Quarterly deep semantic integrity scan (deferred to M58)"
 
 # ── Observability ───────────────────────────────────────────────
 # Added v6.8.2 (audit-022 R8, M44 route-048). Auto-populated on
