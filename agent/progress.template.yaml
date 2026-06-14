@@ -133,6 +133,56 @@ current_blockers:
   - Blocker 1: Description of what's blocking progress
   - Blocker 2: Another blocker and potential resolution
 
+# ── Recurring Tasks (v6.12.1+ M57) ──────────────────────────────
+# Scheduled periodic reviews surfaced at session start (AGENTS.md Step 4.5).
+# Each task has a cadence (frequency or event trigger) and can be
+# checked for overdue status: last_run > next_due = overdue.
+recurring_tasks:
+  # ── Time-based tasks ───────────────────────────────────────────
+  - id: weekly-code-review
+    command: /acp-review --report --carryover
+    frequency: weekly
+    executor: copilot
+    description: "Weekly code quality review"
+    # last_run: 2026-01-01
+    # next_due: 2026-01-08
+    # status: current
+
+  - id: weekly-integrity-scan
+    command: /acp-integrity --self --report --carryover
+    frequency: weekly
+    executor: copilot
+    description: "Weekly ACP framework integrity scan"
+    # last_run: 2026-01-01
+    # next_due: 2026-01-08
+    # status: current
+
+  - id: monthly-dependency-audit
+    command: /acp-integrity --rules dependencies
+    frequency: monthly
+    executor: deepseek-v4-pro
+    description: "Monthly dependency and supply chain audit"
+    # last_run: 2026-01-01
+    # next_due: 2026-02-01
+    # status: current
+
+  - id: quarterly-deep-scan
+    command: /acp-integrity --rules taint-flow,memory --report
+    frequency: quarterly
+    executor: claude-sonnet
+    description: "Quarterly deep semantic integrity scan"
+    # last_run: null
+    # next_due: 2026-04-01
+    # status: current
+
+  # ── Event-based tasks ──────────────────────────────────────────
+  - id: pre-commit-rule-audit
+    command: /acp-integrity --fast --ci
+    trigger: on-commit
+    executor: deepseek-v4-pro
+    description: "Pre-commit ACP rule file scan for Unicode injection"
+    # status: current
+
 # Team and contributors (if applicable)
 team:
   - role: Lead Developer              # Role or responsibility
