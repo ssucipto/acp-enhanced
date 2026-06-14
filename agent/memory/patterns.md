@@ -2,6 +2,19 @@
 # Populated automatically by /acp-commit when patterns are identified
 # Format: date-stamped YAML entries, max 60 days active
 
+- date: 2026-06-15
+  name: spec-audit-fix-publish-cycle
+  task_type: docs-update
+  code_ref: design-spec-acp-enhanced-features (audit-063, v1→v2) + design-spec-m55-m58 (audit-064, v1→v2)
+  description: |
+    Write specification v1 → run /acp-audit on it → fix ALL findings → publish v2.
+    This two-pass cycle caught 26 errors across two specs that would have shipped
+    as authoritative documentation. The key discipline: audit AGAINST the live
+    codebase, not against the spec itself. Three CRITICAL numerical errors
+    (M55: 54→77 actual rules, M56: broken subtotals, development months: 11→5)
+    were caught by line-by-line codebase cross-reference. Without the v2 pass,
+    these would be published errors in the final spec.
+
 - date: 2026-06-07
   name: pre-implementation-audit-drill
   task_type: audit-run
