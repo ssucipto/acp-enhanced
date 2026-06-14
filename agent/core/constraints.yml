@@ -25,6 +25,14 @@ rules:
   - never_break_macos: test BSD sed and date compatibility before committing
   - never_use_gdate_without_fallback: wrap date +%N with linux/macos detection
 
+# ── Hooks ────────────────────────────────────────────────────────
+# Pre-commit / scheduled task hooks. Added v6.12.1 (M57).
+# Each hook references a recurring_task by id from progress.yaml.
+hooks:
+  pre_commit:
+    - task_id: pre-commit-rule-audit
+      description: "Scan ACP rule files for Unicode injection before commit"
+
 # Context budget: a discipline practice, not a hard technical limit.
 # Modern LLMs have 100K+ context windows — this budget enforces reproducibility and focus.
 # Exceed deliberately when needed; never exceed silently.
