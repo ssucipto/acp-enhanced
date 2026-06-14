@@ -1,9 +1,9 @@
 # Domain Entity Model — ACP Protocol project
 # Load ONE section at a time — never load the entire file
-# last_verified: 2026-06-03
+# last_verified: 2026-06-15
 
 commands:
-  count: 71  # 71 total: 68 acp.* + 2 git.* + 1 command.template.md (verified 2026-06-08, M56)
+  count: 71  # 71 total: 68 acp.* + 2 git.* + 1 command.template.md (verified 2026-06-15, M57)
   location: agent/commands/
   naming: "acp.{command-name}.md — dot notation, acp namespace for core; git.{command}.md for git namespace"
   categories:
@@ -365,6 +365,15 @@ test_suites:
     - suite: acp.projects-sync.test.sh
       coverage: acp.projects-sync command — filesystem scan and registry sync
       test_count: 8
+    - suite: acp.integrity.test.sh
+      coverage: /acp-integrity v1.0 — 6 bash scripts, Unicode/entropy/network/git/dependency/manifest, false-positive baseline
+      test_count: 26
+    - suite: acp.recurring-tasks.test.sh
+      coverage: M57 recurring tasks scheduler — schema validation, protocol Step 4.5, hooks block, template
+      test_count: 16
+    - suite: acp.review.test.sh
+      coverage: /acp-review — 77 rules, code quality + security enforcement, structural + behavioral with fixture violations
+      test_count: 49
     - suite: acp.script-command-binding.test.sh
       coverage: Selective script installation based on command dependency declarations
       test_count: 8
