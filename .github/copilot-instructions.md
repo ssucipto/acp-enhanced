@@ -134,6 +134,21 @@ Skill files are no longer auto-loaded by task_type. Instead, they are invoked ex
      ```
    - If all entries are `status: fixed` → skip silently
 
+### Step 4.5 — Scheduled Review Due Check (conditional)
+
+Read `agent/progress.yaml` → `recurring_tasks`.
+If any task has `status: overdue` OR `next_due` <= today:
+  Output before starting any other task:
+  ```
+  ⏰ [ACP] Scheduled review(s) overdue:
+     [task_id]: [command] — last run [date], due [date]
+  ```
+  Recommend running before unrelated work.
+  Developer may defer: note in session entry as deferred with reason.
+
+If all tasks are current:
+  (Silent — do not output to avoid noise at every session start.)
+
 ### Step 5 — Load Reference (section only, if needed)
 Only if the task requires it:
 - ACP architecture decisions → load specific ADR from `agent/memory/decisions.md` by ID
