@@ -172,6 +172,43 @@ Compare the canonical version in `agent/progress.yaml` against all other version
 
 **Expected Outcome**: All version-bearing files consistent; drift reported with expected value  
 
+### 2d. Validate Recurring Tasks (v6.12.1+)
+
+Validate the `recurring_tasks:` block in `agent/progress.yaml`.
+
+**Actions**:
+
+1. **Check block exists**: If `recurring_tasks:` is absent → WARN (optional feature, not required).
+2. **Validate each task entry** (ERROR if violation):
+   - `id`: required, kebab-case, non-empty
+   - `command`: required, must start with `/acp-`
+   - `executor`: required, non-empty
+   - `status`: must be one of `current | paused | overdue | completed`
+   - `frequency` OR `trigger`: at least one must be present
+   - `last_run` / `next_due`: if present, must be valid dates (YYYY-MM-DD)
+3. **Check for overdue tasks**: If `status: current` and `next_due` <= today → flag as overdue.
+4. **Warn on duplicate IDs**: Two tasks with same `id` → ERROR.
+5. **Report**:
+
+```
+🔍 Recurring Tasks (v6.12.1+):
+
+  Schema validation:
+    ✅ weekly-code-review: valid
+    ✅ weekly-integrity-scan: valid
+    ✅ pre-commit-rule-audit: valid (event trigger)
+    ✅ monthly-dependency-audit: valid
+    ✅ quarterly-deep-scan: valid
+
+  Overdue check:
+    ⚠️ weekly-code-review: due 2026-06-15 (7 days from now)
+    ✅ weekly-integrity-scan: due 2026-06-15 (7 days from now)
+
+  Summary: 5 tasks, 0 errors, 0 overdue, 2 upcoming
+```
+
+**Expected Outcome**: Recurring tasks validated; overdue tasks surfaced  
+
 ### 3. Validate Design Documents
 
 Check design document structure and content.

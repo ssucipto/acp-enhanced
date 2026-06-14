@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.12.1] — 2026-06-08
+
+### Added (M57 — Recurring Tasks Scheduler + Pre-Commit Hook Framework)
+- **Recurring Tasks Scheduler**: 5 default recurring tasks — weekly code review, weekly integrity scan, pre-commit rule audit, monthly dependency audit, quarterly deep scan
+- `agent/progress.yaml` — `recurring_tasks:` block with cadence/trigger-based task scheduling
+- `agent/progress.template.yaml` — recurring_tasks template section for new projects
+- **AGENTS.md Step 4.5** — scheduled review due check at session start (surfaces overdue recurring tasks)
+- Synced to `CLAUDE.md` and `.github/copilot-instructions.md`
+- `agent/core/constraints.yml` — `hooks:` block with pre-commit hook binding
+- `agent/schemas/progress.schema.yaml` — recurring_tasks field schema (id, command, frequency, trigger, executor, dates, status)
+- `agent/commands/acp.validate.md` — Step 2d recurring tasks validation
+- E2E test: `e2e/acp.recurring-tasks.test.sh` (16 assertions, 100% pass)
+- Standards: NIST SP 800-53 SI-4, OWASP SAMM v2, ISO 27001 A.8.8
+
+### Changed
+- `agent/progress.yaml` — current_milestone: M57 → M58; project description updated to v6.12.1
+
+---
+
 ## [6.12.0] — 2026-06-07
 
 ### Added (M56 — /acp-integrity v1.0 — AI Code Integrity & Malicious Code Detection)
