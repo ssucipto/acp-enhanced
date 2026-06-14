@@ -21,7 +21,7 @@
 | **Name** | ACP Enhanced — Agent Context Protocol Enhanced |
 | **Type** | Proprietary Software — AI Agent Tooling Framework |
 | **Category** | Original Authorship — Computer Software |
-| **Current Version** | 6.12.0 |
+| **Current Version** | 6.12.1 |
 | **Repository** | `https://github.com/ssucipto/acp-enhanced` (public) |
 | **License** | MIT License (portions of original ACP: © Patrick Michaelsen) |
 
@@ -198,6 +198,7 @@ All third-party components retain their original licences. No proprietary modifi
 | 2026-06-07 (v6.11.0) | M55 — /acp-review Command: 54-rule code quality & security enforcement (OWASP Top 10:2025 + MASVS v2.0), TypeScript-first, copilot executor, 4 task types, 49-assertion E2E, audit-050/051/052 |
 | 2026-06-08 (v6.12.0) | M56 — /acp-integrity Command: 55-rule AI code trustworthiness & provenance (hidden Unicode, exfiltration, supply chain, CI injection), 6 bash scripts, LLM/Script Boundary Rule, 26-assertion E2E, audit-053/054/055/056/057/058 |
 | 2026-06-08 (v6.12.0) | M56 — Audit-056/057/058: 3 rounds post-implementation — 13 bugs/gaps found & fixed (shell injection, trap ERR, regex, domain.yml, progress.yaml, cross-links) |
+| 2026-06-08 (v6.12.1) | M57 — Recurring Tasks Scheduler: 5 default scheduled tasks (weekly review, integrity scan, pre-commit audit, monthly dependency, quarterly deep scan), AGENTS.md Step 4.5, constraints.yml hooks, progress.schema.yaml recurring_tasks, E2E test (16 assertions) |
 | 2026-05-17 | Version 6.8.1; this IP Register created |
 
 ---
