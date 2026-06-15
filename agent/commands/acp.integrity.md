@@ -73,6 +73,16 @@ Before executing any rule, classify: **deterministic** (has a single correct ans
 
 ---
 
+## Steps
+
+1. **Invoke the command**: Run `/acp-integrity` with appropriate flags (`--fast`, `--self`, or `--full`) depending on context (pre-commit, weekly, quarterly deep scan).
+2. **Execute the scan**: Run the script pipeline (see **Scripts** field) — unicode → entropy → manifest → network → provenance → dependency → pattern → taint → memory → output.
+3. **Report findings**: Collect results from the output script (`acp.integrity-output.sh`). Present findings by severity and category with rule IDs.
+4. **Handle carryovers**: Cross-reference findings against `agent/memory/audit-carryovers.md`. If new findings, suggest creating carryover entries. If existing carryovers match, note the overlap.
+5. **Verify**: Run the **Verification Checklist** at the bottom of this document to confirm all checks passed.
+
+---
+
 ## Rules — 55 Rules Across 11 Categories
 
 ### Category 1 — Outbound Network Anomalies (CRITICAL)
