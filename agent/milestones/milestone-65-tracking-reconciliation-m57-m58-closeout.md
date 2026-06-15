@@ -22,11 +22,11 @@ The merge of `origin/develop` (commit `90239d9`) restored historical planning do
 
 | Route | Title | Addresses | Est. | Status |
 |-------|-------|-----------|------|--------|
-| route-185 | Reconcile status across layers: re-stamp milestone-57/58, fill route-150..155 completed, register M59–M65 in progress.yaml, fix M54 pointer | F-069-01, F-069-02, F-069-09 | 3h | not_started |
-| route-186 | Add cross-layer status + dangling-pointer checks to `/acp-validate` (prevent future desync) | F-069-01 (prevention), F-069-09 (prevention) | 3h | not_started |
-| route-187 | M58 plan correction via ADR: fix circular go/no-go gate, reconcile route-155 scope, add fixture `max_confidence`/`ci_blocking`, canonical taint script name | F-069-03, F-069-04, F-068-04/F-069-07, F-069-10 | 3h | not_started |
-| route-188 | M57/M58 hygiene: promote F-062-03 to M59, gate quarterly-deep-scan until v2.0, add acp.meta-scan.sh to pipefail scope, ensure wiki v2.0 surface tracked | F-068-03/F-069-05, F-068-10, F-068-12, F-068-07 | 1.5h | not_started |
-| route-189 | Capture this project's ADR history (`/acp-decide` reconstruction of key ADRs) | CRIT-065-001 | 1.5h | not_started |
+| route-185 | Reconcile status across layers: re-stamp milestone-57/58, fill route-150..155 completed, register M59–M65 in progress.yaml, fix M54 pointer | F-069-01, F-069-02, F-069-09 | 3h | completed |
+| route-186 | Add cross-layer status + dangling-pointer checks to `/acp-validate` (prevent future desync) | F-069-01 (prevention), F-069-09 (prevention) | 3h | completed |
+| route-187 | M58 plan correction via ADR: fix circular go/no-go gate, reconcile route-155 scope, add fixture `max_confidence`/`ci_blocking`, canonical taint script name | F-069-03, F-069-04, F-068-04/F-069-07, F-069-10 | 3h | completed |
+| route-188 | M57/M58 hygiene: promote F-062-03 to M59, gate quarterly-deep-scan until v2.0, add acp.meta-scan.sh to pipefail scope, ensure wiki v2.0 surface tracked | F-068-03/F-069-05, F-068-10, F-068-12, F-068-07 | 1.5h | completed |
+| route-189 | Capture this project's ADR history (`/acp-decide` reconstruction of key ADRs) | CRIT-065-001 | 1.5h | completed |
 
 ---
 
@@ -43,7 +43,7 @@ The merge of `origin/develop` (commit `90239d9`) restored historical planning do
 
 ## 4. Milestone-Level Exit Criteria (double-verify gate)
 
-- `milestone-57.md` Status = completed; `milestone-58.md` Status = in_progress — matching `progress.yaml` and git history.
+- `milestone-57.md` Status = completed; `milestone-58.md` Status = completed — matching `progress.yaml` and git history (M58 Phase 2 shipped v6.20.0, all 4 routes 155–158 done).
 - `progress.yaml` contains registered entries for M59, M60, M61, M62, M63, M64, M65 with correct `file:` pointers; `current_milestone` reflects the active track.
 - `route-150..155` have `completed:` stamps consistent with `progress.yaml` counts.
 - No dangling `file:` pointers in `progress.yaml` (M54 created or removed; `tasks_total` consistent with status).
