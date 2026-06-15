@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.20.0] — 2026-06-15
+
+### Added
+- **M58 `/acp-integrity` v2.0 Phase 2** — semantic analysis (routes 156–158)
+- `acp.taint-scan.sh` + `acp.taint-scan.py` — taint source/sink extraction + IG-45–50 heuristics
+- `acp.memory-scan.sh` — memory vs `constraints.yml` prep for LLM semantic comparison
+- E2E `e2e/acp.integrity-v2.test.sh` — 26 assertions (confidence ceilings, scripts, docs)
+
+### Changed
+- Wiki Cat 8/10 un-deferred with Max Confidence columns; command doc v2.0.0 with `--phase2`
+- Skill `code-integrity.md` Phase 2 guidance + self-protection protocol
+- Confidence ceiling model: Cat 8 MEDIUM max, Cat 9/10 LOW max (IG-61 HIGH script-backed)
+
+---
+
 ## [6.19.0] — 2026-06-15
 
 ### Added

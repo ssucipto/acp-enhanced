@@ -1067,7 +1067,7 @@ carryovers:
     finding: "v6.19.0 / M64 completion tracked locally but uncommitted — version drift vs git HEAD c7a1a9b"
     description: "M64 routes 180–184, fixtures, CI wiring, and doc truth pass exist in working tree at v6.19.0 but are not in git history. Operators see completed milestone in progress.yaml while HEAD is v6.14.1."
     fix_target: "Commit v6.19.0 bundle: scripts, fixtures, E2E, CI, wiki, progress, CHANGELOG."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: 071
     escalated_to: null
