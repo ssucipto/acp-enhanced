@@ -1,0 +1,48 @@
+# Session Entry Schema
+# Schema for validating ACP session entries (agent/memory/sessions.md)
+# Version: 1.0.0
+
+schema_version: 1.0.0
+description: Schema for individual session entries in agent/memory/sessions.md
+
+required_fields:
+  - date
+  - executor
+  - done
+
+fields:
+  date:
+    type: string
+    required: true
+    pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    description: "Session date (YYYY-MM-DD)"
+  executor:
+    type: string
+    required: true
+    description: "Executor used for this session (e.g., copilot, deepseek-v4-pro)"
+  branch:
+    type: string
+    required: false
+    description: "Git branch worked on"
+  tasks:
+    type: array
+    required: false
+    items:
+      type: string
+    description: "List of task/route IDs completed"
+  done:
+    type: array
+    required: true
+    items:
+      type: string
+    description: "Kebab-case list of completed items"
+  deferred:
+    type: array
+    required: false
+    items:
+      type: string
+    description: "Deferred items with target task-ID"
+  key_fact:
+    type: string
+    required: false
+    description: "Single most important thing learned, if any"
