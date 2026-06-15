@@ -68,9 +68,13 @@
     (cp template → manifest, npm install) before running E2E.
   priority: normal
 
-- date: 2026-06-04
-  scope: cross-cutting
-  task_type: audit
+- date: 2026-06-15
+  scope: code-integrity
+  task_type: audit-run
+  lesson: "Audit-070 proved /acp-integrity v1.0 gives false assurance (~18/55 rules implemented, entropy scanner crashes on findings). Ship M64 gateway truth/test before M58 v2.0 semantic analysis — Phase 2 on an untested v1 gateway compounds false confidence."
+  priority: high
+  source: session-key-fact
+
   lesson: |
     Version bumps MUST update 8 files: AGENT.md, identity.yml, package.yaml,
     progress.yaml, CHANGELOG.md, README.md, PRD-MAIN.md, IP_REGISTER.md. No

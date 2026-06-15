@@ -8,6 +8,7 @@
 **Created**: 2026-05-06  
 **Last Updated**: 2026-06-03  
 **Status**: Active  
+**Scripts**: None  
 **Requires**: agent-context-protocol-visualizer repository cloned locally
 
 ---

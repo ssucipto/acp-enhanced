@@ -3,15 +3,15 @@
 
 project:
   name: agent-context-protocol
-  version: 6.12.1
+  version: 6.12.2
   started: 2026-02-16
   status: active
   current_milestone: M58
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.12.1 with 57 completed
-    milestones. M55 shipped /acp-review. M56 shipped /acp-integrity v1.0.
-    M57 shipped recurring tasks scheduler + pre-commit hooks.
-    M58 planned: /acp-integrity v2.0 semantic analysis.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.12.1. M55–M57 shipped
+    (/acp-review, /acp-integrity v1.0, recurring tasks). M54 CI/CD active.
+    M58 in progress (integrity v2.0). M59–M65 planned — critical CI fixes,
+    gateway truth/test (M64), tracking reconciliation (M65), prod-readiness.
 
 milestones:
   M44:
@@ -207,22 +207,23 @@ milestones:
     name: CI/CD Pipeline + GitFlow-Lite Branch Model (v6.10.1)
     priority: 4
     status: active
-    progress: 30
+    progress: 50
     started: 2026-06-07
     completed:
     estimated_weeks: 0.2
-    tasks_completed: 0
-    tasks_total: 0
+    tasks_completed: 1
+    tasks_total: 2
     file: agent/milestones/milestone-54-ci-cd-gitflow.md
     notes: |
-      🚀 M54 — CI/CD infrastructure and gitflow-lite branching model.
+      M54 — CI/CD infrastructure and gitflow-lite branching model.
       Phase 1 (CI setup): e2e-tests.yaml updated for develop+mainline,
         ci.yaml added (validate, shellcheck, e2e-smoke on all branches),
         scripts/ci-validate.sh — YAML/frontmatter/shell validator.
       Phase 2 (Branch model): develop branch created from mainline HEAD,
         git_workflow enabled in identity.yml, protocol files updated.
       Phase 3 (Pushed to remote): develop + mainline both on origin.
-      Pending: branch protection rules on GitHub, milestone doc.
+      Phase 4 (Doc): milestone-54-ci-cd-gitflow.md created 2026-06-15.
+      Pending: branch protection rules on GitHub (route-162 / M59).
 
   M55:
     name: /acp-review — Code Review & Standards Enforcement Command (v6.11.0)
@@ -306,12 +307,14 @@ milestones:
     tasks_total: 4
     file: agent/milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
     notes: |
-      📋 M58 planned — 4 routes for /acp-integrity v2.0 (~18h).
+      M58 in progress — 4 routes for /acp-integrity v2.0 (~18h). Route-155 COMPLETE
+      (2026-06-15): taint-flow calibration research + memory-poisoning UX artifact.
       Phase 2 semantic analysis: taint flow (IG-45–50), semantic injection
       (IG-53/54/56/57), memory poisoning (IG-58–62). 15 rules un-deferred.
       Research-first build order: calibrate → docs → scripts → E2E.
       Confidence Ceiling Model: MEDIUM (taint), LOW (injection/memory).
       Self-protection protocol: agent never self-halts.
+      BLOCKED on M64 (gateway v1.1 truth/test) before route-156+ implementation.
       Target: v6.13.0.
 
   M59:
@@ -4331,6 +4334,21 @@ tasks:
 recent_work:
   - date: 2026-06-15
     description: |
+      📝 /acp-update — Progress tracking refreshed after audit remediation planning,
+      validation hardening, and documentation sync. Committed audit-070 + M64/M65 plan;
+      local work pending commit (validate 0/0, parity wrappers, acp-sync).
+    items:
+      - "✅ Committed 197bda0 — audit-070 M55–M58 gateway deep dive (16 findings → M64)"
+      - "✅ Committed 0e7120a — M64/M65 milestones + routes 179–189 + coverage matrix"
+      - "✅ /acp-validate — 0 errors, 0 warnings; 69×3 parity; AGENTS.md triple-sync under 12KB"
+      - "✅ /acp-sync — README, PRD-MAIN, QUICKSTART aligned to v6.12.1 counts"
+      - "✅ M54 milestone doc on disk; progress 30%→50% (CI delivered, branch protection pending)"
+      - "✅ M58 route-155 stamped complete; research artifact + 12 taint-flow fixtures drafted"
+      - "✓ Artifact health: 2 artifacts, 0 stale (Last Verified all < 180 days)"
+      - "📋 Uncommitted: ~60 files — validation fixes, parity wrappers, workflow YAML tweaks"
+
+  - date: 2026-06-15
+    description: |
       ✅ Audit-067: Complete consolidated audit (3rd round). Merged 065+066 into single gap register
       (27 open: 2 Critical, 8 High, 13 Medium, 4 Low) + production-readiness scorecard + M59-M63 roadmap (~60h).
       New coverage: distribution, version consistency, integrity scripts, YAML parser, test quality.
@@ -6480,30 +6498,33 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "Master plan: agent/reports/plan-audit-coverage-matrix.md (every finding 062/065-070 → milestone/route)"
-  - "Recommended order: M59 (critical) → M64 (gateway truth/test) → M65 (tracking truth) → M61 → M62 → M60 → M63"
-  - "/acp-proceed M59 route-159 — fix updateRoutingYml() overwrite + regression test (H1, 2h)"
-  - "M59 routes 160-164 — package.yaml, CI validation, branch protection, API-key preflight, AGENTS.md version"
-  - "M64 routes 179-184 — integrity gateway v1.1 (audit-070): fix entropy crash + unicode perf, implement missing rules, truth pass, uniform output, robustness, KEYSTONE fixture matrix"
-  - "M65 routes 185-189 — tracking reconciliation (audit-068/069): re-stamp statuses, validate guard, M58 plan ADRs, hygiene, capture ADR history"
-  - "M64 BLOCKS M58 v2.0 — do not build semantic analysis on an untested v1 gateway"
-  - "M58 route-156 — /acp-integrity v2.0 docs (proceed only after M64 + M65 route-187 land)"
-  - "Compact sessions.md (entries above 15 threshold)"
+  - "Commit pending local work — validation 0/0, acp-sync docs, parity wrappers, M54 milestone doc"
+  - "/acp-proceed M59 route-159 — fix updateRoutingYml() overwrite + regression test (H1)"
+  - "M59 routes 160-164 — package.yaml parity, CI validation, branch protection, API preflight"
+  - "M64 routes 179-184 — integrity gateway v1.1 truth/test (audit-070; blocks M58 v2.0)"
+  - "M65 routes 185-189 — tracking reconciliation (route stamps, M58 plan ADRs, M54 pointer)"
+
+current_blockers:
+  - id: m59-critical-unshipped
+    description: "Audit-065/066/067 critical fixes (routing.yml overwrite, CI validation no-op, package.yaml gaps) remain unshipped — blocks production adoption"
+    milestone: M59
+    severity: high
 
 notes:
-  - 57 milestones (M1-M57 complete, M58 planned), v6.12.1 (2026-06-15)
-  - 71 command docs (latest: acp.integrity, acp.review in M55/M56)
-  - 52 audit reports in agent/reports/ (audit-001 through audit-064)
-  - 40 E2E test files (91 assertions on M55-M57 core suites)
-  - M55 COMPLETE: /acp-review — 77 rules, copilot executor, 49-assertion E2E
-  - M56 COMPLETE: /acp-integrity v1.0 — 55 rules, 6 bash scripts, LLM/Script Boundary Rule
-  - M57 COMPLETE: Recurring tasks scheduler — 5 tasks, Step 4.5 protocol, pre-commit hooks
-  - M58 PLANNED: /acp-integrity v2.0 — taint flow, semantic injection, memory poisoning
-  - 7 feedbacks integrated: 001-007
-  - 5 open carryovers from audit-062 (M57 deep dive) — all medium severity
-  - Cursor IDE parity: .cursor/commands/ auto-generated during install/update/bootstrap
-
-current_blockers: []
+  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — order M59→M64→M65→M61→M62→M60→M63"
+  - 65 milestone entries — M55–M57 shipped (v6.11–v6.12.1); M54 CI active (50%); M58 in progress (25%); M59–M65 planned
+  - 71 command docs (69 acp.* + 2 git.*); 69 slash-command wrappers (prompts + opencode + cursor parity)
+  - 9 skills (added code-review, code-integrity in M55/M56)
+  - 36 bash scripts (+ integrity scanners in M56)
+  - 40 E2E test files; 317 listed assertions across 32 suites (domain.yml)
+  - 70+ audit reports in agent/reports/ (audit-001 through audit-070)
+  - M55 COMPLETE — /acp-review (77 rules, 49-assertion E2E)
+  - M56 COMPLETE — /acp-integrity v1.0 (55 rules, 6 bash scripts, 26-assertion E2E)
+  - M57 COMPLETE — recurring tasks scheduler (5 tasks, Step 4.5, pre-commit hooks)
+  - M64/M65 planned — integrity gateway truth/test + tracking reconciliation (audit-070)
+  - 7 feedbacks integrated — 001–007
+  - Cursor IDE parity — .cursor/commands/ auto-generated during install/update/bootstrap
+  - 2026-06-15 /acp-update — progress refreshed; M54 50%; M58 route-155 noted; 1 blocker (M59 critical unshipped)
 
 # ── Recurring Tasks ──────────────────────────────────────────────
 # Added v6.12.1 (M57). Scheduled periodic reviews surfaced at

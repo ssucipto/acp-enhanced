@@ -1,0 +1,2 @@
+# Normalize shell scripts to LF for cross-platform bash compatibility (IG-42, audit-062)
+*.sh text eol=lf
