@@ -7,6 +7,253 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.21.0] — 2026-06-15
+
+### Added
+- **route-178: Cross-file consistency validators** — 7 automated checks in
+  `acp-validate.ts` (40/40 vitest): version consistency across identity.yml,
+  AGENTS.md, CLAUDE.md, CHANGELOG.md; stale next_steps detection;
+  milestone doc version drift; blank verification gate detection;
+  missing git tags; .gitignore conflicts; .gitattributes coverage.
+- **route-179: Post-milestone sweep script** — `acp.post-milestone-sweep.sh`
+  with 6 automated gates (tsc, vitest, git tags, acp-validate, token budget,
+  gitattributes) + E2E test. Triggered by constraints.yml hook.
+- **route-175: Memory-layer schemas** — 7 new `agent/schemas/*.schema.yaml`
+  files (milestone, session, lessons, decisions, clarification, feedback,
+  audit-carryovers) enforced by `acp-validate.ts`.
+- **route-174: Command doc structural conformance** — `## Steps` added to
+  `acp.integrity.md` and `acp.review.md`; `## Verification` added to
+  dispatch, feedback, install, task, and visualize commands.
+- **route-176: Reference git hook** — `.git/hooks/pre-commit` with staged
+  ACP file scanning, bash guard, and pass/fail output.
+- **constraints.yml: test_quality_gate rule** — unit tests must assert
+  behavior, not just types. `post_milestone_sweep` hook registered.
+
+### Changed
+- **route-173: Pipefail upgrade** — 17 scripts upgraded from bare `set -e`
+  to `set -euo pipefail` + ERR trap. All 36 scripts now conform.
+- **route-177: Low-severity cleanups** — network_whitelist.yml reviewed_by
+  populated; L1-L4 resolved.
+
+### Fixed
+- **route-176: 5 audit-062 carryovers resolved** — F-062-01..05 all
+  marked fixed: hooks restored, checklist verified, next_due automated,
+  reference hook created, last_findings_count added.
+
+---
+
+## [6.20.9] — 2026-06-15
+
+### Fixed
+- **route-172 test depth**: `getFilteredLessons`/`getLastNSessions` upgraded from smoke tests (return type) to proper behavioral tests: exact task_type filtering, archived-entry skipping, priority:high cross-matching, 5-entry cap, N=1/2/3 session slicing, and empty-string fast path. 33 vitest tests (from 26). `tsc --noEmit` passes (added tsconfig.json). (audit-075 shortcut remediation)
+- **route-171 budget check**: identity.yml Layer 1 token count verified (1,622 bytes ≈ 405 tokens, under 500 ceiling). team_members addition had negligible impact (+22 bytes, +5 tokens).
+- **A3.5 final sweep**: vitest 33/33 green. E2E suite has 47/47 CRLF failures on WSL — pre-existing line-ending issue. .gitattributes LF enforcement (route-171) prevents future files from acquiring CRLF.
+- **progress.yaml tracking**: Added full recent_work entry for M61 completion + audit-075 (6 routes, 6 findings, 3 carryovers). Updated next_steps from stale M61→M62. Refreshed notes to reflect all shipped milestones.
+- **milestone-61 doc version**: Fixed stale v6.16.0 in success criteria → v6.20.9. Populated verification gate with actual pass/fail/⏳ results (npm audit clean, secret-scan active, vitest 33/33, Windows E2E ⏳ pending CRLF fix).
+- **.gitignore whitelist**: Added `!agent/reports/` to allow audit reports to commit without `-f` (blanket `reports/` glob was catching `agent/reports/`).
+- **.gitattributes TypeScript/JSON**: Added `*.ts` and `*.json` LF enforcement for cross-platform tooling (tsc, vitest, npm).
+- **M61 progress.yaml master entry**: Updated name from planning version v6.16.0 to shipped v6.20.9, replaced planning notes with completion summary.
+- **sessions.md M61 entry**: Expanded key_fact to cover all 15 shortcuts across 3 rounds.
+- **M62 target version**: Updated milestone doc and progress.yaml from stale v6.17.0 → v6.21.0 to match next_steps.
+- **Retroactive git tags**: Created annotated tags for v6.20.3 through v6.20.9 on corresponding commits.
+
+---
+
+## [6.20.8] — 2026-06-15
+
+### Fixed
+- **Audit-075 (M61 post-impl)**: 6 findings fixed — YOUR_ORG placeholder in SECURITY.md URL (HIGH), stale version footer (MEDIUM), fallback contact under-specification (LOW), unpinned trufflehog action → SHA-pinned per IG-67 (HIGH), Windows CI conditional-skip protocol comment (MEDIUM), missing open-pull-requests-limit on Dependabot github-actions (LOW). 3 carryovers (HIGH-065-005/006, MED-066-003) marked fixed and verified.
+
+---
+
+## [6.20.7] — 2026-06-15
+
+### Added
+- **TS unit test suite (vitest)**: 26 tests covering `acp-dispatch.ts` (budget enforcement, getSkillFile, getLastNSessions, getFilteredLessons, estimateTokens, updateRoutingYml) and `acp-validate.ts` (placeholder detection on lines 3-4, frontmatter field validation). Wired into CI. (route-172, M61)
+
+### Changed
+- **`acp-dispatch.ts`**: Exported `buildContext`, `getLastNSessions`, `getFilteredLessons`, `getSkillFile`, `estimateTokens` for testability (route-172, M61).
+- **`acp-validate.ts`**: Exported `validatePlaceholders`, `validateFrontmatter`, `ValidationError`; added `isDirectExecution()` guard to prevent main() from running during test imports (route-172, M61).
+
+---
+
+## [6.20.6] — 2026-06-15
+
+### Added
+- **IG-37 active**: `team_members` populated in `identity.yml` enabling git author provenance verification via `acp.git-provenance.sh`. CRLF resilience added to grep-based parser (L4 migration deferred to route-177). (route-171, M61)
+
+### Changed
+- **`.gitattributes`**: Extended LF enforcement to `*.yml` and `*.yaml` for cross-platform bash-parser compatibility (route-171, M61).
+
+---
+
+## [6.20.5] — 2026-06-15
+
+### Added
+- **Dependabot**: Weekly npm (`/scripts`) and github-actions ecosystem updates (route-170, M61).
+- **`scripts/package-lock.json`**: Pinned dependency tree committed to repo (audit-065 M7).
+- **CI supply-chain job**: `npm audit --audit-level=high` (non-blocking) + trufflehog secret scan (blocking) (route-170, M61).
+
+---
+
+## [6.20.4] — 2026-06-15
+
+### Added
+- **CODEOWNERS**: Catch-all + fine-grained ownership rules for `scripts/`, `.github/workflows/`, and `agent/scripts/` (route-169, M61).
+- **PR and issue templates**: `.github/pull_request_template.md` with E2E+validate+changelog checklist; `bug_report.md` and `feature_request.md` with structured fields (route-169, M61).
+
+---
+
+## [6.20.3] — 2026-06-15
+
+### Added
+- **SECURITY.md**: Vulnerability disclosure policy with private reporting via GitHub Security Advisories, supported versions table, in-scope/out-of-scope definitions, response targets, and coordinated disclosure policy. Linked from README.md and CONTRIBUTING.md. Addresses audit-065 HIGH-065-006 (route-168, M61).
+- **Windows CI**: Added `windows-latest` runner to E2E test matrix with `shell: bash` default for cross-platform Git Bash compatibility. `.gitattributes` LF enforcement already in place (IG-42). (route-167, M61)
+
+---
+
+## [6.20.2] — 2026-06-15
+
+### Added
+- **Cross-layer status validation** (`scripts/acp-validate.ts`): New `validateStatusConsistency()` and `validateFilePointers()` checks run in all validate modes — catches milestone-doc vs progress.yaml desync and dangling file pointers (route-186, audit-069 F-069-01/F-069-09).
+- **ADR-13**: LLM/Script boundary rule for `/acp-integrity` (deterministic → bash, semantic → LLM)
+- **ADR-14**: Confidence ceiling policy for semantic security analysis (taint ≤ MEDIUM, injection/memory ≤ LOW)
+- **ADR-15**: Command doc as spec — no separate specification files
+- **ADR-16**: Gitflow-lite branching model (`develop` → `mainline`)
+- **M60 — Tier 1 E2E test coverage**: 8 new E2E suites for core commands (init, proceed, plan, dispatch, commit, validate, audit, route) — all passing at 100% (route-165). Drops untested command ratio from 68% to ≤56%.
+- **M60 — Integrity test hardening**: Rule-count assertion tightened from ≥55 to exact 70 (route-166, MED-067-003).
+- **M60 — CONTRIBUTING.md**: New contributor guide with branch model, PR checks, command-doc conventions, and shell scripting conventions (route-166, MED-067-005).
+
+### Fixed
+- **Status desync across 12 milestone docs**: M44, M46, M50-M56, M65 milestone docs now agree with progress.yaml (route-185, audit-069 F-069-01)
+- **M54 inconsistency**: `tasks_total: 1` with `status: completed`; branch protection tracked in M59 route-162
+- **Progress.yaml description**: Updated from v6.19.0 to v6.20.1 with correct milestone status
+- **`acp.meta-scan.sh` pipefail**: Added `-o pipefail` to `set -euo pipefail` header (route-188, F-068-12)
+- **`quarterly-deep-scan` recurring task**: Description updated to reflect Phase 2 activation (M58 shipped)
+- **F-062-03 carryover promoted**: automated `next_due` calculation tracked in M59 post-completion follow-up
+
+### Changed
+- **`acp-validate.ts` resilience**: Progress.yaml YAML parse failures (duplicate keys) now fall back to line-based parsing instead of crashing
+- **M58 plan correction ADRs**: ADR-11 (route-155 scope descope) and ADR-12 (§10 non-circular gate) formalize the post-audit-072 plan
+
+## [6.20.1] — 2026-06-15
+
+### Fixed
+- **Taint heuristics**: IG-47/48/50 missing on calibration fixtures — added file-level flow analysis for indirect source→sink (audit-072)
+- **IG-49 false positive**: Skip safe files with URL validation helpers
+- **IG-50 confidence ceiling**: Now reports `[LOW]` per milestone specification
+- **Fixture manifest**: Added `max_confidence` + `ci_blocking` fields per fixture
+- **Wiki header**: Updated to v2.0.0 — Phase 2 active, 70 total rules
+- **Milestone-58**: Verification checklist completed; research gate descoped
+- **Audit carryovers**: 9 M58-related items from audit-068/069 marked fixed
+
+### Added
+- **Memory poisoning UX research** (`agent/artifacts/research-memory-poisoning-ux.md`)
+- **Glossary terms**: 6 M58 Phase 2 terms added (Integrity & Security section)
+- **E2E coverage**: B13–B16 — full 6-rule taint matrix (55 assertions, +29)
+
+### Changed
+- **`quarterly-deep-scan`**: Description updated — M58 shipped, Phase 2 active
+
+## [6.20.0] — 2026-06-15
+
+### Added
+- **M58 `/acp-integrity` v2.0 Phase 2** — semantic analysis (routes 156–158)
+- `acp.taint-scan.sh` + `acp.taint-scan.py` — taint source/sink extraction + IG-45–50 heuristics
+- `acp.memory-scan.sh` — memory vs `constraints.yml` prep for LLM semantic comparison
+- E2E `e2e/acp.integrity-v2.test.sh` — 26 assertions (confidence ceilings, scripts, docs)
+
+### Changed
+- Wiki Cat 8/10 un-deferred with Max Confidence columns; command doc v2.0.0 with `--phase2`
+- Skill `code-integrity.md` Phase 2 guidance + self-protection protocol
+- Confidence ceiling model: Cat 8 MEDIUM max, Cat 9/10 LOW max (IG-61 HIGH script-backed)
+
+---
+
+## [6.19.0] — 2026-06-15
+
+### Added
+- **M64 Integrity Gateway v1.1** — truth & test milestone (routes 180–184 + route-179 from 6.14.1)
+- `acp.integrity-output.sh` — uniform `[SEVERITY] file:line ruleID — msg` contract, `--json`, severity-aware `--ci`
+- `acp.pattern-scan.sh` + `acp.pattern-scan.py` — exfiltration (IG-07–13) and persistence (IG-21–26) deterministic detection
+- Integrity fixture matrix: `agent/benchmarks/fixtures/integrity/manifest.yaml` + true+/true- fixtures
+- E2E B10–B22: scanner regression, fixture matrix, JSON output, false-positive baseline
+
+### Fixed
+- All 7 scanners emit uniform output; `--ci` exits 1 only on CRITICAL/HIGH (not MEDIUM)
+- `acp.network-whitelist-validate.sh` — YAML whitelist load via parser validation
+- `acp.dependency-diff.sh` — Levenshtein typosquat (IG-27), shadow deps (IG-29), git-date stale lock (IG-31)
+- `acp.git-provenance.sh` — IG-37 explicit skip when `team_members` empty
+- `acp.manifest-hash.sh` — directory enumeration, `--output`, `calculate_checksum` sha fallback
+- E2E S3 — `IG-[0-9]+` grep (portable vs `\d`)
+
+### Changed
+- `/acp-integrity` maturity → v1.1; wiki/skill/command docs reconciled to script-backed coverage
+- **ADR-10 gate cleared** — M58 v2.0 semantic work may proceed after M65 tracking reconciliation
+
+---
+
+## [6.14.1] — 2026-06-15
+
+### Added
+- **M64 route-179** (partial) — integrity scanner fixtures under `agent/benchmarks/fixtures/integrity/`
+- E2E regression **B10–B14** in `acp.integrity.test.sh` (entropy crash, `--ci` gate, unicode detection, perf)
+
+### Fixed
+- **F-070-01** — `acp.entropy-scan.sh` no longer crashes on findings (`set -e` + non-zero Python exit); uses `ACP_FINDING_COUNT` marker
+- **F-070-04** — `acp.unicode-scan.sh` single-pass scan (~4.7s for `agent/` vs ~42s per-file Python spawns)
+
+### Changed
+- M64 milestone tracking — route-179 complete, 1/6 routes in progress
+
+---
+
+## [6.14.0] — 2026-06-15
+
+### Added
+- **M59 Critical-Fix & CI Integrity** — six audit carryovers shipped (H1, H8, H2/H3, C1 docs, M9, M12)
+- `scripts/acp-dispatch.test.ts` — regression tests for surgical `updateRoutingYml()` (preserves `context_modes`, `command_suggestions`)
+- `validateVersionConsistency()` in `acp-validate.ts` — AGENTS.md header vs `identity.yml` drift check
+- **15 missing commands** added to `package.yaml` (commit, decide, dispatch, route, task, feedback, visualize, wiki-update, carryover-query, cost-report, memory-sync, pattern-sync, session-sync, rule-file-audit, install)
+- `docs/USAGE.md` — Git branch protection governance section (mainline + develop)
+
+### Fixed
+- **H1** — `updateRoutingYml()` no longer overwrites full `routing.yml`; updates `session:` block only
+- **H8** — `package.yaml` command manifest parity with `agent/commands/acp.*.md`
+- **H2/H3** — CI runs `acp-validate.ts` + `ci-validate.sh` with real command-doc structure checks and package count guard
+- **M9** — `OPENROUTER_API_KEY` preflight in `acp-dispatch.ts` with clear error before API call
+
+### Changed
+- `.github/workflows/ci.yaml` — Node 20 setup, `npm install` in `scripts/`, `npx ts-node scripts/acp-validate.ts`
+- Version bump **6.12.2 → 6.14.0** across identity, package, AGENTS/CLAUDE/copilot triple-sync, README badge
+
+### Notes
+- **C1 (route-162)** — branch protection documented in `docs/USAGE.md`; enable manually in GitHub repo settings (requires admin/`gh`)
+
+---
+
+## [6.12.2] — 2026-06-15
+
+### Added
+- **ADR-10** — M64 (integrity gateway truth/test) is a hard prerequisite before M58 v2.0 semantic analysis implementation
+- Command parity wrappers for `/acp-carryover-query`, `/acp-pattern-sync`, `/acp-session-sync` (69×3 surfaces)
+- `agent/commands/acp.rule-file-audit.md` — alias to `/acp-integrity --self --fast`
+- `agent/milestones/milestone-54-ci-cd-gitflow.md` — CI/CD + GitFlow-lite milestone doc
+- M58 research artifact and taint-flow fixture matrix (`agent/benchmarks/fixtures/taint-flow/`, 12 files)
+- Session document auto-sync: `agent/sessions/2026-06-15-audit-remediation-docs-validation-sync.md`
+
+### Fixed
+- `acp-validate` — 0 errors, 0 warnings (frontmatter gaps, triple-file size under 12KB, sessions.md structure)
+- `package.yaml` — quote `requires.acp` value (`">=3.13.0"`) to fix YAML parse error
+- AGENTS.md / CLAUDE.md / copilot-instructions triple-sync (trimmed stale v6.10.0 header and oversized sections)
+
+### Changed
+- README, `scripts/PRD-MAIN.md`, `scripts/QUICKSTART.md` — doc sync to v6.12.x counts (69 commands, 9 skills, 36 scripts, M52–M57)
+- `agent/progress.yaml` — M54 50%, M58 blocked on M64, next steps and blockers refreshed
+- `agent/wiki/domain.yml` — last_verified annotation
+
+---
+
 ## [6.12.1] — 2026-06-08
 
 ### Added (M57 — Recurring Tasks Scheduler + Pre-Commit Hook Framework)

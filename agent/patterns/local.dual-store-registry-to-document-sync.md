@@ -1,5 +1,13 @@
 # Pattern: dual-store-registry-to-document-sync
 
+<!-- @acp.meta.pattern
+topic: pattern, dual-store-registry-to-document-sync
+description: Pattern: dual-store-registry-to-document-sync
+applies_to: testing, quality
+status: active
+updated: 2026-06-15
+@acp.meta.end -->
+
 **Date**: 2026-06-04
 **Task Type**: architecture-design
 **Code Ref**: agent/commands/acp.commit.md (steps 2b, 3b, 6b)

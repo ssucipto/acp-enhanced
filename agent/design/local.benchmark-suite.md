@@ -1,8 +1,14 @@
 # ACP Benchmark Suite
 
+<!-- @acp.meta.design
+topic: acp, benchmark, suite
+description: E2E benchmark system comparing project outcomes with and without ACP to generate quantitative success metrics
+status: active
+updated: 2026-02-27
+@acp.meta.end -->
+
 **Concept**: E2E benchmark system comparing project outcomes with and without ACP to generate quantitative success metrics  
 **Created**: 2026-02-27  
-**Status**: Implemented  
 
 ---
 

@@ -1,8 +1,14 @@
 # Experimental Features System
 
+<!-- @acp.meta.design
+topic: experimental, features, system
+description: System for marking and managing experimental features that require explicit opt-in via --experimental flag
+status: draft
+updated: 2026-02-23
+@acp.meta.end -->
+
 **Concept**: System for marking and managing experimental features that require explicit opt-in via --experimental flag  
 **Created**: 2026-02-23  
-**Status**: Design Specification  
 
 ---
 

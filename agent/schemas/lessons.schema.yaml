@@ -1,0 +1,57 @@
+# Lessons Entry Schema
+# Schema for validating ACP lesson entries (agent/memory/lessons.md)
+# Version: 1.0.0
+
+schema_version: 1.0.0
+description: Schema for individual lesson entries in agent/memory/lessons.md
+
+required_fields:
+  - date
+  - task_type
+
+fields:
+  date:
+    type: string
+    required: true
+    pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+  task_type:
+    type: string
+    required: true
+    description: "Task type this lesson applies to (e.g., bash-script-fix, all)"
+  scope:
+    type: string
+    required: false
+    description: "Scope of the lesson (e.g., backend-bash, cross-cutting)"
+  mistake:
+    type: string
+    required: false
+    description: "What went wrong in one sentence"
+  correction:
+    type: string
+    required: false
+    description: "Correct behaviour to follow"
+  lesson:
+    type: string
+    required: false
+    description: "Detailed lesson content (alternative to mistake+correction)"
+  priority:
+    type: string
+    required: false
+    enum:
+      - high
+      - medium
+      - low
+  status:
+    type: string
+    required: false
+    enum:
+      - active
+      - archived
+    description: "Archived lessons are skipped by getFilteredLessons()"
+  superseded_by:
+    type: string
+    required: false
+    description: "Reference to what now encodes this knowledge"
+  source:
+    type: string
+    required: false

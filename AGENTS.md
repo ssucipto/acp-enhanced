@@ -1,6 +1,6 @@
 # ACP Enhanced — Agent Context Protocol
 
-> v6.10.0 — Context Loading Protocol (light + full modes)
+> v6.21.0 — Context Loading Protocol (light + full modes)
 >
 > This file is auto-loaded by GitHub Copilot, Cursor, and Claude Code.
 > Do NOT add project content here. This file contains ONLY the context
@@ -154,19 +154,7 @@ The agent MUST proactively write memory entries WITHOUT waiting for the develope
 
 ## Context Budget Hard Limits
 
-> **Why does this budget exist?**
-> The 2,800-token budget is a **discipline practice, not a technical limit**.
-> Modern LLMs (Claude 3.5+, GPT-4o, Gemini 1.5) have 100K–200K token context windows —
-> this budget is not required to prevent context overflow.
->
-> The budget exists because:
-> - **Reproducibility** — deterministic loading means every session starts identically
-> - **Speed and cost** — smaller prompts are faster and cheaper at API scale
-> - **Focus** — less context forces the agent to load only what is decision-relevant
-> - **Credibility** — ACP preaches discipline; the protocol must model what it teaches
->
-> If a task genuinely requires more context, exceed the budget deliberately and note it.
-> The budget is a default, not a ceiling.
+> The 2,800-token budget is a **discipline practice, not a technical limit** — reproducibility, focus, and cost at scale. Exceed deliberately when needed; note it.
 
 Enforce these limits. If exceeded, drop lower-tier content first:
 - Layer 1 (core): max 500 tokens
@@ -205,22 +193,10 @@ When developer runs /acp-commit:
      key_fact: [single most important thing learned, if any]
    ```
 
-2. Auto-stamp `completed:` on routing task files:
-   - Read the `tasks:` list from the session entry just written
-   - For each task ID in the list:
-     - Locate `agent/routing/tasks/route-<task-id>.md` (e.g. `route-012.md` for `task-012`)
-     - If the file exists AND `completed:` field is blank or missing: set `completed: [today]`
-     - If `completed:` is already set: skip (never overwrite)
-     - If the file does not exist: skip silently (task is milestone format, not routing format)
-   - Stage any modified routing task files: `git add agent/routing/tasks/route-*.md`
-   - If any files were stamped, note them: `auto-stamped: route-NNN, route-NNN`
-3. Check: did this session produce a reusable pattern? If yes, append to
-   `agent/memory/patterns.md`
-4. Check: did you make an architectural decision? If yes, prompt:
-   "An architectural decision was made: [decision]. Create ADR? (y/n)"
-5. Count entries in sessions.md. If > 15, auto-compact oldest 10 entries:
-   - Extract all key_facts → check if any belong in patterns.md
-   - Replace the 10 entries with a single weekly summary block
+2. Auto-stamp `completed:` on routing task files listed in the session `tasks:` field (skip if already set; never overwrite).
+3. Check: did this session produce a reusable pattern? If yes, append to `agent/memory/patterns.md`
+4. Check: did you make an architectural decision? If yes, prompt: "An architectural decision was made: [decision]. Create ADR? (y/n)"
+5. Count entries in sessions.md. If > 15, auto-compact oldest 10 entries into a weekly summary block
 6. Confirm: "[ACP] Session committed. [N] entries in sessions.md."
 
 ---

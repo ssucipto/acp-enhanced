@@ -140,3 +140,14 @@ Usage:
 ### Step 3 — Confirm
 
 Display confirmation of the action taken and any follow-up suggestions relevant to the subcommand.
+
+---
+
+## Verification
+
+- [ ] Task file created or updated at `agent/routing/tasks/route-{NNN}.md`
+- [ ] Task frontmatter includes: id, title, task_type, milestone, complexity, executor, context_required, created date
+- [ ] Task body includes: Objective, Steps, Expected Output, Verification, User-Observable Acceptance
+- [ ] Task ID is unique (no collision with existing routes)
+- [ ] Milestone field matches current milestone (from `agent/progress.yaml`)
+- [ ] If stamping: `completed` field set to today's date, `status` updated correctly

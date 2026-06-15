@@ -301,6 +301,16 @@ full codebase, all rules           → Composer 2.5
 
 ---
 
+## Steps
+
+1. **Invoke the command**: Run `/acp-review` with the desired rule set (`--rules <category>`, `--all`, or default).
+2. **Scan the codebase**: The agent examines project files against the 54-rule framework aligned to OWASP Top 10:2025 and TypeScript strict mode.
+3. **Produce findings**: Generate a structured findings report with rule IDs, severities (CRITICAL/HIGH/MEDIUM/LOW), file locations, and fix suggestions.
+4. **Prioritize fixes**: CRITICAL and HIGH findings should be addressed before commit. MEDIUM findings before PR merge. LOW findings tracked for next sprint.
+5. **Verify**: Run the **Verification Checklist** at the bottom of this document to confirm the review completed correctly.
+
+---
+
 ## Appendix A — ACP Self-Review Rules
 
 Auto-activated when `agent/commands/` is detected in the project root.
