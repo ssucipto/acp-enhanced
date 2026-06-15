@@ -158,3 +158,14 @@ If no: skip.
   To trigger a postmortem now: /acp-audit {slug}
   To view all feedback: ls agent/feedback/
 ```
+
+---
+
+## Verification
+
+- [ ] Feedback file created at `agent/feedback/{slug}.md`
+- [ ] Metadata frontmatter includes date, severity, type, and source
+- [ ] Feedback slug is kebab-case and unique (no collision with existing files)
+- [ ] Template applied correctly (if `--template` used)
+- [ ] `agent/feedback/` directory exists and is writable
+- [ ] No feedback file overwritten without confirmation (check with `--dry-run`)
