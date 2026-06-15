@@ -495,6 +495,42 @@ function validateSessionsMemory(): boolean {
   return !hasErrors;
 }
 
+// ── Version consistency (identity.yml ↔ AGENTS.md header) ────
+function validateVersionConsistency(): boolean {
+  const identityPath = path.join("agent", "core", "identity.yml");
+  const agentsPath = "AGENTS.md";
+  if (!existsSync(identityPath) || !existsSync(agentsPath)) {
+    console.warn("⚠️  Version consistency: identity.yml or AGENTS.md missing — skipped");
+    return true;
+  }
+
+  const identity = yaml.load(readFileSync(identityPath, "utf-8")) as Record<string, unknown>;
+  const canonical = String(identity.version ?? "").trim();
+  const agents = readFileSync(agentsPath, "utf-8");
+  const headerMatch = agents.match(/^> v([\d.]+)/m);
+  const headerVersion = headerMatch?.[1]?.trim() ?? "";
+
+  if (!canonical) {
+    console.warn("⚠️  Version consistency: identity.yml has no version field");
+    return true;
+  }
+
+  if (!headerVersion) {
+    console.warn("⚠️  AGENTS.md: missing `> vX.Y.Z` version header line");
+    return true;
+  }
+
+  if (headerVersion !== canonical) {
+    console.warn(
+      `⚠️  Version drift: AGENTS.md header v${headerVersion} != identity.yml ${canonical}`
+    );
+    return true; // soft warn per route-164; hard-fail can be enabled post-M59
+  }
+
+  console.log(`✅ Version header: AGENTS.md v${headerVersion} matches identity.yml`);
+  return true;
+}
+
 // ── Main ───────────────────────────────────────────────────
 const args = process.argv.slice(2);
 if (args.length === 0) {
@@ -504,6 +540,7 @@ if (args.length === 0) {
   runParityCheck();
   const sizeOk = validateAgentsMdSize();
   const sessionsValid = validateSessionsMemory();
+  validateVersionConsistency();
   checkStaleness(); // informational — non-blocking, does not affect exit code
   process.exit(sizeOk && sessionsValid && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
