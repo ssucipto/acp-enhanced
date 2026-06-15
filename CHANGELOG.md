@@ -7,23 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [6.20.9] — 2026-06-15
-
-### Fixed
-- **route-172 test depth**: `getFilteredLessons`/`getLastNSessions` upgraded from smoke tests (return type) to proper behavioral tests: exact task_type filtering, archived-entry skipping, priority:high cross-matching, 5-entry cap, N=1/2/3 session slicing, and empty-string fast path. 33 vitest tests (from 26). `tsc --noEmit` passes (added tsconfig.json). (audit-075 shortcut remediation)
-- **route-171 budget check**: identity.yml Layer 1 token count verified (1,622 bytes ≈ 405 tokens, under 500 ceiling). team_members addition had negligible impact (+22 bytes, +5 tokens).
-- **A3.5 final sweep**: vitest 33/33 green. E2E suite has 47/47 CRLF failures on WSL — pre-existing line-ending issue. .gitattributes LF enforcement (route-171) prevents future files from acquiring CRLF.
-- **progress.yaml tracking**: Added full recent_work entry for M61 completion + audit-075 (6 routes, 6 findings, 3 carryovers). Updated next_steps from stale M61→M62. Refreshed notes to reflect all shipped milestones.
-- **milestone-61 doc version**: Fixed stale v6.16.0 in success criteria → v6.20.9. Populated verification gate with actual pass/fail/⏳ results (npm audit clean, secret-scan active, vitest 33/33, Windows E2E ⏳ pending CRLF fix).
-- **.gitignore whitelist**: Added `!agent/reports/` to allow audit reports to commit without `-f` (blanket `reports/` glob was catching `agent/reports/`).
-- **.gitattributes TypeScript/JSON**: Added `*.ts` and `*.json` LF enforcement for cross-platform tooling (tsc, vitest, npm).
-- **M61 progress.yaml master entry**: Updated name from planning version v6.16.0 to shipped v6.20.9, replaced planning notes with completion summary.
-- **sessions.md M61 entry**: Expanded key_fact to cover all 15 shortcuts across 3 rounds.
-- **M62 target version**: Updated milestone doc and progress.yaml from stale v6.17.0 → v6.21.0 to match next_steps.
-- **Retroactive git tags**: Created annotated tags for v6.20.3 through v6.20.9 on corresponding commits.
-
----
-
 ## [6.21.0] — 2026-06-15
 
 ### Added
@@ -56,6 +39,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **route-176: 5 audit-062 carryovers resolved** — F-062-01..05 all
   marked fixed: hooks restored, checklist verified, next_due automated,
   reference hook created, last_findings_count added.
+
+---
+
+## [6.20.9] — 2026-06-15
+
+### Fixed
+- **route-172 test depth**: `getFilteredLessons`/`getLastNSessions` upgraded from smoke tests (return type) to proper behavioral tests: exact task_type filtering, archived-entry skipping, priority:high cross-matching, 5-entry cap, N=1/2/3 session slicing, and empty-string fast path. 33 vitest tests (from 26). `tsc --noEmit` passes (added tsconfig.json). (audit-075 shortcut remediation)
+- **route-171 budget check**: identity.yml Layer 1 token count verified (1,622 bytes ≈ 405 tokens, under 500 ceiling). team_members addition had negligible impact (+22 bytes, +5 tokens).
+- **A3.5 final sweep**: vitest 33/33 green. E2E suite has 47/47 CRLF failures on WSL — pre-existing line-ending issue. .gitattributes LF enforcement (route-171) prevents future files from acquiring CRLF.
+- **progress.yaml tracking**: Added full recent_work entry for M61 completion + audit-075 (6 routes, 6 findings, 3 carryovers). Updated next_steps from stale M61→M62. Refreshed notes to reflect all shipped milestones.
+- **milestone-61 doc version**: Fixed stale v6.16.0 in success criteria → v6.20.9. Populated verification gate with actual pass/fail/⏳ results (npm audit clean, secret-scan active, vitest 33/33, Windows E2E ⏳ pending CRLF fix).
+- **.gitignore whitelist**: Added `!agent/reports/` to allow audit reports to commit without `-f` (blanket `reports/` glob was catching `agent/reports/`).
+- **.gitattributes TypeScript/JSON**: Added `*.ts` and `*.json` LF enforcement for cross-platform tooling (tsc, vitest, npm).
+- **M61 progress.yaml master entry**: Updated name from planning version v6.16.0 to shipped v6.20.9, replaced planning notes with completion summary.
+- **sessions.md M61 entry**: Expanded key_fact to cover all 15 shortcuts across 3 rounds.
+- **M62 target version**: Updated milestone doc and progress.yaml from stale v6.17.0 → v6.21.0 to match next_steps.
+- **Retroactive git tags**: Created annotated tags for v6.20.3 through v6.20.9 on corresponding commits.
 
 ---
 
