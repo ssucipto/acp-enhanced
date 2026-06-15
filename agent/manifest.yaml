@@ -1,0 +1,16 @@
+# ACP Package Manifest
+# Tracks installed packages and their versions
+
+packages: {}
+
+# ── Scaffold Configuration ─────────────────────────────────────
+# Added v6.8.2 (audit-022 R3 + R4, M44). Controls what gets generated
+# during bootstrap. Solo = ~30 files, Small = ~80 files, Team = ~310 files.
+
+scaffold:
+  team_size: small            # solo | small | team
+  generate_prompts: false     # .github/prompts/ wrappers (opt-in)
+  generate_opencode: true     # .opencode/commands/ slash commands
+
+manifest_version: 1.0.0
+last_updated: 2026-03-20T10:17:27Z
