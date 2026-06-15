@@ -31,6 +31,16 @@ Create the directory `agent/benchmarks/suite/saas-platform/seed/` with:
 ```markdown
 # BENCHMARK SEED FILES — DELIBERATELY INSECURE
 
+<!-- @acp.meta.task
+topic: benchmark, seed, files, deliberately, insecure
+description: Create saas-platform benchmark seed files (OWASP fixtures)
+milestone: M36
+status: draft
+updated: 2026-05-05
+@acp.meta.end -->
+
+
+
 These files contain intentional OWASP Top 10 security vulnerabilities for
 benchmark testing purposes ONLY.
 

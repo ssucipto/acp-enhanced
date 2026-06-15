@@ -19,6 +19,15 @@ completed: 2026-05-04
 override_reason:
 ---
 
+<!-- @acp.meta.task
+topic: task, add, e2e, parity, test, for, opencode, commands
+description: Add E2E parity test for opencode commands
+milestone: M28
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Task: Add E2E parity test for opencode commands
 
 Create `e2e/acp.opencode-commands.test.sh` that enforces 1:1 parity between `.github/prompts/` (canonical) and `.opencode/commands/` (derived). Per ADR-6, this test is the parity enforcement mechanism — it fails if someone adds a Copilot prompt without adding the matching opencode command.

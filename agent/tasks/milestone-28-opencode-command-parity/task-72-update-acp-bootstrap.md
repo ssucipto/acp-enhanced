@@ -19,6 +19,15 @@ completed: 2026-05-04
 override_reason:
 ---
 
+<!-- @acp.meta.task
+topic: task, update, acp-bootstrapsh, to, generate, opencodecommands
+description: Update acp-bootstrap.sh to generate .opencode/commands/
+milestone: M28
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Task: Update acp-bootstrap.sh to generate .opencode/commands/
 
 Add a step `[6b/7]` to `scripts/acp-bootstrap.sh` that generates `.opencode/commands/` from the just-created `.github/prompts/` files. The generation runs immediately after the prompt files are created.

@@ -11,6 +11,15 @@ started: 2026-05-06T00:00:00Z
 completed: 2026-05-06
 ---
 
+<!-- @acp.meta.task
+topic: add, placeholder, detection, to, acp-validatets
+description: Add placeholder detection to acp-validate.ts
+milestone: M35
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Extend `scripts/acp-validate.ts` to detect `{placeholder}` patterns (unresolved template variables) in lines 3–4 of every `agent/commands/*.md` file, excluding fenced code blocks.

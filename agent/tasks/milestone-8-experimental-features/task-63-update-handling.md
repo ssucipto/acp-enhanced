@@ -1,9 +1,18 @@
 # Task 63: Update Handling for Experimental Features
 
+<!-- @acp.meta.task
+topic: update, handling, for, experimental, features
+description: Task 63: Update Handling for Experimental Features
+milestone: M8
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M8 - Experimental Features System  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: [Task 61 - Schema and Validation](task-61-schema-validation.md), [Task 62 - Installation Filtering](task-62-installation-filtering.md)  
-**Status**: Not Started  
 
 ---
 

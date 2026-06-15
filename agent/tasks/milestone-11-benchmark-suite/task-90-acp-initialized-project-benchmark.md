@@ -1,9 +1,18 @@
 # Task 90: ACP-Initialized Project Benchmark Task
 
+<!-- @acp.meta.task
+topic: acp-initialized, project, benchmark, task
+description: Task 90: ACP-Initialized Project Benchmark Task
+milestone: M11
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M11 - ACP Benchmark Suite  
 **Estimated Time**: 8-12 hours  
 **Dependencies**: Task 79 (runner), Task 87 (seed support)  
-**Status**: Not Started  
 
 ---
 

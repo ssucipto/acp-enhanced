@@ -1,9 +1,18 @@
 # Task 53: @acp.project-list Command
 
+<!-- @acp.meta.task
+topic: acpproject-list, command
+description: Task 53: @acp.project-list Command
+milestone: M7
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M7 - Global ACP Project Registry](../../milestones/milestone-7-project-registry.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Task 52 (Registry Infrastructure)  
-**Status**: Not Started  
 
 ---
 

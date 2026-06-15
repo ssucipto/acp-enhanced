@@ -1,9 +1,18 @@
 # Task 37: Preference Loading Infrastructure
 
+<!-- @acp.meta.task
+topic: preference, loading, infrastructure
+description: Task 37: Preference Loading Infrastructure
+milestone: M6
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M6 - Preferences System](../milestones/milestone-6-preferences-system.md)  
 **Estimated Time**: 4-6 hours  
 **Dependencies**: Task 34 (Generic YAML Parser)  
-**Status**: Not Started  
 
 ---
 

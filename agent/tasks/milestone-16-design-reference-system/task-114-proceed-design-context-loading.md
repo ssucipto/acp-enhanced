@@ -1,10 +1,19 @@
 # Task 114: Update @acp.proceed with Design Context Loading
 
+<!-- @acp.meta.task
+topic: update, acpproceed, with, design, context, loading
+description: Task 114: Update @acp.proceed with Design Context Loading
+milestone: M16
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M16 - Design Reference System](../../milestones/milestone-16-design-reference-system.md)  
 **Design Reference**: [Design Reference System](../../design/local.design-reference-system.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Task 111 (directive must exist), Task 112 (template field must exist)  
-**Status**: Not Started  
 
 ---
 

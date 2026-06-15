@@ -1,9 +1,18 @@
 # Task 68: Script-Command Binding - Update Existing Commands
 
+<!-- @acp.meta.task
+topic: script-command, binding, -, update, existing, commands
+description: Task 68: Script-Command Binding - Update Existing Commands
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M3 - ACP Package Management System](../../milestones/milestone-3-package-management.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Task 65 (Schema and Templates), Task 67 (Validation Logic)  
-**Status**: Not Started  
 
 ---
 

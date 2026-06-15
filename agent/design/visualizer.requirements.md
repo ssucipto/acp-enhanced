@@ -1,8 +1,14 @@
 # ACP Progress Visualizer
 
+<!-- @acp.meta.design
+topic: acp, progress, visualizer
+description: Browser-based read-only dashboard for visualizing progress.yaml project data
+status: draft
+updated: 2026-03-14
+@acp.meta.end -->
+
 **Concept**: Browser-based read-only dashboard for visualizing progress.yaml project data  
 **Created**: 2026-03-14  
-**Status**: Design Specification  
 
 ---
 

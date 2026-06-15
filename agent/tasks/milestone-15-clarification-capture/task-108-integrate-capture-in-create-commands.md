@@ -1,7 +1,16 @@
 # Task 108: Integrate Capture Directive into Create Commands
 
+<!-- @acp.meta.task
+topic: integrate, capture, directive, into, create, commands
+description: Task 108: Integrate Capture Directive into Create Commands
+milestone: M15
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M15 - Clarification Capture System  
-**Status**: Not Started  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 106, Task 107  
 

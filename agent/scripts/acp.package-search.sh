@@ -3,9 +3,10 @@
 # Agent Context Protocol (ACP) Package Search Script
 # Search for ACP packages on GitHub using the GitHub API
 
-# Note: set -e disabled because while loop runs in subshell
-# and some commands may return non-zero without being errors
-# set -e
+# Note: set -euo pipefail disabled because while loop runs in subshell
+# and some commands may return non-zero without being errors.
+# Intentionally excluded from route-173 pipefail upgrade.
+# Explicit error handling used in while loop body.
 
 # Source common utilities
 SCRIPT_DIR="$(dirname "$0")"

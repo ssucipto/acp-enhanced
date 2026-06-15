@@ -1,7 +1,16 @@
 # Task 94: Testing and Documentation
 
+<!-- @acp.meta.task
+topic: testing, and, documentation
+description: Task 94: Testing and Documentation
+milestone: M12
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M12 — Sessions System  
-**Status**: Not Started  
 **Estimated Hours**: 2-3  
 **Dependencies**: Tasks 91, 92, 93  
 **Design**: [local.sessions-system.md](../../design/local.sessions-system.md)  

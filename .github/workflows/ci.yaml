@@ -19,13 +19,28 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Install Python yaml parser
         run: |
           python3 -m pip install --quiet pyyaml
 
-      - name: Validate YAML syntax and Markdown frontmatter
+      - name: Setup Node.js
+        uses: actions/setup-node@39370e3970a6d05049ca813bd8259a4c934bbfa1 # v4.1.0
+        with:
+          node-version: '20'
+
+      - name: Install TypeScript tooling
+        run: |
+          cd scripts && npm install --silent --ignore-scripts
+
+      - name: Run acp-validate.ts (command structure + parity)
+        run: npx ts-node scripts/acp-validate.ts
+
+      - name: Run TS unit tests (vitest — M59 dispatch + M61 validate)
+        run: cd scripts && npm test
+
+      - name: Validate YAML syntax and command docs
         run: bash scripts/ci-validate.sh
 
   # ── Shell Script Syntax Check ─────────────────────────────────
@@ -33,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Install shellcheck
         run: sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
@@ -54,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure git for tests
         run: |
@@ -68,9 +83,35 @@ jobs:
             cp agent/manifest.template.yaml agent/manifest.yaml
           fi
 
+      - name: Install Python yaml parser
+        run: python3 -m pip install --quiet pyyaml
+
       - name: Install Node.js dependencies
         run: |
-          cd scripts && npm install --silent
+          cd scripts && npm install --silent --ignore-scripts
+
+      - name: Run integrity gateway E2E (M64 route-184)
+        run: bash e2e/acp.integrity.test.sh
+
+      - name: Run integrity Phase 2 E2E (M58 route-158)
+        run: bash e2e/acp.integrity-v2.test.sh
 
       - name: Run E2E smoke tests
         run: bash run-e2e-tests.sh --skip-network
+
+  # ── Supply-Chain Security (M61 route-170) ─────────────────────
+  supply-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Run npm audit
+        run: |
+          cd scripts && npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Run secret scan (trufflehog)
+        uses: trufflesecurity/trufflehog@84a2b33c9f891494db6ebe02f2a55b19cdf38f25 # v3 (latest main, 2026-06-12)
+        with:
+          extra_args: --only-verified

@@ -1,9 +1,18 @@
 # Task 62: Installation Filtering
 
+<!-- @acp.meta.task
+topic: installation, filtering
+description: Task 62: Installation Filtering
+milestone: M8
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M8 - Experimental Features System  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: [Task 61 - Schema and Validation](task-61-schema-validation.md)  
-**Status**: Not Started  
 
 ---
 

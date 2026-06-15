@@ -20,6 +20,15 @@ completed: 2026-05-04
 override_reason:
 ---
 
+<!-- @acp.meta.task
+topic: task, generate, opencodecommands, from, githubprompts
+description: Generate .opencode/commands/ from .github/prompts/
+milestone: M28
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Task: Generate .opencode/commands/ from .github/prompts/
 
 Create the `.opencode/commands/` directory and populate it with 58 files — one for every `.github/prompts/*.prompt.md` file. Each opencode command file is a transformed copy of the Copilot prompt file:

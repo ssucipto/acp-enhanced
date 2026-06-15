@@ -1,9 +1,18 @@
 # Task 28: Documentation and Agent Instructions
 
+<!-- @acp.meta.task
+topic: documentation, and, agent, instructions
+description: Task 28: Documentation and Agent Instructions
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M5 - Global Package Installation](../milestones/milestone-5-global-package-installation.md)  
 **Estimated Time**: 1-2 hours  
 **Dependencies**: Task 27 (Global Package Commands)  
-**Status**: Not Started  
 
 ---
 

@@ -2,45 +2,21 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [acp-validate, acp-sync, acp-update, acp-commit]
-  done:
-    - validate-all-checks-pass-25-directories-version-consistency-recurring-tasks
-    - sync-domain-yml-added-missing-e2e-suites-review-integrity-recurring
-    - sync-domain-yml-bumped-last-verified-to-2026-06-15
-    - update-progress-yaml-next-steps-notes-refreshed-from-stale-m56-state
-    - commit-session-entry-written-post-maintenance
-  deferred: []
-  key_fact: "Three core E2E suites (review 49, integrity 26, recurring 16 = 91 assertions) from M55-M57 were missing from the canonical domain model. The sync command caught documentation drift that had persisted through 3 milestone completions — proving that sync must be run after every milestone, not just periodically."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [route-150, route-151, route-152, route-153, route-154, audit-062, audit-063, audit-064, design-spec-features, design-spec-m55-m58, stakeholder-report]
-  done:
-    - m57-autonomous-implementation-all-5-routes-completed
-    - route-150-progress-yaml-template-recurring-tasks
-    - route-151-agents-md-step-4-5-triple-file-sync
-    - route-152-constraints-yml-hooks-progress-schema
-    - route-153-acp-validate-step-2d-recurring-validation
-    - route-154-e2e-16-assertions-version-6-12-1-changelog
-    - audit-062-m57-deep-dive-industry-standards-8-findings-5-carryovers
-    - audit-063-design-spec-v1-review-12-findings-all-fixed-v2
-    - audit-064-m55-m58-spine-v1-review-14-findings-all-fixed-v2
-    - design-spec-acp-enhanced-features-v1-then-v2-after-audit-063
-    - design-spec-m55-m58-command-ecosystem-v1-then-v2-after-audit-064
-    - stakeholder-report-week-ending-2026-06-13-amber
-    - status-snapshot-where-are-we
-    - visualizer-configured-for-acp-enhanced-project
-    - 3-spec-documents-2-audit-cycles-v1-v2-pattern-established
-    - all-91-e2e-assertions-passing-across-review-integrity-recurring
-  deferred:
-    - m58-research-calibration → route-155
-    - audit-062-carryovers → m59-remediation
-    - m54-branch-protection → m54-completion
-  key_fact: "The v1→v2 audit cycle pattern (create spec → audit → fix all findings → v2) caught 26 errors across two specs that would have shipped as authoritative documentation. Three CRITICAL numerical errors (M55: 54→77 rules, M56: broken subtotals, months: 11→5) were caught by line-by-line codebase cross-reference — the audit discipline prevented publication of incorrect metrics."
+# === Compacted Block: 2026-06-15 (10 sessions) ===
+- type: weekly-summary
+  week: 2026-06-15
+  key_facts:
+    - "M61 autonomous completion shipped as v6.20.7. Audit-075 found 6 issues including YOUR_ORG placeholder (HIGH), stale version footer (MEDIUM), unpinned trufflehog violating IG-67 (HIGH). Post-audit: 15 shortcuts caught across 3 rounds (E2E smoke-only tests, tsc never ran, no recent_work entries, stale versions). All fixed."
+    - "Four maintenance commands (audit-074, validate, sync, update) found 7 items: missing CHANGELOG, stale milestone statuses, 3 carryovers not fixed. All resolved."
+    - "M65 completed: progress.yaml had systemic duplicate YAML keys causing js-yaml parse failures; validate.ts now uses line-based fallback. Cross-layer validator caught 12 stale milestone docs."
+    - "Glossary was missing 6 M58 Phase 2 terms. Validated: 48/48 terms."
+    - "Taint heuristics must use file-level flow analysis for indirect source-to-sink — line-level patterns miss 50% of calibration fixtures."
+    - "grep treats leading -- as flags — E2E assert_contains with needle '--phase2' silently fails. Use descriptive substring without leading dashes."
+    - "M64 (integrity gateway v1.1): E2E EXIT trap variable collision (FIXTURE_DIR reused) destroyed committed fixtures. Fix: separate TEMP_FIXTURE_DIR + INTEGRITY_FIXTURE_DIR with trap cleared after B3."
+    - "M59 closed silent correctness bugs: routing.yml overwrite, package.yaml gaps, CI no-op. 6 routes shipped as v6.14.0."
+    - "Audit-070 proved /acp-integrity v1.0 gives false assurance (~18/55 rules implemented, entropy scanner crashes). M64 (gateway truth/test) must ship before M58 v2.0."
+    - "M57: v1-to-v2 audit cycle pattern caught 26 errors across two specs. Discipline: audit AGAINST live codebase, not the spec itself."
+  tasks_completed: 26
 
 - date: 2026-06-08
   executor: copilot
@@ -69,6 +45,8 @@
   executor: copilot
   compacted: true
   tasks: [route-131..158, audit-018..061, M39..M57, design-specs, stakeholder-reports]
+  done:
+    - compacted-block-see-summary
   summary: |
     Feb 16 – Jun 8, 2026 (20 sessions compacted 2026-06-15):
 
@@ -112,3 +90,61 @@
     - "Never use set -e without trap ERR in bash scripts"
     - "Never write bash that breaks on macOS (BSD sed, date differences)"
     - "Python subprocess calls must use os.environ — never string-interpolate variables"
+
+- date: 2026-06-15
+  executor: copilot
+  tasks: [route-185..189, audit-073, F-065-AUDIT]
+  done:
+    - m65-audit-followup-fix-11-subagent-findings
+    - e2e-acp-validate-cross-layer-test-created
+    - quarterly-deep-scan-gated-blocked
+    - f-062-03-escalation-recorded
+    - f-069-05-malformed-entry-repaired
+    - version-canonicalized-v6-20-2
+    - m54-progress-50-to-100-completed-date
+    - route-185-verification-checkboxes-stamped
+    - carryover-statuses-fixed-f-068-12-f-069-09-crit-065-001
+    - cross-refs-added-acp-validate-md-steps-2e-2f
+  deferred: []
+  key_fact: "Cross-subagent audit catches what solo audit misses. My own audit-073 found 8 findings, but the F-065 subagent found 19 — including E2E test gaps and carryover status drift I missed."
+
+- date: 2026-06-15
+  executor: copilot
+  tasks: [route-165, route-166]
+  done:
+    - m60-route-165-8-e2e-tests-created-all-passing
+    - m60-route-166-integrity-rule-count-fixed-70-exact
+    - m60-route-166-contributing-md-created
+    - integrity-test-62-62-green
+  deferred: []
+  key_fact: "8 E2E test suites (init, proceed, plan, dispatch, commit, validate, audit, route) created in one milestone — each with structural+negative assertions following patterns/local.e2e-testing.md. CRLF line endings on Windows require tr -d '\r' conversion before bash execution."
+
+- date: 2026-06-15
+  executor: copilot
+  branch: develop
+  tasks: [route-173, route-174, route-175, route-176, route-177, route-178, route-179]
+  done:
+    - m62-complete-7-routes-all-v6-21-0
+    - route-173-pipefail-upgrade-17-scripts-set-euo-pipefail
+    - route-174-command-doc-structural-conformance-steps-verification
+    - route-175-memory-layer-schemas-7-files-enforced-in-acp-validate
+    - route-176-audit-062-carryovers-f-062-01-through-05
+    - route-177-low-severity-cleanups-l1-l4
+    - route-178-cross-file-consistency-validators-7-checks
+    - route-179-post-milestone-sweep-script-e2e-test
+  deferred: []
+  key_fact: "M62 completed in under 3 hours — all 7 routes shipped. 17 scripts upgraded to set -euo pipefail (0 bare remaining). 7 memory-layer schemas created + enforced. 5 audit-062 carryovers resolved (F-062-01..05). Post-M61 shortcut prevention deployed: 7 cross-file consistency validators in acp-validate.ts (40/40 tests) + acp.post-milestone-sweep.sh (6 gates). Pre-commit hook active — caught ACP rule changes on commits."
+
+- date: 2026-06-15
+  executor: copilot
+  branch: develop
+  tasks: [route-m66-marker-backfill]
+  done:
+    - m66-marker-backfill-232-files-100pct-coverage
+    - m66-design-markers-28-files-100pct
+    - m66-task-markers-195-files-100pct
+    - m66-pattern-markers-9-files-100pct
+    - m66-created-backfill-script-acp-backfill-markers-py
+    - m66-stripped-superseded-status-prose-fields
+  deferred: []
+  key_fact: "M66 completed: 100% @acp.meta.* marker coverage across 232 files (from 3.9%). The full traceability chain is now unlocked: meta-scan can inventory all files, acp-validate probes are no longer blind, and acp-sync traceability maps work on the entire codebase. Created scripts/acp-backfill-markers.py as a reusable tool for future marker work."

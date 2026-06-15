@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: update, agentmd, with, dr-ids, and, stackedyolo, proceed, modes
+description: Update AGENT.md with DR-IDs and stacked/yolo proceed modes
+milestone: M32
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Update the existing "Designs" section of AGENT.md to document DR-IDs (`D<N>`) and the `incorporates:` task field, and add a brief "Proceed Modes" section or update the existing proceed reference to include `--stacked`, `--yolo`, and Step 3.5 audit.

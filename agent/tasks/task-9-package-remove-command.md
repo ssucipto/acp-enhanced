@@ -1,9 +1,18 @@
 # Task 9: Package Remove Command
 
+<!-- @acp.meta.task
+topic: package, remove, command
+description: Task 9: Package Remove Command
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M3 - ACP Package Management System](../milestones/milestone-3-acp-package-management.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 5 (Manifest System)  
-**Status**: Not Started  
 **Priority**: Medium  
 
 ---

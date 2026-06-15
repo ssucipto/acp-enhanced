@@ -1,9 +1,18 @@
 # Task 35: Migrate Scripts from acp.yaml.sh to acp.yaml-parser.sh
 
+<!-- @acp.meta.task
+topic: migrate, scripts, from, acpyamlsh, to, acpyaml-parsersh
+description: Task 35: Migrate Scripts from acp.yaml.sh to acp.yaml-parser.sh
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: Future Enhancements  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 34 (Generic YAML Parser)  
-**Status**: Not Started  
 
 ---
 
