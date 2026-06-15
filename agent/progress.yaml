@@ -3,7 +3,7 @@
 
 project:
   name: agent-context-protocol
-  version: 6.12.2
+  version: 6.14.0
   started: 2026-02-16
   status: active
   current_milestone: M58
@@ -320,21 +320,19 @@ milestones:
   M59:
     name: Critical-Fix & CI Integrity Track (v6.14.0)
     priority: 5
-    status: planned
-    progress: 0
-    started:
-    completed:
+    status: completed
+    progress: 100
+    started: 2026-06-15
+    completed: 2026-06-15
     estimated_weeks: 0.5
-    tasks_completed: 0
+    tasks_completed: 6
     tasks_total: 6
     file: agent/milestones/milestone-59-critical-fix-ci-integrity.md
     notes: |
-      📋 M59 planned from audit-065/066/067 consolidated register (~10h, 6 routes).
-      Stops silent correctness bugs: H1 routing.yml overwrite (route-159),
-      H8 package.yaml 13 missing commands (route-160), H2/H3 CI validation no-op
-      (route-161), C1 branch protection (route-162), M9 API-key preflight (route-163),
-      M12 AGENTS.md version header (route-164). Double-verify gate: regression-first.
-      Target: v6.14.0. MUST ship before feature work or external adoption.
+      ✅ M59 shipped v6.14.0 (2026-06-15). Routes 159–164 complete.
+      H1 routing.yml surgical update + regression test; H8 package.yaml parity (15 cmds);
+      H2/H3 CI acp-validate + ci-validate.sh; M9 OPENROUTER preflight; M12 version header check.
+      C1 branch protection documented in docs/USAGE.md — manual GitHub enable still required.
 
   M60:
     name: Test Coverage Sprint — Tier 1 Core Commands (v6.15.0)
@@ -4334,6 +4332,18 @@ tasks:
 recent_work:
   - date: 2026-06-15
     description: |
+      🔧 /acp-proceed M59 — Critical-Fix & CI Integrity shipped as v6.14.0.
+      Dispatch regression test, package.yaml parity, CI validation wiring, version consistency check.
+    items:
+      - "✅ route-159 — updateRoutingYml() surgical session-block update + 2 regression tests"
+      - "✅ route-160 — 15 missing acp.* commands in package.yaml + CI count guard"
+      - "✅ route-161 — acp-validate.ts in CI + ci-validate.sh command-doc checks"
+      - "✅ route-162 — branch protection documented in docs/USAGE.md (manual GitHub enable)"
+      - "✅ route-163 — OPENROUTER_API_KEY preflight in acp-dispatch.ts"
+      - "✅ route-164 — AGENTS.md v6.14.0 + validateVersionConsistency()"
+      - "✅ acp-validate 0 errors; npm test 2/2 pass"
+  - date: 2026-06-15
+    description: |
       📝 /acp-update — Progress tracking refreshed after audit remediation planning,
       validation hardening, and documentation sync. Committed audit-070 + M64/M65 plan;
       local work pending commit (validate 0/0, parity wrappers, acp-sync).
@@ -6498,21 +6508,20 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "Commit pending local work — validation 0/0, acp-sync docs, parity wrappers, M54 milestone doc"
-  - "/acp-proceed M59 route-159 — fix updateRoutingYml() overwrite + regression test (H1)"
-  - "M59 routes 160-164 — package.yaml parity, CI validation, branch protection, API preflight"
-  - "M64 routes 179-184 — integrity gateway v1.1 truth/test (audit-070; blocks M58 v2.0)"
+  - "M64 routes 179-184 — integrity gateway v1.1 truth/test (audit-070; blocks M58 v2.0 per ADR-10)"
   - "M65 routes 185-189 — tracking reconciliation (route stamps, M58 plan ADRs, M54 pointer)"
+  - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md; route-162 manual step)"
+  - "Commit M59 v6.14.0 changes when ready"
 
 current_blockers:
-  - id: m59-critical-unshipped
-    description: "Audit-065/066/067 critical fixes (routing.yml overwrite, CI validation no-op, package.yaml gaps) remain unshipped — blocks production adoption"
-    milestone: M59
+  - id: m64-gateway-truth
+    description: "M58 v2.0 semantic analysis blocked until M64 integrity gateway truth/test ships (ADR-10)"
+    milestone: M64
     severity: high
 
 notes:
   - "Master plan: agent/reports/plan-audit-coverage-matrix.md — order M59→M64→M65→M61→M62→M60→M63"
-  - 65 milestone entries — M55–M57 shipped (v6.11–v6.12.1); M54 CI active (50%); M58 in progress (25%); M59–M65 planned
+  - 65 milestone entries — M55–M57 shipped (v6.11–v6.12.1); M54 CI active (50%); M58 in progress (25%); M59 shipped (v6.14.0); M64–M65 planned
   - 71 command docs (69 acp.* + 2 git.*); 69 slash-command wrappers (prompts + opencode + cursor parity)
   - 9 skills (added code-review, code-integrity in M55/M56)
   - 36 bash scripts (+ integrity scanners in M56)
@@ -6524,7 +6533,9 @@ notes:
   - M64/M65 planned — integrity gateway truth/test + tracking reconciliation (audit-070)
   - 7 feedbacks integrated — 001–007
   - Cursor IDE parity — .cursor/commands/ auto-generated during install/update/bootstrap
+  - M59 COMPLETE — critical-fix & CI integrity (v6.14.0): dispatch regression, package parity, CI validation, version check
   - 2026-06-15 /acp-update — progress refreshed; M54 50%; M58 route-155 noted; 1 blocker (M59 critical unshipped)
+  - 2026-06-15 /acp-proceed M59 — shipped v6.14.0; blocker shifted to M64 (ADR-10)
 
 # ── Recurring Tasks ──────────────────────────────────────────────
 # Added v6.12.1 (M57). Scheduled periodic reviews surfaced at
