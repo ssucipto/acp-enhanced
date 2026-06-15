@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.14.1] — 2026-06-15
+
+### Added
+- **M64 route-179** (partial) — integrity scanner fixtures under `agent/benchmarks/fixtures/integrity/`
+- E2E regression **B10–B14** in `acp.integrity.test.sh` (entropy crash, `--ci` gate, unicode detection, perf)
+
+### Fixed
+- **F-070-01** — `acp.entropy-scan.sh` no longer crashes on findings (`set -e` + non-zero Python exit); uses `ACP_FINDING_COUNT` marker
+- **F-070-04** — `acp.unicode-scan.sh` single-pass scan (~4.7s for `agent/` vs ~42s per-file Python spawns)
+
+### Changed
+- M64 milestone tracking — route-179 complete, 1/6 routes in progress
+
+---
+
 ## [6.14.0] — 2026-06-15
 
 ### Added
