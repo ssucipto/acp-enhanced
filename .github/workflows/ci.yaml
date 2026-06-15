@@ -37,7 +37,7 @@ jobs:
       - name: Run acp-validate.ts (command structure + parity)
         run: npx ts-node scripts/acp-validate.ts
 
-      - name: Run dispatch regression tests (M59 route-159)
+      - name: Run TS unit tests (vitest — M59 dispatch + M61 validate)
         run: cd scripts && npm test
 
       - name: Validate YAML syntax and command docs
