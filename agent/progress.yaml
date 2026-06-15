@@ -3,7 +3,7 @@
 
 project:
   name: agent-context-protocol
-  version: 6.14.0
+  version: 6.14.1
   started: 2026-02-16
   status: active
   current_milestone: M58
@@ -410,23 +410,20 @@ milestones:
   M64:
     name: Integrity Gateway v1.1 — Truth & Test (v6.19.0)
     priority: 5
-    status: planned
-    progress: 0
-    started:
+    status: in_progress
+    progress: 17
+    started: 2026-06-15
     completed:
     estimated_weeks: 1
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 6
     file: agent/milestones/milestone-64-integrity-gateway-v1.1-truth-and-test.md
     notes: |
-      📋 M64 planned from audit-070 (M55–M58 gateway deep dive, ~18h, 6 routes).
-      Makes /acp-integrity honest + tested: fix entropy set -e crash + unicode perf
-      (route-179), implement missing exfil/persistence/shadow-dep detections (route-180),
-      truth pass reconciling coverage tables (route-181), uniform output + severity-aware
-      --ci (route-182), robustness: YAML-parser/git-date/IG-37/manifest/sha (route-183),
-      KEYSTONE per-rule fixture matrix + real false-positive baseline (route-184).
-      Closes F-070-01..16. BLOCKS M58 v2.0 (no semantic work on an untested v1).
-      Target: v6.19.0.
+      🔧 M64 in progress (2026-06-15). route-179 complete: entropy set -e crash fixed
+      (ACP_FINDING_COUNT marker, python always exit 0); unicode single-pass perf
+      (one Python process per scan, agent/ <5s). Fixtures + E2E B10–B14 added.
+      Next: route-182 (output contract) → route-180 → route-183 → route-181 → route-184.
+      BLOCKS M58 v2.0 per ADR-10. Target: v6.19.0.
 
   M65:
     name: Tracking Reconciliation & M57/M58 Closeout (v6.20.0)
@@ -4332,7 +4329,14 @@ tasks:
 recent_work:
   - date: 2026-06-15
     description: |
-      🔧 /acp-proceed M59 — Critical-Fix & CI Integrity shipped as v6.14.0.
+      🔧 /acp-proceed M64 route-179 — fixed broken integrity scanners (F-070-01, F-070-04).
+    items:
+      - "✅ acp.entropy-scan.sh — python always exit 0; ACP_FINDING_COUNT marker (no set -e crash)"
+      - "✅ acp.unicode-scan.sh — single Python process per scan; agent/ tree <5s"
+      - "✅ Fixtures: agent/benchmarks/fixtures/integrity/ (entropy + unicode)"
+      - "✅ E2E B10–B14 regression assertions in acp.integrity.test.sh"
+      - "⏳ M64 1/6 routes — next route-182 (output contract)"
+  - date: 2026-06-15
       Dispatch regression test, package.yaml parity, CI validation wiring, version consistency check.
     items:
       - "✅ route-159 — updateRoutingYml() surgical session-block update + 2 regression tests"
@@ -6508,10 +6512,9 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "M64 routes 179-184 — integrity gateway v1.1 truth/test (audit-070; blocks M58 v2.0 per ADR-10)"
-  - "M65 routes 185-189 — tracking reconciliation (route stamps, M58 plan ADRs, M54 pointer)"
+  - "/acp-proceed M64 route-182 — uniform output contract + severity-aware --ci (then 180, 183, 181, 184)"
+  - "M65 routes 185-189 — tracking reconciliation after M64 exit"
   - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md; route-162 manual step)"
-  - "Commit M59 v6.14.0 changes when ready"
 
 current_blockers:
   - id: m64-gateway-truth

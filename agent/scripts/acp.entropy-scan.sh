@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # acp.entropy-scan.sh — Shannon Entropy Calculator for String Literals
-# Part of /acp-integrity v1.0 (M56)
+# Part of /acp-integrity v1.0 (M56), hardened M64 route-179
 #
 # Calculates Shannon entropy for string literals in source files.
 # High entropy (>4.5 bits/char) indicates potential encoded/encrypted payloads.
@@ -41,7 +41,6 @@ done
 
 FINDINGS=0
 
-# Python3 is required for math.log2 precision
 if ! command -v python3 &>/dev/null; then
   echo "Warning: python3 not found — entropy scan requires Python 3" >&2
   echo "Install python3 or skip entropy scan with --rules flag" >&2
@@ -50,10 +49,9 @@ fi
 
 scan_file_entropy() {
   local file="$1"
-  
-  # Pass parameters via environment to avoid shell injection
-  local output
-  output=$(ACP_THRESHOLD="$THRESHOLD" ACP_FILEPATH="$file" python3 -c "
+  local combined
+  # Python must exit 0 even when findings exist — non-zero exit + set -e triggers ERR trap (F-070-01).
+  combined=$(ACP_THRESHOLD="$THRESHOLD" ACP_FILEPATH="$file" python3 -c "
 import sys, math, re, os
 
 threshold = float(os.environ.get('ACP_THRESHOLD', '4.5'))
@@ -68,18 +66,17 @@ def shannon_entropy(s):
     length = len(s)
     return -sum((count / length) * math.log2(count / length) for count in freq.values())
 
+findings = 0
 try:
     with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
         lines = f.readlines()
 except Exception as e:
     print(f'Error reading {filepath}: {e}', file=sys.stderr)
+    print('ACP_FINDING_COUNT=0')
     sys.exit(0)
 
-string_pattern = re.compile(r'([\"\x60])(?:(?!\1).)*?\1|\x27(?:(?!\x27).)*?\x27')
-line_num = 0
-findings = 0
-for line in lines:
-    line_num += 1
+string_pattern = re.compile(r'([\"\\x60])(?:(?!\\1).)*?\\1|\\x27(?:(?!\\x27).)*?\\x27')
+for line_num, line in enumerate(lines, start=1):
     for match in string_pattern.finditer(line):
         s = match.group(0)
         if len(s) < 20:
@@ -90,20 +87,24 @@ for line in lines:
             print(f'{filepath}:{line_num} entropy={ent:.2f} \"{snippet}\"')
             findings += 1
     if re.search(r'(?:0x[0-9a-fA-F]{16,}|[A-Za-z0-9+/]{40,}={0,2})', line):
-        if not re.search(r'^\s*(?:const|let|var|#define|0x[0-9a-fA-F]{1,8}\b)', line):
+        if not re.search(r'^\\s*(?:const|let|var|#define|0x[0-9a-fA-F]{1,8}\\b)', line):
             snippet = line.strip()[:80]
             print(f'{filepath}:{line_num} IG-18 — potential hex/base64 runtime decoding: \"{snippet}\"')
             findings += 1
 
 if findings > 0:
-    print(f'', file=sys.stderr)
     print(f'Total findings: {findings} high-entropy or encoded string(s) detected', file=sys.stderr)
-sys.exit(findings)
-" 2>/dev/null)
-  
-  local ret=$?
-  echo "$output"
-  FINDINGS=$((FINDINGS + ret))
+print(f'ACP_FINDING_COUNT={findings}')
+sys.exit(0)
+" 2>&1)
+
+  local count_line
+  count_line=$(echo "$combined" | grep '^ACP_FINDING_COUNT=' | tail -1 || true)
+  local count="${count_line#ACP_FINDING_COUNT=}"
+  count="${count:-0}"
+
+  echo "$combined" | grep -v '^ACP_FINDING_COUNT=' || true
+  FINDINGS=$((FINDINGS + count))
 }
 
 # ── Scan ──────────────────────────────────────────────────────────────────────
@@ -115,7 +116,6 @@ elif [[ -d "$TARGET" ]]; then
     case "$file" in
       */node_modules/*|*/.git/*|*.png|*.jpg|*.gif|*.ico|*.woff*|*.ttf|*.eot|*.pdf|*.min.js|*.min.css) continue ;;
     esac
-    # Only scan source files
     case "$file" in
       *.ts|*.tsx|*.js|*.jsx|*.py|*.rb|*.go|*.rs|*.sh|*.bash|*.yml|*.yaml|*.md|*.json)
         scan_file_entropy "$file"
