@@ -10,7 +10,7 @@
     - m61-autonomous-completion-6-routes-all-done-v6-20-7
     - m61-deep-dive-audit-075-6-findings-fixed-3-carryovers-resolved
   deferred: none
-  key_fact: "M61 autonomous completion (6 routes, ~12h) shipped as v6.20.7. Audit-075 found 6 additional issues: YOUR_ORG placeholder in SECURITY.md (HIGH), stale version footer (MEDIUM), fallback contact gap (LOW), unpinned trufflehog action violating IG-67 (HIGH), missing Windows CI skip protocol (MEDIUM), Dependabot limit inconsistency (LOW). All fixed + 3 carryovers closed."
+  key_fact: "M61 autonomous completion (6 routes, ~12h) shipped as v6.20.7. Audit-075 found 6 additional issues: YOUR_ORG placeholder in SECURITY.md (HIGH), stale version footer (MEDIUM), fallback contact gap (LOW), unpinned trufflehog action violating IG-67 (HIGH), missing Windows CI skip protocol (MEDIUM), Dependabot limit inconsistency (LOW). All fixed + 3 carryovers closed. Post-audit: 4 shortcuts caught — route-172 tests were smoke-only (now 14 behavioral tests), tsc --noEmit never ran (now 0 errors), Layer 1 budget unverified (identity.yml ~405 tokens), A3.5 full test suite never ran (vitest 33/33 green; E2E 47/47 CRLF — pre-existing)."
 
 - date: 2026-06-15
   executor: copilot

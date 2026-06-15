@@ -33,20 +33,20 @@ function readAgent(relPath: string): string {
   return readFileSync(full, "utf-8");
 }
 
-export function getLastNSessions(n: number): string {
-  const content = readAgent("memory/sessions.md");
-  if (!content) return "";
-  const entries = content.split("\n- date:").filter(Boolean);
+export function getLastNSessions(n: number, content?: string): string {
+  const raw = content ?? readAgent("memory/sessions.md");
+  if (!raw) return "";
+  const entries = raw.split("\n- date:").filter(Boolean);
   return entries
     .slice(-n)
     .map((e) => (e.startsWith("- date:") ? e : "- date:" + e))
     .join("\n");
 }
 
-export function getFilteredLessons(taskType: string): string {
-  const content = readAgent("memory/lessons.md");
-  if (!content) return "";
-  const entries = content.split("\n- date:").filter(Boolean);
+export function getFilteredLessons(taskType: string, content?: string): string {
+  const raw = content ?? readAgent("memory/lessons.md");
+  if (!raw) return "";
+  const entries = raw.split("\n- date:").filter(Boolean);
   const relevant = entries.filter(
     (e) =>
       // Skip archived lessons (see lessons.md schema comment)
