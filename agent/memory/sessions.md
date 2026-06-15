@@ -225,3 +225,20 @@
     - "Never use set -e without trap ERR in bash scripts"
     - "Never write bash that breaks on macOS (BSD sed, date differences)"
     - "Python subprocess calls must use os.environ — never string-interpolate variables"
+
+- date: 2026-06-15
+  executor: copilot
+  tasks: [route-185..189, audit-073, F-065-AUDIT]
+  done:
+    - m65-audit-followup-fix-11-subagent-findings
+    - e2e-acp-validate-cross-layer-test-created
+    - quarterly-deep-scan-gated-blocked
+    - f-062-03-escalation-recorded
+    - f-069-05-malformed-entry-repaired
+    - version-canonicalized-v6-20-2
+    - m54-progress-50-to-100-completed-date
+    - route-185-verification-checkboxes-stamped
+    - carryover-statuses-fixed-f-068-12-f-069-09-crit-065-001
+    - cross-refs-added-acp-validate-md-steps-2e-2f
+  deferred: []
+  key_fact: "Cross-subagent audit catches what solo audit misses. My own audit-073 found 8 findings, but the F-065 subagent found 19 — including E2E test gaps and carryover status drift I missed."
