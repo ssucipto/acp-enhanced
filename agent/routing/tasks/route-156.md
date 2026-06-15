@@ -64,3 +64,4 @@ Update three documentation files with Phase 2 content: the wiki rule catalogue, 
 - `/acp-integrity --phase2` is documented and discoverable
 - Developers understand what confidence levels mean before running Phase 2
 - Self-protection protocol is clearly documented
+- Wiki header updated to v2.0.0 with 70 total rules; Cat 8/10 active (Phase 2)

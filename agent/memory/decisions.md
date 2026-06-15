@@ -118,6 +118,15 @@
 **Consequences:** `agent/core/identity.yml` encodes the `git_workflow` block with `default_working_branch: develop` and `production_branch: mainline`. All ACP protocol files check the current branch before executing write operations (Step 1b of context loading protocol). Source: M54 implementation, `agent/core/identity.yml → git_workflow`, `agent/core/constraints.yml → branch_safety`.
 **DO NOT re-open** unless the project grows to 3+ regular contributors requiring release-management branches or an LTS release track.
 
+## ADR-17 | 2026-06-15 | Light/full context modes + 2,800-token budget discipline
+
+**Status:** Accepted
+**Context:** ACP Enhanced adopted a tiered context loading model to solve the token-overflow problem that plagued earlier agent frameworks. Without explicit discipline, agents load everything indiscriminately, overflow their context window mid-session, and lose information permanently. The project needed a hard constraint with a documented override path for tasks that genuinely need more context.
+**Options considered:** (1) No budget — load all files unconditionally. Causes context overflow, silent session termination, and permanent knowledge loss. (2) Auto-detect limits — try to estimate token usage dynamically. Fragile; token estimation varies by model and serializer. (3) 2,800-token budget with light/full modes — a practice discipline (not a technical limit) that keeps sessions reproducible and cost-controlled. Exceed deliberately when needed and note it.
+**Decision:** Option 3 — three-layer model with a 2,800-token soft budget. Layer 1 (core/): max 500 tokens, always loaded, prompt-cacheable. Layer 2 (skills/): max 1,000 tokens, exactly one per task domain. Layer 3 (memory/ + wiki/): max 3,500 tokens, filtered by task_type and relevance. Total session context: max 5,000 tokens before task content. The budget is a discipline practice — reproducibility, focus, and cost at scale — not a technical limit. Exceed deliberately when needed; note it.
+**Consequences:** 75–88% token reduction vs monolithic AGENT.md. Prompt caching on Layer 1 gives additional savings. Skills must cover all task domains exhaustively. Every session start runs the Context Loading Protocol (Steps 1–6 in AGENTS.md). Source: `agent/core/constraints.yml`, `agent/core/identity.yml`, `AGENTS.md` Context Budget section.
+**DO NOT re-open** unless a task type genuinely requires >5,000 tokens of pre-task context to complete correctly, AND the additional context can't be loaded on-demand via `/acp-init --full`.
+
 ## ADR-2 | 2026-05-01 | Pure bash YAML parser — no external dependencies
 **Status:** Accepted
 **Context:** ACP scripts need to read/write YAML but must work with zero external dependencies on any macOS or Linux system.

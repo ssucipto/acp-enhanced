@@ -5,6 +5,22 @@
 - date: 2026-06-15
   executor: copilot
   branch: develop
+  tasks: [route-185, route-186, route-187, route-188, route-189]
+  done:
+    - m65-complete-5-routes
+    - cross-layer-status-sync-12-milestone-docs
+    - validate-filepointers-and-status-consistency-checks
+    - m58-plan-correction-adr-11-12
+    - adr-reconstruction-13-16
+    - pipefail-meta-scan
+    - quarterly-deep-scan-phase-2-active
+    - f-062-03-promoted-to-m59
+  deferred: []
+  key_fact: "progress.yaml had systemic duplicate YAML keys causing js-yaml parse failures; validate.ts now uses line-based fallback. The cross-layer validator caught 12 stale milestone docs (9 fixed, M21/M42 left as legacy)."
+
+- date: 2026-06-15
+  executor: copilot
+  branch: develop
   tasks: [validate, sync]
   done:
     - validate-all-layers-pass-0-errors
