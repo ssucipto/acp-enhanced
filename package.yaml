@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.19.0
+version: 6.20.0
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
@@ -192,6 +192,8 @@ contents:
         - acp.dependency-diff.sh
         - acp.pattern-scan.sh
         - acp.integrity-output.sh
+        - acp.taint-scan.sh
+        - acp.memory-scan.sh
     
     - name: acp.design-reference.md
       description: Generate design reference documents from existing designs
