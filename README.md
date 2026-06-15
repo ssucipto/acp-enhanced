@@ -1295,6 +1295,10 @@ Contributions are welcome! Please:
 
 MIT License - See [LICENSE](./LICENSE) for details
 
+## Security
+
+See [SECURITY.md](./SECURITY.md) for our vulnerability disclosure policy and supported versions.
+
 ---
 
 ## Links
