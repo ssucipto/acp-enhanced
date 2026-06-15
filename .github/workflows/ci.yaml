@@ -37,6 +37,9 @@ jobs:
       - name: Run acp-validate.ts (command structure + parity)
         run: npx ts-node scripts/acp-validate.ts
 
+      - name: Run dispatch regression tests (M59 route-159)
+        run: cd scripts && npm test
+
       - name: Validate YAML syntax and command docs
         run: bash scripts/ci-validate.sh
 
@@ -80,9 +83,15 @@ jobs:
             cp agent/manifest.template.yaml agent/manifest.yaml
           fi
 
+      - name: Install Python yaml parser
+        run: python3 -m pip install --quiet pyyaml
+
       - name: Install Node.js dependencies
         run: |
           cd scripts && npm install --silent --ignore-scripts
+
+      - name: Run integrity gateway E2E (M64 route-184)
+        run: bash e2e/acp.integrity.test.sh
 
       - name: Run E2E smoke tests
         run: bash run-e2e-tests.sh --skip-network
