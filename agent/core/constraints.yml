@@ -32,6 +32,10 @@ hooks:
   pre_commit:
     - task_id: pre-commit-rule-audit
       description: "Scan ACP rule files for Unicode injection before commit"
+    - task_id: pre-commit-integrity-phase1
+      description: "Pre-commit integrity phase 1 — fast unicode+entropy scan (ADR-20: format change from booleans to task_id array)"
+    - task_id: ci-npm-ignore-scripts
+      description: "CI check: npm install --ignore-scripts for supply-chain isolation (ADR-20)"
 
 # Context budget: a discipline practice, not a hard technical limit.
 # Modern LLMs have 100K+ context windows — this budget enforces reproducibility and focus.
