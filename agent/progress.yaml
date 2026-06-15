@@ -4319,6 +4319,20 @@ tasks:
 recent_work:
   - date: 2026-06-15
     description: |
+      ✅ /acp-proceed M61 --complete — Production-Readiness Pack shipped as v6.20.7.
+    items:
+      - "✅ route-167 — Windows CI (windows-latest + shell: bash in e2e matrix)"
+      - "✅ route-168 — SECURITY.md (advisory process, scope, response targets, disclosure)"
+      - "✅ route-169 — CODEOWNERS + PR template + bug/feature issue templates"
+      - "✅ route-170 — Dependabot (npm + gh-actions, weekly) + lockfile + npm audit + trufflehog"
+      - "✅ route-171 — team_members populated; IG-37 active (CRLF-resilient grep parser)"
+      - "✅ route-172 — vitest 33/33 (15 dispatch + 11 validate + 7 behavioral); tsc --noEmit clean"
+      - "✅ audit-075 — 6 findings (YOUR_ORG, stale version, trufflehog pin, etc.) all fixed"
+      - "✅ 3 carryovers resolved: HIGH-065-005/006, MED-066-003 → fixed, verified_in_audit: 075"
+      - "✅ 4 shortcuts caught post-audit: route-172 test depth, tsc, Layer 1 budget, A3.5 sweep"
+      - "📊 Version: 6.20.2 → 6.20.9 (7 bumps). Current milestone: M62."
+  - date: 2026-06-15
+    description: |
       ✅ /acp-update — Progress tracking refreshed after M60 delivery, M65 closeout,
       post-M60 audit, validate, and sync. All tracking current.
     items:
@@ -6518,16 +6532,14 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "/acp-proceed M61 — Production-Readiness Pack (v6.16.0)"
-  - "/acp-proceed M62 — Quality Hardening, Schema Coverage & Carryover Resolution (v6.17.0)"
-  - "/acp-proceed M63 — Test Coverage Sprint — Tier 2 & 3 (v6.18.0)"
+  - "/acp-proceed M62 — Quality Hardening, Schema Coverage & Carryover Resolution (v6.21.0)"
   - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md)"
 
 current_blockers: []
 
 notes:
-  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — order M59→M64→M65→M61→M62→M60→M63"
-  - 65 milestone entries — M55–M57 shipped (v6.11–v6.12.1); M54 CI active (50%); M58 in progress (25%); M59 shipped (v6.14.0); M64–M65 planned
+  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — order M59→M64→M65→M61→M62→M60→M63 (completed: M55-61,M64-65; next: M62)"
+  - 66 milestone entries — M55–M61 shipped (v6.11–v6.20.9); M54 CI active (50%); M58 in progress (25%); M62 next
   - 71 command docs (69 acp.* + 2 git.*); 69 slash-command wrappers (prompts + opencode + cursor parity)
   - 9 skills (added code-review, code-integrity in M55/M56)
   - 36 bash scripts (+ integrity scanners in M56)
