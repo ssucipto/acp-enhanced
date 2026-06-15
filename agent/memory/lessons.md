@@ -7,6 +7,21 @@
 #   status: archived     # Archived lessons are skipped by getFilteredLessons()
 #   superseded_by: "constraints.yml:key"  # Reference to what now encodes this knowledge
 
+- date: 2026-06-15
+  scope: cross-cutting
+  task_type: audit
+  lesson: |
+    When auditing a framework that splits tracked framework-data from
+    gitignored instance-data, ALWAYS cross-check .gitignore (or run
+    git check-ignore) before reporting a file as "missing". Audit-065
+    flagged decisions.md and reports 052-064 as critical structural gaps;
+    both are gitignored instance data (agent/.gitignore:5,34) that auto-create
+    on first use. Second rule: ALWAYS open the source files you cite as code
+    pointers — audit-065 cited acp-dispatch.ts:191 and package.json without
+    reading them, missing a routing.yml data-loss bug (updateRoutingYml full
+    overwrite) and an orphaned CI validator. A pointer without a read is a guess.
+  priority: high
+
 - date: 2026-06-07
   scope: backend-bash
   task_type: ci-cd-setup
