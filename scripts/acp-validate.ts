@@ -495,40 +495,61 @@ function validateSessionsMemory(): boolean {
   return !hasErrors;
 }
 
-// ── Version consistency (identity.yml ↔ AGENTS.md header) ────
-function validateVersionConsistency(): boolean {
+// ── Version consistency (identity.yml ↔ AGENTS.md ↔ CLAUDE.md ↔ CHANGELOG) ────
+export function validateVersionConsistency(): ValidationError[] {
+  const errors: ValidationError[] = [];
   const identityPath = path.join("agent", "core", "identity.yml");
-  const agentsPath = "AGENTS.md";
-  if (!existsSync(identityPath) || !existsSync(agentsPath)) {
-    console.warn("⚠️  Version consistency: identity.yml or AGENTS.md missing — skipped");
-    return true;
+  const files: Record<string, string> = {};
+
+  // Extract version from identity.yml
+  if (existsSync(identityPath)) {
+    const identity = yaml.load(readFileSync(identityPath, "utf-8")) as Record<string, unknown>;
+    const ver = String(identity.version ?? "").trim();
+    if (ver) files["identity.yml"] = ver;
   }
 
-  const identity = yaml.load(readFileSync(identityPath, "utf-8")) as Record<string, unknown>;
-  const canonical = String(identity.version ?? "").trim();
-  const agents = readFileSync(agentsPath, "utf-8");
-  const headerMatch = agents.match(/^> v([\d.]+)/m);
-  const headerVersion = headerMatch?.[1]?.trim() ?? "";
-
-  if (!canonical) {
-    console.warn("⚠️  Version consistency: identity.yml has no version field");
-    return true;
+  // AGENTS.md first line
+  if (existsSync("AGENTS.md")) {
+    const raw = readFileSync("AGENTS.md", "utf8");
+    const match = raw.match(/^> v([\d.]+)/m);
+    if (match) files["AGENTS.md"] = match[1];
   }
 
-  if (!headerVersion) {
-    console.warn("⚠️  AGENTS.md: missing `> vX.Y.Z` version header line");
-    return true;
+  // CLAUDE.md first line
+  if (existsSync("CLAUDE.md")) {
+    const raw = readFileSync("CLAUDE.md", "utf8");
+    const match = raw.match(/^> v([\d.]+)/m);
+    if (match) files["CLAUDE.md"] = match[1];
   }
 
-  if (headerVersion !== canonical) {
-    console.warn(
-      `⚠️  Version drift: AGENTS.md header v${headerVersion} != identity.yml ${canonical}`
-    );
-    return true; // soft warn per route-164; hard-fail can be enabled post-M59
+  // CHANGELOG.md first release entry
+  if (existsSync("CHANGELOG.md")) {
+    const raw = readFileSync("CHANGELOG.md", "utf8");
+    const match = raw.match(/^## \[([\d.]+)\]/m);
+    if (match) files["CHANGELOG.md"] = match[1];
   }
 
-  console.log(`✅ Version header: AGENTS.md v${headerVersion} matches identity.yml`);
-  return true;
+  const versions = Object.entries(files);
+  if (versions.length < 2) return errors;
+
+  const [refFile, refVersion] = versions[0];
+  for (let i = 1; i < versions.length; i++) {
+    const [file, ver] = versions[i];
+    if (ver !== refVersion) {
+      errors.push({
+        file,
+        line: 1,
+        message: `Version inconsistency: ${refFile}=v${refVersion}, ${file}=v${ver}`,
+        severity: "error",
+      });
+    }
+  }
+
+  if (errors.length === 0) {
+    console.log(`✅ Version header: AGENTS.md v${files["AGENTS.md"] || "?"} matches identity.yml`);
+  }
+
+  return errors;
 }
 
 // ── Cross-layer status consistency (route-186) ─────────────────
@@ -743,6 +764,253 @@ function runSchemaEnforcement(): boolean {
   return allOk;
 }
 
+// ── Cross-file Consistency Validators (route-178) ──────────────
+
+const IDENTITY_PATH = "agent/core/identity.yml";
+
+export function validateNextStepsFreshness(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(PROGRESS_PATH)) return errors;
+
+  try {
+    const raw = readFileSync(PROGRESS_PATH, "utf8");
+    const progress = yaml.load(raw) as Record<string, unknown>;
+    const currentMilestone = (progress["current_milestone"] as string) || "";
+    const nextSteps = progress["next_steps"] as string[] | undefined;
+
+    if (!nextSteps || nextSteps.length === 0) {
+      errors.push({
+        file: PROGRESS_PATH,
+        line: 0,
+        message: "next_steps is empty — should reference the next active milestone",
+        severity: "warning",
+      });
+    } else if (currentMilestone && nextSteps[0].includes(currentMilestone)) {
+      errors.push({
+        file: PROGRESS_PATH,
+        line: 0,
+        message: `next_steps[0] references current milestone "${currentMilestone}" — should point to the next milestone`,
+        severity: "warning",
+      });
+    }
+  } catch {
+    // Parse error silently — other validators cover this
+  }
+  return errors;
+}
+
+export function validateMilestoneDocVersion(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(IDENTITY_PATH)) return errors;
+
+  const identityRaw = readFileSync(IDENTITY_PATH, "utf8");
+  const idMatch = identityRaw.match(/^version:\s*([0-9.]+)/m);
+  if (!idMatch) return errors;
+  const identityVer = idMatch[1];
+
+  const milestonesDir = "agent/milestones";
+  if (!existsSync(milestonesDir)) return errors;
+
+  const milestoneFiles = readdirSync(milestonesDir).filter(
+    (f) => f.startsWith("milestone-") && f.endsWith(".md")
+  );
+
+  for (const mf of milestoneFiles) {
+    const filePath = path.join(milestonesDir, mf);
+    const raw = readFileSync(filePath, "utf8");
+    const tvMatch = raw.match(/\*\*Target version\*\*:\s*([0-9.]+)/);
+    if (!tvMatch) continue;
+
+    const docVer = tvMatch[1];
+    if (docVer !== identityVer) {
+      // Only warn for past milestones (Target version < identity version)
+      const cmp = docVer.localeCompare(identityVer, undefined, { numeric: true });
+      errors.push({
+        file: filePath,
+        line: 3,
+        message: cmp < 0
+          ? `Stale target version: doc says v${docVer}, identity.yml is v${identityVer}`
+          : `Target version mismatch: doc says v${docVer}, identity.yml is v${identityVer}`,
+        severity: cmp < 0 ? "warning" : "error",
+      });
+    }
+  }
+
+  return errors;
+}
+
+export function validateVerificationGates(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const milestonesDir = "agent/milestones";
+  if (!existsSync(milestonesDir)) return errors;
+
+  const milestoneFiles = readdirSync(milestonesDir).filter(
+    (f) => f.startsWith("milestone-") && f.endsWith(".md")
+  );
+
+  for (const mf of milestoneFiles) {
+    const filePath = path.join(milestonesDir, mf);
+    const raw = readFileSync(filePath, "utf8");
+
+    // Find the verification gate section
+    const gateMatch = raw.match(/## Industry-Standard Verification[\s\S]*?(?=\n## |$)/);
+    if (!gateMatch) continue;
+
+    const gateSection = gateMatch[0];
+    const bullets = gateSection.match(/^- .+$/gm);
+    if (!bullets) continue;
+
+    for (const bullet of bullets) {
+      const trimmed = bullet.replace(/^- /, "");
+      // Check if bullet has a status marker
+      if (!/^(✅|❌|⏳)/.test(trimmed) && trimmed.length > 0) {
+        errors.push({
+          file: filePath,
+          line: 0,
+          message: `Verification gate item is blank (no ✅/❌/⏳): "${trimmed.substring(0, 60)}..."`,
+          severity: "warning",
+        });
+      }
+    }
+  }
+
+  return errors;
+}
+
+export function validateGitTagsExist(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(IDENTITY_PATH)) return errors;
+
+  const identityRaw = readFileSync(IDENTITY_PATH, "utf8");
+  const idMatch = identityRaw.match(/^version:\s*([0-9.]+)/m);
+  if (!idMatch) return errors;
+
+  const version = idMatch[1];
+  try {
+    const { execSync } = require("child_process");
+    const output = execSync(`git tag --list "v${version}"`, {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      stdio: ["pipe", "pipe", "pipe"],
+    }).trim();
+
+    if (!output) {
+      errors.push({
+        file: IDENTITY_PATH,
+        line: 0,
+        message: `Missing git tag for v${version}. Run: git tag -a v${version} -m "..." HEAD`,
+        severity: "error",
+      });
+    }
+  } catch {
+    errors.push({
+      file: IDENTITY_PATH,
+      line: 0,
+      message: "Failed to check git tags — is this a git repository?",
+      severity: "warning",
+    });
+  }
+
+  return errors;
+}
+
+export function validateGitignoreConflicts(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  // Check known tracked paths that have had .gitignore conflicts
+  const trackedPaths = ["agent/reports/", "scripts/package-lock.json"];
+
+  for (const tp of trackedPaths) {
+    try {
+      const { execSync } = require("child_process");
+      execSync(`git check-ignore "${tp}"`, {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "pipe"],
+      });
+      // If exit 0, file is ignored
+      errors.push({
+        file: ".gitignore",
+        line: 0,
+        message: `Tracked path "${tp}" is blocked by .gitignore — add !pattern to whitelist`,
+        severity: "warning",
+      });
+    } catch {
+      // exit 1 = not ignored (good), or git unavailable
+    }
+  }
+
+  return errors;
+}
+
+export function validateGitattributesCoverage(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const attrPath = ".gitattributes";
+  if (!existsSync(attrPath)) {
+    errors.push({
+      file: attrPath,
+      line: 0,
+      message: ".gitattributes missing — should enforce LF for cross-platform scripts",
+      severity: "error",
+    });
+    return errors;
+  }
+
+  const raw = readFileSync(attrPath, "utf8");
+  const requiredPatterns = [
+    { pattern: /\*\.sh\s+text\s+eol=lf/, label: "*.sh text eol=lf" },
+    { pattern: /\*\.yml\s+text\s+eol=lf/, label: "*.yml text eol=lf" },
+    { pattern: /\*\.ts\s+text\s+eol=lf/, label: "*.ts text eol=lf" },
+    { pattern: /\*\.json\s+text\s+eol=lf/, label: "*.json text eol=lf" },
+  ];
+
+  for (const rp of requiredPatterns) {
+    if (!rp.pattern.test(raw)) {
+      errors.push({
+        file: attrPath,
+        line: 0,
+        message: `Missing LF enforcement: ${rp.label} — add to .gitattributes`,
+        severity: "warning",
+      });
+    }
+  }
+
+  return errors;
+}
+
+function runConsistencyScan(): boolean {
+  let allOk = true;
+
+  const checks: [string, () => ValidationError[]][] = [
+    ["version consistency", validateVersionConsistency],
+    ["next steps freshness", validateNextStepsFreshness],
+    ["milestone doc version", validateMilestoneDocVersion],
+    ["verification gates", validateVerificationGates],
+    ["git tags", validateGitTagsExist],
+    ["gitignore conflicts", validateGitignoreConflicts],
+    ["gitattributes coverage", validateGitattributesCoverage],
+  ];
+
+  for (const [name, fn] of checks) {
+    try {
+      const errors = fn();
+      if (errors.length === 0) {
+        console.log(`✅ Consistency: ${name} — OK`);
+      } else {
+        for (const err of errors) {
+          const prefix = err.severity === "error" ? "❌" : "⚠️";
+          console.log(`${prefix} ${err.file}: ${err.message}`);
+          if (err.severity === "error") allOk = false;
+        }
+      }
+    } catch (err) {
+      console.error(`❌ Consistency check "${name}" failed: ${err instanceof Error ? err.message : err}`);
+      allOk = false;
+    }
+  }
+
+  return allOk;
+}
+
 function validateFilePointers(): boolean {
   const progressYaml = loadProgressSafe();
   if (!progressYaml) {
@@ -804,12 +1072,13 @@ if (args.length === 0) {
   runParityCheck();
   const sizeOk = validateAgentsMdSize();
   const sessionsValid = validateSessionsMemory();
-  validateVersionConsistency();
+  const versionOk = validateVersionConsistency().length === 0;
   const statusOk = validateStatusConsistency();
   const pointersOk = validateFilePointers();
   const schemasOk = runSchemaEnforcement();
+  const consistencyOk = runConsistencyScan();
   checkStaleness(); // informational — non-blocking, does not affect exit code
-  process.exit(sizeOk && sessionsValid && statusOk && pointersOk && schemasOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
+  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
 
 let overallFailed = false;
