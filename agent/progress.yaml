@@ -6,16 +6,12 @@ project:
   version: 6.20.2
   started: 2026-02-16
   status: active
-  current_milestone: M61
+  current_milestone: M62
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.20.2. M55–M57 shipped
-    (/acp-review, /acp-integrity v1.1, recurring tasks). M59 critical CI fixes
-    and M64 integrity gateway v1.1 truth/test complete. M58 v2.0 Phase 2
-    semantic analysis complete + audit-072 post-impl fixes. M65 tracking
-    reconciliation complete (5 routes, all cross-layer desyncs fixed).
-    M60 Tier 1 E2E test coverage delivered (8 suites, 100%). M60 audit-074
-    complete (7 findings fixed). /acp-sync: 3 design docs updated (parallel task,
-    parallel runner → Implemented, skills @-mention → Superseded).
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.20.7. M55–M61 shipped
+    (review, integrity v1.1/v2.0, CI fixes, integrity gateway, test coverage,
+    production-readiness: Windows CI, SECURITY.md, governance templates, Dependabot,
+    supply-chain CI, IG-37, TS unit tests). M62 quality-hardening next.
 
 milestones:
   M44:
@@ -349,12 +345,12 @@ milestones:
   M61:
     name: Production-Readiness Pack (v6.16.0)
     priority: 4
-    status: in_progress
-    progress: 83
+    status: completed
+    progress: 100
     started: 2026-06-15
-    completed:
+    completed: 2026-06-15
     estimated_weeks: 1
-    tasks_completed: 5
+    tasks_completed: 6
     tasks_total: 6
     file: agent/milestones/milestone-61-production-readiness-pack.md
     notes: |

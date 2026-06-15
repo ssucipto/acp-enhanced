@@ -33,7 +33,7 @@ priorities:
 
 fork_of: github.com/prmichaelsen/agent-context-protocol
 repo: github.com/ssucipto/acp-enhanced
-version: 6.20.6
+version: 6.20.7
 
 # Git workflow — develop→mainline (gitflow-lite). PRs develop→mainline.
 git_workflow:
