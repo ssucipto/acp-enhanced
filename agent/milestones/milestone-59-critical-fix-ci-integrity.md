@@ -1,7 +1,8 @@
 # Milestone 59: Critical-Fix & CI Integrity Track
 
 **Target version**: 6.14.0  
-**Status**: planned  
+**Status**: completed  
+**Completed**: 2026-06-15  
 **Estimated effort**: ~10h (6 routes)  
 **Source**: audit-065, audit-066, audit-067 (consolidated register Part B)
 
@@ -13,12 +14,12 @@ Stop active correctness bugs and make the CI pipeline trustworthy. Three of thes
 
 | Route | Title | Addresses | Est. | Status |
 |-------|-------|-----------|------|--------|
-| route-159 | Fix `updateRoutingYml()` full-overwrite → surgical session-block update + regression test | H1 (HIGH-066-001) | 2h | not_started |
-| route-160 | Add 13 missing commands to `package.yaml` + CI count-guard | H8 (HIGH-067-001) | 2h | not_started |
-| route-161 | Wire `acp-validate.ts` into CI + fix `ci-validate.sh` command-doc no-op | H2/H3 (HIGH-066-005/006) | 3h | not_started |
-| route-162 | Enable branch protection on `mainline` + `develop` | C1 (CRIT-065-002) | 0.25h | not_started |
-| route-163 | `OPENROUTER_API_KEY` preflight check in dispatch | M9 (MED-066-002) | 0.5h | not_started |
-| route-164 | Fix `AGENTS.md` version header + add version-header check to `/acp-validate` | M12 (MED-067-002) | 1h | not_started |
+| route-159 | Fix `updateRoutingYml()` full-overwrite → surgical session-block update + regression test | H1 (HIGH-066-001) | 2h | completed |
+| route-160 | Add 13 missing commands to `package.yaml` + CI count-guard | H8 (HIGH-067-001) | 2h | completed |
+| route-161 | Wire `acp-validate.ts` into CI + fix `ci-validate.sh` command-doc no-op | H2/H3 (HIGH-066-005/006) | 3h | completed |
+| route-162 | Enable branch protection on `mainline` + `develop` | C1 (CRIT-065-002) | 0.25h | completed (docs; manual GitHub enable pending) |
+| route-163 | `OPENROUTER_API_KEY` preflight check in dispatch | M9 (MED-066-002) | 0.5h | completed |
+| route-164 | Fix `AGENTS.md` version header + add version-header check to `/acp-validate` | M12 (MED-067-002) | 1h | completed |
 
 ## Industry-Standard Verification (double-verify gate)
 
