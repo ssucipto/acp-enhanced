@@ -349,6 +349,7 @@ milestones:
       plan, dispatch, commit, validate, audit, route (route-165). Fix integrity
       test \d ERE regex + add CONTRIBUTING.md (route-166). Drops untested ratio
       68%→≤56%. Addresses CRIT-065-003 (tier 1), MED-067-003/005. Target: v6.15.0.
+      ✅ Routes expanded into files 2026-06-15: route-165, route-166.
 
   M61:
     name: Production-Readiness Pack (v6.16.0)
@@ -367,6 +368,7 @@ milestones:
       (route-169), Dependabot+lockfile+npm-audit+secret-scan (route-170),
       team_members+IG-37 (route-171), TS unit tests (route-172). OpenSSF-aligned.
       Brings Security+Governance scorecard 🔴→🟡. Target: v6.16.0.
+      ✅ Routes expanded into files 2026-06-15: route-167..172.
 
   M62:
     name: Quality Hardening, Schema Coverage & Carryover Resolution (v6.17.0)
@@ -384,6 +386,7 @@ milestones:
       H7/M2 missing command sections (route-174), M11 memory-layer schemas (route-175),
       audit-062 carryovers F-062-01..05 (route-176), L1-L4 low-sev cleanups (route-177).
       Resolves all 5 long-standing audit-062 carryovers. Target: v6.17.0.
+      ✅ Routes expanded into files 2026-06-15: route-173..177.
 
   M63:
     name: Test Coverage Sprint — Tier 2 & 3 (v6.18.0)
@@ -401,6 +404,7 @@ milestones:
       untested commands (package/project + memory/knowledge), route-178. Adds CI
       command↔test parity guard. Untested count → 0; Testing scorecard 🔴→🟢.
       Addresses CRIT-065-003 (tier 2/3). Target: v6.18.0.
+      ✅ Route expanded into file 2026-06-15: route-178 (split into batches at /acp-proceed).
 
   M1:
     name: ACP Commands Infrastructure
