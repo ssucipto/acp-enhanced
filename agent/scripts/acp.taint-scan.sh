@@ -44,7 +44,9 @@ while IFS= read -r line; do
   [[ -z "$line" || "$line" == ACP_FINDING_COUNT=* || "$line" == ACP_MARKER_COUNT=* ]] && continue
   if [[ "$line" =~ ^([^:]+):([0-9]+):(IG-[0-9]+):(.+)$ ]]; then
     if [[ "$PREP_ONLY" != "true" ]]; then
-      ig_emit_finding "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}" "${BASH_REMATCH[4]}" "MEDIUM"
+      conf="MEDIUM"
+      [[ "${BASH_REMATCH[3]}" == "IG-50" ]] && conf="LOW"
+      ig_emit_finding "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}" "${BASH_REMATCH[4]}" "$conf"
     fi
   elif [[ "$line" =~ ^([^:]+):([0-9]+)\ (SOURCE|SINK)\ (.+)$ ]]; then
     printf '%s:%s %s %s\n' "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}" "${BASH_REMATCH[4]}"

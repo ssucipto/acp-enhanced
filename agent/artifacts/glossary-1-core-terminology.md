@@ -2,16 +2,16 @@
 
 <!-- @acp.meta.artifact
 topic: glossary, terminology, onboarding
-last_verified: 2026-05-04
+last_verified: 2026-06-15
 confidence: high
 status: active
-updated: 2026-05-04
+updated: 2026-06-15
 @acp.meta.end -->
 
 **Type**: glossary
 **Created**: 2026-05-04
 **Category**: Terminology
-**Total Terms**: 42
+**Total Terms**: 48
 
 ---
 
@@ -107,6 +107,19 @@ This glossary defines all ACP Enhanced-specific terms to ensure consistent under
 
 ---
 
+## Integrity & Security
+
+| Term | Definition |
+|------|------------|
+| **Integrity Scan** | `/acp-integrity` — a multi-script framework scan for Unicode injection, hidden entropy, data exfiltration, taint flow, and memory poisoning. v1.0 covers Categories 1–7 (IG-01–IG-44). v2.0 Phase 2 adds Categories 8–10 (IG-45–IG-62). 70 rules total. |
+| **Phase 2** | M58 semantic analysis layer extending `/acp-integrity` with taint flow (Cat 8), prompt injection (Cat 9), and memory poisoning (Cat 10). All Phase 2 findings carry `verdict: REQUIRES_HUMAN_REVIEW`. |
+| **Confidence Ceiling** | The maximum confidence level a Phase 2 rule may report, independent of severity. Cat 8: MEDIUM, Cat 9: LOW, Cat 10: LOW (except IG-61 at HIGH as script-backed). No Phase 2 finding auto-fails CI. |
+| **Taint Flow** | Category 8 rules (IG-45–IG-50) that track untrusted data from source to sink across files. Detected via `acp.taint-scan.sh` heuristics (file-level flow analysis for indirect source→sink patterns). |
+| **Memory Poisoning** | Category 10 rules (IG-58–IG-62) detecting adversarial content in `agent/memory/` files. Prep script `acp.memory-scan.sh` outputs structured YAML for LLM comparison against hard rules. LOW-confidence findings do NOT create audit carryovers. |
+| **Self-Protection Protocol** | Agent behavior on detecting prompt injection (IG-53/54/56/57): flag with `INJECTION-RISK`, output `REQUIRES_HUMAN_REVIEW`, CONTINUE scanning — do NOT self-halt. |
+
+---
+
 ## Workflow Terms
 
 | Term | Definition |
@@ -147,6 +160,7 @@ This glossary defines all ACP Enhanced-specific terms to ensure consistent under
 ### C
 - **Clarification** → Workflow Terms
 - **Command Doc** → Commands & Slash Commands
+- **Confidence Ceiling** → Integrity & Security
 - **Context Loading Protocol** → Protocol & Architecture
 - **Context Window** → Protocol & Architecture
 
@@ -160,6 +174,9 @@ This glossary defines all ACP Enhanced-specific terms to ensure consistent under
 ### E
 - **Executor** → Routing & Model Selection
 
+### I
+- **Integrity Scan** → Integrity & Security
+
 ### L
 - **Layer 1 (Core)** → Protocol & Architecture
 - **Layer 2 (Skills)** → Protocol & Architecture
@@ -168,6 +185,7 @@ This glossary defines all ACP Enhanced-specific terms to ensure consistent under
 - **lessons.md** → Memory System
 
 ### M
+- **Memory Poisoning** → Integrity & Security
 - **Milestone** → Workflow Terms
 
 ### O
@@ -181,6 +199,7 @@ This glossary defines all ACP Enhanced-specific terms to ensure consistent under
 - **Persona A** → Personas
 - **Persona B** → Personas
 - **Persona C** → Personas
+- **Phase 2** → Integrity & Security
 - **Prompt Caching** → Protocol & Architecture
 
 ### R
@@ -188,6 +207,7 @@ This glossary defines all ACP Enhanced-specific terms to ensure consistent under
 - **Routing Rules** → Routing & Model Selection
 
 ### S
+- **Self-Protection Protocol** → Integrity & Security
 - **sessions.md** → Memory System
 - **Slash Command** → Commands & Slash Commands
 
@@ -195,4 +215,5 @@ This glossary defines all ACP Enhanced-specific terms to ensure consistent under
 - **Task** → Workflow Terms
 - **Task Taxonomy** → Routing & Model Selection
 - **task_type** → Routing & Model Selection
+- **Taint Flow** → Integrity & Security
 - **Token Budget** → Protocol & Architecture
