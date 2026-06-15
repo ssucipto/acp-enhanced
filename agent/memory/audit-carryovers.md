@@ -58,10 +58,10 @@ carryovers:
     finding: "No automated next_due calculation — manual date updates prone to drift and human error"
     description: "After running a recurring task, the developer must manually update last_run and next_due. No auto-increment based on frequency."
     fix_target: "Implement acp.task-complete.sh helper or --complete flag that auto-sets last_run=today and next_due=today+frequency."
-    status: pending
+    status: in_progress
     fix_applied_date: null
     verified_in_audit: null
-    escalated_to: null
+    escalated_to: "M59 post-completion follow-up route (route-188 per audit-073). Implementation deferred to route-176/M62."
 
   - audit_id: 62
     finding_id: F-062-04
@@ -504,8 +504,9 @@ carryovers:
     file: agent/memory/decisions.md
     finding: "This framework-dev project never ran /acp-decide — its own 57-milestone ADR history is uncaptured (file auto-creates on first use; storage is NOT missing)"
     fix_target: "Run /acp-decide to capture this project's key ADRs; reconstruct 6 from wiki/patterns/commit history. De-prioritized vs code bugs per audit-066."
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "073"
     verified_in_audit: "066 (reclassified)"
     escalated_to: null
 
@@ -772,8 +773,9 @@ carryovers:
     file: agent/scripts/acp.meta-scan.sh
     finding: "Uses set -eu + ERR trap but not -o pipefail (partial case of audit-065 H4); not in route-173's 17-file list"
     fix_target: "Add acp.meta-scan.sh to route-173 pipefail scope, or upgrade its header to set -euo pipefail."
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "073"
     verified_in_audit: null
     escalated_to: null
 
@@ -840,15 +842,7 @@ carryovers:
     status: fixed
     fix_applied_date: 2026-06-15
     verified_in_audit: "072"
-    escalated_to: "M59 post-completion follow-up route (route-176/M62 already queued; automated next_due helper documented in carryover per route-188)"
-    file: agent/benchmarks/fixtures/taint-flow/manifest.yaml
-    finding: "Manifest encodes only severity, not max_confidence/ci_blocking — but milestone-58 §8 E2E (assertions 4-6,9) requires asserting confidence ceilings (<=MEDIUM, no HIGH except IG-61)"
-    description: "route-158 ground truth cannot support the mandated confidence assertions as-is. (= audit-068 F-068-04.)"
-    fix_target: "Add max_confidence + ci_blocking per fixture aligned to milestone-58 §4 confidence table; update route-158 acceptance."
-    status: fixed
-    fix_applied_date: 2026-06-15
-    verified_in_audit: "072"
-    escalated_to: null
+    escalated_to: "M59 post-completion follow-up route (route-188 per audit-073). F-062-03 promoted."
 
   - audit_id: 69
     finding_id: F-069-09
@@ -857,7 +851,9 @@ carryovers:
     finding: "M54 dangling milestone pointer — progress.yaml M54 -> milestone-54-ci-cd-gitflow.md does not exist even after sync; M54 status active/30% with tasks_total: 0"
     description: "Residual of audit-068 F-068-01, now scoped to M54 only. tasks_total: 0 with active/30% is itself inconsistent."
     fix_target: "Create milestone-54-ci-cd-gitflow.md or remove the pointer; fix tasks_total vs progress."
-    status: pending
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "073"
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
