@@ -1,10 +1,19 @@
 # Task 125: Re-Validate M6 Test Suite End-to-End
 
+<!-- @acp.meta.task
+topic: re-validate, m6, test, suite, end-to-end
+description: Task 125: Re-Validate M6 Test Suite End-to-End
+milestone: M19
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Task ID**: task-125  
 **Milestone**: M19 — Preferences System Bug Fix Sprint  
 **Priority**: High  
 **Estimated Hours**: 2–3  
-**Status**: not_started  
 **Files**: `tests/acp.preferences*.test.sh`, `e2e/acp.plan-with-preferences.test.sh`  
 
 ---

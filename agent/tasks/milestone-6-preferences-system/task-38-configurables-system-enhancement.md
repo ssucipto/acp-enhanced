@@ -1,9 +1,18 @@
 # Task 38: Configurables System Enhancement
 
+<!-- @acp.meta.task
+topic: configurables, system, enhancement
+description: Task 38: Configurables System Enhancement
+milestone: M6
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M6 - Preferences System](../milestones/milestone-6-preferences-system.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 37 (Preference Loading Infrastructure)  
-**Status**: Not Started  
 
 ---
 

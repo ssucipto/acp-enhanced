@@ -11,6 +11,15 @@ created: 2026-05-01
 completed: 2026-05-01
 ---
 
+<!-- @acp.meta.task
+topic: problem
+description: Fix README.md curl bootstrap URL (main → mainline)
+milestone: M21
+status: draft
+updated: 2026-05-01
+@acp.meta.end -->
+
+
 ## Problem
 
 README.md line 38 instructs new users to bootstrap ACP Enhanced via:

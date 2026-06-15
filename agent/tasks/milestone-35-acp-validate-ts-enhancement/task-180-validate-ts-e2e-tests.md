@@ -24,6 +24,16 @@ Create `tests/acp.validate-ts.test.sh` with ≥10 assertions testing the new `ac
 ```bash
 #!/usr/bin/env bash
 # Tests for acp-validate.ts new checks (M35)
+
+<!-- @acp.meta.task
+topic: tests, for, acp-validatets, new, checks, m35
+description: Write acp.validate-ts.test.sh with ≥10 assertions
+milestone: M35
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 set -u
 
 source tests/common.sh

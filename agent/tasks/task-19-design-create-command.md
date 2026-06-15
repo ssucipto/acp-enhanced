@@ -1,9 +1,18 @@
 # Task 19: @acp.design-create Command
 
+<!-- @acp.meta.task
+topic: acpdesign-create, command
+description: Task 19: @acp.design-create Command
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M4 - ACP Package Development System](../milestones/milestone-4-package-development.md)  
 **Estimated Time**: 4-5 hours  
 **Dependencies**: Task 14, 15, 16, 17, 18  
-**Status**: Not Started  
 
 ---
 

@@ -19,6 +19,15 @@ completed: 2026-05-04
 override_reason:
 ---
 
+<!-- @acp.meta.task
+topic: task, update, agentmd, invocation, table, for, opencode
+description: Update AGENT.md invocation table for opencode
+milestone: M28
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Task: Update AGENT.md invocation table for opencode
 
 Replace the two-row invocation table (`/acp-*` and `@acp.*`) with a three-row table that accurately describes all supported invocation styles:

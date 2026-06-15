@@ -34,6 +34,16 @@ category: integration
 
 # Driver Dispatch Directive
 
+<!-- @acp.meta.task
+topic: driver, dispatch, directive
+description: Create driver dispatch and workflow override pattern docs
+milestone: M33
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
+
 ## Intent
 Route tool invocations (git, shell, lint, etc.) to configured backends rather than
 always using local shell execution.

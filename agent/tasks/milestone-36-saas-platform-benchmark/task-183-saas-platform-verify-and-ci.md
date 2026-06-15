@@ -26,6 +26,16 @@ The benchmark runner in `agent/benchmarks/runner/` executes prompts and produces
 ```bash
 #!/usr/bin/env bash
 # verify.sh — Checks OWASP violation remediation for saas-platform benchmark
+
+<!-- @acp.meta.task
+topic: verifysh, checks, owasp, violation, remediation, for, saas-platform, benchmark
+description: Create saas-platform verify.sh and wire into CI benchmarks workflow
+milestone: M36
+status: draft
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 # Usage: ./verify.sh <results_file.json>
 # Exit 0 if ≥80% violations detected, 1 otherwise
 

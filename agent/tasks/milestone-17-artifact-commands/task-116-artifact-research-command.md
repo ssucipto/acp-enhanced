@@ -1,6 +1,15 @@
 # Task 116: Implement @acp.artifact-research Command
 
-**Status**: completed  
+<!-- @acp.meta.task
+topic: implement, acpartifact-research, command
+description: Task 116: Implement @acp.artifact-research Command
+milestone: M17
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Priority**: high  
 **Milestone**: M17 (Artifact Commands System)  
 **Design Reference**: [Artifact Commands System](../../design/local.artifact-commands-system.md)  

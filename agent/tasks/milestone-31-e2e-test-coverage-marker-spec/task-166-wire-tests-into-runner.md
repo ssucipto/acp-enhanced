@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: wire, new, e2e, tests, into, run-e2e-testssh
+description: Wire new e2e tests into run-e2e-tests.sh
+milestone: M31
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Ensure all new E2E test files created in M31 (tasks 162–165) are picked up by `run-e2e-tests.sh` and that the test runner correctly counts and reports them.

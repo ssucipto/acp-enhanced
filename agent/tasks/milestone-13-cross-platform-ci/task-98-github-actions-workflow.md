@@ -1,7 +1,16 @@
 # Task 98: Create GitHub Actions CI Workflow
 
+<!-- @acp.meta.task
+topic: create, github, actions, ci, workflow
+description: Task 98: Create GitHub Actions CI Workflow
+milestone: M13
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M13 — Cross-Platform CI  
-**Status**: Not Started  
 **Estimated Hours**: 1-2  
 **Dependencies**: task-97 (test runner must exist)  
 

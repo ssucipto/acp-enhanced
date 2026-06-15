@@ -1,9 +1,18 @@
 # Task 102: @acp.index Command
 
+<!-- @acp.meta.task
+topic: acpindex, command
+description: Task 102: @acp.index Command
+milestone: M14
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M14 - Key File Index System](../../milestones/milestone-14-key-file-index-system.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: [Task 99](task-99-index-directory-infrastructure.md)  
-**Status**: Completed  
 
 ---
 

@@ -1,9 +1,18 @@
 # Task 70: Fix YAML Parser Array Operations
 
+<!-- @acp.meta.task
+topic: fix, yaml, parser, array, operations
+description: Task 70: Fix YAML Parser Array Operations
+milestone: M7
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M7 - Global ACP Project Registry](../../milestones/milestone-7-project-registry.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Task 56 (@acp.project-update Command)  
-**Status**: Not Started  
 
 ---
 

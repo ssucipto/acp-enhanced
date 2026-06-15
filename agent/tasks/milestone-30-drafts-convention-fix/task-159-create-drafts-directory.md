@@ -32,6 +32,16 @@ If an agent runs `/acp-plan` on a fresh install and tries to create a draft file
 ```markdown
 # Draft: {Title}
 
+<!-- @acp.meta.task
+topic: draft, title
+description: Create agent/drafts/ directory with gitkeep and template
+milestone: M30
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
+
 **Type**: design | requirements | milestone | task  
 **Created**: YYYY-MM-DD  
 **Status**: in-progress | ready | abandoned  

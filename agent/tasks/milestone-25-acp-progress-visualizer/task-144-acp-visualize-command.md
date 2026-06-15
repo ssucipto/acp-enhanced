@@ -1,9 +1,18 @@
 # Task 144: @acp.visualize Command + ACP Integration
 
+<!-- @acp.meta.task
+topic: acpvisualize, command, acp, integration
+description: Task 144: @acp.visualize Command + ACP Integration
+milestone: M25
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M25 — ACP Progress Visualizer (P0 MVP)  
 **Task ID**: task-144  
 **Priority**: P0  
-**Status**: Not Started  
 **Estimated Hours**: 1–2h  
 **Design Reference**: [ACP Progress Visualizer](../../design/visualizer.requirements.md)  
 **Depends On**: task-143 (Dashboard Shell)

@@ -7,6 +7,14 @@ applies: [acp.proceed, acp.sync, scripts]
 
 # Driver Dispatch Directive
 
+<!-- @acp.meta.pattern
+topic: driver, dispatch, directive
+description: Driver Dispatch Directive
+applies_to: testing, quality
+status: active
+updated: 2026-06-15
+@acp.meta.end -->
+
 ## Intent
 
 Route tool invocations (git, shell, lint, etc.) to configured backends rather than always using local shell execution. Keeps commands backend-agnostic and honours `agent/driver.yaml` when present.

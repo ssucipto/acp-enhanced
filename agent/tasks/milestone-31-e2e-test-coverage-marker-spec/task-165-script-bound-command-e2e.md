@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: e2e, tests, for, 8, script-bound, commands, with, zero, coverage
+description: E2E tests for 8 script-bound commands with zero coverage
+milestone: M31
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Add E2E test coverage for the 8 script-bound commands that currently have zero test assertions: `package-create`, `package-publish`, `preferences-create`, `preferences-set`, `preferences-show`, `preferences-validate`, `package-validate`, and the `acp.install.sh` bootstrap.

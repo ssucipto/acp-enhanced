@@ -1,9 +1,18 @@
 # Task 22: @acp.package-publish Command
 
+<!-- @acp.meta.task
+topic: acppackage-publish, command
+description: Task 22: @acp.package-publish Command
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M4 - ACP Package Development System](../milestones/milestone-4-package-development.md)  
 **Estimated Time**: 8-10 hours  
 **Dependencies**: Task 20 (@acp.package-validate), existing @git.commit  
-**Status**: Not Started  
 
 ---
 

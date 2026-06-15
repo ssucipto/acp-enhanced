@@ -1,8 +1,14 @@
 # ACP Preferences System
 
+<!-- @acp.meta.design
+topic: acp, preferences, system
+description: Multi-level preference system enabling users to configure agent behavior at user, workspace, and project levels with clear precedence rules
+status: draft
+updated: 2026-02-22
+@acp.meta.end -->
+
 **Concept**: Multi-level preference system enabling users to configure agent behavior at user, workspace, and project levels with clear precedence rules  
 **Created**: 2026-02-22  
-**Status**: Design Specification  
 
 ---
 

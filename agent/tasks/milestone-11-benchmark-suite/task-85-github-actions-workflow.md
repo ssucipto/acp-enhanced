@@ -1,9 +1,18 @@
 # Task 85: GitHub Actions Workflow
 
+<!-- @acp.meta.task
+topic: github, actions, workflow
+description: Task 85: GitHub Actions Workflow
+milestone: M11
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M11 - ACP Benchmark Suite  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Tasks 79-84 (full pipeline must work locally first)  
-**Status**: Not Started  
 
 ---
 

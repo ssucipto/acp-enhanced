@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: add, command, invocation, section, to, agentmd
+description: Add Command Invocation section to AGENT.md
+milestone: M32
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Add a "Command Invocation" section to `AGENT.md` with the complete naming table (6 rows), the invocation chain diagram, and porting rules for upstream content.

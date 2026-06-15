@@ -1,8 +1,14 @@
 # Index Semantic Entry Types
 
+<!-- @acp.meta.design
+topic: index, semantic, entry, types
+description: Extend agent/index schema to support inline context entries (notes, directives) via `path: null`, with no new fields or arrays
+status: draft
+updated: 2026-03-20
+@acp.meta.end -->
+
 **Concept**: Extend agent/index schema to support inline context entries (notes, directives) via `path: null`, with no new fields or arrays
 **Created**: 2026-03-20
-**Status**: Design Specification
 
 ---
 

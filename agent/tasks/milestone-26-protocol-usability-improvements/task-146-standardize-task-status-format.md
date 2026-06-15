@@ -13,6 +13,15 @@ created: 2026-05-04
 completed: 2026-05-04
 ---
 
+<!-- @acp.meta.task
+topic: standardize, task, status, format, deprecate, status, in, favour, of, yaml, completed
+description: Standardize task status format — deprecate `**Status**:` in favour of YAML `completed:`
+milestone: M26
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Objective
 
 Eliminate the two-tier task status format confusion identified in audit-002. The old format uses `**Status**: Not Started / In Progress / Completed` as a markdown body field. The new format uses `completed: <date>` in YAML frontmatter. Both exist in `agent/tasks/` simultaneously. Standardize on the YAML `completed:` field as the sole status indicator going forward.

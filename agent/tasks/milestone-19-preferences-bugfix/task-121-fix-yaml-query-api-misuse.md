@@ -1,10 +1,19 @@
 # Task 121: Fix yaml_query API Misuse and Flat-Dot Key Format Incompatibility
 
+<!-- @acp.meta.task
+topic: fix, yamlquery, api, misuse, and, flat-dot, key, format, incompatibility
+description: Task 121: Fix yaml_query API Misuse and Flat-Dot Key Format Incompatibility
+milestone: M19
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Task ID**: task-121  
 **Milestone**: M19 — Preferences System Bug Fix Sprint  
 **Priority**: Critical  
 **Estimated Hours**: 3–4  
-**Status**: not_started  
 **Bugs Fixed**: BUG-1, BUG-4  
 **File**: `agent/scripts/acp.preferences.sh`  
 

@@ -1,7 +1,16 @@
 # Task 106: Create @acp.clarification-capture Directive
 
+<!-- @acp.meta.task
+topic: create, acpclarification-capture, directive
+description: Task 106: Create @acp.clarification-capture Directive
+milestone: M15
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M15 - Clarification Capture System  
-**Status**: Not Started  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: None  
 

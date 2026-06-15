@@ -11,6 +11,15 @@ started: 2026-05-04
 completed:
 ---
 
+<!-- @acp.meta.task
+topic: fix, acpmetatask, false, positive, in, acptask-createmd
+description: Fix @acp.meta.task false positive in acp.task-create.md
+milestone: M27
+status: in_progress
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Objective
 
 Fix a false positive in `e2e/acp.command-docs.test.sh` caused by prose references to `@acp.meta.task` as a YAML field name in `agent/commands/acp.task-create.md`.

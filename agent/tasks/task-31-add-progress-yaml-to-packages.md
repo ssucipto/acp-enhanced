@@ -1,9 +1,18 @@
 # Task 31: Add progress.yaml to Package Repositories
 
+<!-- @acp.meta.task
+topic: add, progressyaml, to, package, repositories
+description: Task 31: Add progress.yaml to Package Repositories
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: Future Enhancement  
 **Estimated Time**: 1-2 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

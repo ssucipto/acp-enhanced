@@ -1,9 +1,18 @@
 # Task 36: Test Untested Package Commands
 
+<!-- @acp.meta.task
+topic: test, untested, package, commands
+description: Task 36: Test Untested Package Commands
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: Future Enhancements  
 **Estimated Time**: 4-6 hours  
 **Dependencies**: Tasks 8-12 (Package Commands Implementation)  
-**Status**: Not Started  
 
 ---
 

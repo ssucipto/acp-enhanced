@@ -11,6 +11,15 @@ started: 2026-05-06T00:00:00Z
 completed: 2026-05-06
 ---
 
+<!-- @acp.meta.task
+topic: add, header, format, and, commandpromptopencode, parity, check, to, acp-validatets
+description: Add header format and command/prompt/opencode parity check to acp-validate.ts
+milestone: M35
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Extend `scripts/acp-validate.ts` with two new checks:

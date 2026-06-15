@@ -1,9 +1,18 @@
 # Task 141: Milestone Tree View
 
+<!-- @acp.meta.task
+topic: milestone, tree, view
+description: Task 141: Milestone Tree View
+milestone: M25
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M25 — ACP Progress Visualizer (P0 MVP)  
 **Task ID**: task-141  
 **Priority**: P0  
-**Status**: Not Started  
 **Estimated Hours**: 4–6h  
 **Design Reference**: [ACP Progress Visualizer](../../design/visualizer.requirements.md)  
 **Depends On**: task-140 (Milestone Table View)

@@ -1,8 +1,14 @@
 # Clarification Capture System
 
+<!-- @acp.meta.design
+topic: clarification, capture, system
+description: Shared directive enabling create commands to capture clarification decisions into entity documents, preventing loss of design rationale
+status: draft
+updated: 2026-03-04
+@acp.meta.end -->
+
 **Concept**: Shared directive enabling create commands to capture clarification decisions into entity documents, preventing loss of design rationale  
 **Created**: 2026-03-04  
-**Status**: Design Specification  
 
 ---
 

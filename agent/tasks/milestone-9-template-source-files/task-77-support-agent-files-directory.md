@@ -1,9 +1,18 @@
 # Task 77: Support agent/files/ Directory in Package Installer
 
+<!-- @acp.meta.task
+topic: support, agentfiles, directory, in, package, installer
+description: Task 77: Support agent/files/ Directory in Package Installer
+milestone: M9
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M9 - Template Source Files Support](../../milestones/milestone-9-template-source-files.md)  
 **Estimated Time**: 4-6 hours  
 **Dependencies**: None (can be done independently of Tasks 71-76)  
-**Status**: Completed  
 
 ---
 

@@ -37,6 +37,16 @@ Test cases:
 #!/usr/bin/env bash
 # e2e/acp.sync.test.sh — smoke test for @acp.sync command doc and meta-scan integration
 
+<!-- @acp.meta.task
+topic: e2eacpsynctestsh, smoke, test, for, acpsync, command, doc, and, meta-scan, integration
+description: Write e2e/acp.sync.test.sh (sync command + meta-scan integration)
+milestone: M31
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
+
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SYNC_CMD="$ROOT/agent/commands/acp.sync.md"
 META_SCAN="$ROOT/agent/scripts/acp.meta-scan.sh"

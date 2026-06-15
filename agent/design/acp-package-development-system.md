@@ -1,8 +1,14 @@
 # ACP Package Development System
 
+<!-- @acp.meta.design
+topic: acp, package, development, system
+description: Complete package development workflow with entity creation, validation, and publishing
+status: draft
+updated: 2026-02-20
+@acp.meta.end -->
+
 **Concept**: Complete package development workflow with entity creation, validation, and publishing  
 **Created**: 2026-02-20  
-**Status**: Design Specification  
 **Priority**: High  
 **Estimated Effort**: 40-60 hours  
 

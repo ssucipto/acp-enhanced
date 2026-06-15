@@ -1,12 +1,14 @@
 # Task 71: Fix Directive Headers in 9 Command Files
 
 <!-- @acp.meta.task
-topic: notation, directive-header, command-docs
-description: Fix @acp-* hyphen notation to @acp.* dot notation in directive headers of 9 commands
+topic: fix, directive, headers, in, 9, command, files
+description: Task 71: Fix Directive Headers in 9 Command Files
 milestone: M20
-status: completed
-updated: 2026-05-01
+status: draft
+updated: 2026-06-15
 @acp.meta.end -->
+
+
 
 **Milestone**: [M20 - Consistency Cleanup](../milestones/milestone-20-consistency-cleanup.md)  
 **Estimated Time**: 30 minutes  

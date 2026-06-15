@@ -1,9 +1,18 @@
 # Task 29: Global ACP Auto-Initialization
 
+<!-- @acp.meta.task
+topic: global, acp, auto-initialization
+description: Task 29: Global ACP Auto-Initialization
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M5 - Global Package Installation](../milestones/milestone-5-global-package-installation.md)  
 **Estimated Time**: 1-2 hours  
 **Dependencies**: None (can be done in parallel with Task 25)  
-**Status**: Not Started  
 
 ---
 

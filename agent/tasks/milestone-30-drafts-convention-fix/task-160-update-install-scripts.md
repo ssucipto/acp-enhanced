@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: update, install, scripts, to, create, agentdrafts
+description: Update install scripts to create agent/drafts/
+milestone: M30
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Update `agent/scripts/acp.install.sh` and `scripts/acp-bootstrap.sh` to create `agent/drafts/` during project installation, ensuring fresh clones have the directory available without needing to run a separate setup step.

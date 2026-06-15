@@ -1,7 +1,16 @@
 # Task 91: Sessions Infrastructure
 
+<!-- @acp.meta.task
+topic: sessions, infrastructure
+description: Task 91: Sessions Infrastructure
+milestone: M12
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M12 — Sessions System  
-**Status**: Not Started  
 **Estimated Hours**: 4-6  
 **Dependencies**: None  
 **Design**: [local.sessions-system.md](../../design/local.sessions-system.md)  

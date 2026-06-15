@@ -12,6 +12,15 @@ completed: 2026-05-05
 completed:
 ---
 
+<!-- @acp.meta.task
+topic: fix, bare, agentdrafts, pattern, in, acpproject-createmd, sample, gitignore
+description: Fix bare agent/drafts/ pattern in acp.project-create.md sample gitignore
+milestone: M37
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Fix `agent/commands/acp.project-create.md` line 292: change the bare `agent/drafts/` gitignore entry to `agent/drafts/**` with the two required exception lines, matching the pattern applied to `agent/.gitignore` and `acp.install.sh` in M30.

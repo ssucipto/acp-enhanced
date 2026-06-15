@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: update, skillscommandsmd, and, lessonsmd, with, naming, convention, link
+description: Update skills/commands.md and lessons.md with naming convention link
+milestone: M34
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Add a link to `agent/patterns/local.command-naming-convention.md` at the top of `agent/skills/commands.md`, and update the high-priority `@acp-foo` lessons.md entry to reference the pattern doc.

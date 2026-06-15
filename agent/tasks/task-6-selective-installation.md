@@ -1,9 +1,18 @@
 # Task 6: Selective Installation
 
+<!-- @acp.meta.task
+topic: selective, installation
+description: Task 6: Selective Installation
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M3 - ACP Package Management System](../milestones/milestone-3-acp-package-management.md)  
 **Estimated Time**: 4-6 hours  
 **Dependencies**: Task 5 (Manifest System)  
-**Status**: Not Started  
 **Priority**: High  
 
 ---

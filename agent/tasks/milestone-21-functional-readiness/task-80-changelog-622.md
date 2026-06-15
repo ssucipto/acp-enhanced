@@ -11,6 +11,15 @@ created: 2026-05-01
 completed: 2026-05-01
 ---
 
+<!-- @acp.meta.task
+topic: problem
+description: Add CHANGELOG [6.2.2] block for M20 fixes
+milestone: M21
+status: draft
+updated: 2026-05-01
+@acp.meta.end -->
+
+
 ## Problem
 
 M20 (commit 393d9e6) fixed 20+ bugs and bumped the version to 6.2.2, but no CHANGELOG entry
