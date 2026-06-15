@@ -5,6 +5,26 @@
 - date: 2026-06-15
   executor: copilot
   branch: develop
+  tasks: [route-159, route-160, route-161, route-162, route-163, route-164, M59]
+  tasks_completed: [route-159, route-160, route-161, route-162, route-163, route-164]
+  done:
+    - m59-shipped-v6-14-0-critical-fix-ci-integrity
+    - route-159-updateRoutingYml-surgical-session-block-dispatch-regression-tests
+    - route-160-package-yaml-15-missing-commands-ci-count-guard
+    - route-161-acp-validate-in-ci-ci-validate-sh-real-checks
+    - route-162-branch-protection-governance-docs-usage-md
+    - route-163-openrouter-api-key-preflight-dispatch
+    - route-164-version-header-check-validateVersionConsistency
+    - changelog-6-14-0-progress-milestone-59-completed
+  deferred:
+    - github-branch-protection-manual-enable → route-162
+    - m64-integrity-gateway-truth → route-179
+    - git-commit-m59-v6-14-0 → user-request
+  key_fact: "M59 closed silent correctness bugs (routing.yml overwrite, package.yaml gaps, CI no-op). C1 branch protection is documented but requires manual GitHub repo settings — code cannot enforce it. Next per ADR-10: M64 before M58 v2.0."
+
+- date: 2026-06-15
+  executor: copilot
+  branch: develop
   tasks: [route-155]
   tasks_completed: [route-155]
   done:
