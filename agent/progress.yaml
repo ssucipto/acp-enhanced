@@ -328,12 +328,12 @@ milestones:
   M60:
     name: Test Coverage Sprint — Tier 1 Core Commands (v6.15.0)
     priority: 4
-    status: in_progress
-    progress: 50
+    status: completed
+    progress: 100
     started: 2026-06-15
-    completed:
+    completed: 2026-06-15
     estimated_weeks: 1
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 2
     file: agent/milestones/milestone-60-test-coverage-tier1.md
     notes: |
