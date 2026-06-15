@@ -8,7 +8,7 @@ project:
   status: active
   current_milestone: M65
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.20.1. M55–M57 shipped
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.20.2. M55–M57 shipped
     (/acp-review, /acp-integrity v1.1, recurring tasks). M59 critical CI fixes
     and M64 integrity gateway v1.1 truth/test complete. M58 v2.0 Phase 2
     semantic analysis complete + audit-072 post-impl fixes. M65 tracking
@@ -208,9 +208,9 @@ milestones:
     name: CI/CD Pipeline + GitFlow-Lite Branch Model (v6.10.1)
     priority: 4
     status: completed
-    progress: 50
+    progress: 100
     started: 2026-06-07
-    completed:
+    completed: 2026-06-07
     estimated_weeks: 0.2
     tasks_completed: 1
     tasks_total: 1
@@ -299,14 +299,14 @@ milestones:
     completed: 2026-06-15
     estimated_weeks: 2-3
     tasks_completed: 4
-    tasks_total:  4
+    tasks_total: 4
     file: agent/milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
     notes: |
-      🎉 M58 COMPLETE (v6.20.0). Phase 2 semantic analysis shipped:
+      🎉 M58 COMPLETE (v6.20.2). Phase 2 semantic analysis shipped:
       route-155 research + 12 taint-flow fixtures; route-156 wiki/command/skill v2.0;
       route-157 acp.taint-scan.sh + acp.memory-scan.sh; route-158 E2E (32+ assertions).
       Confidence Ceiling Model: MEDIUM (taint), LOW (injection/memory). Self-protection: agent never self-halts.
-      Target: v6.20.0 (shipped).
+      Target: v6.20.2 (shipped).
 
   M59:
     name: Critical-Fix & CI Integrity Track (v6.14.0)
@@ -418,7 +418,7 @@ milestones:
       Unblocks M58 v2.0 per ADR-10.
 
   M65:
-    name: Tracking Reconciliation & M57/M58 Closeout (v6.20.0)
+    name: Tracking Reconciliation & M57/M58 Closeout (v6.20.2)
     priority: 5
     status: completed
     progress: 100
@@ -436,7 +436,7 @@ milestones:
       route-155 scope + fixture confidence policy + canonical script name (route-187),
       M57/M58 hygiene — promote F-062-03 to M59, gate quarterly-deep-scan, pipefail
       meta-scan (route-188), capture ADR history (route-189). Closes F-068-03/04/07/10/12,
-      F-069-01..10, CRIT-065-001. Target: v6.20.0.
+      F-069-01..10, CRIT-065-001. Target: v6.20.2.
 
   M1:
     name: ACP Commands Infrastructure
@@ -6580,9 +6580,9 @@ recurring_tasks:
     frequency: quarterly
     executor: claude-sonnet
     last_run: null
-    next_due: 2026-09-08
-    status: current
-    description: "Quarterly deep semantic integrity scan (Phase 2 — taint-flow + memory via /acp-integrity v2.0, active since M58 shipped 2026-06-15)"
+    next_due: null
+    status: blocked
+    description: "Quarterly deep semantic integrity scan (Phase 2 — taint-flow + memory via /acp-integrity v2.0). BLOCKED: awaits v2.0 quarterly-path validation in E2E."
 
 # ── Observability ───────────────────────────────────────────────
 # Added v6.8.2 (audit-022 R8, M44 route-048). Auto-populated on
