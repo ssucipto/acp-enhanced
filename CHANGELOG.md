@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.20.2] — 2026-06-15
+
+### Added
+- **Cross-layer status validation** (`scripts/acp-validate.ts`): New `validateStatusConsistency()` and `validateFilePointers()` checks run in all validate modes — catches milestone-doc vs progress.yaml desync and dangling file pointers (route-186, audit-069 F-069-01/F-069-09).
+- **ADR-13**: LLM/Script boundary rule for `/acp-integrity` (deterministic → bash, semantic → LLM)
+- **ADR-14**: Confidence ceiling policy for semantic security analysis (taint ≤ MEDIUM, injection/memory ≤ LOW)
+- **ADR-15**: Command doc as spec — no separate specification files
+- **ADR-16**: Gitflow-lite branching model (`develop` → `mainline`)
+
+### Fixed
+- **Status desync across 12 milestone docs**: M44, M46, M50-M56, M65 milestone docs now agree with progress.yaml (route-185, audit-069 F-069-01)
+- **M54 inconsistency**: `tasks_total: 1` with `status: completed`; branch protection tracked in M59 route-162
+- **Progress.yaml description**: Updated from v6.19.0 to v6.20.1 with correct milestone status
+- **`acp.meta-scan.sh` pipefail**: Added `-o pipefail` to `set -euo pipefail` header (route-188, F-068-12)
+- **`quarterly-deep-scan` recurring task**: Description updated to reflect Phase 2 activation (M58 shipped)
+- **F-062-03 carryover promoted**: automated `next_due` calculation tracked in M59 post-completion follow-up
+
+### Changed
+- **`acp-validate.ts` resilience**: Progress.yaml YAML parse failures (duplicate keys) now fall back to line-based parsing instead of crashing
+- **M58 plan correction ADRs**: ADR-11 (route-155 scope descope) and ADR-12 (§10 non-circular gate) formalize the post-audit-072 plan
+
 ## [6.20.1] — 2026-06-15
 
 ### Fixed
