@@ -23,8 +23,8 @@ assert_contains "${CMD_CONTENT}" "## Steps" "Steps section present"
 assert_contains "${CMD_CONTENT}" "## Verification" "Verification section present"
 assert_contains "${CMD_CONTENT}" "Namespace" "Namespace metadata present"
 
-print_test_header "S3 — Context loading documentation present"
-assert_contains "${CMD_CONTENT}" "## Steps" "Steps section present"
+print_test_header "S3 — Context loading protocol documented"
+assert_contains "${CMD_CONTENT}" "context loading" "Context loading referenced"
 
 print_test_header "S4 — Core files exist"
 assert_file_exists "${IDENTITY_FILE}" "identity.yml exists"
