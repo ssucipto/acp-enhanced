@@ -34,9 +34,9 @@ carryovers:
     finding: "Hooks block format diverged from milestone plan — 2 of 3 planned hooks dropped (pre_commit_integrity_phase1, ci_npm_ignore_scripts)"
     description: "Milestone plan specified 3 boolean hooks; implementation uses task_id array binding. Better architecture but missing 2 hooks. Document as ADR."
     fix_target: "Create ADR documenting format change. Add ci_npm_ignore_scripts hook if CI enforces it."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "078"
     escalated_to: null
 
   - audit_id: 62
@@ -46,9 +46,9 @@ carryovers:
     finding: "3 milestone verification checklist items unverified — disabled exclusion, frequency/trigger XOR, executor cross-validation"
     description: "Step 4.5 doesn't exclude disabled tasks. Schema doesn't enforce frequency/trigger mutual exclusivity. No executor validation against taxonomy.yml."
     fix_target: "Add disabled exclusion to Step 4.5. Add XOR constraint to progress.schema.yaml. Add executor cross-check to validate Step 2d."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "078"
     escalated_to: null
 
   - audit_id: 62
@@ -58,10 +58,10 @@ carryovers:
     finding: "No automated next_due calculation — manual date updates prone to drift and human error"
     description: "After running a recurring task, the developer must manually update last_run and next_due. No auto-increment based on frequency."
     fix_target: "Implement acp.task-complete.sh helper or --complete flag that auto-sets last_run=today and next_due=today+frequency."
-    status: in_progress
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: "M59 post-completion follow-up route (route-188 per audit-073). Implementation deferred to route-176/M62."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "078"
+    escalated_to: "M59 post-completion follow-up route (route-188 per audit-073). Automated next_due calculation deferred to M62 route-176 per audit-072 escalation. last_findings_count added (F-062-05)."
 
   - audit_id: 62
     finding_id: F-062-04
@@ -70,9 +70,9 @@ carryovers:
     finding: "No reference git hook implementation for pre-commit-rule-audit trigger"
     description: "The on-commit trigger has no example .git/hooks/pre-commit script showing how to wire /acp-integrity --fast --ci."
     fix_target: "Create agent/examples/pre-commit-hook.sh with 5-line reference implementation."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "078"
     escalated_to: null
 
   - audit_id: 62
@@ -82,9 +82,9 @@ carryovers:
     finding: "No findings-to-task feedback loop — scan results not connected to recurring task status"
     description: "Weekly integrity scan could find same issue for months without automated tracking. No last_findings_count or deferred_findings field."
     fix_target: "Add last_findings_count field to recurring_tasks entries. Defer full findings DB integration to M58."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "078"
     escalated_to: null
 
   # ── AUDIT-014 FINDINGS — ALL FIXED IN M41 (routes 022–035, v6.7.0) ──────────
