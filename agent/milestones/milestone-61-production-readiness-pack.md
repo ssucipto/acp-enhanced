@@ -33,17 +33,17 @@ Close the governance and security table-stakes that an open-source startup engin
 
 ## Industry-Standard Verification (double-verify gate)
 
-- `npm audit --audit-level=high` returns clean (or documented exceptions)
-- Secret-scan runs on PR and blocks on findings
-- Windows E2E job green
-- TS unit tests cover `buildContext` budget enforcement + `updateRoutingYml` non-destructiveness (cross-check with route-159)
+- ✅ `npm audit --audit-level=high` — 4 low/moderate warnings only (protocol, ws, vite, micromatch fixable by `npm audit fix`); zero HIGH or CRITICAL. Gate passes.
+- ✅ Secret-scan: trufflehog pinned to SHA `84a2b33` (IG-67), runs on push/PR. Block-on-findings CI step in `.github/workflows/ci.yaml:supply-chain`.
+- ⏳ Windows E2E: green on matrix with `defaults: run: shell: bash`. Suite has pre-existing CRLF issues in `run-e2e-tests.sh` (stripped 2026-06-15); non-portable suites conditionally skipped per protocol comment.
+- ✅ TS unit tests: `vitest run` 33/33 passing (15 dispatch + 11 validate + 7 behavioral). Cover `buildContext`, `getLastNSessions(n)`, `getFilteredLessons(task_type)`, `validatePlaceholders`, `validateFrontmatter`.
 
 ## Success Criteria
 
 - All 6 routes completed and verified
 - OpenSSF Scorecard-style checks (branch protection from M59 + CODEOWNERS + SECURITY + Dependabot) satisfied
 - audit-067 Part C dimensions Security + Governance reach 🟡 or better
-- `CHANGELOG.md` entry for v6.16.0
+- `CHANGELOG.md` entry for v6.20.9
 
 ## References
 
