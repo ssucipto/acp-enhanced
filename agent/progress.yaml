@@ -349,12 +349,12 @@ milestones:
   M61:
     name: Production-Readiness Pack (v6.16.0)
     priority: 4
-    status: planned
-    progress: 0
-    started:
+    status: in_progress
+    progress: 17
+    started: 2026-06-15
     completed:
     estimated_weeks: 1
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 6
     file: agent/milestones/milestone-61-production-readiness-pack.md
     notes: |
