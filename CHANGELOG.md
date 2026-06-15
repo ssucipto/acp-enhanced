@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.12.2] — 2026-06-15
+
+### Added
+- **ADR-10** — M64 (integrity gateway truth/test) is a hard prerequisite before M58 v2.0 semantic analysis implementation
+- Command parity wrappers for `/acp-carryover-query`, `/acp-pattern-sync`, `/acp-session-sync` (69×3 surfaces)
+- `agent/commands/acp.rule-file-audit.md` — alias to `/acp-integrity --self --fast`
+- `agent/milestones/milestone-54-ci-cd-gitflow.md` — CI/CD + GitFlow-lite milestone doc
+- M58 research artifact and taint-flow fixture matrix (`agent/benchmarks/fixtures/taint-flow/`, 12 files)
+- Session document auto-sync: `agent/sessions/2026-06-15-audit-remediation-docs-validation-sync.md`
+
+### Fixed
+- `acp-validate` — 0 errors, 0 warnings (frontmatter gaps, triple-file size under 12KB, sessions.md structure)
+- `package.yaml` — quote `requires.acp` value (`">=3.13.0"`) to fix YAML parse error
+- AGENTS.md / CLAUDE.md / copilot-instructions triple-sync (trimmed stale v6.10.0 header and oversized sections)
+
+### Changed
+- README, `scripts/PRD-MAIN.md`, `scripts/QUICKSTART.md` — doc sync to v6.12.x counts (69 commands, 9 skills, 36 scripts, M52–M57)
+- `agent/progress.yaml` — M54 50%, M58 blocked on M64, next steps and blockers refreshed
+- `agent/wiki/domain.yml` — last_verified annotation
+
+---
+
 ## [6.12.1] — 2026-06-08
 
 ### Added (M57 — Recurring Tasks Scheduler + Pre-Commit Hook Framework)
