@@ -30,8 +30,8 @@ tokens_actual:
 cost_est_usd:
 cost_actual_usd:
 created: 2026-06-15
-started:
-completed:
+started: 2026-06-15
+completed: 2026-06-15
 override_reason:
 ---
 

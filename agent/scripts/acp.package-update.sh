@@ -3,7 +3,8 @@
 # Agent Context Protocol (ACP) Package Update Script
 # Updates installed ACP packages to their latest versions
 
-set -e
+set -euo pipefail
+trap 'echo "[acp.package-update] Error on line $LINENO" >&2; exit 1' ERR
 trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Source common utilities
