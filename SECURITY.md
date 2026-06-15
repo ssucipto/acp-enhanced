@@ -7,14 +7,17 @@ please **do not** open a public issue.
 
 ### Preferred: GitHub Private Security Advisories
 
-1. Go to the [Security](https://github.com/YOUR_ORG/acp-enhanced/security) tab
+1. Go to the [Security](https://github.com/ssucipto/acp-enhanced/security) tab
 2. Click **"Report a vulnerability"**
 3. Fill in the details — include reproduction steps, affected versions, and impact assessment
 
 ### Fallback Contact
 
-If private advisories are unavailable, send an encrypted report to the maintainer via
-a secure channel. Contact details are in `agent/core/identity.yml → team_members`.
+If private advisories are unavailable, email the maintainer directly.
+The email address is listed in `agent/core/identity.yml → team_members`.
+
+**Note**: If the vulnerability is sensitive, please use encrypted email. The maintainer's
+key is available via the standard keyserver at the team email address.
 
 ## Supported Versions
 
@@ -63,5 +66,5 @@ See `agent/wiki/integrity-rules.md` for the full internal security baseline.
 - No bounty program is in place at this time.
 
 ```text
-Version: 6.20.2
+Version: 6.20.8
 ```

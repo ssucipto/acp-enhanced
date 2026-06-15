@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.20.8] — 2026-06-15
+
+### Fixed
+- **Audit-075 (M61 post-impl)**: 6 findings fixed — YOUR_ORG placeholder in SECURITY.md URL (HIGH), stale version footer (MEDIUM), fallback contact under-specification (LOW), unpinned trufflehog action → SHA-pinned per IG-67 (HIGH), Windows CI conditional-skip protocol comment (MEDIUM), missing open-pull-requests-limit on Dependabot github-actions (LOW). 3 carryovers (HIGH-065-005/006, MED-066-003) marked fixed and verified.
+
+---
+
 ## [6.20.7] — 2026-06-15
 
 ### Added
