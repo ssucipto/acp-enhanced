@@ -467,9 +467,9 @@ carryovers:
     finding: "Step 7 checks directory existence instead of file count — empty dirs from step 1 cause download skip"
     description: "Step 1 creates empty agent/commands/ and agent/scripts/ directories. Step 7 checks [ -d agent/commands ] && [ -d agent/scripts ] — directory exists (true) even when empty, so the install download is always skipped on fresh installs. Every new user gets 0 command files and 0 script files."
     fix_target: "Replace directory check with file count check using find ... | wc -l pattern (same as pre-flight check at line 89)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-06
+    verified_in_audit: "046"
     escalated_to: null
 
   - audit_id: 45
@@ -479,9 +479,9 @@ carryovers:
     finding: "OpenCode command generation nested inside GENERATE_PROMPTS block — skipped when prompts not generated"
     description: "Step 6b (opencode/cursor command generation) is inside if [ GENERATE_PROMPTS = true ]. GENERATE_OPENCODE defaults to true but is never independently checked. When prompts are skipped, .opencode/commands/ and .cursor/commands/ are never created."
     fix_target: "Extract opencode generation into separate if [ GENERATE_OPENCODE = true ] block independent of GENERATE_PROMPTS"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-06
+    verified_in_audit: "046"
     escalated_to: null
 
   - audit_id: 45
@@ -491,6 +491,201 @@ carryovers:
     finding: "Post-install verification detects failures but exits 0 — no auto-repair or fix command"
     description: "Verification correctly shows 0 files (red X) but bootstrap exits 0 and says Done. User sees failure but gets no remediation path."
     fix_target: "Exit non-zero on verification failure; print remediation command (re-run bootstrap or curl acp.install.sh)"
+    status: fixed
+    fix_applied_date: 2026-06-06
+    verified_in_audit: "065"
+    escalated_to: null
+
+  # ── AUDIT-065 FINDINGS — COMPREHENSIVE GAP ANALYSIS 2026-06-15 ──────────────
+
+  - audit_id: 65
+    finding_id: CRIT-065-001
+    severity: medium  # DOWNGRADED by audit-066: decisions.md is gitignored instance data (.gitignore:34), not missing storage
+    file: agent/memory/decisions.md
+    finding: "This framework-dev project never ran /acp-decide — its own 57-milestone ADR history is uncaptured (file auto-creates on first use; storage is NOT missing)"
+    fix_target: "Run /acp-decide to capture this project's key ADRs; reconstruct 6 from wiki/patterns/commit history. De-prioritized vs code bugs per audit-066."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: "066 (reclassified)"
+    escalated_to: null
+
+  - audit_id: 65
+    finding_id: CRIT-065-002
+    severity: critical
+    file: GitHub repository settings
+    finding: "No branch protection rules on mainline or develop — force-push and direct commits unblocked"
+    fix_target: "Enable required status checks + PR review requirement on mainline; disable force-push"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 65
+    finding_id: CRIT-065-003
+    severity: critical
+    file: e2e/
+    finding: "46 of 71 commands (65%) have no E2E test — core commands /acp-init, /acp-proceed, /acp-plan, /acp-dispatch, /acp-commit, /acp-validate, /acp-audit, /acp-route all untested"
+    fix_target: "Add E2E tests in three tiers: Tier 1 (8 core commands), Tier 2 (12 package/project), Tier 3 (16 memory/knowledge)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 65
+    finding_id: HIGH-065-004
+    severity: high
+    file: agent/scripts/ (17 files)
+    finding: "17 scripts use bare 'set -e' not 'set -euo pipefail' — unbound variable bugs silently succeed; pipeline failures masked"
+    fix_target: "Batch-upgrade acp.install.sh, acp.package-*.sh, acp.project-info.sh, acp.project-update.sh, acp.sessions.sh, acp.uninstall.sh, acp.version-*.sh"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 65
+    finding_id: HIGH-065-005
+    severity: high
+    file: .github/workflows/
+    finding: "No Windows CI runner — Windows is documented target platform but has no automated test coverage"
+    fix_target: "Add windows-latest to e2e-tests.yaml matrix (ubuntu + macOS + Windows)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 65
+    finding_id: HIGH-065-006
+    severity: high
+    file: SECURITY.md
+    finding: "No SECURITY.md / vulnerability disclosure process for open-source production tooling"
+    fix_target: "Create SECURITY.md with private advisory process + scope definition"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-066 FINDINGS — SECOND-ROUND DEEP GAPS 2026-06-15 ──────────────────
+
+  - audit_id: 66
+    finding_id: HIGH-066-001
+    severity: high
+    file: scripts/acp-dispatch.ts
+    finding: "updateRoutingYml() overwrites entire core/routing.yml with a 4-line session stub — destroys context_modes + command_suggestions on every Persona B/C dispatch (tracked file = committed data loss)"
+    fix_target: "Replace full-file writeFileSync with surgical session-block update (use yaml_set or targeted regex). Add regression test asserting context_modes survives dispatch."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 66
+    finding_id: HIGH-066-005
+    severity: high
+    file: .github/workflows/ci.yaml
+    finding: "acp-validate.ts never runs in CI — placeholder + frontmatter-field checks never execute; CI only runs ci-validate.sh"
+    fix_target: "Add 'npx ts-node scripts/acp-validate.ts' as a CI step in ci.yaml validate job"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 66
+    finding_id: HIGH-066-006
+    severity: high
+    file: scripts/ci-validate.sh
+    finding: "ci-validate.sh frontmatter check is a no-op for command files — gates on head -1 grep '^---$' but command docs start with '# Command:' (inline bold markers, not --- YAML). No automated structural conformance check exists for command docs."
+    fix_target: "Add command-doc structure validation (## Steps, ## Verification, **Namespace**: etc.) instead of gating on a --- line command files never have"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 66
+    finding_id: MED-066-002
+    severity: medium
+    file: scripts/acp-dispatch.ts
+    finding: "OPENROUTER_API_KEY non-null assertion (process.env.X!) — missing env var yields cryptic SDK error not a clear preflight message"
+    fix_target: "Add preflight check: fail fast with clear message if OPENROUTER_API_KEY unset before client init"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 66
+    finding_id: MED-066-003
+    severity: medium
+    file: scripts/
+    finding: "No unit tests for TS tooling — scripts/*.test.ts = 0 files; acp-dispatch.ts and acp-validate.ts entirely untested (only Turing-complete code in repo)"
+    fix_target: "Add vitest/jest + scripts/*.test.ts covering buildContext budget, getFilteredLessons, updateRoutingYml non-destructiveness"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 66
+    finding_id: MED-066-007
+    severity: medium
+    file: agent/schemas/
+    finding: "Only 5 schemas exist; no schema for milestone/session/lessons/decisions/clarification/feedback/audit-carryovers — memory layer is unvalidated. Also acp-validate.ts does not enforce the 5 schemas that do exist."
+    fix_target: "Add memory-layer entity schemas + wire acp-validate.ts to enforce all schemas"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-067 FINDINGS — COMPLETE CONSOLIDATED AUDIT 2026-06-15 ─────────────
+  # NOTE: audit-067 Part B is the canonical deduplicated backlog. Entries below
+  # are NEW findings only; prior 065/066 entries remain authoritative above.
+
+  - audit_id: 67
+    finding_id: HIGH-067-001
+    severity: high
+    file: package.yaml
+    finding: "13 command docs absent from package.yaml — /acp-package-install would ship a broken framework missing acp.commit, acp.decide, acp.dispatch, acp.route, acp.task, acp.feedback, acp.visualize, acp.wiki-update, acp.carryover-query, acp.cost-report, acp.memory-sync, acp.pattern-sync, acp.session-sync"
+    fix_target: "Add the 13 commands to package.yaml; add CI guard asserting package.yaml command count == command file count"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 67
+    finding_id: MED-067-002
+    severity: medium
+    file: AGENTS.md
+    finding: "AGENTS.md version header reads v6.10.0 while project is 6.12.1 — auto-loaded context file is 2 minors stale; three sync files not byte-identical (AGENTS.md has extra version header line)"
+    fix_target: "Update AGENTS.md header to current version; add version-header check to /acp-validate Step 2c consistency check"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 67
+    finding_id: MED-067-003
+    severity: medium
+    file: e2e/acp.integrity.test.sh
+    finding: "Rule-count assertion uses grep -cE '^| IG-\\d+' but \\d is not a digit class in POSIX ERE (GNU grep -E) — matches literal 'd'; rule count miscomputed and non-portable"
+    fix_target: "Replace \\d with [0-9] or use grep -P; verify >= 55 assertion actually computes correctly"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 67
+    finding_id: MED-067-005
+    severity: medium
+    file: CONTRIBUTING.md
+    finding: "No CONTRIBUTING.md despite being a public fork inviting contributions"
+    fix_target: "Create CONTRIBUTING.md with branch model, test requirements, command-doc conventions"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 67
+    finding_id: LOW-067-004
+    severity: low
+    file: agent/scripts/acp.git-provenance.sh
+    finding: "Parses team_members with grep/while-read instead of YAML parser — violates scripts.md 'never parse YAML with grep' rule"
+    fix_target: "Use yaml_get_array from acp.yaml-parser.sh to read team_members"
     status: pending
     fix_applied_date: null
     verified_in_audit: null
