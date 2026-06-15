@@ -19,6 +19,15 @@ created: 2026-05-01
 completed: 2026-05-01
 ---
 
+<!-- @acp.meta.task
+topic: problem
+description: Fix 8 unfilled template placeholders in pretend-context lines
+milestone: M21
+status: draft
+updated: 2026-05-01
+@acp.meta.end -->
+
+
 ## Problem
 
 The command template (`command.template.md`) contains a pretend-context line:

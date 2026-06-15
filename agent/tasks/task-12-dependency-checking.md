@@ -1,9 +1,18 @@
 # Task 12: Dependency Checking
 
+<!-- @acp.meta.task
+topic: dependency, checking
+description: Task 12: Dependency Checking
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M3 - ACP Package Management System](../milestones/milestone-3-acp-package-management.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 5 (Manifest System)  
-**Status**: Not Started  
 **Priority**: Medium  
 
 ---

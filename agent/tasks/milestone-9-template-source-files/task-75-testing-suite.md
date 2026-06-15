@@ -1,9 +1,18 @@
 # Task 75: Testing Suite for Templates
 
+<!-- @acp.meta.task
+topic: testing, suite, for, templates
+description: Task 75: Testing Suite for Templates
+milestone: M9
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M9 - Template Source Files Support](../../milestones/milestone-9-template-source-files.md)  
 **Estimated Time**: 6-8 hours  
 **Dependencies**: Task 74 (Command Updates)  
-**Status**: Not Started  
 
 ---
 

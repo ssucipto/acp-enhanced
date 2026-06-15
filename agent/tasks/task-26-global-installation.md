@@ -1,9 +1,18 @@
 # Task 26: Global Installation Implementation
 
+<!-- @acp.meta.task
+topic: global, installation, implementation
+description: Task 26: Global Installation Implementation
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M5 - Global Package Installation](../milestones/milestone-5-global-package-installation.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Task 25 (Global Infrastructure Setup)  
-**Status**: Not Started  
 
 ---
 

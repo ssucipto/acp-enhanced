@@ -1,9 +1,18 @@
 # Task 23: Rewrite @acp.package-create
 
+<!-- @acp.meta.task
+topic: rewrite, acppackage-create
+description: Task 23: Rewrite @acp.package-create
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M4 - ACP Package Development System](../milestones/milestone-4-package-development.md)  
 **Estimated Time**: 6-8 hours  
 **Dependencies**: Task 24 (Pre-Commit Hooks)  
-**Status**: Not Started  
 
 ---
 

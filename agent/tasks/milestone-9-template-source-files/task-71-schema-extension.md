@@ -1,9 +1,18 @@
 # Task 71: Schema Extension for Templates
 
+<!-- @acp.meta.task
+topic: schema, extension, for, templates
+description: Task 71: Schema Extension for Templates
+milestone: M9
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M9 - Template Source Files Support](../../milestones/milestone-9-template-source-files.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

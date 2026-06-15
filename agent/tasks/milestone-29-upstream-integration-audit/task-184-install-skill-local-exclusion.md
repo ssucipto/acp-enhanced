@@ -31,6 +31,16 @@ In `agent/scripts/acp.install.sh`, replace the skills wildcard copy (line ~164):
 
 ```bash
 # BEFORE (overwrites everything including local.* project files):
+
+<!-- @acp.meta.task
+topic: before, overwrites, everything, including, local, project, files
+description: Add local.* exclusion to install script skills copy
+milestone: M29
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 if [ -d "$TEMP_DIR/agent/skills" ]; then
     cp "$TEMP_DIR/agent/skills/"*.md "$TARGET_DIR/agent/skills/" 2>/dev/null || true
 fi

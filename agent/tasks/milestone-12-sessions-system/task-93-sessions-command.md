@@ -1,7 +1,16 @@
 # Task 93: @acp.sessions Command
 
+<!-- @acp.meta.task
+topic: acpsessions, command
+description: Task 93: @acp.sessions Command
+milestone: M12
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M12 — Sessions System  
-**Status**: Not Started  
 **Estimated Hours**: 2-3  
 **Dependencies**: Task 91  
 **Design**: [local.sessions-system.md](../../design/local.sessions-system.md)  

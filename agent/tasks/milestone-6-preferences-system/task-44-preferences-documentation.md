@@ -1,9 +1,18 @@
 # Task 44: Preferences Documentation
 
+<!-- @acp.meta.task
+topic: preferences, documentation
+description: Task 44: Preferences Documentation
+milestone: M6
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M6 - Preferences System](../milestones/milestone-6-preferences-system.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 37-43 (All preference implementation complete)  
-**Status**: Not Started  
 
 ---
 

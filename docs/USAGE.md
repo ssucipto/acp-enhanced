@@ -447,6 +447,28 @@ The key file index lets you tell the agent which files are most important to rea
 
 ---
 
+## Git Branch Protection (GitFlow-Lite)
+
+ACP Enhanced uses `develop` as the daily working branch and `mainline` as production (`agent/core/identity.yml → git_workflow`). Branch protection must be enabled in GitHub so CI gates merges.
+
+### Required GitHub settings
+
+**Repository → Settings → Branches → Add branch ruleset** (or classic protection rules):
+
+| Branch | Rules |
+|--------|--------|
+| `mainline` | Require PR before merge · ≥1 approval · require status checks (`validate`, `shellcheck`, `e2e-smoke`) · require branches up to date · block force pushes and deletions |
+| `develop` | Require PR before merge (optional self-review) · require status checks (`validate`, `shellcheck`, `e2e-smoke`) · block force pushes |
+
+### Verify
+
+- Direct `git push origin mainline` from a local branch should be rejected.
+- PRs cannot merge until CI jobs are green.
+
+> **Note:** Branch protection is a repository setting — enable manually in GitHub or via `gh api` with admin permissions. Document confirmation in route-162 when enabled.
+
+---
+
 ## Troubleshooting
 
 **Agent ignores `/acp-plan` or doesn't follow the steps**  

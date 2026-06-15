@@ -1,9 +1,18 @@
 # Task 87: Legacy Codebase Refactor Benchmark Task
 
+<!-- @acp.meta.task
+topic: legacy, codebase, refactor, benchmark, task
+description: Task 87: Legacy Codebase Refactor Benchmark Task
+milestone: M11
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M11 - ACP Benchmark Suite  
 **Estimated Time**: 4-6 hours  
 **Dependencies**: Task 79 (runner must support multi-turn steps)  
-**Status**: Not Started  
 
 ---
 

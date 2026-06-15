@@ -13,6 +13,15 @@ created: 2026-05-01
 completed: 2026-05-01
 ---
 
+<!-- @acp.meta.task
+topic: problem
+description: Bump version to 6.2.2 in metadata files
+milestone: M21
+status: draft
+updated: 2026-05-01
+@acp.meta.end -->
+
+
 ## Problem
 
 M20 introduced a version bump from 6.2.1 → 6.2.2 (in progress.yaml and git.commit message), but three metadata files were not updated:

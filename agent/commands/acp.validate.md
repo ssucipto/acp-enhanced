@@ -5,9 +5,9 @@
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document.
 
 **Namespace**: acp  
-**Version**: 2.3.0  
+**Version**: 2.4.0  
 **Created**: 2026-02-16  
-**Last Updated**: 2026-06-04  
+**Last Updated**: 2026-06-15  
 **Status**: Active  
 **Scripts**: None  
 
@@ -137,13 +137,13 @@ Schema warnings are informational and do not affect exit code.
 > **This step runs in ALL modes** (standard and --memory). Version drift across
 > 8+ files is a recurring bug — this check prevents it.
 
-Compare the canonical version in `agent/progress.yaml` against all other version-bearing files.
+Compare the canonical version in `agent/core/identity.yml` against all other version-bearing files. The TypeScript validator (`scripts/acp-validate.ts`) compares `identity.yml` to the `AGENTS.md` `> vX.Y.Z` header (soft warn on drift).
 
 **Actions**:
 
-1. **Read canonical version**: Extract `project.version` from `agent/progress.yaml`.
+1. **Read canonical version**: Extract `version` from `agent/core/identity.yml` (also check `project.version` in `agent/progress.yaml`).
 2. **Check hard requirements** (ERROR if mismatch):
-   - `AGENT.md` → `**Version**: X.Y.Z` on the metadata line
+   - `AGENTS.md` → `> vX.Y.Z` protocol header line
    - `agent/core/identity.yml` → `version: X.Y.Z`
    - `package.yaml` → `version: X.Y.Z` (if file exists)
 3. **Check soft requirements** (WARN if mismatch):
@@ -208,6 +208,37 @@ Validate the `recurring_tasks:` block in `agent/progress.yaml`.
 ```
 
 **Expected Outcome**: Recurring tasks validated; overdue tasks surfaced  
+
+### 2e. Validate Cross-Layer Status Consistency (v6.20.1+)
+
+> **This step runs in ALL modes**. Mismatches are ERRORS (exit 1).
+
+Compare the `**Status**` field in every milestone document against the `status` field in `progress.yaml`. Documents and progress.yaml MUST agree. This prevents the type of desync that audit-069 discovered, where milestone docs were reset to `planned` by a merge while `progress.yaml` correctly showed them as `completed`.
+
+**Actions**:
+- Parse `progress.yaml` milestones (id, status, file)
+- For each milestone with a `file:`, open the milestone doc, read its `**Status**:` field
+- Normalize both values (map `active` → `in_progress`, `implemented` → `completed`, etc.)
+- FAIL if they disagree (ERROR, exit 1)
+
+**Expected Outcome**: All milestone docs agree with progress.yaml on status
+
+> **Implementation note**: Enforced by `scripts/acp-validate.ts` (`validateStatusConsistency()` / `loadProgressSafe()`) in the no-args validation path (Step 11.6).
+
+### 2f. Validate File Pointers (v6.20.1+)
+
+> **This step runs in ALL modes**. Dangling pointers are ERRORS (exit 1).
+
+Verify every `file:` pointer in `progress.yaml` references an existing file. This catches stale references before they reach readers.
+
+**Actions**:
+- For every `file:` path in progress.yaml (milestones), assert the file exists on disk
+- FAIL listing each dangling pointer (ERROR, exit 1)
+- Flag `tasks_total: 0` combined with `status: active|in_progress` as an inconsistency
+
+**Expected Outcome**: No dangling file pointers; no contradictory task counts
+
+> **Implementation note**: This check is enforced by `scripts/acp-validate.ts` (`validateFilePointers()`) in the no-args validation path (Step 11.6).
 
 ### 3. Validate Design Documents
 

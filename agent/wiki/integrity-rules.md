@@ -1,37 +1,38 @@
-# Integrity Rules Catalogue — v1.0
+# Integrity Rules Catalogue — v1.1 (M64 truth pass)
 
 > **Load control**: Load one category section at a time. Never load the entire file.
-> **Version**: 1.0.0 | **Total rules**: 55 v1.0 + 15 deferred to v2.0 (M58)
+> **Version**: 2.0.0 | **Total rules**: 70 | **Script-backed**: 44 across 9 scripts + output lib | **Phase 2 (M58)**: Cat 8/10 active, Cat 9 semantic LLM
 > **Command**: /acp-integrity | **Skill**: @code-integrity
+> **Fixtures**: `agent/benchmarks/fixtures/integrity/manifest.yaml`
 
 ---
 
 ## Category 1 — Outbound Network Anomalies (CRITICAL)
-**Script**: `acp.network-whitelist-validate.sh` | **Rules**: IG-01–IG-06 | **Standard**: OWASP A01:2025
+**Script**: `acp.network-whitelist-validate.sh` | **Rules**: IG-01–IG-03, IG-05–IG-06 | **Standard**: OWASP A01:2025
 
 | Rule ID | Rule | Severity | Detection |
 |---------|------|----------|-----------|
-| IG-01 | `fetch()`/`axios`/`http.request()` to non-whitelisted domain | CRITICAL | Script — grep + whitelist cross-ref |
-| IG-02 | Network calls to raw IP addresses | CRITICAL | Script — IP regex |
-| IG-03 | Base64-decoded strings immediately in network calls | CRITICAL | Script — pattern match |
-| IG-04 | `eval()` of network-fetched content | CRITICAL | LLM — mixed deterministic/semantic |
-| IG-05 | DNS lookups from env vars | HIGH | Script — grep + pattern |
-| IG-06 | Outbound calls in catch blocks (exfil-on-error) | HIGH | Script — catch-block heuristic |
+| IG-01 | `fetch()`/`axios`/`http.request()` to non-whitelisted domain | CRITICAL | ✅ Script — whitelist cross-ref |
+| IG-02 | Network calls to raw IP addresses | CRITICAL | ✅ Script — IP regex |
+| IG-03 | Base64-decoded strings immediately in network calls | CRITICAL | ✅ Script — pattern match |
+| IG-04 | `eval()` of network-fetched content | CRITICAL | ✅ Script — `acp.pattern-scan.sh` |
+| IG-05 | DNS lookups from env vars | HIGH | ✅ Script — pattern |
+| IG-06 | Outbound calls in catch blocks (exfil-on-error) | HIGH | ✅ Script — catch-block heuristic |
 
 ---
 
 ## Category 2 — Data Exfiltration Patterns (CRITICAL)
-**Script**: `acp.network-whitelist-validate.sh` | **Rules**: IG-07–IG-13 | **Standard**: OWASP A02:2025, CWE-359
+**Script**: `acp.pattern-scan.sh` | **Rules**: IG-07–IG-13 | **Standard**: OWASP A02:2025, CWE-359
 
-| Rule ID | Rule | Severity |
-|---------|------|----------|
-| IG-07 | `process.env` access → network call in same scope | CRITICAL |
-| IG-08 | `fs.readFile` result → network call | CRITICAL |
-| IG-09 | Clipboard access → network call | CRITICAL |
-| IG-10 | Storage read → network call | HIGH |
-| IG-11 | Auth tokens in logs/query strings/URLs | HIGH |
-| IG-12 | PII in request body without encryption | HIGH |
-| IG-13 | Screenshot APIs outside declared feature context | CRITICAL |
+| Rule ID | Rule | Severity | Detection |
+|---------|------|----------|-----------|
+| IG-07 | `process.env` access → network call in same scope | CRITICAL | ✅ Script — pattern-scan |
+| IG-08 | `fs.readFile` result → network call | CRITICAL | ✅ Script — pattern-scan |
+| IG-09 | Clipboard access → network call | CRITICAL | ✅ Script — pattern-scan |
+| IG-10 | Storage read → network call | HIGH | ✅ Script — pattern-scan |
+| IG-11 | Auth tokens in logs/query strings/URLs | HIGH | ✅ Script — pattern-scan |
+| IG-12 | PII in request body without encryption | HIGH | ✅ Script — pattern-scan |
+| IG-13 | Screenshot APIs outside declared feature context | CRITICAL | ✅ Script — pattern-scan |
 
 ---
 
@@ -51,16 +52,16 @@
 ---
 
 ## Category 4 — Persistence & Execution (HIGH)
-**Standard**: MITRE ATT&CK T1053, T1059, CWE-78 | **Rules**: IG-21–IG-26
+**Script**: `acp.pattern-scan.sh` | **Standard**: MITRE ATT&CK T1053, T1059, CWE-78 | **Rules**: IG-21–IG-26
 
-| Rule ID | Rule | Severity |
-|---------|------|----------|
-| IG-21 | `child_process.exec()` with dynamic commands | CRITICAL |
-| IG-22 | `fs.writeFile` to system paths | CRITICAL |
-| IG-23 | Cron/scheduled task creation | HIGH |
-| IG-24 | Self-modifying code | HIGH |
-| IG-25 | Dynamic `require()`/`import()` from env/user input | HIGH |
-| IG-26 | Process injection | CRITICAL |
+| Rule ID | Rule | Severity | Detection |
+|---------|------|----------|-----------|
+| IG-21 | `child_process.exec()` with dynamic commands | CRITICAL | ✅ Script — pattern-scan |
+| IG-22 | `fs.writeFile` to system paths | CRITICAL | ✅ Script — pattern-scan |
+| IG-23 | Cron/scheduled task creation | HIGH | ✅ Script — pattern-scan |
+| IG-24 | Self-modifying code | HIGH | ✅ Script — pattern-scan |
+| IG-25 | Dynamic `require()`/`import()` from env/user input | HIGH | ✅ Script — pattern-scan |
+| IG-26 | Process injection | CRITICAL | ✅ Script — pattern-scan |
 
 ---
 
@@ -108,18 +109,20 @@
 
 ---
 
-## Category 8 — Taint Flow Analysis (HIGH) ⚠️ DEFERRED to v2.0 (M58)
+## Category 8 — Taint Flow Analysis (HIGH) — Phase 2 (M58 v2.0)
 
-> **Deferred**: Requires SAST-grade cross-file reasoning. LLM accuracy insufficient for `confidence: HIGH`. Will be re-evaluated after v1.0 production data.
+**Script**: `acp.taint-scan.sh` (heuristic prep + obvious-sink detection) | **Rules**: IG-45–IG-50 | **Standard**: OWASP A03:2025, CWE-134/601
 
-| Rule ID | Source → Sink | Severity |
-|---------|--------------|----------|
-| IG-45 | User input → SQL/NoSQL query without parameterisation | CRITICAL |
-| IG-46 | User input → shell command execution | CRITICAL |
-| IG-47 | User input → file path without sanitisation | CRITICAL |
-| IG-48 | User input → URL redirect without validation | HIGH |
-| IG-49 | Environment variable → network call without validation | HIGH |
-| IG-50 | Third-party library output → security decision without re-validation | HIGH |
+> **Confidence ceiling**: MEDIUM max for LLM cross-file reasoning; script-backed obvious sinks may report at HIGH severity but never auto-fail CI at HIGH confidence for taint rules. All Phase 2 taint findings carry `verdict: REQUIRES_HUMAN_REVIEW`.
+
+| Rule ID | Source → Sink | Severity | Detection | Max Confidence |
+|---------|--------------|----------|-----------|----------------|
+| IG-45 | User input → SQL/NoSQL query without parameterisation | CRITICAL | ✅ Script — taint-scan (obvious concat) + LLM cross-file | MEDIUM |
+| IG-46 | User input → shell command execution | CRITICAL | ✅ Script — taint-scan (exec/spawn + interpolation) + LLM | MEDIUM |
+| IG-47 | User input → file path without sanitisation | CRITICAL | ✅ Script — taint-scan heuristic + LLM | MEDIUM |
+| IG-48 | User input → URL redirect without validation | HIGH | ✅ Script — taint-scan heuristic + LLM | MEDIUM |
+| IG-49 | Environment variable → network call without validation | HIGH | ✅ Script — taint-scan heuristic + LLM | MEDIUM |
+| IG-50 | Third-party library output → security decision without re-validation | HIGH | LLM semantic only | LOW |
 
 ---
 
@@ -140,17 +143,19 @@
 
 ---
 
-## Category 10 — Memory & Context Integrity (CRITICAL) ⚠️ DEFERRED to v2.0 (M58)
+## Category 10 — Memory & Context Integrity (CRITICAL) — Phase 2 (M58 v2.0)
 
-> **Deferred**: 60–89% AUR documented in literature (LinkedIn Research, May 2026). 11–40% false negative rate. Semantic contradiction detection against `constraints.yml` requires deep reasoning not reliable enough for production use.
+**Script**: `acp.memory-scan.sh` (prep for LLM) + `acp.unicode-scan.sh` (IG-61) | **Rules**: IG-58–IG-62 | **Standard**: MITRE ATLAS AML.T0054
 
-| Rule ID | Rule | Severity |
-|---------|------|----------|
-| IG-58 | Carryover entries with instruction-like text outside YAML schema | CRITICAL |
-| IG-59 | Decision entries with agent-directive language | CRITICAL |
-| IG-60 | Session memory contradicting `constraints.yml` hard rules | CRITICAL |
-| IG-61 | Memory files with hidden Unicode (detection available v1.0 via unicode-scan.sh) | CRITICAL |
-| IG-62 | Memory files modified by session with untrusted context | HIGH |
+> **Confidence ceiling**: LOW for semantic memory analysis (11–40% FNR documented). IG-61 hidden Unicode remains script-backed at HIGH. No LOW-confidence memory finding creates audit carryovers.
+
+| Rule ID | Rule | Severity | Detection | Max Confidence |
+|---------|------|----------|-----------|----------------|
+| IG-58 | Carryover entries with instruction-like text outside YAML schema | CRITICAL | LLM — memory-scan prep | LOW |
+| IG-59 | Decision entries with agent-directive language | CRITICAL | LLM — memory-scan prep | LOW |
+| IG-60 | Session memory contradicting `constraints.yml` hard rules | CRITICAL | LLM — memory-scan prep | LOW |
+| IG-61 | Memory files with hidden Unicode | CRITICAL | ✅ Script — unicode-scan.sh | HIGH |
+| IG-62 | Memory files modified by session with untrusted context | HIGH | LLM — git-provenance + memory-scan | LOW |
 
 ---
 
@@ -169,4 +174,4 @@
 
 ---
 
-*Integrity Rules Catalogue v1.0 | ACP Enhanced | /acp-integrity | 2026-06-07*
+*Integrity Rules Catalogue v2.0 | ACP Enhanced | /acp-integrity | 2026-06-15*

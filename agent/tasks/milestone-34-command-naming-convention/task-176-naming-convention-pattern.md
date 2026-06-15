@@ -32,6 +32,16 @@ category: convention
 
 # ACP Command Naming Convention
 
+<!-- @acp.meta.task
+topic: acp, command, naming, convention
+description: Create command-naming-convention pattern document
+milestone: M34
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
+
 ## Intent
 Establish a consistent, unambiguous naming system for all ACP commands across command
 directive files, IDE prompt integrations, and runtime invocations.

@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: add, specs, section, to, agentmd
+description: Add Specs section to AGENT.md
+milestone: M32
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Add a concise "Specs" section to `AGENT.md` documenting the `agent/specs/` directory, `@acp.spec` command, FR-IDs (`R<N>`), Behavior Tables, and spec-to-task traceability via `covers:`.

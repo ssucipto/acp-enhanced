@@ -1,0 +1,52 @@
+# Feedback Entry Schema
+# Schema for validating ACP feedback files (agent/feedback/)
+# Version: 1.0.0
+
+schema_version: 1.0.0
+description: Schema for feedback files in agent/feedback/
+
+required_fields:
+  - date
+  - severity
+  - type
+
+fields:
+  date:
+    type: string
+    required: true
+    pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+  severity:
+    type: string
+    required: true
+    enum:
+      - critical
+      - high
+      - medium
+      - low
+      - informational
+  type:
+    type: string
+    required: true
+    enum:
+      - bug
+      - feature-request
+      - improvement
+      - correction
+      - process
+  source:
+    type: string
+    required: false
+    description: "Who or what triggered this feedback"
+  milestone:
+    type: string
+    required: false
+    pattern: "^M[0-9]+$"
+  route:
+    type: string
+    required: false
+  description:
+    type: string
+    required: false
+  action_taken:
+    type: string
+    required: false

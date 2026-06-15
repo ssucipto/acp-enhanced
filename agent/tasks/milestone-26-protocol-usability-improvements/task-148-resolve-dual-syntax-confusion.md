@@ -12,6 +12,15 @@ created: 2026-05-04
 completed: 2026-05-04
 ---
 
+<!-- @acp.meta.task
+topic: resolve, acp, vs, acp-, dual-syntax, confusion, in, agentmd, and, readme
+description: Resolve `@acp.*` vs `/acp-*` dual-syntax confusion in AGENT.md and README
+milestone: M26
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Objective
 
 Add a clear "Command Invocation Styles" section to both `AGENT.md` and `README.md` that explains the two command invocation syntaxes, when to use each, and how they relate. Currently both files mix `/acp-*` and `@acp.*` notation interchangeably with no routing guidance.

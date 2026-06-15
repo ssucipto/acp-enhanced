@@ -4,7 +4,9 @@
   "description": "ACP Enhanced dispatch and validation scripts",
   "scripts": {
     "dispatch": "ts-node acp-dispatch.ts",
-    "validate": "ts-node acp-validate.ts"
+    "validate": "ts-node acp-validate.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
@@ -15,6 +17,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
   }
 }
