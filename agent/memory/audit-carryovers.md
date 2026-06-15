@@ -549,9 +549,9 @@ carryovers:
     file: .github/workflows/
     finding: "No Windows CI runner — Windows is documented target platform but has no automated test coverage"
     fix_target: "Add windows-latest to e2e-tests.yaml matrix (ubuntu + macOS + Windows)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
     escalated_to: null
 
   - audit_id: 65
@@ -560,9 +560,9 @@ carryovers:
     file: SECURITY.md
     finding: "No SECURITY.md / vulnerability disclosure process for open-source production tooling"
     fix_target: "Create SECURITY.md with private advisory process + scope definition"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
     escalated_to: null
 
   # ── AUDIT-066 FINDINGS — SECOND-ROUND DEEP GAPS 2026-06-15 ──────────────────
@@ -617,9 +617,9 @@ carryovers:
     file: scripts/
     finding: "No unit tests for TS tooling — scripts/*.test.ts = 0 files; acp-dispatch.ts and acp-validate.ts entirely untested (only Turing-complete code in repo)"
     fix_target: "Add vitest/jest + scripts/*.test.ts covering buildContext budget, getFilteredLessons, updateRoutingYml non-destructiveness"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
     escalated_to: null
 
   - audit_id: 66
@@ -1111,4 +1111,74 @@ carryovers:
     status: pending
     fix_applied_date: null
     verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-075 FINDINGS — M61 POST-IMPL DEEP DIVE (2026-06-15) ─────────────────
+  # All findings were discovered and fixed in the same audit cycle. Listed
+  # for historical traceability; status: fixed with fix_applied_date set.
+
+  - audit_id: 75
+    finding_id: F-075-001
+    severity: high
+    file: SECURITY.md
+    finding: "YOUR_ORG placeholder in GitHub Security Advisories URL — link broken for external researchers"
+    fix_target: "Replace YOUR_ORG with ssucipto per identity.yml repo field"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 75
+    finding_id: F-075-002
+    severity: medium
+    file: SECURITY.md
+    finding: "Version footer stale — says 6.20.2, project is 6.20.7"
+    fix_target: "Update version footer to match current project version"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 75
+    finding_id: F-075-003
+    severity: low
+    file: SECURITY.md
+    finding: "Fallback contact underspecified — no encryption-key path, email-only for sensitive reports"
+    fix_target: "Add keyserver reference and note about encrypted email"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 75
+    finding_id: F-075-004
+    severity: high
+    file: .github/workflows/ci.yaml
+    finding: "Trufflehog uses unpinned trufflesecurity/trufflehog@main — violates IG-67 pinned-SHA requirement"
+    fix_target: "Pin to commit SHA 84a2b33c9f891494db6ebe02f2a55b19cdf38f25 with version comment"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 75
+    finding_id: F-075-005
+    severity: medium
+    file: .github/workflows/e2e-tests.yaml
+    finding: "Windows CI added without conditional test-skipping mechanism for non-portable suites (task spec item #4 not implemented)"
+    fix_target: "Add documented protocol comment for Windows suite authors"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 75
+    finding_id: F-075-006
+    severity: low
+    file: .github/dependabot.yml
+    finding: "open-pull-requests-limit set for npm (5) but not github-actions (unlimited by default)"
+    fix_target: "Add open-pull-requests-limit: 5 to github-actions block"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
     escalated_to: null
