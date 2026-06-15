@@ -22,7 +22,7 @@ session:
 # Current mode is tracked here so the agent can report it.
 
 context_modes:
-  current: light           # Set by agent at session start; persists across session
+  current: full            # Set by agent at session start; persists across session
   light:
     steps:
       - load_identity       # agent/core/identity.yml

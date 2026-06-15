@@ -34,8 +34,8 @@ agent/skills/                     ← Task-specific instructions (Layer 2)
 agent/memory/                     ← Session memory, corrections, patterns
 agent/wiki/                       ← Project reference knowledge
 agent/routing/                    ← Model config, taxonomy, cost ledger
-agent/commands/                    ← All ACP command docs (50 commands)
-agent/scripts/                     ← All ACP bash scripts (28 scripts)
+agent/commands/                    ← All ACP command docs (69 acp.* + 2 git.*)
+agent/scripts/                     ← All ACP bash scripts (36 scripts)
 agent/schemas/                     ← YAML validation schemas
 scripts/acp-dispatch.ts            ← Routing engine (Persona B/C only)
 ```

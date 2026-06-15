@@ -33,20 +33,20 @@ function readAgent(relPath: string): string {
   return readFileSync(full, "utf-8");
 }
 
-function getLastNSessions(n: number): string {
-  const content = readAgent("memory/sessions.md");
-  if (!content) return "";
-  const entries = content.split("\n- date:").filter(Boolean);
+export function getLastNSessions(n: number, content?: string): string {
+  const raw = content ?? readAgent("memory/sessions.md");
+  if (!raw) return "";
+  const entries = raw.split("\n- date:").filter(Boolean);
   return entries
     .slice(-n)
     .map((e) => (e.startsWith("- date:") ? e : "- date:" + e))
     .join("\n");
 }
 
-function getFilteredLessons(taskType: string): string {
-  const content = readAgent("memory/lessons.md");
-  if (!content) return "";
-  const entries = content.split("\n- date:").filter(Boolean);
+export function getFilteredLessons(taskType: string, content?: string): string {
+  const raw = content ?? readAgent("memory/lessons.md");
+  if (!raw) return "";
+  const entries = raw.split("\n- date:").filter(Boolean);
   const relevant = entries.filter(
     (e) =>
       // Skip archived lessons (see lessons.md schema comment)
@@ -88,7 +88,7 @@ function extractSection(filePath: string, sectionId: string): string {
   return result.join("\n").slice(0, 3000); // cap section size
 }
 
-function getSkillFile(taskType: string): string {
+export function getSkillFile(taskType: string): string {
   const commandTypes = ["command-doc-write", "command-doc-update"];
   const scriptTypes = ["bash-script-create", "bash-script-fix", "bash-script-refactor", "preference-system", "bug-fix-simple", "bug-fix-complex"];
   const schemaTypes = ["yaml-schema"];
@@ -108,12 +108,12 @@ function getSkillFile(taskType: string): string {
   return "skills/crosscut.md";
 }
 
-function estimateTokens(text: string): number {
+export function estimateTokens(text: string): number {
   return Math.ceil(text.length / 4);
 }
 
 // ── Context Assembly (cache-optimised) ───────────────────────
-function buildContext(
+export function buildContext(
   meta: Record<string, any>,
   taskContent: string
 ): { system: string; user: string } {
@@ -188,10 +188,22 @@ function appendLedger(
 }
 
 // ── Update core/routing.yml with session executor ─────────────
-function updateRoutingYml(executor: string, modelId: string) {
-  const content =
+export function updateRoutingYml(
+  executor: string,
+  modelId: string,
+  routingPath?: string
+) {
+  const filePath =
+    routingPath ?? path.join(AGENT_DIR, "core", "routing.yml");
+  const original = readFileSync(filePath, "utf-8");
+  const newSession =
     `session:\n  executor: ${executor}\n  model: ${modelId}\n  persona: B\n`;
-  writeFileSync(path.join(AGENT_DIR, "core/routing.yml"), content, "utf-8");
+  const sessionRe = /^session:\r?\n(?:  .*(?:\r?\n|$))*/m;
+  if (!sessionRe.test(original)) {
+    throw new Error(`[ACP] routing.yml missing session: block (${filePath})`);
+  }
+  const updated = original.replace(sessionRe, newSession);
+  writeFileSync(filePath, updated, "utf-8");
 }
 
 // ── Main ──────────────────────────────────────────────────────
@@ -209,6 +221,14 @@ async function dispatch(taskPath: string) {
   if (executor === "local-script") {
     console.log("[ACP] Local task — no API dispatch needed. Run your script manually.");
     return;
+  }
+
+  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+  if (!apiKey) {
+    console.error(
+      "[ACP] OPENROUTER_API_KEY is not set. Export it or use Persona A (copilot). See scripts/QUICKSTART.md."
+    );
+    process.exit(1);
   }
 
   const modelConfig = MODEL_MAP[executor] ?? MODEL_MAP["claude-sonnet"];
@@ -230,7 +250,7 @@ async function dispatch(taskPath: string) {
 
   const client = new OpenAI({
     baseURL: OPENROUTER_BASE,
-    apiKey: process.env.OPENROUTER_API_KEY!,
+    apiKey,
     defaultHeaders: {
       "HTTP-Referer": repoUrl,
       "X-Title": projectName,
@@ -293,10 +313,19 @@ async function dispatch(taskPath: string) {
   console.log(`[ACP] Ledger updated: agent/routing/ledger.md`);
 }
 
-const taskArg = process.argv[2];
-if (!taskArg) {
-  console.error("Usage: npx ts-node scripts/acp-dispatch.ts agent/routing/tasks/task-NNN.md");
-  process.exit(1);
+// ── CLI entry (skip when imported by tests) ───────────────────
+function isDirectExecution(): boolean {
+  const entry = process.argv[1] ?? "";
+  return entry.replace(/\\/g, "/").endsWith("acp-dispatch.ts");
 }
 
-dispatch(taskArg);
+if (isDirectExecution()) {
+  const taskArg = process.argv[2];
+  if (!taskArg) {
+    console.error(
+      "Usage: npx ts-node scripts/acp-dispatch.ts agent/routing/tasks/task-NNN.md"
+    );
+    process.exit(1);
+  }
+  dispatch(taskArg);
+}
