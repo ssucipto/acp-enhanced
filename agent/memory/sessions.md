@@ -2,178 +2,21 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [route-167, route-168, route-169, route-170, route-171, route-172]
-  done:
-    - m61-autonomous-completion-6-routes-all-done-v6-20-7
-    - m61-deep-dive-audit-075-6-findings-fixed-3-carryovers-resolved
-  deferred: none
-  key_fact: "M61 autonomous completion (6 routes, ~12h) shipped as v6.20.7. Audit-075 found 6 additional issues: YOUR_ORG placeholder in SECURITY.md (HIGH), stale version footer (MEDIUM), fallback contact gap (LOW), unpinned trufflehog action violating IG-67 (HIGH), missing Windows CI skip protocol (MEDIUM), Dependabot limit inconsistency (LOW). All fixed + 3 carryovers closed. Post-audit: 4 shortcuts caught — route-172 tests were smoke-only (now 14 behavioral tests), tsc --noEmit never ran (now 0 errors), Layer 1 budget unverified (identity.yml ~405 tokens), A3.5 full test suite never ran (vitest 33/33 green; E2E 47/47 CRLF — pre-existing). Round 2: 6 more shortcuts — no recent_work entry, stale next_steps, stale milestone version, blank verification gate, .gitignore blocking agent/reports/, missing .ts/.json LF in .gitattributes. Round 3: 5 more — zero git tags for v6.20.x series, M61 master entry still v6.16.0, sessions.md incomplete, CHANGELOG v6.20.9 incomplete, M62 version stale. All 15 shortcuts fixed and logged."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks_completed: none
-  done:
-    - m60-deep-dive-audit-074-7-findings-fixed
-    - acp-validate-passed-with-warnings
-    - acp-sync-3-design-docs-updated-draft-to-implemented
-    - acp-update-progress-refreshed-next-steps-m61-m62-m63
-  deferred: none
-  key_fact: "Four maintenance commands (audit-074, validate, sync, update) keep the ACP project synchronized post-delivery. The audit found 7 items — including a missing CHANGELOG entry, stale milestone statuses, and 3 carryovers not marked fixed — all resolved."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [route-185, route-186, route-187, route-188, route-189]
-  done:
-    - m65-complete-5-routes
-    - cross-layer-status-sync-12-milestone-docs
-    - validate-filepointers-and-status-consistency-checks
-    - m58-plan-correction-adr-11-12
-    - adr-reconstruction-13-16
-    - pipefail-meta-scan
-    - quarterly-deep-scan-phase-2-active
-    - f-062-03-promoted-to-m59
-  deferred: []
-  key_fact: "progress.yaml had systemic duplicate YAML keys causing js-yaml parse failures; validate.ts now uses line-based fallback. The cross-layer validator caught 12 stale milestone docs (9 fixed, M21/M42 left as legacy)."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [validate, sync]
-  done:
-    - validate-all-layers-pass-0-errors
-    - sync-glossary-m58-phase-2-terms-added
-  deferred:
-    - design-marker-backfill → pending interactive prompt
-  key_fact: "Glossary was missing 6 M58 Phase 2 terms (Integrity Scan, Phase 2, Confidence Ceiling, Taint Flow, Memory Poisoning, Self-Protection Protocol). Total terms: 42 → 48."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [audit-072, M58]
-  tasks_completed: [audit-072]
-  done:
-    - audit-072-m58-post-impl-8-findings-all-fixed
-    - taint-scan-ig-47-48-50-file-level-heuristics-indirect-flow
-    - taint-manifest-max-confidence-ci-blocking-v1-1-0
-    - e2e-integrity-v2-55-assertions-full-fixture-matrix
-    - research-memory-poisoning-ux-doc-route-155
-    - wiki-header-v2-0-0-phase-2-active
-    - audit-carryovers-m58-bulk-fixed-verified-072
-  deferred:
-    - empirical-tpr-vs-eslint-descoped-literature-calibration → accepted
-  key_fact: "Taint heuristics must use file-level flow analysis for indirect source→sink (target=req.query → redirect(target)); line-level patterns miss 50% of calibration fixtures."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [route-155, route-156, route-157, route-158, M58]
-  tasks_completed: [route-156, route-157, route-158]
-  done:
-    - m58-phase-2-semantic-analysis-shipped-v6-20-0
-    - route-156-wiki-cat-8-10-un-deferred-confidence-ceilings-acp-integrity-v2-0-0
-    - route-157-acp-taint-scan-sh-memory-scan-sh-phase-2-prep-scripts
-    - route-158-e2e-integrity-v2-26-assertions-ci-wired
-    - phase2-self-protection-protocol-continue-not-self-halt
-    - git-commit-d255929-v6-20-0
-  deferred:
-    - github-branch-protection-manual-enable → route-162
-    - m65-tracking-reconciliation → route-185
-  key_fact: "grep treats leading -- as flags — E2E assert_contains with needle '--phase2' silently fails. Use descriptive substring without leading dashes (e.g. 'Run Phase 2 semantic') or grep -F/--."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [route-179, route-180, route-181, route-182, route-183, route-184, audit-071, M64]
-  tasks_completed: [route-179, route-180, route-181, route-182, route-183, route-184, audit-071]
-  done:
-    - m64-integrity-gateway-v1-1-routes-180-184-audit-071-fixes-v6-19-0-committed
-    - audit-071-deep-dive-m59-m64-13-findings-11-fixed-1-open-1-accepted
-    - e2e-exit-trap-fix-temp-fixture-dir-variable-collision-destroying-committed-fixtures
-    - fixture-matrix-11-fixtures-4-script-backed-rules-manifest-yaml
-    - manifest-hash-sh-output-removed-stderr-redirect
-    - progress-yaml-description-updated-v6-19-0-reality
-    - wiki-category-2-detection-column-restored
-    - acp-integrity-md-bumped-v1-1-0
-    - ci-integrity-e2e-plus-npm-test-wired-into-workflow
-    - ig-emit-from-legacy-line-dead-branch-fixed
-    - b20-scanner-specific-baselines-no-entropy-on-yaml-config
-    - git-commit-v6-19-0-32-files-979-insertions-638-deletions
-  deferred:
-    - github-branch-protection-manual-enable → route-162
-    - m65-tracking-reconciliation → route-185
-  key_fact: "The E2E EXIT trap variable collision (FIXTURE_DIR reused across B1 temp dir and committed fixtures path) was the root cause of all intermittent fixture failures — trap deleted the entire fixtures/integrity/ directory on script exit. Fix: separate TEMP_FIXTURE_DIR + INTEGRITY_FIXTURE_DIR with trap cleared after B3."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [route-159, route-160, route-161, route-162, route-163, route-164, M59]
-  tasks_completed: [route-159, route-160, route-161, route-162, route-163, route-164]
-  done:
-    - m59-shipped-v6-14-0-critical-fix-ci-integrity
-    - route-159-updateRoutingYml-surgical-session-block-dispatch-regression-tests
-    - route-160-package-yaml-15-missing-commands-ci-count-guard
-    - route-161-acp-validate-in-ci-ci-validate-sh-real-checks
-    - route-162-branch-protection-governance-docs-usage-md
-    - route-163-openrouter-api-key-preflight-dispatch
-    - route-164-version-header-check-validateVersionConsistency
-    - changelog-6-14-0-progress-milestone-59-completed
-  deferred:
-    - github-branch-protection-manual-enable → route-162
-    - m64-integrity-gateway-truth → route-179
-    - git-commit-m59-v6-14-0 → user-request
-  key_fact: "M59 closed silent correctness bugs (routing.yml overwrite, package.yaml gaps, CI no-op). C1 branch protection is documented but requires manual GitHub repo settings — code cannot enforce it. Next per ADR-10: M64 before M58 v2.0."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [route-155]
-  tasks_completed: [route-155]
-  done:
-    - audit-070-m55-m58-gateway-deep-dive-16-findings-committed
-    - m64-m65-remediation-plan-routes-179-189-coverage-matrix-committed
-    - acp-validate-zero-errors-zero-warnings-69x3-parity-triple-sync
-    - acp-sync-readme-prd-quickstart-counts-m52-m57-protocol-section
-    - acp-update-progress-m54-50pct-m58-blocker-next-steps-trimmed
-    - parity-wrappers-carryover-query-pattern-sync-session-sync-rule-file-audit
-    - m54-milestone-doc-created-route-155-research-artifact-fixtures-drafted
-  deferred:
-    - git-commit-pending-local-work → user-request
-    - m59-critical-ci-fixes → route-159
-    - m64-integrity-gateway-truth → route-179
-    - m65-tracking-reconciliation → route-185
-  key_fact: "Audit-070 proved /acp-integrity v1.0 gives false assurance (~18/55 rules implemented, entropy scanner crashes on findings). M64 (gateway truth/test) must ship before M58 v2.0 semantic analysis — building Phase 2 on an untested v1 gateway would compound the problem."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [route-150, route-151, route-152, route-153, route-154, audit-062, audit-063, audit-064, design-spec-features, design-spec-m55-m58, stakeholder-report]
-  done:
-    - m57-autonomous-implementation-all-5-routes-completed
-    - route-150-progress-yaml-template-recurring-tasks
-    - route-151-agents-md-step-4-5-triple-file-sync
-    - route-152-constraints-yml-hooks-progress-schema
-    - route-153-acp-validate-step-2d-recurring-validation
-    - route-154-e2e-16-assertions-version-6-12-1-changelog
-    - audit-062-m57-deep-dive-industry-standards-8-findings-5-carryovers
-    - audit-063-design-spec-v1-review-12-findings-all-fixed-v2
-    - audit-064-m55-m58-spine-v1-review-14-findings-all-fixed-v2
-    - design-spec-acp-enhanced-features-v1-then-v2-after-audit-063
-    - design-spec-m55-m58-command-ecosystem-v1-then-v2-after-audit-064
-    - stakeholder-report-week-ending-2026-06-13-amber
-    - status-snapshot-where-are-we
-    - visualizer-configured-for-acp-enhanced-project
-    - 3-spec-documents-2-audit-cycles-v1-v2-pattern-established
-    - all-91-e2e-assertions-passing-across-review-integrity-recurring
-  deferred:
-    - m58-research-calibration → route-155
-    - audit-062-carryovers → m59-remediation
-    - m54-branch-protection → m54-completion
-  key_fact: "The v1→v2 audit cycle pattern (create spec → audit → fix all findings → v2) caught 26 errors across two specs that would have shipped as authoritative documentation. Three CRITICAL numerical errors (M55: 54→77 rules, M56: broken subtotals, months: 11→5) were caught by line-by-line codebase cross-reference — the audit discipline prevented publication of incorrect metrics."
+# === Compacted Block: 2026-06-15 (10 sessions) ===
+- type: weekly-summary
+  week: 2026-06-15
+  key_facts:
+    - "M61 autonomous completion shipped as v6.20.7. Audit-075 found 6 issues including YOUR_ORG placeholder (HIGH), stale version footer (MEDIUM), unpinned trufflehog violating IG-67 (HIGH). Post-audit: 15 shortcuts caught across 3 rounds (E2E smoke-only tests, tsc never ran, no recent_work entries, stale versions). All fixed."
+    - "Four maintenance commands (audit-074, validate, sync, update) found 7 items: missing CHANGELOG, stale milestone statuses, 3 carryovers not fixed. All resolved."
+    - "M65 completed: progress.yaml had systemic duplicate YAML keys causing js-yaml parse failures; validate.ts now uses line-based fallback. Cross-layer validator caught 12 stale milestone docs."
+    - "Glossary was missing 6 M58 Phase 2 terms. Validated: 48/48 terms."
+    - "Taint heuristics must use file-level flow analysis for indirect source-to-sink — line-level patterns miss 50% of calibration fixtures."
+    - "grep treats leading -- as flags — E2E assert_contains with needle '--phase2' silently fails. Use descriptive substring without leading dashes."
+    - "M64 (integrity gateway v1.1): E2E EXIT trap variable collision (FIXTURE_DIR reused) destroyed committed fixtures. Fix: separate TEMP_FIXTURE_DIR + INTEGRITY_FIXTURE_DIR with trap cleared after B3."
+    - "M59 closed silent correctness bugs: routing.yml overwrite, package.yaml gaps, CI no-op. 6 routes shipped as v6.14.0."
+    - "Audit-070 proved /acp-integrity v1.0 gives false assurance (~18/55 rules implemented, entropy scanner crashes). M64 (gateway truth/test) must ship before M58 v2.0."
+    - "M57: v1-to-v2 audit cycle pattern caught 26 errors across two specs. Discipline: audit AGAINST live codebase, not the spec itself."
+  tasks_completed: 26
 
 - date: 2026-06-08
   executor: copilot
@@ -291,3 +134,17 @@
     - route-179-post-milestone-sweep-script-e2e-test
   deferred: []
   key_fact: "M62 completed in under 3 hours — all 7 routes shipped. 17 scripts upgraded to set -euo pipefail (0 bare remaining). 7 memory-layer schemas created + enforced. 5 audit-062 carryovers resolved (F-062-01..05). Post-M61 shortcut prevention deployed: 7 cross-file consistency validators in acp-validate.ts (40/40 tests) + acp.post-milestone-sweep.sh (6 gates). Pre-commit hook active — caught ACP rule changes on commits."
+
+- date: 2026-06-15
+  executor: copilot
+  branch: develop
+  tasks: [route-m66-marker-backfill]
+  done:
+    - m66-marker-backfill-232-files-100pct-coverage
+    - m66-design-markers-28-files-100pct
+    - m66-task-markers-195-files-100pct
+    - m66-pattern-markers-9-files-100pct
+    - m66-created-backfill-script-acp-backfill-markers-py
+    - m66-stripped-superseded-status-prose-fields
+  deferred: []
+  key_fact: "M66 completed: 100% @acp.meta.* marker coverage across 232 files (from 3.9%). The full traceability chain is now unlocked: meta-scan can inventory all files, acp-validate probes are no longer blind, and acp-sync traceability maps work on the entire codebase. Created scripts/acp-backfill-markers.py as a reusable tool for future marker work."
