@@ -5,9 +5,9 @@
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document.
 
 **Namespace**: acp  
-**Version**: 2.3.0  
+**Version**: 2.4.0  
 **Created**: 2026-02-16  
-**Last Updated**: 2026-06-04  
+**Last Updated**: 2026-06-15  
 **Status**: Active  
 **Scripts**: None  
 
@@ -208,6 +208,33 @@ Validate the `recurring_tasks:` block in `agent/progress.yaml`.
 ```
 
 **Expected Outcome**: Recurring tasks validated; overdue tasks surfaced  
+
+### 2e. Validate Cross-Layer Status Consistency (v6.20.1+)
+
+> **This step runs in ALL modes**. Mismatches are ERRORS (exit 1).
+
+Compare the `**Status**` field in every milestone document against the `status` field in `progress.yaml`. Documents and progress.yaml MUST agree. This prevents the type of desync that audit-069 discovered, where milestone docs were reset to `planned` by a merge while `progress.yaml` correctly showed them as `completed`.
+
+**Actions**:
+- Parse `progress.yaml` milestones (id, status, file)
+- For each milestone with a `file:`, open the milestone doc, read its `**Status**:` field
+- Normalize both values (map `active` → `in_progress`, `implemented` → `completed`, etc.)
+- FAIL if they disagree (ERROR, exit 1)
+
+**Expected Outcome**: All milestone docs agree with progress.yaml on status  
+
+### 2f. Validate File Pointers (v6.20.1+)
+
+> **This step runs in ALL modes**. Dangling pointers are ERRORS (exit 1).
+
+Verify every `file:` pointer in `progress.yaml` references an existing file. This catches stale references before they reach readers.
+
+**Actions**:
+- For every `file:` path in progress.yaml (milestones), assert the file exists on disk
+- FAIL listing each dangling pointer (ERROR, exit 1)
+- Flag `tasks_total: 0` combined with `status: active|in_progress` as an inconsistency
+
+**Expected Outcome**: No dangling file pointers; no contradictory task counts  
 
 ### 3. Validate Design Documents
 
