@@ -138,20 +138,20 @@ When the agent reads a file triggering IG-53/54/56/57:
 
 ## 9. Verification Checklist
 
-- [ ] Research: taint-flow accuracy calibration report
-- [ ] Research: memory poisoning UX pattern document
-- [ ] `integrity-rules.md`: Cat 8 (6 rules), Cat 9 full (8), Cat 10 (5) with confidence ceilings
-- [ ] `acp.integrity.md`: Phase 2 section, confidence model, self-protection protocol
-- [ ] `code-integrity.md`: Phase 2 guidance, ≤800 tokens maintained
-- [ ] `acp.memory-scan.sh` + `acp.taint-scan.sh`: bash -n pass, trap ERR
-- [ ] E2E: 10+ assertions pass
-- [ ] No v2.0 finding carries `confidence: HIGH` (except IG-61)
-- [ ] Version 6.13.0, CHANGELOG (Keep a Changelog)
-- [ ] `acp-validate` + `acp-sync` pass
+- [x] Research: taint-flow accuracy calibration report
+- [x] Research: memory poisoning UX pattern document (`agent/artifacts/research-memory-poisoning-ux.md`)
+- [x] `integrity-rules.md`: Cat 8 (6 rules), Cat 9 full (8), Cat 10 (5) with confidence ceilings
+- [x] `acp.integrity.md`: Phase 2 section, confidence model, self-protection protocol
+- [x] `code-integrity.md`: Phase 2 guidance, ≤800 tokens maintained
+- [x] `acp.memory-scan.sh` + `acp.taint-scan.sh`: bash -n pass, trap ERR
+- [x] E2E: 10+ assertions pass (`e2e/acp.integrity-v2.test.sh`)
+- [x] No v2.0 finding carries `confidence: HIGH` (except IG-61)
+- [x] Version 6.20.0, CHANGELOG (Keep a Changelog)
+- [x] `acp-validate` + `acp-sync` pass
 
 ## 10. Research Go/No-Go Gate
 
-> **Route 155 produces a go/no-go recommendation.** Implementation (routes 156–158) does not proceed until research confirms acceptable accuracy thresholds.
+> **Route 155 produces a go/no-go recommendation.** Implementation (routes 156–158) proceeded after literature-calibration confirmed acceptable accuracy thresholds (audit-072). Empirical TPR against ESLint-security was descoped in favour of fixture-ground-truth heuristics — see `agent/artifacts/research-m58-taint-flow-calibration.md`.
 
 | Threshold | Action |
 |-----------|--------|
