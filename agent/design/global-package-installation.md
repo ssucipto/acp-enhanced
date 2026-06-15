@@ -1,9 +1,15 @@
 # Global Package Installation
 
+<!-- @acp.meta.design
+topic: global, package, installation
+description: Install ACP packages globally to `~/.acp/packages/` for package development and global command library
+status: draft
+updated: 2026-02-21
+@acp.meta.end -->
+
 **Concept**: Install ACP packages globally to `~/.acp/packages/` for package development and global command library  
 **Created**: 2026-02-21  
 **Updated**: 2026-02-21  
-**Status**: Design Specification  
 **Priority**: Medium  
 **Estimated Effort**: 6-8 hours  
 

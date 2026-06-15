@@ -1,8 +1,14 @@
 # Generic YAML Parser with AST Design
 
+<!-- @acp.meta.design
+topic: generic, yaml, parser, with, ast, design
+description: Pure POSIX shell YAML parser using Abstract Syntax Tree for efficient querying
+status: draft
+updated: 2026-02-21
+@acp.meta.end -->
+
 **Concept**: Pure POSIX shell YAML parser using Abstract Syntax Tree for efficient querying  
 **Created**: 2026-02-21  
-**Status**: Design Specification  
 
 ---
 
