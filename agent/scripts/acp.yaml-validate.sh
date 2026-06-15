@@ -3,6 +3,9 @@
 # Pure bash YAML validation against schema definitions
 # Zero external dependencies
 
+set -euo pipefail
+trap 'echo "[acp.yaml-validate] Error on line $LINENO" >&2; exit 1' ERR
+
 # Source YAML parser (using new generic AST-based parser)
 SCRIPT_DIR="$(dirname "$0")"
 . "${SCRIPT_DIR}/acp.yaml-parser.sh"
