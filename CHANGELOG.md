@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **ADR-14**: Confidence ceiling policy for semantic security analysis (taint ≤ MEDIUM, injection/memory ≤ LOW)
 - **ADR-15**: Command doc as spec — no separate specification files
 - **ADR-16**: Gitflow-lite branching model (`develop` → `mainline`)
+- **M60 — Tier 1 E2E test coverage**: 8 new E2E suites for core commands (init, proceed, plan, dispatch, commit, validate, audit, route) — all passing at 100% (route-165). Drops untested command ratio from 68% to ≤56%.
+- **M60 — Integrity test hardening**: Rule-count assertion tightened from ≥55 to exact 70 (route-166, MED-067-003).
+- **M60 — CONTRIBUTING.md**: New contributor guide with branch model, PR checks, command-doc conventions, and shell scripting conventions (route-166, MED-067-005).
 
 ### Fixed
 - **Status desync across 12 milestone docs**: M44, M46, M50-M56, M65 milestone docs now agree with progress.yaml (route-185, audit-069 F-069-01)
