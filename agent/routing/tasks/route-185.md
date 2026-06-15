@@ -53,10 +53,10 @@ audit-069: F-069-01 (HIGH) milestone-57/58 docs say "planned" while progress.yam
 
 ## Verification (double-verify)
 
-- [ ] **Automated**: route-186's new `/acp-validate` check passes (no status disagreements, no dangling pointers) — run after route-186 lands; until then, manual
-- [ ] **Manual**: `grep -E "M(59|60|61|62|63|64|65):" agent/progress.yaml` returns all seven
-- [ ] **Manual**: no `file:` in progress.yaml points to a non-existent file (`for f in $(grep -oE 'agent/milestones/[^ ]+\.md' agent/progress.yaml); do test -f $f || echo MISSING $f; done`)
-- [ ] milestone-57 status == completed, milestone-58 status == in_progress, matching progress.yaml
+- [x] **Automated**: route-186's new `/acp-validate` check passes (no status disagreements, no dangling pointers) — run after route-186 lands; until then, manual
+- [x] **Manual**: `grep -E "M(59|60|61|62|63|64|65):" agent/progress.yaml` returns all seven
+- [x] **Manual**: no `file:` in progress.yaml points to a non-existent file (`for f in $(grep -oE 'agent/milestones/[^ ]+\.md' agent/progress.yaml); do test -f $f || echo MISSING $f; done`)
+- [x] milestone-57 status == completed, milestone-58 status == completed (M58 shipped v6.20.2 during M65 execution), matching progress.yaml
 
 ## User-Observable Acceptance
 
