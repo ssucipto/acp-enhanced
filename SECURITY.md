@@ -66,5 +66,5 @@ See `agent/wiki/integrity-rules.md` for the full internal security baseline.
 - No bounty program is in place at this time.
 
 ```text
-Version: 6.20.8
+Version: 6.20.9
 ```
