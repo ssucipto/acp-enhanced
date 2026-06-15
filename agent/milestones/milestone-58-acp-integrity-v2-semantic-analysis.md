@@ -3,8 +3,8 @@
 **Milestone**: M58  
 **Version Target**: 6.13.0  
 **Priority**: MEDIUM  
-**Status**: planned  
-**Started**: —  
+**Status**: in_progress  
+**Started**: 2026-06-15  
 **Target**: —  
 **Estimated Weeks**: 2–3  
 **Estimated Hours**: ~18  

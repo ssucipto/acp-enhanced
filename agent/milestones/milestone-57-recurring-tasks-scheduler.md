@@ -3,9 +3,9 @@
 **Milestone**: M57  
 **Version Target**: 6.12.1  
 **Priority**: MEDIUM  
-**Status**: planned  
-**Started**: —  
-**Target**: —  
+**Status**: completed  
+**Started**: 2026-06-08  
+**Target**: 2026-06-08  
 **Estimated Weeks**: 0.5–1  
 **Estimated Hours**: ~6  
 **Depends On**: M56 (acp-integrity v1.0 scripts must exist for pre-commit hooks)  
