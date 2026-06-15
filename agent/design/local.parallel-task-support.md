@@ -1,9 +1,9 @@
 # Parallel Task Support
 
 **Design**: DR-002  
-**Status**: Draft  
+**Status**: Implemented  
 **Created**: 2026-06-03  
-**Last Updated**: 2026-06-03  
+**Last Updated**: 2026-06-15  
 **Namespace**: local  
 **Source**: audit-022 R9, ChoreHive feedback, Anthropic 6 Agent Workflows (Dec 2024)  
 
