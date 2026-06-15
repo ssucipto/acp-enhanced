@@ -11,6 +11,15 @@ started:
 completed:
 ---
 
+<!-- @acp.meta.task
+topic: create, saas-platform, acp-promptsyaml, and, baseline-promptsyaml
+description: Create saas-platform acp-prompts.yaml and baseline-prompts.yaml
+milestone: M36
+status: draft
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Create two benchmark prompt configuration files for the saas-platform suite:

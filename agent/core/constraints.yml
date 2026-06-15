@@ -24,6 +24,9 @@ rules:
   - never_use_set_e_without_trap: always trap ERR in bash scripts
   - never_break_macos: test BSD sed and date compatibility before committing
   - never_use_gdate_without_fallback: wrap date +%N with linux/macos detection
+  - test_quality_gate: when a task includes a step requiring unit tests, at least
+      one test must assert on output values (not just types). A test whose only
+      assertion is `typeof result === "string"` is a bug, not a test — reject it.
 
 # ── Hooks ────────────────────────────────────────────────────────
 # Pre-commit / scheduled task hooks. Added v6.12.1 (M57).
@@ -32,6 +35,12 @@ hooks:
   pre_commit:
     - task_id: pre-commit-rule-audit
       description: "Scan ACP rule files for Unicode injection before commit"
+    - task_id: pre-commit-integrity-phase1
+      description: "Pre-commit integrity phase 1 — fast unicode+entropy scan (ADR-20: format change from booleans to task_id array)"
+    - task_id: ci-npm-ignore-scripts
+      description: "CI check: npm install --ignore-scripts for supply-chain isolation (ADR-20)"
+    - task_id: post-milestone-sweep
+      description: "Run post-milestone sweep after /acp-proceed --complete (acp.post-milestone-sweep.sh)"
 
 # Context budget: a discipline practice, not a hard technical limit.
 # Modern LLMs have 100K+ context windows — this budget enforces reproducibility and focus.

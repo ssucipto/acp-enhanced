@@ -1,9 +1,18 @@
 # Task 49: @acp.project-create Command
 
+<!-- @acp.meta.task
+topic: acpproject-create, command
+description: Task 49: @acp.project-create Command
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M5 - Global Package Installation  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 29 (Global ACP Auto-Initialization)  
-**Status**: Not Started  
 
 ---
 

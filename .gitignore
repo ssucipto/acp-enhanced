@@ -20,6 +20,7 @@ Thumbs.db
 
 # Generated reports (audit findings, cost reports, etc.)
 reports/
+!agent/reports/
 
 # Temporary files
 *.tmp
@@ -28,3 +29,4 @@ reports/
 # Node / npm
 node_modules/
 package-lock.json
+!scripts/package-lock.json

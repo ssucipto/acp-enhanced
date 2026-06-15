@@ -33,6 +33,16 @@ Create `agent/scripts/acp.driver-yaml.sh` with these 8 functions:
 
 ```bash
 # driver_get <tool> [field]
+
+<!-- @acp.meta.task
+topic: driverget, tool, field
+description: Port acp.driver-yaml.sh (8 POSIX helpers, macOS-safe)
+milestone: M33
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 # Returns driver config for a tool. If field specified, returns only that field's value.
 # Returns empty string if driver.yaml doesn't exist or tool not configured.
 driver_get() { ... }

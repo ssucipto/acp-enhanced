@@ -1,9 +1,18 @@
 # Task 20: @acp.package-validate Command
 
+<!-- @acp.meta.task
+topic: acppackage-validate, command
+description: Task 20: @acp.package-validate Command
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M4 - ACP Package Development System](../milestones/milestone-4-package-development.md)  
 **Estimated Time**: 7-9 hours  
 **Dependencies**: Task 14 (YAML Schema), Task 15 (Namespace Utilities)  
-**Status**: Not Started  
 
 ---
 

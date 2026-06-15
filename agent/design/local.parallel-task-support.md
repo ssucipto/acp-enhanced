@@ -1,9 +1,15 @@
 # Parallel Task Support
 
+<!-- @acp.meta.design
+topic: parallel, task, support
+description: Parallel Task Support
+status: active
+updated: 2026-06-15
+@acp.meta.end -->
+
 **Design**: DR-002  
-**Status**: Draft  
 **Created**: 2026-06-03  
-**Last Updated**: 2026-06-03  
+**Last Updated**: 2026-06-15  
 **Namespace**: local  
 **Source**: audit-022 R9, ChoreHive feedback, Anthropic 6 Agent Workflows (Dec 2024)  
 

@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: sync, agentwikidomainyml, to, current, codebase, state
+description: Sync agent/wiki/domain.yml to current codebase state
+milestone: M29
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Update `agent/wiki/domain.yml` so its `commands:`, `scripts:`, `schemas:`, and `test_suites:` sections accurately reflect the current state of the codebase (58 commands, current script count, current schema count).

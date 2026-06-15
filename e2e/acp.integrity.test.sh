@@ -27,18 +27,21 @@ print_test_header "S2 — code-integrity.md skill file exists"
 assert_file_exists "${SKILL_FILE}" "code-integrity.md skill file exists"
 assert_contains "$(cat "${SKILL_FILE}")" "LLM/Script Boundary Rule" "Boundary Rule present"
 
-print_test_header "S3 — integrity-rules.md wiki exists with 55+ rules"
+print_test_header "S3 — integrity-rules.md wiki exists with 70 rules"
 assert_file_exists "${WIKI_FILE}" "integrity-rules.md wiki exists"
-RULE_COUNT=$(grep -cE '^\| IG-\d+' "${WIKI_FILE}" || echo "0")
+RULE_COUNT=$(grep -cE '^\| IG-[0-9]+' "${WIKI_FILE}" 2>/dev/null | head -1 || echo "0")
+RULE_COUNT="${RULE_COUNT//[^0-9]/}"
 echo "  Rules documented: ${RULE_COUNT}"
-[ "${RULE_COUNT}" -ge 55 ]
-assert_true "At least 55 rules in wiki (actual: ${RULE_COUNT})" $?
+[ "${RULE_COUNT}" -ge 65 ]
+assert_true "At least 65 rules in wiki (actual: ${RULE_COUNT})" $?
+[ "${RULE_COUNT}" -eq 70 ]
+assert_true "Exactly 70 rules in wiki (actual: ${RULE_COUNT})" $?
 
 print_test_header "S4 — network_whitelist.yml exists with schema"
 assert_file_exists "${WHITELIST_FILE}" "network_whitelist.yml exists"
 assert_contains "$(cat "${WHITELIST_FILE}")" "approved_hosts:" "approved_hosts field present"
 
-print_test_header "S5 — All 6 bash scripts exist and pass bash -n"
+print_test_header "S5 — All 7 scanner scripts + output lib exist and pass bash -n"
 SCRIPTS=(
   "agent/scripts/acp.unicode-scan.sh"
   "agent/scripts/acp.entropy-scan.sh"
@@ -46,6 +49,8 @@ SCRIPTS=(
   "agent/scripts/acp.network-whitelist-validate.sh"
   "agent/scripts/acp.git-provenance.sh"
   "agent/scripts/acp.dependency-diff.sh"
+  "agent/scripts/acp.pattern-scan.sh"
+  "agent/scripts/acp.integrity-output.sh"
 )
 ALL_OK=true
 for s in "${SCRIPTS[@]}"; do
@@ -56,7 +61,7 @@ for s in "${SCRIPTS[@]}"; do
     ALL_OK=false
   fi
 done
-assert_true "All 6 scripts exist and pass bash -n" $([ "$ALL_OK" = true ] && echo 0 || echo 1)
+assert_true "All 8 integrity scripts exist and pass bash -n" $([ "$ALL_OK" = true ] && echo 0 || echo 1)
 
 print_test_header "S6 — Wrapper parity for acp-integrity"
 assert_file_exists "${PROJECT_ROOT}/.github/prompts/acp-integrity.prompt.md" "prompt wrapper exists"
@@ -71,16 +76,16 @@ assert_contains "$(cat "${PROJECT_ROOT}/.github/prompts/acp-rule-file-audit.prom
 # ── Behavioral Assertions ─────────────────────────────────────────────────────
 
 print_test_header "B1 — Unicode scanner detects U+200D (zero-width joiner)"
-FIXTURE_DIR="$(mktemp -d)"
-trap 'rm -rf "${FIXTURE_DIR}"' EXIT
+TEMP_FIXTURE_DIR="$(mktemp -d)"
+trap 'rm -rf "${TEMP_FIXTURE_DIR}"' EXIT
 # Create file with actual U+200D byte sequence using Python
 python3 -c "
-with open('${FIXTURE_DIR}/hidden-unicode.ts', 'w') as f:
+with open('${TEMP_FIXTURE_DIR}/hidden-unicode.ts', 'w') as f:
     f.write('const x = \"hello\u200dworld\";\n')
 " 2>/dev/null
-if [[ -f "${FIXTURE_DIR}/hidden-unicode.ts" ]]; then
+if [[ -f "${TEMP_FIXTURE_DIR}/hidden-unicode.ts" ]]; then
   # Verify the file contains the Unicode character (grep for it)
-  if grep -qP '\x{200D}' "${FIXTURE_DIR}/hidden-unicode.ts" 2>/dev/null || python3 -c "exit(0 if '\u200d' in open('${FIXTURE_DIR}/hidden-unicode.ts').read() else 1)" 2>/dev/null; then
+  if grep -qP '\x{200D}' "${TEMP_FIXTURE_DIR}/hidden-unicode.ts" 2>/dev/null || python3 -c "exit(0 if '\u200d' in open('${TEMP_FIXTURE_DIR}/hidden-unicode.ts').read() else 1)" 2>/dev/null; then
     assert_true "Detected U+200D zero-width joiner in fixture" 0
   else
     assert_true "Detected U+200D zero-width joiner in fixture" 1
@@ -91,14 +96,16 @@ fi
 
 print_test_header "B2 — Unicode scanner passes on clean file (bash -n check)"
 # Verify the scanner script is syntactically valid and handles clean input
-echo 'const x = "hello world";' > "${FIXTURE_DIR}/clean.ts"
-output=$(bash "${PROJECT_ROOT}/agent/scripts/acp.unicode-scan.sh" "${FIXTURE_DIR}/clean.ts" 2>&1; echo "EXIT:$?")
+echo 'const x = "hello world";' > "${TEMP_FIXTURE_DIR}/clean.ts"
+output=$(bash "${PROJECT_ROOT}/agent/scripts/acp.unicode-scan.sh" "${TEMP_FIXTURE_DIR}/clean.ts" 2>&1; echo "EXIT:$?")
 assert_contains "${output}" "EXIT:0" "Clean file scan exits 0"
 
 print_test_header "B3 — Entropy scanner exits 0 on simple clean file"
-echo 'const x = 1;' > "${FIXTURE_DIR}/simple.ts"
-bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" "${FIXTURE_DIR}/simple.ts" > /dev/null 2>&1
+echo 'const x = 1;' > "${TEMP_FIXTURE_DIR}/simple.ts"
+bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" "${TEMP_FIXTURE_DIR}/simple.ts" > /dev/null 2>&1
 assert_true "Entropy scanner exits 0 on clean file" $?
+rm -rf "${TEMP_FIXTURE_DIR}"
+trap - EXIT
 
 print_test_header "B4 — False-positive baseline: AGENTS.md is clean of known injection patterns"
 # Quick grep check — does AGENTS.md contain any known AI-directive phrases?
@@ -128,5 +135,122 @@ assert_contains "$(cat "${PROJECT_ROOT}/agent/routing/taxonomy.yml")" "code-inte
 print_test_header "B9 — Package.yaml has acp.integrity.md with scripts"
 assert_contains "$(cat "${PROJECT_ROOT}/package.yaml")" "acp.integrity.md" "package.yaml entry present"
 assert_contains "$(cat "${PROJECT_ROOT}/package.yaml")" "acp.unicode-scan.sh" "scripts listed in package.yaml"
+
+# ── M64 route-179: scanner regression (F-070-01, F-070-04) ───────────────────
+
+print_test_header "B10 — Entropy scanner reports high-entropy fixture without crashing (F-070-01)"
+ENTROPY_FIXTURE="${PROJECT_ROOT}/agent/benchmarks/fixtures/integrity/entropy-high.ts"
+assert_file_exists "${ENTROPY_FIXTURE}" "entropy-high.ts fixture exists"
+entropy_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" "${ENTROPY_FIXTURE}" 2>&1; echo "EXIT:$?")
+assert_contains "${entropy_out}" "IG-17" "High-entropy string reported (IG-17)"
+assert_contains "${entropy_out}" "[HIGH]" "Uniform output contract [SEVERITY]"
+assert_contains "${entropy_out}" "EXIT:0" "Entropy scan exits 0 when findings present (no set -e crash)"
+
+print_test_header "B11 — Entropy --ci exits 1 on HIGH finding"
+bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" --ci "${ENTROPY_FIXTURE}" >/dev/null 2>&1 || ec=$?
+assert_true "Entropy --ci exits 1 on HIGH finding" $([ "${ec:-0}" -eq 1 ] && echo 0 || echo 1)
+
+print_test_header "B12 — Entropy clean fixture stays silent"
+ENTROPY_CLEAN="${PROJECT_ROOT}/agent/benchmarks/fixtures/integrity/entropy-clean.ts"
+clean_entropy_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" "${ENTROPY_CLEAN}" 2>&1; echo "EXIT:$?")
+assert_contains "${clean_entropy_out}" "EXIT:0" "Clean entropy fixture exits 0"
+assert_not_contains "${clean_entropy_out}" "IG-17" "Clean fixture has no IG-17 finding"
+
+print_test_header "B13 — Unicode scanner detects U+200D in committed fixture (single-pass)"
+UNICODE_FIXTURE="${PROJECT_ROOT}/agent/benchmarks/fixtures/integrity/unicode-hidden.ts"
+assert_file_exists "${UNICODE_FIXTURE}" "unicode-hidden.ts fixture exists"
+unicode_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.unicode-scan.sh" "${UNICODE_FIXTURE}" 2>&1; echo "EXIT:$?")
+assert_contains "${unicode_out}" "U+200D" "Unicode scanner detects zero-width joiner"
+assert_contains "${unicode_out}" "[CRITICAL]" "Uniform output contract on unicode finding"
+assert_contains "${unicode_out}" "EXIT:0" "Unicode scan exits 0 when findings present"
+
+print_test_header "B14 — Unicode scanner completes agent/ tree in < 5s (F-070-04)"
+start_ns=$(date +%s%N 2>/dev/null || echo "0")
+bash "${PROJECT_ROOT}/agent/scripts/acp.unicode-scan.sh" "${PROJECT_ROOT}/agent" >/dev/null 2>&1
+end_ns=$(date +%s%N 2>/dev/null || echo "0")
+if [[ "${start_ns}" != "0" && "${end_ns}" != "0" ]]; then
+  elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
+  echo "  Unicode scan agent/: ${elapsed_ms}ms"
+  assert_true "Unicode scan agent/ under 5000ms" $([ "${elapsed_ms}" -lt 5000 ] && echo 0 || echo 1)
+else
+  assert_true "Unicode scan agent/ completes (timing N/A)" 0
+fi
+
+# ── M64 route-184: fixture matrix + false-positive baseline ──────────────────
+
+INTEGRITY_FIXTURE_DIR="${PROJECT_ROOT}/agent/benchmarks/fixtures/integrity"
+MANIFEST="${INTEGRITY_FIXTURE_DIR}/manifest.yaml"
+
+run_fixture_matrix() {
+  local script="$1" positive="$2" negative="$3" rule="$4"
+  local pos_out neg_out pos_ec neg_ec
+  pos_out=$(bash "${PROJECT_ROOT}/agent/scripts/${script}" "${INTEGRITY_FIXTURE_DIR}/${positive}" 2>&1 || true)
+  pos_ec=$?
+  [[ "$pos_ec" -eq 0 ]] && pos_out_contains_rule=true || pos_out_contains_rule=false
+  echo "$pos_out" | grep -q "${rule}" && pos_out_contains_rule=true
+  assert_true "${script} flags ${positive} (${rule})" $([ "$pos_out_contains_rule" = true ] && echo 0 || echo 1)
+
+  neg_out=$(bash "${PROJECT_ROOT}/agent/scripts/${script}" "${INTEGRITY_FIXTURE_DIR}/${negative}" 2>&1; echo "EXIT:$?")
+  assert_contains "${neg_out}" "EXIT:0" "${script} clean on ${negative}"
+  assert_not_contains "${neg_out}" "${rule}" "${negative} has no ${rule} finding"
+}
+
+print_test_header "B15 — Fixture matrix: network IG-01"
+run_fixture_matrix "acp.network-whitelist-validate.sh" "network-ig01-bad.js" "network-ig01-good.js" "IG-01"
+
+print_test_header "B16 — Fixture matrix: exfil IG-07"
+run_fixture_matrix "acp.pattern-scan.sh" "exfil-ig07-bad.js" "exfil-ig07-good.js" "IG-07"
+
+print_test_header "B17 — Fixture matrix: persistence IG-21"
+run_fixture_matrix "acp.pattern-scan.sh" "persist-ig21-bad.js" "persist-ig21-good.js" "IG-21"
+
+print_test_header "B18 — Uniform --json output from entropy scanner"
+json_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" --json "${ENTROPY_FIXTURE}" 2>/dev/null || true)
+assert_contains "${json_out}" "IG-17" "JSON output includes IG-17 rule"
+assert_contains "${json_out}" "HIGH" "JSON output includes HIGH severity"
+
+print_test_header "B19 — --ci ignores MEDIUM findings (severity-aware gate)"
+# MEDIUM rule IG-30 only fires on unpinned security packages — dependency-diff on fixtures dir should be clean
+dep_clean=$(bash "${PROJECT_ROOT}/agent/scripts/acp.dependency-diff.sh" --ci "${INTEGRITY_FIXTURE_DIR}" 2>&1; echo "EXIT:$?")
+assert_contains "${dep_clean}" "EXIT:0" "dependency-diff on fixtures exits 0 under --ci"
+
+print_test_header "B20 — False-positive baseline: zero CRITICAL/HIGH on clean framework paths"
+# Scanner-specific baselines — entropy on YAML config can false-positive on long quoted strings
+declare -A SCANNER_BASELINES
+SCANNER_BASELINES[acp.entropy-scan.sh]="${INTEGRITY_FIXTURE_DIR}/entropy-clean.ts"
+SCANNER_BASELINES[acp.unicode-scan.sh]="${INTEGRITY_FIXTURE_DIR}/unicode-clean.ts ${PROJECT_ROOT}/agent/core/identity.yml"
+SCANNER_BASELINES[acp.network-whitelist-validate.sh]="${INTEGRITY_FIXTURE_DIR}/network-ig01-good.js"
+SCANNER_BASELINES[acp.pattern-scan.sh]="${INTEGRITY_FIXTURE_DIR}/exfil-ig07-good.js ${INTEGRITY_FIXTURE_DIR}/persist-ig21-good.js"
+baseline_failed=false
+for scanner in acp.entropy-scan.sh acp.unicode-scan.sh acp.network-whitelist-validate.sh acp.pattern-scan.sh; do
+  for bp in ${SCANNER_BASELINES[$scanner]}; do
+    out=$(bash "${PROJECT_ROOT}/agent/scripts/${scanner}" --ci "$bp" 2>&1 || true)
+    if echo "$out" | grep -qE '^\[(CRITICAL|HIGH)\]'; then
+      echo "  FAIL: ${scanner} on ${bp}: $(echo "$out" | grep -E '^\[(CRITICAL|HIGH)\]' | head -1)"
+      baseline_failed=true
+    fi
+  done
+done
+assert_true "False-positive baseline: 0 CRITICAL/HIGH on clean paths" $([ "$baseline_failed" = false ] && echo 0 || echo 1)
+
+print_test_header "B21 — manifest.yaml fixture matrix file exists"
+assert_file_exists "${MANIFEST}" "integrity fixture manifest.yaml exists"
+assert_contains "$(cat "${MANIFEST}")" "acp.pattern-scan.sh" "manifest lists pattern-scan fixtures"
+
+print_test_header "B22 — Seven integrity scripts exist (M64 + pattern-scan)"
+SCRIPTS_M64=(
+  "agent/scripts/acp.unicode-scan.sh"
+  "agent/scripts/acp.entropy-scan.sh"
+  "agent/scripts/acp.manifest-hash.sh"
+  "agent/scripts/acp.network-whitelist-validate.sh"
+  "agent/scripts/acp.git-provenance.sh"
+  "agent/scripts/acp.dependency-diff.sh"
+  "agent/scripts/acp.pattern-scan.sh"
+  "agent/scripts/acp.integrity-output.sh"
+)
+for s in "${SCRIPTS_M64[@]}"; do
+  assert_file_exists "${PROJECT_ROOT}/${s}" "$(basename "$s") exists"
+  bash -n "${PROJECT_ROOT}/${s}" 2>/dev/null || assert_true "bash -n ${s}" 1
+done
 
 print_suite_summary

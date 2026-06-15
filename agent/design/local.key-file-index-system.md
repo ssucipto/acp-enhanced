@@ -1,8 +1,14 @@
 # ACP Key File Index System
 
+<!-- @acp.meta.design
+topic: acp, key, file, index, system
+description: A weighted index of critical project files that agents must read before taking action, preventing silent ignorance of existing guardrails and patterns
+status: draft
+updated: 2026-03-02
+@acp.meta.end -->
+
 **Concept**: A weighted index of critical project files that agents must read before taking action, preventing silent ignorance of existing guardrails and patterns  
 **Created**: 2026-03-02  
-**Status**: Design Specification  
 
 ---
 

@@ -1,9 +1,9 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.12.1-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.20.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
-[![Milestones](https://img.shields.io/badge/milestones-49%2F49%20complete-brightgreen)](https://github.com/ssucipto/acp-enhanced)
-[![Commands](https://img.shields.io/badge/commands-67%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
+[![Milestones](https://img.shields.io/badge/milestones-57%20shipped%20%7C%20M58%20active-blue)](https://github.com/ssucipto/acp-enhanced)
+[![Commands](https://img.shields.io/badge/commands-69%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Visualizer](https://img.shields.io/badge/visualizer-v1.5.0-6e47ff)](https://github.com/ssucipto/ACPEnhanced-Visual)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Fork](https://img.shields.io/badge/fork%20of-prmichaelsen%2Facp-orange)](https://github.com/prmichaelsen/agent-context-protocol)
@@ -28,12 +28,12 @@ The framework layer solves a specific problem: as your project grows, the AI age
 | Directory | Purpose |
 |---|---|
 | `agent/core/` | Identity, hard constraints, routing config — loaded every session |
-| `agent/skills/` | Domain-specific guidance (7 skills) — invoked via `@{skill-name}` |
+| `agent/skills/` | Domain-specific guidance (9 skills) — invoked via `@{skill-name}` |
 | `agent/routing/` | Task taxonomy, routing rules, cost ledger, task files |
 | `agent/memory/` | Session log, lessons learned, patterns, architectural decisions |
 | `agent/wiki/` | Reference docs loaded section-by-section (never all at once) |
 | `agent/commands/` | 71 self-documenting slash commands (`/acp-init`, `/acp-review`, `/acp-integrity`, `/acp-audit`, etc.) |
-| `agent/scripts/` | 29 bash scripts + TypeScript tooling for dispatch and validation |
+| `agent/scripts/` | 36 bash scripts + TypeScript tooling for dispatch and validation |
 
 > 🖥️ **Companion Tool**: [**ACP Enhanced Visualizer**](https://github.com/ssucipto/ACPEnhanced-Visual) (v1.5.0) — a full-featured local web dashboard that brings your `agent/progress.yaml` to life. Monitors milestones, tasks, sessions, ADRs, lessons, patterns, packages, and audit reports — all from a single interactive UI. **Multi-project tab support, GitHub remote read, and zero-config `npx acp-visualizer` CLI.** [See full feature list below →](#visualize-your-project)
 
@@ -113,13 +113,13 @@ This catches the most common AI coding mistake: letting the agent commit directl
 
 ## Slash Commands
 
-ACP Enhanced registers **63 slash commands** across two tools — available after bootstrapping:
+ACP Enhanced registers **69 slash commands** across two tools — available after bootstrapping:
 
 | Tool | How to invoke | Source files |
 |---|---|---|
 | VS Code Copilot | `/acp-*` — autocomplete in Copilot Chat | `.github/prompts/*.prompt.md` |
 | opencode | `/acp-*` — autocomplete in opencode TUI | `.opencode/commands/*.md` |
-| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (63 commands) |
+| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (69 commands) |
 
 ```text
 /acp-init          /acp-proceed       /acp-plan          /acp-status
@@ -130,7 +130,7 @@ ACP Enhanced registers **63 slash commands** across two tools — available afte
 
 > VS Code Copilot requires agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.  
 > opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.  
-> **Note**: All 63 commands are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.
+> **Note**: All 69 commands are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.
 
 ---
 
@@ -246,8 +246,8 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Memory | None — every session starts cold | sessions.md + lessons.md + ADRs + patterns |
 | Task routing | None | Taxonomy-based routing to skill files |
 | Mistake learning | None | Correction log appended per task type |
-| VS Code commands | Manual file reference | 63 slash commands with autocomplete |
-| opencode support | None | 63 slash commands in `.opencode/commands/` |
+| VS Code commands | Manual file reference | 69 slash commands with autocomplete |
+| opencode support | None | 69 slash commands in `.opencode/commands/` |
 | Preferences | None | 4-level hierarchy (project > workspace > user > default) |
 | Project registry | None | Global `~/.acp/projects.yaml` for multi-project tracking |
 | Cost tracking | None | Per-task token + USD ledger via dispatch |
@@ -257,7 +257,10 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Audit carryovers | None | `agent/memory/audit-carryovers.md` — tracks unresolved findings across sessions; surfaced at session start via Step 4.4 |
 | Install | `curl \| bash` from original repo | Single bootstrap script from this fork |
 | Light mode | Full protocol every session | Default ~200-token light mode; full mode for architecture sessions |
-| Skill invocation | None | 7 skills invocable via `@{skill-name}` in chat |
+| Skill invocation | None | 9 skills invocable via `@{skill-name}` in chat |
+| Code review | None | `/acp-review` — 77-rule quality + security enforcement (OWASP, MASVS) |
+| Code integrity | None | `/acp-integrity` v1.0 — 55-rule trust scan with 6 deterministic bash scripts |
+| Scheduled audits | None | `recurring_tasks` in progress.yaml + Step 4.5 session-start due check |
 | Parallel tasks | None | `task_type: parallel` with DAG sub-tasks + orchestrator-workers |
 | Command discovery | Manual doc reading | Post-command suggestions with "when to use" descriptions |
 | Observability | None | Auto-populated cost/token/latency tracking on `/acp-commit` |
@@ -284,9 +287,37 @@ ACP Enhanced provides five report types, each for a different audience:
 - `design-spec-{subject}-v{N}.md` — interface spec (`/acp-design-spec`)
 - `roadmap-brief-{subject}-{date}.md` — one-off planning (not recurring)
 
-### Recent Protocol Enhancements (v6.4–v6.9.3)
+### Recent Protocol Enhancements (v6.10–v6.12.1)
 
-Eleven milestones shipped in May–June 2026:
+Six milestones shipped in June 2026 after M51:
+
+#### M57 — Recurring Tasks Scheduler (v6.12.1, June 2026)
+Automated periodic review cadence with session-start surfacing.
+
+- **`recurring_tasks`** block in `agent/progress.yaml` — 5 default tasks (weekly review, weekly integrity, pre-commit rule audit, monthly dependency audit, quarterly deep scan)
+- **AGENTS.md Step 4.5** — surfaces overdue scheduled reviews at session start
+- **`constraints.yml` hooks** — pre-commit hook binding for integrity fast-scan
+- E2E test: `e2e/acp.recurring-tasks.test.sh` (16 assertions)
+
+#### M56 — /acp-integrity v1.0 (v6.12.0, June 2026)
+AI code integrity and malicious-pattern detection with deterministic scanners.
+
+- **55 rules** in v1.0 (15 deferred to v2.0 / M58) — Unicode injection, entropy, network whitelist, git provenance, dependency diff, manifest hash
+- **6 bash scripts** — `acp.unicode-scan.sh`, `acp.entropy-scan.sh`, `acp.network-whitelist-validate.sh`, `acp.git-provenance.sh`, `acp.dependency-diff.sh`, `acp.manifest-hash.sh`
+- **LLM/Script Boundary Rule** — deterministic checks run in bash, not LLM reasoning
+- E2E test: `e2e/acp.integrity.test.sh` (26 assertions)
+
+#### M55 — /acp-review (v6.11.0, June 2026)
+Standards-based code quality and security review command.
+
+- **77 rules** across TypeScript, OWASP Top 10:2025, OWASP MASVS v2.0, API conventions, and ACP self-review (SH/YM/AP)
+- **`--diff`**, **`--carryover`**, **`--ci`** modes for targeted review and CI integration
+- E2E test: `e2e/acp.review.test.sh` (49 assertions)
+
+#### M52–M54 — Reporting, Cursor Parity, CI/CD (v6.10.0–v6.10.1)
+- **M52**: `/acp-stakeholder-report` — five-tier reporting model (status → stakeholder → archive → design-spec → cost)
+- **M53**: Cursor IDE slash-command parity — `.cursor/commands/` auto-generated from opencode wrappers
+- **M54**: CI/CD + GitFlow-lite — `develop` → `mainline` workflow, `ci.yaml` + `e2e-tests.yaml`, `scripts/ci-validate.sh` (branch protection pending)
 
 #### M51 — Bootstrap Install Fix (v6.9.4, June 2026)
 Fixed a critical bug where `acp-bootstrap.sh` silently produced broken installs on all fresh curl-pipe-bash invocations. Every new user got 0 command files and 0 script files.
@@ -333,7 +364,7 @@ Cross-referenced 4 weeks of production feedback (ChoreHive: 34 milestones, 54 au
 
 - **Light-mode context protocol** — Default ~200-token load (identity + progress + recent sessions). Two-way switching with auto-recommendations. Agents skipped the full protocol 0/14 times in production — light mode fixes this.
 - **Auto-populate lessons** — `/acp-commit` auto-migrates session key_facts to `lessons.md` with scope inference and dedup.
-- **Skills → @-mention** — 7 skills invocable via `@{commands}`, `@{testing}`, etc. No longer auto-loaded and silently skipped.
+- **Skills → @-mention** — 9 skills invocable via `@{commands}`, `@{testing}`, `@{code-review}`, `@{code-integrity}`, etc. No longer auto-loaded and silently skipped.
 - **Parallel task support** — DAG-based sub-tasks with concurrent spawning. Completes ACP against Anthropic's 6 agent workflows.
 - **Command discoverability** — Post-command related suggestions, underused-command detection, getting-started tips.
 - **Bootstrap flags** — `--team-size solo|small|team` (30/80/310 files). Prompt wrappers now opt-in.
@@ -813,6 +844,8 @@ This will:
 - **`/acp-sync`** - Sync documentation with code
 - **`/acp-validate`** - Validate ACP structure
 - **`/acp-audit`** - Audit task completion status, bugs, and improvement opportunities
+- **`/acp-review`** - Standards-based code quality and security review (77 rules)
+- **`/acp-integrity`** - AI code integrity scan — Unicode, entropy, supply chain (55 rules v1.0)
 - **`/acp-report`** - Generate session report
 - **`/acp-index`** - Manage the key file index (list, add, remove, explore, show)
 
@@ -873,7 +906,7 @@ See [AGENT.md](./AGENT.md) for complete command documentation and methodology.
    cp $TEMP/acp-temp/agent/scripts/*.sh agent/scripts/
    rm -rf $TEMP/acp-temp
    ```
-4. Verify: `ls agent/commands/` should show 60+ files, `ls agent/scripts/` should show 25+ files
+4. Verify: `ls agent/commands/` should show 69+ files, `ls agent/scripts/` should show 36+ files
 
 ### Cursor IDE
 
@@ -1041,8 +1074,9 @@ project-root/
 ├── CLAUDE.md                       # Symlink → AGENT.md (Claude Code)
 ├── .github/
 │   ├── copilot-instructions.md     # Symlink → AGENT.md (GitHub Copilot)
-│   └── prompts/                    # 63 slash command prompts (*.prompt.md)
-├── .opencode/commands/             # 63 slash commands for opencode TUI
+│   └── prompts/                    # 69 slash command prompts (*.prompt.md)
+├── .opencode/commands/             # 69 slash commands for opencode TUI
+├── .cursor/commands/               # 69 slash commands for Cursor Agent (auto-generated)
 ├── agent/                          # Agent context directory
 │   ├── core/                       # Layer 1: always loaded, cached
 │   │   ├── identity.yml            # Project identity + stack
@@ -1055,7 +1089,9 @@ project-root/
 │   │   ├── testing.md              # E2E + unit testing
 │   │   ├── typescript.md           # TypeScript tooling
 │   │   ├── crosscut.md             # Docs, README, cross-cutting
-│   │   └── upstream-sync.md        # Upstream integration
+│   │   ├── upstream-sync.md        # Upstream integration
+│   │   ├── code-review.md          # /acp-review conventions
+│   │   └── code-integrity.md       # /acp-integrity conventions
 │   ├── memory/                     # Layer 3: persistent memory
 │   │   ├── sessions.md             # Session log (last 3 loaded)
 │   │   ├── lessons.md              # Correction log (by task_type)
@@ -1071,8 +1107,8 @@ project-root/
 │   │   ├── rules.md                # Routing rules + conventions
 │   │   ├── ledger.md               # Cost + token tracking
 │   │   └── tasks/                  # Generated route files
-│   ├── commands/                   # 48 command docs (acp.*.md, git.*.md)
-│   ├── scripts/                    # 27 shell scripts + TypeScript tools
+│   ├── commands/                   # 71 command docs (69 acp.* + 2 git.*)
+│   ├── scripts/                    # 36 shell scripts + TypeScript tools
 │   ├── design/                     # Design documents
 │   ├── milestones/                 # Milestone definitions
 │   ├── patterns/                   # Reusable code patterns
@@ -1111,7 +1147,7 @@ The directories below are the original ACP structure that ACP Enhanced preserves
 project-root/
 ├── AGENT.md                        # ACP documentation
 ├── agent/                          # Agent directory
-│   ├── commands/                   # Command system (48 docs)
+│   ├── commands/                   # Command system (71 docs)
 │   ├── design/                     # Design documents
 │   ├── milestones/                 # Project milestones
 │   ├── patterns/                   # Architectural patterns
@@ -1258,6 +1294,10 @@ Contributions are welcome! Please:
 ## License
 
 MIT License - See [LICENSE](./LICENSE) for details
+
+## Security
+
+See [SECURITY.md](./SECURITY.md) for our vulnerability disclosure policy and supported versions.
 
 ---
 

@@ -37,6 +37,16 @@ This is the first task of M33 (optional milestone). Only begin if MCP server int
 1. Create `agent/schemas/driver.schema.yaml`:
 ```yaml
 # driver.schema.yaml — schema for agent/driver.yaml
+
+<!-- @acp.meta.task
+topic: driverschemayaml, schema, for, agentdriveryaml
+description: Create driver.schema.yaml and driver.template.yaml
+milestone: M33
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 # Validate with: acp.driver-yaml.sh validate
 ---
 required:

@@ -1,9 +1,18 @@
 # Task 61: Schema and Validation Enhancement
 
+<!-- @acp.meta.task
+topic: schema, and, validation, enhancement
+description: Task 61: Schema and Validation Enhancement
+milestone: M8
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M8 - Experimental Features System  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

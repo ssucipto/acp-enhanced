@@ -1,9 +1,18 @@
 # Task 21: Enhanced @acp.validate
 
+<!-- @acp.meta.task
+topic: enhanced, acpvalidate
+description: Task 21: Enhanced @acp.validate
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M4 - ACP Package Development System](../milestones/milestone-4-package-development.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 15 (Namespace Utilities)  
-**Status**: Not Started  
 
 ---
 

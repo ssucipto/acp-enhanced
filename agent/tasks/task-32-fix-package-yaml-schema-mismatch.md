@@ -1,9 +1,18 @@
 # Task 32: Fix package.yaml Schema Mismatch and Add Template
 
+<!-- @acp.meta.task
+topic: fix, packageyaml, schema, mismatch, and, add, template
+description: Task 32: Fix package.yaml Schema Mismatch and Add Template
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: Future Enhancement  
 **Estimated Time**: 4-6 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

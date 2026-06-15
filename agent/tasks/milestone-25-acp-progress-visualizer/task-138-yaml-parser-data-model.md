@@ -1,9 +1,18 @@
 # Task 138: YAML Parser + TypeScript Data Model
 
+<!-- @acp.meta.task
+topic: yaml, parser, typescript, data, model
+description: Task 138: YAML Parser + TypeScript Data Model
+milestone: M25
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M25 — ACP Progress Visualizer (P0 MVP)  
 **Task ID**: task-138  
 **Priority**: P0  
-**Status**: Completed  
 **Estimated Hours**: 2–3h  
 **Design Reference**: [ACP Progress Visualizer](../../design/visualizer.requirements.md)  
 **Depends On**: task-137 (Bootstrap Repository)

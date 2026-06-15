@@ -1,9 +1,18 @@
 # Task 74: Command Updates for Templates
 
+<!-- @acp.meta.task
+topic: command, updates, for, templates
+description: Task 74: Command Updates for Templates
+milestone: M9
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M9 - Template Source Files Support](../../milestones/milestone-9-template-source-files.md)  
 **Estimated Time**: 4-5 hours  
 **Dependencies**: Task 73 (Manifest Tracking)  
-**Status**: Not Started  
 
 ---
 

@@ -1,9 +1,18 @@
 # Task 137: Bootstrap Repository + TanStack Start
 
+<!-- @acp.meta.task
+topic: bootstrap, repository, tanstack, start
+description: Task 137: Bootstrap Repository + TanStack Start
+milestone: M25
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M25 — ACP Progress Visualizer (P0 MVP)  
 **Task ID**: task-137  
 **Priority**: P0  
-**Status**: Completed  
 **Estimated Hours**: 3–4h  
 **Started**: 2026-05-06  
 **Completed**: 2026-05-06  
