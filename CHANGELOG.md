@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.20.9] — 2026-06-15
+
+### Fixed
+- **route-172 test depth**: `getFilteredLessons`/`getLastNSessions` upgraded from smoke tests (return type) to proper behavioral tests: exact task_type filtering, archived-entry skipping, priority:high cross-matching, 5-entry cap, N=1/2/3 session slicing, and empty-string fast path. 33 vitest tests (from 26). `tsc --noEmit` passes (added tsconfig.json). (audit-075 shortcut remediation)
+- **route-171 budget check**: identity.yml Layer 1 token count verified (1,622 bytes ≈ 405 tokens, under 500 ceiling). team_members addition had negligible impact (+22 bytes, +5 tokens).
+- **A3.5 final sweep**: vitest 33/33 green. E2E suite has 47/47 CRLF failures on WSL — pre-existing line-ending issue. .gitattributes LF enforcement (route-171) prevents future files from acquiring CRLF.
+
+---
+
 ## [6.20.8] — 2026-06-15
 
 ### Fixed

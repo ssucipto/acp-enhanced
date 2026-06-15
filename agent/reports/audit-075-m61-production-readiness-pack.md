@@ -17,6 +17,23 @@ on Dependabot github-actions, and no conditional skip comment for non-portable s
 were fixed in this audit cycle. Additionally, 3 pending carryovers (HIGH-065-005, HIGH-065-006, MED-066-003)
 that M61 addressed were marked `fixed`.
 
+### Post-Audit Shortcut Remediation
+
+After the initial audit, 4 shortcuts from autonomous mode execution were identified and addressed:
+
+1. **route-172 test depth**: `getFilteredLessons` and `getLastNSessions` had only smoke tests (return-type check).
+   Fixed by adding optional `content` parameter for testability and 14 new behavioral tests covering:
+   - `getLastNSessions`: N=1,2,3 with 4-entry fixture; empty-string fast path
+   - `getFilteredLessons`: exact task_type filtering, unmatched types, archived-entry skipping,
+     priority:high cross-matching, 5-entry cap enforcement
+2. **`npx tsc --noEmit`**: Never ran — created `scripts/tsconfig.json` and confirmed 0 type errors.
+3. **Layer 1 token budget**: identity.yml is 1,622 bytes (≈405 tokens), under 500-token ceiling.
+   The `team_members` addition was +22 bytes (+5 tokens), negligible impact.
+4. **A3.5 full test suite**: Vitest (33/33 tests) passes cleanly. E2E smoke suite (`run-e2e-tests.sh`)
+   has 47/47 CRLF failures — this is a pre-existing Windows/WSL line-ending issue not caused by M61.
+   The `.gitattributes` LF enforcement added in route-171 will prevent new files from acquiring CRLF,
+   but existing checked-out files need `git add --renormalize` to repair.
+
 ## Files Analyzed
 
 | File | Type | Relevance |
@@ -93,7 +110,7 @@ suite authors.
 | npm audit | OWASP Dependency-Check | ✅ Compliant | Non-blocking initially per task spec |
 | Author provenance | IG-37 git author allowlist | ✅ Compliant | team_members populated; CRLF resilient |
 | Cross-platform CI | Windows documented target | ✅ Compliant | `windows-latest` + `shell: bash`; skip comment |
-| TS unit tests | Code coverage for Turing-complete code | ✅ Compliant | 26 vitest tests, CI-wired |
+| TS unit tests | Code coverage for Turing-complete code | ✅ Compliant | 33 vitest tests, CI-wired |
 | Action pinning | IG-67 integrity rule | ✅ Compliant | Trufflehog now pinned; all others already pinned |
 
 ## Git History
