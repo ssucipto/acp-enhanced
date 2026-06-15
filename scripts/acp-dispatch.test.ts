@@ -65,21 +65,150 @@ describe("updateRoutingYml", () => {
 // ── getLastNSessions ─────────────────────────────────────────
 
 describe("getLastNSessions", () => {
-  it("returns empty string when sessions.md does not exist", () => {
-    // sessions.md is in agent/memory/ which should exist, but if it were empty/missing
-    // the function reads from agent/memory/sessions.md. We can't easily redirect.
-    // Instead test that it returns a string (may be empty or populated).
-    const result = getLastNSessions(1);
-    expect(typeof result).toBe("string");
+  const FIXTURE_SESSIONS = `- date: 2026-06-10
+  executor: copilot
+  tasks: [route-001]
+  done: [a]
+  key_fact: "First session"
+
+- date: 2026-06-11
+  executor: deepseek-v4-pro
+  tasks: [route-002]
+  done: [b]
+  key_fact: "Second session"
+
+- date: 2026-06-12
+  executor: claude-sonnet
+  tasks: [route-003]
+  done: [c]
+  key_fact: "Third session"
+
+- date: 2026-06-13
+  executor: copilot
+  tasks: [route-004, route-005]
+  done: [d, e]
+  key_fact: "Fourth session"
+`;
+
+  it("returns empty string when content is missing", () => {
+    const result = getLastNSessions(1, "");
+    expect(result).toBe("");
+  });
+
+  it("returns last 1 entry", () => {
+    const result = getLastNSessions(1, FIXTURE_SESSIONS);
+    expect(result).toContain("Fourth session");
+    expect(result).not.toContain("Third session");
+  });
+
+  it("returns last 2 entries", () => {
+    const result = getLastNSessions(2, FIXTURE_SESSIONS);
+    expect(result).toContain("Fourth session");
+    expect(result).toContain("Third session");
+    expect(result).not.toContain("Second session");
+  });
+
+  it("returns last 3 entries (default context load)", () => {
+    const result = getLastNSessions(3, FIXTURE_SESSIONS);
+    expect(result).toContain("Fourth session");
+    expect(result).toContain("Third session");
+    expect(result).toContain("Second session");
+    expect(result).not.toContain("First session");
   });
 });
 
 // ── getFilteredLessons ────────────────────────────────────────
 
 describe("getFilteredLessons", () => {
-  it("returns a string for any task_type", () => {
-    const result = getFilteredLessons("bash-script-create");
-    expect(typeof result).toBe("string");
+  const FIXTURE_LESSONS = `- date: 2026-06-10
+  task_type: bash-script-create
+  priority: normal
+  mistake: "Used set -e without trap"
+  correction: "Always trap errors with set -e"
+
+- date: 2026-06-11
+  task_type: bash-script-create
+  priority: high
+  mistake: "Forgot pipefail"
+  correction: "Always use set -euo pipefail"
+
+- date: 2026-06-12
+  task_type: typescript-feature
+  priority: normal
+  mistake: "Type issue"
+  correction: "Fix types"
+
+- date: 2026-06-13
+  task_type: all
+  priority: normal
+  mistake: "Context window overflow"
+  correction: "Write at moment of discovery"
+
+- date: 2026-06-14
+  task_type: bash-script-create
+  priority: normal
+  status: archived
+  mistake: "Fixed and archived"
+  correction: "No longer relevant"
+
+- date: 2026-06-15
+  task_type: e2e-test-write
+  priority: high
+  mistake: "CRLF issue"
+  correction: "Convert line endings"
+
+- date: 2026-06-16
+  task_type: bash-script-create
+  priority: normal
+  mistake: "Sixth bash lesson"
+  correction: "This should test the cap of 5"
+
+- date: 2026-06-17
+  task_type: bash-script-create
+  priority: normal
+  mistake: "Seventh bash lesson"
+  correction: "Beyond the cap of 5"
+`;
+
+  it("filters by exact task_type match", () => {
+    const result = getFilteredLessons("bash-script-create", FIXTURE_LESSONS);
+    // 4 bash-script-create + 1 "all" + 1 high = 6 relevant → capped at 5
+    // Oldest (2026-06-10 "Always trap errors") is dropped by the cap
+    expect(result).toContain("Always use set -euo pipefail");
+    expect(result).toContain("Sixth bash lesson");
+    // Oldest entry dropped by the 5-entry cap
+    expect(result).not.toContain("Always trap errors");
+    // Typescript-feature entry not matched (normal priority, different task_type)
+    expect(result).not.toContain("Type issue");
+  });
+
+  it("returns empty string for unmatched task_type", () => {
+    const result = getFilteredLessons("nonexistent-type", FIXTURE_LESSONS);
+    // Only "all" type and "priority: high" should match
+    expect(result).toContain("Context window overflow"); // task_type: all
+    expect(result).toContain("CRLF issue"); // priority: high
+    expect(result).not.toContain("Type issue"); // typescript-feature, normal
+  });
+
+  it("skips archived entries", () => {
+    const result = getFilteredLessons("bash-script-create", FIXTURE_LESSONS);
+    expect(result).not.toContain("status: archived");
+    expect(result).not.toContain("Fixed and archived");
+  });
+
+  it("includes priority: high entries regardless of task_type", () => {
+    const result = getFilteredLessons("e2e-test-write", FIXTURE_LESSONS);
+    expect(result).toContain("CRLF issue"); // priority: high, different task_type
+    expect(result).toContain("Context window overflow"); // task_type: all
+  });
+
+  it("caps at 5 entries", () => {
+    const result = getFilteredLessons("bash-script-create", FIXTURE_LESSONS);
+    // 6 relevant entries (4 bash + 1 all + 1 high) → cap at 5
+    // The oldest (2026-06-10 "Always trap errors") is dropped
+    const entryCount = (result.match(/- date:/g) || []).length;
+    expect(entryCount).toBe(5);
+    expect(result).not.toContain("Always trap errors"); // oldest, dropped by cap
   });
 });
 
