@@ -1,10 +1,16 @@
 # Design: ACP Template Source Files Support
 
+<!-- @acp.meta.design
+topic: design, acp, template, source, files, support
+description: Extend ACP package system to bundle and install template source files (TypeScript, config files, etc.) in agent/files/ directory
+status: active
+updated: 2026-02-28
+@acp.meta.end -->
+
 **Concept**: Extend ACP package system to bundle and install template source files (TypeScript, config files, etc.) in agent/files/ directory  
 
 **Created**: 2026-02-26  
 **Version**: 1.1.0  
-**Status**: Implemented (v5.0.0)  
 **Last Updated**: 2026-02-28  
 
 ---

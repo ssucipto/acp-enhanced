@@ -6,6 +6,14 @@ category: convention
 
 # ACP Command Naming Convention
 
+<!-- @acp.meta.pattern
+topic: acp, command, naming, convention
+description: ACP Command Naming Convention
+applies_to: testing, quality
+status: active
+updated: 2026-06-15
+@acp.meta.end -->
+
 ## Intent
 Establish a consistent, unambiguous naming system for all ACP commands across command
 directive files, IDE prompt integrations, and runtime invocations.
