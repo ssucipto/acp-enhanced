@@ -369,18 +369,19 @@ milestones:
     name: Quality Hardening, Schema Coverage & Carryover Resolution (v6.21.0)
     priority: 3
     status: in_progress
-    progress: 71
+    progress: 85
     started: 2026-06-15
     completed:
     estimated_weeks: 2
-    tasks_completed: 5
+    tasks_completed: 6
     tasks_total: 7
     file: agent/milestones/milestone-62-quality-hardening-schema-carryovers.md
     notes: |
       M62 planned (~21h, 7 routes). Script pipefail upgrade (route-173),
       command-doc structural conformance (route-174), memory-layer schema
       enforcement (route-175), audit-062 carryover resolution (route-176),
-      low-severity cleanups (route-177). NEW: post-M61 shortcut prevention —
+      low-severity cleanups (route-177), cross-file consistency validators
+      (route-178). NEW: post-M61 shortcut prevention —
       cross-file consistency validators in acp-validate.ts (route-178) and
       post-milestone sweep script (route-179). 15 shortcut categories from
       M61 autonomous mode now have automated guards.
