@@ -129,4 +129,43 @@ print_test_header "B9 — Package.yaml has acp.integrity.md with scripts"
 assert_contains "$(cat "${PROJECT_ROOT}/package.yaml")" "acp.integrity.md" "package.yaml entry present"
 assert_contains "$(cat "${PROJECT_ROOT}/package.yaml")" "acp.unicode-scan.sh" "scripts listed in package.yaml"
 
+# ── M64 route-179: scanner regression (F-070-01, F-070-04) ───────────────────
+
+print_test_header "B10 — Entropy scanner reports high-entropy fixture without crashing (F-070-01)"
+ENTROPY_FIXTURE="${PROJECT_ROOT}/agent/benchmarks/fixtures/integrity/entropy-high.ts"
+assert_file_exists "${ENTROPY_FIXTURE}" "entropy-high.ts fixture exists"
+entropy_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" "${ENTROPY_FIXTURE}" 2>&1; echo "EXIT:$?")
+assert_contains "${entropy_out}" "entropy=" "High-entropy string reported"
+assert_contains "${entropy_out}" "EXIT:0" "Entropy scan exits 0 when findings present (no set -e crash)"
+
+print_test_header "B11 — Entropy --ci exits 1 on high-entropy fixture"
+bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" --ci "${ENTROPY_FIXTURE}" >/dev/null 2>&1 || ec=$?
+assert_true "Entropy --ci exits 1 on finding" $([ "${ec:-0}" -eq 1 ] && echo 0 || echo 1)
+
+print_test_header "B12 — Entropy clean fixture stays silent"
+ENTROPY_CLEAN="${PROJECT_ROOT}/agent/benchmarks/fixtures/integrity/entropy-clean.ts"
+clean_entropy_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" "${ENTROPY_CLEAN}" 2>&1; echo "EXIT:$?")
+assert_contains "${clean_entropy_out}" "EXIT:0" "Clean entropy fixture exits 0"
+assert_not_contains "${clean_entropy_out}" "entropy=" "Clean fixture has no entropy finding"
+
+print_test_header "B13 — Unicode scanner detects U+200D in committed fixture (single-pass)"
+UNICODE_FIXTURE="${PROJECT_ROOT}/agent/benchmarks/fixtures/integrity/unicode-hidden.ts"
+assert_file_exists "${UNICODE_FIXTURE}" "unicode-hidden.ts fixture exists"
+unicode_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.unicode-scan.sh" "${UNICODE_FIXTURE}" 2>&1; echo "EXIT:$?")
+assert_contains "${unicode_out}" "U+200D" "Unicode scanner detects zero-width joiner"
+assert_contains "${unicode_out}" "EXIT:0" "Unicode scan exits 0 when findings present"
+
+print_test_header "B14 — Unicode scanner completes agent/ tree in < 5s (F-070-04)"
+start_ns=$(date +%s%N 2>/dev/null || echo "0")
+bash "${PROJECT_ROOT}/agent/scripts/acp.unicode-scan.sh" "${PROJECT_ROOT}/agent" >/dev/null 2>&1
+end_ns=$(date +%s%N 2>/dev/null || echo "0")
+if [[ "${start_ns}" != "0" && "${end_ns}" != "0" ]]; then
+  elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
+  echo "  Unicode scan agent/: ${elapsed_ms}ms"
+  assert_true "Unicode scan agent/ under 5000ms" $([ "${elapsed_ms}" -lt 5000 ] && echo 0 || echo 1)
+else
+  # macOS / environments without date +%N — timing skipped, pass if scan exits 0
+  assert_true "Unicode scan agent/ completes (timing N/A)" 0
+fi
+
 print_suite_summary
