@@ -344,7 +344,7 @@ milestones:
       Addresses CRIT-065-003 (tier 1), MED-067-003/005.
 
   M61:
-    name: Production-Readiness Pack (v6.16.0)
+    name: Production-Readiness Pack (v6.20.9)
     priority: 4
     status: completed
     progress: 100
@@ -355,15 +355,18 @@ milestones:
     tasks_total: 6
     file: agent/milestones/milestone-61-production-readiness-pack.md
     notes: |
-      📋 M61 planned (~12h, 6 routes). Governance + security table stakes:
+      ✅ M61 COMPLETE (v6.20.9, 2026-06-15). Governance + security table stakes shipped:
       Windows CI (route-167), SECURITY.md (route-168), CODEOWNERS+PR templates
       (route-169), Dependabot+lockfile+npm-audit+secret-scan (route-170),
-      team_members+IG-37 (route-171), TS unit tests (route-172). OpenSSF-aligned.
-      Brings Security+Governance scorecard 🔴→🟡. Target: v6.16.0.
-      ✅ Routes expanded into files 2026-06-15: route-167..172.
+      team_members+IG-37 (route-171), TS unit tests via vitest 33/33 (route-172).
+      OpenSSF-aligned. Audit-075: 6 findings fixed, 3 carryovers resolved.
+      Post-audit: 10 shortcuts caught and fixed across 3 rounds (behavioral tests,
+      tsc --noEmit, Layer 1 budget, A3.5 sweep, tracking/version consistency,
+      .gitignore whitelist, .gitattributes TS/JSON LF, git tags retroactive).
+      Security+Governance scorecard 🔴→🟡.
 
   M62:
-    name: Quality Hardening, Schema Coverage & Carryover Resolution (v6.17.0)
+    name: Quality Hardening, Schema Coverage & Carryover Resolution (v6.21.0)
     priority: 3
     status: planned
     progress: 0
