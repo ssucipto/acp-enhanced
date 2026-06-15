@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.20.4] — 2026-06-15
+
+### Added
+- **CODEOWNERS**: Catch-all + fine-grained ownership rules for `scripts/`, `.github/workflows/`, and `agent/scripts/` (route-169, M61).
+- **PR and issue templates**: `.github/pull_request_template.md` with E2E+validate+changelog checklist; `bug_report.md` and `feature_request.md` with structured fields (route-169, M61).
+
+---
+
 ## [6.20.3] — 2026-06-15
 
 ### Added
