@@ -119,7 +119,7 @@ Route-158 will run `/acp-integrity --rules taint-flow` against this directory an
 
 ## Recommendations
 
-1. **Implement `acp.taint-heuristic.sh` (route-157)** (Priority: High, Confidence: 9/10)
+1. **Implement `acp.taint-scan.sh` (route-157)** (Priority: High, Confidence: 9/10) — canonical name per M65 route-187 resolution; shipped as `acp.taint-scan.sh` + `acp.taint-scan.py` in M58 Phase 2.
    - Rationale: Covers obvious sinks at zero token cost
    - Impact: HIGH-confidence findings for unambiguous patterns only
 
