@@ -97,6 +97,10 @@ scripts/              # TypeScript tooling (acp-validate.ts, acp-dispatch.ts)
 - Follow the conventions above — they exist for reproducibility across AI agents.
 - When in doubt, run `/acp-validate` and fix all findings before submitting.
 
+## Security
+
+For vulnerability disclosure, see [SECURITY.md](./SECURITY.md).
+
 ## Questions?
 
 Open an issue or discussion on the repository. If you're new to ACP, run `/acp-init`
