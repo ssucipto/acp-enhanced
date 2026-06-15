@@ -4,7 +4,7 @@ import { readFileSync, existsSync, readdirSync, statSync } from "fs";
 import path from "path";
 
 // ── Shared types ─────────────────────────────────────────────
-interface ValidationError {
+export interface ValidationError {
   file: string;
   line: number;
   message: string;
@@ -15,7 +15,7 @@ interface ValidationError {
 // Env var ACP_COMMANDS_DIR overrides default — used in tests
 const COMMANDS_DIR = process.env["ACP_COMMANDS_DIR"] ?? path.join("agent", "commands");
 
-function validatePlaceholders(filePath: string): ValidationError[] {
+export function validatePlaceholders(filePath: string): ValidationError[] {
   const errors: ValidationError[] = [];
   if (!existsSync(filePath)) return errors;
 
@@ -90,7 +90,7 @@ function runPlaceholderScan(): void {
 // Command files use inline bold markers: **Namespace**: acp
 const REQUIRED_FRONTMATTER_FIELDS = ["Namespace", "Version", "Status", "Scripts"];
 
-function validateFrontmatter(filePath: string): ValidationError[] {
+export function validateFrontmatter(filePath: string): ValidationError[] {
   const errors: ValidationError[] = [];
   if (!existsSync(filePath)) return errors;
 
@@ -674,8 +674,15 @@ function validateFilePointers(): boolean {
   return allOk;
 }
 
+// ── CLI entry (skip when imported by tests) ───────────────────
+function isDirectExecution(): boolean {
+  const entry = process.argv[1] ?? "";
+  return entry.replace(/\\/g, "/").endsWith("acp-validate.ts");
+}
+
 // ── Main ───────────────────────────────────────────────────
 const args = process.argv.slice(2);
+if (isDirectExecution()) {
 if (args.length === 0) {
   // No args: run all command-file scans
   runPlaceholderScan();
@@ -706,3 +713,4 @@ for (const taskFile of args) {
 }
 
 process.exit(overallFailed ? 1 : 0);
+}
