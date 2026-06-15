@@ -12,6 +12,15 @@ completed: 2026-05-05
 completed:
 ---
 
+<!-- @acp.meta.task
+topic: untrack, gitignored, memory, files, lessonsmd, decisionsmd
+description: Untrack gitignored memory files (lessons.md + decisions.md)
+milestone: M37
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Remove `agent/memory/lessons.md` and `agent/memory/decisions.md` from the git index using `git rm --cached`, so that git stops tracking them. Files remain on disk. Commit the untracking.

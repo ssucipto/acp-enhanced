@@ -1,9 +1,18 @@
 # Task 143: Dashboard Shell (Metadata, Progress Bar, Next Steps)
 
+<!-- @acp.meta.task
+topic: dashboard, shell, metadata, progress, bar, next, steps
+description: Task 143: Dashboard Shell (Metadata, Progress Bar, Next Steps)
+milestone: M25
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M25 — ACP Progress Visualizer (P0 MVP)  
 **Task ID**: task-143  
 **Priority**: P0  
-**Status**: Not Started  
 **Estimated Hours**: 3–4h  
 **Design Reference**: [ACP Progress Visualizer](../../design/visualizer.requirements.md)  
 **Depends On**: task-142 (Search + Status Filter)

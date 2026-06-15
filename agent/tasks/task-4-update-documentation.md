@@ -1,9 +1,18 @@
 # Task 4: Update Documentation
 
+<!-- @acp.meta.task
+topic: update, documentation
+description: Task 4: Update Documentation
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M1 - ACP Commands Infrastructure](../milestones/milestone-1-acp-commands.md)  
 **Estimated Time**: 2 hours  
 **Dependencies**: Tasks 1, 2, 3  
-**Status**: Not Started  
 
 ---
 

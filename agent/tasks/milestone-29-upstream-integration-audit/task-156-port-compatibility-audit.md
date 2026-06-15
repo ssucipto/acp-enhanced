@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: port, compatibility, audit, per, identified, gap
+description: Port compatibility audit per identified gap
+milestone: M29
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 For each PORT-tagged feature in the parity matrix (task-155), document its compatibility verdict against ACP Enhanced's 4 hard constraints: macOS BSD bash, no external dependencies, 5,000-token budget discipline, `/acp-` naming convention.

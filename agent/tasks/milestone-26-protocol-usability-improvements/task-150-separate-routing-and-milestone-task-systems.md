@@ -17,6 +17,15 @@ created: 2026-05-04
 completed: 2026-05-04
 ---
 
+<!-- @acp.meta.task
+topic: separate, routing, task, system, from, milestone, task, system, rename, and, document
+description: Separate routing task system from milestone task system — rename and document
+milestone: M26
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Objective
 
 Resolve the naming collision between `agent/routing/tasks/task-NNN.md` (routing dispatch

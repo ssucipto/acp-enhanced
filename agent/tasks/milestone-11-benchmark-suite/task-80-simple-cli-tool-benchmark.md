@@ -1,9 +1,18 @@
 # Task 80: Simple CLI Tool Benchmark Task
 
+<!-- @acp.meta.task
+topic: simple, cli, tool, benchmark, task
+description: Task 80: Simple CLI Tool Benchmark Task
+milestone: M11
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M11 - ACP Benchmark Suite  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 79 (runner must support multi-turn steps)  
-**Status**: Completed  
 **Actual Hours**: 0.5  
 **Completed**: 2026-02-28  
 

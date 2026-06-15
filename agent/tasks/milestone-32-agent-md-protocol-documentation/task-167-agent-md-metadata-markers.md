@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: add, metadata, markers, section, to, agentmd
+description: Add Metadata Markers section to AGENT.md
+milestone: M32
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Add a concise "Metadata Markers" section to `AGENT.md` documenting the `@acp.meta.*` sentinel syntax, all 8 marker kinds, required/optional fields, and how to use `acp.meta-scan.sh`.
@@ -31,12 +40,6 @@ Find the appropriate location in AGENT.md (after "Specs" section if it exists, o
 ACP uses language-agnostic metadata blocks for traceability. Any file can have markers:
 
 ```
-<!-- @acp.meta.spec
-topic: auth, sessions
-requirements: R1..R10
-status: draft
-updated: 2026-05-05
-@acp.meta.end -->
 ```
 
 **8 marker kinds**: `spec`, `task`, `milestone`, `design`, `pattern`, `clarification`, `code`, `artifact`

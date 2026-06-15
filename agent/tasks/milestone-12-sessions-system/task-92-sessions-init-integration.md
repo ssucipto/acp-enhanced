@@ -1,7 +1,16 @@
 # Task 92: Init and Report Integration
 
+<!-- @acp.meta.task
+topic: init, and, report, integration
+description: Task 92: Init and Report Integration
+milestone: M12
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M12 — Sessions System  
-**Status**: Not Started  
 **Estimated Hours**: 1-2  
 **Dependencies**: Task 91  
 **Design**: [local.sessions-system.md](../../design/local.sessions-system.md)  

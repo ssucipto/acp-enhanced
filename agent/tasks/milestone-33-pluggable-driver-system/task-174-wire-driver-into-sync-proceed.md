@@ -11,6 +11,15 @@ started: 2026-05-06T00:00:00Z
 completed: 2026-05-06
 ---
 
+<!-- @acp.meta.task
+topic: wire, driver, hooks, into, acpsyncmd, and, acpproceedmd
+description: Wire driver hooks into acp.sync.md and acp.proceed.md
+milestone: M33
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Add conditional driver hooks to `agent/commands/acp.sync.md` Step 1.3 and `agent/commands/acp.proceed.md` Step 1, so commands can dispatch to configured backends while remaining no-op when `agent/driver.yaml` is absent.

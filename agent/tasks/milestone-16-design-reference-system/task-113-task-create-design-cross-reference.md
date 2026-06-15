@@ -1,10 +1,19 @@
 # Task 113: Update @acp.task-create with Design Cross-Reference
 
+<!-- @acp.meta.task
+topic: update, acptask-create, with, design, cross-reference
+description: Task 113: Update @acp.task-create with Design Cross-Reference
+milestone: M16
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M16 - Design Reference System](../../milestones/milestone-16-design-reference-system.md)  
 **Design Reference**: [Design Reference System](../../design/local.design-reference-system.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 111 (directive must exist), Task 112 (template must have field)  
-**Status**: Not Started  
 
 ---
 

@@ -1,8 +1,14 @@
 # Artifact Commands System
 
+<!-- @acp.meta.design
+topic: artifact, commands, system
+description: Long-lived reference material creation via systematic research with web/MCP integration
+status: draft
+updated: 2026-03-17
+@acp.meta.end -->
+
 **Concept**: Long-lived reference material creation via systematic research with web/MCP integration  
 **Created**: 2026-03-17  
-**Status**: Design Specification  
 
 ---
 

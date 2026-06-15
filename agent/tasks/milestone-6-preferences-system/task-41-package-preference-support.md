@@ -1,9 +1,18 @@
 # Task 41: Package Preference Support
 
+<!-- @acp.meta.task
+topic: package, preference, support
+description: Task 41: Package Preference Support
+milestone: M6
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M6 - Preferences System](../milestones/milestone-6-preferences-system.md)  
 **Estimated Time**: 4-5 hours  
 **Dependencies**: Task 37 (Preference Loading), Task 40 (Management Commands)  
-**Status**: Not Started  
 
 ---
 

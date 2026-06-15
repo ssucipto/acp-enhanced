@@ -1,9 +1,18 @@
 # Task 67: Script-Command Binding - Validation Logic
 
+<!-- @acp.meta.task
+topic: script-command, binding, -, validation, logic
+description: Task 67: Script-Command Binding - Validation Logic
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M3 - ACP Package Management System](../../milestones/milestone-3-package-management.md)  
 **Estimated Time**: 1-2 hours  
 **Dependencies**: Task 65 (Schema and Templates), Task 66 (Installation Logic)  
-**Status**: Not Started  
 
 ---
 

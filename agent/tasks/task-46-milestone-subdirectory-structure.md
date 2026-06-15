@@ -1,9 +1,18 @@
 # Task 46: Milestone Subdirectory Structure
 
+<!-- @acp.meta.task
+topic: milestone, subdirectory, structure
+description: Task 46: Milestone Subdirectory Structure
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: Future Enhancement  
 **Estimated Time**: 4-6 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

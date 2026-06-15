@@ -1,9 +1,18 @@
 # Task 69: Script-Command Binding - Testing and Documentation
 
+<!-- @acp.meta.task
+topic: script-command, binding, -, testing, and, documentation
+description: Task 69: Script-Command Binding - Testing and Documentation
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M3 - ACP Package Management System](../../milestones/milestone-3-package-management.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Task 66 (Installation Logic), Task 67 (Validation), Task 68 (Existing Commands)  
-**Status**: Not Started  
 
 ---
 

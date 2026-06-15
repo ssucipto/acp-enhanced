@@ -1,9 +1,18 @@
 # Task 99: Index Directory Infrastructure
 
+<!-- @acp.meta.task
+topic: index, directory, infrastructure
+description: Task 99: Index Directory Infrastructure
+milestone: M14
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M14 - Key File Index System](../../milestones/milestone-14-key-file-index-system.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: None  
-**Status**: Completed  
 
 ---
 

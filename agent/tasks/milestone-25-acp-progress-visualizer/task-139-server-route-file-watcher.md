@@ -1,9 +1,18 @@
 # Task 139: Server Route + File Watcher (Auto-Refresh)
 
+<!-- @acp.meta.task
+topic: server, route, file, watcher, auto-refresh
+description: Task 139: Server Route + File Watcher (Auto-Refresh)
+milestone: M25
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M25 — ACP Progress Visualizer (P0 MVP)  
 **Task ID**: task-139  
 **Priority**: P0  
-**Status**: Not Started  
 **Estimated Hours**: 2–3h  
 **Design Reference**: [ACP Progress Visualizer](../../design/visualizer.requirements.md)  
 **Depends On**: task-138 (YAML Parser + Data Model)

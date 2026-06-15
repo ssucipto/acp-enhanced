@@ -1,10 +1,19 @@
 # Task 124: Fix Minor Bugs and Stale Metadata
 
+<!-- @acp.meta.task
+topic: fix, minor, bugs, and, stale, metadata
+description: Task 124: Fix Minor Bugs and Stale Metadata
+milestone: M19
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Task ID**: task-124  
 **Milestone**: M19 — Preferences System Bug Fix Sprint  
 **Priority**: Normal  
 **Estimated Hours**: 1–2  
-**Status**: not_started  
 **Bugs Fixed**: BUG-9, BUG-10, BUG-11, BUG-13  
 **Files**: `acp.package-install.sh`, `acp.preferences.sh`, `acp.yaml-parser.sh`, `AGENT.md`  
 

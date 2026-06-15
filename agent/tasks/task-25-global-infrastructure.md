@@ -1,9 +1,18 @@
 # Task 25: Global Infrastructure Setup
 
+<!-- @acp.meta.task
+topic: global, infrastructure, setup
+description: Task 25: Global Infrastructure Setup
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M5 - Global Package Installation](../milestones/milestone-5-global-package-installation.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

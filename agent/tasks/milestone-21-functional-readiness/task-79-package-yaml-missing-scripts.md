@@ -11,6 +11,15 @@ created: 2026-05-01
 completed: 2026-05-01
 ---
 
+<!-- @acp.meta.task
+topic: problem
+description: Add 7 missing scripts to package.yaml scripts section
+milestone: M21
+status: draft
+updated: 2026-05-01
+@acp.meta.end -->
+
+
 ## Problem
 
 Seven scripts exist in `agent/scripts/` but are absent from the `scripts:` section of `package.yaml`.

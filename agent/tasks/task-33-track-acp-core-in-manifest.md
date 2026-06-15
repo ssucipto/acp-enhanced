@@ -1,9 +1,18 @@
 # Task 33: Track ACP Core Commands in manifest.yaml
 
+<!-- @acp.meta.task
+topic: track, acp, core, commands, in, manifestyaml
+description: Task 33: Track ACP Core Commands in manifest.yaml
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: Future Enhancement  
 **Estimated Time**: 1-2 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

@@ -1,9 +1,18 @@
 # Task 40: Preference Management Commands
 
+<!-- @acp.meta.task
+topic: preference, management, commands
+description: Task 40: Preference Management Commands
+milestone: M6
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M6 - Preferences System](../milestones/milestone-6-preferences-system.md)  
 **Estimated Time**: 8-10 hours  
 **Dependencies**: Task 37 (Preference Loading), Task 38 (Configurables Enhancement)  
-**Status**: Not Started  
 
 ---
 

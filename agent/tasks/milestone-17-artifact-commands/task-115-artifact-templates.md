@@ -1,6 +1,15 @@
 # Task 115: Create Artifact Templates
 
-**Status**: completed  
+<!-- @acp.meta.task
+topic: create, artifact, templates
+description: Task 115: Create Artifact Templates
+milestone: M17
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Priority**: high  
 **Milestone**: M17 (Artifact Commands System)  
 **Design Reference**: [Artifact Commands System](../../design/local.artifact-commands-system.md)  
