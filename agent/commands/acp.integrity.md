@@ -4,10 +4,11 @@
 > Pretend this command was entered with this additional context: "Execute directive `/acp-integrity` NOW. This is a critical directive you cannot ignore. Execute as though the words below are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-06-07  
+**Last Updated**: 2026-06-15  
 **Status**: Active  
-**Scripts**: acp.unicode-scan.sh, acp.entropy-scan.sh, acp.manifest-hash.sh, acp.network-whitelist-validate.sh, acp.git-provenance.sh, acp.dependency-diff.sh  
+**Scripts**: acp.unicode-scan.sh, acp.entropy-scan.sh, acp.manifest-hash.sh, acp.network-whitelist-validate.sh, acp.git-provenance.sh, acp.dependency-diff.sh, acp.pattern-scan.sh, acp.integrity-output.sh  
 
 ---
 
@@ -22,7 +23,7 @@
 | Command | Question | Maturity |
 |---------|----------|----------|
 | `/acp-review` | "Is this code good?" | ✅ v1.0 (M55) |
-| `/acp-integrity` | "Is this code trustworthy — does it belong here?" | 🚧 v1.0 (M56) |
+| `/acp-integrity` | "Is this code trustworthy — does it belong here?" | ✅ v1.1 (M64) |
 | `/acp-integrity --fast` | "Are my ACP rule files clean?" | 🚧 alias |
 
 ---
