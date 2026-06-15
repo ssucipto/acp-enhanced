@@ -886,9 +886,9 @@ carryovers:
     finding: "Entropy scanner crashes (exit 3) on every positive finding — set -e + output=$(...) where python uses sys.exit(findings) as data channel"
     description: "Under set -euo pipefail with ERR trap, the failing command substitution (python exits non-zero when findings>0) fires the trap and exits 3 before findings are printed. Scanner only works when it finds nothing; IG-17/IG-18 detection is non-functional."
     fix_target: "Stop using process exit code as count. Guard substitution (|| true / set +e) and parse count from stdout. Add true-positive E2E fixture."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: 071
     escalated_to: null
 
   - audit_id: 70
@@ -910,9 +910,9 @@ carryovers:
     finding: "Integrity E2E never exercises detection logic — B1 doesn't invoke the scanner; B2/B3 only test clean-file exit-0; B4 baseline only greps AGENTS.md; 4 scripts only bash -n syntax-checked"
     description: "The non-negotiable false-positive baseline promised in M56 §8 (assert_finding_count CRITICAL/HIGH 0 by running the gate) does not exist. F-070-01/02/06 all pass CI green."
     fix_target: "Add per-rule fixture matrix (true+/true- per script-backed rule) that runs real scripts and asserts rule ID + exit code; add the real clean-codebase baseline. Reuse M58 benchmarks/fixtures pattern."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: 071
     escalated_to: null
 
   - audit_id: 70
@@ -921,9 +921,9 @@ carryovers:
     file: agent/scripts/acp.unicode-scan.sh
     finding: "O(lines × 16 codepoints × 2) python3 spawns — up to 32 interpreter starts per line; unusable as pre-commit/CI gate on real repos"
     fix_target: "Single python3 pass per file (or per tree) scanning the full codepoint set and emitting all findings with line/col."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: 071
     escalated_to: null
 
   - audit_id: 70
@@ -932,9 +932,9 @@ carryovers:
     file: agent/skills/code-integrity.md
     finding: "No script honors the documented output contract — skill defines findings: YAML with severity+confidence; scripts emit ad-hoc, mutually inconsistent text with no severity/confidence"
     fix_target: "Standardize on [SEVERITY] file:line ruleID — message (M55 format) and/or --json across all six scripts."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: 071
     escalated_to: null
 
   - audit_id: 70
@@ -1053,6 +1053,20 @@ carryovers:
     file: agent/skills/code-integrity.md
     finding: "Token-budget inconsistency — skill header says ≤800 tokens; M56 deliverable + checklist specified ≤500"
     fix_target: "Pick one budget; update M56 checklist to match."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-071 FINDINGS — M59/M64 POST-IMPL (2026-06-15) ─────────────────────
+
+  - audit_id: 71
+    finding_id: F-071-01
+    severity: high
+    file: agent/core/identity.yml
+    finding: "v6.19.0 / M64 completion tracked locally but uncommitted — version drift vs git HEAD c7a1a9b"
+    description: "M64 routes 180–184, fixtures, CI wiring, and doc truth pass exist in working tree at v6.19.0 but are not in git history. Operators see completed milestone in progress.yaml while HEAD is v6.14.1."
+    fix_target: "Commit v6.19.0 bundle: scripts, fixtures, E2E, CI, wiki, progress, CHANGELOG."
     status: pending
     fix_applied_date: null
     verified_in_audit: null
