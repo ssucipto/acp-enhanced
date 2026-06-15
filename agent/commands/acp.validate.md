@@ -137,13 +137,13 @@ Schema warnings are informational and do not affect exit code.
 > **This step runs in ALL modes** (standard and --memory). Version drift across
 > 8+ files is a recurring bug — this check prevents it.
 
-Compare the canonical version in `agent/progress.yaml` against all other version-bearing files.
+Compare the canonical version in `agent/core/identity.yml` against all other version-bearing files. The TypeScript validator (`scripts/acp-validate.ts`) compares `identity.yml` to the `AGENTS.md` `> vX.Y.Z` header (soft warn on drift).
 
 **Actions**:
 
-1. **Read canonical version**: Extract `project.version` from `agent/progress.yaml`.
+1. **Read canonical version**: Extract `version` from `agent/core/identity.yml` (also check `project.version` in `agent/progress.yaml`).
 2. **Check hard requirements** (ERROR if mismatch):
-   - `AGENT.md` → `**Version**: X.Y.Z` on the metadata line
+   - `AGENTS.md` → `> vX.Y.Z` protocol header line
    - `agent/core/identity.yml` → `version: X.Y.Z`
    - `package.yaml` → `version: X.Y.Z` (if file exists)
 3. **Check soft requirements** (WARN if mismatch):
