@@ -4,7 +4,7 @@ import { readFileSync, existsSync, readdirSync, statSync } from "fs";
 import path from "path";
 
 // ── Shared types ─────────────────────────────────────────────
-interface ValidationError {
+export interface ValidationError {
   file: string;
   line: number;
   message: string;
@@ -15,7 +15,7 @@ interface ValidationError {
 // Env var ACP_COMMANDS_DIR overrides default — used in tests
 const COMMANDS_DIR = process.env["ACP_COMMANDS_DIR"] ?? path.join("agent", "commands");
 
-function validatePlaceholders(filePath: string): ValidationError[] {
+export function validatePlaceholders(filePath: string): ValidationError[] {
   const errors: ValidationError[] = [];
   if (!existsSync(filePath)) return errors;
 
@@ -90,7 +90,7 @@ function runPlaceholderScan(): void {
 // Command files use inline bold markers: **Namespace**: acp
 const REQUIRED_FRONTMATTER_FIELDS = ["Namespace", "Version", "Status", "Scripts"];
 
-function validateFrontmatter(filePath: string): ValidationError[] {
+export function validateFrontmatter(filePath: string): ValidationError[] {
   const errors: ValidationError[] = [];
   if (!existsSync(filePath)) return errors;
 
@@ -495,8 +495,576 @@ function validateSessionsMemory(): boolean {
   return !hasErrors;
 }
 
+// ── Version consistency (identity.yml ↔ AGENTS.md ↔ CLAUDE.md ↔ CHANGELOG) ────
+export function validateVersionConsistency(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const identityPath = path.join("agent", "core", "identity.yml");
+  const files: Record<string, string> = {};
+
+  // Extract version from identity.yml
+  if (existsSync(identityPath)) {
+    const identity = yaml.load(readFileSync(identityPath, "utf-8")) as Record<string, unknown>;
+    const ver = String(identity.version ?? "").trim();
+    if (ver) files["identity.yml"] = ver;
+  }
+
+  // AGENTS.md first line
+  if (existsSync("AGENTS.md")) {
+    const raw = readFileSync("AGENTS.md", "utf8");
+    const match = raw.match(/^> v([\d.]+)/m);
+    if (match) files["AGENTS.md"] = match[1];
+  }
+
+  // CLAUDE.md first line
+  if (existsSync("CLAUDE.md")) {
+    const raw = readFileSync("CLAUDE.md", "utf8");
+    const match = raw.match(/^> v([\d.]+)/m);
+    if (match) files["CLAUDE.md"] = match[1];
+  }
+
+  // CHANGELOG.md first release entry
+  if (existsSync("CHANGELOG.md")) {
+    const raw = readFileSync("CHANGELOG.md", "utf8");
+    const match = raw.match(/^## \[([\d.]+)\]/m);
+    if (match) files["CHANGELOG.md"] = match[1];
+  }
+
+  const versions = Object.entries(files);
+  if (versions.length < 2) return errors;
+
+  const [refFile, refVersion] = versions[0];
+  for (let i = 1; i < versions.length; i++) {
+    const [file, ver] = versions[i];
+    if (ver !== refVersion) {
+      errors.push({
+        file,
+        line: 1,
+        message: `Version inconsistency: ${refFile}=v${refVersion}, ${file}=v${ver}`,
+        severity: "error",
+      });
+    }
+  }
+
+  if (errors.length === 0) {
+    console.log(`✅ Version header: AGENTS.md v${files["AGENTS.md"] || "?"} matches identity.yml`);
+  }
+
+  return errors;
+}
+
+// ── Cross-layer status consistency (route-186) ─────────────────
+// FAIL if a milestone doc's **Status**: disagrees with progress.yaml
+const PROGRESS_PATH = path.join("agent", "progress.yaml");
+
+function loadProgressSafe(): Record<string, any> | null {
+  if (!existsSync(PROGRESS_PATH)) return null;
+    const raw = readFileSync(PROGRESS_PATH, "utf-8").replace(/\r/g, "");
+  try {
+    return yaml.load(raw) as Record<string, any>;
+  } catch {
+    console.warn("⚠️  progress.yaml: YAML parse failed (duplicate keys suspected) — using line-based fallback");
+    const milestones: Record<string, any> = {};
+    const lines = raw.split("\n");
+    let currentMid: string | null = null;
+    let currentBlock: string[] = [];
+    for (const line of lines) {
+      const mKeyMatch = line.match(/^\s{2}(M\d{1,2}):\s*$/);
+      if (mKeyMatch) {
+        if (currentMid) {
+          const block = currentBlock.join("\n");
+          const statusMatch = block.match(/^\s{4}status:\s*(.+)/m);
+          const fileMatch = block.match(/^\s{4}file:\s*(.+)/m);
+          const tasksTotalMatch = block.match(/^\s{4}tasks_total:\s*(\d+)/m);
+          milestones[currentMid] = {
+            status: statusMatch ? statusMatch[1].trim() : undefined,
+            file: fileMatch ? fileMatch[1].trim() : undefined,
+            tasks_total: tasksTotalMatch ? parseInt(tasksTotalMatch[1]) : undefined,
+          };
+        }
+        currentMid = mKeyMatch[1];
+        currentBlock = [];
+      } else if (currentMid) {
+        currentBlock.push(line);
+      }
+    }
+    if (currentMid && currentBlock.length > 0) {
+      const block = currentBlock.join("\n");
+      const statusMatch = block.match(/^\s{4}status:\s*(.+)/m);
+      const fileMatch = block.match(/^\s{4}file:\s*(.+)/m);
+      const tasksTotalMatch = block.match(/^\s{4}tasks_total:\s*(\d+)/m);
+      milestones[currentMid] = {
+        status: statusMatch ? statusMatch[1].trim() : undefined,
+        file: fileMatch ? fileMatch[1].trim() : undefined,
+        tasks_total: tasksTotalMatch ? parseInt(tasksTotalMatch[1]) : undefined,
+      };
+    }
+    return { milestones };
+  }
+}
+
+function validateStatusConsistency(): boolean {
+  const progressYaml = loadProgressSafe();
+  if (!progressYaml) {
+    console.warn("⚠️  Status consistency: cannot parse progress.yaml — skipped");
+    return true;
+  }
+
+  const milestones = progressYaml.milestones as Record<string, any> | undefined;
+  if (!milestones || Object.keys(milestones).length === 0) {
+    console.warn("⚠️  Status consistency: no milestones in progress.yaml — skipped");
+    return true;
+  }
+
+  let allOk = true;
+
+  for (const [mid, mdata] of Object.entries(milestones)) {
+    if (!mdata || typeof mdata !== "object") continue;
+    const pyStatus = mdata.status as string | undefined;
+    const docFile = mdata.file as string | undefined;
+    if (!pyStatus || !docFile) continue;
+    if (!existsSync(docFile)) continue; // handled by validateFilePointers
+
+    const docContent = readFileSync(docFile, "utf-8");
+    const statusMatch = docContent.match(/^\*\*Status\*\*:\s*(.+)/m);
+    if (!statusMatch) continue;
+
+    const docStatus = statusMatch[1].trim().toLowerCase();
+    let normalisedDoc = docStatus;
+    if (/implemented|completed/.test(normalisedDoc)) normalisedDoc = "completed";
+    else if (/design specification|design proposal|proposal|draft|reference|planned/.test(normalisedDoc)) normalisedDoc = "planned";
+    else if (/in.progress|in_progress|active/.test(normalisedDoc)) normalisedDoc = "in_progress";
+
+    const normalisedPy = pyStatus === "active" ? "in_progress" : pyStatus;
+
+    if (normalisedDoc !== normalisedPy) {
+      console.error(
+        `❌ Status desync: ${docFile} **Status**: "${docStatus}" (→${normalisedDoc}) != progress.yaml M${mid.replace(/^M/, "")} status: "${pyStatus}" (→${normalisedPy})`
+      );
+      allOk = false;
+    }
+  }
+
+  if (allOk) {
+    console.log(`✅ Status consistency: all milestone docs agree with progress.yaml`);
+  }
+  return allOk;
+}
+
+// ── Memory-layer schema enforcement ────────────────────────────
+const SCHEMAS_DIR = process.env["ACP_SCHEMAS_DIR"] ?? path.join("agent", "schemas");
+// Map schema files to data files they validate
+const SCHEMA_DATA_MAP: Record<string, string> = {
+  "progress.schema.yaml": "agent/progress.yaml",
+  "session.schema.yaml": "agent/memory/sessions.md",
+  "lessons.schema.yaml": "agent/memory/lessons.md",
+  "decisions.schema.yaml": "agent/memory/decisions.md",
+  "audit-carryovers.schema.yaml": "agent/memory/audit-carryovers.md",
+  "milestone.schema.yaml": "agent/progress.yaml", // milestones embedded in progress.yaml
+};
+
+function validateYamlAgainstSchema(
+  dataYaml: unknown,
+  schema: Record<string, unknown>,
+  filePath: string
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const requiredFields = schema["required_fields"] as string[] | undefined;
+  const fields = schema["fields"] as Record<string, Record<string, unknown>> | undefined;
+
+  if (!fields) return errors;
+
+  // Check required top-level fields
+  if (requiredFields) {
+    if (typeof dataYaml !== "object" || dataYaml === null || Array.isArray(dataYaml)) {
+      // For array-type documents (sessions.md), validate each entry
+      return errors;
+    }
+    for (const rf of requiredFields) {
+      if (!(rf in (dataYaml as Record<string, unknown>))) {
+        errors.push({
+          file: filePath,
+          line: 0,
+          message: `Missing required field: ${rf}`,
+          severity: "error",
+        });
+      }
+    }
+  }
+
+  // Check field types
+  for (const [fieldName, fieldDef] of Object.entries(fields)) {
+    if (typeof dataYaml === "object" && dataYaml !== null && fieldName in (dataYaml as Record<string, unknown>)) {
+      const val = (dataYaml as Record<string, unknown>)[fieldName];
+      const expectedType = fieldDef["type"] as string | undefined;
+      if (expectedType && typeof val !== expectedType) {
+        errors.push({
+          file: filePath,
+          line: 0,
+          message: `Field "${fieldName}" expected type ${expectedType}, got ${typeof val}`,
+          severity: "warning",
+        });
+      }
+    }
+  }
+
+  return errors;
+}
+
+function runSchemaEnforcement(): boolean {
+  if (!existsSync(SCHEMAS_DIR)) {
+    console.log(`⚠️  Schema enforcement: ${SCHEMAS_DIR} not found — skipping`);
+    return true;
+  }
+
+  const schemaFiles = readdirSync(SCHEMAS_DIR).filter((f) => f.endsWith(".schema.yaml"));
+  let allOk = true;
+
+  for (const schemaFile of schemaFiles) {
+    const dataFile = SCHEMA_DATA_MAP[schemaFile];
+    if (!dataFile) continue;
+
+    try {
+      const schemaPath = path.join(SCHEMAS_DIR, schemaFile);
+      const schemaContent = readFileSync(schemaPath, "utf8");
+      const schema = yaml.load(schemaContent) as Record<string, unknown>;
+
+      if (!existsSync(dataFile)) {
+        console.log(`⚠️  Schema ${schemaFile}: data file ${dataFile} not found — skipping`);
+        continue;
+      }
+
+      const dataContent = readFileSync(dataFile, "utf8");
+      // sessions.md / lessons.md are multi-document YAML lists; try loading as-is
+      let dataYaml: unknown;
+      try {
+        dataYaml = yaml.load(dataContent);
+      } catch {
+        // If YAML parse fails, that's a pre-existing error from other validators
+        continue;
+      }
+
+      if (!dataYaml) continue;
+
+      const errors = validateYamlAgainstSchema(dataYaml, schema, dataFile);
+      if (errors.length > 0) {
+        for (const err of errors) {
+          const prefix = err.severity === "error" ? "❌" : "⚠️";
+          console.log(`${prefix} ${err.file}: ${err.message}  [schema: ${schemaFile}]`);
+          if (err.severity === "error") allOk = false;
+        }
+      } else {
+        console.log(`✅ Schema ${schemaFile}: ${dataFile} valid`);
+      }
+    } catch (err) {
+      console.error(`❌ Schema enforcement error: ${schemaFile} — ${err instanceof Error ? err.message : err}`);
+      allOk = false;
+    }
+  }
+
+  return allOk;
+}
+
+// ── Cross-file Consistency Validators (route-178) ──────────────
+
+const IDENTITY_PATH = "agent/core/identity.yml";
+
+export function validateNextStepsFreshness(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(PROGRESS_PATH)) return errors;
+
+  try {
+    const raw = readFileSync(PROGRESS_PATH, "utf8");
+    const progress = yaml.load(raw) as Record<string, unknown>;
+    const currentMilestone = (progress["current_milestone"] as string) || "";
+    const nextSteps = progress["next_steps"] as string[] | undefined;
+
+    if (!nextSteps || nextSteps.length === 0) {
+      errors.push({
+        file: PROGRESS_PATH,
+        line: 0,
+        message: "next_steps is empty — should reference the next active milestone",
+        severity: "warning",
+      });
+    } else if (currentMilestone && nextSteps[0].includes(currentMilestone)) {
+      errors.push({
+        file: PROGRESS_PATH,
+        line: 0,
+        message: `next_steps[0] references current milestone "${currentMilestone}" — should point to the next milestone`,
+        severity: "warning",
+      });
+    }
+  } catch {
+    // Parse error silently — other validators cover this
+  }
+  return errors;
+}
+
+export function validateMilestoneDocVersion(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(IDENTITY_PATH)) return errors;
+
+  const identityRaw = readFileSync(IDENTITY_PATH, "utf8");
+  const idMatch = identityRaw.match(/^version:\s*([0-9.]+)/m);
+  if (!idMatch) return errors;
+  const identityVer = idMatch[1];
+
+  const milestonesDir = "agent/milestones";
+  if (!existsSync(milestonesDir)) return errors;
+
+  const milestoneFiles = readdirSync(milestonesDir).filter(
+    (f) => f.startsWith("milestone-") && f.endsWith(".md")
+  );
+
+  for (const mf of milestoneFiles) {
+    const filePath = path.join(milestonesDir, mf);
+    const raw = readFileSync(filePath, "utf8");
+    const tvMatch = raw.match(/\*\*Target version\*\*:\s*([0-9.]+)/);
+    if (!tvMatch) continue;
+
+    const docVer = tvMatch[1];
+    if (docVer !== identityVer) {
+      // Only warn for past milestones (Target version < identity version)
+      const cmp = docVer.localeCompare(identityVer, undefined, { numeric: true });
+      errors.push({
+        file: filePath,
+        line: 3,
+        message: cmp < 0
+          ? `Stale target version: doc says v${docVer}, identity.yml is v${identityVer}`
+          : `Target version mismatch: doc says v${docVer}, identity.yml is v${identityVer}`,
+        severity: cmp < 0 ? "warning" : "error",
+      });
+    }
+  }
+
+  return errors;
+}
+
+export function validateVerificationGates(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const milestonesDir = "agent/milestones";
+  if (!existsSync(milestonesDir)) return errors;
+
+  const milestoneFiles = readdirSync(milestonesDir).filter(
+    (f) => f.startsWith("milestone-") && f.endsWith(".md")
+  );
+
+  for (const mf of milestoneFiles) {
+    const filePath = path.join(milestonesDir, mf);
+    const raw = readFileSync(filePath, "utf8");
+
+    // Find the verification gate section
+    const gateMatch = raw.match(/## Industry-Standard Verification[\s\S]*?(?=\n## |$)/);
+    if (!gateMatch) continue;
+
+    const gateSection = gateMatch[0];
+    const bullets = gateSection.match(/^- .+$/gm);
+    if (!bullets) continue;
+
+    for (const bullet of bullets) {
+      const trimmed = bullet.replace(/^- /, "");
+      // Check if bullet has a status marker
+      if (!/^(✅|❌|⏳)/.test(trimmed) && trimmed.length > 0) {
+        errors.push({
+          file: filePath,
+          line: 0,
+          message: `Verification gate item is blank (no ✅/❌/⏳): "${trimmed.substring(0, 60)}..."`,
+          severity: "warning",
+        });
+      }
+    }
+  }
+
+  return errors;
+}
+
+export function validateGitTagsExist(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(IDENTITY_PATH)) return errors;
+
+  const identityRaw = readFileSync(IDENTITY_PATH, "utf8");
+  const idMatch = identityRaw.match(/^version:\s*([0-9.]+)/m);
+  if (!idMatch) return errors;
+
+  const version = idMatch[1];
+  try {
+    const { execSync } = require("child_process");
+    const output = execSync(`git tag --list "v${version}"`, {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      stdio: ["pipe", "pipe", "pipe"],
+    }).trim();
+
+    if (!output) {
+      errors.push({
+        file: IDENTITY_PATH,
+        line: 0,
+        message: `Missing git tag for v${version}. Run: git tag -a v${version} -m "..." HEAD`,
+        severity: "error",
+      });
+    }
+  } catch {
+    errors.push({
+      file: IDENTITY_PATH,
+      line: 0,
+      message: "Failed to check git tags — is this a git repository?",
+      severity: "warning",
+    });
+  }
+
+  return errors;
+}
+
+export function validateGitignoreConflicts(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  // Check known tracked paths that have had .gitignore conflicts
+  const trackedPaths = ["agent/reports/", "scripts/package-lock.json"];
+
+  for (const tp of trackedPaths) {
+    try {
+      const { execSync } = require("child_process");
+      execSync(`git check-ignore "${tp}"`, {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "pipe"],
+      });
+      // If exit 0, file is ignored
+      errors.push({
+        file: ".gitignore",
+        line: 0,
+        message: `Tracked path "${tp}" is blocked by .gitignore — add !pattern to whitelist`,
+        severity: "warning",
+      });
+    } catch {
+      // exit 1 = not ignored (good), or git unavailable
+    }
+  }
+
+  return errors;
+}
+
+export function validateGitattributesCoverage(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const attrPath = ".gitattributes";
+  if (!existsSync(attrPath)) {
+    errors.push({
+      file: attrPath,
+      line: 0,
+      message: ".gitattributes missing — should enforce LF for cross-platform scripts",
+      severity: "error",
+    });
+    return errors;
+  }
+
+  const raw = readFileSync(attrPath, "utf8");
+  const requiredPatterns = [
+    { pattern: /\*\.sh\s+text\s+eol=lf/, label: "*.sh text eol=lf" },
+    { pattern: /\*\.yml\s+text\s+eol=lf/, label: "*.yml text eol=lf" },
+    { pattern: /\*\.ts\s+text\s+eol=lf/, label: "*.ts text eol=lf" },
+    { pattern: /\*\.json\s+text\s+eol=lf/, label: "*.json text eol=lf" },
+  ];
+
+  for (const rp of requiredPatterns) {
+    if (!rp.pattern.test(raw)) {
+      errors.push({
+        file: attrPath,
+        line: 0,
+        message: `Missing LF enforcement: ${rp.label} — add to .gitattributes`,
+        severity: "warning",
+      });
+    }
+  }
+
+  return errors;
+}
+
+function runConsistencyScan(): boolean {
+  let allOk = true;
+
+  const checks: [string, () => ValidationError[]][] = [
+    ["version consistency", validateVersionConsistency],
+    ["next steps freshness", validateNextStepsFreshness],
+    ["milestone doc version", validateMilestoneDocVersion],
+    ["verification gates", validateVerificationGates],
+    ["git tags", validateGitTagsExist],
+    ["gitignore conflicts", validateGitignoreConflicts],
+    ["gitattributes coverage", validateGitattributesCoverage],
+  ];
+
+  for (const [name, fn] of checks) {
+    try {
+      const errors = fn();
+      if (errors.length === 0) {
+        console.log(`✅ Consistency: ${name} — OK`);
+      } else {
+        for (const err of errors) {
+          const prefix = err.severity === "error" ? "❌" : "⚠️";
+          console.log(`${prefix} ${err.file}: ${err.message}`);
+          if (err.severity === "error") allOk = false;
+        }
+      }
+    } catch (err) {
+      console.error(`❌ Consistency check "${name}" failed: ${err instanceof Error ? err.message : err}`);
+      allOk = false;
+    }
+  }
+
+  return allOk;
+}
+
+function validateFilePointers(): boolean {
+  const progressYaml = loadProgressSafe();
+  if (!progressYaml) {
+    console.warn("⚠️  File pointer check: cannot parse progress.yaml — skipped");
+    return true;
+  }
+
+  const milestones = progressYaml.milestones as Record<string, any> | undefined;
+  if (!milestones || Object.keys(milestones).length === 0) {
+    console.warn("⚠️  File pointer check: no milestones in progress.yaml — skipped");
+    return true;
+  }
+
+  let allOk = true;
+  const seen = new Set<string>();
+
+  for (const [mid, mdata] of Object.entries(milestones)) {
+    if (!mdata || typeof mdata !== "object") continue;
+    const docFile = mdata.file as string | undefined;
+    const tasksTotal = mdata.tasks_total as number | undefined;
+    const status = mdata.status as string | undefined;
+
+    if (docFile) {
+      if (seen.has(docFile)) continue;
+      seen.add(docFile);
+      if (!existsSync(docFile)) {
+        console.error(`❌ Dangling pointer: M${mid.replace(/^M/, "")} file: "${docFile}" does not exist`);
+        allOk = false;
+      }
+    }
+
+    if (tasksTotal === 0 && status && /active|in_progress/.test(status)) {
+      console.error(
+        `❌ Inconsistency: M${mid.replace(/^M/, "")} status: "${status}" but tasks_total: 0`
+      );
+      allOk = false;
+    }
+  }
+
+  if (allOk) {
+    console.log(`✅ File pointers: all progress.yaml file: references exist`);
+  }
+  return allOk;
+}
+
+// ── CLI entry (skip when imported by tests) ───────────────────
+function isDirectExecution(): boolean {
+  const entry = process.argv[1] ?? "";
+  return entry.replace(/\\/g, "/").endsWith("acp-validate.ts");
+}
+
 // ── Main ───────────────────────────────────────────────────
 const args = process.argv.slice(2);
+if (isDirectExecution()) {
 if (args.length === 0) {
   // No args: run all command-file scans
   runPlaceholderScan();
@@ -504,8 +1072,13 @@ if (args.length === 0) {
   runParityCheck();
   const sizeOk = validateAgentsMdSize();
   const sessionsValid = validateSessionsMemory();
+  const versionOk = validateVersionConsistency().length === 0;
+  const statusOk = validateStatusConsistency();
+  const pointersOk = validateFilePointers();
+  const schemasOk = runSchemaEnforcement();
+  const consistencyOk = runConsistencyScan();
   checkStaleness(); // informational — non-blocking, does not affect exit code
-  process.exit(sizeOk && sessionsValid && (process.exitCode ?? 0) === 0 ? 0 : 1);
+  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
 
 let overallFailed = false;
@@ -524,3 +1097,4 @@ for (const taskFile of args) {
 }
 
 process.exit(overallFailed ? 1 : 0);
+}

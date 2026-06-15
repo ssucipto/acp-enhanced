@@ -1,0 +1,89 @@
+# Milestone Schema
+# Schema for validating ACP milestone YAML documents
+# Version: 1.0.0
+
+schema_version: 1.0.0
+description: Schema for ACP milestone files (agent/milestones/*.md frontmatter)
+
+required_fields:
+  - id
+  - title
+  - status
+
+fields:
+  id:
+    type: string
+    required: true
+    pattern: "^M[0-9]+$"
+  title:
+    type: string
+    required: true
+    min_length: 5
+  task_type:
+    type: string
+    required: false
+    enum:
+      - bash-script-create
+      - bash-script-fix
+      - bash-script-refactor
+      - command-doc-write
+      - command-doc-update
+      - yaml-schema
+      - typescript-feature
+      - design-document
+      - design-spec
+      - e2e-test-write
+      - audit-run
+      - cross-cutting
+  milestone:
+    type: string
+    required: false
+    pattern: "^M[0-9]+$"
+  complexity:
+    type: string
+    required: false
+    enum:
+      - low
+      - medium
+      - high
+  executor:
+    type: string
+    required: false
+  context_required:
+    type: array
+    required: false
+    items:
+      type: string
+  files_affected:
+    type: array
+    required: false
+    items:
+      type: string
+  status:
+    type: string
+    required: true
+    enum:
+      - planned
+      - in_progress
+      - completed
+      - deferred
+  progress:
+    type: integer
+    required: false
+    minimum: 0
+    maximum: 100
+  started:
+    type: string
+    required: false
+  completed:
+    type: string
+    required: false
+  estimated_weeks:
+    type: number
+    required: false
+  tasks_completed:
+    type: integer
+    required: false
+  tasks_total:
+    type: integer
+    required: false

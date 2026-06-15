@@ -125,3 +125,14 @@ Next step: edit agent/core/identity.yml with your project details
     3. Run /acp-status to see current task state
     4. (Persona B/C only) cd scripts && npm install — set up dispatch
 ```
+
+---
+
+## Verification
+
+- [ ] `agent/` directory created at project root
+- [ ] All script files installed under `agent/scripts/`
+- [ ] `agent/core/*.yml` files present and valid YAML
+- [ ] `agent/commands/` directory populated with all command docs
+- [ ] `.gitignore` updated with ACP entries (or existing entries preserved)
+- [ ] No existing project files modified or overwritten by install

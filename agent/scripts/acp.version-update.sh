@@ -17,7 +17,7 @@ if [ -z "$_ACP_UPDATE_RELOCATED" ]; then
     exit $_rc
 fi
 
-set -e
+set -euo pipefail
 trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Colors for output using tput (more reliable than ANSI codes)

@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 # acp.dependency-diff.sh — Shadow Dependency & Supply Chain Checker
-# Part of /acp-integrity v1.0 (M56)
-#
-# Detects shadow dependencies (imported but not in lockfile), typosquatting,
-# postinstall script risks, unpinned versions, and stale lockfiles.
-#
-# Usage:
-#   acp.dependency-diff.sh [--ci] [project_root]
+# Part of /acp-integrity v1.0 (M56), M64 routes 180/182/183
 #
 # Covered rules: IG-27, IG-28, IG-29, IG-30, IG-31, IG-32
 
@@ -14,121 +8,155 @@ set -euo pipefail
 trap 'echo "Error: dependency-diff.sh failed at line $LINENO" >&2; exit 3' ERR
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="${1:-$(cd "${SCRIPT_DIR}/../.." && pwd)}"
+# shellcheck source=acp.integrity-output.sh
+source "${SCRIPT_DIR}/acp.integrity-output.sh"
 
-CI_MODE=false
-
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+IG_REMAINING_ARGS=()
+ig_parse_common_args "$@"
+set -- "${IG_REMAINING_ARGS[@]:-}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --ci) CI_MODE=true; shift ;;
     -h|--help)
-      echo "Usage: acp.dependency-diff.sh [--ci] [project_root]"
-      echo "Checks for shadow dependencies, typosquatting, and supply chain risks"
+      echo "Usage: acp.dependency-diff.sh [--ci] [--json] [project_root]"
       exit 0
       ;;
     *) PROJECT_ROOT="$1"; shift ;;
   esac
 done
 
-FINDINGS=0
-
-# ── Top-1000 npm packages (abbreviated — full list in wiki) ───────────────────
-
 TOP_PACKAGES=(
-  "react" "lodash" "axios" "express" "next" "typescript" "eslint" "prettier"
-  "webpack" "babel" "jest" "mocha" "chai" "redux" "vue" "angular" "svelte"
-  "tailwindcss" "bootstrap" "jquery" "d3" "moment" "dayjs" "uuid" "zod" "yup"
-  "graphql" "apollo" "prisma" "sequelize" "mongoose" "typeorm" "knex"
-  "passport" "jsonwebtoken" "bcrypt" "cors" "helmet" "morgan" "winston"
-  "dotenv" "commander" "yargs" "chalk" "ora" "inquirer" "rimraf" "mkdirp"
-  "glob" "semver" "node-fetch" "ws" "socket.io" "nodemailer" "multer"
-  "sharp" "puppeteer" "cheerio" "playwright" "cypress"
+  react lodash axios express next typescript eslint webpack babel jest
+  vue angular svelte tailwindcss jquery moment uuid zod graphql prisma
+  passport jsonwebtoken bcrypt cors helmet dotenv commander chalk
 )
-
-# ── IG-29: Shadow Dependencies ────────────────────────────────────────────────
 
 PACKAGE_JSON="${PROJECT_ROOT}/package.json"
 LOCK_FILE=""
-
-if [[ -f "${PROJECT_ROOT}/package-lock.json" ]]; then
-  LOCK_FILE="${PROJECT_ROOT}/package-lock.json"
-elif [[ -f "${PROJECT_ROOT}/yarn.lock" ]]; then
-  LOCK_FILE="${PROJECT_ROOT}/yarn.lock"
-fi
+[[ -f "${PROJECT_ROOT}/package-lock.json" ]] && LOCK_FILE="${PROJECT_ROOT}/package-lock.json"
+[[ -f "${PROJECT_ROOT}/yarn.lock" ]] && LOCK_FILE="${PROJECT_ROOT}/yarn.lock"
 
 if [[ -f "$PACKAGE_JSON" ]]; then
-  # IG-28: postinstall/preinstall scripts
   if grep -q '"postinstall"' "$PACKAGE_JSON" 2>/dev/null || grep -q '"preinstall"' "$PACKAGE_JSON" 2>/dev/null; then
     postinstall_content=$(ACP_PACKAGE_JSON="$PACKAGE_JSON" python3 -c "
 import json, os
-pkg_path = os.environ.get('ACP_PACKAGE_JSON', '')
-with open(pkg_path) as f:
+with open(os.environ['ACP_PACKAGE_JSON']) as f:
     data = json.load(f)
-scripts = data.get('scripts', {})
 for key in ['postinstall', 'preinstall']:
-    if key in scripts:
-        print(f'{key}: {scripts[key]}')
-" 2>/dev/null || echo "postinstall present (parse error)")
-    
+    if key in data.get('scripts', {}):
+        print(f'{key}: {data[\"scripts\"][key]}')
+" 2>/dev/null || echo "present")
     if echo "$postinstall_content" | grep -qiE 'curl|wget|bash|sh |eval|exec' 2>/dev/null; then
-      echo "IG-28 — postinstall/preinstall script executes shell command: $postinstall_content"
-      FINDINGS=$((FINDINGS + 1))
-    else
-      echo "IG-28 — postinstall/preinstall script present (review required): $postinstall_content"
-      FINDINGS=$((FINDINGS + 1))
+      ig_emit_finding "$PACKAGE_JSON" "0" "IG-28" "postinstall/preinstall executes shell: ${postinstall_content}"
     fi
   fi
-  
-  # IG-30: Unpinned versions for security-critical packages
+
   SECURITY_PACKAGES="jsonwebtoken|bcrypt|passport|helmet|cors|crypto|auth|session|jwt|oauth"
   while IFS= read -r line; do
-    pkg=$(echo "$line" | sed 's/.*"\([^"]*\)".*/\1/')
-    version=$(echo "$line" | sed 's/.*"[^"]*"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
+    pkg=$(echo "$line" | sed -n 's/.*"\([^"]*\)".*/\1/p')
+    version=$(echo "$line" | sed -n 's/.*"[^"]*"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
     if echo "$version" | grep -qE '^[\^~]' 2>/dev/null; then
-      echo "IG-30 — unpinned security package: $pkg@$version (use exact version)"
-      FINDINGS=$((FINDINGS + 1))
+      ig_emit_finding "$PACKAGE_JSON" "0" "IG-30" "unpinned security package: ${pkg}@${version}"
     fi
-  done < <(grep -E "^\s*\"($SECURITY_PACKAGES)\"" "$PACKAGE_JSON" 2>/dev/null || true)
-  
-  # IG-27: Typosquatting check (Levenshtein approximation via substring)
-  if [[ -f "$LOCK_FILE" ]]; then
-    while IFS= read -r pkg; do
-      pkg_name=$(echo "$pkg" | tr -d '[:space:]",')
+  done < <(grep -E "^\s*\"(${SECURITY_PACKAGES})\"" "$PACKAGE_JSON" 2>/dev/null || true)
+
+  if [[ -n "$LOCK_FILE" ]]; then
+    while IFS= read -r dep; do
+      [[ -z "$dep" ]] && continue
       for top in "${TOP_PACKAGES[@]}"; do
-        # Simple similarity check — flag packages that are close to popular names
-        if [[ "$pkg_name" != "$top" ]] && [[ "${#pkg_name}" -ge "${#top}" ]]; then
-          # Check if the package name contains a popular package name as substring
-          # (e.g., "react-native" contains "react" — legitimate, but "reactt" does not)
-          if echo "$pkg_name" | grep -qi "^${top}.\|.${top}$" 2>/dev/null && [[ ${#pkg_name} -le $((${#top} + 3)) ]]; then
-            if ! echo "$pkg_name" | grep -qiE "^${top}-|/${top}$" 2>/dev/null; then
-              echo "IG-27 — potential typosquatting: $pkg_name (close to '$top')"
-              FINDINGS=$((FINDINGS + 1))
-            fi
+        if [[ "$dep" != "$top" && ${#dep} -le $((${#top} + 2)) ]]; then
+          if python3 -c "
+a,b='${dep}','${top}'
+# Levenshtein distance <= 2
+if a==b: exit(1)
+m,n=len(a),len(b)
+dp=[[0]*(n+1) for _ in range(m+1)]
+for i in range(m+1): dp[i][0]=i
+for j in range(n+1): dp[0][j]=j
+for i in range(1,m+1):
+  for j in range(1,n+1):
+    cost=0 if a[i-1]==b[j-1] else 1
+    dp[i][j]=min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+cost)
+exit(0 if dp[m][n]<=2 else 1)
+" 2>/dev/null; then
+            ig_emit_finding "$PACKAGE_JSON" "0" "IG-27" "potential typosquat: ${dep} (close to ${top})"
           fi
         fi
       done
-    done < <(grep -oE '"[a-zA-Z0-9@/.-]+"' "$PACKAGE_JSON" 2>/dev/null | grep -v 'version\|name\|description' | head -100 || true)
+    done < <(python3 -c "
+import json, re, os
+pj='${PACKAGE_JSON}'
+lock='${LOCK_FILE}'
+deps=set()
+try:
+    with open(pj) as f: data=json.load(f)
+    for sec in ['dependencies','devDependencies']:
+        deps.update((data.get(sec) or {}).keys())
+except Exception: pass
+print('\\n'.join(sorted(deps)))
+" 2>/dev/null || true)
+
+    # IG-29: shadow dependencies — import in src not in package.json
+    if [[ -d "${PROJECT_ROOT}/src" || -d "${PROJECT_ROOT}/scripts" ]]; then
+      shadow=$(ACP_ROOT="$PROJECT_ROOT" python3 -c "
+import json, os, re
+from pathlib import Path
+root=Path(os.environ['ACP_ROOT'])
+pj=root/'package.json'
+lock_names=set()
+try:
+    data=json.loads(pj.read_text())
+    for sec in ['dependencies','devDependencies']:
+        lock_names.update((data.get(sec) or {}).keys())
+except Exception: pass
+imports=set()
+pat=re.compile(r\"(?:import|require)\\s*\\(?['\\\"]([^./][^'\\\"]*)['\\\"]\")
+for base in [root/'src', root/'scripts', root]:
+    if not base.is_dir(): continue
+    for f in base.rglob('*'):
+        if f.suffix not in {'.ts','.tsx','.js','.jsx'}: continue
+        if 'node_modules' in f.parts: continue
+        try: text=f.read_text(encoding='utf-8',errors='ignore')
+        except OSError: continue
+        for m in pat.finditer(text):
+            pkg=m.group(1).split('/')[0]
+            if pkg.startswith('@'): pkg='/'.join(m.group(1).split('/')[:2])
+            if pkg not in lock_names and not pkg.startswith('.'):
+                imports.add(pkg)
+for s in sorted(imports):
+    print(s)
+" 2>/dev/null || true)
+      while IFS= read -r pkg; do
+        [[ -z "$pkg" ]] && continue
+        ig_emit_finding "${PROJECT_ROOT}" "0" "IG-29" "shadow dependency imported but not in package.json: ${pkg}"
+      done <<< "$shadow"
+    fi
   fi
 fi
 
-# ── IG-31: Stale lockfile ────────────────────────────────────────────────────
-
-if [[ -f "$LOCK_FILE" ]] && [[ -f "$PACKAGE_JSON" ]]; then
-  lock_mtime=$(stat -f %m "$LOCK_FILE" 2>/dev/null || stat -c %Y "$LOCK_FILE" 2>/dev/null || echo "0")
-  pkg_mtime=$(stat -f %m "$PACKAGE_JSON" 2>/dev/null || stat -c %Y "$PACKAGE_JSON" 2>/dev/null || echo "0")
-  diff_days=$(( (pkg_mtime - lock_mtime) / 86400 ))
-  if [[ $diff_days -gt 30 ]]; then
-    echo "IG-31 — lockfile is $diff_days days older than package.json (stale)"
-    FINDINGS=$((FINDINGS + 1))
+# IG-31: stale lockfile via git commit dates (route-183 — not mtime)
+if [[ -f "$LOCK_FILE" && -f "$PACKAGE_JSON" ]] && git -C "$PROJECT_ROOT" rev-parse --git-dir >/dev/null 2>&1; then
+  lock_ts=$(git -C "$PROJECT_ROOT" log -1 --format=%ct -- "$(basename "$LOCK_FILE")" 2>/dev/null || echo "0")
+  pkg_ts=$(git -C "$PROJECT_ROOT" log -1 --format=%ct -- "package.json" 2>/dev/null || echo "0")
+  if [[ "$lock_ts" != "0" && "$pkg_ts" != "0" ]]; then
+    diff_days=$(( (pkg_ts - lock_ts) / 86400 ))
+    if [[ $diff_days -gt 30 ]]; then
+      ig_emit_finding "$LOCK_FILE" "0" "IG-31" "lockfile commit is ${diff_days}d older than package.json changes"
+    fi
   fi
 fi
 
-if [[ $FINDINGS -gt 0 ]]; then
-  echo "" >&2
-  echo "Total findings: $FINDINGS dependency/supply chain issue(s)" >&2
-  if $CI_MODE; then exit 1; fi
-else
-  echo "✓ No dependency or supply chain anomalies detected" >&2
+# IG-32: recent commits adding deps without task ID
+if git -C "$PROJECT_ROOT" rev-parse --git-dir >/dev/null 2>&1; then
+  while IFS= read -r line; do
+    hash="${line%% *}"
+    msg="${line#* }"
+    if git -C "$PROJECT_ROOT" diff-tree --no-commit-id --name-only -r "$hash" 2>/dev/null | grep -qE 'package(-lock)?\.json$'; then
+      if ! echo "$msg" | grep -qE 'route-[0-9]+|task-[0-9]+|M[0-9]+' 2>/dev/null; then
+        ig_emit_finding "$PACKAGE_JSON" "0" "IG-32" "dependency change in ${hash:0:7} without task ID in message"
+      fi
+    fi
+  done < <(git -C "$PROJECT_ROOT" log --format='%H %s' -n 5 2>/dev/null || true)
 fi
 
-exit 0
+ig_finalize_scan "dependency-diff"
