@@ -10,30 +10,4 @@ drafts/**
 !drafts/draft.template.md
 preferences/
 
-# ── Instance data — project-specific, local-only ──────────────────────────
-# Keep .gitkeep placeholders and template files; ignore all real content
 
-# Milestone task files (your project's work items — not part of distribution)
-tasks/**
-!tasks/.gitkeep
-!tasks/task-1-{title}.template.md
-
-# Milestone documents (your project's milestones — not part of distribution)
-milestones/**
-!milestones/.gitkeep
-!milestones/milestone-1-{title}.template.md
-
-# progress.yaml and manifest.yaml are instance state (templates stay tracked)
-progress.yaml
-manifest.yaml
-
-# Memory run-logs (sessions, lessons, decisions are instance-specific)
-# patterns.md is kept — it contains distributable protocol knowledge
-memory/sessions.md
-memory/lessons.md
-memory/decisions.md
-
-# Routing task records and cost ledger (instance-specific dispatch history)
-routing/tasks/**
-!routing/tasks/.gitkeep
-routing/ledger.md
