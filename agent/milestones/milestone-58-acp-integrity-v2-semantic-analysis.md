@@ -3,11 +3,10 @@
 **Milestone**: M58  
 **Version Target**: 6.13.0  
 **Priority**: MEDIUM  
-**Status**: in_progress  
+**Status**: completed  
 **Started**: 2026-06-15  
-**Target**: —  
-**Estimated Weeks**: 2–3  
-**Estimated Hours**: ~18  
+**Completed**: 2026-06-15  
+**Target**: 6.20.0  
 **Depends On**: M56 (v1.0 stable, 1 month production data), M57 (recurring tasks for scheduled deep scans)  
 **Source**: feedback-007 v2.0 Categories 8, 9 (partial), 10; audit-053; audit-054  
 
