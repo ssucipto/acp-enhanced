@@ -3,7 +3,8 @@
 # Agent Context Protocol (ACP) Package Info Script
 # Shows detailed information about an installed package
 
-set -e
+set -euo pipefail
+trap 'echo "[acp.package-info] Error on line $LINENO" >&2; exit 1' ERR
 trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Source common utilities
