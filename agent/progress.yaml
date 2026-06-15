@@ -3,15 +3,15 @@
 
 project:
   name: agent-context-protocol
-  version: 6.14.1
+  version: 6.19.0
   started: 2026-02-16
   status: active
   current_milestone: M58
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.12.1. M55–M57 shipped
-    (/acp-review, /acp-integrity v1.0, recurring tasks). M54 CI/CD active.
-    M58 in progress (integrity v2.0). M59–M65 planned — critical CI fixes,
-    gateway truth/test (M64), tracking reconciliation (M65), prod-readiness.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.19.0. M55–M57 shipped
+    (/acp-review, /acp-integrity v1.1, recurring tasks). M59 critical CI fixes
+    and M64 integrity gateway v1.1 truth/test complete. M58 v2.0 semantic
+    analysis unblocked (ADR-10). M65 tracking reconciliation next.
 
 milestones:
   M44:
@@ -314,7 +314,7 @@ milestones:
       Research-first build order: calibrate → docs → scripts → E2E.
       Confidence Ceiling Model: MEDIUM (taint), LOW (injection/memory).
       Self-protection protocol: agent never self-halts.
-      BLOCKED on M64 (gateway v1.1 truth/test) before route-156+ implementation.
+      ADR-10 gate cleared (M64 shipped v6.19.0) — route-156+ implementation may proceed.
       Target: v6.13.0.
 
   M59:
@@ -410,20 +410,21 @@ milestones:
   M64:
     name: Integrity Gateway v1.1 — Truth & Test (v6.19.0)
     priority: 5
-    status: in_progress
-    progress: 17
+    status: completed
+    progress: 100
     started: 2026-06-15
-    completed:
+    completed: 2026-06-15
     estimated_weeks: 1
-    tasks_completed: 1
+    tasks_completed: 6
     tasks_total: 6
     file: agent/milestones/milestone-64-integrity-gateway-v1.1-truth-and-test.md
     notes: |
-      🔧 M64 in progress (2026-06-15). route-179 complete: entropy set -e crash fixed
-      (ACP_FINDING_COUNT marker, python always exit 0); unicode single-pass perf
-      (one Python process per scan, agent/ <5s). Fixtures + E2E B10–B14 added.
-      Next: route-182 (output contract) → route-180 → route-183 → route-181 → route-184.
-      BLOCKS M58 v2.0 per ADR-10. Target: v6.19.0.
+      ✅ M64 shipped v6.19.0 (2026-06-15). All 6 routes complete.
+      route-179: entropy/unicode scanner fixes. route-182: uniform output + severity-aware --ci.
+      route-180: acp.pattern-scan.sh (IG-04,07-13,21-26). route-183: YAML parser, git-date IG-31,
+      IG-37 skip, manifest dir enum + sha fallback. route-181: wiki/skill/cmd truth pass v1.1.
+      route-184: fixture matrix manifest + E2E B10-B22 + false-positive baseline.
+      Unblocks M58 v2.0 per ADR-10.
 
   M65:
     name: Tracking Reconciliation & M57/M58 Closeout (v6.20.0)
@@ -4329,7 +4330,15 @@ tasks:
 recent_work:
   - date: 2026-06-15
     description: |
-      🔧 /acp-proceed M64 route-179 — fixed broken integrity scanners (F-070-01, F-070-04).
+      ✅ /acp-proceed M64 --complete — Integrity Gateway v1.1 shipped as v6.19.0.
+    items:
+      - "✅ route-182 — acp.integrity-output.sh uniform contract + severity-aware --ci"
+      - "✅ route-180 — acp.pattern-scan.sh/py (IG-04,07-13,21-26)"
+      - "✅ route-183 — YAML whitelist, git-date IG-31, IG-37 skip, manifest robustness"
+      - "✅ route-181 — wiki/skill/command truth pass v1.1"
+      - "✅ route-184 — fixture matrix + E2E B10-B22 + false-positive baseline"
+      - "✅ ADR-10 gate cleared — M58 v2.0 unblocked"
+  - date: 2026-06-15
     items:
       - "✅ acp.entropy-scan.sh — python always exit 0; ACP_FINDING_COUNT marker (no set -e crash)"
       - "✅ acp.unicode-scan.sh — single Python process per scan; agent/ tree <5s"
@@ -6512,15 +6521,11 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "/acp-proceed M64 route-182 — uniform output contract + severity-aware --ci (then 180, 183, 181, 184)"
-  - "M65 routes 185-189 — tracking reconciliation after M64 exit"
-  - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md; route-162 manual step)"
+  - "/acp-proceed M65 — tracking reconciliation (routes 185-189)"
+  - "/acp-proceed M58 route-156+ — integrity v2.0 semantic analysis (ADR-10 gate cleared)"
+  - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md)"
 
-current_blockers:
-  - id: m64-gateway-truth
-    description: "M58 v2.0 semantic analysis blocked until M64 integrity gateway truth/test ships (ADR-10)"
-    milestone: M64
-    severity: high
+current_blockers: []
 
 notes:
   - "Master plan: agent/reports/plan-audit-coverage-matrix.md — order M59→M64→M65→M61→M62→M60→M63"
