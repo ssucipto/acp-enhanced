@@ -3,7 +3,8 @@
 # Agent Context Protocol (ACP) Package Install Script - OPTIMIZED VERSION
 # Installs third-party ACP packages with batched operations for 10x+ performance improvement
 
-set -e
+set -euo pipefail
+trap 'echo "[acp.package-install] Error on line $LINENO" >&2; exit 1' ERR
 trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Source common utilities
