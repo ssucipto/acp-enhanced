@@ -1,6 +1,6 @@
 # Milestone 62: Quality Hardening, Schema Coverage & Carryover Resolution
 
-**Target version**: 6.17.0  
+**Target version**: 6.21.0  
 **Status**: planned  
 **Estimated effort**: ~14h (5 routes)  
 **Source**: audit-065 (H4, H7, M2), audit-066 (M11), audit-067 (L1-L4), audit-062 carryovers (F-062-01..05)
