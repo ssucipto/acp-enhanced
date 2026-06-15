@@ -20,6 +20,7 @@ Thumbs.db
 
 # Generated reports (audit findings, cost reports, etc.)
 reports/
+!agent/reports/
 
 # Temporary files
 *.tmp
