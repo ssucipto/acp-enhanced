@@ -1,6 +1,6 @@
 # Milestone 60: Test Coverage Sprint — Tier 1 (Core Commands)
 
-**Target version**: 6.15.0  
+**Target version**: 6.20.2  
 **Status**: completed  
 **Estimated effort**: ~14h (2 routes)  
 **Source**: audit-065 (CRIT-065-003), audit-067 (Part D, M60)
@@ -13,8 +13,8 @@ Eliminate the single largest quality gap: 46 of 68 commands (68%) have no E2E te
 
 | Route | Title | Addresses | Est. | Status |
 |-------|-------|-----------|------|--------|
-| route-165 | E2E tests for 8 core commands: init, proceed, plan, dispatch, commit, validate, audit, route | C2 (CRIT-065-003 tier 1) | 12h | created |
-| route-166 | Fix integrity E2E `\d` ERE regex bug + add `CONTRIBUTING.md` | M13 (MED-067-003, MED-067-005) | 2h | created |
+| route-165 | E2E tests for 8 core commands: init, proceed, plan, dispatch, commit, validate, audit, route | C2 (CRIT-065-003 tier 1) | 12h | completed |
+| route-166 | Fix integrity E2E `\d` ERE regex bug + add `CONTRIBUTING.md` | M13 (MED-067-003, MED-067-005) | 2h | completed |
 
 ## Tier 1 Command Coverage (route-165)
 
@@ -41,7 +41,7 @@ Eliminate the single largest quality gap: 46 of 68 commands (68%) have no E2E te
 - Untested-command ratio drops from 68% to ≤56% (46→≤38)
 - Integrity test rule-count assertion computes correctly (verified with a known-count fixture)
 - `CONTRIBUTING.md` present with branch model + test requirements
-- `CHANGELOG.md` entry for v6.15.0
+- `CHANGELOG.md` entry for v6.20.2 (M60 Tier 1 E2E + integrity + CONTRIBUTING)
 
 ## References
 

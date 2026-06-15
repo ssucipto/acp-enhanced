@@ -1,9 +1,9 @@
 # Skills → @-Mention Pattern
 
 **Design**: DR-001  
-**Status**: Draft  
+**Status**: Superseded  
 **Created**: 2026-06-03  
-**Last Updated**: 2026-06-03  
+**Last Updated**: 2026-06-15  
 **Namespace**: local  
 **Source**: audit-022 R6, ChoreHive feedback  
 
