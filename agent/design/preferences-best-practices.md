@@ -1,7 +1,13 @@
 # ACP Preferences Best Practices
 
+<!-- @acp.meta.design
+topic: acp, preferences, best, practices
+description: The ACP preferences system provides multi-level configuration (Project > Workspace > User > Default). This guide covers when and how to use each level
+status: draft
+updated: 2026-05-01
+@acp.meta.end -->
+
 **Created**: 2026-05-01  
-**Status**: Reference  
 **Related**: [`agent/configurables/acp.configurables.yaml`](../configurables/acp.configurables.yaml), [`@acp.preferences-show`](../commands/acp.preferences-show.md)
 
 ---

@@ -1,8 +1,14 @@
 # Install Local Patterns Feature
 
+<!-- @acp.meta.design
+topic: install, local, patterns, feature
+description: Add --install-local flag to @acp.package-install to install local namespace patterns from source repository with automatic namespace conversion
+status: draft
+updated: 2026-02-21
+@acp.meta.end -->
+
 **Concept**: Add --install-local flag to @acp.package-install to install local namespace patterns from source repository with automatic namespace conversion  
 **Created**: 2026-02-21  
-**Status**: Design Proposal  
 **Priority**: Medium  
 **Estimated Effort**: 3-4 hours  
 

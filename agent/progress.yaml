@@ -6,7 +6,7 @@ project:
   version: 6.21.0
   started: 2026-02-16
   status: active
-  current_milestone: M62
+  current_milestone: M66
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.20.9. M55–M61 shipped
     (review, integrity v1.1/v2.0, CI fixes, integrity gateway, test coverage,
@@ -443,6 +443,23 @@ milestones:
       M57/M58 hygiene — promote F-062-03 to M59, gate quarterly-deep-scan, pipefail
       meta-scan (route-188), capture ADR history (route-189). Closes F-068-03/04/07/10/12,
       F-069-01..10, CRIT-065-001. Target: v6.20.2.
+
+  M66:
+    name: Marker Backfill & Metadata Traceability (v6.21.0)
+    priority: 4
+    status: completed
+    progress: 100
+    started: 2026-06-15
+    completed: 2026-06-15
+    estimated_weeks: 1
+    tasks_completed: 1
+    tasks_total: 1
+    file: agent/milestones/milestone-66-marker-backfill-traceability.md
+    notes: |
+      📋 M66 planned from /acp-sync Finding 1 (2026-06-15) — 250+ files missing
+      @acp.meta.* markers. Auto-backfill via acp.backfill-markers.sh. Targets
+      100% marker coverage across design/tasks/patterns for full traceability chain.
+      Target: v6.22.0.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4323,6 +4340,32 @@ tasks:
         P2: --repair detects and fixes partial/broken installs.
 
 recent_work:
+  - date: 2026-06-15
+    description: |
+      ✅ M66 — Marker backfill across all design/task/pattern files. Created
+      acp.backfill-markers.sh + scripts/acp-backfill-markers.py for batch
+      auto-generation. 232/232 files now have @acp.meta.* markers (100% coverage):
+      28 designs, 195 tasks, 9 patterns. Stripped superseded **Status:** prose
+      fields. Milestone doc created, progress.yaml updated. Finding 1 resolved.
+    items:
+      - "✅ 28/28 design files have @acp.meta.design markers (100%)"
+      - "✅ 195/195 task files have @acp.meta.task markers (100%)"
+      - "✅ 9/9 pattern files have @acp.meta.pattern markers (100%)"
+      - "✅ scripts/acp-backfill-markers.py created (reusable)"
+      - "✅ superseded **Status:** prose fields stripped"
+      - "📊 M66: 1/1 route complete (100%) — Finding 1 resolved"
+  - date: 2026-06-15
+    description: |
+      ✅ /acp-sync — Documentation sync sweep. Marker coverage assessed: 2/30 design
+      files (6.7%), 8/216 task files (3.7%), 0/12 pattern files (0%) have @acp.meta.*
+      markers. Artifacts all current (last verified 2026-06-15). Spec traceability: 14
+      R-IDs (R1-R14) unclaimed (planning gap — acp-code plugin system). 4 findings
+      logged for potential follow-up as M66.
+    items:
+      - "📊 Marker coverage: 2/30 designs (6.7%) — 250+ files missing markers"
+      - "📊 14 unclaimed spec R-IDs (local.acp-code-plugin-api)"
+      - "📊 0 clarification files in agent/clarifications/"
+      - "📊 All artifacts current (last verified 2026-06-15)"
   - date: 2026-06-15
     description: |
       ✅ audit-076 — Post-M62 completeness audit. 8 findings (1 HIGH CHANGELOG ordering,
