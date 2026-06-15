@@ -527,9 +527,9 @@ carryovers:
     file: e2e/
     finding: "46 of 71 commands (65%) have no E2E test — core commands /acp-init, /acp-proceed, /acp-plan, /acp-dispatch, /acp-commit, /acp-validate, /acp-audit, /acp-route all untested"
     fix_target: "Add E2E tests in three tiers: Tier 1 (8 core commands), Tier 2 (12 package/project), Tier 3 (16 memory/knowledge)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "074"
     escalated_to: null
 
   - audit_id: 65
@@ -665,9 +665,9 @@ carryovers:
     file: e2e/acp.integrity.test.sh
     finding: "Rule-count assertion uses grep -cE '^| IG-\\d+' but \\d is not a digit class in POSIX ERE (GNU grep -E) — matches literal 'd'; rule count miscomputed and non-portable"
     fix_target: "Replace \\d with [0-9] or use grep -P; verify >= 55 assertion actually computes correctly"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "074"
     escalated_to: null
 
   - audit_id: 67
@@ -676,9 +676,9 @@ carryovers:
     file: CONTRIBUTING.md
     finding: "No CONTRIBUTING.md despite being a public fork inviting contributions"
     fix_target: "Create CONTRIBUTING.md with branch model, test requirements, command-doc conventions"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "074"
     escalated_to: null
 
   - audit_id: 67

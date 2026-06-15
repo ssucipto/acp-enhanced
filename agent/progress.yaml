@@ -6,13 +6,16 @@ project:
   version: 6.20.2
   started: 2026-02-16
   status: active
-  current_milestone: M65
+  current_milestone: M61
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.20.2. M55–M57 shipped
     (/acp-review, /acp-integrity v1.1, recurring tasks). M59 critical CI fixes
     and M64 integrity gateway v1.1 truth/test complete. M58 v2.0 Phase 2
     semantic analysis complete + audit-072 post-impl fixes. M65 tracking
     reconciliation complete (5 routes, all cross-layer desyncs fixed).
+    M60 Tier 1 E2E test coverage delivered (8 suites, 100%). M60 audit-074
+    complete (7 findings fixed). /acp-sync: 3 design docs updated (parallel task,
+    parallel runner → Implemented, skills @-mention → Superseded).
 
 milestones:
   M44:
@@ -337,11 +340,11 @@ milestones:
     tasks_total: 2
     file: agent/milestones/milestone-60-test-coverage-tier1.md
     notes: |
-      📋 M60 planned (~14h, 2 routes). E2E for 8 core commands: init, proceed,
-      plan, dispatch, commit, validate, audit, route (route-165). Fix integrity
-      test \d ERE regex + add CONTRIBUTING.md (route-166). Drops untested ratio
-      68%→≤56%. Addresses CRIT-065-003 (tier 1), MED-067-003/005. Target: v6.15.0.
-      ✅ Routes expanded into files 2026-06-15: route-165, route-166.
+      ✅ M60 COMPLETE (v6.15.0, 2026-06-15). 8 E2E test suites created for core
+      commands: init, proceed, plan, dispatch, commit, validate, audit, route
+      (route-165, all passing 100%). Integrity test rule count fixed (70 exact) +
+      CONTRIBUTING.md created (route-166). Drops untested ratio 68%→≤56%.
+      Addresses CRIT-065-003 (tier 1), MED-067-003/005.
 
   M61:
     name: Production-Readiness Pack (v6.16.0)
@@ -4319,6 +4322,14 @@ tasks:
 recent_work:
   - date: 2026-06-15
     description: |
+      ✅ /acp-update — Progress tracking refreshed after M60 delivery, M65 closeout,
+      post-M60 audit, validate, and sync. All tracking current.
+    items:
+      - "✅ /acp-validate — 0 errors, 3 warnings (known dupe keys F-073-04, broken carryover-query link)"
+      - "✅ /acp-sync — 3 design docs updated (parallel-task, parallel-runner: Implemented; skills: Superseded)"
+      - "✅ /acp-update — This entry. Milestone progress verified. Next steps refreshed."
+  - date: 2026-06-15
+    description: |
       ✅ /acp-proceed M64 --complete — Integrity Gateway v1.1 shipped as v6.19.0.
     items:
       - "✅ route-182 — acp.integrity-output.sh uniform contract + severity-aware --ci"
@@ -6510,8 +6521,9 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "/acp-proceed M65 — tracking reconciliation (routes 185-189)"
-  - "/acp-proceed M58 route-156+ — integrity v2.0 semantic analysis (ADR-10 gate cleared)"
+  - "/acp-proceed M61 — Production-Readiness Pack (v6.16.0)"
+  - "/acp-proceed M62 — Quality Hardening, Schema Coverage & Carryover Resolution (v6.17.0)"
+  - "/acp-proceed M63 — Test Coverage Sprint — Tier 2 & 3 (v6.18.0)"
   - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md)"
 
 current_blockers: []
