@@ -3,7 +3,7 @@
 **Milestone**: M55  
 **Version Target**: 6.11.0  
 **Priority**: medium-high  
-**Status**: planned  
+**Status**: completed  
 **Started**: —  
 **Target**: —  
 **Estimated Weeks**: 1.5–2
