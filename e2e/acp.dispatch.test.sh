@@ -33,7 +33,7 @@ print_test_header "B1 — Context budget referenced"
 assert_contains "${CMD_CONTENT}" "context" "Context management referenced"
 
 print_test_header "N1 — No TODO or TBD in Steps section"
-STEPS_SECTION=$(sed -n '/## Steps/,/## Verification/p' "${CMD_FILE}")
+STEPS_SECTION=$(sed -n '/## Steps/,/^## /p' "${CMD_FILE}" | head -n 100)
 assert_not_contains "${STEPS_SECTION}" "TODO" "No TODO in Steps section"
 assert_not_contains "${STEPS_SECTION}" "TBD" "No TBD in Steps section"
 

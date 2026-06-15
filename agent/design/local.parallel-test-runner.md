@@ -1,9 +1,9 @@
 # Design: Parallel Test Execution in run-e2e-tests.sh
 
 **Design**: local.parallel-test-runner  
-**Status**: Draft  
+**Status**: Implemented  
 **Created**: 2026-06-03  
-**Last Updated**: 2026-06-03  
+**Last Updated**: 2026-06-15  
 **Informs**: run-e2e-tests.sh  
 
 ---
