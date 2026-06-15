@@ -1,37 +1,38 @@
-# Integrity Rules Catalogue — v1.0
+# Integrity Rules Catalogue — v1.1 (M64 truth pass)
 
 > **Load control**: Load one category section at a time. Never load the entire file.
-> **Version**: 1.0.0 | **Total rules**: 55 v1.0 + 15 deferred to v2.0 (M58)
+> **Version**: 1.1.0 | **Script-backed**: 38 rules across 7 scripts + output lib | **Deferred v2.0**: 15 rules
 > **Command**: /acp-integrity | **Skill**: @code-integrity
+> **Fixtures**: `agent/benchmarks/fixtures/integrity/manifest.yaml`
 
 ---
 
 ## Category 1 — Outbound Network Anomalies (CRITICAL)
-**Script**: `acp.network-whitelist-validate.sh` | **Rules**: IG-01–IG-06 | **Standard**: OWASP A01:2025
+**Script**: `acp.network-whitelist-validate.sh` | **Rules**: IG-01–IG-03, IG-05–IG-06 | **Standard**: OWASP A01:2025
 
 | Rule ID | Rule | Severity | Detection |
 |---------|------|----------|-----------|
-| IG-01 | `fetch()`/`axios`/`http.request()` to non-whitelisted domain | CRITICAL | Script — grep + whitelist cross-ref |
-| IG-02 | Network calls to raw IP addresses | CRITICAL | Script — IP regex |
-| IG-03 | Base64-decoded strings immediately in network calls | CRITICAL | Script — pattern match |
-| IG-04 | `eval()` of network-fetched content | CRITICAL | LLM — mixed deterministic/semantic |
-| IG-05 | DNS lookups from env vars | HIGH | Script — grep + pattern |
-| IG-06 | Outbound calls in catch blocks (exfil-on-error) | HIGH | Script — catch-block heuristic |
+| IG-01 | `fetch()`/`axios`/`http.request()` to non-whitelisted domain | CRITICAL | ✅ Script — whitelist cross-ref |
+| IG-02 | Network calls to raw IP addresses | CRITICAL | ✅ Script — IP regex |
+| IG-03 | Base64-decoded strings immediately in network calls | CRITICAL | ✅ Script — pattern match |
+| IG-04 | `eval()` of network-fetched content | CRITICAL | ✅ Script — `acp.pattern-scan.sh` |
+| IG-05 | DNS lookups from env vars | HIGH | ✅ Script — pattern |
+| IG-06 | Outbound calls in catch blocks (exfil-on-error) | HIGH | ✅ Script — catch-block heuristic |
 
 ---
 
 ## Category 2 — Data Exfiltration Patterns (CRITICAL)
-**Script**: `acp.network-whitelist-validate.sh` | **Rules**: IG-07–IG-13 | **Standard**: OWASP A02:2025, CWE-359
+**Script**: `acp.pattern-scan.sh` | **Rules**: IG-07–IG-13 | **Standard**: OWASP A02:2025, CWE-359
 
-| Rule ID | Rule | Severity |
-|---------|------|----------|
-| IG-07 | `process.env` access → network call in same scope | CRITICAL |
-| IG-08 | `fs.readFile` result → network call | CRITICAL |
-| IG-09 | Clipboard access → network call | CRITICAL |
-| IG-10 | Storage read → network call | HIGH |
-| IG-11 | Auth tokens in logs/query strings/URLs | HIGH |
-| IG-12 | PII in request body without encryption | HIGH |
-| IG-13 | Screenshot APIs outside declared feature context | CRITICAL |
+| Rule ID | Rule | Severity | Detection |
+|---------|------|----------|-----------|
+| IG-07 | `process.env` access → network call in same scope | CRITICAL | ✅ Script — pattern-scan |
+| IG-08 | `fs.readFile` result → network call | CRITICAL | ✅ Script — pattern-scan |
+| IG-09 | Clipboard access → network call | CRITICAL | ✅ Script — pattern-scan |
+| IG-10 | Storage read → network call | HIGH | ✅ Script — pattern-scan |
+| IG-11 | Auth tokens in logs/query strings/URLs | HIGH | ✅ Script — pattern-scan |
+| IG-12 | PII in request body without encryption | HIGH | ✅ Script — pattern-scan |
+| IG-13 | Screenshot APIs outside declared feature context | CRITICAL | ✅ Script — pattern-scan |
 
 ---
 
@@ -51,16 +52,16 @@
 ---
 
 ## Category 4 — Persistence & Execution (HIGH)
-**Standard**: MITRE ATT&CK T1053, T1059, CWE-78 | **Rules**: IG-21–IG-26
+**Script**: `acp.pattern-scan.sh` | **Standard**: MITRE ATT&CK T1053, T1059, CWE-78 | **Rules**: IG-21–IG-26
 
-| Rule ID | Rule | Severity |
-|---------|------|----------|
-| IG-21 | `child_process.exec()` with dynamic commands | CRITICAL |
-| IG-22 | `fs.writeFile` to system paths | CRITICAL |
-| IG-23 | Cron/scheduled task creation | HIGH |
-| IG-24 | Self-modifying code | HIGH |
-| IG-25 | Dynamic `require()`/`import()` from env/user input | HIGH |
-| IG-26 | Process injection | CRITICAL |
+| Rule ID | Rule | Severity | Detection |
+|---------|------|----------|-----------|
+| IG-21 | `child_process.exec()` with dynamic commands | CRITICAL | ✅ Script — pattern-scan |
+| IG-22 | `fs.writeFile` to system paths | CRITICAL | ✅ Script — pattern-scan |
+| IG-23 | Cron/scheduled task creation | HIGH | ✅ Script — pattern-scan |
+| IG-24 | Self-modifying code | HIGH | ✅ Script — pattern-scan |
+| IG-25 | Dynamic `require()`/`import()` from env/user input | HIGH | ✅ Script — pattern-scan |
+| IG-26 | Process injection | CRITICAL | ✅ Script — pattern-scan |
 
 ---
 

@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.19.0] — 2026-06-15
+
+### Added
+- **M64 Integrity Gateway v1.1** — truth & test milestone (routes 180–184 + route-179 from 6.14.1)
+- `acp.integrity-output.sh` — uniform `[SEVERITY] file:line ruleID — msg` contract, `--json`, severity-aware `--ci`
+- `acp.pattern-scan.sh` + `acp.pattern-scan.py` — exfiltration (IG-07–13) and persistence (IG-21–26) deterministic detection
+- Integrity fixture matrix: `agent/benchmarks/fixtures/integrity/manifest.yaml` + true+/true- fixtures
+- E2E B10–B22: scanner regression, fixture matrix, JSON output, false-positive baseline
+
+### Fixed
+- All 7 scanners emit uniform output; `--ci` exits 1 only on CRITICAL/HIGH (not MEDIUM)
+- `acp.network-whitelist-validate.sh` — YAML whitelist load via parser validation
+- `acp.dependency-diff.sh` — Levenshtein typosquat (IG-27), shadow deps (IG-29), git-date stale lock (IG-31)
+- `acp.git-provenance.sh` — IG-37 explicit skip when `team_members` empty
+- `acp.manifest-hash.sh` — directory enumeration, `--output`, `calculate_checksum` sha fallback
+- E2E S3 — `IG-[0-9]+` grep (portable vs `\d`)
+
+### Changed
+- `/acp-integrity` maturity → v1.1; wiki/skill/command docs reconciled to script-backed coverage
+- **ADR-10 gate cleared** — M58 v2.0 semantic work may proceed after M65 tracking reconciliation
+
+---
+
 ## [6.14.1] — 2026-06-15
 
 ### Added
