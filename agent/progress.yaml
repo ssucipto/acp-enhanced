@@ -406,6 +406,48 @@ milestones:
       Addresses CRIT-065-003 (tier 2/3). Target: v6.18.0.
       ✅ Route expanded into file 2026-06-15: route-178 (split into batches at /acp-proceed).
 
+  M64:
+    name: Integrity Gateway v1.1 — Truth & Test (v6.19.0)
+    priority: 5
+    status: planned
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 6
+    file: agent/milestones/milestone-64-integrity-gateway-v1.1-truth-and-test.md
+    notes: |
+      📋 M64 planned from audit-070 (M55–M58 gateway deep dive, ~18h, 6 routes).
+      Makes /acp-integrity honest + tested: fix entropy set -e crash + unicode perf
+      (route-179), implement missing exfil/persistence/shadow-dep detections (route-180),
+      truth pass reconciling coverage tables (route-181), uniform output + severity-aware
+      --ci (route-182), robustness: YAML-parser/git-date/IG-37/manifest/sha (route-183),
+      KEYSTONE per-rule fixture matrix + real false-positive baseline (route-184).
+      Closes F-070-01..16. BLOCKS M58 v2.0 (no semantic work on an untested v1).
+      Target: v6.19.0.
+
+  M65:
+    name: Tracking Reconciliation & M57/M58 Closeout (v6.20.0)
+    priority: 5
+    status: planned
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 5
+    file: agent/milestones/milestone-65-tracking-reconciliation-m57-m58-closeout.md
+    notes: |
+      📋 M65 planned from audit-068/069 + audit-065 straggler (~12h, 5 routes).
+      Restores single-source-of-truth: re-stamp milestone-57/58 status + fill route
+      completed dates + fix M54 pointer (route-185), add /acp-validate cross-layer +
+      dangling-pointer guard (route-186), M58 plan correction via ADR — circular gate +
+      route-155 scope + fixture confidence policy + canonical script name (route-187),
+      M57/M58 hygiene — promote F-062-03 to M59, gate quarterly-deep-scan, pipefail
+      meta-scan (route-188), capture ADR history (route-189). Closes F-068-03/04/07/10/12,
+      F-069-01..10, CRIT-065-001. Target: v6.20.0.
+
   M1:
     name: ACP Commands Infrastructure
     priority: 5
@@ -6438,15 +6480,15 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
+  - "Master plan: agent/reports/plan-audit-coverage-matrix.md (every finding 062/065-070 → milestone/route)"
+  - "Recommended order: M59 (critical) → M64 (gateway truth/test) → M65 (tracking truth) → M61 → M62 → M60 → M63"
   - "/acp-proceed M59 route-159 — fix updateRoutingYml() overwrite + regression test (H1, 2h)"
-  - "M59 route-160 — add 13 missing commands to package.yaml + CI count-guard (H8, 2h)"
-  - "M59 route-161 — wire acp-validate.ts into CI + fix ci-validate.sh no-op (H2/H3, 3h)"
-  - "M59 route-162 — enable branch protection on mainline + develop (C1, 15 min)"
-  - "M59 route-163/164 — API-key preflight + AGENTS.md version header (M9/M12)"
-  - "Then M60 (test tier1) → M61 (prod-readiness) → M62 (quality+carryovers) → M63 (test tier2/3)"
-  - "M58 route-156 — /acp-integrity v2.0 docs (runs independently of M59-M63)"
-  - "Roadmap source: audit-067 Part D; backlog: audit-067 Part B (~60h M59-M63)"
-  - "Compact sessions.md (21 entries above 15 threshold)"
+  - "M59 routes 160-164 — package.yaml, CI validation, branch protection, API-key preflight, AGENTS.md version"
+  - "M64 routes 179-184 — integrity gateway v1.1 (audit-070): fix entropy crash + unicode perf, implement missing rules, truth pass, uniform output, robustness, KEYSTONE fixture matrix"
+  - "M65 routes 185-189 — tracking reconciliation (audit-068/069): re-stamp statuses, validate guard, M58 plan ADRs, hygiene, capture ADR history"
+  - "M64 BLOCKS M58 v2.0 — do not build semantic analysis on an untested v1 gateway"
+  - "M58 route-156 — /acp-integrity v2.0 docs (proceed only after M64 + M65 route-187 land)"
+  - "Compact sessions.md (entries above 15 threshold)"
 
 notes:
   - 57 milestones (M1-M57 complete, M58 planned), v6.12.1 (2026-06-15)
