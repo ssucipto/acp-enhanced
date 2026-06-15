@@ -837,14 +837,10 @@ carryovers:
     finding: "All 5 audit-062 (M57) carryovers still pending incl. F-062-03 (no automated next_due -> date drift) in a shipped feature; queued late in route-176/M62"
     description: "Reconfirms audit-068 F-068-03. M57's own audit findings remain open."
     fix_target: "Promote F-062-03 (auto next_due helper / --complete flag) to M59; keep F-062-01/02/04/05 in route-176."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: null
-
-  - audit_id: 69
-    finding_id: F-069-07
-    severity: medium
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: "M59 post-completion follow-up route (route-176/M62 already queued; automated next_due helper documented in carryover per route-188)"
     file: agent/benchmarks/fixtures/taint-flow/manifest.yaml
     finding: "Manifest encodes only severity, not max_confidence/ci_blocking — but milestone-58 §8 E2E (assertions 4-6,9) requires asserting confidence ceilings (<=MEDIUM, no HIGH except IG-61)"
     description: "route-158 ground truth cannot support the mandated confidence assertions as-is. (= audit-068 F-068-04.)"

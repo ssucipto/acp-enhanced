@@ -531,6 +531,149 @@ function validateVersionConsistency(): boolean {
   return true;
 }
 
+// ── Cross-layer status consistency (route-186) ─────────────────
+// FAIL if a milestone doc's **Status**: disagrees with progress.yaml
+const PROGRESS_PATH = path.join("agent", "progress.yaml");
+
+function loadProgressSafe(): Record<string, any> | null {
+  if (!existsSync(PROGRESS_PATH)) return null;
+    const raw = readFileSync(PROGRESS_PATH, "utf-8").replace(/\r/g, "");
+  try {
+    return yaml.load(raw) as Record<string, any>;
+  } catch {
+    console.warn("⚠️  progress.yaml: YAML parse failed (duplicate keys suspected) — using line-based fallback");
+    const milestones: Record<string, any> = {};
+    const lines = raw.split("\n");
+    let currentMid: string | null = null;
+    let currentBlock: string[] = [];
+    for (const line of lines) {
+      const mKeyMatch = line.match(/^\s{2}(M\d{1,2}):\s*$/);
+      if (mKeyMatch) {
+        if (currentMid) {
+          const block = currentBlock.join("\n");
+          const statusMatch = block.match(/^\s{4}status:\s*(.+)/m);
+          const fileMatch = block.match(/^\s{4}file:\s*(.+)/m);
+          const tasksTotalMatch = block.match(/^\s{4}tasks_total:\s*(\d+)/m);
+          milestones[currentMid] = {
+            status: statusMatch ? statusMatch[1].trim() : undefined,
+            file: fileMatch ? fileMatch[1].trim() : undefined,
+            tasks_total: tasksTotalMatch ? parseInt(tasksTotalMatch[1]) : undefined,
+          };
+        }
+        currentMid = mKeyMatch[1];
+        currentBlock = [];
+      } else if (currentMid) {
+        currentBlock.push(line);
+      }
+    }
+    if (currentMid && currentBlock.length > 0) {
+      const block = currentBlock.join("\n");
+      const statusMatch = block.match(/^\s{4}status:\s*(.+)/m);
+      const fileMatch = block.match(/^\s{4}file:\s*(.+)/m);
+      const tasksTotalMatch = block.match(/^\s{4}tasks_total:\s*(\d+)/m);
+      milestones[currentMid] = {
+        status: statusMatch ? statusMatch[1].trim() : undefined,
+        file: fileMatch ? fileMatch[1].trim() : undefined,
+        tasks_total: tasksTotalMatch ? parseInt(tasksTotalMatch[1]) : undefined,
+      };
+    }
+    return { milestones };
+  }
+}
+
+function validateStatusConsistency(): boolean {
+  const progressYaml = loadProgressSafe();
+  if (!progressYaml) {
+    console.warn("⚠️  Status consistency: cannot parse progress.yaml — skipped");
+    return true;
+  }
+
+  const milestones = progressYaml.milestones as Record<string, any> | undefined;
+  if (!milestones || Object.keys(milestones).length === 0) {
+    console.warn("⚠️  Status consistency: no milestones in progress.yaml — skipped");
+    return true;
+  }
+
+  let allOk = true;
+
+  for (const [mid, mdata] of Object.entries(milestones)) {
+    if (!mdata || typeof mdata !== "object") continue;
+    const pyStatus = mdata.status as string | undefined;
+    const docFile = mdata.file as string | undefined;
+    if (!pyStatus || !docFile) continue;
+    if (!existsSync(docFile)) continue; // handled by validateFilePointers
+
+    const docContent = readFileSync(docFile, "utf-8");
+    const statusMatch = docContent.match(/^\*\*Status\*\*:\s*(.+)/m);
+    if (!statusMatch) continue;
+
+    const docStatus = statusMatch[1].trim().toLowerCase();
+    let normalisedDoc = docStatus;
+    if (/implemented|completed/.test(normalisedDoc)) normalisedDoc = "completed";
+    else if (/design specification|design proposal|proposal|draft|reference|planned/.test(normalisedDoc)) normalisedDoc = "planned";
+    else if (/in.progress|in_progress|active/.test(normalisedDoc)) normalisedDoc = "in_progress";
+
+    const normalisedPy = pyStatus === "active" ? "in_progress" : pyStatus;
+
+    if (normalisedDoc !== normalisedPy) {
+      console.error(
+        `❌ Status desync: ${docFile} **Status**: "${docStatus}" (→${normalisedDoc}) != progress.yaml M${mid.replace(/^M/, "")} status: "${pyStatus}" (→${normalisedPy})`
+      );
+      allOk = false;
+    }
+  }
+
+  if (allOk) {
+    console.log(`✅ Status consistency: all milestone docs agree with progress.yaml`);
+  }
+  return allOk;
+}
+
+function validateFilePointers(): boolean {
+  const progressYaml = loadProgressSafe();
+  if (!progressYaml) {
+    console.warn("⚠️  File pointer check: cannot parse progress.yaml — skipped");
+    return true;
+  }
+
+  const milestones = progressYaml.milestones as Record<string, any> | undefined;
+  if (!milestones || Object.keys(milestones).length === 0) {
+    console.warn("⚠️  File pointer check: no milestones in progress.yaml — skipped");
+    return true;
+  }
+
+  let allOk = true;
+  const seen = new Set<string>();
+
+  for (const [mid, mdata] of Object.entries(milestones)) {
+    if (!mdata || typeof mdata !== "object") continue;
+    const docFile = mdata.file as string | undefined;
+    const tasksTotal = mdata.tasks_total as number | undefined;
+    const status = mdata.status as string | undefined;
+
+    if (docFile) {
+      if (seen.has(docFile)) continue;
+      seen.add(docFile);
+      if (!existsSync(docFile)) {
+        console.error(`❌ Dangling pointer: M${mid.replace(/^M/, "")} file: "${docFile}" does not exist`);
+        allOk = false;
+      }
+    }
+
+    if (tasksTotal === 0 && status && /active|in_progress/.test(status)) {
+      console.error(
+        `❌ Inconsistency: M${mid.replace(/^M/, "")} status: "${status}" but tasks_total: 0`
+      );
+      allOk = false;
+    }
+  }
+
+  if (allOk) {
+    console.log(`✅ File pointers: all progress.yaml file: references exist`);
+  }
+  return allOk;
+}
+
 // ── Main ───────────────────────────────────────────────────
 const args = process.argv.slice(2);
 if (args.length === 0) {
@@ -541,8 +684,10 @@ if (args.length === 0) {
   const sizeOk = validateAgentsMdSize();
   const sessionsValid = validateSessionsMemory();
   validateVersionConsistency();
+  const statusOk = validateStatusConsistency();
+  const pointersOk = validateFilePointers();
   checkStaleness(); // informational — non-blocking, does not affect exit code
-  process.exit(sizeOk && sessionsValid && (process.exitCode ?? 0) === 0 ? 0 : 1);
+  process.exit(sizeOk && sessionsValid && statusOk && pointersOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
 
 let overallFailed = false;
