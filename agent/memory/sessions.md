@@ -5,15 +5,22 @@
 - date: 2026-06-15
   executor: copilot
   branch: develop
-  tasks: [acp-validate, acp-sync, acp-update, acp-commit]
+  tasks: [route-155]
+  tasks_completed: [route-155]
   done:
-    - validate-all-checks-pass-25-directories-version-consistency-recurring-tasks
-    - sync-domain-yml-added-missing-e2e-suites-review-integrity-recurring
-    - sync-domain-yml-bumped-last-verified-to-2026-06-15
-    - update-progress-yaml-next-steps-notes-refreshed-from-stale-m56-state
-    - commit-session-entry-written-post-maintenance
-  deferred: []
-  key_fact: "Three core E2E suites (review 49, integrity 26, recurring 16 = 91 assertions) from M55-M57 were missing from the canonical domain model. The sync command caught documentation drift that had persisted through 3 milestone completions — proving that sync must be run after every milestone, not just periodically."
+    - audit-070-m55-m58-gateway-deep-dive-16-findings-committed
+    - m64-m65-remediation-plan-routes-179-189-coverage-matrix-committed
+    - acp-validate-zero-errors-zero-warnings-69x3-parity-triple-sync
+    - acp-sync-readme-prd-quickstart-counts-m52-m57-protocol-section
+    - acp-update-progress-m54-50pct-m58-blocker-next-steps-trimmed
+    - parity-wrappers-carryover-query-pattern-sync-session-sync-rule-file-audit
+    - m54-milestone-doc-created-route-155-research-artifact-fixtures-drafted
+  deferred:
+    - git-commit-pending-local-work → user-request
+    - m59-critical-ci-fixes → route-159
+    - m64-integrity-gateway-truth → route-179
+    - m65-tracking-reconciliation → route-185
+  key_fact: "Audit-070 proved /acp-integrity v1.0 gives false assurance (~18/55 rules implemented, entropy scanner crashes on findings). M64 (gateway truth/test) must ship before M58 v2.0 semantic analysis — building Phase 2 on an untested v1 gateway would compound the problem."
 
 - date: 2026-06-15
   executor: copilot
@@ -69,6 +76,8 @@
   executor: copilot
   compacted: true
   tasks: [route-131..158, audit-018..061, M39..M57, design-specs, stakeholder-reports]
+  done:
+    - compacted-block-see-summary
   summary: |
     Feb 16 – Jun 8, 2026 (20 sessions compacted 2026-06-15):
 
