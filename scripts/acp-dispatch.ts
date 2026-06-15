@@ -33,7 +33,7 @@ function readAgent(relPath: string): string {
   return readFileSync(full, "utf-8");
 }
 
-function getLastNSessions(n: number): string {
+export function getLastNSessions(n: number): string {
   const content = readAgent("memory/sessions.md");
   if (!content) return "";
   const entries = content.split("\n- date:").filter(Boolean);
@@ -43,7 +43,7 @@ function getLastNSessions(n: number): string {
     .join("\n");
 }
 
-function getFilteredLessons(taskType: string): string {
+export function getFilteredLessons(taskType: string): string {
   const content = readAgent("memory/lessons.md");
   if (!content) return "";
   const entries = content.split("\n- date:").filter(Boolean);
@@ -88,7 +88,7 @@ function extractSection(filePath: string, sectionId: string): string {
   return result.join("\n").slice(0, 3000); // cap section size
 }
 
-function getSkillFile(taskType: string): string {
+export function getSkillFile(taskType: string): string {
   const commandTypes = ["command-doc-write", "command-doc-update"];
   const scriptTypes = ["bash-script-create", "bash-script-fix", "bash-script-refactor", "preference-system", "bug-fix-simple", "bug-fix-complex"];
   const schemaTypes = ["yaml-schema"];
@@ -108,12 +108,12 @@ function getSkillFile(taskType: string): string {
   return "skills/crosscut.md";
 }
 
-function estimateTokens(text: string): number {
+export function estimateTokens(text: string): number {
   return Math.ceil(text.length / 4);
 }
 
 // ── Context Assembly (cache-optimised) ───────────────────────
-function buildContext(
+export function buildContext(
   meta: Record<string, any>,
   taskContent: string
 ): { system: string; user: string } {

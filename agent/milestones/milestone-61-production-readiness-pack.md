@@ -1,7 +1,7 @@
 # Milestone 61: Production-Readiness Pack
 
-**Target version**: 6.16.0  
-**Status**: planned  
+**Target version**: 6.20.7  
+**Status**: Completed  
 **Estimated effort**: ~12h (6 routes)  
 **Source**: audit-065 (security/governance findings), audit-066 (M10), audit-067 (Part D, M61)
 
@@ -13,12 +13,12 @@ Close the governance and security table-stakes that an open-source startup engin
 
 | Route | Title | Addresses | Est. | Status |
 |-------|-------|-----------|------|--------|
-| route-167 | Add `windows-latest` to E2E CI matrix | H5 (HIGH-065-005) | 2h | created |
-| route-168 | Create `SECURITY.md` (private advisory process + scope) | H6 (HIGH-065-006) | 1h | created |
-| route-169 | Add `CODEOWNERS` + PR/issue templates | M3, M6 | 1.5h | created |
-| route-170 | Dependabot + `package-lock.json` + `npm audit`/secret-scan in CI | M5, M7, M8 | 4h | created |
-| route-171 | Populate `team_members` in identity.yml; enable IG-37 author verification | M4 | 0.5h | created |
-| route-172 | Unit tests for TS tooling (dispatch + validate) via vitest/jest | M10 (MED-066-003) | 3h | created |
+| route-167 | Add `windows-latest` to E2E CI matrix | H5 (HIGH-065-005) | 2h | completed |
+| route-168 | Create `SECURITY.md` (private advisory process + scope) | H6 (HIGH-065-006) | 1h | completed |
+| route-169 | Add `CODEOWNERS` + PR/issue templates | M3, M6 | 1.5h | completed |
+| route-170 | Dependabot + `package-lock.json` + `npm audit`/secret-scan in CI | M5, M7, M8 | 4h | completed |
+| route-171 | Populate `team_members` in identity.yml; enable IG-37 author verification | M4 | 0.5h | completed |
+| route-172 | Unit tests for TS tooling (dispatch + validate) via vitest/jest | M10 (MED-066-003) | 3h | completed |
 
 ## Industry-Standard Alignment
 
