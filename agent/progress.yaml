@@ -3,15 +3,14 @@
 
 project:
   name: agent-context-protocol
-  version: 6.19.0
+  version: 6.20.0
   started: 2026-02-16
   status: active
-  current_milestone: M58
+  current_milestone: M65
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.19.0. M55–M57 shipped
     (/acp-review, /acp-integrity v1.1, recurring tasks). M59 critical CI fixes
-    and M64 integrity gateway v1.1 truth/test complete. M58 v2.0 semantic
-    analysis unblocked (ADR-10). M65 tracking reconciliation next.
+    and M64 integrity gateway v1.1 truth/test complete. M58 v2.0 Phase 2 semantic analysis complete. M65 tracking reconciliation next.
 
 milestones:
   M44:
@@ -298,13 +297,13 @@ milestones:
   M58:
     name: /acp-integrity v2.0 — Semantic Analysis & Deep Detection (v6.13.0)
     priority: 3
-    status: in_progress
-    progress: 25
+    status: completed
+    progress: 100
     started: 2026-06-15
-    completed:
+    completed: 2026-06-15
     estimated_weeks: 2-3
-    tasks_completed: 1
-    tasks_total: 4
+    tasks_completed: 4
+    tasks_total:  4
     file: agent/milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
     notes: |
       M58 in progress — 4 routes for /acp-integrity v2.0 (~18h). Route-155 COMPLETE
