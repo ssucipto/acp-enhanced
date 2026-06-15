@@ -275,3 +275,19 @@
     - integrity-test-62-62-green
   deferred: []
   key_fact: "8 E2E test suites (init, proceed, plan, dispatch, commit, validate, audit, route) created in one milestone — each with structural+negative assertions following patterns/local.e2e-testing.md. CRLF line endings on Windows require tr -d '\r' conversion before bash execution."
+
+- date: 2026-06-15
+  executor: copilot
+  branch: develop
+  tasks: [route-173, route-174, route-175, route-176, route-177, route-178, route-179]
+  done:
+    - m62-complete-7-routes-all-v6-21-0
+    - route-173-pipefail-upgrade-17-scripts-set-euo-pipefail
+    - route-174-command-doc-structural-conformance-steps-verification
+    - route-175-memory-layer-schemas-7-files-enforced-in-acp-validate
+    - route-176-audit-062-carryovers-f-062-01-through-05
+    - route-177-low-severity-cleanups-l1-l4
+    - route-178-cross-file-consistency-validators-7-checks
+    - route-179-post-milestone-sweep-script-e2e-test
+  deferred: []
+  key_fact: "M62 completed in under 3 hours — all 7 routes shipped. 17 scripts upgraded to set -euo pipefail (0 bare remaining). 7 memory-layer schemas created + enforced. 5 audit-062 carryovers resolved (F-062-01..05). Post-M61 shortcut prevention deployed: 7 cross-file consistency validators in acp-validate.ts (40/40 tests) + acp.post-milestone-sweep.sh (6 gates). Pre-commit hook active — caught ACP rule changes on commits."
