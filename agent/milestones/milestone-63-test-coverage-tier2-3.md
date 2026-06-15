@@ -13,7 +13,7 @@ Complete the E2E coverage effort begun in M60. Cover the remaining untested comm
 
 | Route | Title | Addresses | Est. | Status |
 |-------|-------|-----------|------|--------|
-| route-178 | E2E tests for remaining untested commands (Tier 2: package/project; Tier 3: memory/knowledge) | C2 (CRIT-065-003 tier 2/3) | 12h | not_started |
+| route-178 | E2E tests for remaining untested commands (Tier 2: package/project; Tier 3: memory/knowledge) | C2 (CRIT-065-003 tier 2/3) | 12h | created |
 
 > Note: route-178 will be split into per-tier or per-command routes during `/acp-proceed` if the scope proves too large for a single route.
 

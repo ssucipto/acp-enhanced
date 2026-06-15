@@ -13,8 +13,8 @@ Eliminate the single largest quality gap: 46 of 68 commands (68%) have no E2E te
 
 | Route | Title | Addresses | Est. | Status |
 |-------|-------|-----------|------|--------|
-| route-165 | E2E tests for 8 core commands: init, proceed, plan, dispatch, commit, validate, audit, route | C2 (CRIT-065-003 tier 1) | 12h | not_started |
-| route-166 | Fix integrity E2E `\d` ERE regex bug + add `CONTRIBUTING.md` | M13 (MED-067-003, MED-067-005) | 2h | not_started |
+| route-165 | E2E tests for 8 core commands: init, proceed, plan, dispatch, commit, validate, audit, route | C2 (CRIT-065-003 tier 1) | 12h | created |
+| route-166 | Fix integrity E2E `\d` ERE regex bug + add `CONTRIBUTING.md` | M13 (MED-067-003, MED-067-005) | 2h | created |
 
 ## Tier 1 Command Coverage (route-165)
 
