@@ -109,18 +109,20 @@
 
 ---
 
-## Category 8 — Taint Flow Analysis (HIGH) ⚠️ DEFERRED to v2.0 (M58)
+## Category 8 — Taint Flow Analysis (HIGH) — Phase 2 (M58 v2.0)
 
-> **Deferred**: Requires SAST-grade cross-file reasoning. LLM accuracy insufficient for `confidence: HIGH`. Will be re-evaluated after v1.0 production data.
+**Script**: `acp.taint-scan.sh` (heuristic prep + obvious-sink detection) | **Rules**: IG-45–IG-50 | **Standard**: OWASP A03:2025, CWE-134/601
 
-| Rule ID | Source → Sink | Severity |
-|---------|--------------|----------|
-| IG-45 | User input → SQL/NoSQL query without parameterisation | CRITICAL |
-| IG-46 | User input → shell command execution | CRITICAL |
-| IG-47 | User input → file path without sanitisation | CRITICAL |
-| IG-48 | User input → URL redirect without validation | HIGH |
-| IG-49 | Environment variable → network call without validation | HIGH |
-| IG-50 | Third-party library output → security decision without re-validation | HIGH |
+> **Confidence ceiling**: MEDIUM max for LLM cross-file reasoning; script-backed obvious sinks may report at HIGH severity but never auto-fail CI at HIGH confidence for taint rules. All Phase 2 taint findings carry `verdict: REQUIRES_HUMAN_REVIEW`.
+
+| Rule ID | Source → Sink | Severity | Detection | Max Confidence |
+|---------|--------------|----------|-----------|----------------|
+| IG-45 | User input → SQL/NoSQL query without parameterisation | CRITICAL | ✅ Script — taint-scan (obvious concat) + LLM cross-file | MEDIUM |
+| IG-46 | User input → shell command execution | CRITICAL | ✅ Script — taint-scan (exec/spawn + interpolation) + LLM | MEDIUM |
+| IG-47 | User input → file path without sanitisation | CRITICAL | ✅ Script — taint-scan heuristic + LLM | MEDIUM |
+| IG-48 | User input → URL redirect without validation | HIGH | ✅ Script — taint-scan heuristic + LLM | MEDIUM |
+| IG-49 | Environment variable → network call without validation | HIGH | ✅ Script — taint-scan heuristic + LLM | MEDIUM |
+| IG-50 | Third-party library output → security decision without re-validation | HIGH | LLM semantic only | LOW |
 
 ---
 
@@ -141,17 +143,19 @@
 
 ---
 
-## Category 10 — Memory & Context Integrity (CRITICAL) ⚠️ DEFERRED to v2.0 (M58)
+## Category 10 — Memory & Context Integrity (CRITICAL) — Phase 2 (M58 v2.0)
 
-> **Deferred**: 60–89% AUR documented in literature (LinkedIn Research, May 2026). 11–40% false negative rate. Semantic contradiction detection against `constraints.yml` requires deep reasoning not reliable enough for production use.
+**Script**: `acp.memory-scan.sh` (prep for LLM) + `acp.unicode-scan.sh` (IG-61) | **Rules**: IG-58–IG-62 | **Standard**: MITRE ATLAS AML.T0054
 
-| Rule ID | Rule | Severity |
-|---------|------|----------|
-| IG-58 | Carryover entries with instruction-like text outside YAML schema | CRITICAL |
-| IG-59 | Decision entries with agent-directive language | CRITICAL |
-| IG-60 | Session memory contradicting `constraints.yml` hard rules | CRITICAL |
-| IG-61 | Memory files with hidden Unicode (detection available v1.0 via unicode-scan.sh) | CRITICAL |
-| IG-62 | Memory files modified by session with untrusted context | HIGH |
+> **Confidence ceiling**: LOW for semantic memory analysis (11–40% FNR documented). IG-61 hidden Unicode remains script-backed at HIGH. No LOW-confidence memory finding creates audit carryovers.
+
+| Rule ID | Rule | Severity | Detection | Max Confidence |
+|---------|------|----------|-----------|----------------|
+| IG-58 | Carryover entries with instruction-like text outside YAML schema | CRITICAL | LLM — memory-scan prep | LOW |
+| IG-59 | Decision entries with agent-directive language | CRITICAL | LLM — memory-scan prep | LOW |
+| IG-60 | Session memory contradicting `constraints.yml` hard rules | CRITICAL | LLM — memory-scan prep | LOW |
+| IG-61 | Memory files with hidden Unicode | CRITICAL | ✅ Script — unicode-scan.sh | HIGH |
+| IG-62 | Memory files modified by session with untrusted context | HIGH | LLM — git-provenance + memory-scan | LOW |
 
 ---
 
@@ -170,4 +174,4 @@
 
 ---
 
-*Integrity Rules Catalogue v1.0 | ACP Enhanced | /acp-integrity | 2026-06-07*
+*Integrity Rules Catalogue v2.0 | ACP Enhanced | /acp-integrity | 2026-06-15*
