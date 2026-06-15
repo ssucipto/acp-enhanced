@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.20.6] — 2026-06-15
+
+### Added
+- **IG-37 active**: `team_members` populated in `identity.yml` enabling git author provenance verification via `acp.git-provenance.sh`. CRLF resilience added to grep-based parser (L4 migration deferred to route-177). (route-171, M61)
+
+### Changed
+- **`.gitattributes`**: Extended LF enforcement to `*.yml` and `*.yaml` for cross-platform bash-parser compatibility (route-171, M61).
+
+---
+
 ## [6.20.5] — 2026-06-15
 
 ### Added
