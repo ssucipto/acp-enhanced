@@ -221,7 +221,9 @@ Compare the `**Status**` field in every milestone document against the `status` 
 - Normalize both values (map `active` → `in_progress`, `implemented` → `completed`, etc.)
 - FAIL if they disagree (ERROR, exit 1)
 
-**Expected Outcome**: All milestone docs agree with progress.yaml on status  
+**Expected Outcome**: All milestone docs agree with progress.yaml on status
+
+> **Implementation note**: Enforced by `scripts/acp-validate.ts` (`validateStatusConsistency()` / `loadProgressSafe()`) in the no-args validation path (Step 11.6).
 
 ### 2f. Validate File Pointers (v6.20.1+)
 
@@ -234,7 +236,9 @@ Verify every `file:` pointer in `progress.yaml` references an existing file. Thi
 - FAIL listing each dangling pointer (ERROR, exit 1)
 - Flag `tasks_total: 0` combined with `status: active|in_progress` as an inconsistency
 
-**Expected Outcome**: No dangling file pointers; no contradictory task counts  
+**Expected Outcome**: No dangling file pointers; no contradictory task counts
+
+> **Implementation note**: This check is enforced by `scripts/acp-validate.ts` (`validateFilePointers()`) in the no-args validation path (Step 11.6).
 
 ### 3. Validate Design Documents
 
