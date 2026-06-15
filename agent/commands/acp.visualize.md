@@ -118,3 +118,14 @@ Display:
 - The visualizer auto-refreshes when `progress.yaml` changes — no manual reload needed
 - P1 features (GitHub remote, kanban, multi-project) are in a future milestone
 - To use with a different project: `/acp-visualize --path /path/to/other/agent/progress.yaml`
+
+---
+
+## Verification
+
+- [ ] Visualizer launches and displays current milestone progress
+- [ ] All completed milestones render correctly with progress bars
+- [ ] Milestone links are clickable and resolve to correct milestone doc files
+- [ ] Summary stats (total milestones, completion percentage, routes) are accurate
+- [ ] No JavaScript console errors in the visualizer UI
+- [ ] Works with `--path` flag pointing to a valid alternate project
