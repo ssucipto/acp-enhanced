@@ -369,11 +369,11 @@ milestones:
     name: Quality Hardening, Schema Coverage & Carryover Resolution (v6.21.0)
     priority: 3
     status: in_progress
-    progress: 28
+    progress: 42
     started: 2026-06-15
     completed:
     estimated_weeks: 2
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 7
     file: agent/milestones/milestone-62-quality-hardening-schema-carryovers.md
     notes: |
