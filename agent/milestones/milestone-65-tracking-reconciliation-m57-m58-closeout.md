@@ -1,6 +1,6 @@
 # Milestone 65: Tracking Reconciliation & M57/M58 Closeout
 
-**Target version**: 6.20.0
+**Target version**: 6.20.2
 **Status**: completed
 **Priority**: HIGH (single-source-of-truth integrity + unblocks M58 v2.0)
 **Estimated effort**: ~12h (5 routes)
@@ -50,7 +50,7 @@ The merge of `origin/develop` (commit `90239d9`) restored historical planning do
 - `/acp-validate` gains (and passes) a check that FAILS when a milestone/route status disagrees with `progress.yaml` or a `file:` pointer dangles — proven by a deliberately-mismatched fixture.
 - M58 go/no-go gate is non-circular (ADR recorded); route-155 either finished-to-scope or formally descoped via ADR; taint fixtures carry `max_confidence`/`ci_blocking`; one canonical taint script name.
 - F-062-03 promoted to M59; quarterly-deep-scan gated/annotated until v2.0 ships; `acp.meta-scan.sh` upgraded to `set -euo pipefail`.
-- `CHANGELOG.md` entry for v6.20.0.
+- `CHANGELOG.md` entry for v6.20.2.
 - Carryovers F-068-03/04/07/10/12 and F-069-01..10 and CRIT-065-001 marked `fixed` with `verified_in_audit`.
 
 ---
@@ -63,4 +63,4 @@ The merge of `origin/develop` (commit `90239d9`) restored historical planning do
 - `agent/artifacts/research-m58-taint-flow-calibration.md`, `agent/benchmarks/fixtures/taint-flow/manifest.yaml`
 - `scripts/acp-validate.ts` (cross-layer checks), `agent/commands/acp.decide.md`
 
-*Milestone 65 | ACP Enhanced v6.20.0 | audit-068 + audit-069 | 2026-06-15*
+*Milestone 65 | ACP Enhanced v6.20.2 | audit-068 + audit-069 | 2026-06-15*
