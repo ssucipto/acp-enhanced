@@ -72,4 +72,30 @@ for s in acp.taint-scan.sh acp.memory-scan.sh; do
   assert_true "bash -n ${s}" $?
 done
 
+print_test_header "B13 — taint-flow manifest has max_confidence + ci_blocking"
+manifest="${TAINT_FIXTURE}/manifest.yaml"
+assert_contains "$(cat "${manifest}")" "max_confidence:" "manifest encodes max_confidence"
+assert_contains "$(cat "${manifest}")" "ci_blocking: false" "manifest marks taint fixtures non-blocking in CI"
+
+print_test_header "B14 — full taint fixture matrix (6 vulnerable rules)"
+for pair in 45 46 47 48 49 50; do
+  vuln="${TAINT_FIXTURE}/ig-${pair}-vulnerable.js"
+  safe="${TAINT_FIXTURE}/ig-${pair}-safe.js"
+  vuln_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.taint-scan.sh" "${vuln}" 2>&1; echo "EXIT:$?")
+  safe_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.taint-scan.sh" "${safe}" 2>&1; echo "EXIT:$?")
+  assert_contains "${vuln_out}" "IG-${pair}" "IG-${pair} finding on vulnerable fixture"
+  assert_contains "${vuln_out}" "EXIT:0" "IG-${pair} vulnerable exits 0"
+  assert_not_contains "${safe_out}" "IG-${pair}" "IG-${pair} clean on safe fixture"
+  assert_contains "${safe_out}" "EXIT:0" "IG-${pair} safe exits 0"
+done
+
+print_test_header "B15 — taint-scan --ci does not fail on MEDIUM findings"
+ci_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.taint-scan.sh" --ci "${TAINT_FIXTURE}/ig-45-vulnerable.js" 2>&1; echo "EXIT:$?")
+assert_contains "${ci_out}" "MEDIUM" "Phase 2 taint finding at MEDIUM"
+assert_contains "${ci_out}" "EXIT:0" "taint-scan --ci exits 0 on MEDIUM-only findings"
+
+print_test_header "B16 — IG-50 reports LOW confidence ceiling"
+ig50_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.taint-scan.sh" "${TAINT_FIXTURE}/ig-50-vulnerable.js" 2>&1)
+assert_contains "${ig50_out}" "[LOW]" "IG-50 finding uses LOW confidence"
+
 print_suite_summary

@@ -5,8 +5,53 @@
 - date: 2026-06-15
   executor: copilot
   branch: develop
-  tasks: [route-179, route-180, route-181, route-182, route-183, route-184, audit-071, route-156, route-157, route-158, M58]
-  tasks_completed: [route-179, route-180, route-181, route-182, route-183, route-184, audit-071, route-156, route-157, route-158]
+  tasks: [validate, sync]
+  done:
+    - validate-all-layers-pass-0-errors
+    - sync-glossary-m58-phase-2-terms-added
+  deferred:
+    - design-marker-backfill → pending interactive prompt
+  key_fact: "Glossary was missing 6 M58 Phase 2 terms (Integrity Scan, Phase 2, Confidence Ceiling, Taint Flow, Memory Poisoning, Self-Protection Protocol). Total terms: 42 → 48."
+
+- date: 2026-06-15
+  executor: copilot
+  branch: develop
+  tasks: [audit-072, M58]
+  tasks_completed: [audit-072]
+  done:
+    - audit-072-m58-post-impl-8-findings-all-fixed
+    - taint-scan-ig-47-48-50-file-level-heuristics-indirect-flow
+    - taint-manifest-max-confidence-ci-blocking-v1-1-0
+    - e2e-integrity-v2-55-assertions-full-fixture-matrix
+    - research-memory-poisoning-ux-doc-route-155
+    - wiki-header-v2-0-0-phase-2-active
+    - audit-carryovers-m58-bulk-fixed-verified-072
+  deferred:
+    - empirical-tpr-vs-eslint-descoped-literature-calibration → accepted
+  key_fact: "Taint heuristics must use file-level flow analysis for indirect source→sink (target=req.query → redirect(target)); line-level patterns miss 50% of calibration fixtures."
+
+- date: 2026-06-15
+  executor: copilot
+  branch: develop
+  tasks: [route-155, route-156, route-157, route-158, M58]
+  tasks_completed: [route-156, route-157, route-158]
+  done:
+    - m58-phase-2-semantic-analysis-shipped-v6-20-0
+    - route-156-wiki-cat-8-10-un-deferred-confidence-ceilings-acp-integrity-v2-0-0
+    - route-157-acp-taint-scan-sh-memory-scan-sh-phase-2-prep-scripts
+    - route-158-e2e-integrity-v2-26-assertions-ci-wired
+    - phase2-self-protection-protocol-continue-not-self-halt
+    - git-commit-d255929-v6-20-0
+  deferred:
+    - github-branch-protection-manual-enable → route-162
+    - m65-tracking-reconciliation → route-185
+  key_fact: "grep treats leading -- as flags — E2E assert_contains with needle '--phase2' silently fails. Use descriptive substring without leading dashes (e.g. 'Run Phase 2 semantic') or grep -F/--."
+
+- date: 2026-06-15
+  executor: copilot
+  branch: develop
+  tasks: [route-179, route-180, route-181, route-182, route-183, route-184, audit-071, M64]
+  tasks_completed: [route-179, route-180, route-181, route-182, route-183, route-184, audit-071]
   done:
     - m64-integrity-gateway-v1-1-routes-180-184-audit-071-fixes-v6-19-0-committed
     - audit-071-deep-dive-m59-m64-13-findings-11-fixed-1-open-1-accepted
@@ -23,8 +68,7 @@
   deferred:
     - github-branch-protection-manual-enable → route-162
     - m65-tracking-reconciliation → route-185
-    - m58-v2-0-semantic-analysis → after-m65
-  key_fact: "The E2E EXIT trap variable collision (FIXTURE_DIR reused across B1 temp dir and committed fixtures path) was the root cause of all intermittent fixture failures — trap deleted the entire fixtures/integrity/ directory on script exit. Fix: separate TEMP_FIXTURE_DIR + INTEGRITY_FIXTURE_DIR with trap cleared after B3. This was invisible because the trap only fires when the test suite exits (success or failure), so the fixtures appeared fine during development and only vanished in CI/sequential runs."
+  key_fact: "The E2E EXIT trap variable collision (FIXTURE_DIR reused across B1 temp dir and committed fixtures path) was the root cause of all intermittent fixture failures — trap deleted the entire fixtures/integrity/ directory on script exit. Fix: separate TEMP_FIXTURE_DIR + INTEGRITY_FIXTURE_DIR with trap cleared after B3."
 
 - date: 2026-06-15
   executor: copilot
