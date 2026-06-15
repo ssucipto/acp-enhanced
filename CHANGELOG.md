@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.20.5] — 2026-06-15
+
+### Added
+- **Dependabot**: Weekly npm (`/scripts`) and github-actions ecosystem updates (route-170, M61).
+- **`scripts/package-lock.json`**: Pinned dependency tree committed to repo (audit-065 M7).
+- **CI supply-chain job**: `npm audit --audit-level=high` (non-blocking) + trufflehog secret scan (blocking) (route-170, M61).
+
+---
+
 ## [6.20.4] — 2026-06-15
 
 ### Added
