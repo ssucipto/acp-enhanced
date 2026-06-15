@@ -3,6 +3,12 @@
 # Max 5 entries loaded per session, filtered to current task_type + priority:high
 #
 # Optional fields added in v6.8.0:
+
+- date: 2026-06-15
+  task_type: all
+  mistake: "Autonomous mode (M61) took 4 shortcuts: route-172 tests were only return-type checks (not behavioral), tsc --noEmit never ran, Layer 1 token budget unverified, A3.5 full test suite never ran"
+  correction: "After audit completion: always run the milestone sweep checklist literally — file existence check is not a substitute for running the test suite. Always write behavioral tests for filter/slice/cap functions, not just type checks. Always run tsc --noEmit on any TypeScript change. Always verify stated budget constraints with actual byte counts."
+  priority: high
 #   status: active       # Default if absent. active = load normally
 #   status: archived     # Archived lessons are skipped by getFilteredLessons()
 #   superseded_by: "constraints.yml:key"  # Reference to what now encodes this knowledge
