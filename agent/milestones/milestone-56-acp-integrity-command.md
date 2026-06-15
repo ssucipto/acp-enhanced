@@ -3,7 +3,7 @@
 **Milestone**: M56  
 **Version Target**: 6.12.0  
 **Priority**: HIGH  
-**Status**: planned  
+**Status**: completed  
 **Started**: —  
 **Target**: —  
 **Estimated Weeks**: 1.5–2  
