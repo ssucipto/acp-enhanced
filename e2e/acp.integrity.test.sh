@@ -27,13 +27,15 @@ print_test_header "S2 — code-integrity.md skill file exists"
 assert_file_exists "${SKILL_FILE}" "code-integrity.md skill file exists"
 assert_contains "$(cat "${SKILL_FILE}")" "LLM/Script Boundary Rule" "Boundary Rule present"
 
-print_test_header "S3 — integrity-rules.md wiki exists with 55+ rules"
+print_test_header "S3 — integrity-rules.md wiki exists with 70 rules"
 assert_file_exists "${WIKI_FILE}" "integrity-rules.md wiki exists"
 RULE_COUNT=$(grep -cE '^\| IG-[0-9]+' "${WIKI_FILE}" 2>/dev/null | head -1 || echo "0")
 RULE_COUNT="${RULE_COUNT//[^0-9]/}"
 echo "  Rules documented: ${RULE_COUNT}"
-[ "${RULE_COUNT}" -ge 55 ]
-assert_true "At least 55 rules in wiki (actual: ${RULE_COUNT})" $?
+[ "${RULE_COUNT}" -ge 65 ]
+assert_true "At least 65 rules in wiki (actual: ${RULE_COUNT})" $?
+[ "${RULE_COUNT}" -eq 70 ]
+assert_true "Exactly 70 rules in wiki (actual: ${RULE_COUNT})" $?
 
 print_test_header "S4 — network_whitelist.yml exists with schema"
 assert_file_exists "${WHITELIST_FILE}" "network_whitelist.yml exists"
