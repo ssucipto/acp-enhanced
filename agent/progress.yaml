@@ -368,12 +368,12 @@ milestones:
   M62:
     name: Quality Hardening, Schema Coverage & Carryover Resolution (v6.21.0)
     priority: 3
-    status: planned
-    progress: 0
-    started:
+    status: in_progress
+    progress: 14
+    started: 2026-06-15
     completed:
     estimated_weeks: 2
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 7
     file: agent/milestones/milestone-62-quality-hardening-schema-carryovers.md
     notes: |
@@ -4328,6 +4328,14 @@ tasks:
         P2: --repair detects and fixes partial/broken installs.
 
 recent_work:
+  - date: 2026-06-15
+    description: |
+      ✅ route-173 — Upgraded 17 scripts from bare set -e to set -euo pipefail
+      + ERR trap. All 36 scripts now use proper error handling. 0 bare set -e remaining.
+    items:
+      - "✅ 17 scripts upgraded: install, package-*, project-*, sessions, uninstall, version-*"
+      - "✅ Embedded bootstrap script in package-create.sh also upgraded"
+      - "📊 M62: 1/7 routes complete (14%)"
   - date: 2026-06-15
     description: |
       ✅ /acp-proceed M61 --complete — Production-Readiness Pack shipped as v6.20.7.
