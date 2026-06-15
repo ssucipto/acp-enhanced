@@ -13,11 +13,11 @@ Bring the script layer to full convention conformance, validate the memory layer
 
 | Route | Title | Addresses | Est. | Status |
 |-------|-------|-----------|------|--------|
-| route-173 | Upgrade 17 scripts from bare `set -e` to `set -euo pipefail` (+ fix surfaced unbound vars) | H4 (HIGH-065-004) | 3h | not_started |
-| route-174 | Add `## Steps` to integrity/review; `## Verification` to 5 commands | H7, M2 | 3h | not_started |
-| route-175 | Add memory-layer entity schemas + enforce all schemas in `acp-validate.ts` | M11 (MED-066-007) | 4h | not_started |
-| route-176 | Resolve 5 audit-062 carryovers (hooks format, checklist verification, auto next_due, git-hook ref, findings feedback loop) | F-062-01..05 | 2h | not_started |
-| route-177 | Low-severity cleanups: whitelist reviewed_by, routing.yml dynamic-state, dispatch YAML-split, git-provenance grep→parser | L1-L4 | 2h | not_started |
+| route-173 | Upgrade 17 scripts from bare `set -e` to `set -euo pipefail` (+ fix surfaced unbound vars) | H4 (HIGH-065-004) | 3h | created |
+| route-174 | Add `## Steps` to integrity/review; `## Verification` to 5 commands | H7, M2 | 3h | created |
+| route-175 | Add memory-layer entity schemas + enforce all schemas in `acp-validate.ts` | M11 (MED-066-007) | 4h | created |
+| route-176 | Resolve 5 audit-062 carryovers (hooks format, checklist verification, auto next_due, git-hook ref, findings feedback loop) | F-062-01..05 | 2h | created |
+| route-177 | Low-severity cleanups: whitelist reviewed_by, routing.yml dynamic-state, dispatch YAML-split, git-provenance grep→parser | L1-L4 | 2h | created |
 
 ## audit-062 Carryover Detail (route-176)
 
