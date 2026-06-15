@@ -1,7 +1,13 @@
 # Skills → @-Mention Pattern
 
+<!-- @acp.meta.design
+topic: skills, -mention, pattern
+description: Skills → @-Mention Pattern
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
 **Design**: DR-001  
-**Status**: Superseded  
 **Created**: 2026-06-03  
 **Last Updated**: 2026-06-15  
 **Namespace**: local  

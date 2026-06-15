@@ -27,6 +27,16 @@ The driver system (tasks 171–174) needs test coverage. Tests require a fixture
 #!/usr/bin/env bash
 # Tests for acp.driver-yaml.sh helper functions
 
+<!-- @acp.meta.task
+topic: tests, for, acpdriver-yamlsh, helper, functions
+description: Create driver e2e tests and acp.validate Step 11.5
+milestone: M33
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
+
 source tests/common.sh
 
 SCRIPT="agent/scripts/acp.driver-yaml.sh"

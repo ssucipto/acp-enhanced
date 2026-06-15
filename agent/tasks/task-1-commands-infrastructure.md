@@ -1,9 +1,18 @@
 # Task 1: Create Commands Directory Structure
 
+<!-- @acp.meta.task
+topic: create, commands, directory, structure
+description: Task 1: Create Commands Directory Structure
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M1 - ACP Commands Infrastructure](../milestones/milestone-1-acp-commands.md)  
 **Estimated Time**: 1 hour  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

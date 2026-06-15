@@ -1,9 +1,18 @@
 # Task 95: Add Deliverables Verification Gate to @acp.proceed
 
+<!-- @acp.meta.task
+topic: add, deliverables, verification, gate, to, acpproceed
+description: Task 95: Add Deliverables Verification Gate to @acp.proceed
+milestone: M11
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M11 - ACP Benchmark Suite](../milestones/milestone-11-benchmark-suite.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

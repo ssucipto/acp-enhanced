@@ -1,5 +1,15 @@
 # Task 120: Implement Index Semantic Entry Types
 
+<!-- @acp.meta.task
+topic: implement, index, semantic, entry, types
+description: Task 120: Implement Index Semantic Entry Types
+milestone: M18
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 ## Objective
 
 Implement `path: null` support and new `kind` enum values (`note`, `directive`) in the key file index system. Collapse `requirements` kind into `design`.

@@ -1,12 +1,14 @@
 # Task 72: Fix Body-Text Hyphen References in 5 Commands
 
 <!-- @acp.meta.task
-topic: notation, body-text, command-docs
-description: Fix @acp-* hyphen references in body text of acp.init.md, acp.status.md, acp.handoff.md, acp.proceed.md, acp.spec.md
+topic: fix, body-text, hyphen, references, in, 5, commands
+description: Task 72: Fix Body-Text Hyphen References in 5 Commands
 milestone: M20
-status: completed
-updated: 2026-05-01
+status: draft
+updated: 2026-06-15
 @acp.meta.end -->
+
+
 
 **Milestone**: [M20 - Consistency Cleanup](../milestones/milestone-20-consistency-cleanup.md)  
 **Estimated Time**: 30 minutes  

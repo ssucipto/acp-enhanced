@@ -39,6 +39,16 @@ Test cases:
 #!/usr/bin/env bash
 # e2e/acp.spec.test.sh — smoke test for @acp.spec command doc and spec template
 
+<!-- @acp.meta.task
+topic: e2eacpspectestsh, smoke, test, for, acpspec, command, doc, and, spec, template
+description: Write e2e/acp.spec.test.sh (command doc format smoke test)
+milestone: M31
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
+
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SPEC_CMD="$ROOT/agent/commands/acp.spec.md"
 SPEC_TMPL="$ROOT/agent/specs/spec.template.md"

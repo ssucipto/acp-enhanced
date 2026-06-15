@@ -1,9 +1,18 @@
 # Task 84: Report & Dashboard Enhancement
 
+<!-- @acp.meta.task
+topic: report, dashboard, enhancement
+description: Task 84: Report & Dashboard Enhancement
+milestone: M11
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M11 - ACP Benchmark Suite  
 **Estimated Time**: 4-5 hours  
 **Dependencies**: Task 79 (metrics), Task 83 (evaluator scores)  
-**Status**: Not Started  
 
 ---
 

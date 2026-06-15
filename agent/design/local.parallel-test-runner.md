@@ -1,7 +1,13 @@
 # Design: Parallel Test Execution in run-e2e-tests.sh
 
+<!-- @acp.meta.design
+topic: design, parallel, test, execution, in, run-e2e-testssh
+description: Add a `--parallel N` flag to `run-e2e-tests.sh` that runs E2E and unit tests concurrently using background subshells. Currently all ~38 tests run seri
+status: active
+updated: 2026-06-15
+@acp.meta.end -->
+
 **Design**: local.parallel-test-runner  
-**Status**: Implemented  
 **Created**: 2026-06-03  
 **Last Updated**: 2026-06-15  
 **Informs**: run-e2e-tests.sh  

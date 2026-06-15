@@ -1,9 +1,18 @@
 # Task 51: Pattern Reading in Commands
 
+<!-- @acp.meta.task
+topic: pattern, reading, in, commands
+description: Task 51: Pattern Reading in Commands
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M2 - Documentation & Utility Commands  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

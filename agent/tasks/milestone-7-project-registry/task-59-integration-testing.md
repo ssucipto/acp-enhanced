@@ -1,9 +1,18 @@
 # Task 59: Integration & Testing
 
+<!-- @acp.meta.task
+topic: integration, testing
+description: Task 59: Integration & Testing
+milestone: M7
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M7 - Global ACP Project Registry](../../milestones/milestone-7-project-registry.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Tasks 52-58 (All command implementations)  
-**Status**: Not Started  
 
 ---
 

@@ -1,9 +1,18 @@
 # Task 82: Complex Auth System Benchmark Task
 
+<!-- @acp.meta.task
+topic: complex, auth, system, benchmark, task
+description: Task 82: Complex Auth System Benchmark Task
+milestone: M11
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M11 - ACP Benchmark Suite  
 **Estimated Time**: 5-6 hours  
 **Dependencies**: Task 79 (runner must support multi-turn steps)  
-**Status**: Completed  
 **Actual Hours**: 0.5  
 **Completed**: 2026-02-28  
 

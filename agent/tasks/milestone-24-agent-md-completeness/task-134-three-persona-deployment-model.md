@@ -1,8 +1,17 @@
 # Task 134: Add Three-Persona Deployment Model Section to AGENT.md
 
+<!-- @acp.meta.task
+topic: add, three-persona, deployment, model, section, to, agentmd
+description: Task 134: Add Three-Persona Deployment Model Section to AGENT.md
+milestone: M24
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M24 — AGENT.md Completeness  
 **Estimated Time**: 2–3 hours  
-**Status**: Completed
 
 ---
 

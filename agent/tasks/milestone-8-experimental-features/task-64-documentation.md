@@ -1,9 +1,18 @@
 # Task 64: Documentation and Examples
 
+<!-- @acp.meta.task
+topic: documentation, and, examples
+description: Task 64: Documentation and Examples
+milestone: M8
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M8 - Experimental Features System  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: [Task 61 - Schema and Validation](task-61-schema-validation.md), [Task 62 - Installation Filtering](task-62-installation-filtering.md), [Task 63 - Update Handling](task-63-update-handling.md)  
-**Status**: Not Started  
 
 ---
 

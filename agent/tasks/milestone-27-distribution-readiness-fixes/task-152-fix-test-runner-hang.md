@@ -11,6 +11,15 @@ started:
 completed:
 ---
 
+<!-- @acp.meta.task
+topic: fix, run-e2e-testssh, hang, on, network-dependent, tests
+description: Fix run-e2e-tests.sh hang on network-dependent tests
+milestone: M27
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Objective
 
 Fix `run-e2e-tests.sh` hanging indefinitely when running 8 network-dependent tests. After the fix, the runner must complete in under 60 seconds on a machine without internet or with slow network.

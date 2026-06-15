@@ -1,8 +1,14 @@
 # ACP Commands System
 
+<!-- @acp.meta.design
+topic: acp, commands, system
+description: Standardized command interface for ACP operations using file-based triggers
+status: draft
+updated: 2026-02-16
+@acp.meta.end -->
+
 **Concept**: Standardized command interface for ACP operations using file-based triggers  
 **Created**: 2026-02-16  
-**Status**: Design Specification  
 
 ---
 

@@ -1,9 +1,18 @@
 # Task 2: Implement Core Workflow Commands
 
+<!-- @acp.meta.task
+topic: implement, core, workflow, commands
+description: Task 2: Implement Core Workflow Commands
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M1 - ACP Commands Infrastructure](../milestones/milestone-1-acp-commands.md)  
 **Estimated Time**: 3 hours  
 **Dependencies**: Task 1 (Commands Infrastructure)  
-**Status**: Not Started  
 
 ---
 

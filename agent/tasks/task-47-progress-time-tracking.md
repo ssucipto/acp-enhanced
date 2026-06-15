@@ -1,9 +1,18 @@
 # Task 47: Progress Time Tracking
 
+<!-- @acp.meta.task
+topic: progress, time, tracking
+description: Task 47: Progress Time Tracking
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: Future Enhancement  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

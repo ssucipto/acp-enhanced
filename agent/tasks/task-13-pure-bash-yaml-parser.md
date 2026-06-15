@@ -1,9 +1,18 @@
 # Task 13: Pure Bash YAML Library
 
+<!-- @acp.meta.task
+topic: pure, bash, yaml, library
+description: Task 13: Pure Bash YAML Library
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M3 - ACP Package Management System](../milestones/milestone-3-acp-package-management.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: None (MUST be done first)  
-**Status**: Not Started  
 **Priority**: Critical (Blocking)  
 
 ---

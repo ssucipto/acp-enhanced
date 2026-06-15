@@ -12,6 +12,15 @@ created: 2026-05-04
 completed: 2026-05-04
 ---
 
+<!-- @acp.meta.task
+topic: add, concurrent, modification, warning, to, sessions, system
+description: Add concurrent modification warning to sessions system
+milestone: M26
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Objective
 
 Extend the sessions system (`/acp-sessions`) and session initialization (`/acp-init`) to warn the user when another session appears to be actively working on the same milestone or task area. This closes the silent multi-agent overlap gap without requiring file locking (which is out of scope for ACP's advisory-only session model).

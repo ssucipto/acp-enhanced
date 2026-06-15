@@ -1,9 +1,18 @@
 # Task 34: Build Generic YAML Parser with AST
 
+<!-- @acp.meta.task
+topic: build, generic, yaml, parser, with, ast
+description: Task 34: Build Generic YAML Parser with AST
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: Future Project  
 **Estimated Time**: 1-2 weeks  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

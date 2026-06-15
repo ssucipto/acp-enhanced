@@ -44,6 +44,16 @@ Create `e2e/acp.drafts.test.sh`:
 #!/usr/bin/env bash
 # e2e/acp.drafts.test.sh — verify agent/drafts/ convention
 
+<!-- @acp.meta.task
+topic: e2eacpdraftstestsh, verify, agentdrafts, convention
+description: Update AGENT.md directory tree and add acp.drafts.test.sh
+milestone: M30
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
+
 source "$(dirname "$0")/../tests/common.sh" 2>/dev/null || {
   pass() { echo "PASS: $1"; }
   fail() { echo "FAIL: $1"; exit 1; }

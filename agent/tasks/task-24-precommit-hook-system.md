@@ -1,9 +1,18 @@
 # Task 24: Pre-Commit Hook System
 
+<!-- @acp.meta.task
+topic: pre-commit, hook, system
+description: Task 24: Pre-Commit Hook System
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M4 - ACP Package Development System](../milestones/milestone-4-package-development.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 14 (YAML Schema)  
-**Status**: Completed  
 **Completed Date**: 2026-02-21  
 
 ---

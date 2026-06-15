@@ -1,9 +1,18 @@
 # Task 48: Enforce Directive Header in @acp.command-create
 
+<!-- @acp.meta.task
+topic: enforce, directive, header, in, acpcommand-create
+description: Task 48: Enforce Directive Header in @acp.command-create
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: Future Enhancement  
 **Estimated Time**: 1-2 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

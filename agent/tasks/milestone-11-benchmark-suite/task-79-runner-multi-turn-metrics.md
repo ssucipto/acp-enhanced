@@ -1,9 +1,18 @@
 # Task 79: Runner Multi-Turn & Metrics Fix
 
+<!-- @acp.meta.task
+topic: runner, multi-turn, metrics, fix
+description: Task 79: Runner Multi-Turn & Metrics Fix
+milestone: M11
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M11 - ACP Benchmark Suite  
 **Estimated Time**: 6-8 hours  
 **Dependencies**: None  
-**Status**: Completed  
 **Actual Hours**: 1.5  
 **Completed**: 2026-02-28  
 

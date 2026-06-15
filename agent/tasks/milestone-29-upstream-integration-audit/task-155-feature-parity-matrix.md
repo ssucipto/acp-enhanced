@@ -12,6 +12,15 @@ started: 2026-05-05
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: create, upstream, v720, feature, parity, matrix
+description: Create upstream v7.2.0 feature parity matrix
+milestone: M29
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Create `agent/design/local.upstream-parity-matrix.md` — a complete feature parity matrix covering every upstream `prmichaelsen/agent-context-protocol` v7.2.0 feature, with a HAVE / PARTIAL / PORT / DEFER decision and one-line rationale for each.

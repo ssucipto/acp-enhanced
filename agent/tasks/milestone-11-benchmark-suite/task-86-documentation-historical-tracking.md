@@ -1,9 +1,18 @@
 # Task 86: Documentation & Historical Tracking
 
+<!-- @acp.meta.task
+topic: documentation, historical, tracking
+description: Task 86: Documentation & Historical Tracking
+milestone: M11
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M11 - ACP Benchmark Suite  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Tasks 79-85 (full pipeline must be working)  
-**Status**: Not Started  
 
 ---
 

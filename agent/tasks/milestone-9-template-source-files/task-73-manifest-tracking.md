@@ -1,9 +1,18 @@
 # Task 73: Manifest Tracking for Templates
 
+<!-- @acp.meta.task
+topic: manifest, tracking, for, templates
+description: Task 73: Manifest Tracking for Templates
+milestone: M9
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M9 - Template Source Files Support](../../milestones/milestone-9-template-source-files.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Task 72 (Installation System)  
-**Status**: Not Started  
 
 ---
 

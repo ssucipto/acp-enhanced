@@ -1,7 +1,16 @@
 # Task 107: Update Entity Templates with Key Design Decisions Section
 
+<!-- @acp.meta.task
+topic: update, entity, templates, with, key, design, decisions, section
+description: Task 107: Update Entity Templates with Key Design Decisions Section
+milestone: M15
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M15 - Clarification Capture System  
-**Status**: Not Started  
 **Estimated Time**: 1-2 hours  
 **Dependencies**: Task 106  
 
