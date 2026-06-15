@@ -8,7 +8,7 @@ project:
   status: active
   current_milestone: M62
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.20.8. M55–M61 shipped
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.20.9. M55–M61 shipped
     (review, integrity v1.1/v2.0, CI fixes, integrity gateway, test coverage,
     production-readiness: Windows CI, SECURITY.md, governance templates, Dependabot,
     supply-chain CI, IG-37, TS unit tests). Audit-075: 6 findings fixed + 3 carryovers
