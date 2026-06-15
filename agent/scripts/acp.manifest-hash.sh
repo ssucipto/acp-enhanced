@@ -1,15 +1,8 @@
 #!/usr/bin/env bash
 # acp.manifest-hash.sh — SHA-256 Manifest Generator & Verifier
-# Part of /acp-integrity v1.0 (M56)
+# Part of /acp-integrity v1.0 (M56), M64 routes 182/183
 #
-# Generates and verifies SHA-256 hashes of ACP framework files for tamper
-# detection. Used by /acp-integrity --diff flag.
-#
-# Usage:
-#   acp.manifest-hash.sh --generate           Generate manifest.yaml from current files
-#   acp.manifest-hash.sh --verify             Verify files against stored manifest
-#   acp.manifest-hash.sh --diff               Alias for --verify with diff output
-#   acp.manifest-hash.sh --file <path>        Check single file
+# Covered rules: IG-42 (framework tamper detection via --verify)
 
 set -euo pipefail
 trap 'echo "Error: manifest-hash.sh failed at line $LINENO" >&2; exit 3' ERR
@@ -17,8 +10,11 @@ trap 'echo "Error: manifest-hash.sh failed at line $LINENO" >&2; exit 3' ERR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 MANIFEST_FILE="${PROJECT_ROOT}/agent/manifest.yaml"
+source "${SCRIPT_DIR}/acp.common.sh"
+# shellcheck source=acp.integrity-output.sh
+source "${SCRIPT_DIR}/acp.integrity-output.sh"
+source "${SCRIPT_DIR}/acp.yaml-parser.sh"
 
-# ACP framework files to track
 TRACKED_FILES=(
   "AGENTS.md"
   "CLAUDE.md"
@@ -29,111 +25,119 @@ TRACKED_FILES=(
   "agent/core/network_whitelist.yml"
 )
 
+TRACKED_DIRS=(
+  "agent/core"
+  "agent/skills"
+  ".cursor/commands"
+)
+
 MODE=""
 SINGLE_FILE=""
+OUTPUT_FILE=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --generate) MODE="generate"; shift ;;
     --verify|--diff) MODE="verify"; shift ;;
+    --ci) IG_CI_MODE=true; shift ;;
+    --json) IG_JSON_MODE=true; shift ;;
     --file) SINGLE_FILE="$2"; shift 2 ;;
+    --output) OUTPUT_FILE="$2"; shift 2 ;;
     -h|--help)
-      echo "Usage: acp.manifest-hash.sh --generate|--verify [--file <path>]"
-      echo "Generates/verifies SHA-256 hashes of ACP framework files"
+      echo "Usage: acp.manifest-hash.sh --generate|--verify [--output path] [--ci] [--json] [--file path]"
       exit 0
       ;;
     *) shift ;;
   esac
 done
 
-if [[ -z "$MODE" ]]; then
-  echo "Error: --generate or --verify required" >&2
-  exit 2
-fi
-
-# ── Hash Function ─────────────────────────────────────────────────────────────
-
 hash_file() {
   local file="$1"
   if [[ -f "$file" ]]; then
-    shasum -a 256 "$file" 2>/dev/null | awk '{print $1}'
+    calculate_checksum "$file" 2>/dev/null || echo "MISSING"
   else
     echo "MISSING"
   fi
 }
 
-# ── Generate Manifest ─────────────────────────────────────────────────────────
-
-if [[ "$MODE" == "generate" ]]; then
-  echo "# agent/manifest.yaml"
-  echo "# SHA-256 hashes of ACP framework files — generated $(date +%Y-%m-%d)"
-  echo "# Used by /acp-integrity --diff for tamper detection"
-  echo ""
-  echo "version: \"1.0\""
-  echo "generated: \"$(date +%Y-%m-%d)\""
-  echo "files:"
-  
-  for f in "${TRACKED_FILES[@]}"; do
-    local_path="${PROJECT_ROOT}/${f}"
-    hash=$(hash_file "$local_path")
-    echo "  - path: \"$f\""
-    echo "    sha256: \"$hash\""
-    echo "    last_verified: \"$(date +%Y-%m-%d)\""
+collect_tracked_paths() {
+  local paths=()
+  local f d
+  for f in "${TRACKED_FILES[@]}"; do paths+=("$f"); done
+  for d in "${TRACKED_DIRS[@]}"; do
+    if [[ -d "${PROJECT_ROOT}/${d}" ]]; then
+      while IFS= read -r fp; do
+        case "$fp" in
+          */node_modules/*|*/.git/*) continue ;;
+        esac
+        rel="${fp#${PROJECT_ROOT}/}"
+        rel="${rel#./}"
+        paths+=("$rel")
+      done < <(find "${PROJECT_ROOT}/${d}" -type f 2>/dev/null || true)
+    fi
   done
-  
   if [[ -n "$SINGLE_FILE" ]]; then
-    hash=$(hash_file "${PROJECT_ROOT}/${SINGLE_FILE}")
-    echo "  - path: \"$SINGLE_FILE\""
-    echo "    sha256: \"$hash\""
-    echo "    last_verified: \"$(date +%Y-%m-%d)\""
+    paths+=("$SINGLE_FILE")
   fi
-  
-  echo ""
-  echo "✓ Manifest generated — $((${#TRACKED_FILES[@]} + (${SINGLE_FILE:+1}))) files hashed" >&2
-  exit 0
+  printf '%s\n' "${paths[@]}" | sort -u
+}
+
+if [[ -z "$MODE" ]]; then
+  echo "Error: --generate or --verify required" >&2
+  exit 2
 fi
 
-# ── Verify Against Manifest ──────────────────────────────────────────────────
+if [[ "$MODE" == "generate" ]]; then
+  {
+    echo "# agent/manifest.yaml"
+    echo "# SHA-256 hashes of ACP framework files — generated $(date +%Y-%m-%d)"
+    echo "# Used by /acp-integrity --diff for tamper detection"
+    echo ""
+    echo "version: \"1.1\""
+    echo "generated: \"$(date +%Y-%m-%d)\""
+    echo "files:"
+    while IFS= read -r f; do
+      [[ -z "$f" ]] && continue
+      h=$(hash_file "${PROJECT_ROOT}/${f}")
+      echo "  - path: \"$f\""
+      echo "    sha256: \"$h\""
+      echo "    last_verified: \"$(date +%Y-%m-%d)\""
+    done < <(collect_tracked_paths)
+  } | if [[ -n "$OUTPUT_FILE" ]]; then
+    tee "$OUTPUT_FILE"
+  else
+    cat
+  fi
+  echo "✓ Manifest generated" >&2
+  exit 0
+fi
 
 if [[ ! -f "$MANIFEST_FILE" ]]; then
   echo "Error: $MANIFEST_FILE not found. Run --generate first." >&2
   exit 2
 fi
 
-CHANGED=0
-MATCHED=0
+yaml_parse "$MANIFEST_FILE" >/dev/null 2>&1 || {
+  ig_emit_finding "$MANIFEST_FILE" "0" "IG-42" "manifest.yaml failed YAML parse"
+  ig_finalize_scan "manifest-hash"
+}
 
-if [[ -n "$SINGLE_FILE" ]]; then
-  actual=$(hash_file "${PROJECT_ROOT}/${SINGLE_FILE}")
-  expected=$(grep -A1 "path: \"$SINGLE_FILE\"" "$MANIFEST_FILE" 2>/dev/null | grep 'sha256:' | awk '{print $2}' | tr -d '"' || echo "NOT_IN_MANIFEST")
-  if [[ "$actual" == "$expected" ]]; then
-    echo "  $SINGLE_FILE: OK"
-    MATCHED=$((MATCHED + 1))
-  else
-    echo "  $SINGLE_FILE: CHANGED (expected: ${expected:0:12}..., actual: ${actual:0:12}...)"
-    CHANGED=$((CHANGED + 1))
+while IFS= read -r f; do
+  [[ -z "$f" ]] && continue
+  actual=$(hash_file "${PROJECT_ROOT}/${f}")
+  expected=$(python3 -c "
+import yaml, sys
+data=yaml.safe_load(open('${MANIFEST_FILE}'))
+for item in data.get('files', []) or []:
+    if item.get('path')=='${f}':
+        print(item.get('sha256',''))
+        break
+" 2>/dev/null || echo "")
+  if [[ -z "$expected" ]]; then
+    ig_emit_finding "$f" "0" "IG-42" "file not in manifest (sha256: ${actual:0:12}...)"
+  elif [[ "$actual" != "$expected" ]]; then
+    ig_emit_finding "$f" "0" "IG-42" "hash mismatch (expected ${expected:0:12}..., actual ${actual:0:12}...)"
   fi
-else
-  for f in "${TRACKED_FILES[@]}"; do
-    actual=$(hash_file "${PROJECT_ROOT}/${f}")
-    expected=$(grep -A1 "path: \"$f\"" "$MANIFEST_FILE" 2>/dev/null | grep 'sha256:' | awk '{print $2}' | tr -d '"' || echo "NOT_IN_MANIFEST")
-    if [[ "$actual" == "$expected" ]]; then
-      echo "  $f: OK"
-      MATCHED=$((MATCHED + 1))
-    elif [[ "$expected" == "NOT_IN_MANIFEST" ]]; then
-      echo "  $f: NOT IN MANIFEST (current: ${actual:0:12}...)"
-      CHANGED=$((CHANGED + 1))
-    else
-      echo "  $f: CHANGED (expected: ${expected:0:12}..., actual: ${actual:0:12}...)"
-      CHANGED=$((CHANGED + 1))
-    fi
-  done
-fi
+done < <(collect_tracked_paths)
 
-echo ""
-echo "Verified: $MATCHED matched, $CHANGED changed" >&2
-
-if [[ $CHANGED -gt 0 ]]; then
-  exit 1
-fi
-exit 0
+ig_finalize_scan "manifest-hash"

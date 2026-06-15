@@ -3,9 +3,52 @@
 # Max 5 entries loaded per session, filtered to current task_type + priority:high
 #
 # Optional fields added in v6.8.0:
+
+- date: 2026-06-15
+  task_type: all
+  mistake: "Autonomous mode (M61) took 4 shortcuts: route-172 tests were only return-type checks (not behavioral), tsc --noEmit never ran, Layer 1 token budget unverified, A3.5 full test suite never ran"
+  correction: "After audit completion: always run the milestone sweep checklist literally — file existence check is not a substitute for running the test suite. Always write behavioral tests for filter/slice/cap functions, not just type checks. Always run tsc --noEmit on any TypeScript change. Always verify stated budget constraints with actual byte counts."
+  priority: high
+
+- date: 2026-06-15
+  task_type: all
+  mistake: "Autonomous mode (M61) took 6 additional shortcuts: (1) progress.yaml had no recent_work entry for M61+audit-075 completion — the session wasn't recorded in tracking; (2) next_steps stayed stale pointing to M61 instead of M62; (3) milestone-61 doc kept the original planning version v6.16.0 in success criteria instead of the actual shipped v6.20.9; (4) milestone verification gate (npm audit / Windows CI / secret scan) was never explicitly documented — tasks said 'done' but the gate checklist was blank; (5) .gitignore had a blanket `reports/` glob that also matched `agent/reports/`, forcing `-f` on every audit report commit; (6) .ts/.json files had no LF enforcement in .gitattributes despite being cross-platform build artifacts (tsc, vitest, npm)"
+  correction: "Always write a recent_work entry in progress.yaml for every milestone completion and audit — they are the primary tracking record. Always update next_steps to reflect the next milestone, not the one just done. Always update the milestone doc's target version in the success criteria block to match the actual shipped version. Always replace 'TBD' verification gate checklists with actual pass/fail/⏳ results — don't leave them blank. If a .gitignore pattern blocks files that command docs say should be committed, whitelist the path explicitly. Add .ts and .json to .gitattributes LF enforcement when setting up TypeScript tooling."
+  priority: high
+
+- date: 2026-06-15
+  task_type: all
+  mistake: "Autonomous mode (M61) took 5 more shortcuts in Round 3: (1) None of the 7 version bumps (v6.20.3–v6.20.9) had git tags created — `git tag --list` was empty; (2) progress.yaml M61 master entry still used planning version v6.16.0 instead of shipped v6.20.9; (3) sessions.md M61 entry was frozen after Round 1, missing Round 2 fixes; (4) CHANGELOG v6.20.9 was frozen after Round 1, missing Round 2+3 fixes; (5) M62 target version mismatch — milestone doc/progress.yaml said v6.17.0 but next_steps said v6.21.0"
+  correction: "Always create an annotated git tag as part of every version bump — it is the primary artifact connecting CHANGELOG to commit. If missed, create retroactive tags immediately. Keep progress.yaml master entries synced to actual shipped versions, not planning estimates. Expand sessions.md key_fact when post-entry fixes occur. Extend CHANGELOG entries for post-bump commits — do not leave them frozen. Ensure milestone doc, progress.yaml, and next_steps all agree on target version."
+  priority: high
 #   status: active       # Default if absent. active = load normally
 #   status: archived     # Archived lessons are skipped by getFilteredLessons()
 #   superseded_by: "constraints.yml:key"  # Reference to what now encodes this knowledge
+
+- date: 2026-06-15
+  scope: backend-bash
+  task_type: audit
+  lesson: |
+    Taint-flow heuristics that only match direct sink calls (e.g. redirect(req.query))
+    miss indirect flows (target = req.query.url; redirect(target)). Always add
+    file-level fallbacks with sanitization negation (ALLOWED, path.resolve, isAllowedWebhook).
+    Also: IG-49 file-level env+fetch heuristic must skip files with URL validation helpers.
+  priority: high
+
+- date: 2026-06-15
+  scope: cross-cutting
+  task_type: audit
+  lesson: |
+    When auditing a framework that splits tracked framework-data from
+    gitignored instance-data, ALWAYS cross-check .gitignore (or run
+    git check-ignore) before reporting a file as "missing". Audit-065
+    flagged decisions.md and reports 052-064 as critical structural gaps;
+    both are gitignored instance data (agent/.gitignore:5,34) that auto-create
+    on first use. Second rule: ALWAYS open the source files you cite as code
+    pointers — audit-065 cited acp-dispatch.ts:191 and package.json without
+    reading them, missing a routing.yml data-loss bug (updateRoutingYml full
+    overwrite) and an orphaned CI validator. A pointer without a read is a guess.
+  priority: high
 
 - date: 2026-06-07
   scope: backend-bash
@@ -53,9 +96,13 @@
     (cp template → manifest, npm install) before running E2E.
   priority: normal
 
-- date: 2026-06-04
-  scope: cross-cutting
-  task_type: audit
+- date: 2026-06-15
+  scope: code-integrity
+  task_type: audit-run
+  lesson: "Audit-070 proved /acp-integrity v1.0 gives false assurance (~18/55 rules implemented, entropy scanner crashes on findings). Ship M64 gateway truth/test before M58 v2.0 semantic analysis — Phase 2 on an untested v1 gateway compounds false confidence."
+  priority: high
+  source: session-key-fact
+
   lesson: |
     Version bumps MUST update 8 files: AGENT.md, identity.yml, package.yaml,
     progress.yaml, CHANGELOG.md, README.md, PRD-MAIN.md, IP_REGISTER.md. No

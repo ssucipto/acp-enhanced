@@ -1,21 +1,19 @@
 # ACP Enhanced — Product Requirements Document
-**Version:** 2.2 FINAL (Implemented)
-**Date:** 2026-05-01 (updated 2026-06-06)
+**Version:** 2.3 (Implemented + Active Roadmap)
+**Date:** 2026-05-01 (updated 2026-06-15)
 **Author:** Project Owner
-**Status:** ✅ Implemented — 54 milestones complete as of v6.11.0 (M1–M55, June 2026)
+**Status:** ✅ Core implemented — v6.12.1 → v6.14.0 (M1–M57 shipped, M54 CI active, M58 in progress, M59 shipped, M64–M65 planned)
 **Forked from:** prmichaelsen/agent-context-protocol
 
-> **Note (2026-06-07):** This PRD describes the original vision for ACP Enhanced as of May 2026.
-> All 53 milestones (M1–M53) have been completed. M50 (v6.9.3) integrated the
-> /acp-design-spec command. M51 (v6.9.4) fixed a critical bootstrap install bug.
-> M52 (v6.9.5) delivered /acp-stakeholder-report with five-tier reporting model.
-> M53 (v6.10.0) added Cursor IDE slash-command parity. The implementation matches the architecture
-> and design specification from M44. M54 (v6.10.1) established CI/CD with GitHub Actions and GitFlow-lite branching.
-> M55 (v6.11.0) delivered /acp-review — 54-rule code quality & security enforcement with OWASP and MASVS.
-> described below with some naming differences: `/acp-` prefix (not `@acp-`), skills are
-> domain-specific (commands, scripts, schemas, testing, typescript, crosscut, upstream-sync),
-> and the directory layout uses `agent/routing/tasks/` (not `agent/tasks/`). See README.md
-> and CHANGELOG.md for current state.
+> **Note (2026-06-15):** This PRD describes the original vision for ACP Enhanced (May 2026)
+> plus the current implementation state. M55 (v6.11.0) delivered `/acp-review` — 77-rule code
+> quality and security enforcement. M56 (v6.12.0) delivered `/acp-integrity` v1.0 — 55-rule
+> trust scan with 6 deterministic bash scripts. M57 (v6.12.1) added recurring tasks scheduler
+> and pre-commit hook framework. M58 is in progress (integrity v2.0 semantic analysis).
+> M59–M65 cover CI/critical fixes, gateway truth/test (M64), tracking reconciliation (M65),
+> and production-readiness test tracks. See `agent/progress.yaml`, README.md, and CHANGELOG.md
+> for current state. Naming: `/acp-` prefix, 9 skills via `@{skill-name}`, routes in
+> `agent/routing/tasks/`.
 
 ---
 
@@ -150,21 +148,24 @@ taxonomy.yml assigns: executor + context_required
 ├── CLAUDE.md → AGENTS.md             ← symlink for Claude Code
 ├── .github/
 │   ├── copilot-instructions.md → ../AGENTS.md   ← symlink for Copilot
-│   └── prompts/                       ← 63 Copilot slash commands (*.prompt.md)
-├── .opencode/commands/                ← 63 opencode slash commands (*.md)
+│   └── prompts/                       ← 69 Copilot slash commands (*.prompt.md)
+├── .opencode/commands/                ← 69 opencode slash commands (*.md)
+├── .cursor/commands/                  ← 69 Cursor slash commands (*.md)
 ├── agent/
 │   ├── core/                          ← Layer 1: always loaded, cached
 │   │   ├── identity.yml
 │   │   ├── constraints.yml
 │   │   └── routing.yml
-│   ├── skills/                        ← Layer 2: one per task session
+│   ├── skills/                        ← Layer 2: one per task session (9 files)
 │   │   ├── commands.md
 │   │   ├── scripts.md
 │   │   ├── schemas.md
 │   │   ├── testing.md
 │   │   ├── typescript.md
 │   │   ├── crosscut.md
-│   │   └── upstream-sync.md
+│   │   ├── upstream-sync.md
+│   │   ├── code-review.md
+│   │   └── code-integrity.md
 │   ├── memory/                        ← Layer 3: ephemeral, session-specific
 │   │   ├── sessions.md
 │   │   ├── decisions.md
@@ -213,8 +214,8 @@ They are identical on every API call = prompt cache hits every time.
 
 ### F3 — Skills Layer (Layer 2)
 
-Six XML-tagged skill files, one per domain. Only the relevant skill
-file is loaded per task. XML tags chosen over markdown headers for
+Nine XML-tagged skill files, one per domain. Only the relevant skill
+file is loaded per task (invoked via `@{skill-name}`). XML tags chosen over markdown headers for
 superior model attention accuracy on structured instructions.
 
 Format: `<skill name="..."><rules>...<patterns>...<anti_patterns>...</skill>`
