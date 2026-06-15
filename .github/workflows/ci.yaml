@@ -112,6 +112,6 @@ jobs:
         continue-on-error: true
 
       - name: Run secret scan (trufflehog)
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@84a2b33c9f891494db6ebe02f2a55b19cdf38f25 # v3 (latest main, 2026-06-12)
         with:
           extra_args: --only-verified
