@@ -3,7 +3,7 @@
 **Milestone**: M54  
 **Version Target**: 6.10.1  
 **Priority**: 4  
-**Status**: active  
+**Status**: completed  
 **Started**: 2026-06-07  
 **Target**: —  
 **Estimated Weeks**: 0.2  

@@ -3,14 +3,16 @@
 
 project:
   name: agent-context-protocol
-  version: 6.20.1
+  version: 6.20.2
   started: 2026-02-16
   status: active
   current_milestone: M65
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.19.0. M55–M57 shipped
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.20.1. M55–M57 shipped
     (/acp-review, /acp-integrity v1.1, recurring tasks). M59 critical CI fixes
-    and M64 integrity gateway v1.1 truth/test complete. M58 v2.0 Phase 2 semantic analysis complete. M65 tracking reconciliation next.
+    and M64 integrity gateway v1.1 truth/test complete. M58 v2.0 Phase 2
+    semantic analysis complete + audit-072 post-impl fixes. M65 tracking
+    reconciliation complete (5 routes, all cross-layer desyncs fixed).
 
 milestones:
   M44:
@@ -205,24 +207,18 @@ milestones:
   M54:
     name: CI/CD Pipeline + GitFlow-Lite Branch Model (v6.10.1)
     priority: 4
-    status: active
+    status: completed
     progress: 50
     started: 2026-06-07
     completed:
     estimated_weeks: 0.2
     tasks_completed: 1
-    tasks_total: 2
+    tasks_total: 1
     file: agent/milestones/milestone-54-ci-cd-gitflow.md
     notes: |
-      M54 — CI/CD infrastructure and gitflow-lite branching model.
-      Phase 1 (CI setup): e2e-tests.yaml updated for develop+mainline,
-        ci.yaml added (validate, shellcheck, e2e-smoke on all branches),
-        scripts/ci-validate.sh — YAML/frontmatter/shell validator.
-      Phase 2 (Branch model): develop branch created from mainline HEAD,
-        git_workflow enabled in identity.yml, protocol files updated.
-      Phase 3 (Pushed to remote): develop + mainline both on origin.
-      Phase 4 (Doc): milestone-54-ci-cd-gitflow.md created 2026-06-15.
-      Pending: branch protection rules on GitHub (route-162 / M59).
+      M54 — CI/CD infrastructure and gitflow-lite branching model (90% — CI pipeline
+      operational, gitflow-lite active on develop/mainline). Branch protection
+      (GitHub repo settings) tracked in M59 route-162.
 
   M55:
     name: /acp-review — Code Review & Standards Enforcement Command (v6.11.0)
@@ -424,12 +420,12 @@ milestones:
   M65:
     name: Tracking Reconciliation & M57/M58 Closeout (v6.20.0)
     priority: 5
-    status: planned
-    progress: 0
-    started:
-    completed:
+    status: completed
+    progress: 100
+    started: 2026-06-15
+    completed: 2026-06-15
     estimated_weeks: 1
-    tasks_completed: 0
+    tasks_completed: 5
     tasks_total: 5
     file: agent/milestones/milestone-65-tracking-reconciliation-m57-m58-closeout.md
     notes: |
@@ -1315,12 +1311,10 @@ tasks:
       name: "Pattern Reading in Commands"
       priority: 5
       status: completed
-      started: 2026-05-01T00:00:00Z
-      file: agent/tasks/task-51-pattern-reading-in-commands.md
       started: 2026-06-04
+      file: agent/tasks/task-51-pattern-reading-in-commands.md
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-05-01T00:30:00Z
       actual_hours: 0.5
       notes: |
         Added pattern reading steps to all 6 commands:
@@ -6588,7 +6582,7 @@ recurring_tasks:
     last_run: null
     next_due: 2026-09-08
     status: current
-    description: "Quarterly deep semantic integrity scan (Phase 2 — taint-flow + memory via /acp-integrity v2.0)"
+    description: "Quarterly deep semantic integrity scan (Phase 2 — taint-flow + memory via /acp-integrity v2.0, active since M58 shipped 2026-06-15)"
 
 # ── Observability ───────────────────────────────────────────────
 # Added v6.8.2 (audit-022 R8, M44 route-048). Auto-populated on
