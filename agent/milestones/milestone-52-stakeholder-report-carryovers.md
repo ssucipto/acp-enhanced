@@ -1,6 +1,6 @@
 # Milestone 52 — Stakeholder Report Command + Carryover Resolution (v6.9.5)
 
-**Status**: Planned  
+**Status**: Completed  
 **Priority**: P1  
 **Started**: null  
 **Target**: 2026-06-06  

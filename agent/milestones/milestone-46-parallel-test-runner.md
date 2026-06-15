@@ -3,7 +3,7 @@
 **Milestone**: M46  
 **Version Target**: 6.8.4  
 **Priority**: 4  
-**Status**: planned  
+**Status**: completed  
 **Source**: audit-039 (next steps) + agent/design/local.parallel-test-runner.md
 
 ## Overview
