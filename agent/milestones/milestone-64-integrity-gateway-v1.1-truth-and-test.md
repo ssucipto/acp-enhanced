@@ -1,7 +1,8 @@
 # Milestone 64: Integrity Gateway v1.1 — Truth & Test
 
 **Target version**: 6.19.0
-**Status**: planned
+**Status**: in_progress  
+**Started**: 2026-06-15  
 **Priority**: HIGH (blocks further M58 v2.0 semantic work)
 **Estimated effort**: ~18h (6 routes)
 **Source**: audit-070 (M55–M58 gateway deep dive) — findings F-070-01..16
@@ -26,7 +27,7 @@ The quality gateway (`/acp-review`, M55) was confirmed production-grade in audit
 
 | Route | Title | Addresses | Est. | Status |
 |-------|-------|-----------|------|--------|
-| route-179 | Fix the two broken scanners: entropy `set -e` crash + unicode single-pass performance | F-070-01, F-070-04 | 3h | not_started |
+| route-179 | Fix the two broken scanners: entropy `set -e` crash + unicode single-pass performance | F-070-01, F-070-04 | 3h | completed |
 | route-180 | Implement missing deterministic detections (exfil IG-07–13, persistence IG-21–26, IG-04/05, shadow-deps IG-29, real typosquat IG-27, IG-32) | F-070-02, F-070-08 | 5h | not_started |
 | route-181 | Truth pass: reconcile coverage tables (cmd/wiki/skill/headers) to actual; relabel unenforced rules; fix token budget | F-070-02 (doc), F-070-07, F-070-16 | 2h | not_started |
 | route-182 | Uniform output contract `[SEVERITY] file:line ruleID — msg` (+ `--json`) and severity-aware `--ci` across all 6 scripts | F-070-05, F-070-06, F-070-13 | 3h | not_started |
