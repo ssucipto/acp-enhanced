@@ -297,12 +297,12 @@ milestones:
   M58:
     name: /acp-integrity v2.0 — Semantic Analysis & Deep Detection (v6.13.0)
     priority: 3
-    status: planned
-    progress: 0
-    started:
+    status: in_progress
+    progress: 25
+    started: 2026-06-15
     completed:
     estimated_weeks: 2-3
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 4
     file: agent/milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
     notes: |
@@ -313,6 +313,94 @@ milestones:
       Confidence Ceiling Model: MEDIUM (taint), LOW (injection/memory).
       Self-protection protocol: agent never self-halts.
       Target: v6.13.0.
+
+  M59:
+    name: Critical-Fix & CI Integrity Track (v6.14.0)
+    priority: 5
+    status: planned
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 0.5
+    tasks_completed: 0
+    tasks_total: 6
+    file: agent/milestones/milestone-59-critical-fix-ci-integrity.md
+    notes: |
+      📋 M59 planned from audit-065/066/067 consolidated register (~10h, 6 routes).
+      Stops silent correctness bugs: H1 routing.yml overwrite (route-159),
+      H8 package.yaml 13 missing commands (route-160), H2/H3 CI validation no-op
+      (route-161), C1 branch protection (route-162), M9 API-key preflight (route-163),
+      M12 AGENTS.md version header (route-164). Double-verify gate: regression-first.
+      Target: v6.14.0. MUST ship before feature work or external adoption.
+
+  M60:
+    name: Test Coverage Sprint — Tier 1 Core Commands (v6.15.0)
+    priority: 4
+    status: planned
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 2
+    file: agent/milestones/milestone-60-test-coverage-tier1.md
+    notes: |
+      📋 M60 planned (~14h, 2 routes). E2E for 8 core commands: init, proceed,
+      plan, dispatch, commit, validate, audit, route (route-165). Fix integrity
+      test \d ERE regex + add CONTRIBUTING.md (route-166). Drops untested ratio
+      68%→≤56%. Addresses CRIT-065-003 (tier 1), MED-067-003/005. Target: v6.15.0.
+
+  M61:
+    name: Production-Readiness Pack (v6.16.0)
+    priority: 4
+    status: planned
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 6
+    file: agent/milestones/milestone-61-production-readiness-pack.md
+    notes: |
+      📋 M61 planned (~12h, 6 routes). Governance + security table stakes:
+      Windows CI (route-167), SECURITY.md (route-168), CODEOWNERS+PR templates
+      (route-169), Dependabot+lockfile+npm-audit+secret-scan (route-170),
+      team_members+IG-37 (route-171), TS unit tests (route-172). OpenSSF-aligned.
+      Brings Security+Governance scorecard 🔴→🟡. Target: v6.16.0.
+
+  M62:
+    name: Quality Hardening, Schema Coverage & Carryover Resolution (v6.17.0)
+    priority: 3
+    status: planned
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 5
+    file: agent/milestones/milestone-62-quality-hardening-schema-carryovers.md
+    notes: |
+      📋 M62 planned (~14h, 5 routes). H4 set -euo pipefail x17 scripts (route-173),
+      H7/M2 missing command sections (route-174), M11 memory-layer schemas (route-175),
+      audit-062 carryovers F-062-01..05 (route-176), L1-L4 low-sev cleanups (route-177).
+      Resolves all 5 long-standing audit-062 carryovers. Target: v6.17.0.
+
+  M63:
+    name: Test Coverage Sprint — Tier 2 & 3 (v6.18.0)
+    priority: 3
+    status: planned
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 1
+    file: agent/milestones/milestone-63-test-coverage-tier2-3.md
+    notes: |
+      📋 M63 planned (~12h, 1 route — split during /acp-proceed). E2E for remaining
+      untested commands (package/project + memory/knowledge), route-178. Adds CI
+      command↔test parity guard. Untested count → 0; Testing scorecard 🔴→🟢.
+      Addresses CRIT-065-003 (tier 2/3). Target: v6.18.0.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4195,6 +4283,71 @@ tasks:
         P2: --repair detects and fixes partial/broken installs.
 
 recent_work:
+  - date: 2026-06-15
+    description: |
+      ✅ Audit-067: Complete consolidated audit (3rd round). Merged 065+066 into single gap register
+      (27 open: 2 Critical, 8 High, 13 Medium, 4 Low) + production-readiness scorecard + M59-M63 roadmap (~60h).
+      New coverage: distribution, version consistency, integrity scripts, YAML parser, test quality.
+    items:
+      - "📋 audit-067 created: agent/reports/audit-067-complete-consolidated-audit.md (canonical backlog)"
+      - "🔴 HIGH-067-001: 13 commands missing from package.yaml — package-install ships broken framework"
+      - "🟡 MED-067-002: AGENTS.md version header stale (v6.10.0 vs 6.12.1)"
+      - "🟡 MED-067-003: integrity E2E test uses invalid \\d regex in ERE"
+      - "🟡 MED-067-005: no CONTRIBUTING.md; LOW-067-004: git-provenance parses YAML with grep"
+      - "✅ POS-067-A: YAML parser EXIT-trap fix verified — no regression"
+      - "📊 Scorecard: Beta-quality — red on Verification/Testing/Distribution/Governance"
+      - "🗺️ Roadmap: M59 critical-fix+CI, M60 test tier1, M61 prod-readiness, M62 quality, M63 test tier2/3"
+
+  - date: 2026-06-15
+    description: |
+      🔍 Audit-066: Second-round validation + deep gaps. Validated audit-065 (17/22 confirmed,
+      1 misdiagnosis, 1 partial, 1 understatement) + 8 NEW findings from deep-diving TS tooling & CI.
+      Headline: dispatch.ts overwrites core/routing.yml (data loss) + CI validation is partly a no-op.
+    items:
+      - "📋 audit-066 created: agent/reports/audit-066-second-round-validation-and-deep-gaps.md"
+      - "🔴 HIGH-066-001: updateRoutingYml() overwrites routing.yml — destroys context_modes/command_suggestions"
+      - "🔴 HIGH-066-005: acp-validate.ts never wired into CI"
+      - "🔴 HIGH-066-006: ci-validate.sh frontmatter check is no-op for command files (root cause of structural drift)"
+      - "🟡 MED-066-002/003/007: no env preflight, no TS unit tests, no memory-layer schemas"
+      - "⚠️ CRIT-065-001 DOWNGRADED → Medium: decisions.md is gitignored instance data, not missing storage"
+      - "📌 Audit doctrine lesson: cross-check .gitignore before flagging 'missing' files; always read cited source"
+
+  - date: 2026-06-15
+    description: |
+      📋 Audit-065: Comprehensive ACP Enhanced gap analysis — 22 findings, 3 Critical, 7 High, 9 Medium, 3 Low.
+      Phased improvement plan: P1 decisions.md + branch protection + E2E tier 1, P2 script quality + Windows CI,
+      P3 carryover hygiene + SAST. BUG-045 carryovers closed (confirmed fixed in M51).
+    items:
+      - "📋 audit-065 created: agent/reports/audit-065-acp-enhanced-comprehensive-gap-analysis.md"
+      - "🔴 CRIT-065-001: decisions.md missing — all ADRs unrecorded; create as P1-A"
+      - "🔴 CRIT-065-002: No branch protection on mainline/develop (M54 pending)"
+      - "🔴 CRIT-065-003: 46/71 commands have no E2E tests"
+      - "🟠 HIGH-065-004: 17 scripts use bare set -e not set -euo pipefail"
+      - "🟠 HIGH-065-005: No Windows CI runner despite Windows being documented target"
+      - "🟠 HIGH-065-006: No SECURITY.md / vulnerability disclosure process"
+      - "✅ BUG-045-01/02/03: Marked fixed in audit-carryovers.md (confirmed fixed M51)"
+
+  - date: 2026-06-15
+    description: |
+      ✅ Integrity-001 remediation complete — all 5 findings fixed, integrity-002 verification PASS.
+    items:
+      - "✅ IG-67: pinned actions/checkout, setup-node, upload-artifact to commit SHAs (ci, e2e, benchmark)"
+      - "✅ IG-68: npm install --ignore-scripts in ci.yaml and e2e-tests.yaml"
+      - "✅ IG-41: agent/manifest.yaml baseline created (7 tracked files)"
+      - "✅ IG-42: .gitattributes eol=lf + 36 shell scripts normalized to LF"
+      - "✅ integrity-001.md updated with remediation status"
+      - "✅ integrity-002.md post-fix verification — 0 open findings"
+
+  - date: 2026-06-15
+    description: |
+      🚀 Session resumed via /acp-resume. M58 route-155 complete: taint-flow calibration research + 12 fixtures.
+    items:
+      - "✅ route-155: research-m58-taint-flow-calibration.md — calibration matrix, confidence ceilings"
+      - "✅ 12 taint-flow fixtures + manifest.yaml for route-158 E2E ground truth"
+      - "✅ milestone-58-acp-integrity-v2-semantic-analysis.md created"
+      - "📋 M58 progress: 25% (1/4 routes) — next route-156 command doc updates"
+      - "⏰ Weekly recurring tasks due today (code-review, integrity-scan)"
+
   - date: 2026-06-07
     description: |
       📋 M56 PLANNED: /acp-integrity v1.0 — AI Code Integrity & Malicious Code Detection.
@@ -6281,10 +6434,14 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "/acp-proceed M58 route-155 — taint-flow accuracy research calibration"
-  - "Address 5 audit-062 carryovers (M59 candidates)"
-  - "M54: Set up GitHub branch protection rules (develop to mainline)"
-  - "Run first automated weekly integrity scan (M57 scheduler)"
+  - "/acp-proceed M59 route-159 — fix updateRoutingYml() overwrite + regression test (H1, 2h)"
+  - "M59 route-160 — add 13 missing commands to package.yaml + CI count-guard (H8, 2h)"
+  - "M59 route-161 — wire acp-validate.ts into CI + fix ci-validate.sh no-op (H2/H3, 3h)"
+  - "M59 route-162 — enable branch protection on mainline + develop (C1, 15 min)"
+  - "M59 route-163/164 — API-key preflight + AGENTS.md version header (M9/M12)"
+  - "Then M60 (test tier1) → M61 (prod-readiness) → M62 (quality+carryovers) → M63 (test tier2/3)"
+  - "M58 route-156 — /acp-integrity v2.0 docs (runs independently of M59-M63)"
+  - "Roadmap source: audit-067 Part D; backlog: audit-067 Part B (~60h M59-M63)"
   - "Compact sessions.md (21 entries above 15 threshold)"
 
 notes:
@@ -6311,8 +6468,8 @@ recurring_tasks:
     command: /acp-review --report --carryover
     frequency: weekly
     executor: copilot
-    last_run: 2026-06-08
-    next_due: 2026-06-15
+    last_run: 2026-06-15
+    next_due: 2026-06-22
     status: current
     description: "Weekly code quality review with carryover tracking"
 
@@ -6320,8 +6477,8 @@ recurring_tasks:
     command: /acp-integrity --self --report --carryover
     frequency: weekly
     executor: copilot
-    last_run: 2026-06-08
-    next_due: 2026-06-15
+    last_run: 2026-06-15
+    next_due: 2026-06-22
     status: current
     description: "Weekly ACP framework integrity scan"
 
