@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.20.7] — 2026-06-15
+
+### Added
+- **TS unit test suite (vitest)**: 26 tests covering `acp-dispatch.ts` (budget enforcement, getSkillFile, getLastNSessions, getFilteredLessons, estimateTokens, updateRoutingYml) and `acp-validate.ts` (placeholder detection on lines 3-4, frontmatter field validation). Wired into CI. (route-172, M61)
+
+### Changed
+- **`acp-dispatch.ts`**: Exported `buildContext`, `getLastNSessions`, `getFilteredLessons`, `getSkillFile`, `estimateTokens` for testability (route-172, M61).
+- **`acp-validate.ts`**: Exported `validatePlaceholders`, `validateFrontmatter`, `ValidationError`; added `isDirectExecution()` guard to prevent main() from running during test imports (route-172, M61).
+
+---
+
 ## [6.20.6] — 2026-06-15
 
 ### Added
