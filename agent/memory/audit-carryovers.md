@@ -876,3 +876,184 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-070 FINDINGS — M55–M58 GATEWAY DEEP DIVE (2026-06-15) ──────────────
+
+  - audit_id: 70
+    finding_id: F-070-01
+    severity: high
+    file: agent/scripts/acp.entropy-scan.sh
+    finding: "Entropy scanner crashes (exit 3) on every positive finding — set -e + output=$(...) where python uses sys.exit(findings) as data channel"
+    description: "Under set -euo pipefail with ERR trap, the failing command substitution (python exits non-zero when findings>0) fires the trap and exits 3 before findings are printed. Scanner only works when it finds nothing; IG-17/IG-18 detection is non-functional."
+    fix_target: "Stop using process exit code as count. Guard substitution (|| true / set +e) and parse count from stdout. Add true-positive E2E fixture."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-02
+    severity: high
+    file: agent/scripts/acp.network-whitelist-validate.sh
+    finding: "Claimed rule coverage >> implemented — ~18 of 55 v1.0 rules real. CRITICAL exfiltration (IG-07–13) and persistence (IG-21–26) categories have NO detection; IG-04/IG-05 also absent"
+    description: "Command doc/wiki/skill/milestone present these as script-backed; the network script implements only IG-01,02,03,06. 18+ mostly-CRITICAL malicious-code rules silently pass — false assurance for a security gate."
+    fix_target: "Implement the rules or relabel as 'documented, not enforced'; ship an accurate coverage matrix; gate --ci accordingly."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-03
+    severity: high
+    file: e2e/acp.integrity.test.sh
+    finding: "Integrity E2E never exercises detection logic — B1 doesn't invoke the scanner; B2/B3 only test clean-file exit-0; B4 baseline only greps AGENTS.md; 4 scripts only bash -n syntax-checked"
+    description: "The non-negotiable false-positive baseline promised in M56 §8 (assert_finding_count CRITICAL/HIGH 0 by running the gate) does not exist. F-070-01/02/06 all pass CI green."
+    fix_target: "Add per-rule fixture matrix (true+/true- per script-backed rule) that runs real scripts and asserts rule ID + exit code; add the real clean-codebase baseline. Reuse M58 benchmarks/fixtures pattern."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-04
+    severity: high
+    file: agent/scripts/acp.unicode-scan.sh
+    finding: "O(lines × 16 codepoints × 2) python3 spawns — up to 32 interpreter starts per line; unusable as pre-commit/CI gate on real repos"
+    fix_target: "Single python3 pass per file (or per tree) scanning the full codepoint set and emitting all findings with line/col."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-05
+    severity: medium
+    file: agent/skills/code-integrity.md
+    finding: "No script honors the documented output contract — skill defines findings: YAML with severity+confidence; scripts emit ad-hoc, mutually inconsistent text with no severity/confidence"
+    fix_target: "Standardize on [SEVERITY] file:line ruleID — message (M55 format) and/or --json across all six scripts."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-06
+    severity: medium
+    file: agent/scripts/acp.dependency-diff.sh
+    finding: "--ci severity semantics contradict spec — doc says exit 1 on CRITICAL/HIGH only; scripts exit 1 on ANY finding. MEDIUM (IG-30/31) and IG-28 'postinstall present' break CI on normal projects"
+    fix_target: "Scripts must emit severity; --ci filters to CRITICAL/HIGH only."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-07
+    severity: medium
+    file: agent/skills/code-integrity.md
+    finding: "Skill 'Rules Covered' table overstates 4/6 scripts (git-prov claims IG-34/35 not impl, omits IG-36; dep-diff claims IG-29/32 not impl; network claims IG-05 not impl; unicode claims IG-16 homoglyphs not impl)"
+    fix_target: "Align coverage tables (skill + script headers) to actual implementation."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-08
+    severity: medium
+    file: agent/scripts/acp.dependency-diff.sh
+    finding: "Typosquatting is substring match over ~60 hardcoded packages, not Levenshtein 1–2 from top-1000 as claimed; misses real squats. IG-29 (shadow deps — the script's namesake) and IG-32 not implemented"
+    fix_target: "Implement real Levenshtein (python helper); implement IG-29 by diffing imports/package.json vs lockfile; or descope honestly."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-09
+    severity: medium
+    file: agent/scripts/acp.network-whitelist-validate.sh
+    finding: "YAML parsed with grep/sed across gateway — whitelist loader grabs ANY '- ' list item (not scoped to approved_hosts:), fail-open; same in git-provenance + manifest verify. Violates scripts.md (LOW-067-004 class)"
+    fix_target: "Use agent/scripts/acp.yaml-parser.sh; scope extraction to the correct key."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-10
+    severity: medium
+    file: agent/scripts/acp.dependency-diff.sh
+    finding: "IG-31 stale-lockfile uses file mtime — unreliable in git checkouts/CI (clone resets mtimes to checkout time)"
+    fix_target: "Use git log -1 --format=%ct -- <file> for both files."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-11
+    severity: medium
+    file: agent/scripts/acp.git-provenance.sh
+    finding: "IG-37 provenance is a no-op out of the box — identity.yml ships team_members: [] so author verification is silently skipped for every commit"
+    fix_target: "Emit explicit IG-37 SKIPPED warning when team_members empty; document first-run setup."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-12
+    severity: medium
+    file: agent/scripts/acp.manifest-hash.sh
+    finding: "IG-41 (new files in agent/core/ not in manifest) structurally undetectable — manifest tracks hardcoded 7-file list, never enumerates directory. --generate prints to stdout (not the file) while --verify reads the file"
+    fix_target: "Glob tracked directories at generate time; have --generate write agent/manifest.yaml (with --stdout opt-out)."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-13
+    severity: low
+    file: agent/scripts/acp.unicode-scan.sh
+    finding: "Mis-attributes rule IDs (JSON hardcodes IG-14 for all hidden-char hits; human output omits rule ID). Comment-detector ERE '/\\\\*' won't match real /* block comments"
+    fix_target: "Map codepoint class → correct rule (IG-14/15/16); fix comment regex."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-14
+    severity: low
+    file: e2e/acp.integrity.test.sh
+    finding: "Rule-count assertion uses grep -cE '^\\| IG-\\d+' — \\d is literal in ERE → count 0, [ 0 -ge 55 ] fails (masked by || echo 0). Same class as F-067-003"
+    fix_target: "Use grep -cE '^\\| IG-[0-9]+'."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-15
+    severity: low
+    file: agent/scripts/acp.manifest-hash.sh
+    finding: "Portability — shasum -a 256 only (many Linux CI images have sha256sum not shasum); unicode/entropy hard-require python3 and silently degrade to exit-2 warning if absent"
+    fix_target: "Fall back to sha256sum/openssl dgst; document python3 requirement / make absence a hard error in --ci."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-16
+    severity: low
+    file: agent/skills/code-integrity.md
+    finding: "Token-budget inconsistency — skill header says ≤800 tokens; M56 deliverable + checklist specified ≤500"
+    fix_target: "Pick one budget; update M56 checklist to match."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
