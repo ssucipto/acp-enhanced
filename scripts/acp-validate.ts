@@ -629,6 +629,120 @@ function validateStatusConsistency(): boolean {
   return allOk;
 }
 
+// ── Memory-layer schema enforcement ────────────────────────────
+const SCHEMAS_DIR = process.env["ACP_SCHEMAS_DIR"] ?? path.join("agent", "schemas");
+// Map schema files to data files they validate
+const SCHEMA_DATA_MAP: Record<string, string> = {
+  "progress.schema.yaml": "agent/progress.yaml",
+  "session.schema.yaml": "agent/memory/sessions.md",
+  "lessons.schema.yaml": "agent/memory/lessons.md",
+  "decisions.schema.yaml": "agent/memory/decisions.md",
+  "audit-carryovers.schema.yaml": "agent/memory/audit-carryovers.md",
+  "milestone.schema.yaml": "agent/progress.yaml", // milestones embedded in progress.yaml
+};
+
+function validateYamlAgainstSchema(
+  dataYaml: unknown,
+  schema: Record<string, unknown>,
+  filePath: string
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const requiredFields = schema["required_fields"] as string[] | undefined;
+  const fields = schema["fields"] as Record<string, Record<string, unknown>> | undefined;
+
+  if (!fields) return errors;
+
+  // Check required top-level fields
+  if (requiredFields) {
+    if (typeof dataYaml !== "object" || dataYaml === null || Array.isArray(dataYaml)) {
+      // For array-type documents (sessions.md), validate each entry
+      return errors;
+    }
+    for (const rf of requiredFields) {
+      if (!(rf in (dataYaml as Record<string, unknown>))) {
+        errors.push({
+          file: filePath,
+          line: 0,
+          message: `Missing required field: ${rf}`,
+          severity: "error",
+        });
+      }
+    }
+  }
+
+  // Check field types
+  for (const [fieldName, fieldDef] of Object.entries(fields)) {
+    if (typeof dataYaml === "object" && dataYaml !== null && fieldName in (dataYaml as Record<string, unknown>)) {
+      const val = (dataYaml as Record<string, unknown>)[fieldName];
+      const expectedType = fieldDef["type"] as string | undefined;
+      if (expectedType && typeof val !== expectedType) {
+        errors.push({
+          file: filePath,
+          line: 0,
+          message: `Field "${fieldName}" expected type ${expectedType}, got ${typeof val}`,
+          severity: "warning",
+        });
+      }
+    }
+  }
+
+  return errors;
+}
+
+function runSchemaEnforcement(): boolean {
+  if (!existsSync(SCHEMAS_DIR)) {
+    console.log(`⚠️  Schema enforcement: ${SCHEMAS_DIR} not found — skipping`);
+    return true;
+  }
+
+  const schemaFiles = readdirSync(SCHEMAS_DIR).filter((f) => f.endsWith(".schema.yaml"));
+  let allOk = true;
+
+  for (const schemaFile of schemaFiles) {
+    const dataFile = SCHEMA_DATA_MAP[schemaFile];
+    if (!dataFile) continue;
+
+    try {
+      const schemaPath = path.join(SCHEMAS_DIR, schemaFile);
+      const schemaContent = readFileSync(schemaPath, "utf8");
+      const schema = yaml.load(schemaContent) as Record<string, unknown>;
+
+      if (!existsSync(dataFile)) {
+        console.log(`⚠️  Schema ${schemaFile}: data file ${dataFile} not found — skipping`);
+        continue;
+      }
+
+      const dataContent = readFileSync(dataFile, "utf8");
+      // sessions.md / lessons.md are multi-document YAML lists; try loading as-is
+      let dataYaml: unknown;
+      try {
+        dataYaml = yaml.load(dataContent);
+      } catch {
+        // If YAML parse fails, that's a pre-existing error from other validators
+        continue;
+      }
+
+      if (!dataYaml) continue;
+
+      const errors = validateYamlAgainstSchema(dataYaml, schema, dataFile);
+      if (errors.length > 0) {
+        for (const err of errors) {
+          const prefix = err.severity === "error" ? "❌" : "⚠️";
+          console.log(`${prefix} ${err.file}: ${err.message}  [schema: ${schemaFile}]`);
+          if (err.severity === "error") allOk = false;
+        }
+      } else {
+        console.log(`✅ Schema ${schemaFile}: ${dataFile} valid`);
+      }
+    } catch (err) {
+      console.error(`❌ Schema enforcement error: ${schemaFile} — ${err instanceof Error ? err.message : err}`);
+      allOk = false;
+    }
+  }
+
+  return allOk;
+}
+
 function validateFilePointers(): boolean {
   const progressYaml = loadProgressSafe();
   if (!progressYaml) {
@@ -693,8 +807,9 @@ if (args.length === 0) {
   validateVersionConsistency();
   const statusOk = validateStatusConsistency();
   const pointersOk = validateFilePointers();
+  const schemasOk = runSchemaEnforcement();
   checkStaleness(); // informational — non-blocking, does not affect exit code
-  process.exit(sizeOk && sessionsValid && statusOk && pointersOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
+  process.exit(sizeOk && sessionsValid && statusOk && pointersOk && schemasOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
 
 let overallFailed = false;

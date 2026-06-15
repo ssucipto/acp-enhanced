@@ -1,0 +1,55 @@
+# ADR Entry Schema
+# Schema for validating ACP architectural decision records (agent/memory/decisions.md)
+# Version: 1.0.0
+
+schema_version: 1.0.0
+description: Schema for ADR entries in agent/memory/decisions.md
+
+required_fields:
+  - id
+  - status
+  - date
+
+fields:
+  id:
+    type: string
+    required: true
+    pattern: "^ADR-[0-9]+$"
+  status:
+    type: string
+    required: true
+    enum:
+      - Accepted
+      - Proposed
+      - Deprecated
+      - Superseded
+  date:
+    type: string
+    required: true
+    pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+  title:
+    type: string
+    required: false
+    description: "ADR title"
+  context:
+    type: string
+    required: false
+    description: "Why this decision was needed"
+  options_considered:
+    type: array
+    required: false
+    items:
+      type: string
+    description: "Brief list of options"
+  decision:
+    type: string
+    required: false
+    description: "What was decided"
+  consequences:
+    type: string
+    required: false
+    description: "What this means going forward"
+  do_not_reopen:
+    type: string
+    required: false
+    description: "Specific trigger condition for reopening"
