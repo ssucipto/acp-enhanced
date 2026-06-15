@@ -9,7 +9,7 @@ context_required: [milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
 files_affected: [agent/wiki/integrity-rules.md, agent/commands/acp.integrity.md, agent/skills/code-integrity.md]
 tokens_est: 8000
 created: 2026-06-08
-completed:
+completed: 2026-06-15
 ---
 
 # Route 156: Documentation — Phase 2 Rules & Confidence Model
