@@ -1,0 +1,9 @@
+# CODEOWNERS
+
+# Catch-all: solo maintainer reviews everything
+* @ssucipto
+
+# Critical infrastructure — tighter ownership
+/scripts/           @ssucipto
+/.github/workflows/ @ssucipto
+/agent/scripts/     @ssucipto

@@ -22,7 +22,8 @@ platform_constraints:
 team: solo-developer
 
 # Team member emails for /acp-integrity IG-37 git author verification.
-team_members: []
+team_members:
+  - suryo.sucipto@gmail.com
 
 priorities:
   - correctness: command docs must be unambiguous for any LLM
@@ -32,7 +33,7 @@ priorities:
 
 fork_of: github.com/prmichaelsen/agent-context-protocol
 repo: github.com/ssucipto/acp-enhanced
-version: 6.12.1
+version: 6.21.0
 
 # Git workflow — develop→mainline (gitflow-lite). PRs develop→mainline.
 git_workflow:

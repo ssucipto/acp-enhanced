@@ -1,0 +1,27 @@
+# Integrity scanner fixture matrix — M64 route-184
+
+fixtures:
+  - script: acp.entropy-scan.sh
+    rule: IG-17
+    positive: entropy-high.ts
+    negative: entropy-clean.ts
+
+  - script: acp.unicode-scan.sh
+    rule: IG-16
+    positive: unicode-hidden.ts
+    negative: unicode-clean.ts
+
+  - script: acp.network-whitelist-validate.sh
+    rule: IG-01
+    positive: network-ig01-bad.js
+    negative: network-ig01-good.js
+
+  - script: acp.pattern-scan.sh
+    rule: IG-07
+    positive: exfil-ig07-bad.js
+    negative: exfil-ig07-good.js
+
+  - script: acp.pattern-scan.sh
+    rule: IG-21
+    positive: persist-ig21-bad.js
+    negative: persist-ig21-good.js

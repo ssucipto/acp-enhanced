@@ -3,7 +3,7 @@
 # ACP Package Creator v2.1.0
 # Creates a new ACP package with full ACP installation
 
-set -e
+set -euo pipefail
 trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Source common utilities
@@ -821,9 +821,8 @@ cat > "agent/scripts/bootstrap.sh" << 'BOOTSTRAP_EOF'
 # Bootstrap script for installing ACP and this package in one command
 # Usage: curl -fsSL https://github.com/{owner}/{repo}/raw/{branch}/agent/scripts/bootstrap.sh | bash
 
-set -e
-
-# Colors
+set -euo pipefail
+trap 'echo "[acp-bootstrap] Error on line $LINENO" >&2; exit 1' ERR
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'

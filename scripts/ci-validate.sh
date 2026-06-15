@@ -7,6 +7,7 @@
 set -euo pipefail
 
 ERRORS=0
+WARNINGS=0
 
 # ── Prerequisites ─────────────────────────────────────────────
 if ! python3 -c "import yaml" 2>/dev/null; then
@@ -35,11 +36,74 @@ except yaml.YAMLError as e:
 " || { ERRORS=$((ERRORS + 1)); }
 done < <(find_yaml)
 
-# ── 2. Markdown Frontmatter ───────────────────────────────────
+# ── 2. package.yaml ↔ command file count ───────────────────────
+echo "[ci-validate] Checking package.yaml command parity..."
+
+CMD_FILE_COUNT=$(find agent/commands -maxdepth 1 -name 'acp.*.md' ! -name '*.template.md' 2>/dev/null | wc -l | tr -d ' ')
+PKG_CMD_COUNT=$(python3 -c "
+import yaml
+pkg = yaml.safe_load(open('package.yaml'))
+cmds = [c['name'] for c in pkg['contents']['commands'] if c['name'].startswith('acp.')]
+print(len(cmds))
+")
+
+if [ "$CMD_FILE_COUNT" != "$PKG_CMD_COUNT" ]; then
+  echo "[ci-validate] ❌ package.yaml lists $PKG_CMD_COUNT acp.* commands but $CMD_FILE_COUNT files exist in agent/commands/"
+  ERRORS=$((ERRORS + 1))
+else
+  echo "[ci-validate]   OK: $CMD_FILE_COUNT command files match package.yaml entries"
+fi
+
+# ── 3. Command doc structure (ACP command files) ──────────────
+echo "[ci-validate] Checking ACP command doc structure..."
+
+check_command_doc() {
+  local f="$1"
+  local base
+  base=$(basename "$f")
+  local failed=0
+
+  if ! grep -q '^# Command:' "$f"; then
+    echo "  FAIL: $f — missing '# Command:' heading"
+    failed=1
+  fi
+  if ! grep -q '^\*\*Namespace\*\*:' "$f"; then
+    echo "  FAIL: $f — missing **Namespace**:"
+    failed=1
+  fi
+  if ! grep -q '^\*\*Version\*\*:' "$f"; then
+    echo "  FAIL: $f — missing **Version**:"
+    failed=1
+  fi
+  if ! grep -q '^\*\*Scripts\*\*:' "$f"; then
+    echo "  FAIL: $f — missing **Scripts**:"
+    failed=1
+  fi
+  if ! grep -q '^## Steps' "$f"; then
+    echo "  WARN: $f — missing ## Steps (allowlisted until M62 route-174)"
+    WARNINGS=$((WARNINGS + 1))
+  fi
+  if ! grep -q '^## Verification' "$f"; then
+    echo "  WARN: $f — missing ## Verification (allowlisted until M62 route-174)"
+    WARNINGS=$((WARNINGS + 1))
+  fi
+
+  if [ "$failed" -eq 0 ]; then
+    echo "  OK: $f"
+  else
+    ERRORS=$((ERRORS + 1))
+  fi
+}
+
+while IFS= read -r f; do
+  check_command_doc "$f"
+done < <(find agent/commands -maxdepth 1 -name 'acp.*.md' ! -name '*.template.md' 2>/dev/null | sort)
+
+# ── 4. Markdown YAML frontmatter (skills, etc.) ───────────────
 echo "[ci-validate] Checking Markdown YAML frontmatter..."
 
 find_md_with_frontmatter() {
-  find agent/commands/ agent/skills/ -name '*.md' 2>/dev/null
+  find agent/skills/ -name '*.md' 2>/dev/null
 }
 
 while IFS= read -r f; do
@@ -62,7 +126,11 @@ except yaml.YAMLError as e:
   fi
 done < <(find_md_with_frontmatter)
 
-# ── 3. Summary ────────────────────────────────────────────────
+# ── 5. Summary ────────────────────────────────────────────────
+if [ "$WARNINGS" -gt 0 ]; then
+  echo "[ci-validate] ⚠️  $WARNINGS warning(s) (non-blocking until M62)."
+fi
+
 if [ "$ERRORS" -gt 0 ]; then
   echo "[ci-validate] ❌ $ERRORS error(s) found."
   exit 1

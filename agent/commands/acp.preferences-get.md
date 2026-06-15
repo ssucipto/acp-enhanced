@@ -7,6 +7,7 @@
 
 **Namespace**: acp  
 **Version**: 1.0.0  
+**Status**: Active  
 **Purpose**: Resolve and display preferences for a given namespace  
 **Category**: Utility  
 **Frequency**: As Needed  
