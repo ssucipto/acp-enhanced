@@ -4325,6 +4325,22 @@ tasks:
 recent_work:
   - date: 2026-06-15
     description: |
+      ✅ audit-076 — Post-M62 completeness audit. 8 findings (1 HIGH CHANGELOG ordering,
+      3 MEDIUM milestone doc/progress gaps, 4 LOW script hygiene). All 7 carryovers fixed
+      (F-076-001..007). CHANGELOG reordered, milestone doc updated (Status→completed,
+      verification gate populated), monthly-dependency-audit last_findings_count added,
+      acp.yaml-validate.sh pipefail added, acp.package-search.sh exclusion documented.
+    items:
+      - "✅ F-076-001 HIGH: CHANGELOG reordered (v6.21.0 before v6.20.9)"
+      - "✅ F-076-002 MEDIUM: M62 milestone doc Status→completed"
+      - "✅ F-076-003 MEDIUM: Verification gate populated with ✅/⏳"
+      - "✅ F-076-004 MEDIUM: monthly-dependency-audit last_findings_count added"
+      - "✅ F-076-005 LOW: acp.yaml-validate.sh set -euo pipefail added"
+      - "✅ F-076-006 LOW: acp.package-search.sh exclusion documented"
+      - "✅ F-076-007 LOW: Sweep script CRLF confirmed fixed (.gitattributes enforced)"
+      - "📊 All 7 carryovers marked fixed in audit-carryovers.md"
+  - date: 2026-06-15
+    description: |
       ✅ route-173 — Upgraded 17 scripts from bare set -e to set -euo pipefail
       + ERR trap. All 36 scripts now use proper error handling. 0 bare set -e remaining.
     items:
@@ -6610,6 +6626,7 @@ recurring_tasks:
     executor: deepseek-v4-pro
     last_run: 2026-06-08
     next_due: 2026-07-08
+    last_findings_count: 0
     status: current
     description: "Monthly dependency and supply chain audit"
 

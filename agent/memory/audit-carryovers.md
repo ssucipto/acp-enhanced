@@ -1189,9 +1189,9 @@ carryovers:
     file: CHANGELOG.md
     finding: "v6.21.0 entry appears AFTER v6.20.9. Reverse chronological order violated — newest release should be first entry."
     fix_target: "Move ## [6.21.0] entry before ## [6.20.9]."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
     escalated_to: null
 
   - audit_id: 76
@@ -1200,9 +1200,9 @@ carryovers:
     file: agent/milestones/milestone-62-quality-hardening-schema-carryovers.md
     finding: "**Status**: planned — never updated to completed. Milestone fully shipped (7/7 routes, v6.21.0 tagged)."
     fix_target: "Change Status to completed, set completion date to 2026-06-15."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
     escalated_to: null
 
   - audit_id: 76
@@ -1211,9 +1211,9 @@ carryovers:
     file: agent/milestones/milestone-62-quality-hardening-schema-carryovers.md
     finding: "Verification gate has 4 aspirational bullets with no pass/fail markers (no ✅/❌/⏳)."
     fix_target: "Populate verification gate with actual pass/fail results."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
     escalated_to: null
 
   - audit_id: 76
@@ -1222,9 +1222,9 @@ carryovers:
     file: agent/progress.yaml
     finding: "monthly-dependency-audit missing last_findings_count — F-062-05 only added to 3 of 4 recurring_tasks."
     fix_target: "Add last_findings_count: 0 to monthly-dependency-audit."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
     escalated_to: null
 
   - audit_id: 76
@@ -1233,9 +1233,9 @@ carryovers:
     file: agent/scripts/acp.yaml-validate.sh
     finding: "Standalone executable script with no set -e or set -euo pipefail."
     fix_target: "Add set -euo pipefail + ERR trap."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
     escalated_to: null
 
   - audit_id: 76
@@ -1244,9 +1244,9 @@ carryovers:
     file: agent/scripts/acp.package-search.sh
     finding: "Has # set -e commented out with subshell rationale. Should use conventional pattern."
     fix_target: "Add set -euo pipefail or document as standard exclusion."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
     escalated_to: null
 
   - audit_id: 76
@@ -1255,7 +1255,7 @@ carryovers:
     file: agent/scripts/acp.post-milestone-sweep.sh
     finding: "Created with CRLF on Windows. Pre-commit hook (same commit) couldn't catch it — new-file race condition."
     fix_target: "Verify .gitattributes prevents recurrence. Test on clean checkout."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
     escalated_to: null
