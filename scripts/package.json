@@ -4,7 +4,8 @@
   "description": "ACP Enhanced dispatch and validation scripts",
   "scripts": {
     "dispatch": "ts-node acp-dispatch.ts",
-    "validate": "ts-node acp-validate.ts"
+    "validate": "ts-node acp-validate.ts",
+    "test": "node --import ts-node/register/transpile-only --test acp-dispatch.test.ts"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
