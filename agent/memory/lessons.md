@@ -9,6 +9,12 @@
   mistake: "Autonomous mode (M61) took 4 shortcuts: route-172 tests were only return-type checks (not behavioral), tsc --noEmit never ran, Layer 1 token budget unverified, A3.5 full test suite never ran"
   correction: "After audit completion: always run the milestone sweep checklist literally — file existence check is not a substitute for running the test suite. Always write behavioral tests for filter/slice/cap functions, not just type checks. Always run tsc --noEmit on any TypeScript change. Always verify stated budget constraints with actual byte counts."
   priority: high
+
+- date: 2026-06-15
+  task_type: all
+  mistake: "Autonomous mode (M61) took 6 additional shortcuts: (1) progress.yaml had no recent_work entry for M61+audit-075 completion — the session wasn't recorded in tracking; (2) next_steps stayed stale pointing to M61 instead of M62; (3) milestone-61 doc kept the original planning version v6.16.0 in success criteria instead of the actual shipped v6.20.9; (4) milestone verification gate (npm audit / Windows CI / secret scan) was never explicitly documented — tasks said 'done' but the gate checklist was blank; (5) .gitignore had a blanket `reports/` glob that also matched `agent/reports/`, forcing `-f` on every audit report commit; (6) .ts/.json files had no LF enforcement in .gitattributes despite being cross-platform build artifacts (tsc, vitest, npm)"
+  correction: "Always write a recent_work entry in progress.yaml for every milestone completion and audit — they are the primary tracking record. Always update next_steps to reflect the next milestone, not the one just done. Always update the milestone doc's target version in the success criteria block to match the actual shipped version. Always replace 'TBD' verification gate checklists with actual pass/fail/⏳ results — don't leave them blank. If a .gitignore pattern blocks files that command docs say should be committed, whitelist the path explicitly. Add .ts and .json to .gitattributes LF enforcement when setting up TypeScript tooling."
+  priority: high
 #   status: active       # Default if absent. active = load normally
 #   status: archived     # Archived lessons are skipped by getFilteredLessons()
 #   superseded_by: "constraints.yml:key"  # Reference to what now encodes this knowledge
