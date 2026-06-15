@@ -1,9 +1,18 @@
 # Task 5: Manifest System Implementation
 
+<!-- @acp.meta.task
+topic: manifest, system, implementation
+description: Task 5: Manifest System Implementation
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M3 - ACP Package Management System](../milestones/milestone-3-acp-package-management.md)  
 **Estimated Time**: 6-8 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 **Priority**: High  
 
 ---

@@ -37,6 +37,16 @@ yaml_write file.yaml
 yaml_parse file.yaml
 result=$(yaml_query ".project.tags")
 # result is ":" instead of "production"
+
+<!-- @acp.meta.task
+topic: result, is, instead, of, production
+description: Fix yaml_array_append to empty array returns ':' instead of value
+milestone: M27
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ```
 
 Root cause: `yaml_set "[]"` creates an array node in the AST with type `array` but empty value. `yaml_array_append` likely inserts a child node, but `yaml_query` on an array parent doesn't traverse children when the parent value is empty/null — it returns the parent value (which is `:` from the AST line format `key|type|value`).

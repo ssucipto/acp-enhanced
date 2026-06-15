@@ -1,9 +1,18 @@
 # Task 66: Script-Command Binding - Installation Logic
 
+<!-- @acp.meta.task
+topic: script-command, binding, -, installation, logic
+description: Task 66: Script-Command Binding - Installation Logic
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M3 - ACP Package Management System](../../milestones/milestone-3-package-management.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Task 65 (Schema and Templates)  
-**Status**: Not Started  
 
 ---
 

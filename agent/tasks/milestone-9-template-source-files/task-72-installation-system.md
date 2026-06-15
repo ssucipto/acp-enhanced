@@ -1,9 +1,18 @@
 # Task 72: Template Installation System
 
+<!-- @acp.meta.task
+topic: template, installation, system
+description: Task 72: Template Installation System
+milestone: M9
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M9 - Template Source Files Support](../../milestones/milestone-9-template-source-files.md)  
 **Estimated Time**: 6-8 hours  
 **Dependencies**: Task 71 (Schema Extension)  
-**Status**: Not Started  
 
 ---
 

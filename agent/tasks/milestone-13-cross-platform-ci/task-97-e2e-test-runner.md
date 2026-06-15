@@ -1,7 +1,16 @@
 # Task 97: Create Unified E2E Test Runner
 
+<!-- @acp.meta.task
+topic: create, unified, e2e, test, runner
+description: Task 97: Create Unified E2E Test Runner
+milestone: M13
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M13 — Cross-Platform CI  
-**Status**: Not Started  
 **Estimated Hours**: 1-2  
 **Dependencies**: task-96 (tests must have reliable exit codes)  
 

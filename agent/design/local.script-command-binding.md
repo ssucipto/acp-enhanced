@@ -1,8 +1,14 @@
 # Script-Command Binding System
 
+<!-- @acp.meta.design
+topic: script-command, binding, system
+description: Selective script installation based on command dependencies with dual validation
+status: draft
+updated: 2026-02-24
+@acp.meta.end -->
+
 **Concept**: Selective script installation based on command dependencies with dual validation  
 **Created**: 2026-02-24  
-**Status**: Design Specification  
 
 ---
 

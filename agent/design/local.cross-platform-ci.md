@@ -1,8 +1,14 @@
 # Cross-Platform E2E CI/CD Pipeline
 
+<!-- @acp.meta.design
+topic: cross-platform, e2e, cicd, pipeline
+description: GitHub Actions matrix strategy running E2E tests on Linux and macOS to catch platform-specific bugs automatically
+status: draft
+updated: 2026-03-02
+@acp.meta.end -->
+
 **Concept**: GitHub Actions matrix strategy running E2E tests on Linux and macOS to catch platform-specific bugs automatically  
 **Created**: 2026-03-02  
-**Status**: Design Specification  
 
 ---
 

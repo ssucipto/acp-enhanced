@@ -1,9 +1,15 @@
 # Global ACP Installation
 
+<!-- @acp.meta.design
+topic: global, acp, installation
+description: Auto-initialize global ACP infrastructure when using global package features
+status: draft
+updated: 2026-02-21
+@acp.meta.end -->
+
 **Concept**: Auto-initialize global ACP infrastructure when using global package features  
 **Created**: 2026-02-21  
 **Updated**: 2026-02-21  
-**Status**: Design Specification  
 **Priority**: High  
 **Estimated Effort**: 1-2 hours  
 

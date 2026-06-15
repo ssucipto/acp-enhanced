@@ -1,12 +1,14 @@
 # Task 74: Add Missing Commands and Scripts to package.yaml
 
 <!-- @acp.meta.task
-topic: package-yaml, crosscut, sync
-description: Add 13 missing command entries and 1 missing script entry to package.yaml contents section
+topic: add, missing, commands, and, scripts, to, packageyaml
+description: Task 74: Add Missing Commands and Scripts to package.yaml
 milestone: M20
-status: completed
-updated: 2026-05-01
+status: draft
+updated: 2026-06-15
 @acp.meta.end -->
+
+
 
 **Milestone**: [M20 - Consistency Cleanup](../milestones/milestone-20-consistency-cleanup.md)  
 **Estimated Time**: 20 minutes  

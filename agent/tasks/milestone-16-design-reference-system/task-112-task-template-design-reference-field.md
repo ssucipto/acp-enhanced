@@ -1,10 +1,19 @@
 # Task 112: Update Task Template with Design Reference Field
 
+<!-- @acp.meta.task
+topic: update, task, template, with, design, reference, field
+description: Task 112: Update Task Template with Design Reference Field
+milestone: M16
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M16 - Design Reference System](../../milestones/milestone-16-design-reference-system.md)  
 **Design Reference**: [Design Reference System](../../design/local.design-reference-system.md)  
 **Estimated Time**: 1 hour  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

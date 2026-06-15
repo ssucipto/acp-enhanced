@@ -1,9 +1,18 @@
 # Task 30: Fix Package Validation for Non-Package Files
 
+<!-- @acp.meta.task
+topic: fix, package, validation, for, non-package, files
+description: Task 30: Fix Package Validation for Non-Package Files
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: Future Enhancement  
 **Estimated Time**: 30 minutes - 1 hour  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

@@ -1,6 +1,15 @@
 # Task 119: Integrate Artifacts with Existing Commands
 
-**Status**: completed  
+<!-- @acp.meta.task
+topic: integrate, artifacts, with, existing, commands
+description: Task 119: Integrate Artifacts with Existing Commands
+milestone: M17
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Priority**: medium  
 **Milestone**: M17 (Artifact Commands System)  
 **Design Reference**: [Artifact Commands System](../../design/local.artifact-commands-system.md)  

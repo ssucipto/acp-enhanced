@@ -12,6 +12,15 @@ created: 2026-05-04
 completed: 2026-05-04
 ---
 
+<!-- @acp.meta.task
+topic: auto-stamp, completed, on, routing, task, files, in, acp-commit
+description: Auto-stamp `completed:` on routing task files in /acp-commit
+milestone: M26
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Objective
 
 Update the `/acp-commit` command (implemented via `agent/commands/git.commit.md`) to automatically set the `completed: <date>` field on routing task files for each task listed in the session's `tasks:` frontmatter block. This eliminates manual completion-stamping and prevents BUG-01 class omissions.

@@ -1,8 +1,17 @@
 # Task 135: Update AGENT.md Conclusion and Sample Prompts
 
+<!-- @acp.meta.task
+topic: update, agentmd, conclusion, and, sample, prompts
+description: Task 135: Update AGENT.md Conclusion and Sample Prompts
+milestone: M24
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M24 — AGENT.md Completeness  
 **Estimated Time**: 1–2 hours  
-**Status**: Completed
 
 ---
 

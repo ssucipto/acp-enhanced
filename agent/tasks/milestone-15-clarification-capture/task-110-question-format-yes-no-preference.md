@@ -1,9 +1,18 @@
 # Task 110: Implement Yes/No Question Format Preference
 
+<!-- @acp.meta.task
+topic: implement, yesno, question, format, preference
+description: Task 110: Implement Yes/No Question Format Preference
+milestone: M15
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M15 - Clarification Capture System](../milestones/milestone-15-clarification-capture-system.md)  
 **Estimated Time**: 1 hour  
 **Dependencies**: Task 109  
-**Status**: Completed  
 
 ---
 

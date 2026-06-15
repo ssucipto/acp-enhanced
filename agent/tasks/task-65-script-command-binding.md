@@ -1,9 +1,18 @@
 # Task 65: Script-Command Binding - Schema and Templates
 
+<!-- @acp.meta.task
+topic: script-command, binding, -, schema, and, templates
+description: Task 65: Script-Command Binding - Schema and Templates
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M3 - ACP Package Management System](../../milestones/milestone-3-package-management.md)  
 **Estimated Time**: 1-2 hours  
 **Dependencies**: Task 45 (Package Script Bundling), Task 62 (Installation Filtering)  
-**Status**: Not Started  
 
 ---
 

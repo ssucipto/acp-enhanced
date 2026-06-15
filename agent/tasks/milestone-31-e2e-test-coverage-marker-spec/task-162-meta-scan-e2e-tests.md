@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: write, e2eacpmeta-scantestsh, 15, assertions
+description: Write e2e/acp.meta-scan.test.sh (15+ assertions)
+milestone: M31
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Create `e2e/acp.meta-scan.test.sh` with ≥15 assertions testing `agent/scripts/acp.meta-scan.sh` — covering: basic scan, all 8 marker kinds, `--kind` filtering, cross-language comment stripping, empty output path, and field parsing.

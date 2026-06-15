@@ -1,9 +1,18 @@
 # Task 43: Preferences Testing Suite
 
+<!-- @acp.meta.task
+topic: preferences, testing, suite
+description: Task 43: Preferences Testing Suite
+milestone: M6
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M6 - Preferences System](../milestones/milestone-6-preferences-system.md)  
 **Estimated Time**: 6-8 hours  
 **Dependencies**: Task 37-42 (All preference infrastructure and commands)  
-**Status**: Not Started  
 
 ---
 

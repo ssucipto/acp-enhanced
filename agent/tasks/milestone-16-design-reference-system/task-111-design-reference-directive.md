@@ -1,10 +1,19 @@
 # Task 111: Create @acp.design-reference Shared Directive
 
+<!-- @acp.meta.task
+topic: create, acpdesign-reference, shared, directive
+description: Task 111: Create @acp.design-reference Shared Directive
+milestone: M16
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M16 - Design Reference System](../../milestones/milestone-16-design-reference-system.md)  
 **Design Reference**: [Design Reference System](../../design/local.design-reference-system.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

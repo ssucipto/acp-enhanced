@@ -1,9 +1,18 @@
 # Task 88: Event-Driven Order Pipeline Benchmark Task
 
+<!-- @acp.meta.task
+topic: event-driven, order, pipeline, benchmark, task
+description: Task 88: Event-Driven Order Pipeline Benchmark Task
+milestone: M11
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M11 - ACP Benchmark Suite  
 **Estimated Time**: 4-6 hours  
 **Dependencies**: Task 79 (runner must support multi-turn steps)  
-**Status**: Not Started  
 
 ---
 

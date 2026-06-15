@@ -11,6 +11,15 @@ started:
 completed:
 ---
 
+<!-- @acp.meta.task
+topic: revise, token, budget, from, 2800, to, 5000
+description: Revise token budget from 2800 to 5000
+milestone: M27
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Objective
 
 Update the ACP context budget from 2,800 tokens to 5,000 tokens across all protocol files. The rationale blockquote (added in task-147) already explains the budget is a discipline practice; now update the numbers to something achievable and realistic.

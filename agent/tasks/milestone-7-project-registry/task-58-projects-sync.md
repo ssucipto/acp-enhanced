@@ -1,9 +1,18 @@
 # Task 58: @acp.projects-sync Command
 
+<!-- @acp.meta.task
+topic: acpprojects-sync, command
+description: Task 58: @acp.projects-sync Command
+milestone: M7
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M7 - Global ACP Project Registry](../../milestones/milestone-7-project-registry.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Task 52 (Registry Infrastructure), Task 53 (Project List)  
-**Status**: Not Started  
 
 ---
 

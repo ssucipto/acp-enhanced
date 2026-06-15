@@ -1,8 +1,15 @@
 # E2E Testing Pattern for Shell Scripts
 
+<!-- @acp.meta.pattern
+topic: e2e, testing, pattern, for, shell, scripts
+description: The E2E Testing Pattern provides a structured approach for writing comprehensive end-to-end tests for shell scripts. It emphasizes test isolation, cle
+applies_to: testing, quality
+status: active
+updated: 2026-06-15
+@acp.meta.end -->
+
 **Category**: Testing  
 **Applicable To**: Shell script projects, ACP packages, CLI tools  
-**Status**: Stable  
 
 ---
 

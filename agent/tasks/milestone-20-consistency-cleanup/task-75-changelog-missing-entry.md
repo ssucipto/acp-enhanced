@@ -1,12 +1,14 @@
 # Task 75: Add CHANGELOG Entry for Post-M19 Audit Fixes
 
 <!-- @acp.meta.task
-topic: changelog, crosscut, documentation
-description: Add missing CHANGELOG entry for commit afcf61d (audit fixes: flat-dot fallback, dot notation, USAGE.md)
+topic: add, changelog, entry, for, post-m19, audit, fixes
+description: Task 75: Add CHANGELOG Entry for Post-M19 Audit Fixes
 milestone: M20
-status: completed
-updated: 2026-05-01
+status: draft
+updated: 2026-06-15
 @acp.meta.end -->
+
+
 
 **Milestone**: [M20 - Consistency Cleanup](../milestones/milestone-20-consistency-cleanup.md)  
 **Estimated Time**: 10 minutes  
