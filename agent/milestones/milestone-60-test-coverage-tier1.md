@@ -1,7 +1,7 @@
 # Milestone 60: Test Coverage Sprint — Tier 1 (Core Commands)
 
 **Target version**: 6.15.0  
-**Status**: planned  
+**Status**: completed  
 **Estimated effort**: ~14h (2 routes)  
 **Source**: audit-065 (CRIT-065-003), audit-067 (Part D, M60)
 

@@ -242,3 +242,14 @@
     - cross-refs-added-acp-validate-md-steps-2e-2f
   deferred: []
   key_fact: "Cross-subagent audit catches what solo audit misses. My own audit-073 found 8 findings, but the F-065 subagent found 19 — including E2E test gaps and carryover status drift I missed."
+
+- date: 2026-06-15
+  executor: copilot
+  tasks: [route-165, route-166]
+  done:
+    - m60-route-165-8-e2e-tests-created-all-passing
+    - m60-route-166-integrity-rule-count-fixed-70-exact
+    - m60-route-166-contributing-md-created
+    - integrity-test-62-62-green
+  deferred: []
+  key_fact: "8 E2E test suites (init, proceed, plan, dispatch, commit, validate, audit, route) created in one milestone — each with structural+negative assertions following patterns/local.e2e-testing.md. CRLF line endings on Windows require tr -d '\r' conversion before bash execution."
