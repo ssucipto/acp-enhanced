@@ -1,7 +1,7 @@
 # Integrity Rules Catalogue — v1.1 (M64 truth pass)
 
 > **Load control**: Load one category section at a time. Never load the entire file.
-> **Version**: 1.1.0 | **Script-backed**: 38 rules across 7 scripts + output lib | **Deferred v2.0**: 15 rules
+> **Version**: 2.0.0 | **Total rules**: 70 | **Script-backed**: 44 across 9 scripts + output lib | **Phase 2 (M58)**: Cat 8/10 active, Cat 9 semantic LLM
 > **Command**: /acp-integrity | **Skill**: @code-integrity
 > **Fixtures**: `agent/benchmarks/fixtures/integrity/manifest.yaml`
 

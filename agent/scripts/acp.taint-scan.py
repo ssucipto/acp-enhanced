@@ -27,6 +27,7 @@ HEURISTICS = [
     (re.compile(r"(SELECT|INSERT|UPDATE|DELETE).*\+\s*(req\.|id\b)"), "IG-45", "user input concatenated into SQL"),
     (re.compile(r"(exec|spawn)\s*\(\s*[`'\"].*\$\{"), "IG-46", "shell command with dynamic interpolation"),
     (re.compile(r"readFile(Sync)?\s*\([^)]*req\.(query|body|params)"), "IG-47", "file path from user input"),
+    (re.compile(r"path\.join\([^)]*req\.(query|body|params)"), "IG-47", "file path built from user input"),
     (re.compile(r"redirect\s*\(\s*req\.(query|body|params)"), "IG-48", "redirect from user input"),
     (re.compile(r"fetch\s*\(\s*process\.env"), "IG-49", "network call using raw environment URL"),
     (re.compile(r"(isAdmin|isTrusted|verified|authorized)\s*=\s*external"), "IG-50", "security decision trusts external output"),
@@ -63,8 +64,40 @@ def scan(path: Path, markers: list, findings: list):
     if has_user_input and re.search(r"(SELECT|INSERT|UPDATE|DELETE).+\+", text, re.I):
         if not any(f[2] == "IG-45" for f in findings):
             findings.append((str(path), 1, "IG-45", "user input may flow to SQL concatenation"))
+    if has_user_input and re.search(r"fs\.(readFile|readFileSync)", text):
+        sanitized = bool(re.search(r"ALLOWED", text) and re.search(r"path\.resolve", text))
+        if not sanitized and re.search(r"path\.join", text):
+            if not any(f[2] == "IG-47" for f in findings):
+                ln = next((i + 1 for i, l in enumerate(lines) if "readFile" in l), 1)
+                findings.append((str(path), ln, "IG-47", "file path may derive from user input"))
+    if has_user_input and re.search(r"res\.redirect", text):
+        allowlisted = bool(re.search(r"ALLOWED_HOSTS|allowlist", text, re.I)) and bool(
+            re.search(r"new URL", text)
+        )
+        if not allowlisted:
+            if not any(f[2] == "IG-48" for f in findings):
+                ln = next((i + 1 for i, l in enumerate(lines) if re.search(r"res\.redirect", l)), 1)
+                findings.append((str(path), ln, "IG-48", "redirect may use unvalidated user URL"))
+    if re.search(r"req\.session\.(isAdmin|isTrusted)|\.isAdmin\s*=\s*true", text):
+        external = bool(re.search(r"result\.(valid|authorized|trusted)|checkLicense|vendor-", text))
+        local_verify = bool(
+            re.search(r"verifyAdminEntitlement|revalid|local.*policy|verify.*Entitlement", text, re.I)
+        )
+        if external and not local_verify:
+            if not any(f[2] == "IG-50" for f in findings):
+                ln = next(
+                    (i + 1 for i, l in enumerate(lines) if "isAdmin" in l or "result.valid" in l),
+                    1,
+                )
+                findings.append((str(path), ln, "IG-50", "security decision may trust external output"))
     if has_env and re.search(r"fetch\s*\(", text):
-        if not any(f[2] == "IG-49" for f in findings):
+        validated = bool(
+            re.search(
+                r"isAllowed|allowlist|ALLOWED|validate.*[Uu]rl|\.protocol\s*===|endsWith\s*\(",
+                text,
+            )
+        )
+        if not validated and not any(f[2] == "IG-49" for f in findings):
             findings.append((str(path), 1, "IG-49", "network call may use unvalidated environment URL"))
 
 
