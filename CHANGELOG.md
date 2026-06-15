@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.20.1] — 2026-06-15
+
+### Fixed
+- **Taint heuristics**: IG-47/48/50 missing on calibration fixtures — added file-level flow analysis for indirect source→sink (audit-072)
+- **IG-49 false positive**: Skip safe files with URL validation helpers
+- **IG-50 confidence ceiling**: Now reports `[LOW]` per milestone specification
+- **Fixture manifest**: Added `max_confidence` + `ci_blocking` fields per fixture
+- **Wiki header**: Updated to v2.0.0 — Phase 2 active, 70 total rules
+- **Milestone-58**: Verification checklist completed; research gate descoped
+- **Audit carryovers**: 9 M58-related items from audit-068/069 marked fixed
+
+### Added
+- **Memory poisoning UX research** (`agent/artifacts/research-memory-poisoning-ux.md`)
+- **Glossary terms**: 6 M58 Phase 2 terms added (Integrity & Security section)
+- **E2E coverage**: B13–B16 — full 6-rule taint matrix (55 assertions, +29)
+
+### Changed
+- **`quarterly-deep-scan`**: Description updated — M58 shipped, Phase 2 active
+
 ## [6.20.0] — 2026-06-15
 
 ### Added

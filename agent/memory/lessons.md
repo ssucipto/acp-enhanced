@@ -8,6 +8,16 @@
 #   superseded_by: "constraints.yml:key"  # Reference to what now encodes this knowledge
 
 - date: 2026-06-15
+  scope: backend-bash
+  task_type: audit
+  lesson: |
+    Taint-flow heuristics that only match direct sink calls (e.g. redirect(req.query))
+    miss indirect flows (target = req.query.url; redirect(target)). Always add
+    file-level fallbacks with sanitization negation (ALLOWED, path.resolve, isAllowedWebhook).
+    Also: IG-49 file-level env+fetch heuristic must skip files with URL validation helpers.
+  priority: high
+
+- date: 2026-06-15
   scope: cross-cutting
   task_type: audit
   lesson: |
