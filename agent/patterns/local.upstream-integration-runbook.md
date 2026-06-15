@@ -7,6 +7,14 @@ task: task-157
 
 # Upstream Integration Runbook
 
+<!-- @acp.meta.pattern
+topic: upstream, integration, runbook
+description: Upstream Integration Runbook
+applies_to: testing, quality
+status: active
+updated: 2026-06-15
+@acp.meta.end -->
+
 ## When to Run
 
 Run when upstream (`prmichaelsen/agent-context-protocol`) releases a new minor or major version.

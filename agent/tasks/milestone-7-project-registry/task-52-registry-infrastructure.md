@@ -1,9 +1,18 @@
 # Task 52: Project Registry Infrastructure
 
+<!-- @acp.meta.task
+topic: project, registry, infrastructure
+description: Task 52: Project Registry Infrastructure
+milestone: M7
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M7 - Global ACP Project Registry](../../milestones/milestone-7-project-registry.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Task 29 (Global ACP Auto-Initialization)  
-**Status**: Not Started  
 
 ---
 

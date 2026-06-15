@@ -152,3 +152,14 @@ After the LLM completes the task:
 
   Next: review output → /acp-commit
 ```
+
+---
+
+## Verification
+
+- [ ] Dispatch output includes cost estimate, route ID, and executor
+- [ ] Context budget applied correctly (fails hard beyond Layer 3 limit)
+- [ ] Skill file resolved from `agent/skills/` matching task_type
+- [ ] Sessions and lessons filtered per protocol (3 sessions, 5 lessons)
+- [ ] No uncaught exceptions from YAML parse errors in progress/sessions/lessons
+- [ ] `tsc --noEmit` clean after any TypeScript changes

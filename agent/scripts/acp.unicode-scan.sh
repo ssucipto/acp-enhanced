@@ -1,176 +1,94 @@
 #!/usr/bin/env bash
 # acp.unicode-scan.sh — Hidden Unicode Character Scanner
-# Part of /acp-integrity v1.0 (M56)
+# Part of /acp-integrity v1.0 (M56), M64 routes 179/182
 #
-# Detects invisible/hidden Unicode characters used in Rules File Backdoor attacks
-# (Pillar Security, March 2025). Scans for zero-width characters, bidirectional
-# text markers, and Unicode homoglyphs.
-#
-# Usage:
-#   acp.unicode-scan.sh [file|dir]        Scan file or directory (default: .)
-#   acp.unicode-scan.sh --ci [file|dir]   Exit 1 on any finding
-#   acp.unicode-scan.sh --json [file|dir] JSON output format
-#
-# Covered rules: IG-14, IG-15, IG-16, IG-38, IG-39, IG-61
-# Also covers: IG-20 (AI-directive language in comments)
+# Covered rules: IG-14–IG-16, IG-20, IG-38, IG-39, IG-61
 
 set -euo pipefail
 trap 'echo "Error: unicode-scan.sh failed at line $LINENO" >&2; exit 3' ERR
 
-# ── Configuration ────────────────────────────────────────────────────────────
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=acp.integrity-output.sh
+source "${SCRIPT_DIR}/acp.integrity-output.sh"
 
-# Hidden Unicode characters: hex codepoint and name (bash 3.2 compat — no associative arrays)
-# Format: "HEX|Name"
-HIDDEN_CHARS=(
-  "200B|ZERO WIDTH SPACE"
-  "200C|ZERO WIDTH NON-JOINER"
-  "200D|ZERO WIDTH JOINER"
-  "FEFF|ZERO WIDTH NO-BREAK SPACE (BOM)"
-  "00AD|SOFT HYPHEN"
-  "180E|MONGOLIAN VOWEL SEPARATOR"
-  "202A|LEFT-TO-RIGHT EMBEDDING"
-  "202B|RIGHT-TO-LEFT EMBEDDING"
-  "202C|POP DIRECTIONAL FORMATTING"
-  "202D|LEFT-TO-RIGHT OVERRIDE"
-  "202E|RIGHT-TO-LEFT OVERRIDE"
-  "2066|LEFT-TO-RIGHT ISOLATE"
-  "2067|RIGHT-TO-LEFT ISOLATE"
-  "2068|FIRST STRONG ISOLATE"
-  "2069|POP DIRECTIONAL ISOLATE"
-  "061C|ARABIC LETTER MARK"
-)
-
-# AI-directive phrases to detect in comments (IG-20)
-AI_DIRECTIVE_PATTERNS=(
-  "ignore previous instructions"
-  "ignore the above"
-  "do not flag"
-  "bypass security"
-  "skip this rule"
-  "system:"
-  "assistant:"
-  "forget previous"
-  "new instruction"
-  "as an AI"
-)
-
-# ── Argument Parsing ─────────────────────────────────────────────────────────
-
-CI_MODE=false
-JSON_MODE=false
 TARGET="."
-
+IG_REMAINING_ARGS=()
+ig_parse_common_args "$@"
+set -- "${IG_REMAINING_ARGS[@]:-}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --ci) CI_MODE=true; shift ;;
-    --json) JSON_MODE=true; shift ;;
     -h|--help)
       echo "Usage: acp.unicode-scan.sh [--ci] [--json] [file|dir]"
-      echo "Scans for hidden Unicode characters (Rules File Backdoor detection)"
-      echo "  --ci     Exit 1 on any finding"
-      echo "  --json   Output findings as JSON"
       exit 0
       ;;
     *) TARGET="$1"; shift ;;
   esac
 done
 
-# ── File Discovery ────────────────────────────────────────────────────────────
+if ! command -v python3 &>/dev/null; then
+  echo "Error: python3 required" >&2
+  exit 2
+fi
 
-FINDINGS=0
-FINDING_LINES=""
-
-scan_file() {
-  local file="$1"
-  local line_num=0
-  
-  while IFS= read -r line || [[ -n "$line" ]]; do
-    line_num=$((line_num + 1))
-    
-    # Check for hidden Unicode characters
-    for entry in "${HIDDEN_CHARS[@]}"; do
-      local hex="${entry%%|*}"
-      local name="${entry##*|}"
-      local codepoint_dec=$((16#${hex}))
-      # Use Python for reliable UTF-8 byte detection — pass via env to avoid injection
-      if echo "$line" | ACP_CODEPOINT="$codepoint_dec" python3 -c "
-import sys, os
-codepoint = int(os.environ.get('ACP_CODEPOINT', '0'))
-text = sys.stdin.read()
-c = chr(codepoint)
-if c in text:
-    col = text.index(c) + 1
-    print(col)
-    sys.exit(0)
-sys.exit(1)
-" 2>/dev/null; then
-        col=$(echo "$line" | ACP_CODEPOINT="$codepoint_dec" python3 -c "
-import sys, os
-codepoint = int(os.environ.get('ACP_CODEPOINT', '0'))
-text = sys.stdin.read()
-c = chr(codepoint)
-if c in text:
-    print(text.index(c) + 1)
-" 2>/dev/null)
-        col="${col:-?}"
-        if $JSON_MODE; then
-          FINDING_LINES+="{\"file\":\"$file\",\"line\":$line_num,\"col\":$col,\"char\":\"U+${hex}\",\"name\":\"$name\",\"rule\":\"IG-14\"},"$'\n'
-        else
-          echo "${file}:${line_num}:${col} U+${hex} — ${name}"
-        fi
-        FINDINGS=$((FINDINGS + 1))
-      fi
-    done
-    
-    # Check for AI-directive language (IG-20) — only in comments
-    # Match comment starters: //, #, /*, *, <!--
-    if echo "$line" | grep -qE '^[[:space:]]*(//|#|/\\*|\*|<!--)' 2>/dev/null; then
-      for pattern in "${AI_DIRECTIVE_PATTERNS[@]}"; do
-        if echo "$line" | grep -qi "$pattern" 2>/dev/null; then
-          if $JSON_MODE; then
-            FINDING_LINES+="{\"file\":\"$file\",\"line\":$line_num,\"pattern\":\"$pattern\",\"rule\":\"IG-20\"},"$'\n'
-          else
-            echo "${file}:${line_num} IG-20 — AI-directive language in comment: \"$pattern\""
-          fi
-          FINDINGS=$((FINDINGS + 1))
-        fi
-      done
-    fi
-  done < "$file"
-}
-
-# Scan files
-if [[ -f "$TARGET" ]]; then
-  scan_file "$TARGET"
-elif [[ -d "$TARGET" ]]; then
-  while IFS= read -r file; do
-    # Skip binary files, node_modules, .git
-    case "$file" in
-      */node_modules/*|*/.git/*|*.png|*.jpg|*.gif|*.ico|*.woff*|*.ttf|*.eot|*.pdf) continue ;;
-    esac
-    scan_file "$file"
-  done < <(find "$TARGET" -type f 2>/dev/null || true)
-else
+if [[ ! -e "$TARGET" ]]; then
   echo "Error: $TARGET not found" >&2
   exit 2
 fi
 
-# ── Output ────────────────────────────────────────────────────────────────────
+combined=$(ACP_TARGET="$TARGET" python3 -c "
+import os, re, sys
+from pathlib import Path
 
-if $JSON_MODE; then
-  echo "["
-  echo "$FINDING_LINES" | sed '/^$/d' | sed 's/,$//'
-  echo "]"
-fi
+target = Path(os.environ.get('ACP_TARGET', '.'))
+SKIP = {'node_modules', '.git'}
+HIDDEN = {
+    0x200B: ('IG-14', 'ZERO WIDTH SPACE'), 0x200C: ('IG-15', 'ZERO WIDTH NON-JOINER'),
+    0x200D: ('IG-16', 'ZERO WIDTH JOINER'), 0xFEFF: ('IG-38', 'BOM'),
+    0x00AD: ('IG-39', 'SOFT HYPHEN'), 0x180E: ('IG-61', 'MONGOLIAN VOWEL SEPARATOR'),
+    0x202A: ('IG-14', 'BIDI LRE'), 0x202B: ('IG-14', 'BIDI RLE'),
+    0x202C: ('IG-14', 'BIDI PDF'), 0x202D: ('IG-14', 'BIDI LRO'),
+    0x202E: ('IG-14', 'BIDI RLO'), 0x2066: ('IG-14', 'BIDI LRI'),
+    0x2067: ('IG-14', 'BIDI RLI'), 0x2068: ('IG-14', 'BIDI FSI'), 0x2069: ('IG-14', 'BIDI PDI'),
+    0x061C: ('IG-14', 'ARABIC LETTER MARK'),
+}
+AI = ['ignore previous instructions','ignore the above','do not flag','bypass security',
+      'skip this rule','system:','assistant:','forget previous','new instruction','as an AI']
+COMMENT = re.compile(r'^\\s*(//|#|/\\*|\\*|<!--)')
+findings = []
 
-if [[ $FINDINGS -gt 0 ]]; then
-  echo "" >&2
-  echo "Total findings: $FINDINGS hidden Unicode character(s) or AI-directive phrase(s) detected" >&2
-  if $CI_MODE; then
-    exit 1
+def scan(path: Path):
+    try: lines = path.read_text(encoding='utf-8', errors='replace').splitlines()
+    except OSError: return
+    for i, line in enumerate(lines, 1):
+        for j, ch in enumerate(line):
+            cp = ord(ch)
+            if cp in HIDDEN:
+                rule, name = HIDDEN[cp]
+                findings.append((str(path), i, rule, f'hidden Unicode U+{cp:04X} ({name})'))
+        if COMMENT.match(line):
+            low = line.lower()
+            for p in AI:
+                if p in low:
+                    findings.append((str(path), i, 'IG-20', f'AI-directive language: \"{p}\"'))
+
+def walk(root: Path):
+    if root.is_file(): scan(root); return
+    for p in root.rglob('*'):
+        if not p.is_file() or any(x in p.parts for x in SKIP): continue
+        scan(p)
+
+walk(target)
+for f, ln, rule, msg in findings:
+    print(f'{f}:{ln}:{rule}:{msg}')
+print(f'ACP_FINDING_COUNT={len(findings)}')
+sys.exit(0)
+" 2>&1)
+
+while IFS= read -r line; do
+  [[ -z "$line" || "$line" == ACP_FINDING_COUNT=* ]] && continue
+  if [[ "$line" =~ ^([^:]+):([0-9]+):(IG-[0-9]+):(.+)$ ]]; then
+    ig_emit_finding "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}" "${BASH_REMATCH[4]}"
   fi
-else
-  echo "✓ No hidden Unicode characters or AI-directive phrases detected" >&2
-fi
+done <<< "$(echo "$combined" | grep -v '^ACP_FINDING_COUNT=' || true)"
 
-exit 0
+ig_finalize_scan "unicode-scan"

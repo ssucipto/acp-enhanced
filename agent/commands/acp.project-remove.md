@@ -8,6 +8,7 @@
 **Created**: 2026-02-26  
 **Last Updated**: 2026-02-26  
 **Status**: Experimental  
+**Scripts**: acp.project-remove.sh  
 
 ---
 

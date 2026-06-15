@@ -1,9 +1,18 @@
 # Task 83: LLM Evaluator Implementation
 
+<!-- @acp.meta.task
+topic: llm, evaluator, implementation
+description: Task 83: LLM Evaluator Implementation
+milestone: M11
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: M11 - ACP Benchmark Suite  
 **Estimated Time**: 4-6 hours  
 **Dependencies**: Task 79 (runner infrastructure), Tasks 80-82 (at least one benchmark task to evaluate)  
-**Status**: Not Started  
 
 ---
 

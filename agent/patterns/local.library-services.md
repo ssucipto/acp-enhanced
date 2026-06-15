@@ -1,5 +1,13 @@
 # library-services
 
+<!-- @acp.meta.pattern
+topic: library-services
+description: Service layer, database layer, and API client layer architecture pattern for TypeScript libraries. This pattern establishes a clean separation of conc
+applies_to: testing, quality
+status: active
+updated: 2026-06-15
+@acp.meta.end -->
+
 **Version**: 1.0.0  
 **Last Updated**: 2026-02-20  
 **Namespace**: local  

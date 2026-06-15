@@ -1,9 +1,18 @@
 # Task 42: Preset Configuration System
 
+<!-- @acp.meta.task
+topic: preset, configuration, system
+description: Task 42: Preset Configuration System
+milestone: M6
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M6 - Preferences System](../milestones/milestone-6-preferences-system.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 37 (Preference Loading), Task 41 (Package Support)  
-**Status**: Not Started  
 
 ---
 

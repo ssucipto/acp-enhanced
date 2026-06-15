@@ -1,9 +1,18 @@
 # Task 45: Package Script Bundling Support
 
+<!-- @acp.meta.task
+topic: package, script, bundling, support
+description: Task 45: Package Script Bundling Support
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M5 - Global Package Installation](../milestones/milestone-5-global-package-installation.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Task 26 (Global Installation), Task 27 (Global Commands)  
-**Status**: Not Started  
 
 ---
 

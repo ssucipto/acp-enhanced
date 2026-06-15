@@ -3,7 +3,7 @@
 **Milestone**: M44
 **Version Target**: 6.9.0
 **Priority**: 5
-**Status**: in_progress
+**Status**: completed
 **Started**: 2026-06-03
 **Estimated Weeks**: 2–3
 

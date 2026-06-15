@@ -13,6 +13,15 @@ created: 2026-05-04
 completed: 2026-05-04
 ---
 
+<!-- @acp.meta.task
+topic: document, token, budget, as, discipline, not, technical, necessity
+description: Document token budget as discipline, not technical necessity
+milestone: M26
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Objective
 
 Add rationale to the context loading protocol explaining *why* the 2,800-token budget exists, making clear it is a discipline practice for reliable, reproducible session startup — not a hard technical limit imposed by LLM context windows. This prevents new users from either (a) dismissing the budget as unnecessary given modern 100K+ context models, or (b) treating it as a hard ceiling that cannot be reasoned about.

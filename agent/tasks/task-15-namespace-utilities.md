@@ -1,9 +1,18 @@
 # Task 15: Namespace Utilities
 
+<!-- @acp.meta.task
+topic: namespace, utilities
+description: Task 15: Namespace Utilities
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M4 - ACP Package Development System](../milestones/milestone-4-package-development.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: None  
-**Status**: Not Started  
 
 ---
 

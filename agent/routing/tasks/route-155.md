@@ -9,7 +9,7 @@ context_required: [milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
 files_affected: [agent/reports/research-taint-flow-calibration.md, agent/reports/research-memory-poisoning-ux.md]
 tokens_est: 12000
 created: 2026-06-08
-completed:
+completed: 2026-06-15
 ---
 
 # Route 155: Research Phase — Accuracy Calibration & UX Design

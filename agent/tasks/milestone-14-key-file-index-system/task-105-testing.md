@@ -1,9 +1,18 @@
 # Task 105: Testing
 
+<!-- @acp.meta.task
+topic: testing
+description: Task 105: Testing
+milestone: M14
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M14 - Key File Index System](../../milestones/milestone-14-key-file-index-system.md)  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: [Task 100](task-100-command-directive-integration.md), [Task 101](task-101-creation-command-integration.md), [Task 102](task-102-acp-index-command.md)  
-**Status**: Completed  
 
 ---
 

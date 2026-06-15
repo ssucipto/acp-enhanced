@@ -1,9 +1,18 @@
 # Task 27: Global Package Commands
 
+<!-- @acp.meta.task
+topic: global, package, commands
+description: Task 27: Global Package Commands
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M5 - Global Package Installation](../milestones/milestone-5-global-package-installation.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Task 26 (Global Installation Implementation)  
-**Status**: Not Started  
 
 ---
 

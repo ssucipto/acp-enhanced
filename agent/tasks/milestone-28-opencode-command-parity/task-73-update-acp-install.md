@@ -19,6 +19,15 @@ completed: 2026-05-04
 override_reason:
 ---
 
+<!-- @acp.meta.task
+topic: task, update, acpinstallsh, to, copy, opencodecommands
+description: Update acp.install.sh to copy .opencode/commands/
+milestone: M28
+status: draft
+updated: 2026-05-04
+@acp.meta.end -->
+
+
 ## Task: Update acp.install.sh to copy .opencode/commands/
 
 When `acp.install.sh` installs ACP from a fresh repo clone (`$TEMP_DIR`), it should also copy `.opencode/commands/` to the target project. Since the files are committed to the repo (per ADR-6), they are present in `$TEMP_DIR` after git clone.

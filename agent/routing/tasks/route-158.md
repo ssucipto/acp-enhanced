@@ -9,7 +9,7 @@ context_required: [milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
 files_affected: [e2e/acp.integrity-v2.test.sh, agent/commands/acp.integrity.md, agent/commands/acp.review.md, AGENT.md, CHANGELOG.md, package.yaml, agent/core/identity.yml, agent/progress.yaml, README.md, IP_REGISTER.md]
 tokens_est: 8000
 created: 2026-06-08
-completed:
+completed: 2026-06-15
 ---
 
 # Route 158: E2E Test + Release — v2.0 Validation & v6.13.0 Ship

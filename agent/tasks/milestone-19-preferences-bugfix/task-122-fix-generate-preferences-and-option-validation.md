@@ -1,10 +1,19 @@
 # Task 122: Fix generate_preferences Enumeration and Option Validation
 
+<!-- @acp.meta.task
+topic: fix, generatepreferences, enumeration, and, option, validation
+description: Task 122: Fix generate_preferences Enumeration and Option Validation
+milestone: M19
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Task ID**: task-122  
 **Milestone**: M19 — Preferences System Bug Fix Sprint  
 **Priority**: Critical  
 **Estimated Hours**: 3–4  
-**Status**: not_started  
 **Bugs Fixed**: BUG-2, BUG-3  
 **Files**: `agent/scripts/acp.preferences.sh`  
 

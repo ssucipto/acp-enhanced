@@ -9,7 +9,7 @@ context_required: [milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
 files_affected: [agent/scripts/acp.memory-scan.sh, agent/scripts/acp.taint-scan.sh]
 tokens_est: 8000
 created: 2026-06-08
-completed:
+completed: 2026-06-15
 ---
 
 # Route 157: Phase 2 Scripts — Memory Scanner + Taint Extractor

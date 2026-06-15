@@ -1,12 +1,14 @@
 # Task 73: Update AGENT.md Directory Tree Comments
 
 <!-- @acp.meta.task
-topic: notation, agent-md, crosscut
-description: Fix @acp-* hyphen notation in AGENT.md directory tree inline comments
+topic: update, agentmd, directory, tree, comments
+description: Task 73: Update AGENT.md Directory Tree Comments
 milestone: M20
-status: completed
-updated: 2026-05-01
+status: draft
+updated: 2026-06-15
 @acp.meta.end -->
+
+
 
 **Milestone**: [M20 - Consistency Cleanup](../milestones/milestone-20-consistency-cleanup.md)  
 **Estimated Time**: 10 minutes  

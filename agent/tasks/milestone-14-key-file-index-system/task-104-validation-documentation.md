@@ -1,9 +1,18 @@
 # Task 104: Validation & Documentation
 
+<!-- @acp.meta.task
+topic: validation, documentation
+description: Task 104: Validation & Documentation
+milestone: M14
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M14 - Key File Index System](../../milestones/milestone-14-key-file-index-system.md)  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: [Task 100](task-100-command-directive-integration.md), [Task 101](task-101-creation-command-integration.md)  
-**Status**: Completed  
 
 ---
 

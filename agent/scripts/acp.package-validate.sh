@@ -3,7 +3,8 @@
 # Comprehensive package validation with shell-based checks
 # Version: 1.0.0
 
-set -e
+set -euo pipefail
+trap 'echo "[acp.package-validate] Error on line $LINENO" >&2; exit 1' ERR
 trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Source common utilities

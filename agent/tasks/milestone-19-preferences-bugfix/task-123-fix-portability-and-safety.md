@@ -1,10 +1,19 @@
 # Task 123: Fix Portability and Safety Issues
 
+<!-- @acp.meta.task
+topic: fix, portability, and, safety, issues
+description: Task 123: Fix Portability and Safety Issues
+milestone: M19
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Task ID**: task-123  
 **Milestone**: M19 — Preferences System Bug Fix Sprint  
 **Priority**: High  
 **Estimated Hours**: 2–3  
-**Status**: not_started  
 **Bugs Fixed**: BUG-5, BUG-6, BUG-7, BUG-8, BUG-12  
 **Files**: `acp.preferences.sh`, `acp.yaml-parser.sh`, `acp.common.sh`  
 

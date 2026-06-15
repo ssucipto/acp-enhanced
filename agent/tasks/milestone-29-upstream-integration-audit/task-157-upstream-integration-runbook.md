@@ -11,6 +11,15 @@ started: 2026-05-05T00:00:00Z
 completed: 2026-05-05
 ---
 
+<!-- @acp.meta.task
+topic: create, upstream, integration, runbook, pattern
+description: Create upstream integration runbook pattern
+milestone: M29
+status: completed
+updated: 2026-05-05
+@acp.meta.end -->
+
+
 ## Objective
 
 Create `agent/patterns/local.upstream-integration-runbook.md` — a reusable step-by-step runbook for future upstream sync cycles, so the next integration analysis doesn't require a full-session deep-dive from scratch.

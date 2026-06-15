@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.12.1
+version: 6.20.2
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
@@ -190,6 +190,10 @@ contents:
         - acp.network-whitelist-validate.sh
         - acp.git-provenance.sh
         - acp.dependency-diff.sh
+        - acp.pattern-scan.sh
+        - acp.integrity-output.sh
+        - acp.taint-scan.sh
+        - acp.memory-scan.sh
     
     - name: acp.design-reference.md
       description: Generate design reference documents from existing designs
@@ -252,6 +256,68 @@ contents:
     - name: acp.validate.md
       description: Validate ACP structure
       scripts: []
+
+    - name: acp.commit.md
+      description: End-of-session memory commit and route stamping
+      scripts: []
+
+    - name: acp.decide.md
+      description: Create architecture decision records
+      scripts: []
+
+    - name: acp.dispatch.md
+      description: Dispatch routed tasks to OpenRouter models
+      scripts: []
+
+    - name: acp.route.md
+      description: Classify tasks and create routing files
+      scripts: []
+
+    - name: acp.task.md
+      description: Create routing task files
+      scripts: []
+
+    - name: acp.feedback.md
+      description: Capture and process user feedback
+      scripts: []
+
+    - name: acp.visualize.md
+      description: Launch ACP Enhanced Visualizer dashboard
+      scripts: []
+
+    - name: acp.wiki-update.md
+      description: Update wiki reference files by section
+      scripts: []
+
+    - name: acp.carryover-query.md
+      description: Search audit carryovers registry
+      scripts: []
+
+    - name: acp.cost-report.md
+      description: Weekly AI token spend and routing report
+      scripts: []
+
+    - name: acp.memory-sync.md
+      description: Compact and sync memory registries to documents
+      scripts: []
+
+    - name: acp.pattern-sync.md
+      description: Sync patterns registry to pattern documents
+      scripts: []
+
+    - name: acp.session-sync.md
+      description: Sync sessions registry to session documents
+      scripts: []
+
+    - name: acp.rule-file-audit.md
+      description: Fast pre-commit integrity scan alias for ACP rule files
+      scripts:
+        - acp.unicode-scan.sh
+
+    - name: acp.install.md
+      description: Install ACP commands and scripts into a project
+      scripts:
+        - acp.install.sh
 
     # Preferences Commands
     - name: acp.preferences-create.md
@@ -451,7 +517,7 @@ contents:
 
 # Compatibility requirements
 requires:
-  acp: >=3.13.0
+  acp: ">=3.13.0"
 
 # Tags for package discovery
 tags:

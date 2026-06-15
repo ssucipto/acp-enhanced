@@ -1,9 +1,18 @@
 # Task 7: Update System
 
+<!-- @acp.meta.task
+topic: update, system
+description: Task 7: Update System
+milestone: 
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
+
+
+
 **Milestone**: [M3 - ACP Package Management System](../milestones/milestone-3-acp-package-management.md)  
 **Estimated Time**: 5-7 hours  
 **Dependencies**: Task 5 (Manifest System), Task 6 (Selective Installation)  
-**Status**: Not Started  
 **Priority**: High  
 
 ---

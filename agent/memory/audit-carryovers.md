@@ -34,9 +34,9 @@ carryovers:
     finding: "Hooks block format diverged from milestone plan — 2 of 3 planned hooks dropped (pre_commit_integrity_phase1, ci_npm_ignore_scripts)"
     description: "Milestone plan specified 3 boolean hooks; implementation uses task_id array binding. Better architecture but missing 2 hooks. Document as ADR."
     fix_target: "Create ADR documenting format change. Add ci_npm_ignore_scripts hook if CI enforces it."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "078"
     escalated_to: null
 
   - audit_id: 62
@@ -46,9 +46,9 @@ carryovers:
     finding: "3 milestone verification checklist items unverified — disabled exclusion, frequency/trigger XOR, executor cross-validation"
     description: "Step 4.5 doesn't exclude disabled tasks. Schema doesn't enforce frequency/trigger mutual exclusivity. No executor validation against taxonomy.yml."
     fix_target: "Add disabled exclusion to Step 4.5. Add XOR constraint to progress.schema.yaml. Add executor cross-check to validate Step 2d."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "078"
     escalated_to: null
 
   - audit_id: 62
@@ -58,10 +58,10 @@ carryovers:
     finding: "No automated next_due calculation — manual date updates prone to drift and human error"
     description: "After running a recurring task, the developer must manually update last_run and next_due. No auto-increment based on frequency."
     fix_target: "Implement acp.task-complete.sh helper or --complete flag that auto-sets last_run=today and next_due=today+frequency."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "078"
+    escalated_to: "M59 post-completion follow-up route (route-188 per audit-073). Automated next_due calculation deferred to M62 route-176 per audit-072 escalation. last_findings_count added (F-062-05)."
 
   - audit_id: 62
     finding_id: F-062-04
@@ -70,9 +70,9 @@ carryovers:
     finding: "No reference git hook implementation for pre-commit-rule-audit trigger"
     description: "The on-commit trigger has no example .git/hooks/pre-commit script showing how to wire /acp-integrity --fast --ci."
     fix_target: "Create agent/examples/pre-commit-hook.sh with 5-line reference implementation."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "078"
     escalated_to: null
 
   - audit_id: 62
@@ -82,9 +82,9 @@ carryovers:
     finding: "No findings-to-task feedback loop — scan results not connected to recurring task status"
     description: "Weekly integrity scan could find same issue for months without automated tracking. No last_findings_count or deferred_findings field."
     fix_target: "Add last_findings_count field to recurring_tasks entries. Defer full findings DB integration to M58."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "078"
     escalated_to: null
 
   # ── AUDIT-014 FINDINGS — ALL FIXED IN M41 (routes 022–035, v6.7.0) ──────────
@@ -467,9 +467,9 @@ carryovers:
     finding: "Step 7 checks directory existence instead of file count — empty dirs from step 1 cause download skip"
     description: "Step 1 creates empty agent/commands/ and agent/scripts/ directories. Step 7 checks [ -d agent/commands ] && [ -d agent/scripts ] — directory exists (true) even when empty, so the install download is always skipped on fresh installs. Every new user gets 0 command files and 0 script files."
     fix_target: "Replace directory check with file count check using find ... | wc -l pattern (same as pre-flight check at line 89)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-06
+    verified_in_audit: "046"
     escalated_to: null
 
   - audit_id: 45
@@ -479,9 +479,9 @@ carryovers:
     finding: "OpenCode command generation nested inside GENERATE_PROMPTS block — skipped when prompts not generated"
     description: "Step 6b (opencode/cursor command generation) is inside if [ GENERATE_PROMPTS = true ]. GENERATE_OPENCODE defaults to true but is never independently checked. When prompts are skipped, .opencode/commands/ and .cursor/commands/ are never created."
     fix_target: "Extract opencode generation into separate if [ GENERATE_OPENCODE = true ] block independent of GENERATE_PROMPTS"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-06-06
+    verified_in_audit: "046"
     escalated_to: null
 
   - audit_id: 45
@@ -491,7 +491,771 @@ carryovers:
     finding: "Post-install verification detects failures but exits 0 — no auto-repair or fix command"
     description: "Verification correctly shows 0 files (red X) but bootstrap exits 0 and says Done. User sees failure but gets no remediation path."
     fix_target: "Exit non-zero on verification failure; print remediation command (re-run bootstrap or curl acp.install.sh)"
+    status: fixed
+    fix_applied_date: 2026-06-06
+    verified_in_audit: "065"
+    escalated_to: null
+
+  # ── AUDIT-065 FINDINGS — COMPREHENSIVE GAP ANALYSIS 2026-06-15 ──────────────
+
+  - audit_id: 65
+    finding_id: CRIT-065-001
+    severity: medium  # DOWNGRADED by audit-066: decisions.md is gitignored instance data (.gitignore:34), not missing storage
+    file: agent/memory/decisions.md
+    finding: "This framework-dev project never ran /acp-decide — its own 57-milestone ADR history is uncaptured (file auto-creates on first use; storage is NOT missing)"
+    fix_target: "Run /acp-decide to capture this project's key ADRs; reconstruct 6 from wiki/patterns/commit history. De-prioritized vs code bugs per audit-066."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "073"
+    verified_in_audit: "066 (reclassified)"
+    escalated_to: null
+
+  - audit_id: 65
+    finding_id: CRIT-065-002
+    severity: critical
+    file: GitHub repository settings
+    finding: "No branch protection rules on mainline or develop — force-push and direct commits unblocked"
+    fix_target: "Enable required status checks + PR review requirement on mainline; disable force-push"
     status: pending
     fix_applied_date: null
     verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 65
+    finding_id: CRIT-065-003
+    severity: critical
+    file: e2e/
+    finding: "46 of 71 commands (65%) have no E2E test — core commands /acp-init, /acp-proceed, /acp-plan, /acp-dispatch, /acp-commit, /acp-validate, /acp-audit, /acp-route all untested"
+    fix_target: "Add E2E tests in three tiers: Tier 1 (8 core commands), Tier 2 (12 package/project), Tier 3 (16 memory/knowledge)"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "074"
+    escalated_to: null
+
+  - audit_id: 65
+    finding_id: HIGH-065-004
+    severity: high
+    file: agent/scripts/ (17 files)
+    finding: "17 scripts use bare 'set -e' not 'set -euo pipefail' — unbound variable bugs silently succeed; pipeline failures masked"
+    fix_target: "Batch-upgrade acp.install.sh, acp.package-*.sh, acp.project-info.sh, acp.project-update.sh, acp.sessions.sh, acp.uninstall.sh, acp.version-*.sh"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 65
+    finding_id: HIGH-065-005
+    severity: high
+    file: .github/workflows/
+    finding: "No Windows CI runner — Windows is documented target platform but has no automated test coverage"
+    fix_target: "Add windows-latest to e2e-tests.yaml matrix (ubuntu + macOS + Windows)"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 65
+    finding_id: HIGH-065-006
+    severity: high
+    file: SECURITY.md
+    finding: "No SECURITY.md / vulnerability disclosure process for open-source production tooling"
+    fix_target: "Create SECURITY.md with private advisory process + scope definition"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  # ── AUDIT-066 FINDINGS — SECOND-ROUND DEEP GAPS 2026-06-15 ──────────────────
+
+  - audit_id: 66
+    finding_id: HIGH-066-001
+    severity: high
+    file: scripts/acp-dispatch.ts
+    finding: "updateRoutingYml() overwrites entire core/routing.yml with a 4-line session stub — destroys context_modes + command_suggestions on every Persona B/C dispatch (tracked file = committed data loss)"
+    fix_target: "Replace full-file writeFileSync with surgical session-block update (use yaml_set or targeted regex). Add regression test asserting context_modes survives dispatch."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 66
+    finding_id: HIGH-066-005
+    severity: high
+    file: .github/workflows/ci.yaml
+    finding: "acp-validate.ts never runs in CI — placeholder + frontmatter-field checks never execute; CI only runs ci-validate.sh"
+    fix_target: "Add 'npx ts-node scripts/acp-validate.ts' as a CI step in ci.yaml validate job"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 66
+    finding_id: HIGH-066-006
+    severity: high
+    file: scripts/ci-validate.sh
+    finding: "ci-validate.sh frontmatter check is a no-op for command files — gates on head -1 grep '^---$' but command docs start with '# Command:' (inline bold markers, not --- YAML). No automated structural conformance check exists for command docs."
+    fix_target: "Add command-doc structure validation (## Steps, ## Verification, **Namespace**: etc.) instead of gating on a --- line command files never have"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 66
+    finding_id: MED-066-002
+    severity: medium
+    file: scripts/acp-dispatch.ts
+    finding: "OPENROUTER_API_KEY non-null assertion (process.env.X!) — missing env var yields cryptic SDK error not a clear preflight message"
+    fix_target: "Add preflight check: fail fast with clear message if OPENROUTER_API_KEY unset before client init"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 66
+    finding_id: MED-066-003
+    severity: medium
+    file: scripts/
+    finding: "No unit tests for TS tooling — scripts/*.test.ts = 0 files; acp-dispatch.ts and acp-validate.ts entirely untested (only Turing-complete code in repo)"
+    fix_target: "Add vitest/jest + scripts/*.test.ts covering buildContext budget, getFilteredLessons, updateRoutingYml non-destructiveness"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 66
+    finding_id: MED-066-007
+    severity: medium
+    file: agent/schemas/
+    finding: "Only 5 schemas exist; no schema for milestone/session/lessons/decisions/clarification/feedback/audit-carryovers — memory layer is unvalidated. Also acp-validate.ts does not enforce the 5 schemas that do exist."
+    fix_target: "Add memory-layer entity schemas + wire acp-validate.ts to enforce all schemas"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-067 FINDINGS — COMPLETE CONSOLIDATED AUDIT 2026-06-15 ─────────────
+  # NOTE: audit-067 Part B is the canonical deduplicated backlog. Entries below
+  # are NEW findings only; prior 065/066 entries remain authoritative above.
+
+  - audit_id: 67
+    finding_id: HIGH-067-001
+    severity: high
+    file: package.yaml
+    finding: "13 command docs absent from package.yaml — /acp-package-install would ship a broken framework missing acp.commit, acp.decide, acp.dispatch, acp.route, acp.task, acp.feedback, acp.visualize, acp.wiki-update, acp.carryover-query, acp.cost-report, acp.memory-sync, acp.pattern-sync, acp.session-sync"
+    fix_target: "Add the 13 commands to package.yaml; add CI guard asserting package.yaml command count == command file count"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 67
+    finding_id: MED-067-002
+    severity: medium
+    file: AGENTS.md
+    finding: "AGENTS.md version header reads v6.10.0 while project is 6.12.1 — auto-loaded context file is 2 minors stale; three sync files not byte-identical (AGENTS.md has extra version header line)"
+    fix_target: "Update AGENTS.md header to current version; add version-header check to /acp-validate Step 2c consistency check"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 67
+    finding_id: MED-067-003
+    severity: medium
+    file: e2e/acp.integrity.test.sh
+    finding: "Rule-count assertion uses grep -cE '^| IG-\\d+' but \\d is not a digit class in POSIX ERE (GNU grep -E) — matches literal 'd'; rule count miscomputed and non-portable"
+    fix_target: "Replace \\d with [0-9] or use grep -P; verify >= 55 assertion actually computes correctly"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "074"
+    escalated_to: null
+
+  - audit_id: 67
+    finding_id: MED-067-005
+    severity: medium
+    file: CONTRIBUTING.md
+    finding: "No CONTRIBUTING.md despite being a public fork inviting contributions"
+    fix_target: "Create CONTRIBUTING.md with branch model, test requirements, command-doc conventions"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "074"
+    escalated_to: null
+
+  - audit_id: 67
+    finding_id: LOW-067-004
+    severity: low
+    file: agent/scripts/acp.git-provenance.sh
+    finding: "Parses team_members with grep/while-read instead of YAML parser — violates scripts.md 'never parse YAML with grep' rule"
+    fix_target: "Use yaml_get_array from acp.yaml-parser.sh to read team_members"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-068 FINDINGS — M57 & M58 IMPLEMENTATION DEEP DIVE (2026-06-15) ─────
+  # Note: M57's own findings F-062-01..05 remain pending (mapped to route-176/M62);
+  # not re-listed here. Below are NEW findings only. See audit-068 report for full detail.
+
+  - audit_id: 68
+    finding_id: F-068-01
+    severity: high
+    file: agent/progress.yaml
+    finding: "M54-M57 milestone artifact files missing; progress.yaml file: pointers dangle (e.g. M57 -> milestone-57-recurring-tasks-scheduler.md does not exist)"
+    description: "GITIGNORE ARTIFACT — milestone-55/56/57/58 were tracked on origin all along; local gitignore hid them. Resolved 2026-06-15 by merging origin/develop (commit 90239d9). Residual: only M54 (milestone-54-ci-cd-gitflow.md) genuinely missing — see F-069-09."
+    fix_target: "Resolved by sync. Residual M54 dangling pointer tracked as F-069-09."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "069"
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-02
+    severity: high
+    file: agent/milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
+    finding: "M58 marked in_progress (25%) but routes 156/157/158 never expanded into route files; no acp.taint-heuristic.sh exists — claimed capability not runnable"
+    description: "GITIGNORE ARTIFACT (route files) — routes 155-158 were tracked on origin; resolved 2026-06-15 by sync (commit 90239d9). The real residual is that route-157 scripts (acp.taint-scan.sh/acp.memory-scan.sh) remain unimplemented (route-157 not started) and route-155 under-delivered — see F-069-03/F-069-10."
+    fix_target: "Route-file gap resolved by sync. Script implementation + route-155 scope tracked as F-069-03/F-069-10."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "069"
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-03
+    severity: high
+    file: agent/memory/audit-carryovers.md
+    finding: "M57 shipped with HIGH carryover F-062-03 (no automated next_due -> manual date drift) still pending; currently queued late in route-176/M62"
+    description: "A HIGH correctness gap lives in a shipped feature (recurring scheduler). Consider promoting F-062-03 out of M62 into the M59 critical track."
+    fix_target: "Promote F-062-03 (auto next_due helper / --complete flag) to M59; keep F-062-01/02/04/05 in route-176."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-04
+    severity: medium
+    file: agent/benchmarks/fixtures/taint-flow/manifest.yaml
+    finding: "Fixture manifest encodes severity but not the research-mandated max_confidence/CI policy; route-158 E2E built on severity alone could assert CRITICAL output, contradicting v2.0 'never CRITICAL in --ci' self-protection"
+    description: "research-m58 mandates MEDIUM confidence ceiling and advisory-only taint findings. Severity (impact) != confidence (certainty)."
+    fix_target: "Add max_confidence + ci_blocking per fixture aligned to the calibration matrix; update route-157/158 acceptance to assert no CRITICAL auto-fail on taint fixtures."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-07
+    severity: medium
+    file: agent/wiki/integrity-rules.md
+    finding: "Neither integrity-rules.md nor acp.integrity.md reflect any v2.0 surface (still v1.0 / 'DEFERRED to v2.0'); wiki '55 v1.0 + 15 deferred' header going stale as M58 progresses"
+    description: "Consistent with route-156 not_started, but doc surface unchanged despite M58 in_progress + fixtures shipped."
+    fix_target: "Covered by route-156 (M58 doc/wiki/skill update); ensure header counts updated when v2.0 rules land."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-10
+    severity: low
+    file: agent/progress.yaml
+    finding: "quarterly-deep-scan recurring task invokes unbuilt M58 capability (--rules taint-flow,memory); scheduled (next_due 2026-09-08) for a feature not yet implemented"
+    fix_target: "Align quarterly-deep-scan activation with M58 delivery; gate or annotate until v2.0 ships."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-12
+    severity: low
+    file: agent/scripts/acp.meta-scan.sh
+    finding: "Uses set -eu + ERR trap but not -o pipefail (partial case of audit-065 H4); not in route-173's 17-file list"
+    fix_target: "Add acp.meta-scan.sh to route-173 pipefail scope, or upgrade its header to set -euo pipefail."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "073"
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-069 FINDINGS — M57 & M58 POST-SYNC RE-AUDIT (2026-06-15) ───────────
+  # Performed after merging origin/develop (commit 90239d9) which un-gitignored
+  # milestones/tasks/routing/memory. Supersedes audit-068 F-068-01/02 (now fixed).
+  # See agent/reports/audit-069-m57-m58-post-sync-reaudit.md for full detail.
+
+  - audit_id: 69
+    finding_id: F-069-01
+    severity: high
+    file: agent/milestones/milestone-57-recurring-tasks-scheduler.md
+    finding: "Status desync — milestone-57.md & milestone-58.md say 'Status: planned / Started: —', contradicting progress.yaml (M57 completed 100% / M58 in_progress 25%) and git history"
+    description: "Synced planning docs are pre-completion versions. A reader of the milestone file would conclude work never started. Single-source-of-truth violation introduced by the sync."
+    fix_target: "Re-stamp milestone-57 -> completed, milestone-58 -> in_progress; add /acp-validate check flagging milestone/route status that disagrees with progress.yaml."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-02
+    severity: high
+    file: agent/routing/tasks/route-155.md
+    finding: "route-155 completion desync — deliverables exist (research + 12 fixtures + manifest) and progress.yaml counts M58 1/4 done, but synced route-155.md completed: is empty"
+    description: "Four tracking layers disagree on whether route-155 is done. Auto-stamp (/acp-commit protocol) never ran on the synced route file."
+    fix_target: "Fill completed: on route-150..155; reconcile progress.yaml tasks_completed with route stamps."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-03
+    severity: high
+    file: agent/artifacts/research-m58-taint-flow-calibration.md
+    finding: "route-155 scope under-delivery vs milestone-58 §7 — no 10 taint-flow CVEs, no TypeScript sample, no ESLint-security comparison, no empirical TPR (self-deferred to route-158), no memory-poisoning UX document — yet counted complete"
+    description: "Research is solid literature calibration with JS fixtures but does not meet the milestone's empirical acceptance criteria."
+    fix_target: "Either finish missing scope (empirical TPR vs ESLint, memory-poisoning UX doc) OR descope milestone-58 §7/§10 via ADR to the literature-calibration approach actually taken."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-04
+    severity: high
+    file: agent/milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
+    finding: "Go/No-Go gate unsatisfiable as sequenced — §10 gates routes 156-158 on empirical taint TPR, but research measures no TPR ('measured in route-158') and route-158 is gated by the gate"
+    description: "Circular dependency: the gate needs route-158's measurement; route-158 is blocked by the gate. The 'proceed' decision rests on literature estimates, not the mandated benchmark."
+    fix_target: "Restructure the gate: move empirical TPR measurement into route-155/156 (before the gate), or accept literature ceilings explicitly via ADR and remove the empirical precondition."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-05
+    severity: high
+    file: agent/memory/audit-carryovers.md
+    finding: "All 5 audit-062 (M57) carryovers still pending incl. F-062-03 (no automated next_due -> date drift) in a shipped feature; queued late in route-176/M62"
+    description: "Reconfirms audit-068 F-068-03. M57's own audit findings remain open."
+    fix_target: "Promote F-062-03 (auto next_due helper / --complete flag) to M59; keep F-062-01/02/04/05 in route-176."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: "M59 post-completion follow-up route (route-188 per audit-073). F-062-03 promoted."
+
+  - audit_id: 69
+    finding_id: F-069-09
+    severity: medium
+    file: agent/progress.yaml
+    finding: "M54 dangling milestone pointer — progress.yaml M54 -> milestone-54-ci-cd-gitflow.md does not exist even after sync; M54 status active/30% with tasks_total: 0"
+    description: "Residual of audit-068 F-068-01, now scoped to M54 only. tasks_total: 0 with active/30% is itself inconsistent."
+    fix_target: "Create milestone-54-ci-cd-gitflow.md or remove the pointer; fix tasks_total vs progress."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "073"
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-10
+    severity: low
+    file: agent/routing/tasks/route-157.md
+    finding: "Script naming mismatch — research recommends acp.taint-heuristic.sh; route-157/milestone-58 call them acp.taint-scan.sh + acp.memory-scan.sh (none exist yet)"
+    fix_target: "Reconcile to one canonical script name before route-157 implementation."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: null
+
+  # ── AUDIT-072 FINDINGS — M58 POST-IMPL VERIFICATION (2026-06-15) ─────────────
+
+  - audit_id: 72
+    finding_id: F-072-01
+    severity: high
+    file: agent/wiki/integrity-rules.md
+    finding: "Wiki header still says 'Deferred v2.0: 15 rules' after M58 un-deferred Cat 8/10"
+    fix_target: "Update header to v2.0.0 with Phase 2 active and 70 total rules."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: null
+
+  - audit_id: 72
+    finding_id: F-072-02
+    severity: high
+    file: agent/scripts/acp.taint-scan.py
+    finding: "Taint heuristics missed IG-47/48/50 on calibration fixtures (3/6 vulnerable fixtures returned clean)"
+    fix_target: "Add file-level flow heuristics for indirect source→sink patterns; IG-50 LOW confidence."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: null
+
+  - audit_id: 72
+    finding_id: F-072-03
+    severity: medium
+    file: e2e/acp.integrity-v2.test.sh
+    finding: "E2E v2 only tested IG-45 fixture — not full 6-rule taint matrix"
+    fix_target: "Add B13-B16: manifest fields, full matrix, --ci non-blocking, IG-50 LOW."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "072"
+    escalated_to: null
+
+  # ── AUDIT-070 FINDINGS — M55–M58 GATEWAY DEEP DIVE (2026-06-15) ──────────────
+
+  - audit_id: 70
+    finding_id: F-070-01
+    severity: high
+    file: agent/scripts/acp.entropy-scan.sh
+    finding: "Entropy scanner crashes (exit 3) on every positive finding — set -e + output=$(...) where python uses sys.exit(findings) as data channel"
+    description: "Under set -euo pipefail with ERR trap, the failing command substitution (python exits non-zero when findings>0) fires the trap and exits 3 before findings are printed. Scanner only works when it finds nothing; IG-17/IG-18 detection is non-functional."
+    fix_target: "Stop using process exit code as count. Guard substitution (|| true / set +e) and parse count from stdout. Add true-positive E2E fixture."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: 071
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-02
+    severity: high
+    file: agent/scripts/acp.network-whitelist-validate.sh
+    finding: "Claimed rule coverage >> implemented — ~18 of 55 v1.0 rules real. CRITICAL exfiltration (IG-07–13) and persistence (IG-21–26) categories have NO detection; IG-04/IG-05 also absent"
+    description: "Command doc/wiki/skill/milestone present these as script-backed; the network script implements only IG-01,02,03,06. 18+ mostly-CRITICAL malicious-code rules silently pass — false assurance for a security gate."
+    fix_target: "Implement the rules or relabel as 'documented, not enforced'; ship an accurate coverage matrix; gate --ci accordingly."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-03
+    severity: high
+    file: e2e/acp.integrity.test.sh
+    finding: "Integrity E2E never exercises detection logic — B1 doesn't invoke the scanner; B2/B3 only test clean-file exit-0; B4 baseline only greps AGENTS.md; 4 scripts only bash -n syntax-checked"
+    description: "The non-negotiable false-positive baseline promised in M56 §8 (assert_finding_count CRITICAL/HIGH 0 by running the gate) does not exist. F-070-01/02/06 all pass CI green."
+    fix_target: "Add per-rule fixture matrix (true+/true- per script-backed rule) that runs real scripts and asserts rule ID + exit code; add the real clean-codebase baseline. Reuse M58 benchmarks/fixtures pattern."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: 071
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-04
+    severity: high
+    file: agent/scripts/acp.unicode-scan.sh
+    finding: "O(lines × 16 codepoints × 2) python3 spawns — up to 32 interpreter starts per line; unusable as pre-commit/CI gate on real repos"
+    fix_target: "Single python3 pass per file (or per tree) scanning the full codepoint set and emitting all findings with line/col."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: 071
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-05
+    severity: medium
+    file: agent/skills/code-integrity.md
+    finding: "No script honors the documented output contract — skill defines findings: YAML with severity+confidence; scripts emit ad-hoc, mutually inconsistent text with no severity/confidence"
+    fix_target: "Standardize on [SEVERITY] file:line ruleID — message (M55 format) and/or --json across all six scripts."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: 071
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-06
+    severity: medium
+    file: agent/scripts/acp.dependency-diff.sh
+    finding: "--ci severity semantics contradict spec — doc says exit 1 on CRITICAL/HIGH only; scripts exit 1 on ANY finding. MEDIUM (IG-30/31) and IG-28 'postinstall present' break CI on normal projects"
+    fix_target: "Scripts must emit severity; --ci filters to CRITICAL/HIGH only."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-07
+    severity: medium
+    file: agent/skills/code-integrity.md
+    finding: "Skill 'Rules Covered' table overstates 4/6 scripts (git-prov claims IG-34/35 not impl, omits IG-36; dep-diff claims IG-29/32 not impl; network claims IG-05 not impl; unicode claims IG-16 homoglyphs not impl)"
+    fix_target: "Align coverage tables (skill + script headers) to actual implementation."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-08
+    severity: medium
+    file: agent/scripts/acp.dependency-diff.sh
+    finding: "Typosquatting is substring match over ~60 hardcoded packages, not Levenshtein 1–2 from top-1000 as claimed; misses real squats. IG-29 (shadow deps — the script's namesake) and IG-32 not implemented"
+    fix_target: "Implement real Levenshtein (python helper); implement IG-29 by diffing imports/package.json vs lockfile; or descope honestly."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-09
+    severity: medium
+    file: agent/scripts/acp.network-whitelist-validate.sh
+    finding: "YAML parsed with grep/sed across gateway — whitelist loader grabs ANY '- ' list item (not scoped to approved_hosts:), fail-open; same in git-provenance + manifest verify. Violates scripts.md (LOW-067-004 class)"
+    fix_target: "Use agent/scripts/acp.yaml-parser.sh; scope extraction to the correct key."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-10
+    severity: medium
+    file: agent/scripts/acp.dependency-diff.sh
+    finding: "IG-31 stale-lockfile uses file mtime — unreliable in git checkouts/CI (clone resets mtimes to checkout time)"
+    fix_target: "Use git log -1 --format=%ct -- <file> for both files."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-11
+    severity: medium
+    file: agent/scripts/acp.git-provenance.sh
+    finding: "IG-37 provenance is a no-op out of the box — identity.yml ships team_members: [] so author verification is silently skipped for every commit"
+    fix_target: "Emit explicit IG-37 SKIPPED warning when team_members empty; document first-run setup."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-12
+    severity: medium
+    file: agent/scripts/acp.manifest-hash.sh
+    finding: "IG-41 (new files in agent/core/ not in manifest) structurally undetectable — manifest tracks hardcoded 7-file list, never enumerates directory. --generate prints to stdout (not the file) while --verify reads the file"
+    fix_target: "Glob tracked directories at generate time; have --generate write agent/manifest.yaml (with --stdout opt-out)."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-13
+    severity: low
+    file: agent/scripts/acp.unicode-scan.sh
+    finding: "Mis-attributes rule IDs (JSON hardcodes IG-14 for all hidden-char hits; human output omits rule ID). Comment-detector ERE '/\\\\*' won't match real /* block comments"
+    fix_target: "Map codepoint class → correct rule (IG-14/15/16); fix comment regex."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-14
+    severity: low
+    file: e2e/acp.integrity.test.sh
+    finding: "Rule-count assertion uses grep -cE '^\\| IG-\\d+' — \\d is literal in ERE → count 0, [ 0 -ge 55 ] fails (masked by || echo 0). Same class as F-067-003"
+    fix_target: "Use grep -cE '^\\| IG-[0-9]+'."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-15
+    severity: low
+    file: agent/scripts/acp.manifest-hash.sh
+    finding: "Portability — shasum -a 256 only (many Linux CI images have sha256sum not shasum); unicode/entropy hard-require python3 and silently degrade to exit-2 warning if absent"
+    fix_target: "Fall back to sha256sum/openssl dgst; document python3 requirement / make absence a hard error in --ci."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 70
+    finding_id: F-070-16
+    severity: low
+    file: agent/skills/code-integrity.md
+    finding: "Token-budget inconsistency — skill header says ≤800 tokens; M56 deliverable + checklist specified ≤500"
+    fix_target: "Pick one budget; update M56 checklist to match."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-071 FINDINGS — M59/M64 POST-IMPL (2026-06-15) ─────────────────────
+
+  - audit_id: 71
+    finding_id: F-071-01
+    severity: high
+    file: agent/core/identity.yml
+    finding: "v6.19.0 / M64 completion tracked locally but uncommitted — version drift vs git HEAD c7a1a9b"
+    description: "M64 routes 180–184, fixtures, CI wiring, and doc truth pass exist in working tree at v6.19.0 but are not in git history. Operators see completed milestone in progress.yaml while HEAD is v6.14.1."
+    fix_target: "Commit v6.19.0 bundle: scripts, fixtures, E2E, CI, wiki, progress, CHANGELOG."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: 071
+    escalated_to: null
+
+  # ── AUDIT-073 FINDINGS — M65 POST-IMPL VERIFICATION (2026-06-15) ─────────────
+
+  - audit_id: 73
+    finding_id: F-073-04
+    severity: low
+    file: agent/progress.yaml
+    finding: "191 duplicate YAML mapping keys (started:, completed_date:) across task entries cause js-yaml parse failure; validate.ts fallback loader works but hides the symptom"
+    description: "Systemic duplication from accumulated session writes. The fallback loader masks the issue but the underlying YAML is still corrupt. Fix requires a dedup script."
+    fix_target: "Create acp.dedup-progress.sh or a one-time cleanup that deduplicates started:/completed_date: fields on task entries, keeping the most recent value. Deferred to M70 tech-debt track."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-075 FINDINGS — M61 POST-IMPL DEEP DIVE (2026-06-15) ─────────────────
+  # All findings were discovered and fixed in the same audit cycle. Listed
+  # for historical traceability; status: fixed with fix_applied_date set.
+
+  - audit_id: 75
+    finding_id: F-075-001
+    severity: high
+    file: SECURITY.md
+    finding: "YOUR_ORG placeholder in GitHub Security Advisories URL — link broken for external researchers"
+    fix_target: "Replace YOUR_ORG with ssucipto per identity.yml repo field"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 75
+    finding_id: F-075-002
+    severity: medium
+    file: SECURITY.md
+    finding: "Version footer stale — says 6.20.2, project is 6.20.7"
+    fix_target: "Update version footer to match current project version"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 75
+    finding_id: F-075-003
+    severity: low
+    file: SECURITY.md
+    finding: "Fallback contact underspecified — no encryption-key path, email-only for sensitive reports"
+    fix_target: "Add keyserver reference and note about encrypted email"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 75
+    finding_id: F-075-004
+    severity: high
+    file: .github/workflows/ci.yaml
+    finding: "Trufflehog uses unpinned trufflesecurity/trufflehog@main — violates IG-67 pinned-SHA requirement"
+    fix_target: "Pin to commit SHA 84a2b33c9f891494db6ebe02f2a55b19cdf38f25 with version comment"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 75
+    finding_id: F-075-005
+    severity: medium
+    file: .github/workflows/e2e-tests.yaml
+    finding: "Windows CI added without conditional test-skipping mechanism for non-portable suites (task spec item #4 not implemented)"
+    fix_target: "Add documented protocol comment for Windows suite authors"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 75
+    finding_id: F-075-006
+    severity: low
+    file: .github/dependabot.yml
+    finding: "open-pull-requests-limit set for npm (5) but not github-actions (unlimited by default)"
+    fix_target: "Add open-pull-requests-limit: 5 to github-actions block"
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "075"
+    escalated_to: null
+
+  - audit_id: 76
+    finding_id: F-076-001
+    severity: high
+    file: CHANGELOG.md
+    finding: "v6.21.0 entry appears AFTER v6.20.9. Reverse chronological order violated — newest release should be first entry."
+    fix_target: "Move ## [6.21.0] entry before ## [6.20.9]."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
+    escalated_to: null
+
+  - audit_id: 76
+    finding_id: F-076-002
+    severity: medium
+    file: agent/milestones/milestone-62-quality-hardening-schema-carryovers.md
+    finding: "**Status**: planned — never updated to completed. Milestone fully shipped (7/7 routes, v6.21.0 tagged)."
+    fix_target: "Change Status to completed, set completion date to 2026-06-15."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
+    escalated_to: null
+
+  - audit_id: 76
+    finding_id: F-076-003
+    severity: medium
+    file: agent/milestones/milestone-62-quality-hardening-schema-carryovers.md
+    finding: "Verification gate has 4 aspirational bullets with no pass/fail markers (no ✅/❌/⏳)."
+    fix_target: "Populate verification gate with actual pass/fail results."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
+    escalated_to: null
+
+  - audit_id: 76
+    finding_id: F-076-004
+    severity: medium
+    file: agent/progress.yaml
+    finding: "monthly-dependency-audit missing last_findings_count — F-062-05 only added to 3 of 4 recurring_tasks."
+    fix_target: "Add last_findings_count: 0 to monthly-dependency-audit."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
+    escalated_to: null
+
+  - audit_id: 76
+    finding_id: F-076-005
+    severity: low
+    file: agent/scripts/acp.yaml-validate.sh
+    finding: "Standalone executable script with no set -e or set -euo pipefail."
+    fix_target: "Add set -euo pipefail + ERR trap."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
+    escalated_to: null
+
+  - audit_id: 76
+    finding_id: F-076-006
+    severity: low
+    file: agent/scripts/acp.package-search.sh
+    finding: "Has # set -e commented out with subshell rationale. Should use conventional pattern."
+    fix_target: "Add set -euo pipefail or document as standard exclusion."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
+    escalated_to: null
+
+  - audit_id: 76
+    finding_id: F-076-007
+    severity: low
+    file: agent/scripts/acp.post-milestone-sweep.sh
+    finding: "Created with CRLF on Windows. Pre-commit hook (same commit) couldn't catch it — new-file race condition."
+    fix_target: "Verify .gitattributes prevents recurrence. Test on clean checkout."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "076"
     escalated_to: null
