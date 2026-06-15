@@ -690,3 +690,189 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-068 FINDINGS — M57 & M58 IMPLEMENTATION DEEP DIVE (2026-06-15) ─────
+  # Note: M57's own findings F-062-01..05 remain pending (mapped to route-176/M62);
+  # not re-listed here. Below are NEW findings only. See audit-068 report for full detail.
+
+  - audit_id: 68
+    finding_id: F-068-01
+    severity: high
+    file: agent/progress.yaml
+    finding: "M54-M57 milestone artifact files missing; progress.yaml file: pointers dangle (e.g. M57 -> milestone-57-recurring-tasks-scheduler.md does not exist)"
+    description: "GITIGNORE ARTIFACT — milestone-55/56/57/58 were tracked on origin all along; local gitignore hid them. Resolved 2026-06-15 by merging origin/develop (commit 90239d9). Residual: only M54 (milestone-54-ci-cd-gitflow.md) genuinely missing — see F-069-09."
+    fix_target: "Resolved by sync. Residual M54 dangling pointer tracked as F-069-09."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "069"
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-02
+    severity: high
+    file: agent/milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
+    finding: "M58 marked in_progress (25%) but routes 156/157/158 never expanded into route files; no acp.taint-heuristic.sh exists — claimed capability not runnable"
+    description: "GITIGNORE ARTIFACT (route files) — routes 155-158 were tracked on origin; resolved 2026-06-15 by sync (commit 90239d9). The real residual is that route-157 scripts (acp.taint-scan.sh/acp.memory-scan.sh) remain unimplemented (route-157 not started) and route-155 under-delivered — see F-069-03/F-069-10."
+    fix_target: "Route-file gap resolved by sync. Script implementation + route-155 scope tracked as F-069-03/F-069-10."
+    status: fixed
+    fix_applied_date: 2026-06-15
+    verified_in_audit: "069"
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-03
+    severity: high
+    file: agent/memory/audit-carryovers.md
+    finding: "M57 shipped with HIGH carryover F-062-03 (no automated next_due -> manual date drift) still pending; currently queued late in route-176/M62"
+    description: "A HIGH correctness gap lives in a shipped feature (recurring scheduler). Consider promoting F-062-03 out of M62 into the M59 critical track."
+    fix_target: "Promote F-062-03 (auto next_due helper / --complete flag) to M59; keep F-062-01/02/04/05 in route-176."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-04
+    severity: medium
+    file: agent/benchmarks/fixtures/taint-flow/manifest.yaml
+    finding: "Fixture manifest encodes severity but not the research-mandated max_confidence/CI policy; route-158 E2E built on severity alone could assert CRITICAL output, contradicting v2.0 'never CRITICAL in --ci' self-protection"
+    description: "research-m58 mandates MEDIUM confidence ceiling and advisory-only taint findings. Severity (impact) != confidence (certainty)."
+    fix_target: "Add max_confidence + ci_blocking per fixture aligned to the calibration matrix; update route-157/158 acceptance to assert no CRITICAL auto-fail on taint fixtures."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-07
+    severity: medium
+    file: agent/wiki/integrity-rules.md
+    finding: "Neither integrity-rules.md nor acp.integrity.md reflect any v2.0 surface (still v1.0 / 'DEFERRED to v2.0'); wiki '55 v1.0 + 15 deferred' header going stale as M58 progresses"
+    description: "Consistent with route-156 not_started, but doc surface unchanged despite M58 in_progress + fixtures shipped."
+    fix_target: "Covered by route-156 (M58 doc/wiki/skill update); ensure header counts updated when v2.0 rules land."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-10
+    severity: low
+    file: agent/progress.yaml
+    finding: "quarterly-deep-scan recurring task invokes unbuilt M58 capability (--rules taint-flow,memory); scheduled (next_due 2026-09-08) for a feature not yet implemented"
+    fix_target: "Align quarterly-deep-scan activation with M58 delivery; gate or annotate until v2.0 ships."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 68
+    finding_id: F-068-12
+    severity: low
+    file: agent/scripts/acp.meta-scan.sh
+    finding: "Uses set -eu + ERR trap but not -o pipefail (partial case of audit-065 H4); not in route-173's 17-file list"
+    fix_target: "Add acp.meta-scan.sh to route-173 pipefail scope, or upgrade its header to set -euo pipefail."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-069 FINDINGS — M57 & M58 POST-SYNC RE-AUDIT (2026-06-15) ───────────
+  # Performed after merging origin/develop (commit 90239d9) which un-gitignored
+  # milestones/tasks/routing/memory. Supersedes audit-068 F-068-01/02 (now fixed).
+  # See agent/reports/audit-069-m57-m58-post-sync-reaudit.md for full detail.
+
+  - audit_id: 69
+    finding_id: F-069-01
+    severity: high
+    file: agent/milestones/milestone-57-recurring-tasks-scheduler.md
+    finding: "Status desync — milestone-57.md & milestone-58.md say 'Status: planned / Started: —', contradicting progress.yaml (M57 completed 100% / M58 in_progress 25%) and git history"
+    description: "Synced planning docs are pre-completion versions. A reader of the milestone file would conclude work never started. Single-source-of-truth violation introduced by the sync."
+    fix_target: "Re-stamp milestone-57 -> completed, milestone-58 -> in_progress; add /acp-validate check flagging milestone/route status that disagrees with progress.yaml."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-02
+    severity: high
+    file: agent/routing/tasks/route-155.md
+    finding: "route-155 completion desync — deliverables exist (research + 12 fixtures + manifest) and progress.yaml counts M58 1/4 done, but synced route-155.md completed: is empty"
+    description: "Four tracking layers disagree on whether route-155 is done. Auto-stamp (/acp-commit protocol) never ran on the synced route file."
+    fix_target: "Fill completed: on route-150..155; reconcile progress.yaml tasks_completed with route stamps."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-03
+    severity: high
+    file: agent/artifacts/research-m58-taint-flow-calibration.md
+    finding: "route-155 scope under-delivery vs milestone-58 §7 — no 10 taint-flow CVEs, no TypeScript sample, no ESLint-security comparison, no empirical TPR (self-deferred to route-158), no memory-poisoning UX document — yet counted complete"
+    description: "Research is solid literature calibration with JS fixtures but does not meet the milestone's empirical acceptance criteria."
+    fix_target: "Either finish missing scope (empirical TPR vs ESLint, memory-poisoning UX doc) OR descope milestone-58 §7/§10 via ADR to the literature-calibration approach actually taken."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-04
+    severity: high
+    file: agent/milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
+    finding: "Go/No-Go gate unsatisfiable as sequenced — §10 gates routes 156-158 on empirical taint TPR, but research measures no TPR ('measured in route-158') and route-158 is gated by the gate"
+    description: "Circular dependency: the gate needs route-158's measurement; route-158 is blocked by the gate. The 'proceed' decision rests on literature estimates, not the mandated benchmark."
+    fix_target: "Restructure the gate: move empirical TPR measurement into route-155/156 (before the gate), or accept literature ceilings explicitly via ADR and remove the empirical precondition."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-05
+    severity: high
+    file: agent/memory/audit-carryovers.md
+    finding: "All 5 audit-062 (M57) carryovers still pending incl. F-062-03 (no automated next_due -> date drift) in a shipped feature; queued late in route-176/M62"
+    description: "Reconfirms audit-068 F-068-03. M57's own audit findings remain open."
+    fix_target: "Promote F-062-03 (auto next_due helper / --complete flag) to M59; keep F-062-01/02/04/05 in route-176."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-07
+    severity: medium
+    file: agent/benchmarks/fixtures/taint-flow/manifest.yaml
+    finding: "Manifest encodes only severity, not max_confidence/ci_blocking — but milestone-58 §8 E2E (assertions 4-6,9) requires asserting confidence ceilings (<=MEDIUM, no HIGH except IG-61)"
+    description: "route-158 ground truth cannot support the mandated confidence assertions as-is. (= audit-068 F-068-04.)"
+    fix_target: "Add max_confidence + ci_blocking per fixture aligned to milestone-58 §4 confidence table; update route-158 acceptance."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-09
+    severity: medium
+    file: agent/progress.yaml
+    finding: "M54 dangling milestone pointer — progress.yaml M54 -> milestone-54-ci-cd-gitflow.md does not exist even after sync; M54 status active/30% with tasks_total: 0"
+    description: "Residual of audit-068 F-068-01, now scoped to M54 only. tasks_total: 0 with active/30% is itself inconsistent."
+    fix_target: "Create milestone-54-ci-cd-gitflow.md or remove the pointer; fix tasks_total vs progress."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 69
+    finding_id: F-069-10
+    severity: low
+    file: agent/routing/tasks/route-157.md
+    finding: "Script naming mismatch — research recommends acp.taint-heuristic.sh; route-157/milestone-58 call them acp.taint-scan.sh + acp.memory-scan.sh (none exist yet)"
+    fix_target: "Reconcile to one canonical script name before route-157 implementation."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
