@@ -1102,3 +1102,17 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: 071
     escalated_to: null
+
+  # ── AUDIT-073 FINDINGS — M65 POST-IMPL VERIFICATION (2026-06-15) ─────────────
+
+  - audit_id: 73
+    finding_id: F-073-04
+    severity: low
+    file: agent/progress.yaml
+    finding: "191 duplicate YAML mapping keys (started:, completed_date:) across task entries cause js-yaml parse failure; validate.ts fallback loader works but hides the symptom"
+    description: "Systemic duplication from accumulated session writes. The fallback loader masks the issue but the underlying YAML is still corrupt. Fix requires a dedup script."
+    fix_target: "Create acp.dedup-progress.sh or a one-time cleanup that deduplicates started:/completed_date: fields on task entries, keeping the most recent value. Deferred to M70 tech-debt track."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
