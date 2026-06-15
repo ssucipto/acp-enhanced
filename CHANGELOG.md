@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.14.0] — 2026-06-15
+
+### Added
+- **M59 Critical-Fix & CI Integrity** — six audit carryovers shipped (H1, H8, H2/H3, C1 docs, M9, M12)
+- `scripts/acp-dispatch.test.ts` — regression tests for surgical `updateRoutingYml()` (preserves `context_modes`, `command_suggestions`)
+- `validateVersionConsistency()` in `acp-validate.ts` — AGENTS.md header vs `identity.yml` drift check
+- **15 missing commands** added to `package.yaml` (commit, decide, dispatch, route, task, feedback, visualize, wiki-update, carryover-query, cost-report, memory-sync, pattern-sync, session-sync, rule-file-audit, install)
+- `docs/USAGE.md` — Git branch protection governance section (mainline + develop)
+
+### Fixed
+- **H1** — `updateRoutingYml()` no longer overwrites full `routing.yml`; updates `session:` block only
+- **H8** — `package.yaml` command manifest parity with `agent/commands/acp.*.md`
+- **H2/H3** — CI runs `acp-validate.ts` + `ci-validate.sh` with real command-doc structure checks and package count guard
+- **M9** — `OPENROUTER_API_KEY` preflight in `acp-dispatch.ts` with clear error before API call
+
+### Changed
+- `.github/workflows/ci.yaml` — Node 20 setup, `npm install` in `scripts/`, `npx ts-node scripts/acp-validate.ts`
+- Version bump **6.12.2 → 6.14.0** across identity, package, AGENTS/CLAUDE/copilot triple-sync, README badge
+
+### Notes
+- **C1 (route-162)** — branch protection documented in `docs/USAGE.md`; enable manually in GitHub repo settings (requires admin/`gh`)
+
+---
+
 ## [6.12.2] — 2026-06-15
 
 ### Added
