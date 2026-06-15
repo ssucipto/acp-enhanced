@@ -1,0 +1,10 @@
+# Normalize shell scripts to LF for cross-platform bash compatibility (IG-42, audit-062)
+*.sh text eol=lf
+
+# Normalize YAML to LF for cross-platform bash parsers (IG-37, audit-065 M4)
+*.yml  text eol=lf
+*.yaml text eol=lf
+
+# Normalize TS and config files for cross-platform tooling (tsc, vitest, npm)
+*.ts   text eol=lf
+*.json text eol=lf

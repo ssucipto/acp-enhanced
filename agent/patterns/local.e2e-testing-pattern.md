@@ -1,8 +1,15 @@
 # E2E Testing Pattern for ACP Scripts
 
+<!-- @acp.meta.pattern
+topic: e2e, testing, pattern, for, acp, scripts
+description: This pattern documents the proven approach for writing E2E tests for ACP shell scripts that use the YAML parser. It's based on successful tests from `
+applies_to: testing, quality
+status: active
+updated: 2026-06-15
+@acp.meta.end -->
+
 **Pattern Name**: E2E Testing for Shell Scripts with YAML Parser  
 **Created**: 2026-02-25  
-**Status**: Active Pattern  
 **Success Rate**: 100% (when followed correctly)  
 
 ---

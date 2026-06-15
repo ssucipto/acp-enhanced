@@ -1,0 +1,101 @@
+# Taint-flow calibration fixtures for M58 /acp-integrity v2.0
+# Used by route-158 E2E and route-157 heuristic development
+
+version: "1.1.0"
+created: 2026-06-15
+updated: 2026-06-15
+research: agent/artifacts/research-m58-taint-flow-calibration.md
+
+# severity = impact if real; max_confidence = scanner certainty ceiling (v2.0 policy)
+# ci_blocking: false — Phase 2 taint findings are advisory-only in --ci mode
+
+fixtures:
+  - file: ig-45-vulnerable.js
+    rule: IG-45
+    expected: FINDING
+    severity: CRITICAL
+    max_confidence: MEDIUM
+    ci_blocking: false
+    description: Raw SQL string concatenation with request parameter
+
+  - file: ig-45-safe.js
+    rule: IG-45
+    expected: CLEAN
+    max_confidence: MEDIUM
+    ci_blocking: false
+    description: Parameterized query with placeholders
+
+  - file: ig-46-vulnerable.js
+    rule: IG-46
+    expected: FINDING
+    severity: CRITICAL
+    max_confidence: MEDIUM
+    ci_blocking: false
+    description: Shell exec with user-controlled interpolation
+
+  - file: ig-46-safe.js
+    rule: IG-46
+    expected: CLEAN
+    max_confidence: MEDIUM
+    ci_blocking: false
+    description: spawn with argument array, no shell
+
+  - file: ig-47-vulnerable.js
+    rule: IG-47
+    expected: FINDING
+    severity: CRITICAL
+    max_confidence: MEDIUM
+    ci_blocking: false
+    description: File read using unsanitized user path
+
+  - file: ig-47-safe.js
+    rule: IG-47
+    expected: CLEAN
+    max_confidence: MEDIUM
+    ci_blocking: false
+    description: Path resolved and checked against allowlist
+
+  - file: ig-48-vulnerable.js
+    rule: IG-48
+    expected: FINDING
+    severity: HIGH
+    max_confidence: MEDIUM
+    ci_blocking: false
+    description: Open redirect via query parameter
+
+  - file: ig-48-safe.js
+    rule: IG-48
+    expected: CLEAN
+    max_confidence: MEDIUM
+    ci_blocking: false
+    description: Redirect allowlist for external URLs
+
+  - file: ig-49-vulnerable.js
+    rule: IG-49
+    expected: FINDING
+    severity: HIGH
+    max_confidence: MEDIUM
+    ci_blocking: false
+    description: Fetch URL taken directly from environment without validation
+
+  - file: ig-49-safe.js
+    rule: IG-49
+    expected: CLEAN
+    max_confidence: MEDIUM
+    ci_blocking: false
+    description: Environment URL validated against HTTPS allowlist
+
+  - file: ig-50-vulnerable.js
+    rule: IG-50
+    expected: FINDING
+    severity: HIGH
+    max_confidence: LOW
+    ci_blocking: false
+    description: Security decision trusts external library boolean without re-validation
+
+  - file: ig-50-safe.js
+    rule: IG-50
+    expected: CLEAN
+    max_confidence: LOW
+    ci_blocking: false
+    description: External flag verified against local policy before grant

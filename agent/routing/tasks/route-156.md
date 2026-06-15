@@ -9,7 +9,7 @@ context_required: [milestones/milestone-58-acp-integrity-v2-semantic-analysis.md
 files_affected: [agent/wiki/integrity-rules.md, agent/commands/acp.integrity.md, agent/skills/code-integrity.md]
 tokens_est: 8000
 created: 2026-06-08
-completed:
+completed: 2026-06-15
 ---
 
 # Route 156: Documentation — Phase 2 Rules & Confidence Model
@@ -64,3 +64,4 @@ Update three documentation files with Phase 2 content: the wiki rule catalogue, 
 - `/acp-integrity --phase2` is documented and discoverable
 - Developers understand what confidence levels mean before running Phase 2
 - Self-protection protocol is clearly documented
+- Wiki header updated to v2.0.0 with 70 total rules; Cat 8/10 active (Phase 2)

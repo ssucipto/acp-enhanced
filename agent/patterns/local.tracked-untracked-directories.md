@@ -1,9 +1,16 @@
 # Local Artifact Directories Pattern
 
+<!-- @acp.meta.pattern
+topic: local, artifact, directories, pattern
+description: This pattern establishes a convention for agent directories that should exist in the repository structure but whose contents are primarily local artif
+applies_to: testing, quality
+status: active
+updated: 2026-06-15
+@acp.meta.end -->
+
 **Pattern**: Tracked directories with untracked contents for local artifacts  
 **Version**: 1.0.0  
 **Created**: 2026-02-22  
-**Status**: Active  
 
 ---
 

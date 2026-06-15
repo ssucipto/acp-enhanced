@@ -1,8 +1,14 @@
 # Global ACP Projects Registry
 
+<!-- @acp.meta.design
+topic: global, acp, projects, registry
+description: Centralized project metadata tracking for global ACP workspace
+status: draft
+updated: 2026-02-23
+@acp.meta.end -->
+
 **Concept**: Centralized project metadata tracking for global ACP workspace  
 **Created**: 2026-02-23  
-**Status**: Proposal  
 
 ---
 
