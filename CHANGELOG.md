@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.20.3] — 2026-06-15
+
+### Added
+- **SECURITY.md**: Vulnerability disclosure policy with private reporting via GitHub Security Advisories, supported versions table, in-scope/out-of-scope definitions, response targets, and coordinated disclosure policy. Linked from README.md and CONTRIBUTING.md. Addresses audit-065 HIGH-065-006 (route-168, M61).
+- **Windows CI**: Added `windows-latest` runner to E2E test matrix with `shell: bash` default for cross-platform Git Bash compatibility. `.gitattributes` LF enforcement already in place (IG-42). (route-167, M61)
+
+---
+
 ## [6.20.2] — 2026-06-15
 
 ### Added
