@@ -38,7 +38,7 @@ if [[ -f "$IDENTITY_FILE" ]]; then
     fi
     if $in_team; then
       if echo "$line" | grep -qE '^\s*-'; then
-        email=$(echo "$line" | sed 's/^\s*-[[:space:]]*//' | tr -d '"' | tr -d "'")
+        email=$(echo "$line" | sed 's/^\s*-[[:space:]]*//' | tr -d '"' | tr -d "'" | tr -d '\r')
         [[ -n "$email" ]] && TEAM_MEMBERS+=("$email")
       elif echo "$line" | grep -qE '^\S'; then
         break
