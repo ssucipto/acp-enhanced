@@ -1,6 +1,13 @@
 > *Originally at scripts/FINAL-REVIEW.md — moved to agent/design/ in M42 (route-042) so the UX analysis is discoverable by the ACP context-loading protocol.*
 
 # ACP Enhanced — Final Critical Review
+
+<!-- @acp.meta.design
+topic: acp, enhanced, final, critical, review
+description: ACP Enhanced — Final Critical Review
+status: draft
+updated: 2026-06-15
+@acp.meta.end -->
 **Date:** 2026-05-01 | **Review phase:** 7 (Final, Synthesis)
 
 ---

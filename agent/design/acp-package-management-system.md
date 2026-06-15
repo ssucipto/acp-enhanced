@@ -1,8 +1,14 @@
 # ACP Package Management System
 
+<!-- @acp.meta.design
+topic: acp, package, management, system
+description: Comprehensive package management for ACP modules with versioning, selective installation, and dependency tracking
+status: draft
+updated: 2026-02-18
+@acp.meta.end -->
+
 **Concept**: Comprehensive package management for ACP modules with versioning, selective installation, and dependency tracking  
 **Created**: 2026-02-18  
-**Status**: Design Specification  
 **Priority**: High  
 **Estimated Effort**: 15-20 hours  
 

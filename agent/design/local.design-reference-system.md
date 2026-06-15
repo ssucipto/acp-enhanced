@@ -1,8 +1,14 @@
 # Design Reference System
 
+<!-- @acp.meta.design
+topic: design, reference, system
+description: Shared directive ensuring tasks have complete design document coverage so agents can implement from the task alone
+status: draft
+updated: 2026-03-07
+@acp.meta.end -->
+
 **Concept**: Shared directive ensuring tasks have complete design document coverage so agents can implement from the task alone  
 **Created**: 2026-03-07  
-**Status**: Design Specification  
 
 ---
 

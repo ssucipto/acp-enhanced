@@ -7,6 +7,14 @@ applies: [acp.proceed, acp.sync, acp.validate]
 
 # Workflow Override Directive
 
+<!-- @acp.meta.pattern
+topic: workflow, override, directive
+description: Workflow Override Directive
+applies_to: testing, quality
+status: active
+updated: 2026-06-15
+@acp.meta.end -->
+
 ## Intent
 
 Allow team-specific overrides of default ACP workflow step behaviour without modifying command docs. Useful for CI, remote execution, or custom tooling environments.

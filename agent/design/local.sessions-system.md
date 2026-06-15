@@ -1,8 +1,14 @@
 # ACP Sessions System
 
+<!-- @acp.meta.design
+topic: acp, sessions, system
+description: Global session tracking for concurrent multi-project agent work from a single IDE instance
+status: active
+updated: 2026-03-01
+@acp.meta.end -->
+
 **Concept**: Global session tracking for concurrent multi-project agent work from a single IDE instance  
 **Created**: 2026-03-01  
-**Status**: Implemented  
 
 ---
 

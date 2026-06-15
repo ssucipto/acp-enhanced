@@ -1,8 +1,14 @@
 # acp-code: Python + SQLite Fork of ACP
 
+<!-- @acp.meta.design
+topic: acp-code, python, sqlite, fork, of, acp
+description: A project fork of ACP reimplemented in Python, replacing the bash/yaml persistence model with a library-first architecture backed by SQLite + an autho
+status: draft
+updated: 2026-04-23
+@acp.meta.end -->
+
 **Concept**: A project fork of ACP reimplemented in Python, replacing the bash/yaml persistence model with a library-first architecture backed by SQLite + an authoritative event log, extensible through a VSCode-style plugin system.  
 **Created**: 2026-04-23  
-**Status**: Proposal  
 
 ---
 
