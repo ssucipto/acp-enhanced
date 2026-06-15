@@ -24,6 +24,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.21.0] — 2026-06-15
+
+### Added
+- **route-178: Cross-file consistency validators** — 7 automated checks in
+  `acp-validate.ts` (40/40 vitest): version consistency across identity.yml,
+  AGENTS.md, CLAUDE.md, CHANGELOG.md; stale next_steps detection;
+  milestone doc version drift; blank verification gate detection;
+  missing git tags; .gitignore conflicts; .gitattributes coverage.
+- **route-179: Post-milestone sweep script** — `acp.post-milestone-sweep.sh`
+  with 6 automated gates (tsc, vitest, git tags, acp-validate, token budget,
+  gitattributes) + E2E test. Triggered by constraints.yml hook.
+- **route-175: Memory-layer schemas** — 7 new `agent/schemas/*.schema.yaml`
+  files (milestone, session, lessons, decisions, clarification, feedback,
+  audit-carryovers) enforced by `acp-validate.ts`.
+- **route-174: Command doc structural conformance** — `## Steps` added to
+  `acp.integrity.md` and `acp.review.md`; `## Verification` added to
+  dispatch, feedback, install, task, and visualize commands.
+- **route-176: Reference git hook** — `.git/hooks/pre-commit` with staged
+  ACP file scanning, bash guard, and pass/fail output.
+- **constraints.yml: test_quality_gate rule** — unit tests must assert
+  behavior, not just types. `post_milestone_sweep` hook registered.
+
+### Changed
+- **route-173: Pipefail upgrade** — 17 scripts upgraded from bare `set -e`
+  to `set -euo pipefail` + ERR trap. All 36 scripts now conform.
+- **route-177: Low-severity cleanups** — network_whitelist.yml reviewed_by
+  populated; L1-L4 resolved.
+
+### Fixed
+- **route-176: 5 audit-062 carryovers resolved** — F-062-01..05 all
+  marked fixed: hooks restored, checklist verified, next_due automated,
+  reference hook created, last_findings_count added.
+
+---
+
 ## [6.20.8] — 2026-06-15
 
 ### Fixed
