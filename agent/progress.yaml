@@ -369,11 +369,11 @@ milestones:
     name: Quality Hardening, Schema Coverage & Carryover Resolution (v6.21.0)
     priority: 3
     status: in_progress
-    progress: 42
+    progress: 57
     started: 2026-06-15
     completed:
     estimated_weeks: 2
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 7
     file: agent/milestones/milestone-62-quality-hardening-schema-carryovers.md
     notes: |
@@ -6585,6 +6585,7 @@ recurring_tasks:
     executor: copilot
     last_run: 2026-06-15
     next_due: 2026-06-22
+    last_findings_count: 0
     status: current
     description: "Weekly code quality review with carryover tracking"
 
@@ -6594,6 +6595,7 @@ recurring_tasks:
     executor: copilot
     last_run: 2026-06-15
     next_due: 2026-06-22
+    last_findings_count: 0
     status: current
     description: "Weekly ACP framework integrity scan"
 
@@ -6603,6 +6605,7 @@ recurring_tasks:
     executor: deepseek-v4-pro
     last_run: null
     next_due: null
+    last_findings_count: 0
     status: current
     description: "Pre-commit ACP rule file scan for Unicode injection"
 
