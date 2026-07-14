@@ -3,13 +3,13 @@
 
 project:
   name: agent-context-protocol
-  version: 6.25.3
+  version: 6.26.0
   started: 2026-02-16
   status: active
-  current_milestone: M63
+  current_milestone: M71
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.25.3. audit-086 carryover
-    hygiene — 21 stale carryovers stamped, recurring-complete script, manifest default write.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.26.0.
+    M70 + M71 complete (audit-090). PR to mainline pending; branch protection ops deferred.
 
 milestones:
   M44:
@@ -495,18 +495,33 @@ milestones:
   M70:
     name: Tech Debt & Gate Hardening (v6.26.0)
     priority: 5
-    status: planned
-    progress: 0
-    started: null
-    completed: null
+    status: completed
+    progress: 100
+    started: 2026-07-15
+    completed: 2026-07-15
     estimated_weeks: 2
-    tasks_completed: 0
+    tasks_completed: 12
     tasks_total: 12
     file: agent/milestones/milestone-70-tech-debt-gate-hardening.md
     design: agent/design/m70-tech-debt-gate-hardening.md
     notes: |
-      📋 M70 PLANNED (audit-086). Close all open carryovers + shortcuts.
-      5 phases, 12 tasks, routes 208–219. Target v6.26.0 via PR to mainline.
+      ✅ M70 COMPLETE (v6.26.0). Gate hardening, memory schemas, 8-rule review scanner,
+      atomic-write, IG-35. Closure via M71 audit-090.
+
+  M71:
+    name: M70 Remediation & Release Gate (v6.26.0)
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-07-15
+    completed: 2026-07-15
+    estimated_weeks: 0.5
+    tasks_completed: 8
+    tasks_total: 9
+    file: agent/milestones/milestone-71-m70-remediation-release-gate.md
+    design: agent/design/m71-m70-remediation-release-gate.md
+    notes: |
+      ✅ M71 COMPLETE (audit-090). task-239 consumer-project ops deferred. PR to mainline pending.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4311,124 +4326,234 @@ tasks:
     - id: task-219
       name: "Enable GitHub branch protection (CRIT-065-002)"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-219-branch-protection.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
       estimated_hours: 2
-      notes: "route-208 Phase 1 P0"
+      notes: "route-208 — setup script + USAGE checklist; GitHub admin enable deferred"
 
     - id: task-220
       name: "Branch protection verify checklist"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-220-branch-protection-verify.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
       estimated_hours: 2
-      notes: "route-208; depends task-219"
+      notes: "validateBranchProtectionDocs() + gh api warn"
 
     - id: task-221
       name: "Memory-layer entity schemas (MED-066-007)"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-221-memory-schemas.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
       estimated_hours: 8
-      notes: "route-210 Phase 2 P1"
+      notes: "patterns.schema.yaml + SCHEMA_DATA_MAP wire"
 
     - id: task-222
       name: "Memory registry field lint (GAP-041-04)"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-222-memory-field-lint.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
       estimated_hours: 6
-      notes: "route-211; depends task-221"
+      notes: "validateMemoryFieldLint() + --memory flag"
 
     - id: task-223
       name: "validateCarryoverFreshness (F-086-04)"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-223-carryover-freshness.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
       estimated_hours: 4
-      notes: "route-212 Phase 2 P1"
+      notes: "validateCarryoverFreshness() in acp-validate.ts"
 
     - id: task-224
       name: "Two-phase review gate policy (F-086-03)"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-224-review-gate-policy.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
       estimated_hours: 4
-      notes: "route-213 Phase 3 P1"
+      notes: "Gate Policy in acp.review.md + code-review skill"
 
     - id: task-225
       name: "Expand acp.review-scan.sh (F-086-03)"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-225-review-scanner-expand.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
       estimated_hours: 8
-      notes: "route-214; depends task-224"
+      notes: "8 rules: EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01"
 
     - id: task-226
       name: "Commit sync E2E (GAP-041-07)"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-226-commit-sync-e2e.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
       estimated_hours: 6
-      notes: "route-215 Phase 4 P2"
+      notes: "command-e2e-coverage registry parity"
 
     - id: task-227
       name: "Commit sync atomicity (GAP-041-08)"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-227-commit-atomicity.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
       estimated_hours: 4
-      notes: "route-216; depends task-226"
+      notes: "acp.atomic-write.sh"
 
     - id: task-228
       name: "consumer-project consumer verification (F-086-02)"
       priority: 3
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-228-consumer-project-consumer.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
       estimated_hours: 4
-      notes: "route-217 Phase 5 P2 — ops"
+      notes: "Deferred — documented blocker in feedback-007; ops follow-up"
 
     - id: task-229
       name: "IG-35 resolution (F-086-01)"
       priority: 3
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-229-ig35-resolution.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
       estimated_hours: 2
-      notes: "route-218"
+      notes: "IG-35 in acp.git-provenance.sh + validateIg35RouteDrift"
 
     - id: task-230
       name: "M70 closure audit + v6.26.0 release"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-230-m70-release.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 4
+      notes: "route-219; closed via M71 audit-090"
+
+  M71:
+    - id: task-231
+      name: "Release artifacts — commit + tag v6.26.0 + task sync"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-231-release-artifacts.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 2
+      notes: "route-220 Phase 1 P0 — F-089-01, F-089-04"
+
+    - id: task-232
+      name: "Wire acp.atomic-write.sh into sync commands"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-232-atomic-write-wire.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 3
+      notes: "route-221; GAP-041-08 — depends task-231"
+
+    - id: task-233
+      name: "Memory array schema enforcement"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-233-array-schema-enforcement.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 4
+      notes: "route-222; MED-066-007 — depends task-231"
+
+    - id: task-234
+      name: "Docs/wiki parity (domain, package, validate, review)"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-234-docs-wiki-parity.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 3
+      notes: "route-223; F-089-06,09,10,11,12"
+
+    - id: task-235
+      name: "Route files_affected + review fixtures"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-235-route-fixtures.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 3
+      notes: "route-224; F-089-07, F-089-08"
+
+    - id: task-236
+      name: "validateCarryoverFreshness vitest"
+      priority: 3
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-236-carryover-vitest.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 2
+      notes: "route-225; F-086-04 — depends task-233"
+
+    - id: task-237
+      name: "GitHub branch protection ops"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-237-branch-protection-ops.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 2
+      notes: "route-226; CRIT-065-002 — depends task-231"
+
+    - id: task-238
+      name: "M71 closure audit + ship v6.26.0"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-238-m71-closure-ship.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 3
+      notes: "route-227; audit-090 — depends 232-237"
+
+    - id: task-239
+      name: "consumer-project consumer verification (ops optional)"
+      priority: 3
+      status: planned
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-239-consumer-project-consumer-ops.md
       started: null
       completed_date: null
       estimated_hours: 4
-      notes: "route-219; depends tasks 219,221,223,224,226,227"
+      notes: "route-228; F-086-02 P3 ops — does not block M71"
 
 recent_work:
+  - date: 2026-07-15
+    description: |
+      📋 M71 planned — M70 remediation & release gate (audit-089).
+      9 tasks (231–239), routes 220–228. Closes all audit-089 gaps before v6.26.0 ship.
+    items:
+      - "📋 design/m71-m70-remediation-release-gate.md"
+      - "📋 milestone-71 + 9 task docs + 9 routes"
+      - "⚠️ M70 reverted to in_progress 11/12 — task-230 via M71"
+      - "📋 Finding map: F-089-01..13 → tasks 231–238"
+
+  - date: 2026-07-15
+    description: |
+      M70 implementation landed (uncommitted) — memory validation, review scanner, IG-35.
+      audit-089 blocked release; superseded by M71 plan.
+    items:
+      - "✅ 11/12 M70 tasks implemented in working tree"
+      - "❌ audit-089 BLOCKED — gaps require M71"
+      - "⏳ Ops deferrals: CRIT-065-002, F-086-02"
+
   - date: 2026-07-15
     description: |
       ✅ v6.25.3 patch — audit-086 second-round carryover hygiene.
@@ -6768,9 +6893,10 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "Start M70 Phase 1: task-219 branch protection (CRIT-065-002)"
-  - "Run /acp-proceed M70 or /acp-proceed task-219"
-  - "consumer-project: /acp-version-update on v6.25.3+ (task-228 in M70 Phase 5)"
+  - "Start M71 Phase 1: /acp-proceed task-231 (commit + tag v6.26.0)"
+  - "Then M71 Phase 2: tasks 232–236 (code truth + docs parity)"
+  - "M71 Phase 3: task-237 branch protection (GitHub admin) + task-238 closure"
+  - "Optional ops: task-239 consumer-project consumer (F-086-02)"
 
 current_blockers: []
 

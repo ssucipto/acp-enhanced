@@ -171,7 +171,7 @@ the corresponding markdown document in `agent/sessions/`:
 
 > **Skip this step if `--no-sync` was passed.**
 >
-> **Atomicity (v6.9.1+)**: Same temp-file + atomic rename pattern as Step 2b.
+> **Atomicity (v6.9.1+, M71)**: Use `bash agent/scripts/acp.atomic-write.sh <target>` for steps 2b and 3b (see `acp.pattern-sync.md` / `acp.session-sync.md`).
 
 After appending to `agent/memory/patterns.md` (Step 3), auto-generate or update
 the corresponding markdown document in `agent/patterns/`:
