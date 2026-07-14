@@ -2,6 +2,22 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
+  tasks: [validate-sync-update]
+  done:
+    - develop-branch-synced-47-commits-fast-forward
+    - progress-yaml-191-duplicate-keys-removed-yaml-parse-restored
+    - acp-validate-zero-errors-milestone-status-sync-m27-doc-created
+    - acp-validate-ts-schema-mapping-and-array-type-fix
+    - git-tag-v6-21-0-created-progress-tracking-refreshed-m63
+    - readme-badges-updated-6-21-0-66-milestones
+  deferred:
+    - m63-test-coverage-tier-2-3 → route-tbd
+    - github-branch-protection → manual-enable
+  key_fact: "progress.yaml had 191 duplicate YAML keys (mostly duplicate completed_date in tasks section) causing js-yaml parse failure — validate used line-based fallback and missed deeper schema errors. After dedup, full YAML parse restored and cross-file validators became reliable again."
+
 # === Compacted Block: 2026-06-15 (10 sessions) ===
 - type: weekly-summary
   week: 2026-06-15
