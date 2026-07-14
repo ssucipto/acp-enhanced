@@ -1,6 +1,6 @@
 # Milestone 61: Production-Readiness Pack
 
-**Target version**: 6.20.9  
+**Shipped version**: 6.20.9  
 **Status**: Completed  
 **Estimated effort**: ~12h (6 routes)  
 **Source**: audit-065 (security/governance findings), audit-066 (M10), audit-067 (Part D, M61)
