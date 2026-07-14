@@ -25,10 +25,10 @@ Add validate check: `acp.version-update.sh` and `acp.install.sh` must not contai
 
 ## Acceptance criteria
 
-- [ ] Validator fails if destructive glob patterns reintroduced (core, commands, manifest)
-- [ ] Vitest coverage for new check
-- [ ] `npx tsx scripts/acp-validate.ts` — 0 errors
-- [ ] **Required before v6.24.0 tag** (SC-080-03)
+- [x] Validator fails if destructive glob patterns reintroduced (core, commands, manifest)
+- [x] Vitest coverage for new check
+- [x] `npx tsx scripts/acp-validate.ts` — 0 errors
+- [x] **Required before v6.24.0 tag** (SC-080-03) — shipped v6.24.0, verified @ audit-082
 
 ## Addresses
 

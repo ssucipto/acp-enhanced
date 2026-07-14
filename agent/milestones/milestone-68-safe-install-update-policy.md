@@ -159,4 +159,4 @@ After v6.24.0: FIFOZ runs `/acp-version-update` (default safe mode), verifies `i
 
 ---
 
-**Status**: completed — shipped v6.24.0 (2026-07-15)
+**Status**: completed — shipped v6.24.1 (2026-07-15); core policy at v6.24.0
