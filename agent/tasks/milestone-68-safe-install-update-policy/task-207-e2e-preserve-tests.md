@@ -2,13 +2,13 @@
 id: task-207
 milestone: M68
 title: E2E preserve behavioral tests (route-202)
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-202
 audit_findings: [F-080-10, F-080-13, P-081-01, P-081-02, P-081-03]
 ---

@@ -29,11 +29,11 @@ Fix `domain.yml` path in command doc (`agent/wiki/` not `agent/core/`). Remove c
 
 ## Acceptance criteria
 
-- [ ] Command doc matches implemented flags and paths
-- [ ] README warns: pre-v6.24.0 updates require git commit first
-- [ ] FIFOZ consumer path documented
-- [ ] route-079 `completed:` stamped only after route-202 E2E green (not route-199 alone — P-081-04)
-- [ ] Command doc has single authoritative tier table — no L38-47 contradiction (P-081-06, SC-080-05)
+- [x] Command doc matches implemented flags and paths
+- [x] README warns: pre-v6.24.0 updates require git commit first
+- [x] FIFOZ consumer path documented
+- [x] route-079 `completed:` stamped only after route-202 E2E green (not route-199 alone — P-081-04)
+- [x] Command doc has single authoritative tier table — no L38-47 contradiction (P-081-06, SC-080-05)
 
 ## Addresses
 

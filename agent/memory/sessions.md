@@ -5,6 +5,17 @@
 - date: 2026-07-15
   executor: copilot
   branch: develop
+  tasks: [route-198, route-199, route-200, route-201, route-202, route-203, route-204, route-205]
+  done:
+    - m68-safe-install-update-policy-shipped-v6-24-0
+    - tier-helpers-version-update-install-bootstrap-e2e-validate
+    - audit-082-post-ship-gaps-doc-drift-install-agents-md-fixed
+  deferred: []
+  key_fact: "M68 audit-082 fully closed at v6.24.1 — bootstrap preserve E2E, carryovers re-verified @082, doc/install gaps fixed."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
   tasks: [route-190, route-191, route-192, route-193, route-194, route-195, route-196, route-197]
   done:
     - m67-cross-agent-handoff-protocol-shipped-v6-23-0

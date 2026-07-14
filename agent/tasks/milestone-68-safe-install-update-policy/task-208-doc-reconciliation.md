@@ -2,13 +2,13 @@
 id: task-208
 milestone: M68
 title: Doc reconciliation + route-079 re-close (route-203)
-status: planned
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-203
 depends_on: route-202
 audit_findings: [F-080-08, F-080-12, P-081-04, P-081-06]

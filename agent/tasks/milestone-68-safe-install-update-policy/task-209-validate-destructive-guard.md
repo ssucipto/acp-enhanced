@@ -2,13 +2,13 @@
 id: task-209
 milestone: M68
 title: Validate destructive-pattern guard (route-204)
-status: planned
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-204
 audit_findings: [SC-080-03]
 ---
