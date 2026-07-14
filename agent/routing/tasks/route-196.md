@@ -21,7 +21,7 @@ tokens_actual:
 cost_est_usd:
 cost_actual_usd:
 created: 2026-07-15
-completed:
+completed: 2026-07-15
 override_reason:
 ---
 
@@ -32,7 +32,8 @@ Register acp.receive as 70th framework command with full parity. Audit routing.y
 ## Acceptance criteria
 
 - [ ] acp.receive in package.yaml
-- [ ] domain.yml command count = 70
+- [ ] Repair `domain.yml` L33-37 corrupt acp.feedback/handoff entries (audit-078 P-078-01)
+- [ ] 70×3 command parity after `acp.receive` (baseline 69 acp + 1 new)
 - [ ] index entries for handoff/receive/resume
 - [ ] 70×3 wrapper parity passes
 - [ ] routing.yml validated against shipped command set
