@@ -1,6 +1,6 @@
 # Cross-Agent Handoff (ACP Enhanced)
 
-> **Status:** DRAFT — ships with M67 v6.23.0. Do not treat as enforced until release.  
+> **Status:** Shipped — ACP v6.23.0 (M67)  
 > **Design:** `agent/design/cross-agent-handoff-protocol.md`  
 > **Audit:** `agent/reports/audit-077-cross-agent-handoff-feedback-007.md`  
 > **Field evidence:** consumer-project audit-245 + M51 exemplar (external reference project)
@@ -11,7 +11,7 @@
 
 ACP supports two handoff modes:
 
-| Mode | Use when | Delivery | Command (post-M67) |
+| Mode | Use when | Delivery | Command |
 |------|----------|----------|-------------------|
 | **executor** | Same repo, different agent/model (plan → implement, implement → audit) | Disk file in `agent/reports/` | `/acp-handoff --mode executor --to <executor>` |
 | **cross-repo** | Problem transfer to another codebase | Chat-primary (optional disk) | `/acp-handoff --mode cross-repo` (default) |
@@ -57,16 +57,11 @@ sequenceDiagram
 
 ## Incoming ritual
 
-Until M67 ships `/acp-receive`, follow manually:
-
-1. Load context protocol (`CLAUDE.md` / `AGENTS.md`)
-2. Open handoff (`@` attach in Cursor)
-3. Compare handoff `git_commit` vs `git rev-parse HEAD` — if drift, `git log pin..HEAD`
-4. Compare handoff date vs last `sessions.md` entry
-5. Confirm mode: **Implement** vs **Audit only**
-6. **`/acp-proceed`** or **`/acp-audit`** — do not re-litigate locked decisions
-
-Post-M67: **`/acp-receive <path>`** or **`/acp-resume @handoff.md`**
+1. **`/acp-receive <path>`** or **`/acp-resume @handoff.md`** — load handoff, verify git pin, print assignment checklist
+2. Compare handoff `git_commit` vs `git rev-parse HEAD` — if drift, review `git log pin..HEAD`
+3. Compare handoff date vs last `sessions.md` entry
+4. Confirm mode: **Implement** vs **Audit only** vs **Document only**
+5. **`/acp-proceed`** or **`/acp-audit`** — do not re-litigate locked decisions
 
 ---
 
@@ -106,9 +101,9 @@ Path: `Project/consumer-project/consumer-project/agent/reports/`
 | Command | When |
 |---------|------|
 | `/acp-commit` | Always before outgoing handoff |
-| `/acp-handoff` | Create handoff (v2 dual mode post-M67) |
-| `/acp-receive` | Load + verify incoming handoff (M67) |
-| `/acp-resume` | Session start; optional handoff path (M67) |
+| `/acp-handoff` | Create handoff (v2 dual mode) |
+| `/acp-receive` | Load + verify incoming handoff |
+| `/acp-resume` | Session start; optional handoff path |
 | `/acp-status` | Snapshot for handoff context |
 
 ---
