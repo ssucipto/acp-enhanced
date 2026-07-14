@@ -1810,3 +1810,131 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 084
     escalated_to: null
+
+  # ── REVIEW-001 FINDINGS — CODE REVIEW (2026-07-15) ───────────────────────────
+
+  - audit_id: review-001
+    finding_id: CR-001
+    severity: critical
+    file: scripts/package.json
+    finding: "vitest ^1.6.0 — npm audit CRITICAL GHSA-5xrq (UI server arbitrary file RCE)"
+    description: "Dev dependency; CI uses vitest run not UI — still violates SC-14 gate."
+    fix_target: "Upgrade vitest to >=3.2.6; npm audit fix in scripts/"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: review-001-remediation
+    escalated_to: null
+
+  - audit_id: review-001
+    finding_id: CR-002
+    severity: high
+    file: scripts/package.json
+    finding: "Transitive vite <=6.4.2 — GHSA-fx2h high path traversal"
+    fix_target: "Upgrade vitest/vite via npm audit fix; re-run scripts npm test"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: review-001-remediation
+    escalated_to: null
+
+  - audit_id: review-001
+    finding_id: CR-003
+    severity: high
+    file: scripts/acp-validate.ts
+    finding: "Widespread any in YAML parsers — loadYaml<any>, Record<string, any>"
+    fix_target: "Add typed interfaces for taxonomy/config/progress YAML structures"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: review-001-remediation
+    escalated_to: null
+
+  - audit_id: review-001
+    finding_id: CR-004
+    severity: high
+    file: scripts/acp-dispatch.ts
+    finding: "catch (err: any) at line 294 — should use unknown"
+    fix_target: "catch (err: unknown) with instanceof Error guard"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: review-001-remediation
+    escalated_to: null
+
+  - audit_id: review-001
+    finding_id: CR-005
+    severity: high
+    file: agent/scripts/acp.package-search.sh
+    finding: "Missing set -euo pipefail + trap ERR (SH-01 violation)"
+    fix_target: "Refactor subshell loop or add ERR trap; align with route-173 pipefail standard"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: review-001-remediation
+    escalated_to: null
+
+  # ── INTEGRITY-001 FINDINGS — SELF SCAN (2026-07-15) ──────────────────────────
+
+  - audit_id: integrity-001
+    finding_id: INT-001
+    severity: high
+    file: agent/manifest.yaml
+    finding: "IG-42 — manifest.yaml lacks files: sha256 block; 88 framework paths fail --verify"
+    fix_target: "Run acp.manifest-hash.sh --generate to populate files: SHA registry (or split integrity manifest)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: integrity-001-remediation
+    escalated_to: null
+
+  - audit_id: integrity-001
+    finding_id: INT-002
+    severity: high
+    file: agent/scripts/acp.git-provenance.sh
+    finding: "IG-37 — BSD sed \\s in team_members parser fails on macOS; false unknown-author alerts"
+    fix_target: "Replace sed 's/^\\s*-' with '[[:space:]]' POSIX class or yaml_get for team_members"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: integrity-001-remediation
+    escalated_to: null
+
+  # ── AUDIT-085 FINDINGS — ACP-REVIEW SELF-COVERAGE (2026-07-15) ─────────────
+
+  - audit_id: audit-085
+    finding_id: F-085-01
+    severity: high
+    file: agent/commands/acp.review.md
+    finding: "Default path src/ misses ACP Enhanced codebase — no src/ directory exists"
+    fix_target: "Add --self flag (scripts/, agent/scripts/, agent/commands/) or change ACP default path"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-085-remediation
+    escalated_to: null
+
+  - audit_id: audit-085
+    finding_id: F-085-05
+    severity: medium
+    file: agent/commands/acp.review.md
+    finding: "Rule ID collision — AP-01/02/03 used for API rules and Appendix A ACP rules"
+    fix_target: "Rename Appendix A AP-* to ACP-01/02/03; update E2E and skill references"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-085-remediation
+    escalated_to: null
+
+  - audit_id: audit-085
+    finding_id: F-085-06
+    severity: medium
+    file: README.md
+    finding: "Rule count inconsistent — command doc says 54, README/domain.yml claim 77"
+    fix_target: "Reconcile to 64 distinct definitions (54+10 appendix); update README, domain.yml, sessions.md"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-085-remediation
+    escalated_to: null
+
+  - audit_id: audit-085
+    finding_id: F-085-07
+    severity: medium
+    file: e2e/acp.review.test.sh
+    finding: "E2E does not execute /acp-review — only greps command doc against fixtures (M55 G-004 partial)"
+    fix_target: "Add behavioral test: run review on fixture dir with --ci or script-backed rule scanner"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-085-remediation
+    escalated_to: null

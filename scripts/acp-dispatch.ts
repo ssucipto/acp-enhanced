@@ -291,8 +291,9 @@ async function dispatch(taskPath: string) {
         outputTokens = chunk.usage.completion_tokens ?? 0;
       }
     }
-  } catch (err: any) {
-    console.error(`\n[ACP] API error: ${err.message}`);
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`\n[ACP] API error: ${msg}`);
     process.exit(1);
   }
 
