@@ -12,6 +12,8 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 IDENTITY_FILE="${PROJECT_ROOT}/agent/core/identity.yml"
 # shellcheck source=acp.integrity-output.sh
 source "${SCRIPT_DIR}/acp.integrity-output.sh"
+# shellcheck source=acp.yaml-parser.sh
+source "${SCRIPT_DIR}/acp.yaml-parser.sh"
 
 SINCE="10"
 IG_REMAINING_ARGS=()
@@ -30,21 +32,14 @@ done
 
 TEAM_MEMBERS=()
 if [[ -f "$IDENTITY_FILE" ]]; then
-  in_team=false
-  while IFS= read -r line; do
-    if echo "$line" | grep -q '^team_members:'; then
-      in_team=true
-      continue
-    fi
-    if $in_team; then
-      if echo "$line" | grep -qE '^\s*-'; then
-        email=$(echo "$line" | sed 's/^\s*-[[:space:]]*//' | tr -d '"' | tr -d "'" | tr -d '\r')
-        [[ -n "$email" ]] && TEAM_MEMBERS+=("$email")
-      elif echo "$line" | grep -qE '^\S'; then
-        break
-      fi
-    fi
-  done < "$IDENTITY_FILE"
+  member_count=$(yaml_get_array "$IDENTITY_FILE" "team_members" 2>/dev/null || echo "0")
+  if [[ "$member_count" =~ ^[0-9]+$ ]] && [[ "$member_count" -gt 0 ]]; then
+    for ((i = 0; i < member_count; i++)); do
+      email=$(yaml_get_nested "$IDENTITY_FILE" "team_members[${i}]" 2>/dev/null || true)
+      email="${email//$'\r'/}"
+      [[ -n "$email" ]] && TEAM_MEMBERS+=("$email")
+    done
+  fi
 fi
 
 cd "$PROJECT_ROOT"

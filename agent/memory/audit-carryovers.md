@@ -643,9 +643,9 @@ carryovers:
     file: package.yaml
     finding: "13 command docs absent from package.yaml — /acp-package-install would ship a broken framework missing acp.commit, acp.decide, acp.dispatch, acp.route, acp.task, acp.feedback, acp.visualize, acp.wiki-update, acp.carryover-query, acp.cost-report, acp.memory-sync, acp.pattern-sync, acp.session-sync"
     fix_target: "Add the 13 commands to package.yaml; add CI guard asserting package.yaml command count == command file count"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
     escalated_to: null
 
   - audit_id: 67
@@ -1258,4 +1258,683 @@ carryovers:
     status: fixed
     fix_applied_date: 2026-06-15
     verified_in_audit: "076"
+    escalated_to: null
+
+  # ── AUDIT-077 FINDINGS — CROSS-AGENT HANDOFF (M67) ───────────────────────────
+  # Field evidence: FIFOZ audit-245, feedback-007. Planned: M67 routes 190–197.
+  # Post-ship verification: audit-079 (2026-07-15)
+
+  - audit_id: 77
+    finding_id: H1
+    severity: high
+    file: agent/commands/acp.handoff.md
+    finding: "Command forbids implementation steps; executor handoffs require task sequence, ADRs, guardrails"
+    description: "acp.handoff.md L125/L247 explicit ban conflicts with FIFOZ M51 exemplar. Multi-executor same-repo workflow blocked by spec."
+    fix_target: "acp.handoff.md v2 --mode executor with mandatory §4 template (route-190)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-190
+
+  - audit_id: 77
+    finding_id: H2
+    severity: high
+    file: agent/commands/
+    finding: "No /acp-receive command; incoming agent has no structured protocol"
+    fix_target: "Create acp.receive.md + wrappers (route-191)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-191
+
+  - audit_id: 77
+    finding_id: H3
+    severity: high
+    file: agent/commands/acp.handoff.md
+    finding: "/acp-commit not enforced before handoff despite routing.yml suggestion"
+    fix_target: "Outgoing ritual in handoff v2 command text (route-190)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-190
+
+  - audit_id: 77
+    finding_id: H4
+    severity: medium
+    file: agent/commands/
+    finding: "No git commit pin freshness check on receive"
+    fix_target: "/acp-receive step 3 git drift warning (route-191, route-195 E2E)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-191
+
+  - audit_id: 77
+    finding_id: H5
+    severity: medium
+    file: agent/reports/
+    finding: "Ad-hoc handoff filename conventions (4 patterns across 9 FIFOZ handoffs)"
+    fix_target: "Standardize handoff-{to}-{scope}-{date}.md in command (route-190)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-190
+
+  - audit_id: 77
+    finding_id: H6
+    severity: medium
+    file: agent/wiki/cross-agent-handoff.md
+    finding: "No return-handoff template (implement → planning agent)"
+    fix_target: "Template § Return handoff + wiki (route-190, route-194)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-194
+
+  - audit_id: 77
+    finding_id: H7
+    severity: medium
+    file: agent/commands/acp.handoff.md
+    finding: "Self-contained-without-source conflicts with same-repo executor handoffs"
+    fix_target: "Mode split: executor assumes same repo; cross-repo retains v1 rule (route-190)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-190
+
+  - audit_id: 77
+    finding_id: H8
+    severity: low
+    file: agent/progress.yaml
+    finding: "Handoff usage undercounted in audits; no discoverability pointer"
+    fix_target: "active_handoff field + wiki (route-193)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-193
+
+  - audit_id: 77
+    finding_id: H9
+    severity: low
+    file: agent/schemas/progress.schema.yaml
+    finding: "No active_handoff pointer in progress.yaml schema"
+    fix_target: "Schema extension + validate (route-193)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-193
+
+  - audit_id: 77
+    finding_id: H10
+    severity: low
+    file: agent/reports/
+    finding: "Cross-repo handoffs mixed in same filename family without target-repo field"
+    fix_target: "--mode cross-repo + optional target-repo frontmatter P2 (route-194)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-194
+
+  - audit_id: 77
+    finding_id: U1
+    severity: medium
+    file: agent/commands/acp.resume.md
+    finding: "acp-resume chains init+proceed but never loads handoff files"
+    fix_target: "Optional handoff path → receive protocol (route-192)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-192
+
+  - audit_id: 77
+    finding_id: U2
+    severity: low
+    file: agent/
+    finding: "No formal proposals/feedback intake path until audit-077"
+    fix_target: "CONTRIBUTING.md intake section (route-196)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-196
+
+  - audit_id: 77
+    finding_id: U3
+    severity: low
+    file: agent/wiki/
+    finding: "No cross-agent handoff wiki until audit-077 (draft only)"
+    fix_target: "Finalize wiki on M67 ship (route-193)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-193
+
+  # ── AUDIT-078 FINDINGS — M67 PRE-IMPL (2026-07-15) ───────────────────────────
+
+  - audit_id: 78
+    finding_id: P-078-01
+    severity: medium
+    file: agent/wiki/domain.yml
+    finding: "domain.yml entries corrupt at L33-37 — acp.feedback has duplicate category/purpose; acp.handoff purpose merged without command key"
+    description: "Adding acp.receive on top of corrupt entries will propagate bad taxonomy. Must repair acp.feedback and add explicit acp.handoff entry before M67 ship."
+    fix_target: "route-196: split L33-37 into proper acp.feedback and acp.handoff entries; add acp.receive entry; update count to 70 acp commands"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: M67 route-196
+
+  # ── AUDIT-079 FINDINGS — M67 POST-SHIP GAPS (2026-07-15) ─────────────────────
+  # Housekeeping closed in same session (audit-079 follow-up).
+
+  - audit_id: 79
+    finding_id: F-079-01
+    severity: medium
+    file: agent/milestones/milestone-67-cross-agent-handoff-protocol.md
+    finding: "Milestone status completed but verification gates L88-108 all unchecked"
+    fix_target: "Mark verification gates pass; align milestone doc with shipped state"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-02
+    severity: medium
+    file: agent/tasks/milestone-67-cross-agent-handoff-protocol/
+    finding: "task-195..202 still status planned while routes 190-197 completed"
+    fix_target: "Stamp all 8 task docs completed 2026-07-15"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-03
+    severity: medium
+    file: agent/memory/sessions.md
+    finding: "No sessions.md entry for M67 v6.23.0 ship"
+    fix_target: "Write session entry via /acp-commit"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-04
+    severity: medium
+    file: agent/feedback/feedback-007-cross-agent-handoff-protocol.md
+    finding: "feedback-007 section 6 acceptance criteria still unchecked"
+    fix_target: "Check acceptance boxes; document FIFOZ acp-version-update path"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-05
+    severity: low
+    file: README.md
+    finding: "README omits /acp-receive and cross-agent-handoff wiki"
+    fix_target: "Add receive to workflow list; link cross-agent-handoff.md"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-06
+    severity: low
+    file: .github/prompts/acp-handoff.prompt.md
+    finding: "Handoff wrapper description still v1 cross-context not v2 dual mode"
+    fix_target: "Update handoff wrapper descriptions on all 3 surfaces"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-07
+    severity: low
+    file: agent/wiki/domain.yml
+    finding: "e2e_suites catalog missing acp.handoff and acp.receive tests"
+    fix_target: "Add both suites to domain.yml test_suites"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-08
+    severity: low
+    file: agent/progress.yaml
+    finding: "notes still claim 69 commands after M67"
+    fix_target: "Update progress.yaml notes to 70 commands"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-11
+    severity: low
+    file: package.yaml
+    finding: "HIGH-067-001 still pending but 0/70 acp commands missing from package.yaml"
+    fix_target: "Re-verify HIGH-067-001; mark fixed if confirmed"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  # ── AUDIT-080 FINDINGS — VERSION-UPDATE OVERWRITE SAFETY (2026-07-15) ────────
+  # Field report: FIFOZ /acp-version-update overwrote identity.yml. route-079 doc-only.
+
+  - audit_id: 80
+    finding_id: F-080-01
+    severity: critical
+    file: agent/scripts/acp.version-update.sh
+    finding: "route-079 guards (--diff, --preserve-project-core, --force) documented and marked complete but script has zero argument parsing"
+    fix_target: "Implement route-079 in acp.version-update.sh; reopen route-079 until E2E passes"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-02
+    severity: critical
+    file: agent/scripts/acp.version-update.sh
+    finding: "cp agent/core/*.yml blindly overwrites identity.yml on every version-update"
+    fix_target: "Tier B policy: never overwrite identity.yml without --force; hash-diff vs upstream default"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-03
+    severity: high
+    file: agent/scripts/acp.version-update.sh
+    finding: "agent/wiki/domain.yml and all wiki markdown overwritten on version-update"
+    fix_target: "Add wiki paths to preserve-project-core tier; skip if modified"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-04
+    severity: high
+    file: agent/scripts/acp.version-update.sh
+    finding: "routing taxonomy.yml, rules.md, config.yml overwritten on version-update"
+    fix_target: "Tier B preserve for consumer-customized routing config"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-05
+    severity: high
+    file: scripts/acp-bootstrap.sh
+    finding: "bootstrap re-run overwrites constraints.yml, routing.yml, wiki, taxonomy (only identity is create-if-absent)"
+    fix_target: "create-if-absent for all Tier B bootstrap stubs"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-06
+    severity: high
+    file: agent/scripts/acp.install.sh
+    finding: "acp.install.sh always cat > agent/manifest.yaml destroying third-party package entries on reinstall"
+    fix_target: "Merge acp-core block only; preserve existing packages: keys"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-07
+    severity: high
+    file: agent/scripts/acp.install.sh
+    finding: "acp.install.sh overwrites agent/core/*.yml on existing agent/ directory"
+    fix_target: "Tier B preserve on reinstall; match version-update policy"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-08
+    severity: medium
+    file: CHANGELOG.md
+    finding: "CHANGELOG v6.9.0 claims version-update core file protection shipped but script unchanged"
+    fix_target: "Reconcile CHANGELOG after script fix; note doc-only gap in audit-080"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-10
+    severity: medium
+    file: e2e/acp.version.test.sh
+    finding: "No behavioral E2E asserting project files preserved on version-update"
+    fix_target: "Add e2e/acp.version-update-preserve.test.sh with customized identity.yml fixture"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-11
+    severity: medium
+    file: agent/scripts/acp.install.sh
+    finding: "xargs in manifest generation fails on Windows Git Bash (sysconf error)"
+    fix_target: "Replace xargs basename loops with portable while-read loop"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-09
+    severity: medium
+    file: agent/scripts/acp.version-update.sh
+    finding: "Script entry check requires AGENT.md only; ACP Enhanced standard is AGENTS.md"
+    fix_target: "Accept AGENTS.md OR AGENT.md; triple-sync AGENTS→CLAUDE+copilot on update (route-199)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-12
+    severity: low
+    file: agent/commands/acp.version-update.md
+    finding: "Command doc lists domain.yml under agent/core/ — actual path is agent/wiki/domain.yml"
+    fix_target: "Fix path in acp.version-update.md (route-203)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  # ── AUDIT-081 PRE-IMPL GAPS — M68 (2026-07-15) ───────────────────────────────
+
+  - audit_id: 81
+    finding_id: P-081-01
+    severity: medium
+    file: agent/scripts/acp.version-update.sh
+    finding: "version-update L153 copies all agent/commands/*.*.md — overwrites third-party/custom command namespaces (Tier A)"
+    fix_target: "route-199: copy only acp.*.md and git.*.md; skip other namespaces per design Tier A"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 81
+    finding_id: P-081-02
+    severity: medium
+    file: agent/scripts/acp.version-update.sh
+    finding: "version-update L193 blind-copies all skills; install skips local.* — update must match"
+    fix_target: "route-199: skip local.*.md skills on update (Tier B); add E2E regression"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 81
+    finding_id: P-081-03
+    severity: medium
+    file: e2e/acp.version-update-preserve.test.sh
+    finding: "E2E preserve test needs offline upstream fixture — domain.yml says no network for version-update in CI"
+    fix_target: "route-202: use ACP_UPSTREAM_ROOT=PROJECT_ROOT or copied fixture; no live git clone in CI"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 82
+    finding_id: F-082-09
+    severity: low
+    file: e2e/acp.bootstrap-preserve.test.sh
+    finding: "No E2E for bootstrap re-run preserving customized Tier B files"
+    fix_target: "Add e2e/acp.bootstrap-preserve.test.sh — re-run bootstrap with customized identity.yml"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
+    escalated_to: null
+
+  # ── AUDIT-083 FINDINGS — M63 POST-SHIP (2026-07-15) ─────────────────────────
+
+  - audit_id: 83
+    finding_id: F-083-01
+    severity: high
+    file: e2e/acp.tier3-memory-knowledge.test.sh
+    finding: "Tier-3 E2E asserted only 26 of 58 commands while registry claimed full coverage"
+    description: "Static hand-picked command list gave false confidence; registry mapped all tier-3 slugs to one suite."
+    fix_target: "Dynamic loop over all non-tier-2 acp.*.md docs; meta-assertion TIER3_COUNT=58"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 083
+    escalated_to: null
+
+  - audit_id: 83
+    finding_id: F-083-02
+    severity: medium
+    file: agent/milestones/milestone-63-test-coverage-tier2-3.md
+    finding: "Success criteria referenced CHANGELOG v6.18.0 instead of v6.25.0"
+    fix_target: "Update success criteria and add verification gates"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 083
+    escalated_to: null
+
+  - audit_id: 83
+    finding_id: F-083-03
+    severity: medium
+    file: agent/tasks/milestone-63-test-coverage-tier2-3/
+    finding: "No M63 task tracking doc while route-206 marked complete"
+    fix_target: "Create task-211-route-206-coverage.md"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 083
+    escalated_to: null
+
+  - audit_id: 83
+    finding_id: F-083-04
+    severity: medium
+    file: scripts/acp-validate.test.ts
+    finding: "No vitest unit test for validateCommandE2eCoverage"
+    fix_target: "Add options param (repoRoot/commandsDir) + fixture + 3 vitest cases"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 083
+    escalated_to: null
+
+  - audit_id: 83
+    finding_id: F-083-06
+    severity: low
+    file: e2e/acp.tier2-workflow.test.sh
+    finding: "Agent Directive check case-sensitive — acp.proceed uses CRITICAL AGENT DIRECTIVE"
+    fix_target: "Use grep -qi for case-insensitive directive check in tier2/tier3 suites"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 083
+    escalated_to: null
+
+  # ── AUDIT-084 FINDINGS — M63 PRE-DEPLOYMENT (2026-07-15) ────────────────────
+
+  - audit_id: 84
+    finding_id: F-084-01
+    severity: high
+    file: agent/tasks/milestone-63-test-coverage-tier2-3/task-217-audit-083-release-closure.md
+    finding: "v6.25.1 git tag missing — validate fails, task-217 step 5 incomplete"
+    description: "identity.yml and CHANGELOG at 6.25.1 but only v6.25.0 tag exists on HEAD commit a84b00a."
+    fix_target: "git tag -a v6.25.1 -m 'M63 audit-083 closure' HEAD; re-run acp-validate"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 084
+    escalated_to: null
+
+  - audit_id: 84
+    finding_id: F-084-02
+    severity: high
+    file: agent/progress.yaml
+    finding: "develop branch not pushed — v6.25.0/v6.25.1 commits local only"
+    description: "c0baf78 and a84b00a ahead of origin/develop. Remote consumers cannot receive M63 amendment."
+    fix_target: "git push origin develop && git push origin v6.25.0 v6.25.1"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 084
+    escalated_to: null
+
+  - audit_id: 84
+    finding_id: F-084-03
+    severity: medium
+    file: agent/tasks/milestone-63-test-coverage-tier2-3/task-217-audit-083-release-closure.md
+    finding: "task-217 marked completed while git tag step remains undone"
+    fix_target: "Complete tag step; update verification checklist; stamp after F-084-01 fixed"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 084
+    escalated_to: null
+
+  - audit_id: 84
+    finding_id: F-084-04
+    severity: medium
+    file: agent/progress.yaml
+    finding: "recent_work stale tier3 assertion count (96 vs 259)"
+    fix_target: "Update recent_work M63 entry: tier3 259 assertions post audit-083"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 084
+    escalated_to: null
+
+  # ── REVIEW-001 FINDINGS — CODE REVIEW (2026-07-15) ───────────────────────────
+
+  - audit_id: review-001
+    finding_id: CR-001
+    severity: critical
+    file: scripts/package.json
+    finding: "vitest ^1.6.0 — npm audit CRITICAL GHSA-5xrq (UI server arbitrary file RCE)"
+    description: "Dev dependency; CI uses vitest run not UI — still violates SC-14 gate."
+    fix_target: "Upgrade vitest to >=3.2.6; npm audit fix in scripts/"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: review-001-remediation
+    escalated_to: null
+
+  - audit_id: review-001
+    finding_id: CR-002
+    severity: high
+    file: scripts/package.json
+    finding: "Transitive vite <=6.4.2 — GHSA-fx2h high path traversal"
+    fix_target: "Upgrade vitest/vite via npm audit fix; re-run scripts npm test"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: review-001-remediation
+    escalated_to: null
+
+  - audit_id: review-001
+    finding_id: CR-003
+    severity: high
+    file: scripts/acp-validate.ts
+    finding: "Widespread any in YAML parsers — loadYaml<any>, Record<string, any>"
+    fix_target: "Add typed interfaces for taxonomy/config/progress YAML structures"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: review-001-remediation
+    escalated_to: null
+
+  - audit_id: review-001
+    finding_id: CR-004
+    severity: high
+    file: scripts/acp-dispatch.ts
+    finding: "catch (err: any) at line 294 — should use unknown"
+    fix_target: "catch (err: unknown) with instanceof Error guard"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: review-001-remediation
+    escalated_to: null
+
+  - audit_id: review-001
+    finding_id: CR-005
+    severity: high
+    file: agent/scripts/acp.package-search.sh
+    finding: "Missing set -euo pipefail + trap ERR (SH-01 violation)"
+    fix_target: "Refactor subshell loop or add ERR trap; align with route-173 pipefail standard"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: review-001-remediation
+    escalated_to: null
+
+  # ── INTEGRITY-001 FINDINGS — SELF SCAN (2026-07-15) ──────────────────────────
+
+  - audit_id: integrity-001
+    finding_id: INT-001
+    severity: high
+    file: agent/manifest.yaml
+    finding: "IG-42 — manifest.yaml lacks files: sha256 block; 88 framework paths fail --verify"
+    fix_target: "Run acp.manifest-hash.sh --generate to populate files: SHA registry (or split integrity manifest)"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: integrity-001-remediation
+    escalated_to: null
+
+  - audit_id: integrity-001
+    finding_id: INT-002
+    severity: high
+    file: agent/scripts/acp.git-provenance.sh
+    finding: "IG-37 — BSD sed \\s in team_members parser fails on macOS; false unknown-author alerts"
+    fix_target: "Replace sed 's/^\\s*-' with '[[:space:]]' POSIX class or yaml_get for team_members"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: integrity-001-remediation
+    escalated_to: null
+
+  # ── AUDIT-085 FINDINGS — ACP-REVIEW SELF-COVERAGE (2026-07-15) ─────────────
+
+  - audit_id: audit-085
+    finding_id: F-085-01
+    severity: high
+    file: agent/commands/acp.review.md
+    finding: "Default path src/ misses ACP Enhanced codebase — no src/ directory exists"
+    fix_target: "Add --self flag (scripts/, agent/scripts/, agent/commands/) or change ACP default path"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-085-remediation
+    escalated_to: null
+
+  - audit_id: audit-085
+    finding_id: F-085-05
+    severity: medium
+    file: agent/commands/acp.review.md
+    finding: "Rule ID collision — AP-01/02/03 used for API rules and Appendix A ACP rules"
+    fix_target: "Rename Appendix A AP-* to ACP-01/02/03; update E2E and skill references"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-085-remediation
+    escalated_to: null
+
+  - audit_id: audit-085
+    finding_id: F-085-06
+    severity: medium
+    file: README.md
+    finding: "Rule count inconsistent — command doc says 54, README/domain.yml claim 77"
+    fix_target: "Reconcile to 64 distinct definitions (54+10 appendix); update README, domain.yml, sessions.md"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-085-remediation
+    escalated_to: null
+
+  - audit_id: audit-085
+    finding_id: F-085-07
+    severity: medium
+    file: e2e/acp.review.test.sh
+    finding: "E2E does not execute /acp-review — only greps command doc against fixtures (M55 G-004 partial)"
+    fix_target: "Add behavioral test: run review on fixture dir with --ci or script-backed rule scanner"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-085-remediation
     escalated_to: null

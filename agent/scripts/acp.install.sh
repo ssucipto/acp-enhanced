@@ -40,14 +40,16 @@ echo ""
 
 # Backup + overwrite warning
 echo "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo "${BLUE}  What will be OVERWRITTEN:${NC}"
+echo "${BLUE}  Tier C — framework files refreshed:${NC}"
 echo "    • AGENTS.md, CLAUDE.md, copilot-instructions.md"
-echo "    • agent/commands/*.md, agent/scripts/*.sh"
-echo "    • agent/core/*.yml, agent/skills/*.md, agent/wiki/*"
+echo "    • agent/commands/acp.*.md, agent/commands/git.*.md, agent/scripts/*.sh"
 echo ""
-echo "${BLUE}  What will be PRESERVED:${NC}"
-echo "    • agent/memory/*, agent/design/*, agent/milestones/*"
-echo "    • agent/patterns/local.*, agent/progress.yaml"
+echo "${BLUE}  Tier B — preserved if customized:${NC}"
+echo "    • agent/core/*.yml, agent/wiki/*, agent/routing/taxonomy.yml"
+echo "    • agent/skills/local.*.md"
+echo ""
+echo "${BLUE}  Tier A — never overwritten:${NC}"
+echo "    • agent/memory/*, agent/design/*, agent/milestones/*, agent/progress.yaml"
 echo "    • agent/preferences/, agent/configurables/"
 echo ""
 echo "  💡 Backup customized files before continuing:"
@@ -76,6 +78,11 @@ fi
 
 echo "${GREEN}✓${NC} Repository cloned"
 echo ""
+
+export TEMP_DIR
+. "$TEMP_DIR/agent/scripts/acp.common.sh"
+init_colors
+export ACP_DIFF_ONLY=false ACP_FORCE=false ACP_PRESERVE_PROJECT_CORE=false ACP_YES=true
 
 # ── Legacy .agent/ migration ──────────────────────────────────────────────────
 # Detect ACP < 6.x layout and auto-merge user-state files into agent/ before
@@ -178,25 +185,35 @@ mkdir -p "$TARGET_DIR/agent/routing/tasks"
 mkdir -p "$TARGET_DIR/agent/skills"
 mkdir -p "$TARGET_DIR/agent/wiki"
 
-# Copy static config files (always overwrite — no user state)
-if [ -d "$TEMP_DIR/agent/core" ]; then
-    cp "$TEMP_DIR/agent/core/"*.yml "$TARGET_DIR/agent/core/" 2>/dev/null || true
-fi
-if [ -d "$TEMP_DIR/agent/skills" ]; then
-    for _skill_file in "$TEMP_DIR/agent/skills/"*.md; do
-        [ -e "$_skill_file" ] || continue  # glob safety: skip if no match
-        _skill_basename=$(basename "$_skill_file")
-        case "$_skill_basename" in
-            local.*) continue ;;  # never overwrite project-local skill extensions
-        esac
-        cp "$_skill_file" "$TARGET_DIR/agent/skills/"
+# Copy static config files (tier-aware — preserve customized Tier B on reinstall)
+(
+    cd "$TARGET_DIR"
+    for _f in identity.yml constraints.yml routing.yml; do
+        acp_copy_framework_file "agent/core/${_f}" B
     done
-    unset _skill_file _skill_basename
-fi
-if [ -d "$TEMP_DIR/agent/wiki" ]; then
-    cp "$TEMP_DIR/agent/wiki/"*.yml "$TARGET_DIR/agent/wiki/" 2>/dev/null || true
-    cp "$TEMP_DIR/agent/wiki/"*.md  "$TARGET_DIR/agent/wiki/" 2>/dev/null || true
-fi
+    if [ -d "$TEMP_DIR/agent/skills" ]; then
+        for _skill_file in "$TEMP_DIR/agent/skills/"*.md; do
+            [ -e "$_skill_file" ] || continue
+            _skill_basename=$(basename "$_skill_file")
+            case "$_skill_basename" in
+                local.*) continue ;;
+            esac
+            acp_copy_framework_file "agent/skills/${_skill_basename}" C
+        done
+    fi
+    if [ -d "$TEMP_DIR/agent/wiki" ]; then
+        for _wf in "$TEMP_DIR/agent/wiki/"*; do
+            [ -e "$_wf" ] || continue
+            acp_copy_framework_file "agent/wiki/$(basename "$_wf")" B
+        done
+    fi
+    if [ -d "$TEMP_DIR/agent/routing" ]; then
+        for _rf in taxonomy.yml rules.md config.yml; do
+            acp_copy_framework_file "agent/routing/${_rf}" B
+        done
+        acp_copy_framework_file "agent/routing/tasks/route-template.md" C
+    fi
+)
 if [ -d "$TEMP_DIR/.opencode/commands" ]; then
     mkdir -p "$TARGET_DIR/.opencode/commands"
     cp "$TEMP_DIR/.opencode/commands/"*.md "$TARGET_DIR/.opencode/commands/" 2>/dev/null || true
@@ -206,14 +223,6 @@ if [ -f "$TARGET_DIR/agent/scripts/acp.cursor-commands-sync.sh" ]; then
     echo "Generating Cursor slash commands..."
     chmod +x "$TARGET_DIR/agent/scripts/acp.cursor-commands-sync.sh"
     (cd "$TARGET_DIR" && bash agent/scripts/acp.cursor-commands-sync.sh)
-fi
-if [ -d "$TEMP_DIR/agent/routing" ]; then
-    cp "$TEMP_DIR/agent/routing/taxonomy.yml" "$TARGET_DIR/agent/routing/" 2>/dev/null || true
-    cp "$TEMP_DIR/agent/routing/rules.md"     "$TARGET_DIR/agent/routing/" 2>/dev/null || true
-    cp "$TEMP_DIR/agent/routing/config.yml"   "$TARGET_DIR/agent/routing/" 2>/dev/null || true
-    # route-template only — never copy route-*.md (user routing files)
-    cp "$TEMP_DIR/agent/routing/tasks/route-template.md" \
-       "$TARGET_DIR/agent/routing/tasks/" 2>/dev/null || true
 fi
 
 # Create user-state files only if absent (never overwrite existing state)
@@ -289,10 +298,12 @@ fi
 # Copy command template
 cp "$TEMP_DIR/agent/commands/command.template.md" "$TARGET_DIR/agent/commands/"
 
-# Copy all command files (flat structure with dot notation)
-# Copies files like acp.init.md, acp.status.md, deploy.production.md, etc.
+# Tier C: framework commands only — preserve third-party namespaces (P-081-01)
 if [ -d "$TEMP_DIR/agent/commands" ]; then
-    find "$TEMP_DIR/agent/commands" -maxdepth 1 -name "*.*.md" -exec cp {} "$TARGET_DIR/agent/commands/" \;
+    for _cmd in "$TEMP_DIR/agent/commands"/acp.*.md "$TEMP_DIR/agent/commands"/git.*.md; do
+        [ -e "$_cmd" ] || continue
+        cp "$_cmd" "$TARGET_DIR/agent/commands/"
+    done
 fi
 
 # Copy progress template
@@ -328,8 +339,16 @@ if [ -f "$TEMP_DIR/agent/schemas/package.schema.yaml" ]; then
     cp "$TEMP_DIR/agent/schemas/package.schema.yaml" "$TARGET_DIR/agent/schemas/"
 fi
 
-# Copy AGENT.md
-cp "$TEMP_DIR/AGENT.md" "$TARGET_DIR/"
+# Entry docs (tier C) — prefer AGENTS.md; keep AGENT.md for legacy consumers
+if [ -f "$TEMP_DIR/AGENTS.md" ]; then
+    cp "$TEMP_DIR/AGENTS.md" "$TARGET_DIR/"
+    cp "$TARGET_DIR/AGENTS.md" "$TARGET_DIR/CLAUDE.md" 2>/dev/null || true
+    mkdir -p "$TARGET_DIR/.github"
+    cp "$TARGET_DIR/AGENTS.md" "$TARGET_DIR/.github/copilot-instructions.md" 2>/dev/null || true
+fi
+if [ -f "$TEMP_DIR/AGENT.md" ]; then
+    cp "$TEMP_DIR/AGENT.md" "$TARGET_DIR/"
+fi
 
 # Copy scripts - selective installation based on command dependencies
 if [ -d "$TEMP_DIR/agent/scripts" ]; then
@@ -452,49 +471,24 @@ if [ -d "$TEMP_DIR/agent/scripts" ]; then
 fi
 
 # Clean up deprecated scripts (from versions < 2.0.0)
-. "$TARGET_DIR/agent/scripts/acp.common.sh"
 init_colors
 cleanup_deprecated_scripts
 
 echo "${GREEN}✓${NC} All files installed"
 echo ""
 
-# Create manifest.yaml to track core ACP installation
+# Create manifest (tier D merge — preserve third-party packages)
 echo "Creating manifest..."
+_ver_file="AGENTS.md"
+[ -f "$TARGET_DIR/AGENTS.md" ] || _ver_file="AGENT.md"
+ACP_VERSION=$(grep -m1 "^\*\*Version\*\*:" "$TARGET_DIR/$_ver_file" 2>/dev/null | sed 's/.*: *//' | tr -d '\r')
+if [ -z "$ACP_VERSION" ]; then
+    ACP_VERSION=$(grep -m1 '^> v' "$TARGET_DIR/$_ver_file" 2>/dev/null | sed 's/^> v//' | cut -d' ' -f1 | tr -d '\r')
+fi
+[ -n "$ACP_VERSION" ] || ACP_VERSION="unknown"
+acp_install_manifest_acp_core "$TARGET_DIR" "$ACP_VERSION"
 
-# Get ACP version from AGENT.md
-ACP_VERSION=$(grep "^\*\*Version\*\*:" "$TARGET_DIR/AGENT.md" | sed 's/.*: //' | head -1)
-INSTALL_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-
-# List installed core files
-CORE_COMMANDS=$(cd "$TARGET_DIR" && ls agent/commands/acp.*.md agent/commands/git.*.md 2>/dev/null | xargs -n1 basename)
-CORE_PATTERNS=$(cd "$TARGET_DIR" && ls agent/patterns/*.template.md 2>/dev/null | xargs -n1 basename)
-CORE_DESIGNS=$(cd "$TARGET_DIR" && ls agent/design/*.template.md 2>/dev/null | xargs -n1 basename)
-
-# Create manifest with acp-core package
-cat > "$TARGET_DIR/agent/manifest.yaml" << EOF
-# ACP Package Manifest
-# Tracks installed packages and their versions
-
-packages:
-  acp-core:
-    source: https://github.com/ssucipto/acp-enhanced.git
-    package_version: ${ACP_VERSION}
-    installed_at: ${INSTALL_DATE}
-    updated_at: ${INSTALL_DATE}
-    files:
-      commands:
-$(echo "$CORE_COMMANDS" | sed 's/^/        - name: /')
-      patterns:
-$(echo "$CORE_PATTERNS" | sed 's/^/        - name: /')
-      designs:
-$(echo "$CORE_DESIGNS" | sed 's/^/        - name: /')
-
-manifest_version: 1.0.0
-last_updated: ${INSTALL_DATE}
-EOF
-
-echo "${GREEN}✓${NC} Created manifest.yaml (tracking acp-core v${ACP_VERSION})"
+echo "${GREEN}✓${NC} Updated manifest.yaml (tracking acp-core v${ACP_VERSION})"
 echo ""
 echo "${GREEN}Installation complete! (ACP Enhanced v${ACP_VERSION})${NC}"
 echo ""
@@ -512,7 +506,7 @@ echo ""
 echo "3. Initialize progress tracking:"
 echo "   cp agent/progress.template.yaml agent/progress.yaml"
 echo ""
-echo "4. Read AGENT.md for complete documentation"
+echo "4. Read AGENTS.md for complete documentation"
 echo ""
 display_available_commands
 echo ""
