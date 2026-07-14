@@ -141,5 +141,13 @@ assert_equals "${CONSTRAINTS_BEFORE}" "$(cat "${TMPDIR_ROOT}/agent/core/constrai
 print_test_header "V12 — AGENTS.md entry accepted (F-080-09)"
 assert_file_exists "${TMPDIR_ROOT}/AGENTS.md" "AGENTS.md present after update"
 
+print_test_header "V13 — --force overwrites customized tier B"
+echo "force_overwrite_marker: true" > "${TMPDIR_ROOT}/agent/wiki/domain.yml"
+(
+    cd "${TMPDIR_ROOT}"
+    ACP_UPSTREAM_ROOT="${PROJECT_ROOT}" bash agent/scripts/acp.version-update.sh --force --yes
+)
+assert_not_contains "$(cat "${TMPDIR_ROOT}/agent/wiki/domain.yml")" "force_overwrite_marker" "domain.yml overwritten with --force"
+
 print_test_summary "acp.version-update-preserve.test.sh"
 exit $?
