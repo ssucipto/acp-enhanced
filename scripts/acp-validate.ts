@@ -1,6 +1,7 @@
 import matter from "gray-matter";
 import yaml from "js-yaml";
 import { readFileSync, existsSync, readdirSync, statSync } from "fs";
+import { execSync } from "child_process";
 import path from "path";
 
 // ── Shared types ─────────────────────────────────────────────
@@ -9,6 +10,42 @@ export interface ValidationError {
   line: number;
   message: string;
   severity: "error" | "warning";
+}
+
+/** Subset of agent/routing/taxonomy.yml used by validateTaskFile / staleness checks */
+interface YamlTaxonomy {
+  last_updated?: string;
+  task_types?: Record<string, Record<string, unknown>>;
+}
+
+/** Subset of agent/routing/config.yml used by executor / model freshness checks */
+interface YamlRoutingConfig {
+  models?: Record<string, { last_verified?: string }>;
+}
+
+/** Subset of agent/core/constraints.yml used by AGENTS.md size validation */
+interface YamlConstraints {
+  agents_md_rules?: {
+    max_bytes?: number;
+    warn_at_bytes?: number;
+    files_to_check?: string[];
+  };
+}
+
+/** Milestone block inside agent/progress.yaml */
+interface MilestoneProgressEntry {
+  status?: string;
+  file?: string;
+  tasks_total?: number;
+}
+
+/** Subset of agent/progress.yaml used by consistency / pointer checks */
+interface ProgressYaml {
+  milestones?: Record<string, MilestoneProgressEntry>;
+  active_handoff?: {
+    path?: string;
+    git_commit?: string;
+  };
 }
 
 // ── Placeholder detection ─────────────────────────────────────
@@ -295,7 +332,7 @@ function validateTaskFile(taskFilePath: string): string[] {
 
   // ── task_type must exist in taxonomy ────────────────────
   if (meta.task_type) {
-    const taxonomy = loadYaml<any>(TAXONOMY_PATH);
+    const taxonomy = loadYaml<YamlTaxonomy>(TAXONOMY_PATH);
     if (taxonomy) {
       const knownTypes = Object.keys(taxonomy.task_types ?? {});
       if (!knownTypes.includes(meta.task_type)) {
@@ -310,7 +347,7 @@ function validateTaskFile(taskFilePath: string): string[] {
 
   // ── executor must be a valid model name ──────────────────
   if (meta.executor && meta.executor !== "local-script") {
-    const config = loadYaml<any>(CONFIG_PATH);
+    const config = loadYaml<YamlRoutingConfig>(CONFIG_PATH);
     if (config) {
       const knownModels = Object.keys(config.models ?? {});
       if (!knownModels.includes(meta.executor)) {
@@ -339,7 +376,7 @@ function checkStaleness(): boolean {
     console.warn("⚠️  taxonomy.yml: file not found — staleness unknown");
     hasWarnings = true;
   } else {
-    const taxonomy = yaml.load(readFileSync(TAXONOMY_PATH_LOCAL, "utf-8")) as Record<string, any>;
+    const taxonomy = yaml.load(readFileSync(TAXONOMY_PATH_LOCAL, "utf-8")) as YamlTaxonomy;
     const lastUpdated: string | undefined = taxonomy?.last_updated;
     if (!lastUpdated) {
       console.warn("⚠️  taxonomy.yml: no last_updated field — staleness unknown");
@@ -368,8 +405,8 @@ function checkStaleness(): boolean {
     console.warn("⚠️  routing/config.yml: file not found — model freshness unknown");
     hasWarnings = true;
   } else {
-    const config = yaml.load(readFileSync(CONFIG_PATH_LOCAL, "utf-8")) as Record<string, any>;
-    const models = config?.models as Record<string, any> | undefined;
+    const config = yaml.load(readFileSync(CONFIG_PATH_LOCAL, "utf-8")) as YamlRoutingConfig;
+    const models = config?.models;
     if (models) {
       for (const [modelName, modelData] of Object.entries(models)) {
         const lastVerified: string | undefined = modelData?.last_verified;
@@ -400,7 +437,7 @@ function checkStaleness(): boolean {
   }
 
   if (!hasWarnings) {
-    const taxonomy2 = yaml.load(readFileSync(TAXONOMY_PATH_LOCAL, "utf-8")) as Record<string, any>;
+    const taxonomy2 = yaml.load(readFileSync(TAXONOMY_PATH_LOCAL, "utf-8")) as YamlTaxonomy;
     const lu = taxonomy2?.last_updated ?? "unknown";
     const d2 = new Date(lu);
     const days2 = isNaN(d2.getTime()) ? "?" : Math.floor((now - d2.getTime()) / DAY_MS);
@@ -417,7 +454,7 @@ function validateAgentsMdSize(): boolean {
     return true;
   }
 
-  const constraints = yaml.load(readFileSync(constraintsPath, "utf-8")) as Record<string, any>;
+  const constraints = yaml.load(readFileSync(constraintsPath, "utf-8")) as YamlConstraints;
   const rules = constraints?.agents_md_rules;
   if (!rules) {
     console.warn("⚠️  constraints.yml: agents_md_rules not defined — skipping size check");
@@ -556,14 +593,14 @@ export function validateVersionConsistency(): ValidationError[] {
 // FAIL if a milestone doc's **Status**: disagrees with progress.yaml
 const PROGRESS_PATH = path.join("agent", "progress.yaml");
 
-function loadProgressSafe(): Record<string, any> | null {
+function loadProgressSafe(): ProgressYaml | null {
   if (!existsSync(PROGRESS_PATH)) return null;
     const raw = readFileSync(PROGRESS_PATH, "utf-8").replace(/\r/g, "");
   try {
-    return yaml.load(raw) as Record<string, any>;
+    return yaml.load(raw) as ProgressYaml;
   } catch {
     console.warn("⚠️  progress.yaml: YAML parse failed (duplicate keys suspected) — using line-based fallback");
-    const milestones: Record<string, any> = {};
+    const milestones: Record<string, MilestoneProgressEntry> = {};
     const lines = raw.split("\n");
     let currentMid: string | null = null;
     let currentBlock: string[] = [];
@@ -609,7 +646,7 @@ function validateStatusConsistency(): boolean {
     return true;
   }
 
-  const milestones = progressYaml.milestones as Record<string, any> | undefined;
+  const milestones = progressYaml.milestones;
   if (!milestones || Object.keys(milestones).length === 0) {
     console.warn("⚠️  Status consistency: no milestones in progress.yaml — skipped");
     return true;
@@ -890,7 +927,6 @@ export function validateGitTagsExist(): ValidationError[] {
 
   const version = idMatch[1];
   try {
-    const { execSync } = require("child_process");
     const output = execSync(`git tag --list "v${version}"`, {
       cwd: process.cwd(),
       encoding: "utf8",
@@ -924,7 +960,6 @@ export function validateGitignoreConflicts(): ValidationError[] {
 
   for (const tp of trackedPaths) {
     try {
-      const { execSync } = require("child_process");
       execSync(`git check-ignore "${tp}"`, {
         cwd: process.cwd(),
         encoding: "utf8",
@@ -1021,7 +1056,7 @@ function validateFilePointers(): boolean {
     return true;
   }
 
-  const milestones = progressYaml.milestones as Record<string, any> | undefined;
+  const milestones = progressYaml.milestones;
   if (!milestones || Object.keys(milestones).length === 0) {
     console.warn("⚠️  File pointer check: no milestones in progress.yaml — skipped");
     return true;
@@ -1082,7 +1117,6 @@ export function validateActiveHandoff(strict = false): ValidationError[] {
   const gitCommit = activeHandoff.git_commit ? String(activeHandoff.git_commit) : "";
   if (strict && gitCommit) {
     try {
-      const { execSync } = require("child_process");
       execSync(`git merge-base --is-ancestor ${gitCommit} HEAD`, {
         cwd: process.cwd(),
         encoding: "utf8",
