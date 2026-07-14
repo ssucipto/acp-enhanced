@@ -1913,3 +1913,104 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: audit-090
     escalated_to: null
+
+  # ── AUDIT-091 FINDINGS — WHOLE-SYSTEM GAPS & STANDARDS (2026-07-15) ────────
+
+  - audit_id: audit-091
+    finding_id: F-091-01
+    severity: high
+    file: .github/copilot-instructions.md
+    finding: "copilot-instructions.md stale at v6.24.0 (two releases behind); pre-commit AGENTS.md sync hook not installed in this repo; validator size-only guard masked the drift"
+    fix_target: "Re-copy AGENTS.md to copilot-instructions.md; install pre-commit sync hook in framework repo; change validator instruction-file check from byte-size to content hash"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-091
+    finding_id: F-091-02
+    severity: high
+    file: package.yaml
+    finding: "package.yaml version 6.21.1 vs canonical 6.26.0; acp.validate.md Step 2c documents package.yaml as hard requirement but acp-validate.ts never checks it; acp.cursor-commands-sync.sh, acp.claude-commands-sync.sh, acp.post-milestone-sweep.sh unregistered in package.yaml and integrity-manifest.yaml"
+    fix_target: "Bump package.yaml to 6.26.0; implement package.yaml version check in acp-validate.ts; register the 3 missing scripts in package.yaml and integrity-manifest.yaml"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-091
+    finding_id: F-091-03
+    severity: medium
+    file: scripts/acp-validate.ts
+    finding: "Validator is cwd-sensitive with no repo-root detection; documented invocation in acp.validate.md Step 11.6 '(cd scripts && npx ts-node acp-validate.ts)' yields vacuous all-green run including 'Parity: 0 commands x 3 surfaces — all matched'"
+    fix_target: "Add repo-root detection (walk up to agent/ or fail loudly); make parity check hard-fail on 0 commands found; fix Step 11.6 invocation text to 'npx tsx scripts/acp-validate.ts' from root"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-091
+    finding_id: F-091-04
+    severity: medium
+    file: .github/prompts/
+    finding: "6 stale dot-named duplicate wrappers (acp.carryover-query, acp.pattern-sync, acp.session-sync in both .github/prompts/ and .opencode/commands/) coexist with hyphen-named twins; invisible to parity check due to startsWith('acp-') filter; show as duplicates in slash pickers"
+    fix_target: "Delete the 6 dot-named files; extend parity check to detect dot-named strays"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-091
+    finding_id: F-091-05
+    severity: medium
+    file: scripts/acp-validate.ts
+    finding: "Wrapper parity check covers 3 of 5 surfaces — .cursor/commands/ and .claude/commands/ unchecked (pre-noted in ADR-18); progress.yaml summary line and lessons.md companion-file lesson still name only prompts+opencode(+cursor)"
+    fix_target: "Extend runParityCheck() to 5 surfaces; update progress.yaml summary line and the high-priority lessons.md entry to name all 4 wrapper directories"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-091
+    finding_id: F-091-06
+    severity: medium
+    file: scripts/acp-bootstrap.sh
+    finding: "Cursor/Claude wrapper copy loops (lines ~1330, ~1342) glob '.opencode/commands/acp.*.md' but opencode files are hyphen-named — dead code printing misleading '0 generated' success; on fresh bootstrap sync scripts do not exist yet at that step"
+    fix_target: "Fix glob to acp-*.md or remove copy loops in favor of invoking sync scripts after agent/ install step 7"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-091
+    finding_id: F-091-10
+    severity: low
+    file: .github/workflows/ci.yaml
+    finding: "No ShellCheck lint gate in CI for a bash-first project (47 scripts in agent/scripts/)"
+    fix_target: "Add shellcheck job to ci.yaml (SHA-pinned action), triage initial findings"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-091
+    finding_id: F-091-07
+    severity: low
+    file: agent/commands/acp.validate.md
+    finding: "Step 11.6 doc claims sessions entries require tasks_completed; enforced session.schema.yaml requires only date/executor/done and real entries use tasks:"
+    fix_target: "Align Step 11.6 text with session.schema.yaml required_fields"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-091
+    finding_id: F-091-14
+    severity: high
+    file: agent/.gitignore
+    finding: "agent/.gitignore reports/ rule overrides root !agent/reports/ whitelist — new reports silently excluded from version control; audit-078..090 (incl. M71 closure evidence) untracked; validator gitignore check inspects tracked paths only so it passes"
+    fix_target: "Remove/whitelist reports/ in agent/.gitignore; git add untracked reports; extend validator gitignore check to probe new-file addability in protocol dirs (task-240 fix + task-241 enforcement)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
