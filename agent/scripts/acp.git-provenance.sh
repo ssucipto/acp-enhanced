@@ -2,7 +2,7 @@
 # acp.git-provenance.sh — Git Commit Provenance Verifier
 # Part of /acp-integrity v1.0 (M56), M64 routes 182/183
 #
-# Covered rules: IG-33, IG-34, IG-35, IG-36, IG-37
+# Covered rules: IG-33, IG-34, IG-36, IG-37 (IG-35 not implemented — see audit-086 F-086-01)
 
 set -euo pipefail
 trap 'echo "Error: git-provenance.sh failed at line $LINENO" >&2; exit 3' ERR
