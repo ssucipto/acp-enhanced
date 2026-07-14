@@ -1,0 +1,9 @@
+schema_version: 1.0.0
+updated: 2026-07-15
+milestone: M63-fixture
+description: Fixture with missing command entry for vitest
+commands:
+  acp.init:
+    tier: 3
+    suites:
+      - e2e/acp.init.test.sh
