@@ -356,7 +356,11 @@ contents:
         - acp.yaml-parser.sh
 
     - name: acp.handoff.md
-      description: Generate cross-context task handoff reports
+      description: Generate cross-context task handoff reports (v2 dual mode — executor + cross-repo)
+      scripts: []
+
+    - name: acp.receive.md
+      description: Load and verify incoming handoff before starting work (git drift, session gap, assignment checklist)
       scripts: []
 
     - name: acp.clarification-address.md

@@ -10,6 +10,7 @@ context_required:
   - schemas/progress.schema.yaml
 files_affected:
   - agent/schemas/progress.schema.yaml
+  - agent/progress.yaml
   - scripts/acp-validate.ts
   - agent/wiki/cross-agent-handoff.md
   - agent/wiki/architecture.md
@@ -18,7 +19,7 @@ tokens_actual:
 cost_est_usd:
 cost_actual_usd:
 created: 2026-07-15
-completed:
+completed: 2026-07-15
 override_reason:
 ---
 

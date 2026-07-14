@@ -3,14 +3,14 @@
 
 project:
   name: agent-context-protocol
-  version: 6.21.1
+  version: 6.23.0
   started: 2026-02-16
   status: active
   current_milestone: M63
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.21.0. M55–M66 shipped
-    (review, integrity v1/v2, CI, test coverage tier 1, production-readiness,
-    quality hardening, marker backfill). Next: M63 test coverage tier 2/3.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.23.0. M67 shipped
+    cross-agent handoff protocol (handoff v2, receive, resume integration).
+    M55–M66 shipped. Next: M63 test coverage tier 2/3.
 
 milestones:
   M44:
@@ -462,21 +462,19 @@ milestones:
   M67:
     name: Cross-Agent Handoff Protocol v1 (v6.23.0)
     priority: 4
-    status: planned
-    progress: 0
-    started:
-    completed:
+    status: completed
+    progress: 100
+    started: 2026-07-15
+    completed: 2026-07-15
     estimated_weeks: 2
-    tasks_completed: 0
+    tasks_completed: 8
     tasks_total: 8
     file: agent/milestones/milestone-67-cross-agent-handoff-protocol.md
     design: agent/design/cross-agent-handoff-protocol.md
     notes: |
-      📋 M67 comprehensive plan from /acp-plan (2026-07-15). Addresses audit-077
-      H1–H10, U1–U3, audit-245 S1–S6, intake shortcuts SC-01–SC-07.
-      Routes route-190..197; tasks task-195..202. Design doc published.
-      P0: handoff v2 + receive + E2E + release. P1: resume, schema, ecosystem.
-      P2: lifecycle (route-194). Target: v6.23.0. Parallel to M63 OK.
+      ✅ M67 shipped v6.23.0 (2026-07-15). Routes route-190..197 complete.
+      /acp-handoff v2 dual mode, /acp-receive, resume integration, active_handoff
+      schema, E2E fixtures, ecosystem parity. Closes audit-077 H1–U3, feedback-007.
 
   M1:
     name: ACP Commands Infrastructure
@@ -6449,8 +6447,7 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "/acp-proceed M63 — Test Coverage Sprint (Tier 2 & 3, v6.22.0)"
-  - "/acp-proceed M67 — Cross-Agent Handoff Protocol (feedback-007, audit-077, v6.23.0)"
+  - "/acp-proceed M63 — Test Coverage Sprint (Tier 2 & 3, v6.24.0)"
   - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md)"
   - "Run overdue weekly /acp-review and /acp-integrity scans (due 2026-06-22)"
 
