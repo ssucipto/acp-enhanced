@@ -2014,3 +2014,49 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-092 FINDINGS — M72 PRE-IMPL READINESS (2026-07-15) ────────────────
+
+  - audit_id: audit-092
+    finding_id: F-092-01
+    severity: medium
+    file: agent/integrity-manifest.yaml
+    finding: "No M72 task regenerates the SHA-256 integrity manifest despite M72 rewriting manifest-covered files (.cursor/commands wrappers etc.) — /acp-integrity --diff and weekly-integrity-scan will raise tamper false-alarms post-M72"
+    fix_target: "Add manifest regeneration (agent/scripts/acp.manifest-hash.sh) + clean /acp-integrity --diff to task-247 closure gates; regen after task-242/243 wrapper changes"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-092
+    finding_id: F-092-02
+    severity: medium
+    file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-247-m72-closure-ship.md
+    finding: "M72 plan reserves 'audit-092' for closure audit but pre-impl audit took #092 per numbering protocol (M70 precedent) — 15 stale references across task-247, route-236, milestone doc, progress.yaml, carryover fix_targets"
+    fix_target: "Renumber closure-audit references audit-092 → audit-093 in all 15 locations (fold into task-245)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-092
+    finding_id: F-092-03
+    severity: medium
+    file: agent/.gitignore
+    finding: "F-091-14 scope extension: 61 untracked reports (88 on disk / 27 tracked) and feedback/ 25 untracked (28/3) incl. feedback-007 cited by carryover F-086-02; clarifications/ ignore is INTENTIONAL (acp.plan.md Step 10) and must survive the fix"
+    fix_target: "task-240: whitelist reports/ only; add feedback/ tracking decision (recommend track); do not blanket-remove agent/.gitignore"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-092
+    finding_id: F-092-04
+    severity: low
+    file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-244-shellcheck-ci.md
+    finding: "task-244 missing shellcheck install prerequisite (not installed locally); task-240 text misnames package.yaml script entry fields (says name+version+description; actual shape is name+description+type)"
+    fix_target: "Add 'brew install shellcheck' prerequisite to task-244; correct task-240 field list (binding phrase 'matching existing entries shape' already governs)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
