@@ -3,16 +3,14 @@
 
 project:
   name: agent-context-protocol
-  version: 6.21.0
+  version: 6.21.1
   started: 2026-02-16
   status: active
-  current_milestone: M66
+  current_milestone: M63
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.20.9. M55–M61 shipped
-    (review, integrity v1.1/v2.0, CI fixes, integrity gateway, test coverage,
-    production-readiness: Windows CI, SECURITY.md, governance templates, Dependabot,
-    supply-chain CI, IG-37, TS unit tests). Audit-075: 6 findings fixed + 3 carryovers
-    resolved. M62 quality-hardening next.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.21.0. M55–M66 shipped
+    (review, integrity v1/v2, CI, test coverage tier 1, production-readiness,
+    quality hardening, marker backfill). Next: M63 test coverage tier 2/3.
 
 milestones:
   M44:
@@ -1390,7 +1388,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 8
-      completed_date: 2026-02-18
       notes: |
         ✅ Manifest system foundation complete!
         - Created agent/manifest.template.yaml
@@ -1407,7 +1404,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 6
-      completed_date: 2026-02-18
       notes: |
         ✅ Selective installation complete!
         - Added command-line argument parsing for --patterns, --commands, --designs
@@ -1424,7 +1420,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 7
-      completed_date: 2026-02-18
       notes: |
         ✅ Update system complete!
         - Created acp.package-update.sh script with full update logic
@@ -1443,7 +1438,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-02-18
       notes: |
         ✅ Package list command complete!
         - Created acp.package-list.sh script
@@ -1461,7 +1455,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-02-18
       notes: |
         ✅ Package remove command complete!
         - Created acp.package-remove.sh script
@@ -1479,7 +1472,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-02-18
       notes: |
         ✅ Package info command complete!
         - Created acp.package-info.sh script
@@ -1497,7 +1489,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 8
-      completed_date: 2026-02-18
       notes: |
         ✅ Package search command complete!
         - Created acp.package-search.sh script with GitHub API integration
@@ -1515,7 +1506,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-02-18
       notes: |
         ✅ Dependency checking complete!
         - Added detect_package_manager() to acp.common.sh
@@ -1538,7 +1528,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 6
-      completed_date: 2026-02-18
       notes: |
         ✅ YAML parser already implemented!
         - agent/scripts/acp.yaml.sh exists and is fully functional
@@ -1556,7 +1545,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 2
       actual_hours: 0.5
-      completed_date: 2026-02-24
       notes: |
         ✅ Phase 1 complete: Schemas and templates updated for script-command binding.
         - Updated package.schema.yaml: Added required scripts field to command entries
@@ -1573,7 +1561,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 1
-      completed_date: 2026-02-24
       notes: |
         ✅ Phase 2 complete: Selective script installation implemented.
         - Updated acp.package-install.sh: Collect scripts from installed commands
@@ -1592,7 +1579,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 2
       actual_hours: 0.5
-      completed_date: 2026-02-24
       notes: |
         ✅ Phase 3 complete: Script-command binding validation implemented.
         - Added validate_script_dependencies() function to acp.package-validate.sh
@@ -1611,7 +1597,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 1
-      completed_date: 2026-02-24
       notes: |
         ✅ Phase 4 complete: All existing commands updated with Scripts field.
         - Added **Scripts**: field to all 30 ACP commands
@@ -1634,7 +1619,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 4
-      completed_date: 2026-02-25
       notes: |
         ✅ Phase 5 complete: E2E tests passing, bugs fixed!
         - Created e2e/acp.script-command-binding.test.sh (8 test scenarios, 28 assertions)
@@ -1657,7 +1641,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 1
-      completed_date: 2026-02-26
       notes: |
         ✅ Investigation complete! Root cause: O(n) manifest operations.
         Solution: Batch operations for 10-20x speedup.
@@ -1691,7 +1674,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 8
-      completed_date: 2026-02-20
       notes: |
         ✅ YAML Schema System complete!
         - Researched YAML validation standards (JSON Schema is industry standard)
@@ -1711,7 +1693,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-02-20
       notes: |
         ✅ Namespace utilities complete!
         - Added is_acp_package() - Detects if directory is ACP package
@@ -1730,7 +1711,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-02-20
       notes: |
         ✅ README update utilities complete!
         - Added update_readme_contents() - Updates README from package.yaml
@@ -1747,10 +1727,8 @@ tasks:
       status: completed
       started: 2026-05-01T00:30:00Z
       file: agent/tasks/task-17-pattern-create-command.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 8
-      completed_date: 2026-05-01T00:45:00Z
       actual_hours: 0.2
       notes: |
         Command doc acp.pattern-create.md already fully implemented as LLM directive
@@ -1767,7 +1745,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 6
-      completed_date: 2026-02-21
       notes: |
         ✅ @acp.command-create complete!
         - Created agent/commands/acp.command-create.md
@@ -1784,7 +1761,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 5
-      completed_date: 2026-02-21
       notes: |
         ✅ @acp.design-create complete!
         - Created agent/commands/acp.design-create.md
@@ -1800,7 +1776,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 9
-      completed_date: 2026-02-21
       notes: |
         ✅ @acp.package-validate complete!
         - Created agent/commands/acp.package-validate.md (comprehensive command doc)
@@ -1820,7 +1795,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-02-21
       notes: |
         ✅ Enhanced @acp.validate complete!
         - Updated agent/commands/acp.validate.md with namespace validation
@@ -1842,7 +1816,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 10
-      completed_date: 2026-02-21
       notes: |
         ✅ @acp.package-publish complete!
         - Created agent/commands/acp.package-publish.md (comprehensive command doc)
@@ -1874,7 +1847,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 8
-      completed_date: 2026-02-21
       notes: |
         ✅ @acp.package-create v2.0.0 complete!
         - Updated agent/commands/acp.package-create.md (comprehensive rewrite)
@@ -1905,7 +1877,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-02-21
       notes: |
         ✅ Pre-commit hook system complete!
         - Hook template embedded in install_precommit_hook() function
@@ -1926,7 +1897,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-02-22
       notes: |
         ✅ Global infrastructure complete!
         - Created ~/.acp/ directory structure (packages, projects)
@@ -1951,7 +1921,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-02-22
       notes: |
         ✅ Global installation complete!
         - Added installation directory logic to acp.package-install.sh
@@ -1971,7 +1940,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-02-22
       notes: |
         ✅ Global package commands complete!
         - Added --global flag to acp.package-info.sh
@@ -1994,7 +1962,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
-      completed_date: 2026-02-22
       notes: |
         ✅ Documentation complete!
         - Updated AGENT.md with "Global Package Discovery" section
@@ -2015,7 +1982,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
-      completed_date: 2026-02-22
       notes: |
         ✅ Auto-initialization complete!
         - Added init_global_acp() function to agent/scripts/acp.common.sh
@@ -2038,7 +2004,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-02-22
       notes: |
         ✅ Package script bundling complete!
         - Updated agent/schemas/package.schema.yaml with scripts field
@@ -2060,7 +2025,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 4
       actual_hours: 1
-      completed_date: 2026-02-22
       notes: |
         ✅ @acp.project-create command complete!
         - Created agent/commands/acp.project-create.md
@@ -2083,11 +2047,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-37-preference-loading-infrastructure.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 6
       actual_hours: 1
-      completed_date: 2026-05-01
       notes: |
         ✅ Complete. Created agent/scripts/acp.preferences.sh (get/has/or/source/generate),
         agent/commands/acp.preferences-get.md, tests/acp.preferences.test.sh.
@@ -2098,11 +2060,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-38-configurables-system-enhancement.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
       actual_hours: 0.5
-      completed_date: 2026-05-01
       notes: |
         ✅ Complete. Enhanced acp.configurables.yaml with 9 preferences across 5 categories
         (plan, task, validation, output, git). Updated acp.default.yaml with all values.
@@ -2113,11 +2073,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-39-command-integration-acp-plan.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 5
       actual_hours: 0.5
-      completed_date: 2026-05-01
       notes: |
         ✅ Complete. acp.plan.md v2.0.0: preference loading in Step 1, preference-aware
         Option A in Step 4, --plan.draft.create_mode override arg, 2 new examples.
@@ -2128,11 +2086,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-40-preference-management-commands.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 10
       actual_hours: 0.5
-      completed_date: 2026-05-01
       notes: |
         ✅ Complete. Created 4 preference management commands: acp.preferences-create.md,
         acp.preferences-show.md, acp.preferences-set.md, acp.preferences-validate.md.
@@ -2146,10 +2102,8 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-41-package-preference-support.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 5
-      completed_date: 2026-05-01
       notes: |
         Enable packages to define configurables and provide presets.
         Updated package.schema.yaml, acp.package-install.sh, acp.package-create.sh,
@@ -2161,10 +2115,8 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-42-preset-configuration-system.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-05-01
       notes: |
         Implemented --preset flag: load_preset, get_preference_with_preset, list_presets
         in acp.preferences.sh. Created 3 core presets. Updated acp.plan.md and
@@ -2176,10 +2128,8 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-43-preferences-testing-suite.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 8
-      completed_date: 2026-05-01
       notes: |
         Created 3 new test files + 3 fixture files.
         tests/acp.preferences-validate.test.sh: 13 validation tests.
@@ -2193,10 +2143,8 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-6-preferences-system/task-44-preferences-documentation.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-05-01
       notes: |
         Updated AGENT.md (Preferences System section + dir structure).
         Updated README.md (Preferences System section with tables + quick reference).
@@ -2213,7 +2161,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: null
-      completed_date: 2026-02-23
       notes: |
         ✅ Project registry infrastructure complete!
         - Created agent/schemas/projects.schema.yaml
@@ -2232,7 +2179,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 0.5
-      completed_date: 2026-02-23
       notes: |
         ✅ @acp.project-list command complete!
         - Created agent/scripts/acp.project-list.sh
@@ -2252,7 +2198,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 1.5
-      completed_date: 2026-02-24
       notes: |
         ✅ @acp.project-set command complete!
         - Created agent/scripts/acp.project-set.sh (context switching script)
@@ -2280,7 +2225,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 2
       actual_hours: 0.5
-      completed_date: 2026-02-25
       notes: |
         ✅ @acp.project-info command complete!
         - Created agent/scripts/acp.project-info.sh
@@ -2303,7 +2247,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 2
       actual_hours: 1
-      completed_date: 2026-02-25
       notes: |
         ✅ @acp.project-update command complete!
         - Created agent/scripts/acp.project-update.sh (258 lines)
@@ -2327,7 +2270,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 2
       actual_hours: 1
-      completed_date: 2026-02-26
       notes: |
         ✅ @acp.project-remove command complete!
         - Created agent/scripts/acp.project-remove.sh (removal script)
@@ -2352,7 +2294,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 1.5
-      completed_date: 2026-02-26
       notes: |
         ✅ @acp.projects-sync command complete!
         - Created agent/scripts/acp.projects-sync.sh (filesystem scanner)
@@ -2377,7 +2318,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 1.5
-      completed_date: 2026-02-26
       notes: |
         ✅ YAML parser array operations fixed!
         - Fixed parser to detect [] as empty array (not scalar)
@@ -2396,7 +2336,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 4
       actual_hours: 2
-      completed_date: 2026-02-26
       notes: |
         ✅ Task 59 complete! Comprehensive test suite created
         - Unit tests: 5/5 passing (100%)
@@ -2416,7 +2355,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 0.5
-      completed_date: 2026-02-26
       notes: |
         ✅ Documentation updates complete!
         - Added "Project Registry System" section to AGENT.md
@@ -2435,7 +2373,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 1
-      completed_date: 2026-02-23
       notes: |
         ✅ Schema and validation complete!
         - Updated agent/schemas/package.schema.yaml with experimental field
@@ -2453,7 +2390,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 4
       actual_hours: 1.5
-      completed_date: 2026-02-23
       notes: |
         ✅ Installation filtering complete!
         - Added --experimental flag to acp.package-install.sh
@@ -2475,7 +2411,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 1
-      completed_date: 2026-02-23
       notes: |
         ✅ Update handling complete!
         - Added is_experimental_installed() helper function
@@ -2496,7 +2431,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 4
       actual_hours: 1
-      completed_date: 2026-02-23
       notes: |
         ✅ Documentation complete!
         - Updated agent/commands/acp.package-install.md with --experimental flag
@@ -2519,7 +2453,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-02-28
       notes: |
         ✅ Schema extension for template files complete!
         - Added files array to package.schema.yaml contents with 6 metadata fields
@@ -2537,7 +2470,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 8
-      completed_date: 2026-02-28
       notes: |
         ✅ Template Installation System complete!
         - Metadata-aware scanning: reads contents.files from package.yaml for target/variable info
@@ -2559,7 +2491,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-02-28
       notes: |
         ✅ Manifest Tracking for Templates complete!
         - Manifest stores target path for files with metadata (target: ./tsconfig.json)
@@ -2580,7 +2511,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 5
-      completed_date: 2026-02-28
       notes: |
         ✅ Command Updates for Templates complete!
         - acp.package-list.sh: Added files count, modified file detection for template files
@@ -2598,7 +2528,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 8
-      completed_date: 2026-02-28
       notes: |
         ✅ Testing Suite for Templates complete!
         - 34/34 E2E tests passing in acp.template-files.test.sh
@@ -2617,7 +2546,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-02-28
       notes: |
         ✅ Documentation for Templates complete!
         - AGENT.md: Added Template Source Files section with target paths, variable substitution, security docs
@@ -2634,7 +2562,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 6
-      completed_date: 2026-02-27
       notes: |
         ✅ Add agent/files/ to INSTALL_DIRS, fix manifest file tracking, warn on unrecognized dirs.
         GitHub Issue #6. Also fixed design→designs manifest key mismatch, added scripts/files to manifest.
@@ -2649,7 +2576,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 12
       actual_hours: 0.5
-      completed_date: 2026-02-28
       notes: |
         ✅ @acp.proceed autonomous completion implemented!
         - Updated acp.proceed.md from v1.1.0 to v2.0.0 (338 → 500+ lines)
@@ -2675,7 +2601,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 8
       actual_hours: 1.5
-      completed_date: 2026-02-28
       notes: |
         Upgraded runner for multi-turn steps (--resume), fixed token metrics (try .usage.* then top-level),
         created metrics-collector.sh with mean/stddev, added --runs N flag, task-aware verification dispatch.
@@ -2690,7 +2615,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 4
       actual_hours: 0.5
-      completed_date: 2026-02-28
       notes: |
         Created simple-cli-tool benchmark: 3 steps (build CSV-to-JSON CLI, test suite, fix empty cells bug).
         Config.yaml with multi-turn steps, expected/structure.yaml, verify_simple_cli_tool() in verify.sh.
@@ -2704,7 +2628,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 5
       actual_hours: 0.5
-      completed_date: 2026-02-28
       notes: |
         Created medium-rest-api benchmark: 4 steps (build Express CRUD, test suite, fix DELETE 204 + PUT validation, refactor routes).
         Config.yaml with multi-turn steps, expected/structure.yaml, verify_medium_rest_api() in verify.sh.
@@ -2718,7 +2641,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 6
       actual_hours: 0.5
-      completed_date: 2026-02-28
       notes: |
         Created complex-auth-system benchmark: 5 steps (scaffold Express app, JWT auth, test suite,
         fix password leak + token expiry, API docs). Config.yaml, expected/structure.yaml, verify function.
@@ -2732,7 +2654,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 6
       actual_hours: 0.5
-      completed_date: 2026-02-28
       notes: |
         Created evaluator-prompt.md (6-category rubric), evaluation-schema.json (structured output),
         integrated into run-single.sh (separate Claude session after verification), added evaluation
@@ -2747,7 +2668,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 5
       actual_hours: 0.5
-      completed_date: 2026-02-28
       notes: |
         Added improvement % to metrics tables, per-step breakdowns, radar chart (Chart.js) for eval scores,
         eval scores in summary.yaml, checks row in verification, multi-task report links in serve-reports.sh.
@@ -2761,7 +2681,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 0.3
-      completed_date: 2026-03-01
       notes: |
         Created .github/workflows/benchmark.yaml with workflow_dispatch trigger,
         configurable inputs (task, mode, runs), report artifact upload, job summary,
@@ -2776,7 +2695,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 4
       actual_hours: 0.3
-      completed_date: 2026-03-01
       notes: |
         Added benchmark section to AGENT.md (quick start, task table, key files) and README.md.
         Updated design doc status to Implemented. Created compare-runs.sh for historical tracking.
@@ -2790,7 +2708,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 6
       actual_hours: 0.5
-      completed_date: 2026-03-01
       notes: |
         Created legacy-refactor benchmark: seed app (messy server.js with 3 bugs), 6 steps
         (understand, refactor, test, fix-bugs, add-feature, docs), config.yaml with seed_dir,
@@ -2805,7 +2722,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 6
       actual_hours: 0.5
-      completed_date: 2026-03-01
       notes: |
         Created order-pipeline benchmark: 7 steps (catalog, cart, state machine, tests,
         event-driven refactor, notifications+retry, integration+docs), config.yaml,
@@ -2820,7 +2736,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 12
       actual_hours: 0.5
-      completed_date: 2026-03-01
       notes: |
         Created enterprise-task-manager benchmark: seed project (670+ lines, 12 files) with
         5 unlabeled bugs, circular deps, inconsistent patterns. 10 steps: analysis, bug fixes,
@@ -2836,7 +2751,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 12
       actual_hours: 0.5
-      completed_date: 2026-03-01
       notes: |
         Implemented acp-project benchmark with dual-seed design. Seed-base: 9-file Express app
         with working auth/health and stubbed task/project/notification endpoints. Seed-acp:
@@ -2854,7 +2768,6 @@ tasks:
       completed_date: 2026-06-04
       estimated_hours: 4
       actual_hours: 0.3
-      completed_date: 2026-03-01
       notes: |
         ✅ Deliverables verification gate complete
         - Added Step 3.5 to single-task mode: mandatory deliverables check before marking complete
@@ -2872,7 +2785,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 6
-      completed_date: 2026-03-01
       notes: |
         ✅ Sessions infrastructure complete
         - Created sessions.template.yaml and acp.sessions.sh (470+ lines)
@@ -2890,7 +2802,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
-      completed_date: 2026-03-01
       notes: |
         ✅ Directive-level integration complete
         - @acp.init: Step 1.5 — register session + show sibling sessions
@@ -2907,7 +2818,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-03-01
       notes: |
         ✅ @acp.sessions command complete
         - Created acp.sessions.md with full template structure
@@ -2925,7 +2835,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-03-01
       notes: |
         ✅ Testing and documentation complete
         - Created e2e/acp.sessions.test.sh (16 tests, 40 assertions, 100% pass rate)
@@ -2942,11 +2851,9 @@ tasks:
       status: completed
       started: 2026-03-20T12:00:00Z
       file: agent/tasks/milestone-13-cross-platform-ci/task-96-fix-macos-e2e-tests.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 0.2
-      completed_date: 2026-03-20T12:10:00Z
       notes: |
         ✅ Fixed sed -i (3 calls in 2 files): portable sed+mv pattern
         ✅ Fixed date +%N (3 files): replaced with $RANDOM
@@ -2958,11 +2865,9 @@ tasks:
       status: completed
       started: 2026-03-20T12:10:00Z
       file: agent/tasks/milestone-13-cross-platform-ci/task-97-e2e-test-runner.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
       actual_hours: 0.1
-      completed_date: 2026-03-20T12:15:00Z
       notes: |
         ✅ Created run-e2e-tests.sh at project root
         - Discovers all e2e/*.test.sh files via glob
@@ -2978,11 +2883,9 @@ tasks:
       status: completed
       started: 2026-03-20T12:15:00Z
       file: agent/tasks/milestone-13-cross-platform-ci/task-98-github-actions-workflow.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
       actual_hours: 0.1
-      completed_date: 2026-03-20T12:20:00Z
       notes: |
         ✅ Created .github/workflows/e2e-tests.yaml
         - Triggers on push to mainline and PRs
@@ -3000,7 +2903,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-03-02
       notes: |
         ✅ Created agent/index/ directory with .gitkeep
         - local.main.template.yaml with full schema documentation
@@ -3015,7 +2917,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-03-02
       notes: |
         ✅ Updated @acp.init (step 2.8), @acp.proceed (step 1.5 + autonomous loop),
         @acp.plan (step 0), @acp.resume (inherits from init)
@@ -3030,7 +2931,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-03-02
       notes: |
         ✅ Updated @acp.design-create, @acp.task-create, @acp.pattern-create, @acp.command-create
         - Added step 2.5 (contextual pre-read) to each
@@ -3044,7 +2944,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-03-02
       notes: |
         ✅ Created agent/commands/acp.index.md with list/add/remove/explore/show
         - NLP argument parsing, recommended limit warnings
@@ -3059,7 +2958,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-03-02
       notes: |
         ✅ Updated 5 package scripts for index file support:
         - acp.package-install.sh: --indices flag, index/ dir scanning, manifest tracking
@@ -3076,7 +2974,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-03-02
       notes: |
         Added step 9 (Index Validation) to @acp.validate with schema, path, and limit checks.
         Added Key File Index section to AGENT.md with full docs (schema, naming, commands, weights).
@@ -3093,7 +2990,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-03-02
       notes: |
         Created e2e/acp.index.test.sh with 16 tests, 51 assertions, 100% pass rate.
         Tests cover: schema structure, naming convention, template exclusion, weight range,
@@ -3112,7 +3008,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-03-04
       notes: |
         ✅ Created agent/commands/acp.clarification-capture.md shared directive.
         8 steps: detect sources, read clars, warn partial, resolve conflicts,
@@ -3127,7 +3022,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
-      completed_date: 2026-03-04
       notes: |
         ✅ Added optional Key Design Decisions section to all 4 entity templates:
         design.template.md, task template, pattern.template.md, command.template.md.
@@ -3141,7 +3035,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-03-04
       notes: |
         ✅ Updated all 4 create commands with capture step and arguments:
         design-create, task-create, pattern-create, command-create.
@@ -3156,7 +3049,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
-      completed_date: 2026-03-04
       notes: |
         ✅ Added Step 1.5 to acp.clarification-create.md:
         Check Existing Clarifications for Overlap.
@@ -3184,7 +3076,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-03-07
       notes: |
         ✅ Created agent/commands/acp.design-reference.md shared directive.
         6 steps: determine topic, search designs, report findings, extract elements,
@@ -3211,7 +3102,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-03-07
       notes: |
         ✅ Added Step 5.5 to task-create invoking @acp.design-reference directive.
         Strengthened Step 6: implementation-level detail, argument tables preserved,
@@ -3226,7 +3116,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-03-07
       notes: |
         ✅ Added Step 1.7 to proceed: Load Design Context.
         Reads Design Reference field, falls back to dynamic search.
@@ -3242,7 +3131,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-03-17
       notes: |
         Create agent/artifacts/ directory with three templates:
         - research.template.md (6 core + 9 optional sections)
@@ -3258,7 +3146,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 6
-      completed_date: 2026-03-17
       notes: |
         Plan-first research methodology:
         1. Generate research plan (gaps, considerations, topics, outline)
@@ -3276,7 +3163,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-03-17
       notes: |
         Auto-extraction with interactive refinement:
         1. Scan codebase for terms (classes, interfaces, CamelCase patterns)
@@ -3293,7 +3179,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-03-17
       notes: |
         Command-first sanity check:
         1. Evaluate: "Could this be a command instead?"
@@ -3310,7 +3195,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-03-17
       notes: |
         Enhance existing commands for artifact awareness:
         - @acp.validate: Check Last Verified dates, warn about staleness
@@ -3328,7 +3212,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
-      completed_date: 2026-02-21
       notes: |
         ✅ Fixed @acp.package-validate namespace validation
         - Only validates files in package.yaml contents
@@ -3345,7 +3228,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
-      completed_date: 2026-02-21
       notes: |
         ✅ Added progress.yaml creation to @acp.package-create
         - Creates minimal progress.yaml (no predefined milestones/tasks)
@@ -3361,7 +3243,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      completed_date: 2026-02-21
       notes: |
         ✅ Fixed package.yaml schema mismatch
         - Added yaml_get_nested() function to acp.yaml.sh for array indexing
@@ -3378,7 +3259,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
-      completed_date: 2026-02-21
       notes: |
         ✅ ACP core installation now tracked in manifest.yaml
         - Updated acp.install.sh to create manifest with acp-core package
@@ -3394,7 +3274,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 160
-      completed_date: 2026-02-21
       notes: |
         ✅ Generic YAML parser with AST complete!
         - Created agent/scripts/acp.yaml-parser.sh (549 lines, pure POSIX shell)
@@ -3420,7 +3299,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      completed_date: 2026-02-21
       notes: |
         ✅ Migration complete - old parser removed!
         - Updated documentation references in acp.sync.md
@@ -3439,7 +3317,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 6
-      completed_date: 2026-02-22
       notes: |
         ✅ Comprehensive E2E testing complete!
         - ✅ Created e2e/acp.package-update.test.sh (13/13 assertions passing)
@@ -3456,11 +3333,9 @@ tasks:
       status: completed
       started: 2026-05-01T00:00:00Z
       file: agent/tasks/milestone-24-agent-md-completeness/task-133-add-missing-commands.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
       actual_hours: 0.5
-      completed_date: 2026-05-01T01:00:00Z
       notes: |
         Add @acp.resume (Workflow), @acp.update (Version & Sync), @acp.preferences-get
         (Preferences), @acp.projects-restore (Project Registry), and git namespace section
@@ -3472,11 +3347,9 @@ tasks:
       status: completed
       started: 2026-05-01T01:00:00Z
       file: agent/tasks/milestone-24-agent-md-completeness/task-134-three-persona-deployment-model.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 0.5
-      completed_date: 2026-05-01T01:30:00Z
       notes: |
         Added Three-Persona Deployment Model section to AGENT.md between
         How to Use ACP Enhanced and Pattern Significance & Impact.
@@ -3492,8 +3365,6 @@ tasks:
       completed_date: 2026-05-01T02:30:00Z
       actual_hours: 0.5
       file: agent/tasks/milestone-24-agent-md-completeness/task-135-conclusion-and-sample-prompts.md
-      started: 2026-06-04
-      completed_date: 2026-06-04
       estimated_hours: 2
       notes: |
         Conclusion: "Agent Directory Pattern" → "ACP Enhanced" in opening sentence.
@@ -3511,8 +3382,6 @@ tasks:
       completed_date: 2026-05-01T03:30:00Z
       actual_hours: 0.5
       file: agent/tasks/milestone-24-agent-md-completeness/task-136-session-memory-and-housekeeping.md
-      started: 2026-06-04
-      completed_date: 2026-06-04
       estimated_hours: 2
       notes: |
         Prepended M23 session memory entry to agent/memory/sessions.md.
@@ -3528,11 +3397,9 @@ tasks:
       status: completed
       started: 2026-05-06T00:00:00Z
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-137-bootstrap-repository.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
       actual_hours: 1.5
-      completed_date: 2026-05-06T12:00:00Z
       notes: Create agent-context-protocol-visualizer GitHub repo, init TanStack Start with Tailwind, verify npm run dev.
 
     - id: task-138
@@ -3541,11 +3408,9 @@ tasks:
       status: completed
       started: 2026-05-06T12:24:36Z
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-138-yaml-parser-data-model.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 0.5
-      completed_date: 2026-05-06T12:35:00Z
       notes: TypeScript interfaces (ProgressData, Milestone, Task) + yaml-loader.ts with js-yaml, unit tests.
 
     - id: task-139
@@ -3554,11 +3419,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-139-server-route-file-watcher.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: null
-      completed_date: null
       notes: TanStack Start server route reads progress.yaml; SSE file watcher triggers auto-refresh.
 
     - id: task-140
@@ -3567,11 +3430,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-140-milestone-table-view.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 6
       actual_hours: null
-      completed_date: null
       notes: "@tanstack/react-table with sortable columns, StatusBadge, ProgressBar components."
 
     - id: task-141
@@ -3580,11 +3441,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-141-milestone-tree-view.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 6
       actual_hours: null
-      completed_date: null
       notes: Expandable/collapsible milestone → task hierarchy; shared route with table (tab toggle).
 
     - id: task-142
@@ -3593,11 +3452,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-142-search-and-filter.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
       actual_hours: null
-      completed_date: null
       notes: fuse.js search index across milestones + tasks; FilterBar with All/In Progress/Completed/Not Started.
 
     - id: task-143
@@ -3606,11 +3463,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-143-dashboard-shell.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
       actual_hours: null
-      completed_date: null
       notes: Root layout (sidebar nav), project header, overall progress bar, NextSteps panel.
 
     - id: task-144
@@ -3619,11 +3474,9 @@ tasks:
       status: not_started
       started: null
       file: agent/tasks/milestone-25-acp-progress-visualizer/task-144-acp-visualize-command.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
       actual_hours: null
-      completed_date: null
       notes: Create agent/commands/acp.visualize.md in ACP core; add to AGENT.md Core Commands.
 
   M26:
@@ -3635,8 +3488,6 @@ tasks:
       completed_date: 2026-05-04
       actual_hours: 1.0
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-145-auto-stamp-completed-in-acp-commit.md
-      started: 2026-06-04
-      completed_date: 2026-06-04
       estimated_hours: 3
       notes: Add step to git.commit.md to auto-set completed field on routing task files; eliminates BUG-01 class omissions.
 
@@ -3648,8 +3499,6 @@ tasks:
       completed_date: 2026-05-04
       actual_hours: 1.0
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-146-standardize-task-status-format.md
-      started: 2026-06-04
-      completed_date: 2026-06-04
       estimated_hours: 4
       notes: "Update acp.task-create.md and task template to use YAML completed: field; deprecate markdown Status field."
 
@@ -3659,11 +3508,9 @@ tasks:
       status: completed
       started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-147-document-token-budget-rationale.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
       actual_hours: 0.5
-      completed_date: 2026-05-04
       notes: Add rationale to AGENTS.md and constraints.yml explaining budget is for reproducibility/focus, not context window limits.
 
     - id: task-148
@@ -3674,8 +3521,6 @@ tasks:
       completed_date: 2026-05-04
       actual_hours: 0.5
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-148-resolve-dual-syntax-confusion.md
-      started: 2026-06-04
-      completed_date: 2026-06-04
       estimated_hours: 2
       notes: Add Command Invocation Styles section to AGENT.md and README; clarify VS Code vs generic agent usage.
 
@@ -3685,11 +3530,9 @@ tasks:
       status: completed
       started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-149-concurrent-modification-warning.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 0.5
-      completed_date: 2026-05-04
       notes: Add overlap heuristic to acp.sessions.md and acp.init.md; warn when two sessions target same milestone/task.
 
     - id: task-150
@@ -3698,11 +3541,9 @@ tasks:
       status: completed
       started: 2026-05-04T00:00:00Z
       file: agent/tasks/milestone-26-protocol-usability-improvements/task-150-separate-routing-and-milestone-task-systems.md
-      started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
       actual_hours: 0.5
-      completed_date: 2026-05-04
       notes: "Renamed 12 routing task files task-NNN.md → route-NNN.md; updated id:/precedes:/depends_on: fields; updated install.sh, version-update.sh, AGENTS.md, scripts/AGENTS.md, .github/copilot-instructions.md; added Two Task Systems note to AGENT.md."
 
   M27:
@@ -3816,8 +3657,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
-      started: 2026-03-20T12:00:00Z
-      completed_date: 2026-03-20T12:30:00Z
       actual_hours: 0.5
       notes: |
         Implement path: null support, new kind enum values (note, directive),
@@ -3832,8 +3671,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      started: 2026-05-01T00:00:00Z
-      completed_date: 2026-05-01T01:00:00Z
       actual_hours: 1.0
       notes: |
         Replace all yaml_query(file, path) calls in acp.preferences.sh with yaml_get(file, path).
@@ -3849,8 +3686,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      started: 2026-05-01T01:00:00Z
-      completed_date: 2026-05-01T01:30:00Z
       actual_hours: 0.5
       notes: |
         Rewrite generate_preferences to enumerate preferences via _index array in configurables.
@@ -3867,8 +3702,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      started: 2026-05-01T01:30:00Z
-      completed_date: 2026-05-01T02:00:00Z
       actual_hours: 0.5
       notes: |
         Remove dead indent_key variable and fix sed injection in set_preference.
@@ -3886,8 +3719,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
-      started: 2026-05-01T02:00:00Z
-      completed_date: 2026-05-01T02:15:00Z
       actual_hours: 0.25
       notes: |
         Remove duplicate "Repository cloned" echo in acp.package-install.sh.
@@ -3904,8 +3735,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      started: 2026-05-01T02:15:00Z
-      completed_date: 2026-05-01T02:30:00Z
       actual_hours: 0.25
       notes: |
         Run all M6 unit tests: acp.preferences.test.sh, acp.preferences-validate.test.sh,
@@ -3990,8 +3819,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      started: 2026-06-04
-      completed_date: 2026-06-04
       notes: |
         P0: Extend /acp-commit with auto-sync of agent/sessions/ from
         memory/sessions.md registry. Idempotent, --no-sync opt-out.
@@ -4004,8 +3831,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 4
-      started: 2026-06-04
-      completed_date: 2026-06-04
       notes: |
         P0: Extend /acp-commit with auto-sync of agent/patterns/ from
         memory/patterns.md registry. Idempotent, respects namespace conventions.
@@ -4018,8 +3843,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 2
-      started: 2026-06-04
-      completed_date: 2026-06-04
       notes: |
         P0: Re-sync session documents after weekly compaction replaces entries.
 
@@ -4031,8 +3854,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      started: 2026-06-04
-      completed_date: 2026-06-04
       notes: |
         P0: Standalone sync commands for repair. --dry-run, --all flags.
 
@@ -4044,8 +3865,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       estimated_hours: 3
-      started: 2026-06-04
-      completed_date: 2026-06-04
       notes: |
         P0: YAML-parse patterns.md, sessions.md, progress.yaml. Fail on
         syntax errors with line numbers.
@@ -4057,8 +3876,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-079.md
-      started: 2026-06-04
-      completed_date: 2026-06-04
       estimated_hours: 3
       notes: |
         P1: --diff, --preserve-project-core flags. Warn before overwriting
@@ -4071,8 +3888,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-080.md
-      started: 2026-06-04
-      completed_date: 2026-06-04
       estimated_hours: 2
       notes: |
         P1: Agent directives to quote scalars containing ':' in key_fact,
@@ -4085,8 +3900,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-081.md
-      started: 2026-06-04
-      completed_date: 2026-06-04
       estimated_hours: 1
       notes: |
         P1: Align commit output schema with visualizer expectations.
@@ -4098,8 +3911,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-082.md
-      started: 2026-06-04
-      completed_date: 2026-06-04
       estimated_hours: 2
       notes: |
         P2: Document registry vs document directories in architecture.md.
@@ -4111,8 +3922,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-083.md
-      started: 2026-06-04
-      completed_date: 2026-06-04
       estimated_hours: 2
       notes: |
         P2: Prompt when key_fact looks like a reusable pattern.
@@ -4124,8 +3933,6 @@ tasks:
       started: 2026-06-04
       completed_date: 2026-06-04
       file: agent/routing/tasks/route-084.md
-      started: 2026-06-04
-      completed_date: 2026-06-04
       estimated_hours: 2
       notes: |
         P2: Show phase-appropriate commands on init.
@@ -4340,6 +4147,22 @@ tasks:
         P2: --repair detects and fixes partial/broken installs.
 
 recent_work:
+  - date: 2026-07-15
+    description: |
+      🔧 Maintenance session — validate/sync/update after develop branch sync.
+      Fixed 191 duplicate YAML keys in progress.yaml; milestone status desyncs;
+      created missing M27 milestone doc; validator schema mapping fix.
+    items:
+      - "✅ /acp-validate — 0 errors (191 duplicate keys removed from progress.yaml tasks)"
+      - "✅ Milestone doc status sync — M19,M24-M28,M47-M49 → completed"
+      - "✅ Created agent/milestones/milestone-27-distribution-readiness-fixes.md"
+      - "✅ Verification gates marked ✅/⏳ on M59,M60,M63 milestone docs"
+      - "✅ acp-validate.ts — removed incorrect milestone.schema→progress.yaml mapping"
+      - "✅ acp-validate.ts — Array.isArray fix for progress.schema array fields"
+      - "✅ git tag v6.21.0 on eebc983"
+      - "✅ develop branch synced (47 commits fast-forward)"
+      - "📋 current_milestone → M63; next_steps refreshed"
+
   - date: 2026-06-15
     description: |
       ✅ M66 — Marker backfill across all design/task/pattern files. Created
@@ -4430,6 +4253,8 @@ recent_work:
       - "✅ E2E B10–B14 regression assertions in acp.integrity.test.sh"
       - "⏳ M64 1/6 routes — next route-182 (output contract)"
   - date: 2026-06-15
+    description: |
+      ✅ /acp-proceed M59 — Critical-Fix & CI Integrity Track shipped as v6.14.0.
       Dispatch regression test, package.yaml parity, CI validation wiring, version consistency check.
     items:
       - "✅ route-159 — updateRoutingYml() surgical session-block update + 2 regression tests"
@@ -6605,14 +6430,15 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "/acp-proceed M62 — Quality Hardening, Schema Coverage & Carryover Resolution (v6.21.0)"
+  - "/acp-proceed M63 — Test Coverage Sprint (Tier 2 & 3, v6.22.0)"
   - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md)"
+  - "Run overdue weekly /acp-review and /acp-integrity scans (due 2026-06-22)"
 
 current_blockers: []
 
 notes:
-  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — order M59→M64→M65→M61→M62→M60→M63 (completed: M55-61,M64-65; next: M62)"
-  - 66 milestone entries — M55–M61 shipped (v6.11–v6.20.9); M54 CI active (50%); M58 in progress (25%); M62 next
+  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M59–M66 complete; next M63"
+  - 66 milestone entries — M55–M66 shipped (v6.11–v6.21.0); M63 planned (test tier 2/3)
   - 71 command docs (69 acp.* + 2 git.*); 69 slash-command wrappers (prompts + opencode + cursor parity)
   - 9 skills (added code-review, code-integrity in M55/M56)
   - 36 bash scripts (+ integrity scanners in M56)
