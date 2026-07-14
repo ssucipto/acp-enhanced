@@ -5,6 +5,19 @@
 - date: 2026-07-15
   executor: copilot
   branch: develop
+  tasks: [housekeeping]
+  done:
+    - acp-validate-sync-update-commit-housekeeping
+    - progress-yaml-next-steps-m68-notes-refreshed
+    - recurring-tasks-marked-overdue-weekly-monthly
+  deferred:
+    - m63-test-coverage-tier-2-3 → route-178
+    - fifoz-feedback-007-consumer-path → acp-version-update-on-v6-24-1
+  key_fact: "v6.24.1 clean — validate 0 errors; current_milestone M63; weekly/monthly integrity scans overdue since June."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
   tasks: [route-198, route-199, route-200, route-201, route-202, route-203, route-204, route-205]
   done:
     - m68-safe-install-update-policy-shipped-v6-24-0
