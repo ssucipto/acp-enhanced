@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.21.1] — 2026-07-15
+
+### Fixed
+- **progress.yaml YAML integrity** — removed 191 duplicate task field keys
+  (mostly duplicate `completed_date` entries) restoring full js-yaml parse.
+- **Milestone status desync** — synced `**Status**` in M19, M24–M28, M47–M49
+  milestone docs to match progress.yaml (`completed`).
+- **Missing M27 milestone doc** — created
+  `agent/milestones/milestone-27-distribution-readiness-fixes.md`.
+- **acp-validate.ts** — removed incorrect `milestone.schema.yaml` →
+  `progress.yaml` mapping; fixed `Array.isArray` type check for schema warnings.
+- **Verification gates** — marked M59/M60/M63 industry-standard verification
+  items with ✅/⏳ status prefixes.
+
+### Changed
+- **progress.yaml tracking** — `current_milestone` → M63; `next_steps` and
+  `notes` refreshed after M66 completion.
+- **README badges** — version 6.21.1; 66 milestones shipped, M63 next.
+- **git tag** — retroactive `v6.21.0` tag on M66 release commit.
+
+---
+
 ## [6.21.0] — 2026-06-15
 
 ### Added
