@@ -3,13 +3,13 @@
 
 project:
   name: agent-context-protocol
-  version: 6.25.0
+  version: 6.25.1
   started: 2026-02-16
   status: active
   current_milestone: M63
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.25.0. M63 test coverage
-    tier 2/3 shipped — 0 untested commands, CI parity guard. M68 v6.24.1 safe install/update.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.25.1. M63 test coverage
+    tier 2/3 shipped — 0 untested commands, CI parity guard; audit-083 tier3 loop fix.
 
 milestones:
   M44:
@@ -384,20 +384,20 @@ milestones:
       M61 autonomous mode now have automated guards (validators + sweep).
 
   M63:
-    name: Test Coverage Sprint — Tier 2 & 3 (v6.25.0)
+    name: Test Coverage Sprint — Tier 2 & 3 (v6.25.1)
     priority: 3
     status: completed
     progress: 100
     started: 2026-07-15
     completed: 2026-07-15
     estimated_weeks: 1
-    tasks_completed: 1
-    tasks_total: 1
+    tasks_completed: 8
+    tasks_total: 8
     file: agent/milestones/milestone-63-test-coverage-tier2-3.md
     notes: |
-      ✅ M63 COMPLETE (v6.25.0). command-e2e-coverage.yaml (70 commands),
-      validateCommandE2eCoverage() CI guard, tier2/tier3/parity E2E suites.
-      0 untested commands at exit. route-206.
+      ✅ M63 COMPLETE (v6.25.1). Phase 1 route-206 (v6.25.0): registry + validate guard.
+      Phase 2 route-207 (audit-083): tier3 dynamic loop (58 docs), vitest validator,
+      tracking reconciliation. tasks 211–218. 0 untested commands; behavioral coverage verified.
 
   M64:
     name: Integrity Gateway v1.1 — Truth & Test (v6.19.0)
@@ -4179,6 +4179,118 @@ tasks:
       notes: |
         P2: --repair detects and fixes partial/broken installs.
 
+  M63:
+    - id: task-211
+      name: "Phase 1: E2E tier 2/3 + parity guard (route-206)"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-63-test-coverage-tier2-3/task-211-route-206-coverage.md
+      started: 2026-07-15
+      completed_date: 2026-07-15
+      estimated_hours: 12
+      notes: |
+        v6.25.0 ship. Registry (70 commands), validateCommandE2eCoverage CI guard,
+        tier2 + parity E2E. Initial tier3 subset — superseded by task-212.
+
+    - id: task-212
+      name: "Tier3 dynamic E2E loop — 58 commands (F-083-01)"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-63-test-coverage-tier2-3/task-212-tier3-dynamic-e2e-loop.md
+      started: 2026-07-15
+      completed_date: 2026-07-15
+      estimated_hours: 2
+      notes: |
+        audit-083 SC-M63-01 fix. Dynamic loop + TIER3_COUNT=58 meta-assertion. 259 assertions.
+
+    - id: task-213
+      name: "Vitest validateCommandE2eCoverage unit tests (F-083-04)"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-63-test-coverage-tier2-3/task-213-vitest-coverage-validator.md
+      started: 2026-07-15
+      completed_date: 2026-07-15
+      estimated_hours: 1.5
+      notes: |
+        CommandE2eCoverageOptions + gap fixture. 3 vitest cases, no process.chdir.
+
+    - id: task-214
+      name: "Case-insensitive Agent Directive in tier E2E (F-083-06)"
+      priority: 3
+      status: completed
+      file: agent/tasks/milestone-63-test-coverage-tier2-3/task-214-agent-directive-case-fix.md
+      started: 2026-07-15
+      completed_date: 2026-07-15
+      estimated_hours: 0.5
+      notes: |
+        grep -qi fix for acp.proceed CRITICAL AGENT DIRECTIVE. tier2 + tier3 suites.
+
+    - id: task-215
+      name: "Milestone doc reconciliation (F-083-02)"
+      priority: 3
+      status: completed
+      file: agent/tasks/milestone-63-test-coverage-tier2-3/task-215-milestone-doc-reconciliation.md
+      started: 2026-07-15
+      completed_date: 2026-07-15
+      estimated_hours: 0.5
+      notes: |
+        CHANGELOG v6.25.0 reference, verification gates, Phase 2 build order.
+
+    - id: task-216
+      name: "Task tracking alignment route-206/207 (F-083-03)"
+      priority: 3
+      status: completed
+      file: agent/tasks/milestone-63-test-coverage-tier2-3/task-216-task-tracking-alignment.md
+      started: 2026-07-15
+      completed_date: 2026-07-15
+      estimated_hours: 1
+      notes: |
+        task-211..218 + route-207. Dual tracking desync resolved.
+
+    - id: task-217
+      name: "audit-083 release closure v6.25.1"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-63-test-coverage-tier2-3/task-217-audit-083-release-closure.md
+      started: 2026-07-15
+      completed_date: 2026-07-15
+      estimated_hours: 1
+      notes: |
+        audit-083 report, carryovers @ 083, CHANGELOG + version bump v6.25.1.
+
+    - id: task-218
+      name: "Coverage meta-assertion preventive pattern"
+      priority: 3
+      status: completed
+      file: agent/tasks/milestone-63-test-coverage-tier2-3/task-218-coverage-meta-assertion-pattern.md
+      started: 2026-07-15
+      completed_date: 2026-07-15
+      estimated_hours: 0.5
+      notes: |
+        Anti-shortcuts table in milestone. Registry ≠ behavioral coverage rule.
+
+    - id: route-206
+      name: "M63 Phase 1 — E2E tier 2/3 + parity CI guard"
+      priority: 5
+      status: completed
+      file: agent/routing/tasks/route-206.md
+      started: 2026-07-15
+      completed_date: 2026-07-15
+      estimated_hours: 12
+      notes: |
+        v6.25.0. command-e2e-coverage.yaml, validateCommandE2eCoverage, tier2/parity E2E.
+
+    - id: route-207
+      name: "M63 Phase 2 — audit-083 remediation"
+      priority: 5
+      status: completed
+      file: agent/routing/tasks/route-207.md
+      started: 2026-07-15
+      completed_date: 2026-07-15
+      estimated_hours: 4
+      notes: |
+        v6.25.1. F-083-01..06 closed. tasks 212–218. tier3 loop + vitest + tracking.
+
 recent_work:
   - date: 2026-07-15
     description: |
@@ -6486,10 +6598,8 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "Pick next milestone from backlog (M63 complete — test coverage tier 2/3)"
-  - "Run overdue /acp-review and /acp-integrity weekly scans"
-  - "FIFOZ: /acp-version-update on v6.24.1+ and close feedback-007"
-  - "Push develop + tags v6.24.x/v6.25.0 to remote"
+  - "M63 audit-083 plan amended — 8 tasks (211–218), route-207 Phase 2"
+  - "Commit + tag v6.25.1; push develop and tags to remote"
 
 current_blockers: []
 
