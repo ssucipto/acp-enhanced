@@ -30,23 +30,28 @@ done
 
 WHITELISTED_DOMAINS=()
 if [[ -f "$WHITELIST_FILE" ]]; then
-  yaml_parse "$WHITELIST_FILE" >/dev/null 2>&1 || true
-  mapfile -t WHITELISTED_DOMAINS < <(python3 -c "
-import yaml
-with open('${WHITELIST_FILE}') as f:
-    data = yaml.safe_load(f) or {}
-for h in data.get('approved_hosts', []) or []:
-    print(h)
-" 2>/dev/null || true)
+  host_count=$(yaml_get_array "$WHITELIST_FILE" "approved_hosts" 2>/dev/null || echo "0")
+  if [[ "$host_count" =~ ^[0-9]+$ ]] && [[ "$host_count" -gt 0 ]]; then
+    for ((i = 0; i < host_count; i++)); do
+      host=$(yaml_get_nested "$WHITELIST_FILE" "approved_hosts[${i}]" 2>/dev/null || true)
+      host="${host//$'\r'/}"
+      host="${host//\"/}"
+      host="${host//\'/}"
+      [[ -n "$host" ]] && WHITELISTED_DOMAINS+=("$host")
+    done
+  fi
 else
   echo "Warning: $WHITELIST_FILE not found — all outbound calls flagged" >&2
 fi
 
 is_whitelisted() {
   local domain="$1"
+  local wd pattern suffix
   for wd in "${WHITELISTED_DOMAINS[@]}"; do
     if [[ "$wd" == *"*"* ]]; then
-      local pattern="${wd//\*/.*}"
+      suffix="${wd#\*}"
+      suffix="${suffix//./\\.}"
+      pattern=".*${suffix}"
       if echo "$domain" | grep -qE "^${pattern}$" 2>/dev/null; then
         return 0
       fi
@@ -71,7 +76,7 @@ scan_file() {
       while IFS= read -r url; do
         [[ -z "$url" ]] && continue
         local domain
-        domain=$(echo "$url" | sed 's|https\?://||' | awk -F/ '{print $1}')
+        domain=$(echo "$url" | sed -E 's|^https?://||' | awk -F/ '{print $1}')
         if echo "$domain" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' 2>/dev/null; then
           ig_emit_finding "$file" "$line_num" "IG-02" "raw IP address: $url"
           continue
