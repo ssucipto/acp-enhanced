@@ -491,10 +491,11 @@ milestones:
     file: agent/milestones/milestone-68-safe-install-update-policy.md
     design: agent/design/safe-install-update-policy.md
     notes: |
-      📋 Planned from audit-080 (2026-07-15). route-079 reopened — doc-only fix
-      in M47 never reached acp.version-update.sh. Blocks consumer-project /acp-version-update.
-      8 routes (198–205), 8 tasks (203–210). Tier A/B/C/D file policy.
-      Target: v6.24.0. Plan: agent/reports/plan-audit-080-safe-install-update.md
+      📋 Planned audit-080 (2026-07-15); amended audit-081 pre-impl (2026-07-15).
+      route-079 reopened — M47 doc-only shortcut SC-080-01. Blocks consumer-project /acp-version-update.
+      8 routes (198–205), 8 tasks (203–210). Tier A/B/C/D policy.
+      Closes: F-080-01..12 + P-081-01..03 (15 carryovers). Target v6.24.0.
+      Pre-impl verdict: READY. Reports: audit-080, audit-081.
 
   M1:
     name: ACP Commands Infrastructure

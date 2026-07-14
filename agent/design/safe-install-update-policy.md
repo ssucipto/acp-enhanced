@@ -8,8 +8,9 @@ updated: 2026-07-15
 @acp.meta.end -->
 
 **Status**: Accepted (M68 design)  
-**Source**: audit-080, route-079 (reopened), consumer-project field report  
+**Source**: audit-080, audit-081 (pre-impl), route-079 (reopened), consumer-project field report  
 **Target version**: v6.24.0  
+**Amended**: 2026-07-15 (audit-081 findings folded in)
 
 ---
 
@@ -128,6 +129,10 @@ New functions (route-198):
 | `acp_copy_framework_file rel tier` | Tier-aware copy with logging |
 | `acp_merge_manifest_acp_core version` | Tier D manifest merge |
 
+**Critical implementation note (P-081-07)**: Do **not** use `is_file_modified()` for acp-core Tier B files — it requires per-file manifest checksums that acp-core does not populate. Use `acp_file_differs_from_upstream()` (SHA-256 local vs `$TEMP_DIR/rel`) instead.
+
+**Environment**: Callers must `export TEMP_DIR` before invoking tier helpers (P-081-08).
+
 Registry file (optional): `agent/schemas/install-tier-registry.yaml` listing paths per tier for validate + docs.
 
 ---
@@ -136,7 +141,7 @@ Registry file (optional): `agent/schemas/install-tier-registry.yaml` listing pat
 
 | Script | Changes |
 |--------|---------|
-| `acp.version-update.sh` | Full flag parsing; replace blind `cp` blocks; AGENTS.md entry check; schemas Tier C |
+| `acp.version-update.sh` | Full flag parsing; replace blind `cp` blocks; AGENTS.md OR AGENT.md entry; schemas Tier C; **acp/git commands only** (P-081-01); skip `local.*` skills (P-081-02) |
 | `acp.install.sh` | Tier B on reinstall; manifest merge; xargs → while-read |
 | `acp-bootstrap.sh` | `create-if-absent` for all Tier B stubs |
 | `acp.version-update.md` | Fix `domain.yml` path (`agent/wiki/` not `agent/core/`) |
@@ -162,10 +167,14 @@ Registry file (optional): `agent/schemas/install-tier-registry.yaml` listing pat
 | Test | Platform |
 |------|----------|
 | `e2e/acp.version-update-preserve.test.sh` | macOS + Linux CI |
+| `e2e/acp.install-preserve.test.sh` | macOS + Linux + Windows CI |
 | Customized `identity.yml` survives default update | Required |
-| `progress.yaml` untouched | Required |
+| `progress.yaml` untouched | Required (F-080-13) |
+| Third-party command namespace preserved | Required (P-081-01) |
+| `local.*` skill preserved on update | Required (P-081-02) |
 | `manifest.yaml` retains non-acp-core packages after reinstall | Required |
 | Windows Git Bash: manifest generation without `xargs` | windows-latest CI |
+| **Offline upstream** via `ACP_UPSTREAM_ROOT` env | Required — no live `git clone` in CI (P-081-03) |
 
 ---
 
@@ -181,7 +190,20 @@ Registry file (optional): `agent/schemas/install-tier-registry.yaml` listing pat
 
 Milestone M68 exit requires:
 
-- [ ] route-079 acceptance criteria pass **in shell** (not doc-only)
-- [ ] audit-080 F-080-01..11 closed
+- [ ] route-079 acceptance criteria pass **in shell** (not doc-only — SC-080-01)
+- [ ] audit-080 F-080-01..12 closed
+- [ ] audit-081 P-081-01..03 closed
+- [ ] route-204 validate guard passes before v6.24.0 tag (SC-080-03)
 - [ ] consumer-project can run `/acp-version-update` without `git restore`
 - [ ] `npx tsx scripts/acp-validate.ts` — 0 errors
+
+## Anti-shortcut register
+
+| ID | Prevention |
+|----|------------|
+| SC-080-01 | No route-079 `completed:` until route-202 E2E green |
+| SC-080-02 | CHANGELOG v6.24.0 notes v6.9.0 doc-only gap |
+| SC-080-03 | `acp_copy_framework_file()` + validate guard |
+| SC-080-04 | Tier D manifest merge only |
+| SC-080-05 | Single tier table in command doc (no contradicting lists) |
+| SC-080-06 | Behavioral E2E ≥12 assertions, not syntax-only |
