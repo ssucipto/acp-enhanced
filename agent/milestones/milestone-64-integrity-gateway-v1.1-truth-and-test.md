@@ -1,6 +1,6 @@
 # Milestone 64: Integrity Gateway v1.1 — Truth & Test
 
-**Target version**: 6.19.0
+**Shipped version**: 6.19.0  
 **Status**: completed  
 **Completed**: 2026-06-15  
 **Priority**: HIGH (blocks further M58 v2.0 semantic work)

@@ -3,7 +3,7 @@
 **Goal**: Close all gaps found in the M23 post-rebrand audit — missing commands, missing Three-Persona section, stale Conclusion, legacy Sample Prompts, missing M17 doc, and deferred M23 session memory.  
 **Duration**: ~1 week (6–7 total agent-hours across 4 tasks)  
 **Dependencies**: M23 (ACP Enhanced Identity) — completed ✅  
-**Status**: Not Started
+**Status**: completed
 
 ---
 
