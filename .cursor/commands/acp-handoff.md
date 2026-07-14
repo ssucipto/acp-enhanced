@@ -1,5 +1,5 @@
 ---
-description: "Generate a context-aware handoff report for transferring work to an agent in a different context (different repository, provider, etc.)"
+description: "Generate a context-aware handoff for transferring work to another agent context — same-repo executor transfer (plan → implement) or cross-repository problem transfer"
 ---
 
 # ACP Command: /acp-handoff

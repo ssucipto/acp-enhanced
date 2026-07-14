@@ -1,12 +1,9 @@
 #!/bin/bash
 
 # Agent Context Protocol (ACP) Update Script
-# This script updates AGENT.md, template files, and utility scripts from the repository
+# Tier-aware update — preserves project-owned files (M68 / route-079)
 
-# Self-relocation guard: this script overwrites itself during the update
-# (it copies the latest version from the repo to agent/scripts/). Bash reads
-# files lazily by byte offset, so the overwrite garbles execution. Fix: re-exec
-# from a temp copy so the file on disk can safely change.
+# Self-relocation guard: re-exec from temp copy so on-disk script can change safely
 if [ -z "$_ACP_UPDATE_RELOCATED" ]; then
     _tmp_copy=$(mktemp)
     cp "$0" "$_tmp_copy"
@@ -20,24 +17,40 @@ fi
 set -euo pipefail
 trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
-# Colors for output using tput (more reliable than ANSI codes)
+# ── Argument parsing (route-079) ─────────────────────────────────────────────
+ACP_DIFF_ONLY=false
+ACP_FORCE=false
+ACP_PRESERVE_PROJECT_CORE=false
+ACP_YES=false
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --diff) ACP_DIFF_ONLY=true ;;
+        --preserve-project-core) ACP_PRESERVE_PROJECT_CORE=true ;;
+        --force) ACP_FORCE=true ;;
+        --yes|-y) ACP_YES=true ;;
+        -h|--help)
+            echo "Usage: acp.version-update.sh [--diff] [--preserve-project-core] [--force] [--yes]"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+export ACP_DIFF_ONLY ACP_FORCE ACP_PRESERVE_PROJECT_CORE ACP_YES
+
+# Colors
 if command -v tput >/dev/null 2>&1 && [ -t 1 ]; then
-    RED=$(tput setaf 1)
-    GREEN=$(tput setaf 2)
-    YELLOW=$(tput setaf 3)
-    BLUE=$(tput setaf 4)
-    BOLD=$(tput bold)
-    NC=$(tput sgr0)
+    RED=$(tput setaf 1); GREEN=$(tput setaf 2); YELLOW=$(tput setaf 3)
+    BLUE=$(tput setaf 4); BOLD=$(tput bold); NC=$(tput sgr0)
 else
-    RED=''
-    GREEN=''
-    YELLOW=''
-    BLUE=''
-    BOLD=''
-    NC=''
+    RED=''; GREEN=''; YELLOW=''; BLUE=''; BOLD=''; NC=''
 fi
 
-# Repository details
 REPO_URL="https://github.com/ssucipto/acp-enhanced.git"
 BRANCH="mainline"
 
@@ -45,43 +58,47 @@ echo "${BLUE}Agent Context Protocol (ACP) Updater${NC}"
 echo "======================================"
 echo ""
 
-# Check if AGENT.md exists
-if [ ! -f "AGENT.md" ]; then
-    echo "${RED}Error: AGENT.md not found in current directory${NC}"
-    echo "This script should be run from your project root where AGENT.md is located."
+# Entry check: AGENTS.md OR AGENT.md (F-080-09)
+if [ ! -f "AGENTS.md" ] && [ ! -f "AGENT.md" ]; then
+    echo "${RED}Error: AGENTS.md or AGENT.md not found in current directory${NC}"
+    echo "Run this script from your project root."
     exit 1
 fi
 
-# Check for complete ACP installation (audit-036)
 if [ ! -f "agent/core/identity.yml" ] || [ ! -f "agent/core/routing.yml" ]; then
     echo "${YELLOW}Warning: Incomplete ACP installation detected.${NC}"
-    echo "  Missing agent/core/identity.yml or agent/core/routing.yml."
-    echo "  Run scripts/acp-bootstrap.sh first to install ACP Enhanced."
-    echo "  Continuing with partial update (may overwrite existing files)..."
+    echo "  Run scripts/acp-bootstrap.sh first for a full install."
 fi
 
-# Create temporary directory
-TEMP_DIR=$(mktemp -d)
-trap "rm -rf $TEMP_DIR" EXIT
-
-echo "Fetching latest ACP files..."
-if ! git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$TEMP_DIR" &>/dev/null; then
-    echo "${RED}Error: Failed to fetch repository${NC}"
-    echo "Please check your internet connection and try again."
-    exit 1
+# Upstream source: offline fixture (E2E) or git clone
+_CLEANUP_TEMP=false
+if [ -n "${ACP_UPSTREAM_ROOT:-}" ]; then
+    TEMP_DIR="$ACP_UPSTREAM_ROOT"
+    echo "Using offline upstream: ${TEMP_DIR}"
+else
+    TEMP_DIR=$(mktemp -d)
+    _CLEANUP_TEMP=true
+    trap 'rm -rf "$TEMP_DIR"' EXIT
+    echo "Fetching latest ACP files..."
+    if ! git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$TEMP_DIR" &>/dev/null; then
+        echo "${RED}Error: Failed to fetch repository${NC}"
+        exit 1
+    fi
+    echo "${GREEN}✓${NC} Latest files fetched"
 fi
+export TEMP_DIR
 
-echo "${GREEN}✓${NC} Latest files fetched"
-echo ""
+. "agent/scripts/acp.common.sh"
+init_colors
+
+if [ "$ACP_DIFF_ONLY" = true ]; then
+    echo "${YELLOW}Dry-run mode (--diff) — no files will be modified${NC}"
+    echo ""
+fi
 
 # ── Legacy .agent/ migration ──────────────────────────────────────────────────
-# Detect ACP < 6.x layout and auto-merge user-state files into agent/ before
-# the update proceeds. Static files (.agent/core, skills, wiki) are dropped —
-# they will be refreshed by the update anyway.
-if [ -d ".agent" ]; then
+if [ "$ACP_DIFF_ONLY" = false ] && [ -d ".agent" ]; then
     echo "${YELLOW}Found legacy .agent/ directory — auto-migrating to agent/ layout...${NC}"
-
-    # User-state memory files (create-if-absent: never overwrite)
     if [ -d ".agent/memory" ]; then
         mkdir -p agent/memory
         for _f in sessions.md lessons.md decisions.md patterns.md; do
@@ -91,8 +108,6 @@ if [ -d ".agent" ]; then
             fi
         done
     fi
-
-    # Routing task files (route-NNN.md — user-created, never overwrite)
     if [ -d ".agent/tasks" ]; then
         mkdir -p agent/routing/tasks
         for _f in ".agent/tasks/task-"*.md; do
@@ -104,174 +119,196 @@ if [ -d ".agent" ]; then
             fi
         done
     fi
-
-    # Routing ledger (user-state — never overwrite)
     if [ -f ".agent/routing/ledger.md" ] && [ ! -f "agent/routing/ledger.md" ]; then
         mkdir -p agent/routing
         mv ".agent/routing/ledger.md" "agent/routing/ledger.md"
         echo "  ✓ Migrated routing/ledger.md"
     fi
-
     rm -rf ".agent"
     echo "${GREEN}✓${NC} Legacy .agent/ merged and removed"
     echo ""
 fi
 
-# Ensure reports directory exists and is ignored
-mkdir -p "agent/reports"
-if [ ! -f "agent/.gitignore" ]; then
-    echo "Creating agent/.gitignore..."
-    cat > "agent/.gitignore" << 'EOF'
+if [ "$ACP_DIFF_ONLY" = false ]; then
+    mkdir -p "agent/reports"
+    if [ ! -f "agent/.gitignore" ]; then
+        cat > "agent/.gitignore" << 'EOF'
 # Agent Context Protocol - Local Files
-# These files are generated locally and should not be committed
-
-# Reports directory - generated by /acp-report command
 reports/
 clarifications/
 feedback/
 drafts/
 preferences/
 EOF
-    echo "${GREEN}✓${NC} Created agent/.gitignore"
+        echo "${GREEN}✓${NC} Created agent/.gitignore"
+    fi
 fi
 
 echo "Updating ACP files..."
 
-# Update template files (only .template.md files from these directories)
-find "$TEMP_DIR/agent/design" -maxdepth 1 -name "*.template.md" -exec cp {} "agent/design/" \;
-find "$TEMP_DIR/agent/milestones" -maxdepth 1 -name "*.template.md" -exec cp {} "agent/milestones/" \;
-find "$TEMP_DIR/agent/patterns" -maxdepth 1 -name "*.template.md" -exec cp {} "agent/patterns/" \;
-find "$TEMP_DIR/agent/tasks" -maxdepth 1 -name "*.template.md" -exec cp {} "agent/tasks/" \;
-
-# Update command template
-mkdir -p "agent/commands"
-cp "$TEMP_DIR/agent/commands/command.template.md" "agent/commands/"
-
-# Update all command files (flat structure with dot notation)
-# Copies files like acp.init.md, acp.status.md, deploy.production.md, etc.
-if [ -d "$TEMP_DIR/agent/commands" ]; then
-    find "$TEMP_DIR/agent/commands" -maxdepth 1 -name "*.*.md" -exec cp {} "agent/commands/" \;
+# Tier C: templates
+if [ "$ACP_DIFF_ONLY" = false ]; then
+    find "$TEMP_DIR/agent/design" -maxdepth 1 -name "*.template.md" -exec cp {} "agent/design/" \; 2>/dev/null || true
+    find "$TEMP_DIR/agent/milestones" -maxdepth 1 -name "*.template.md" -exec cp {} "agent/milestones/" \; 2>/dev/null || true
+    find "$TEMP_DIR/agent/patterns" -maxdepth 1 -name "*.template.md" -exec cp {} "agent/patterns/" \; 2>/dev/null || true
+    find "$TEMP_DIR/agent/tasks" -maxdepth 1 -name "*.template.md" -exec cp {} "agent/tasks/" \; 2>/dev/null || true
+    mkdir -p "agent/commands"
+    acp_copy_framework_file "agent/commands/command.template.md" C
+else
+    echo "  ↻ would update (tier C): agent/design/*.template.md"
+    echo "  ↻ would update (tier C): agent/commands/command.template.md"
 fi
 
-# Update progress template
-cp "$TEMP_DIR/agent/progress.template.yaml" "agent/"
+# Tier C: framework commands only (P-081-01) — third-party namespaces preserved
+for _cmd in "$TEMP_DIR/agent/commands"/acp.*.md "$TEMP_DIR/agent/commands"/git.*.md; do
+    [ -e "$_cmd" ] || continue
+    _rel="agent/commands/$(basename "$_cmd")"
+    acp_copy_framework_file "$_rel" C
+done
 
-# Update manifest template
-if [ -f "$TEMP_DIR/agent/manifest.template.yaml" ]; then
-    cp "$TEMP_DIR/agent/manifest.template.yaml" "agent/"
+# Tier C: templates and schemas
+for _tpl in progress.template.yaml manifest.template.yaml package.template.yaml; do
+    acp_copy_framework_file "agent/${_tpl}" C
+done
+if [ -d "$TEMP_DIR/agent/schemas" ]; then
+    mkdir -p agent/schemas
+    for _sch in "$TEMP_DIR/agent/schemas"/*; do
+        [ -f "$_sch" ] || continue
+        acp_copy_framework_file "agent/schemas/$(basename "$_sch")" C
+    done
 fi
 
-# Update package template
-if [ -f "$TEMP_DIR/agent/package.template.yaml" ]; then
-    cp "$TEMP_DIR/agent/package.template.yaml" "agent/"
+# Tier C: protocol docs (triple-sync)
+if [ -f "$TEMP_DIR/AGENTS.md" ]; then
+    acp_copy_framework_file "AGENTS.md" C
+elif [ -f "$TEMP_DIR/AGENT.md" ]; then
+    if [ "$ACP_DIFF_ONLY" = true ]; then
+        echo "  ↻ would update (tier C): AGENTS.md (from AGENT.md)"
+    else
+        cp "$TEMP_DIR/AGENT.md" "AGENTS.md"
+        echo "  ↻ updated: AGENTS.md (from AGENT.md)"
+    fi
+fi
+if [ "$ACP_DIFF_ONLY" = false ] && [ -f "AGENTS.md" ]; then
+    cp AGENTS.md CLAUDE.md 2>/dev/null || true
+    mkdir -p .github
+    cp AGENTS.md .github/copilot-instructions.md 2>/dev/null || true
 fi
 
-# Update AGENT.md
-cp "$TEMP_DIR/AGENT.md" "."
-
-# Update all scripts (*.sh files)
-# This ensures all current and future scripts are copied
+# Tier C: scripts (self-update — copy after helpers loaded)
 if [ -d "$TEMP_DIR/agent/scripts" ]; then
-    find "$TEMP_DIR/agent/scripts" -maxdepth 1 -name "*.sh" -exec cp {} "agent/scripts/" \;
-    chmod +x agent/scripts/*.sh
+    if [ "$ACP_DIFF_ONLY" = true ]; then
+        echo "  ↻ would update (tier C): agent/scripts/*.sh"
+    else
+        find "$TEMP_DIR/agent/scripts" -maxdepth 1 -name "*.sh" -exec cp {} "agent/scripts/" \;
+        chmod +x agent/scripts/*.sh 2>/dev/null || true
+        echo "  ↻ updated: agent/scripts/*.sh"
+    fi
 fi
 
-# Clean up deprecated scripts (from versions < 2.0.0)
-. "agent/scripts/acp.common.sh"
-init_colors
-cleanup_deprecated_scripts
+if [ "$ACP_DIFF_ONLY" = false ]; then
+    cleanup_deprecated_scripts
+fi
 
-echo "${GREEN}✓${NC} All files updated"
 echo ""
+echo "Updating ACP Enhanced context layer (tier-aware)..."
+mkdir -p agent/core agent/memory agent/routing/tasks agent/skills agent/wiki agent/routing
 
-# ACP Enhanced — update static context files (preserve user-state files)
-echo "Updating ACP Enhanced context layer..."
-mkdir -p agent/core agent/memory agent/routing/tasks agent/skills agent/wiki
+# Tier B: core
+for _f in identity.yml constraints.yml routing.yml; do
+    acp_copy_framework_file "agent/core/${_f}" B
+done
 
-# Overwrite static files (no user state in these)
-[ -d "$TEMP_DIR/agent/core" ]   && cp "$TEMP_DIR/agent/core/"*.yml   agent/core/   2>/dev/null || true
-[ -d "$TEMP_DIR/agent/skills" ] && cp "$TEMP_DIR/agent/skills/"*.md  agent/skills/ 2>/dev/null || true
-if [ -d "$TEMP_DIR/agent/wiki" ]; then
-    cp "$TEMP_DIR/agent/wiki/"*.yml agent/wiki/ 2>/dev/null || true
-    cp "$TEMP_DIR/agent/wiki/"*.md  agent/wiki/ 2>/dev/null || true
-fi
-if [ -d "$TEMP_DIR/agent/routing" ]; then
-    cp "$TEMP_DIR/agent/routing/taxonomy.yml" agent/routing/ 2>/dev/null || true
-    cp "$TEMP_DIR/agent/routing/rules.md"     agent/routing/ 2>/dev/null || true
-    cp "$TEMP_DIR/agent/routing/config.yml"   agent/routing/ 2>/dev/null || true
-    # route-template only — never overwrite user routing task files
-    cp "$TEMP_DIR/agent/routing/tasks/route-template.md" \
-       agent/routing/tasks/ 2>/dev/null || true
-fi
-
-# Preserve user-state files — create only if somehow missing
-[ -f "agent/memory/sessions.md"  ] || echo "# Session Memory"    > agent/memory/sessions.md
-[ -f "agent/memory/lessons.md"   ] || echo "# Lessons Log"       > agent/memory/lessons.md
-[ -f "agent/memory/decisions.md" ] || echo "# ADR Log"           > agent/memory/decisions.md
-[ -f "agent/memory/patterns.md"  ] || echo "# Reusable Patterns" > agent/memory/patterns.md
-[ -f "agent/routing/ledger.md"   ] || echo "# Routing Ledger"    > agent/routing/ledger.md
-
-# Update opencode slash commands (static generated artifact — always overwrite)
-if [ -d "$TEMP_DIR/.opencode/commands" ]; then
-    mkdir -p .opencode/commands
-    cp "$TEMP_DIR/.opencode/commands/"*.md .opencode/commands/ 2>/dev/null || true
+# Tier B/C skills: skip local.* (P-081-02)
+if [ -d "$TEMP_DIR/agent/skills" ]; then
+    for _skill in "$TEMP_DIR/agent/skills/"*.md; do
+        [ -e "$_skill" ] || continue
+        _base=$(basename "$_skill")
+        case "$_base" in
+            local.*) echo "  ⊘ preserved: agent/skills/${_base}"; continue ;;
+        esac
+        acp_copy_framework_file "agent/skills/${_base}" C
+    done
 fi
 
-# Regenerate Cursor slash commands from updated command docs
-if [ -f "agent/scripts/acp.cursor-commands-sync.sh" ]; then
-    echo "Regenerating Cursor slash commands..."
-    bash agent/scripts/acp.cursor-commands-sync.sh
+# Tier B: wiki
+for _f in "$TEMP_DIR/agent/wiki/"*.yml "$TEMP_DIR/agent/wiki/"*.md; do
+    [ -e "$_f" ] || continue
+    acp_copy_framework_file "agent/wiki/$(basename "$_f")" B
+done
+
+# Tier B: routing config
+for _f in taxonomy.yml rules.md config.yml; do
+    acp_copy_framework_file "agent/routing/${_f}" B
+done
+acp_copy_framework_file "agent/routing/tasks/route-template.md" C
+
+# Tier A: user-state create-if-absent only
+if [ "$ACP_DIFF_ONLY" = false ]; then
+    [ -f "agent/memory/sessions.md"  ] || echo "# Session Memory"    > agent/memory/sessions.md
+    [ -f "agent/memory/lessons.md"   ] || echo "# Lessons Log"       > agent/memory/lessons.md
+    [ -f "agent/memory/decisions.md" ] || echo "# ADR Log"           > agent/memory/decisions.md
+    [ -f "agent/memory/patterns.md"  ] || echo "# Reusable Patterns" > agent/memory/patterns.md
+    [ -f "agent/routing/ledger.md"   ] || echo "# Routing Ledger"    > agent/routing/ledger.md
+else
+    echo "  ⊘ preserved (tier A): agent/memory/*, agent/progress.yaml"
+fi
+
+# Tier C: opencode + cursor commands
+if [ "$ACP_DIFF_ONLY" = false ]; then
+    if [ -d "$TEMP_DIR/.opencode/commands" ]; then
+        mkdir -p .opencode/commands
+        cp "$TEMP_DIR/.opencode/commands/"*.md .opencode/commands/ 2>/dev/null || true
+    fi
+    if [ -f "agent/scripts/acp.cursor-commands-sync.sh" ]; then
+        echo "Regenerating Cursor slash commands..."
+        bash agent/scripts/acp.cursor-commands-sync.sh 2>/dev/null || echo "${YELLOW}Note: Cursor slash command sync skipped${NC}"
+    fi
 fi
 
 echo "${GREEN}✓${NC} ACP Enhanced context layer updated"
 echo ""
 
-# Update acp-core version in manifest if it exists
+# Tier D: manifest merge only
 if [ -f "agent/manifest.yaml" ]; then
-    echo "Updating manifest..."
-    
-    # Get new ACP version
-    NEW_VERSION=$(grep "^\*\*Version\*\*:" "AGENT.md" | sed 's/.*: //' | head -1)
-    UPDATE_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-    
-    # Update acp-core version in manifest — create entry if missing (FIX F-004, audit-036)
-    if grep -q "^  acp-core:" agent/manifest.yaml 2>/dev/null; then
-        _sed_i "s/package_version: .*/package_version: ${NEW_VERSION}/" agent/manifest.yaml
-        _sed_i "s/updated_at: .*/updated_at: ${UPDATE_DATE}/" agent/manifest.yaml
-    else
-        # Append acp-core entry before scaffold block
-        _sed_i "/^scaffold:/i\\
-  acp-core:
-    package_version: ${NEW_VERSION}
-    updated_at: ${UPDATE_DATE}
-    source: https://github.com/ssucipto/acp-enhanced.git
-" agent/manifest.yaml
+    _ver_file="AGENTS.md"
+    [ -f "$_ver_file" ] || _ver_file="AGENT.md"
+    NEW_VERSION=$(grep -m1 "^\*\*Version\*\*:" "$_ver_file" 2>/dev/null | sed 's/.*: *//' | tr -d '\r')
+    if [ -z "$NEW_VERSION" ]; then
+        NEW_VERSION=$(grep -m1 '^> v' "$_ver_file" 2>/dev/null | sed 's/^> v//' | cut -d' ' -f1 | tr -d '\r')
     fi
-
-    # Update manifest timestamp
-    _sed_i "s/^last_updated: .*/last_updated: ${UPDATE_DATE}/" agent/manifest.yaml
-    
-    echo "${GREEN}✓${NC} Updated acp-core to v${NEW_VERSION} in manifest.yaml"
+    [ -n "$NEW_VERSION" ] || NEW_VERSION="unknown"
+    if [ "$ACP_DIFF_ONLY" = true ]; then
+        echo "  ↻ would merge (tier D): agent/manifest.yaml acp-core → v${NEW_VERSION}"
+    else
+        echo "Updating manifest (tier D merge)..."
+        acp_merge_manifest_acp_core "$NEW_VERSION" "agent/manifest.yaml"
+        echo "${GREEN}✓${NC} Updated acp-core to v${NEW_VERSION} in manifest.yaml"
+    fi
     echo ""
+fi
+
+if [ "$_CLEANUP_TEMP" = true ]; then
+    rm -rf "$TEMP_DIR"
+    trap - EXIT
+fi
+
+if [ "$ACP_DIFF_ONLY" = true ]; then
+    echo "${GREEN}Dry-run complete — no files modified.${NC}"
+    exit 0
 fi
 
 echo "${GREEN}Update complete!${NC}"
 echo ""
 echo "${BLUE}What was updated:${NC}"
-echo "  ✓ AGENT.md (methodology documentation)"
-echo "  ✓ Template files (design, milestone, task, pattern)"
-echo "  ✓ Command files (all ACP commands)"
-echo "  ✓ Utility scripts (update, check-for-updates, version, etc.)"
-echo "  ✓ ACP Enhanced context layer (agent/core/, agent/skills/, agent/wiki/, agent/routing/)"
-echo "  ✓ opencode slash commands (.opencode/commands/)"
+echo "  ✓ Framework commands (acp.*, git.* only)"
+echo "  ✓ Scripts, schemas, templates"
+echo "  ✓ AGENTS.md + sync copies"
+echo "  ✓ Unmodified project core/wiki/routing preserved"
 echo ""
 echo "${BLUE}Next steps:${NC}"
 echo "1. Review changes: git diff"
-echo "2. See what changed: git status"
-echo "3. Revert if needed: git checkout <file>"
-echo ""
-echo "For detailed changelog:"
-echo "  https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md"
+echo "2. Revert if needed: git checkout <file>"
 echo ""
 display_available_commands
 echo ""

@@ -3,9 +3,9 @@
 > **🤖 Agent Directive**: If you are reading this file, the command `/acp-version-update` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
-**Version**: 1.1.0  
+**Version**: 1.2.0  
 **Created**: 2026-02-16  
-**Last Updated**: 2026-06-04  
+**Last Updated**: 2026-07-15  
 **Status**: Active  
 **Scripts**: acp.version-update.sh, acp.common.sh  
 
@@ -23,52 +23,38 @@
 |------|-------------|
 | `--diff` | Show what files would change without applying any updates |
 | `--preserve-project-core` | Skip overwriting project-specific core files (identity.yml, domain.yml, taxonomy.yml) |
-| `--force` | Skip all confirmation prompts; overwrite everything without asking |
+| `--yes` / `-y` | Auto-confirm prompts (CI / agent runs) |
 
-**Default behavior**: Before overwriting any `agent/core/*.yml` file that differs from the framework template, warn and ask for confirmation.
+**Default behavior (v6.24.0+)**: Tier-aware safe update — customized Tier B files are **preserved**; framework Tier C files refreshed. Requires `AGENTS.md` or `AGENT.md` at project root.
+
+---
+
+## File tier policy (authoritative)
+
+| Tier | Behavior | Examples |
+|------|----------|----------|
+| **A — Never overwrite** | Create-if-absent only | `agent/progress.yaml`, `agent/memory/*`, `agent/routing/tasks/route-*.md`, third-party `agent/commands/{ns}.*.md` (ns ≠ acp, git) |
+| **B — Preserve if customized** | Skip when local ≠ upstream SHA | `agent/core/identity.yml`, `agent/wiki/domain.yml`, `agent/routing/taxonomy.yml`, `agent/skills/local.*.md` |
+| **C — Always refresh** | Framework artifacts | `agent/commands/acp.*.md`, `agent/scripts/*.sh`, `AGENTS.md`, `agent/schemas/*` |
+| **D — Merge only** | acp-core block in manifest | `agent/manifest.yaml` — other packages untouched |
+
+> **Pre-v6.24.0**: Commit before updating. Older scripts blind-overwrote core files.
 
 ---
 
 ## What This Command Does
 
-This command updates your ACP Enhanced installation to the latest version by running the update script. It downloads the latest AGENT.md, template files, command docs, and utility scripts from the ACP Enhanced repository, replacing your current framework versions while **preserving your project-specific files**.
+This command updates your ACP Enhanced installation using **tier-aware** copy logic in `acp.version-update.sh`. Framework files refresh; project-owned configuration is preserved by default.
 
-Use this command when `/acp-version-check-for-updates` reports that updates are available, or when you want to get the latest ACP improvements. The update process is git-friendly and reversible.
+Use when `/acp-version-check-for-updates` reports updates available. Git commit before updating is still recommended.
 
-**⚠️ What gets overwritten (framework files):**
-- `AGENT.md` — the ACP Enhanced protocol document
-- `agent/commands/*.md` — all command docs (including any local customizations!)
-- `agent/scripts/*.sh` — all utility scripts
-- `agent/core/*.yml` — identity, constraints, routing config
-- `agent/skills/*.md` — skill files
-- `agent/wiki/*` — reference docs
-- `agent/routing/taxonomy.yml`, `rules.md`, `config.yml` — routing config
-- `agent/*.template.*` — all template files
-- `.opencode/commands/*.md` — opencode slash commands
+**Removed**: Contradictory overwrite lists — use the tier table above.
 
-**🛡️ What is preserved (your data — NEVER overwritten):**
-- `agent/memory/*` — sessions, lessons, decisions, patterns
-- `agent/routing/tasks/route-*.md` — your task route files
-- `agent/routing/ledger.md` — cost tracking ledger
-- `agent/progress.yaml` — milestone + task progress
-- `agent/manifest.yaml` — package manifest (acp-core version updated, rest untouched)
-- `agent/design/*.md` — your design documents (non-template)
-- `agent/milestones/*.md` — your milestone documents (non-template)
-- `agent/patterns/*.md` — your pattern documents (non-template)
-- `agent/preferences/` — your preference overrides
-- `agent/configurables/` — your configurable definitions
-- `agent/drafts/` — your draft documents
-- `agent/clarifications/` — your clarification documents
-- `agent/artifacts/` — your research artifacts
-- `agent/specs/` — your specs
-- `agent/index/` — your key file index
+---
 
-> **Important**: If you've customized `AGENT.md` or any files in `agent/commands/`, commit your changes before updating so you can recover them via `git diff` / `git checkout`.
->
-> **🔒 Project Core Files (v1.1.0+)**: Before overwriting `agent/core/identity.yml`,
-> `agent/core/domain.yml`, or `agent/core/taxonomy.yml`, the update now warns if these
-> files differ from framework defaults. Use `--diff` to preview changes, or
-> `--preserve-project-core` to skip these files entirely.
+## Legacy note (v1.1.0 doc-only — fixed v6.24.0)
+
+Project core paths: `agent/wiki/domain.yml` (not `agent/core/domain.yml`). `agent/routing/taxonomy.yml` for taxonomy.
 
 ---
 
@@ -106,70 +92,40 @@ Display the following informational header, then continue immediately:
 
 ### 0b. Handle --diff Flag
 
-> **If `--diff` was passed, run this step only and exit.**
+> **If `--diff` was passed**, run the script with `--diff` only and exit.
 
 **Actions**:
-- Compare current `agent/core/identity.yml`, `domain.yml`, `taxonomy.yml` against
-  what the latest framework version would write
-- Show a diff summary of what files would change
-- List which core files would be overwritten vs preserved
-- Exit without applying any changes
+- Run `./agent/scripts/acp.version-update.sh --diff`
+- Script prints tier-aware would-change list (no writes)
+- Exit without applying updates
 
-**Output**:
-```
-[Dry Run] The following files would be updated:
-  agent/core/identity.yml (project-modified — would be overwritten)
-  agent/core/routing.yml (unchanged from framework — safe)
-  AGENTS.md (framework update)
-  agent/commands/*.md (N files)
-  agent/scripts/*.sh (N files)
-
-The following project-specific files would be preserved:
-  agent/progress.yaml, agent/memory/*, agent/design/*, ...
-
-💡 Use --preserve-project-core to skip overwriting identity.yml,
-   domain.yml, and taxonomy.yml.
-```
-
-**Expected Outcome**: User sees what would change; no files modified.
+**Expected Outcome**: User sees preview; no files modified.
 
 ### 1. Verify Prerequisites
 
-Check that update can proceed safely.
-
 **Actions**:
 - Verify `./agent/scripts/acp.version-update.sh` exists
-- Check internet connection
-- Recommend committing changes if git repo exists
-- Warn user that files will be updated
+- Confirm `AGENTS.md` or `AGENT.md` at project root
+- Recommend `git commit` before updating (rollback safety)
 
-**Expected Outcome**: Prerequisites confirmed or user warned  
+**Expected Outcome**: Prerequisites confirmed.
 
 ### 2. Run Update Script
 
-Execute the update script.
-
-> **If `--force` was passed**: Skip all confirmation prompts below.
-> **If `--preserve-project-core` was passed**: The update script skips
-> `agent/core/identity.yml`, `domain.yml`, and `taxonomy.yml`.
+Execute tier-aware update (v6.24.0+).
 
 **Actions**:
-- Run `./agent/scripts/acp.version-update.sh`
-- **Before overwriting core files**: If `agent/core/identity.yml`, `domain.yml`,
-  or `taxonomy.yml` differ from framework defaults (and `--preserve-project-core`
-  was NOT passed), warn and confirm:
-  ```
-  ⚠️ agent/core/identity.yml has been modified from framework defaults.
-  Overwrite? (y/N)
-  ```
-- Script will:
-  - Clone latest ACP repository
-  - Update AGENT.md
-  - Update all template files
-  - Update utility scripts
-  - Preserve your project files (non-templates)
+- Run `./agent/scripts/acp.version-update.sh` with flags from user invocation
+- Pass `--yes` when running non-interactively (CI / agent)
+- Script behavior:
+  - **Tier A** — create-if-absent only (`progress.yaml`, `memory/*`, third-party commands)
+  - **Tier B** — preserve when local SHA ≠ upstream (`identity.yml`, wiki, taxonomy)
+  - **Tier C** — refresh framework (`acp.*`/`git.*` commands, scripts, `AGENTS.md`)
+  - **Tier D** — merge `acp-core` block in manifest only
+- `--preserve-project-core` — force-skip all Tier B core/wiki/routing paths
+- `--force` — overwrite Tier B even when customized (use with caution)
 
-**Expected Outcome**: Update script completes successfully  
+**Expected Outcome**: Update script completes; project-owned files preserved by default.
 
 ### 3. Review Changes
 
@@ -188,7 +144,7 @@ Show what was updated.
 Confirm update completed correctly.
 
 **Actions**:
-- Check AGENT.md version number updated
+- Check `AGENTS.md` version (`> vX.Y.Z` or `**Version**:`)
 - Verify template files updated
 - Confirm scripts updated
 - Test that ACP still works
@@ -212,73 +168,36 @@ Provide recommendations after update.
 ## Verification
 
 - [ ] Update script executed successfully
-- [ ] AGENT.md updated to new version
-- [ ] Template files updated
-- [ ] Scripts updated
-- [ ] Project-specific files preserved (not overwritten)
+- [ ] AGENTS.md updated to new version
+- [ ] Tier C framework files refreshed
+- [ ] Tier B customized files preserved (unless `--force`)
+- [ ] Tier A data files untouched (`progress.yaml`, `memory/*`, third-party commands)
+- [ ] Manifest `acp-core` block merged (other packages retained)
 - [ ] No errors encountered
-- [ ] Git shows clean diff of changes
 
 ---
 
 ## Expected Output
 
-### Files Modified
-- `AGENT.md` - Updated to latest version
-- `agent/design/*.template.md` - Updated templates
-- `agent/milestones/*.template.md` - Updated templates
-- `agent/patterns/*.template.md` - Updated templates
-- `agent/tasks/*.template.md` - Updated templates
-- `agent/commands/command.template.md` - Updated template
-- `agent/commands/acp.*.md` - Updated core commands (if any)
-- `agent/progress.template.yaml` - Updated template
-- `agent/scripts/*.sh` - Updated utility scripts
+### Files Modified (Tier C — refreshed)
+- `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`
+- `agent/commands/acp.*.md`, `agent/commands/git.*.md`
+- `agent/scripts/*.sh`, `agent/schemas/*`
 
-### Console Output
+### Files Preserved (Tier A/B — default)
+- `agent/progress.yaml`, `agent/memory/*`, `agent/design/*`
+- Customized `agent/core/*.yml`, `agent/wiki/*`, `agent/routing/taxonomy.yml`
+- Third-party `agent/commands/{ns}.*.md` (ns ≠ acp, git)
+- `agent/manifest.yaml` — acp-core block merged only (Tier D)
+
+### Console Output (representative)
 ```
-🔄 Updating ACP to latest version...
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📥 Fetching latest files...
-✓ Latest files fetched
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📝 Updating files...
-✓ Updated AGENT.md (1.0.3 → 1.1.0)
-✓ Updated design templates
-✓ Updated milestone templates
-✓ Updated pattern templates
-✓ Updated task templates
-✓ Updated command template
-✓ Updated core commands (3 files)
-✓ Updated progress template
-✓ Updated utility scripts
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-✅ Update complete!
-
-Version: 1.0.3 → 1.1.0
-Files updated: 15
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🎯 Next steps:
-  1. Review changes: git diff
-  2. See what changed: git status
-  3. Revert if needed: git checkout <file>
-  4. Read changelog: @acp-version-check
-
-📚 Full changelog:
-  https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md
+🔄 Updating ACP Enhanced to latest version...
+✓ Framework commands (acp.*, git.* only)
+✓ Unmodified project core/wiki/routing preserved
+✓ AGENTS.md + sync copies
+Review changes: git diff
 ```
-
-### Status Update
-- ACP version: 1.0.3 → 1.1.0
-- Template files updated
-- Scripts updated
 
 ---
 
@@ -357,8 +276,8 @@ Files updated: 15
 ## Security Considerations
 
 ### File Access
-- **Reads**: Current ACP files to determine what to update
-- **Writes**: AGENT.md, all template files, utility scripts
+- **Reads**: Current ACP files + upstream clone for SHA compare
+- **Writes**: Tier C framework files; Tier D manifest merge only
 - **Executes**: `./agent/scripts/acp.version-update.sh`
 
 ### Network Access
@@ -376,19 +295,17 @@ Files updated: 15
 
 - **Backup recommended**: Commit changes before updating
 - **Reversible**: Use `git checkout <file>` to revert specific files
-- **Template-only**: Only updates `.template.md` files and core ACP files
-- **Preserves your work**: Your project-specific files are not touched
-- **Safe operation**: Can be reverted via git
-- **Git-friendly**: Creates clean diffs for review
+- **Tier-aware (v6.24.0+)**: Project-owned Tier B files preserved by default
+- **Pre-v6.24.0**: Older scripts blind-overwrote core — commit first
 - **Run after update**: Consider running `@acp-init` to reload context
 
 ---
 
 **Namespace**: acp  
 **Command**: version-update  
-**Version**: 1.0.0  
+**Version**: 1.2.0  
 **Created**: 2026-02-16  
-**Last Updated**: 2026-02-16  
+**Last Updated**: 2026-07-15  
 **Status**: Active  
-**Compatibility**: ACP 1.0.3+  
+**Compatibility**: ACP Enhanced v6.24.0+  
 **Author**: ACP Project  
