@@ -2,13 +2,13 @@
 id: task-210
 milestone: M68
 title: Release v6.24.0 + audit carryover closure (route-205)
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-205
 audit_findings: [F-080-01..12, P-081-01..03, SC-080-02]
 ---

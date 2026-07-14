@@ -2,13 +2,13 @@
 id: task-206
 milestone: M68
 title: bootstrap create-if-absent Tier B (route-201)
-status: planned
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-201
 audit_findings: [F-080-05]
 ---
