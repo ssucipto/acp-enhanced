@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.25.3] — 2026-07-15
+
+### Added
+- **`acp.recurring-complete.sh`** — auto-advance `recurring_tasks.next_due` after weekly/monthly scans (F-068-03).
+- **audit-086** — second-round carryover re-verification report and planning matrix.
+
+### Changed
+- **`acp.manifest-hash.sh`** — `--generate` writes to `integrity-manifest.yaml` by default.
+- **`ci-validate.sh`** — missing `## Steps` / `## Verification` in command docs now FAIL (not warn).
+- **`code-integrity.md`** — honest multi-script gateway coverage note (pattern-scan owns exfil/persistence).
+
+### Fixed
+- **audit-086** — stamped 21 stale carryovers as fixed (audit-065/066/070 items closed in M59–M64/v6.25.2).
+- **F-086-01** — descoped IG-35 from `git-provenance.sh` header (not implemented).
+
+---
+
 ## [6.25.2] — 2026-07-15
 
 ### Added
