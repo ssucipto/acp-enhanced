@@ -5,6 +5,20 @@
 - date: 2026-07-15
   executor: copilot
   branch: develop
+  tasks: [review-001, integrity-001, audit-085]
+  done:
+    - v6-25-2-review-integrity-audit-remediation
+    - acp-review-scan-phase1-scanner
+    - integrity-manifest-split-int-001
+    - vitest-cve-fix-review-001
+  deferred:
+    - audit-085-remaining-carryovers → acp-audit
+    - consumer-project-feedback-007-consumer-path → acp-version-update
+  key_fact: "integrity-manifest.yaml is separate from package manifest.yaml; acp.manifest-hash.sh --generate requires --output to persist hashes."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
   tasks: [route-207, task-217, audit-084]
   done:
     - m63-amendment-deployed-v6-25-1
@@ -162,7 +176,7 @@
 
     Jun 1–8: M49–M57 — Command ecosystem spine. Dogfooding resolution (Windows + Cursor),
     install fixes, design-spec command (arc42/C4/IEEE/ISO), stakeholder report command,
-    bootstrap install fix. M55: /acp-review shipped (77 rules). M56: /acp-integrity v1.0
+    bootstrap install fix. M55: /acp-review shipped (64 rules). M56: /acp-integrity v1.0
     shipped (55 rules, 6 bash scripts, LLM/Script Boundary Rule). M57: Recurring tasks
     scheduler shipped (5 tasks, Step 4.5 protocol, pre-commit hooks).
 

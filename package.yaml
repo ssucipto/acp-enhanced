@@ -179,7 +179,8 @@ contents:
     
     - name: acp.review.md
       description: Standards enforcement for code quality, security, and consistency — OWASP, TypeScript, API convention rules
-      scripts: []
+      scripts:
+        - acp.review-scan.sh
     
     - name: acp.integrity.md
       description: AI code integrity & trustworthiness — hidden Unicode, exfiltration, supply chain, CI injection detection

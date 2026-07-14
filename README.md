@@ -316,8 +316,9 @@ AI code integrity and malicious-pattern detection with deterministic scanners.
 #### M55 — /acp-review (v6.11.0, June 2026)
 Standards-based code quality and security review command.
 
-- **77 rules** across TypeScript, OWASP Top 10:2025, OWASP MASVS v2.0, API conventions, and ACP self-review (SH/YM/AP)
-- **`--diff`**, **`--carryover`**, **`--ci`** modes for targeted review and CI integration
+- **64 rules** (54 core + 10 Appendix A) across TypeScript, OWASP Top 10:2025, OWASP MASVS v2.0, API conventions, and ACP self-review (SH/YM/ACP)
+- **`--self`**, **`--diff`**, **`--carryover`**, **`--ci`** modes for ACP Enhanced self-review and CI integration
+- **`acp.review-scan.sh`** — deterministic Phase 1 checks (EH-02, SC-01, TS-01, SH-01)
 - E2E test: `e2e/acp.review.test.sh` (49 assertions)
 
 #### M52–M54 — Reporting, Cursor Parity, CI/CD (v6.10.0–v6.10.1)
@@ -850,7 +851,7 @@ This will:
 - **`/acp-sync`** - Sync documentation with code
 - **`/acp-validate`** - Validate ACP structure
 - **`/acp-audit`** - Audit task completion status, bugs, and improvement opportunities
-- **`/acp-review`** - Standards-based code quality and security review (77 rules)
+- **`/acp-review`** - Standards-based code quality and security review (64 rules)
 - **`/acp-integrity`** - AI code integrity scan — Unicode, entropy, supply chain (55 rules v1.0)
 - **`/acp-report`** - Generate session report
 - **`/acp-index`** - Manage the key file index (list, add, remove, explore, show)

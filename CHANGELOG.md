@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+---
+
+## [6.25.2] — 2026-07-15
+
+### Added
+- **`acp.review-scan.sh`** — deterministic Phase 1 scanner for `/acp-review` (EH-02, SC-01, TS-01, SH-01).
+- **`agent/integrity-manifest.yaml`** — SHA-256 manifest split from package `manifest.yaml` (INT-001).
+- **`/acp-review --self`** — self-review recipe for ACP Enhanced framework code (audit-085 F-085-01).
+
+### Changed
+- **Rule count** — reconciled to 64 total (54 core + 10 Appendix A) across README, domain.yml, wrappers.
+- **Appendix A IDs** — renamed AP-01/02/03 → ACP-01/02/03 in review command docs.
+
+### Fixed
+- **review-001** — vitest ^3.2.7 (0 npm audit CVEs); TypeScript strictness in `acp-validate.ts`; `err: unknown` in `acp-dispatch.ts`; `set -euo pipefail` in `acp.package-search.sh`.
+- **integrity-001** — INT-001/002: integrity manifest verify via awk; macOS BSD `sed`/`mapfile` fixes in git-provenance and network-whitelist scripts.
+- **audit-085** — F-085-01/05/06/07: Phase 1 scanner, `--self` flag, rule count, appendix naming.
+
+### Security
+- **npm audit** — scripts/ dev dependencies upgraded; 0 vulnerabilities.
+
+---
+
 ## [6.25.1] — 2026-07-15
 
 ### Fixed
@@ -430,7 +453,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`/acp-review` command**: 54-rule standards enforcement covering TypeScript, OWASP Top 10:2025, OWASP MASVS v2.0, API conventions, naming, code health, and error handling
 - `agent/commands/acp.review.md` — full command document with 7 rule categories, quality gates, executor selection, and output format spec
 - `agent/skills/code-review.md` — compact skill file (copilot executor, Flash disqualified, OWASP→rule mapping)
-- Appendix A: 10 ACP self-review rules (SH-01–SH-04, YM-01–YM-03, AP-01–AP-03) auto-activate when `agent/commands/` detected
+- Appendix A: 10 ACP self-review rules (SH-01–SH-04, YM-01–YM-03, ACP-01–ACP-03) auto-activate when `agent/commands/` detected
 - `--diff` flag: review only files changed since last commit (git diff integration)
 - `--carryover` integration: writes HIGH+ findings to `agent/memory/audit-carryovers.md`
 - `--ci` mode: compact output, exit 1 on CRITICAL/HIGH findings
