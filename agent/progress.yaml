@@ -9,8 +9,8 @@ project:
   current_milestone: M63
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.23.1. M67 shipped
-    cross-agent handoff protocol (handoff v2, receive, resume integration).
-    M55–M66 shipped. Next: M63 test coverage tier 2/3.
+    cross-agent handoff protocol. M68 planned (safe install/update — audit-080).
+    M55–M66 shipped. Next: M68 P0 then M63 test coverage.
 
 milestones:
   M44:
@@ -477,6 +477,24 @@ milestones:
       schema, E2E fixtures, ecosystem parity. Closes audit-077 H1–U3, feedback-007.
       ✅ audit-079 housekeeping closed (2026-07-15): gates, task stamps, README 70×3,
       domain e2e catalog, carryovers verified @079, HIGH-067-001 stale closure.
+
+  M68:
+    name: Safe Install & Update Policy (v6.24.0)
+    priority: 5
+    status: planned
+    progress: 0
+    started:
+    completed:
+    estimated_weeks: 1
+    tasks_completed: 0
+    tasks_total: 8
+    file: agent/milestones/milestone-68-safe-install-update-policy.md
+    design: agent/design/safe-install-update-policy.md
+    notes: |
+      📋 Planned from audit-080 (2026-07-15). route-079 reopened — doc-only fix
+      in M47 never reached acp.version-update.sh. Blocks FIFOZ /acp-version-update.
+      8 routes (198–205), 8 tasks (203–210). Tier A/B/C/D file policy.
+      Target: v6.24.0. Plan: agent/reports/plan-audit-080-safe-install-update.md
 
   M1:
     name: ACP Commands Infrastructure
@@ -6449,7 +6467,8 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "/acp-proceed M63 — Test Coverage Sprint (Tier 2 & 3, v6.24.0)"
+  - "/acp-proceed --complete M68 — Safe install/update policy (audit-080, v6.24.0) [P0 — blocks FIFOZ]"
+  - "/acp-proceed M63 — Test Coverage Sprint (Tier 2 & 3, parallel)"
   - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md)"
   - "Run overdue weekly /acp-review and /acp-integrity scans (due 2026-06-22)"
 
