@@ -2,13 +2,13 @@
 id: task-198
 milestone: M67
 title: active_handoff schema + wiki + validate (route-193)
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 4
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-193
 ---
 

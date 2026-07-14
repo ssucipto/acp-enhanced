@@ -2,13 +2,13 @@
 id: task-201
 milestone: M67
 title: Ecosystem parity — package, domain, index, README (route-196)
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 3
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-196
 ---
 
