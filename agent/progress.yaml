@@ -3,14 +3,13 @@
 
 project:
   name: agent-context-protocol
-  version: 6.23.0
+  version: 6.24.0
   started: 2026-02-16
   status: active
   current_milestone: M63
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.23.1. M67 shipped
-    cross-agent handoff protocol. M68 planned (safe install/update — audit-080).
-    M55–M66 shipped. Next: M68 P0 then M63 test coverage.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.24.0. M68 shipped safe
+    install/update tier policy. M67 handoff protocol shipped. Next: M63 test coverage.
 
 milestones:
   M44:
@@ -481,21 +480,18 @@ milestones:
   M68:
     name: Safe Install & Update Policy (v6.24.0)
     priority: 5
-    status: planned
-    progress: 0
-    started:
-    completed:
+    status: completed
+    progress: 100
+    started: 2026-07-15
+    completed: 2026-07-15
     estimated_weeks: 1
-    tasks_completed: 0
+    tasks_completed: 8
     tasks_total: 8
     file: agent/milestones/milestone-68-safe-install-update-policy.md
     design: agent/design/safe-install-update-policy.md
     notes: |
-      📋 Planned audit-080 (2026-07-15); amended audit-081 pre-impl (2026-07-15).
-      route-079 reopened — M47 doc-only shortcut SC-080-01. Blocks FIFOZ /acp-version-update.
-      8 routes (198–205), 8 tasks (203–210). Tier A/B/C/D policy.
-      Closes: F-080-01..12 + P-081-01..03 (15 carryovers). Target v6.24.0.
-      Pre-impl verdict: READY. Reports: audit-080, audit-081.
+      ✅ M68 COMPLETE (v6.24.0). Tier helpers, version-update route-079, install/bootstrap
+      preserve, E2E preserve suites, validate guard, audit-080/081 carryovers closed.
 
   M1:
     name: ACP Commands Infrastructure
@@ -6468,8 +6464,7 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "/acp-proceed --complete M68 — Safe install/update policy (audit-080, v6.24.0) [P0 — blocks FIFOZ]"
-  - "/acp-proceed M63 — Test Coverage Sprint (Tier 2 & 3, parallel)"
+  - "/acp-proceed M63 — Test Coverage Sprint (Tier 2 & 3)"
   - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md)"
   - "Run overdue weekly /acp-review and /acp-integrity scans (due 2026-06-22)"
 
