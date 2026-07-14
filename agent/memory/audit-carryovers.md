@@ -1535,7 +1535,7 @@ carryovers:
     fix_target: "Implement route-079 in acp.version-update.sh; reopen route-079 until E2E passes"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 80
@@ -1546,7 +1546,7 @@ carryovers:
     fix_target: "Tier B policy: never overwrite identity.yml without --force; hash-diff vs upstream default"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 80
@@ -1557,7 +1557,7 @@ carryovers:
     fix_target: "Add wiki paths to preserve-project-core tier; skip if modified"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 80
@@ -1568,7 +1568,7 @@ carryovers:
     fix_target: "Tier B preserve for consumer-customized routing config"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 80
@@ -1579,7 +1579,7 @@ carryovers:
     fix_target: "create-if-absent for all Tier B bootstrap stubs"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 80
@@ -1590,7 +1590,7 @@ carryovers:
     fix_target: "Merge acp-core block only; preserve existing packages: keys"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 80
@@ -1601,7 +1601,7 @@ carryovers:
     fix_target: "Tier B preserve on reinstall; match version-update policy"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 80
@@ -1612,7 +1612,7 @@ carryovers:
     fix_target: "Reconcile CHANGELOG after script fix; note doc-only gap in audit-080"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 80
@@ -1623,7 +1623,7 @@ carryovers:
     fix_target: "Add e2e/acp.version-update-preserve.test.sh with customized identity.yml fixture"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 80
@@ -1634,7 +1634,7 @@ carryovers:
     fix_target: "Replace xargs basename loops with portable while-read loop"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 80
@@ -1645,7 +1645,7 @@ carryovers:
     fix_target: "Accept AGENTS.md OR AGENT.md; triple-sync AGENTS→CLAUDE+copilot on update (route-199)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 80
@@ -1656,7 +1656,7 @@ carryovers:
     fix_target: "Fix path in acp.version-update.md (route-203)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   # ── AUDIT-081 PRE-IMPL GAPS — M68 (2026-07-15) ───────────────────────────────
@@ -1669,7 +1669,7 @@ carryovers:
     fix_target: "route-199: copy only acp.*.md and git.*.md; skip other namespaces per design Tier A"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 81
@@ -1680,7 +1680,7 @@ carryovers:
     fix_target: "route-199: skip local.*.md skills on update (Tier B); add E2E regression"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
     escalated_to: null
 
   - audit_id: 81
@@ -1691,5 +1691,16 @@ carryovers:
     fix_target: "route-202: use ACP_UPSTREAM_ROOT=PROJECT_ROOT or copied fixture; no live git clone in CI"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: 081
+    verified_in_audit: 082
+    escalated_to: null
+
+  - audit_id: 82
+    finding_id: F-082-09
+    severity: low
+    file: e2e/acp.bootstrap-preserve.test.sh
+    finding: "No E2E for bootstrap re-run preserving customized Tier B files"
+    fix_target: "Add e2e/acp.bootstrap-preserve.test.sh — re-run bootstrap with customized identity.yml"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 082
     escalated_to: null

@@ -3,12 +3,13 @@
 
 project:
   name: agent-context-protocol
-  version: 6.24.0
+  version: 6.24.1
   started: 2026-02-16
   status: active
   current_milestone: M63
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.24.0. M68 shipped safe
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.24.1. M68 audit-082 gaps closed
+    (bootstrap preserve E2E, install AGENTS.md, doc drift, carryovers @082).
     install/update tier policy. M67 handoff protocol shipped. Next: M63 test coverage.
 
 milestones:

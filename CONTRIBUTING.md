@@ -37,6 +37,15 @@ Every PR must pass these checks:
 CI runs on every push and PR to `develop` and `mainline`. It executes the full E2E suite
 and validation pipeline. A green CI run is required before merging.
 
+## Consumer safety — install and update (v6.24.0+)
+
+When recommending `/acp-version-update` or `acp.install.sh` to downstream projects:
+
+- **v6.24.0+** — safe by default: tier-aware copy preserves customized `identity.yml`, wiki, taxonomy, and third-party command namespaces.
+- **Pre-v6.24.0** — **do not** recommend `/acp-version-update` without a git commit; older scripts blind-overwrote `agent/core/*.yml`.
+- Always suggest `./agent/scripts/acp.version-update.sh --diff` first on production forks.
+- Design reference: `agent/design/safe-install-update-policy.md`
+
 ## Command Document Conventions
 
 Command documents live in `agent/commands/acp.<name>.md`. Every command document must have:
