@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Vitest** — `validateCommandE2eCoverage` unit tests + gap fixture YAML.
-- **Task doc** — `task-211` for route-206 M63 coverage.
+- **Task doc** — `task-211` for route-206 M63 coverage; tasks 212–218 for audit-083 remediation.
 
 ---
 
