@@ -4294,13 +4294,24 @@ tasks:
 recent_work:
   - date: 2026-07-15
     description: |
+      ✅ M63 amendment deployed v6.25.1 (route-207, audit-084 closure).
+      Tier3 dynamic loop (58 docs, 259 assertions), vitest validator tests,
+      git tag v6.25.1, develop + tags pushed.
+    items:
+      - "✅ audit-084 pre-deployment blockers closed (F-084-01..04)"
+      - "✅ git tag v6.25.1 on a84b00a"
+      - "✅ e2e tier2 (76), tier3 (259), parity (8) — 100% pass"
+      - "✅ validate 0 errors; M63 tasks 211–218 complete"
+
+  - date: 2026-07-15
+    description: |
       ✅ M63 Test Coverage Tier 2 & 3 shipped v6.25.0 (route-206).
       Command E2E coverage registry (70 commands), validateCommandE2eCoverage CI guard,
       tier2/tier3/parity E2E suites — 0 untested commands.
     items:
       - "✅ agent/schemas/command-e2e-coverage.yaml — 70 commands mapped"
       - "✅ validateCommandE2eCoverage() in acp-validate.ts"
-      - "✅ e2e tier2 (76), tier3 (96), parity (8) assertions — 100% pass"
+      - "✅ e2e tier2 (76), tier3 (259), parity (8) assertions — 100% pass"
       - "✅ M63 milestone + progress.yaml completed"
 
   - date: 2026-07-15
@@ -6598,14 +6609,15 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "M63 audit-083 plan amended — 8 tasks (211–218), route-207 Phase 2"
-  - "Commit + tag v6.25.1; push develop and tags to remote"
+  - "Pick next milestone from backlog (M63 complete — v6.25.1 deployed)"
+  - "Run overdue /acp-review and /acp-integrity weekly scans"
+  - "consumer-project: /acp-version-update on v6.25.1+ and close feedback-007"
 
 current_blockers: []
 
 notes:
-  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M67/M68 shipped; next M63"
-  - "68 milestone entries — M55–M68 shipped (v6.11–v6.24.1); M63 planned (test tier 2/3)"
+  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M63–M68 shipped (v6.25.1)"
+  - "68 milestone entries — M55–M68 shipped (v6.11–v6.25.1); M63 complete (test tier 2/3)"
   - "72 command docs (70 acp.* + 2 git.*); 70 slash-command wrappers (prompts + opencode + cursor parity)"
   - "9 skills; 36+ bash scripts; 56 E2E test files (incl. M68 preserve suites)"
   - "82+ audit reports (audit-080–082 install/update safety)"

@@ -1762,3 +1762,51 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 083
     escalated_to: null
+
+  # ── AUDIT-084 FINDINGS — M63 PRE-DEPLOYMENT (2026-07-15) ────────────────────
+
+  - audit_id: 84
+    finding_id: F-084-01
+    severity: high
+    file: agent/tasks/milestone-63-test-coverage-tier2-3/task-217-audit-083-release-closure.md
+    finding: "v6.25.1 git tag missing — validate fails, task-217 step 5 incomplete"
+    description: "identity.yml and CHANGELOG at 6.25.1 but only v6.25.0 tag exists on HEAD commit a84b00a."
+    fix_target: "git tag -a v6.25.1 -m 'M63 audit-083 closure' HEAD; re-run acp-validate"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 084
+    escalated_to: null
+
+  - audit_id: 84
+    finding_id: F-084-02
+    severity: high
+    file: agent/progress.yaml
+    finding: "develop branch not pushed — v6.25.0/v6.25.1 commits local only"
+    description: "c0baf78 and a84b00a ahead of origin/develop. Remote consumers cannot receive M63 amendment."
+    fix_target: "git push origin develop && git push origin v6.25.0 v6.25.1"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 084
+    escalated_to: null
+
+  - audit_id: 84
+    finding_id: F-084-03
+    severity: medium
+    file: agent/tasks/milestone-63-test-coverage-tier2-3/task-217-audit-083-release-closure.md
+    finding: "task-217 marked completed while git tag step remains undone"
+    fix_target: "Complete tag step; update verification checklist; stamp after F-084-01 fixed"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 084
+    escalated_to: null
+
+  - audit_id: 84
+    finding_id: F-084-04
+    severity: medium
+    file: agent/progress.yaml
+    finding: "recent_work stale tier3 assertion count (96 vs 259)"
+    fix_target: "Update recent_work M63 entry: tier3 259 assertions post audit-083"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 084
+    escalated_to: null

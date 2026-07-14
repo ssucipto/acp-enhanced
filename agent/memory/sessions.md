@@ -5,6 +5,18 @@
 - date: 2026-07-15
   executor: copilot
   branch: develop
+  tasks: [route-207, task-217, audit-084]
+  done:
+    - m63-amendment-deployed-v6-25-1
+    - git-tag-v6-25-1-pushed
+    - audit-084-carryovers-closed
+  deferred:
+    - consumer-project-feedback-007-consumer-path → acp-version-update
+  key_fact: "M63 amendment complete — v6.25.1 tagged and pushed; audit-084 deployment blockers closed."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
   tasks: [route-206, audit-083]
   done:
     - audit-083-m63-gaps-closed-v6-25-1
