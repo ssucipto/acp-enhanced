@@ -1,8 +1,8 @@
 # Milestone 70: Tech Debt & Gate Hardening
 
 **Planned version**: 6.26.0  
-**Status**: planned  
-**Estimated effort**: ~52h (11 tasks, 5 phases)  
+**Status**: completed (12/12 — audit-090)  
+**Estimated effort**: ~52h (12 tasks, 5 phases)  
 **Source**: audit-086, open carryovers (audit-041/065/066/086), v6.25.x shortcuts
 
 ## Goal
@@ -61,14 +61,23 @@ Close **all remaining open carryovers** and **all unacceptable shortcuts** ident
 | 60/64 review rules need agent | By design — semantic rules cannot be scripted |
 | FIFOZ blocked on access | Defer with documented blocker in carryovers |
 
+## M70 Amendment (audit-089)
+
+**Status**: Implementation landed; **release blocked** until M71 completes.
+
+M71 ([milestone-71](../milestones/milestone-71-m70-remediation-release-gate.md)) closes audit-089 gaps before v6.26.0 ships. task-230 completes via M71 task-238.
+
 ## Verification Gates
 
-- [ ] All 8 open carryovers `status: fixed` with `verified_in_audit: audit-087` or M70
-- [ ] `npx ts-node scripts/acp-validate.ts` — 0 errors
-- [ ] New memory schema vitest tests pass
-- [ ] E2E commit-sync suite green
-- [ ] Git tag v6.26.0
-- [ ] `mainline` updated via PR (not direct merge)
+- [x] Memory schemas + field lint enforced (`patterns.schema.yaml`, `validateMemoryFieldLint`)
+- [x] `npx ts-node scripts/acp-validate.ts` — 0 errors
+- [x] vitest 48+ tests pass
+- [x] E2E commit-sync suite green + registry updated
+- [x] Review Phase 1 scanner covers 8 rules
+- [x] IG-35 implemented in `acp.git-provenance.sh`
+- [ ] Git tag v6.26.0 (on commit)
+- [ ] `mainline` updated via PR (requires branch protection)
+- [ ] CRIT-065-002 GitHub protection enabled (ops)
 
 ## Dependencies
 

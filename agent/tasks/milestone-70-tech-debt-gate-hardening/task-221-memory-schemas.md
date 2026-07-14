@@ -2,13 +2,13 @@
 id: task-221
 milestone: M70
 title: "Memory-layer entity schemas (MED-066-007)"
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 8
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15
+completed_date: 2026-07-15
 route: route-210
 audit_findings: [MED-066-007]
 depends_on: []
