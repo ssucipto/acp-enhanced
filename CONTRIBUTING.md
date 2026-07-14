@@ -50,6 +50,18 @@ Command documents live in `agent/commands/acp.<name>.md`. Every command document
 
 See [`agent/skills/commands.md`](agent/skills/commands.md) for the full skill reference.
 
+## Field Feedback Intake
+
+Structured feedback about ACP protocol gaps, command failures, or improvement ideas
+belongs in two places:
+
+- **`agent/proposals/`** — design proposals and RFC-style specs (e.g. cross-agent handoff v1)
+- **`agent/feedback/`** — field feedback captured via `/acp-feedback` (`feedback-NNN-*.md`)
+
+When contributing protocol changes, check both directories for related open items before
+opening a duplicate issue. Reference the originating feedback ID in milestone tasks and
+audit carryovers.
+
 ## Shell Script Conventions
 
 Shell scripts live in `agent/scripts/*.sh`. Every script must:

@@ -5,9 +5,9 @@
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-02-21  
-**Last Updated**: 2026-02-21  
+**Last Updated**: 2026-07-15  
 **Status**: Active  
 **Scripts**: None  
 
@@ -27,7 +27,32 @@ This command is a convenient alias that combines three essential workflow comman
 2. **Review Recent Work** - Reads the latest session report to understand what was done
 3. **Continue Work** - Proceeds with the current/next task via `/acp-proceed`
 
-**Use this when**: Starting a new session or returning to a project after a break.  
+**Use this when**: Starting a new session or returning to a project after a break.
+
+When an optional handoff path is provided, this command runs the `/acp-receive` verification gate before initialization so the incoming agent confirms assignment, git pin, and session alignment first.
+
+---
+
+## Arguments
+
+| Argument | Aliases | Description |
+|---|---|---|
+| `<path>` | (positional) | Optional path to an incoming handoff markdown file |
+| `@<path>` | `@attach` | Attached handoff file (Cursor `@` reference or equivalent) |
+
+**CLI-Style Arguments**:
+- `<path>` (positional) — explicit handoff file path
+- `@<path>` — attached handoff file from the user's message
+
+**Natural Language Arguments**:
+- `/acp-resume` — standard resume (no handoff receive step)
+- `/acp-resume @agent/reports/handoff-cursor-m67-example-2026-07-15.md` — receive then init + proceed
+- `/acp-resume agent/reports/handoff-cursor-m67-example-2026-07-15.md` — same, by path
+
+**Argument Parsing**:
+- If `@<path>` or an attached file is present → use that path (strip leading `@` if present)
+- Else if a positional `<path>` ending in `.md` is provided → use that path
+- Else → skip handoff receive (Step 1) and proceed directly to initialization
 
 ---
 
@@ -48,6 +73,8 @@ This command is a convenient alias that combines three essential workflow comman
   Resume work by initializing context, reviewing progress, and continuing next task
 
   Related:
+    /acp-receive   Load and verify incoming handoff only
+    /acp-handoff   Generate outgoing handoff
     /acp-init      Initialize context only
     /acp-proceed   Proceed with task only
     /acp-status    Check status without proceeding
@@ -56,7 +83,25 @@ This command is a convenient alias that combines three essential workflow comman
 
 This step is informational only — do not wait for user input.
 
-### 1. Initialize Agent Context
+### 1. Optional Handoff Receive
+
+If a handoff path was provided via arguments, run the incoming handoff protocol before initialization.
+
+**Actions**:
+- If no handoff path was resolved from arguments → skip this step entirely
+- If a handoff path was provided → execute [`/acp-receive`](acp.receive.md) **Steps 1–6** against that path:
+  1. Resolve handoff path (already known from arguments)
+  2. Parse frontmatter and metadata
+  3. Git drift warning (`match` or `DRIFT`)
+  4. Session gap warning
+  5. Assignment checklist (executor or cross-repo mode)
+  6. Output status banner: `[ACP Receive] handoff loaded | git {match|DRIFT} | mode {executor|cross-repo}`
+- Do **not** run receive Step 7 (confirm prompt) as a hard stop — after banner and checklist, continue to Step 2 unless the user explicitly asked to pause
+- Record resolved handoff path and drift status for the session summary
+
+**Expected Outcome**: Handoff verified (or step skipped when no path provided); assignment checklist visible before init  
+
+### 2. Initialize Agent Context
 
 Run the initialization workflow to load complete project context.
 
@@ -71,7 +116,7 @@ Run the initialization workflow to load complete project context.
 
 **Expected Outcome**: Complete project context loaded (including key file index)  
 
-### 2. Read Latest Session Report
+### 3. Read Latest Session Report
 
 Find and read the most recent session report to understand what was accomplished.
 
@@ -84,7 +129,7 @@ Find and read the most recent session report to understand what was accomplished
 
 **Expected Outcome**: Recent work understood  
 
-### 3. Proceed with Current/Next Task
+### 4. Proceed with Current/Next Task
 
 Continue work by executing the current or next task.
 
@@ -101,6 +146,7 @@ Continue work by executing the current or next task.
 
 ## Verification
 
+- [ ] Handoff receive completed when `@path` or `<path>` provided (Steps 1–6)
 - [ ] Context initialized successfully
 - [ ] Latest report read and summarized
 - [ ] Current task identified
@@ -194,10 +240,23 @@ Objective: Create ~/.acp/ directory structure with AGENT.md and manifest.yaml
 - Understands recent work from reports
 - Ready to contribute immediately
 
+### Example 4: Resume with Executor Handoff
+
+**Context**: Incoming Cursor agent receives a Claude planner handoff  
+
+**Invocation**: `/acp-resume @agent/reports/handoff-cursor-m67-example-2026-07-15.md`  
+
+**Result**:
+- Runs receive Steps 1–6 (git pin check, assignment checklist, status banner)
+- Initializes full project context via /acp-init
+- Proceeds with handoff task sequence via /acp-proceed
+
 ---
 
 ## Related Commands
 
+- [`/acp-receive`](acp.receive.md) - Load and verify incoming handoff only
+- [`/acp-handoff`](acp.handoff.md) - Generate outgoing handoff (executor or cross-repo)
 - [`/acp-init`](acp.init.md) - Initialize context only
 - [`/acp-proceed`](acp.proceed.md) - Proceed with task only
 - [`/acp-status`](acp.status.md) - Check status without proceeding
@@ -236,7 +295,8 @@ Objective: Create ~/.acp/ directory structure with AGENT.md and manifest.yaml
 ## Notes
 
 - This is a convenience command that chains three workflows
-- Equivalent to running: `/acp-init` → read reports → `/acp-proceed`
+- Equivalent to running: optional `/acp-receive` → `/acp-init` → read reports → `/acp-proceed`
+- With handoff path: `/acp-receive` Steps 1–6 run inline before init
 - Saves time when starting new sessions
 - Provides comprehensive context before starting work
 - Reports are optional but highly recommended for context
@@ -246,9 +306,9 @@ Objective: Create ~/.acp/ directory structure with AGENT.md and manifest.yaml
 
 **Namespace**: acp  
 **Command**: resume  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-02-21  
-**Last Updated**: 2026-02-21  
+**Last Updated**: 2026-07-15  
 **Status**: Active  
-**Compatibility**: ACP 3.7.0+  
+**Compatibility**: ACP 6.23.0+ (M67 handoff integration)  
 **Author**: ACP Project  

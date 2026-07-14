@@ -1270,9 +1270,9 @@ carryovers:
     finding: "Command forbids implementation steps; executor handoffs require task sequence, ADRs, guardrails"
     description: "acp.handoff.md L125/L247 explicit ban conflicts with consumer-project M51 exemplar. Multi-executor same-repo workflow blocked by spec."
     fix_target: "acp.handoff.md v2 --mode executor with mandatory §4 template (route-190)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-190
 
   - audit_id: 77
@@ -1281,9 +1281,9 @@ carryovers:
     file: agent/commands/
     finding: "No /acp-receive command; incoming agent has no structured protocol"
     fix_target: "Create acp.receive.md + wrappers (route-191)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-191
 
   - audit_id: 77
@@ -1292,9 +1292,9 @@ carryovers:
     file: agent/commands/acp.handoff.md
     finding: "/acp-commit not enforced before handoff despite routing.yml suggestion"
     fix_target: "Outgoing ritual in handoff v2 command text (route-190)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-190
 
   - audit_id: 77
@@ -1303,9 +1303,9 @@ carryovers:
     file: agent/commands/
     finding: "No git commit pin freshness check on receive"
     fix_target: "/acp-receive step 3 git drift warning (route-191, route-195 E2E)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-191
 
   - audit_id: 77
@@ -1314,9 +1314,9 @@ carryovers:
     file: agent/reports/
     finding: "Ad-hoc handoff filename conventions (4 patterns across 9 consumer-project handoffs)"
     fix_target: "Standardize handoff-{to}-{scope}-{date}.md in command (route-190)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-190
 
   - audit_id: 77
@@ -1325,9 +1325,9 @@ carryovers:
     file: agent/wiki/cross-agent-handoff.md
     finding: "No return-handoff template (implement → planning agent)"
     fix_target: "Template § Return handoff + wiki (route-190, route-194)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-194
 
   - audit_id: 77
@@ -1336,9 +1336,9 @@ carryovers:
     file: agent/commands/acp.handoff.md
     finding: "Self-contained-without-source conflicts with same-repo executor handoffs"
     fix_target: "Mode split: executor assumes same repo; cross-repo retains v1 rule (route-190)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-190
 
   - audit_id: 77
@@ -1347,9 +1347,9 @@ carryovers:
     file: agent/progress.yaml
     finding: "Handoff usage undercounted in audits; no discoverability pointer"
     fix_target: "active_handoff field + wiki (route-193)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-193
 
   - audit_id: 77
@@ -1358,9 +1358,9 @@ carryovers:
     file: agent/schemas/progress.schema.yaml
     finding: "No active_handoff pointer in progress.yaml schema"
     fix_target: "Schema extension + validate (route-193)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-193
 
   - audit_id: 77
@@ -1369,9 +1369,9 @@ carryovers:
     file: agent/reports/
     finding: "Cross-repo handoffs mixed in same filename family without target-repo field"
     fix_target: "--mode cross-repo + optional target-repo frontmatter P2 (route-194)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-194
 
   - audit_id: 77
@@ -1380,9 +1380,9 @@ carryovers:
     file: agent/commands/acp.resume.md
     finding: "acp-resume chains init+proceed but never loads handoff files"
     fix_target: "Optional handoff path → receive protocol (route-192)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-192
 
   - audit_id: 77
@@ -1391,9 +1391,9 @@ carryovers:
     file: agent/
     finding: "No formal proposals/feedback intake path until audit-077"
     fix_target: "CONTRIBUTING.md intake section (route-196)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-196
 
   - audit_id: 77
@@ -1402,7 +1402,21 @@ carryovers:
     file: agent/wiki/
     finding: "No cross-agent handoff wiki until audit-077 (draft only)"
     fix_target: "Finalize wiki on M67 ship (route-193)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
     escalated_to: M67 route-193
+
+  # ── AUDIT-078 FINDINGS — M67 PRE-IMPL (2026-07-15) ───────────────────────────
+
+  - audit_id: 78
+    finding_id: P-078-01
+    severity: medium
+    file: agent/wiki/domain.yml
+    finding: "domain.yml entries corrupt at L33-37 — acp.feedback has duplicate category/purpose; acp.handoff purpose merged without command key"
+    description: "Adding acp.receive on top of corrupt entries will propagate bad taxonomy. Must repair acp.feedback and add explicit acp.handoff entry before M67 ship."
+    fix_target: "route-196: split L33-37 into proper acp.feedback and acp.handoff entries; add acp.receive entry; update count to 70 acp commands"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "078"
+    escalated_to: M67 route-196

@@ -3,11 +3,11 @@
 # last_verified: 2026-06-15 (acp-sync — README/PRD aligned to v6.12.1)
 
 commands:
-  count: 71  # 71 total: 68 acp.* + 2 git.* + 1 command.template.md (verified 2026-06-15, M57)
+  count: 70  # 70 acp.* commands (M67 +acp.receive); plus 2 git.* + 1 command.template.md
   location: agent/commands/
   naming: "acp.{command-name}.md — dot notation, acp namespace for core; git.{command}.md for git namespace"
   categories:
-    core: [acp.audit, acp.carryover-query, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.integrity, acp.memory-sync, acp.plan, acp.proceed, acp.repair-tools, acp.report, acp.resume, acp.review, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
+    core: [acp.audit, acp.carryover-query, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.integrity, acp.memory-sync, acp.plan, acp.proceed, acp.receive, acp.repair-tools, acp.report, acp.resume, acp.review, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
     artifact: [acp.artifact-glossary, acp.artifact-reference, acp.artifact-research]
     clarification: [acp.clarification-address, acp.clarification-capture, acp.clarification-create]
     design: [acp.command-create, acp.design-create, acp.design-reference, acp.pattern-create]
@@ -33,8 +33,12 @@ commands:
     - command: acp.feedback
       category: core
       purpose: Capture structured developer feedback about ACP system failures, protocol gaps, or improvement suggestions; write to agent/feedback/feedback-NNN.md.
+    - command: acp.handoff
       category: core
-      purpose: Generate a context-aware handoff report for transferring work to an agent in a different context.
+      purpose: Generate context-aware handoff for same-repo executor transfer (plan → implement) or cross-repo problem transfer; v2 dual mode with mandatory git pin in executor mode.
+    - command: acp.receive
+      category: core
+      purpose: Load and verify an incoming handoff — resolve path or --latest, warn on git drift and session gap, print assignment checklist before work begins.
     - command: acp.index
       category: core
       purpose: Manage the key file index — list, add, remove, explore, and show indexed key files.
@@ -44,6 +48,7 @@ commands:
     - command: acp.install
       category: core
       purpose: Install or upgrade ACP Enhanced in the current project directory; copies static ACP files while preserving user state.
+    - command: acp.memory-sync
       category: core
       purpose: Compress old session history into monthly summaries, flag stale patterns, and check wiki files for re-verification — keeps the memory layer lean without losing history.
     - command: acp.plan
