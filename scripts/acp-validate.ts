@@ -1,6 +1,7 @@
 import matter from "gray-matter";
 import yaml from "js-yaml";
 import { readFileSync, existsSync, readdirSync, statSync } from "fs";
+import { execSync } from "child_process";
 import path from "path";
 
 // ── Shared types ─────────────────────────────────────────────
@@ -9,6 +10,42 @@ export interface ValidationError {
   line: number;
   message: string;
   severity: "error" | "warning";
+}
+
+/** Subset of agent/routing/taxonomy.yml used by validateTaskFile / staleness checks */
+interface YamlTaxonomy {
+  last_updated?: string;
+  task_types?: Record<string, Record<string, unknown>>;
+}
+
+/** Subset of agent/routing/config.yml used by executor / model freshness checks */
+interface YamlRoutingConfig {
+  models?: Record<string, { last_verified?: string }>;
+}
+
+/** Subset of agent/core/constraints.yml used by AGENTS.md size validation */
+interface YamlConstraints {
+  agents_md_rules?: {
+    max_bytes?: number;
+    warn_at_bytes?: number;
+    files_to_check?: string[];
+  };
+}
+
+/** Milestone block inside agent/progress.yaml */
+interface MilestoneProgressEntry {
+  status?: string;
+  file?: string;
+  tasks_total?: number;
+}
+
+/** Subset of agent/progress.yaml used by consistency / pointer checks */
+interface ProgressYaml {
+  milestones?: Record<string, MilestoneProgressEntry>;
+  active_handoff?: {
+    path?: string;
+    git_commit?: string;
+  };
 }
 
 // ── Placeholder detection ─────────────────────────────────────
@@ -295,7 +332,7 @@ function validateTaskFile(taskFilePath: string): string[] {
 
   // ── task_type must exist in taxonomy ────────────────────
   if (meta.task_type) {
-    const taxonomy = loadYaml<any>(TAXONOMY_PATH);
+    const taxonomy = loadYaml<YamlTaxonomy>(TAXONOMY_PATH);
     if (taxonomy) {
       const knownTypes = Object.keys(taxonomy.task_types ?? {});
       if (!knownTypes.includes(meta.task_type)) {
@@ -310,7 +347,7 @@ function validateTaskFile(taskFilePath: string): string[] {
 
   // ── executor must be a valid model name ──────────────────
   if (meta.executor && meta.executor !== "local-script") {
-    const config = loadYaml<any>(CONFIG_PATH);
+    const config = loadYaml<YamlRoutingConfig>(CONFIG_PATH);
     if (config) {
       const knownModels = Object.keys(config.models ?? {});
       if (!knownModels.includes(meta.executor)) {
@@ -339,7 +376,7 @@ function checkStaleness(): boolean {
     console.warn("⚠️  taxonomy.yml: file not found — staleness unknown");
     hasWarnings = true;
   } else {
-    const taxonomy = yaml.load(readFileSync(TAXONOMY_PATH_LOCAL, "utf-8")) as Record<string, any>;
+    const taxonomy = yaml.load(readFileSync(TAXONOMY_PATH_LOCAL, "utf-8")) as YamlTaxonomy;
     const lastUpdated: string | undefined = taxonomy?.last_updated;
     if (!lastUpdated) {
       console.warn("⚠️  taxonomy.yml: no last_updated field — staleness unknown");
@@ -368,8 +405,8 @@ function checkStaleness(): boolean {
     console.warn("⚠️  routing/config.yml: file not found — model freshness unknown");
     hasWarnings = true;
   } else {
-    const config = yaml.load(readFileSync(CONFIG_PATH_LOCAL, "utf-8")) as Record<string, any>;
-    const models = config?.models as Record<string, any> | undefined;
+    const config = yaml.load(readFileSync(CONFIG_PATH_LOCAL, "utf-8")) as YamlRoutingConfig;
+    const models = config?.models;
     if (models) {
       for (const [modelName, modelData] of Object.entries(models)) {
         const lastVerified: string | undefined = modelData?.last_verified;
@@ -400,7 +437,7 @@ function checkStaleness(): boolean {
   }
 
   if (!hasWarnings) {
-    const taxonomy2 = yaml.load(readFileSync(TAXONOMY_PATH_LOCAL, "utf-8")) as Record<string, any>;
+    const taxonomy2 = yaml.load(readFileSync(TAXONOMY_PATH_LOCAL, "utf-8")) as YamlTaxonomy;
     const lu = taxonomy2?.last_updated ?? "unknown";
     const d2 = new Date(lu);
     const days2 = isNaN(d2.getTime()) ? "?" : Math.floor((now - d2.getTime()) / DAY_MS);
@@ -417,7 +454,7 @@ function validateAgentsMdSize(): boolean {
     return true;
   }
 
-  const constraints = yaml.load(readFileSync(constraintsPath, "utf-8")) as Record<string, any>;
+  const constraints = yaml.load(readFileSync(constraintsPath, "utf-8")) as YamlConstraints;
   const rules = constraints?.agents_md_rules;
   if (!rules) {
     console.warn("⚠️  constraints.yml: agents_md_rules not defined — skipping size check");
@@ -556,14 +593,14 @@ export function validateVersionConsistency(): ValidationError[] {
 // FAIL if a milestone doc's **Status**: disagrees with progress.yaml
 const PROGRESS_PATH = path.join("agent", "progress.yaml");
 
-function loadProgressSafe(): Record<string, any> | null {
+function loadProgressSafe(): ProgressYaml | null {
   if (!existsSync(PROGRESS_PATH)) return null;
     const raw = readFileSync(PROGRESS_PATH, "utf-8").replace(/\r/g, "");
   try {
-    return yaml.load(raw) as Record<string, any>;
+    return yaml.load(raw) as ProgressYaml;
   } catch {
     console.warn("⚠️  progress.yaml: YAML parse failed (duplicate keys suspected) — using line-based fallback");
-    const milestones: Record<string, any> = {};
+    const milestones: Record<string, MilestoneProgressEntry> = {};
     const lines = raw.split("\n");
     let currentMid: string | null = null;
     let currentBlock: string[] = [];
@@ -609,7 +646,7 @@ function validateStatusConsistency(): boolean {
     return true;
   }
 
-  const milestones = progressYaml.milestones as Record<string, any> | undefined;
+  const milestones = progressYaml.milestones;
   if (!milestones || Object.keys(milestones).length === 0) {
     console.warn("⚠️  Status consistency: no milestones in progress.yaml — skipped");
     return true;
@@ -659,7 +696,7 @@ const SCHEMA_DATA_MAP: Record<string, string> = {
   "lessons.schema.yaml": "agent/memory/lessons.md",
   "decisions.schema.yaml": "agent/memory/decisions.md",
   "audit-carryovers.schema.yaml": "agent/memory/audit-carryovers.md",
-  "milestone.schema.yaml": "agent/progress.yaml", // milestones embedded in progress.yaml
+  // milestone.schema.yaml validates route-task frontmatter (id/title/status), not progress.yaml milestones map
 };
 
 function validateYamlAgainstSchema(
@@ -696,13 +733,16 @@ function validateYamlAgainstSchema(
     if (typeof dataYaml === "object" && dataYaml !== null && fieldName in (dataYaml as Record<string, unknown>)) {
       const val = (dataYaml as Record<string, unknown>)[fieldName];
       const expectedType = fieldDef["type"] as string | undefined;
-      if (expectedType && typeof val !== expectedType) {
+      if (expectedType) {
+        const actualType = Array.isArray(val) ? "array" : typeof val;
+        if (actualType !== expectedType) {
         errors.push({
           file: filePath,
           line: 0,
-          message: `Field "${fieldName}" expected type ${expectedType}, got ${typeof val}`,
+          message: `Field "${fieldName}" expected type ${expectedType}, got ${actualType}`,
           severity: "warning",
         });
+        }
       }
     }
   }
@@ -887,7 +927,6 @@ export function validateGitTagsExist(): ValidationError[] {
 
   const version = idMatch[1];
   try {
-    const { execSync } = require("child_process");
     const output = execSync(`git tag --list "v${version}"`, {
       cwd: process.cwd(),
       encoding: "utf8",
@@ -921,7 +960,6 @@ export function validateGitignoreConflicts(): ValidationError[] {
 
   for (const tp of trackedPaths) {
     try {
-      const { execSync } = require("child_process");
       execSync(`git check-ignore "${tp}"`, {
         cwd: process.cwd(),
         encoding: "utf8",
@@ -1018,7 +1056,7 @@ function validateFilePointers(): boolean {
     return true;
   }
 
-  const milestones = progressYaml.milestones as Record<string, any> | undefined;
+  const milestones = progressYaml.milestones;
   if (!milestones || Object.keys(milestones).length === 0) {
     console.warn("⚠️  File pointer check: no milestones in progress.yaml — skipped");
     return true;
@@ -1056,6 +1094,249 @@ function validateFilePointers(): boolean {
   return allOk;
 }
 
+// ── Active handoff validation (M67 route-198) ─────────────────
+export function validateActiveHandoff(strict = false): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const progressYaml = loadProgressSafe();
+  if (!progressYaml) return errors;
+
+  const activeHandoff = progressYaml.active_handoff as Record<string, unknown> | undefined;
+  if (!activeHandoff || !activeHandoff.path) return errors;
+
+  const handoffPath = String(activeHandoff.path);
+  if (!existsSync(handoffPath)) {
+    errors.push({
+      file: PROGRESS_PATH,
+      line: 0,
+      message: `active_handoff.path "${handoffPath}" does not exist`,
+      severity: "error",
+    });
+    return errors;
+  }
+
+  const gitCommit = activeHandoff.git_commit ? String(activeHandoff.git_commit) : "";
+  if (strict && gitCommit) {
+    try {
+      execSync(`git merge-base --is-ancestor ${gitCommit} HEAD`, {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "pipe"],
+      });
+    } catch {
+      errors.push({
+        file: PROGRESS_PATH,
+        line: 0,
+        message: `active_handoff.git_commit "${gitCommit}" is not an ancestor of HEAD`,
+        severity: "warning",
+      });
+    }
+  }
+
+  return errors;
+}
+
+// ── Install/update destructive-pattern guard (M68 route-204) ───
+const DESTRUCTIVE_INSTALL_UPDATE_PATTERNS: Array<{ pattern: RegExp; message: string }> = [
+  {
+    pattern: /cp\s+["']?\$TEMP_DIR\/agent\/core\/["']?\*\.yml/,
+    message: "blind cp of agent/core/*.yml — use acp_copy_framework_file()",
+  },
+  {
+    pattern: /cat\s+>\s*["']?\$TARGET_DIR\/agent\/manifest\.yaml\s*<<\s*EOF[\s\S]{0,400}acp-core:/,
+    message: "cat > manifest.yaml with acp-core block wipes packages — use acp_install_manifest_acp_core()",
+  },
+  {
+    pattern: /find\s+["']?\$TEMP_DIR\/agent\/commands["']?[^;]*-exec\s+cp/,
+    message: "blind find commands -exec cp — copy acp.* and git.* only",
+  },
+];
+
+export function validateInstallUpdateSafety(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const targets = [
+    "agent/scripts/acp.version-update.sh",
+    "agent/scripts/acp.install.sh",
+  ];
+  for (const rel of targets) {
+    const full = path.join(process.cwd(), rel);
+    if (!existsSync(full)) continue;
+    const content = readFileSync(full, "utf8");
+    if (content.includes("acp_copy_framework_file") || content.includes("acp_merge_manifest_acp_core")) {
+      // expected — still scan for forbidden patterns
+    }
+    for (const { pattern, message } of DESTRUCTIVE_INSTALL_UPDATE_PATTERNS) {
+      if (pattern.test(content)) {
+        errors.push({
+          file: rel,
+          line: 0,
+          message,
+          severity: "error",
+        });
+      }
+    }
+  }
+  return errors;
+}
+
+const COMMAND_E2E_COVERAGE_FILE = path.join("agent", "schemas", "command-e2e-coverage.yaml");
+
+export interface CommandE2eCoverageOptions {
+  commandsDir?: string;
+  repoRoot?: string;
+}
+
+export function validateCommandE2eCoverage(
+  coverageFile: string = COMMAND_E2E_COVERAGE_FILE,
+  options: CommandE2eCoverageOptions = {}
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const repoRoot = options.repoRoot ?? process.cwd();
+  const commandsDir = options.commandsDir ?? path.join(repoRoot, "agent", "commands");
+  if (!existsSync(coverageFile)) {
+    errors.push({
+      file: coverageFile,
+      line: 0,
+      message: "missing command E2E coverage registry (M63)",
+      severity: "error",
+    });
+    return errors;
+  }
+
+  let doc: { commands?: Record<string, { suites?: string[]; tier?: number }> };
+  try {
+    doc = yaml.load(readFileSync(coverageFile, "utf8")) as typeof doc;
+  } catch {
+    errors.push({
+      file: coverageFile,
+      line: 0,
+      message: "invalid YAML in command E2E coverage registry",
+      severity: "error",
+    });
+    return errors;
+  }
+
+  const registry = doc.commands ?? {};
+  if (!existsSync(commandsDir)) {
+    errors.push({
+      file: commandsDir,
+      line: 0,
+      message: "missing commands directory for E2E coverage check",
+      severity: "error",
+    });
+    return errors;
+  }
+  const commandFiles = readdirSync(commandsDir).filter(
+    (f) => f.startsWith("acp.") && f.endsWith(".md") && f !== "command.template.md"
+  );
+
+  for (const file of commandFiles) {
+    const cmd = file.replace(/\.md$/, "");
+    const entry = registry[cmd];
+    if (!entry) {
+      errors.push({
+        file: coverageFile,
+        line: 0,
+        message: `no E2E coverage entry for ${cmd}`,
+        severity: "error",
+      });
+      continue;
+    }
+    const suites = entry.suites ?? [];
+    if (suites.length === 0) {
+      errors.push({
+        file: coverageFile,
+        line: 0,
+        message: `${cmd} has empty suites list`,
+        severity: "error",
+      });
+    }
+    for (const suite of suites) {
+      const suitePath = path.isAbsolute(suite) ? suite : path.join(repoRoot, suite);
+      if (!existsSync(suitePath)) {
+        errors.push({
+          file: suitePath,
+          line: 0,
+          message: `missing E2E suite for ${cmd}: ${suite}`,
+          severity: "error",
+        });
+      }
+    }
+  }
+
+  for (const cmd of Object.keys(registry)) {
+    if (!existsSync(path.join(commandsDir, `${cmd}.md`))) {
+      errors.push({
+        file: coverageFile,
+        line: 0,
+        message: `orphan coverage entry ${cmd} — no command doc`,
+        severity: "warning",
+      });
+    }
+  }
+
+  return errors;
+}
+
+function runCommandE2eCoverageValidation(): boolean {
+  const repoRoot = process.cwd();
+  const errors = validateCommandE2eCoverage(COMMAND_E2E_COVERAGE_FILE, { repoRoot });
+  const blocking = errors.filter((e) => e.severity === "error");
+  if (blocking.length === 0) {
+    const commandsDir = path.join(repoRoot, "agent", "commands");
+    const cmdCount = readdirSync(commandsDir).filter(
+      (f) => f.startsWith("acp.") && f.endsWith(".md") && f !== "command.template.md"
+    ).length;
+    console.log(`✅ Command E2E coverage: ${cmdCount} commands mapped (0 untested)`);
+    for (const err of errors.filter((e) => e.severity === "warning")) {
+      console.log(`⚠️  ${err.file}: ${err.message}`);
+    }
+    return true;
+  }
+  for (const err of blocking) {
+    console.log(`❌ ${err.file}: ${err.message}`);
+  }
+  return false;
+}
+
+function runInstallUpdateSafetyValidation(): boolean {
+  const errors = validateInstallUpdateSafety();
+  if (errors.length === 0) {
+    console.log("✅ Install/update safety: no destructive blind-copy patterns");
+    return true;
+  }
+  for (const err of errors) {
+    console.log(`❌ ${err.file}: ${err.message}`);
+  }
+  return false;
+}
+
+function runActiveHandoffValidation(): boolean {
+  const strict =
+    process.env["ACP_VALIDATE_STRICT"] === "true" || process.argv.includes("--strict");
+  const errors = validateActiveHandoff(strict);
+  if (errors.length === 0) {
+    const progressYaml = loadProgressSafe();
+    const hasHandoff = Boolean(
+      progressYaml &&
+        (progressYaml.active_handoff as Record<string, unknown> | undefined)?.path
+    );
+    if (hasHandoff) {
+      console.log("✅ Active handoff: path exists");
+    } else {
+      console.log("✅ Active handoff: none configured — skipped");
+    }
+    return true;
+  }
+
+  let allOk = true;
+  for (const err of errors) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+  return allOk;
+}
+
 // ── CLI entry (skip when imported by tests) ───────────────────
 function isDirectExecution(): boolean {
   const entry = process.argv[1] ?? "";
@@ -1075,10 +1356,13 @@ if (args.length === 0) {
   const versionOk = validateVersionConsistency().length === 0;
   const statusOk = validateStatusConsistency();
   const pointersOk = validateFilePointers();
+  const handoffOk = runActiveHandoffValidation();
+  const installUpdateOk = runInstallUpdateSafetyValidation();
+  const commandE2eOk = runCommandE2eCoverageValidation();
   const schemasOk = runSchemaEnforcement();
   const consistencyOk = runConsistencyScan();
   checkStaleness(); // informational — non-blocking, does not affect exit code
-  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
+  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && handoffOk && installUpdateOk && commandE2eOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
 
 let overallFailed = false;
