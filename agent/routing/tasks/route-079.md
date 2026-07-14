@@ -15,8 +15,8 @@ tokens_actual:
 cost_est_usd:
 cost_actual_usd:
 created: 2026-06-04
-completed:
-override_reason: "Reopened audit-080 (2026-07-15) — M47 shipped doc-only; script never implemented. M68 route-199 completes for real."
+completed: 2026-07-15
+override_reason:
 ---
 
 # Route 079: Version Update Guard
