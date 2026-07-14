@@ -104,6 +104,15 @@ the primary planning and review mechanism:
 - Carryover tracking prevents findings from being lost between sessions
 - Production data (FIFOZ): 64 audits prevented CI/CD bugs in pre-impl mode
 
+## Cross-Agent Handoff (v6.23.0+)
+
+ACP Enhanced supports structured handoffs between AI executors (same repo) and
+cross-repository problem transfers via `/acp-handoff` (outgoing) and `/acp-receive`
+(incoming). Executor-mode handoffs pin `git_commit`, lock ADRs, and carry task
+sequences; `/acp-resume @handoff.md` runs receive verification before session init.
+See [`agent/wiki/cross-agent-handoff.md`](cross-agent-handoff.md) for the full ritual
+diagram, filename conventions, and FIFOZ field exemplars.
+
 ## YAML Parser Chain
 
 acp.yaml-parser.sh → pure-bash AST-based parser (zero dependencies)
