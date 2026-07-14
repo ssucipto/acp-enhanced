@@ -106,7 +106,7 @@ if [[ "$MODE" == "generate" ]]; then
   } | if [[ -n "$OUTPUT_FILE" ]]; then
     tee "$OUTPUT_FILE"
   else
-    cat
+    tee "$MANIFEST_FILE"
   fi
   echo "✓ Manifest generated" >&2
   exit 0
