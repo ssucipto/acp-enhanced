@@ -835,6 +835,26 @@ Recommendations:
 
 ---
 
+## M70 Validators (v6.26.0)
+
+When `scripts/acp-validate.ts` runs (including via `/acp-validate`), these M70 checks apply:
+
+| Check | Flag / trigger | Severity | Description |
+|-------|----------------|----------|-------------|
+| Branch protection docs | always (when `docs/USAGE.md` exists) | warning | `validateBranchProtectionDocs()` — Git Branch Protection checklist; warns if `gh api` shows mainline unprotected |
+| Memory field lint | `--memory` | error | `validateMemoryFieldLint()` — required keys on `sessions.md` and `patterns.md` entries |
+| Carryover freshness | always | warning | `validateCarryoverFreshness()` — pending carryovers whose `fix_target` snippet already exists in repo |
+| IG-35 route drift | always | warning | `validateIg35RouteDrift()` — changed files vs `files_affected` on commit-referenced route |
+| Schema enforcement | always | error/warning | `runSchemaEnforcement()` — progress, session, patterns, **lessons**, **decisions** (ADR headers), **audit-carryovers** per-entry |
+
+**Usage**:
+```bash
+npx tsx scripts/acp-validate.ts           # standard + schema enforcement
+npx tsx scripts/acp-validate.ts --memory  # + memory field lint
+```
+
+---
+
 ## Security Considerations
 
 ### File Access

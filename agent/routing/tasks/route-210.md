@@ -8,7 +8,11 @@ executor: copilot
 context_required:
   - agent/design/m70-tech-debt-gate-hardening.md
   - agent/milestones/milestone-70-tech-debt-gate-hardening.md
-files_affected: []
+files_affected:
+  - agent/schemas/patterns.schema.yaml
+  - agent/schemas/lessons.schema.yaml
+  - agent/schemas/decisions.schema.yaml
+  - agent/schemas/audit-carryovers.schema.yaml
 tokens_est: 6000
 tokens_actual:
 cost_est_usd:

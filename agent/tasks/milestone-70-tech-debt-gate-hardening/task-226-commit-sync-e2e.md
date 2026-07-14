@@ -2,13 +2,13 @@
 id: task-226
 milestone: M70
 title: "E2E commit auto-sync, repair tools, --memory (GAP-041-07)"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 6
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15
+completed_date: 2026-07-15
 route: route-215
 audit_findings: [GAP-041-07]
 depends_on: []

@@ -2,13 +2,13 @@
 id: task-222
 milestone: M70
 title: "Memory registry field-level lint (GAP-041-04)"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 6
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15
+completed_date: 2026-07-15
 route: route-211
 audit_findings: [GAP-041-04]
 depends_on: [task-221]

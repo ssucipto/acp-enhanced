@@ -27,7 +27,7 @@
 3. **Apply rules**: 64 rules total (54 core + 10 Appendix A) across 7 categories
 4. **Scope rules**: Mobile rules (SC-19–SC-23) fire only for React Native/Expo
 5. **ACP self-review**: Appendix A auto-activates when `agent/commands/` exists; use `--self` for ACP Enhanced paths
-6. **Phase 1 scanner**: Run `acp.review-scan.sh` for deterministic EH-02/SC-01/TS-01/SH-01 before agent review
+6. **Phase 1 scanner**: Run `acp.review-scan.sh` for 8 deterministic rules (EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01) before Phase 2 agent review
 7. **Output**: Structured YAML findings in `agent/reports/review-NNN.md`
 8. **Never auto-fix** — report only
 

@@ -2,13 +2,13 @@
 id: task-228
 milestone: M70
 title: "FIFOZ consumer /acp-version-update verification (F-086-02)"
-status: planned
+status: completed
 priority: 3
 complexity: medium
 estimated_hours: 4
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15
+completed_date: 2026-07-15
 route: route-217
 audit_findings: [F-086-02]
 depends_on: []
