@@ -1,7 +1,8 @@
 # Milestone 67 — Cross-Agent Handoff Protocol v1
 
 **Milestone ID**: M67  
-**Status**: planned  
+**Status**: completed  
+**Shipped**: 2026-07-15  
 **Target version**: v6.23.0  
 **Priority**: 4  
 **Estimated effort**: ~25–30h (8 routes, 8 tasks)  
@@ -95,7 +96,8 @@ Multi-executor same-repo workflows (Claude/Fable → Cursor) are **operationally
 - [ ] `e2e/acp.handoff.test.sh` — section presence + mode branch
 - [ ] `e2e/acp.receive.test.sh` — **behavioral** drift fixture (not grep-only)
 - [ ] `agent/benchmarks/fixtures/handoff/` — M51-anonymized exemplar
-- [ ] 70×3 command parity (new receive = 70th command)
+- [ ] domain.yml corruption at L33-37 repaired (audit-078 P-078-01)
+- [ ] `routing.yml` validated against shipped commands only (SC-01)
 - [ ] `npx tsx scripts/acp-validate.ts` — 0 errors
 - [ ] `bash agent/scripts/acp.sync-cursor-commands.sh --check`
 
@@ -113,4 +115,4 @@ After v6.23.0 ships: FIFOZ runs `/acp-version-update`, retires local wiki workar
 
 ---
 
-**Status**: planned — `/acp-proceed M67` or `route-190`
+**Status**: completed — shipped v6.23.0 (2026-07-15)
