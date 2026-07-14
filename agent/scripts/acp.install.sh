@@ -40,14 +40,16 @@ echo ""
 
 # Backup + overwrite warning
 echo "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo "${BLUE}  What will be OVERWRITTEN:${NC}"
+echo "${BLUE}  Tier C — framework files refreshed:${NC}"
 echo "    • AGENTS.md, CLAUDE.md, copilot-instructions.md"
-echo "    • agent/commands/*.md, agent/scripts/*.sh"
-echo "    • agent/core/*.yml, agent/skills/*.md, agent/wiki/*"
+echo "    • agent/commands/acp.*.md, agent/commands/git.*.md, agent/scripts/*.sh"
 echo ""
-echo "${BLUE}  What will be PRESERVED:${NC}"
-echo "    • agent/memory/*, agent/design/*, agent/milestones/*"
-echo "    • agent/patterns/local.*, agent/progress.yaml"
+echo "${BLUE}  Tier B — preserved if customized:${NC}"
+echo "    • agent/core/*.yml, agent/wiki/*, agent/routing/taxonomy.yml"
+echo "    • agent/skills/local.*.md"
+echo ""
+echo "${BLUE}  Tier A — never overwritten:${NC}"
+echo "    • agent/memory/*, agent/design/*, agent/milestones/*, agent/progress.yaml"
 echo "    • agent/preferences/, agent/configurables/"
 echo ""
 echo "  💡 Backup customized files before continuing:"
@@ -337,8 +339,16 @@ if [ -f "$TEMP_DIR/agent/schemas/package.schema.yaml" ]; then
     cp "$TEMP_DIR/agent/schemas/package.schema.yaml" "$TARGET_DIR/agent/schemas/"
 fi
 
-# Copy AGENT.md
-cp "$TEMP_DIR/AGENT.md" "$TARGET_DIR/"
+# Entry docs (tier C) — prefer AGENTS.md; keep AGENT.md for legacy consumers
+if [ -f "$TEMP_DIR/AGENTS.md" ]; then
+    cp "$TEMP_DIR/AGENTS.md" "$TARGET_DIR/"
+    cp "$TARGET_DIR/AGENTS.md" "$TARGET_DIR/CLAUDE.md" 2>/dev/null || true
+    mkdir -p "$TARGET_DIR/.github"
+    cp "$TARGET_DIR/AGENTS.md" "$TARGET_DIR/.github/copilot-instructions.md" 2>/dev/null || true
+fi
+if [ -f "$TEMP_DIR/AGENT.md" ]; then
+    cp "$TEMP_DIR/AGENT.md" "$TARGET_DIR/"
+fi
 
 # Copy scripts - selective installation based on command dependencies
 if [ -d "$TEMP_DIR/agent/scripts" ]; then
@@ -469,7 +479,13 @@ echo ""
 
 # Create manifest (tier D merge — preserve third-party packages)
 echo "Creating manifest..."
-ACP_VERSION=$(grep "^\*\*Version\*\*:" "$TARGET_DIR/AGENT.md" | sed 's/.*: //' | head -1)
+_ver_file="AGENTS.md"
+[ -f "$TARGET_DIR/AGENTS.md" ] || _ver_file="AGENT.md"
+ACP_VERSION=$(grep -m1 "^\*\*Version\*\*:" "$TARGET_DIR/$_ver_file" 2>/dev/null | sed 's/.*: *//' | tr -d '\r')
+if [ -z "$ACP_VERSION" ]; then
+    ACP_VERSION=$(grep -m1 '^> v' "$TARGET_DIR/$_ver_file" 2>/dev/null | sed 's/^> v//' | cut -d' ' -f1 | tr -d '\r')
+fi
+[ -n "$ACP_VERSION" ] || ACP_VERSION="unknown"
 acp_install_manifest_acp_core "$TARGET_DIR" "$ACP_VERSION"
 
 echo "${GREEN}✓${NC} Updated manifest.yaml (tracking acp-core v${ACP_VERSION})"
@@ -490,7 +506,7 @@ echo ""
 echo "3. Initialize progress tracking:"
 echo "   cp agent/progress.template.yaml agent/progress.yaml"
 echo ""
-echo "4. Read AGENT.md for complete documentation"
+echo "4. Read AGENTS.md for complete documentation"
 echo ""
 display_available_commands
 echo ""

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.24.1] — 2026-07-15
+
+### Added
+- **E2E** — `e2e/acp.bootstrap-preserve.test.sh` (6 assertions) — bootstrap re-run preserves Tier B.
+- **`agent/schemas/install-tier-registry.yaml`** — path registry for tier policy docs/validate.
+
+### Fixed
+- **audit-082** — `acp.install.sh` copies `AGENTS.md` (not stale `AGENT.md` only); tier-aware install banner;
+  README/CONTRIBUTING consumer safety; `acp.version-update.md` steps reconciled to tier policy;
+  milestone gates + task stamps; `--force` E2E (V13); carryovers re-verified @ audit-082.
+
+---
+
 ## [6.24.0] — 2026-07-15
 
 ### Added
