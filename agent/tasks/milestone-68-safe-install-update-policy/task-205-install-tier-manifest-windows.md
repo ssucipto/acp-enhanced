@@ -1,0 +1,35 @@
+---
+id: task-205
+milestone: M68
+title: install.sh tier preserve + manifest merge (route-200)
+status: planned
+priority: 5
+complexity: medium
+estimated_hours: 4
+created: 2026-07-15
+started:
+completed:
+route: route-200
+---
+
+## Objective
+
+Safe reinstall: preserve Tier B, merge manifest, fix Windows xargs.
+
+## Steps
+
+1. Replace `cp agent/core/*.yml` with tier-aware copy (reuse common.sh helpers)
+2. Wiki/routing/skills: same tier rules as version-update
+3. Replace manifest `cat >` block with `acp_merge_manifest_acp_core` or create-if-absent on first install
+4. Replace `xargs -n1 basename` loops (L470–472) with while-read basename loop
+5. Extend install overwrite/preserve banner to match design tiers
+
+## Verification
+
+- [ ] Reinstall with 2 packages in manifest — both remain
+- [ ] Customized domain.yml preserved
+- [ ] Windows Git Bash manifest generation (CI or local)
+
+## User-Observable Acceptance
+
+Running `acp.install.sh` twice does not reset `identity.yml` or wipe non-acp-core packages from manifest.yaml.
