@@ -21,14 +21,15 @@ override_reason:
 
 ## Objective
 
-Add validate check: `acp.version-update.sh` and `acp.install.sh` must not contain blind `cp ... agent/core/*.yml` or `cat > agent/manifest.yaml` without tier helper call.
+Add validate check: `acp.version-update.sh` and `acp.install.sh` must not contain blind `cp ... agent/core/*.yml`, blind `find ... *.*.md -exec cp`, or `cat > agent/manifest.yaml` without tier helper call.
 
 ## Acceptance criteria
 
-- [ ] Validator fails if destructive glob patterns reintroduced
+- [ ] Validator fails if destructive glob patterns reintroduced (core, commands, manifest)
 - [ ] Vitest coverage for new check
 - [ ] `npx tsx scripts/acp-validate.ts` — 0 errors
+- [ ] **Required before v6.24.0 tag** (SC-080-03)
 
 ## Addresses
 
-audit-080 regression prevention; SC-080-03
+audit-080 regression prevention; SC-080-03; blocks SC-080-01 recurrence
