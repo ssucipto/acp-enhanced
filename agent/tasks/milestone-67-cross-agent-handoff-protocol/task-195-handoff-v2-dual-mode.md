@@ -2,13 +2,13 @@
 id: task-195
 milestone: M67
 title: Handoff v2 — dual mode executor + cross-repo (route-190)
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 5
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-190
 ---
 

@@ -85,27 +85,27 @@ Multi-executor same-repo workflows (Claude/Fable → Cursor) are **operationally
 
 ### Functional (proposal §13)
 
-- [ ] `/acp-handoff --mode executor --to cursor` — all §4 sections, git pin required
-- [ ] `/acp-handoff --mode cross-repo` — v1.0.0 parity
-- [ ] `/acp-receive` — git drift + session gap warnings
-- [ ] `/acp-resume @handoff.md` — receive then resume
-- [ ] `active_handoff` written and validates
+- [x] `/acp-handoff --mode executor --to cursor` — all §4 sections, git pin required
+- [x] `/acp-handoff --mode cross-repo` — v1.0.0 parity
+- [x] `/acp-receive` — git drift + session gap warnings
+- [x] `/acp-resume @handoff.md` — receive then resume
+- [x] `active_handoff` written and validates
 
 ### Quality (no shortcuts)
 
-- [ ] `e2e/acp.handoff.test.sh` — section presence + mode branch
-- [ ] `e2e/acp.receive.test.sh` — **behavioral** drift fixture (not grep-only)
-- [ ] `agent/benchmarks/fixtures/handoff/` — M51-anonymized exemplar
-- [ ] domain.yml corruption at L33-37 repaired (audit-078 P-078-01)
-- [ ] `routing.yml` validated against shipped commands only (SC-01)
-- [ ] `npx tsx scripts/acp-validate.ts` — 0 errors
-- [ ] `bash agent/scripts/acp.sync-cursor-commands.sh --check`
+- [x] `e2e/acp.handoff.test.sh` — section presence + mode branch
+- [x] `e2e/acp.receive.test.sh` — **behavioral** drift fixture (not grep-only)
+- [x] `agent/benchmarks/fixtures/handoff/` — M51-anonymized exemplar
+- [x] domain.yml corruption at L33-37 repaired (audit-078 P-078-01)
+- [x] `routing.yml` validated against shipped commands only (SC-01)
+- [x] `npx tsx scripts/acp-validate.ts` — 0 errors
+- [x] `bash agent/scripts/acp.sync-cursor-commands.sh --check`
 
 ### Release
 
-- [ ] CHANGELOG v6.23.0
-- [ ] audit-077 carryovers H1–H10, U1–U3 → `status: fixed`
-- [ ] feedback-007 §6 acceptance criteria checked
+- [x] CHANGELOG v6.23.0
+- [x] audit-077 carryovers H1–H10, U1–U3 → `status: fixed`
+- [x] feedback-007 §6 acceptance criteria checked (upstream items; FIFOZ `/acp-version-update` pending consumer)
 
 ---
 

@@ -90,11 +90,11 @@ Document ritual in project wiki; manual filename convention; mandatory `/acp-com
 
 ## 6. Acceptance Criteria (for closing feedback-007)
 
-- [ ] `acp.handoff.md` bumped to v2 with dual modes
-- [ ] `acp.receive.md` added to `agent/commands/`
-- [ ] Cursor/OpenCode command wrappers synced
-- [ ] Proposal §13 acceptance criteria met
-- [ ] FIFOZ `/acp-version-update` picks up release and retires local wiki workaround
+- [x] `acp.handoff.md` bumped to v2 with dual modes — shipped v6.23.0 (`4baae9b`)
+- [x] `acp.receive.md` added to `agent/commands/` — shipped v6.23.0
+- [x] Cursor/OpenCode command wrappers synced — 70×3 parity verified audit-079
+- [x] Proposal §13 acceptance criteria met — audit-079 cross-check ✅
+- [ ] FIFOZ `/acp-version-update` picks up release and retires local wiki workaround — **consumer action** (FIFOZ runs after upstream tag `v6.23.0`)
 
 ---
 

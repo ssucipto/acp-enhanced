@@ -2,13 +2,13 @@
 id: task-202
 milestone: M67
 title: Release v6.23.0 + carryover closure (route-197)
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-197
 ---
 
@@ -28,10 +28,10 @@ Milestone exit: CHANGELOG, version bump, close audit-077 carryovers, verify feed
 
 ## Verification
 
-- [ ] CHANGELOG at top (chronological)
-- [ ] All audit-077 carryovers fixed or verified
-- [ ] feedback-007 §6 all boxes pass
-- [ ] `npx tsx scripts/acp-validate.ts` exit 0
+- [x] CHANGELOG at top (chronological)
+- [x] All audit-077 carryovers fixed or verified (audit-079 post-ship re-verify)
+- [x] feedback-007 §6 upstream boxes pass (FIFOZ consumer path documented)
+- [x] `npx tsx scripts/acp-validate.ts` exit 0
 
 ## Depends on
 

@@ -113,24 +113,25 @@ This catches the most common AI coding mistake: letting the agent commit directl
 
 ## Slash Commands
 
-ACP Enhanced registers **69 slash commands** across two tools — available after bootstrapping:
+ACP Enhanced registers **70 slash commands** across two tools — available after bootstrapping:
 
 | Tool | How to invoke | Source files |
 |---|---|---|
 | VS Code Copilot | `/acp-*` — autocomplete in Copilot Chat | `.github/prompts/*.prompt.md` |
 | opencode | `/acp-*` — autocomplete in opencode TUI | `.opencode/commands/*.md` |
-| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (69 commands) |
+| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (70 commands) |
 
 ```text
 /acp-init          /acp-proceed       /acp-plan          /acp-status
-/acp-resume        /acp-report        /acp-audit         /acp-handoff
+/acp-resume        /acp-report        /acp-audit         /acp-handoff       /acp-receive
 /acp-package-*     /acp-project-*     /acp-preferences-* /acp-clarification-*
 /acp-design-*      /acp-artifact-*    /git-commit        /git-init
 ```
 
 > VS Code Copilot requires agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.  
 > opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.  
-> **Note**: All 69 commands are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.
+> **Note**: All 70 commands are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.  
+> **Cross-agent handoff**: See [`agent/wiki/cross-agent-handoff.md`](agent/wiki/cross-agent-handoff.md) for executor vs cross-repo modes, `/acp-receive`, and git drift checks.
 
 ---
 
@@ -246,8 +247,8 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Memory | None — every session starts cold | sessions.md + lessons.md + ADRs + patterns |
 | Task routing | None | Taxonomy-based routing to skill files |
 | Mistake learning | None | Correction log appended per task type |
-| VS Code commands | Manual file reference | 69 slash commands with autocomplete |
-| opencode support | None | 69 slash commands in `.opencode/commands/` |
+| VS Code commands | Manual file reference | 70 slash commands with autocomplete |
+| opencode support | None | 70 slash commands in `.opencode/commands/` |
 | Preferences | None | 4-level hierarchy (project > workspace > user > default) |
 | Project registry | None | Global `~/.acp/projects.yaml` for multi-project tracking |
 | Cost tracking | None | Per-task token + USD ledger via dispatch |
@@ -1074,9 +1075,9 @@ project-root/
 ├── CLAUDE.md                       # Symlink → AGENT.md (Claude Code)
 ├── .github/
 │   ├── copilot-instructions.md     # Symlink → AGENT.md (GitHub Copilot)
-│   └── prompts/                    # 69 slash command prompts (*.prompt.md)
-├── .opencode/commands/             # 69 slash commands for opencode TUI
-├── .cursor/commands/               # 69 slash commands for Cursor Agent (auto-generated)
+│   └── prompts/                    # 70 slash command prompts (*.prompt.md)
+├── .opencode/commands/             # 70 slash commands for opencode TUI
+├── .cursor/commands/               # 70 slash commands for Cursor Agent (auto-generated)
 ├── agent/                          # Agent context directory
 │   ├── core/                       # Layer 1: always loaded, cached
 │   │   ├── identity.yml            # Project identity + stack
@@ -1107,7 +1108,7 @@ project-root/
 │   │   ├── rules.md                # Routing rules + conventions
 │   │   ├── ledger.md               # Cost + token tracking
 │   │   └── tasks/                  # Generated route files
-│   ├── commands/                   # 71 command docs (69 acp.* + 2 git.*)
+│   ├── commands/                   # 72 command docs (70 acp.* + 2 git.*)
 │   ├── scripts/                    # 36 shell scripts + TypeScript tools
 │   ├── design/                     # Design documents
 │   ├── milestones/                 # Milestone definitions
