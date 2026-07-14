@@ -33,7 +33,8 @@ Implement shared tier-aware copy helpers in `acp.common.sh` per design doc. Opti
 - [ ] `acp_copy_framework_file rel tier` enforces Tier A/B/C rules with logging
 - [ ] `acp_merge_manifest_acp_core version` updates acp-core block only (Tier D)
 - [ ] Design doc cross-references helper names
+- [ ] Tier B uses upstream SHA compare — NOT `is_file_modified()` (P-081-07)
 
 ## Addresses
 
-audit-080 F-080-01 (foundation); industry conffile/checksum patterns
+audit-080 F-080-01 (foundation); P-081-07; industry conffile/checksum patterns
