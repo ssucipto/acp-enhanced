@@ -402,6 +402,8 @@ test_suites:
       test_count: 12
     - suite: acp.install-preserve.test.sh
       coverage: acp.install.sh manifest merge, acp_list_basenames, tier B preserve
+    - suite: acp.bootstrap-preserve.test.sh
+      coverage: acp-bootstrap.sh re-run create-if-absent — Tier B identity/wiki/taxonomy preserved
       test_count: 5
   unit_suites:
     - suite: acp.preferences-preset.test.sh

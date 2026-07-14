@@ -2,13 +2,13 @@
 id: task-203
 milestone: M68
 title: Tier helpers in acp.common.sh (route-198)
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-198
 audit_findings: [F-080-01, P-081-07]
 ---
