@@ -696,8 +696,378 @@ const SCHEMA_DATA_MAP: Record<string, string> = {
   "lessons.schema.yaml": "agent/memory/lessons.md",
   "decisions.schema.yaml": "agent/memory/decisions.md",
   "audit-carryovers.schema.yaml": "agent/memory/audit-carryovers.md",
+  "patterns.schema.yaml": "agent/memory/patterns.md",
   // milestone.schema.yaml validates route-task frontmatter (id/title/status), not progress.yaml milestones map
 };
+
+const USAGE_PATH = "docs/USAGE.md";
+const CARRYOVERS_PATH = "agent/memory/audit-carryovers.md";
+const PATTERNS_PATH = "agent/memory/patterns.md";
+const SESSIONS_PATH = "agent/memory/sessions.md";
+
+function splitYamlListEntries(raw: string, entryMarker: RegExp): string[] {
+  const stripped = raw.replace(/^(#[^\n]*\n|\s*\n)*/m, "");
+  if (stripped.trim() === "") return [];
+  return stripped.split(entryMarker).filter((p) => p.trim().startsWith("- "));
+}
+
+/** M70 task-220: warn when branch protection checklist in USAGE.md is incomplete */
+export function validateBranchProtectionDocs(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(USAGE_PATH)) {
+    errors.push({
+      file: USAGE_PATH,
+      line: 0,
+      message: "USAGE.md missing — cannot verify branch protection checklist",
+      severity: "warning",
+    });
+    return errors;
+  }
+
+  const raw = readFileSync(USAGE_PATH, "utf8");
+  if (!raw.includes("## Git Branch Protection")) {
+    errors.push({
+      file: USAGE_PATH,
+      line: 0,
+      message: "Missing § Git Branch Protection section",
+      severity: "warning",
+    });
+    return errors;
+  }
+
+  if (!raw.includes("### Protection checklist")) {
+    errors.push({
+      file: USAGE_PATH,
+      line: 0,
+      message: "Missing ### Protection checklist under Git Branch Protection",
+      severity: "warning",
+    });
+  }
+
+  if (commandExists("gh")) {
+    try {
+      const repo = execSync("gh repo view --json nameWithOwner -q .nameWithOwner", {
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "pipe"],
+      }).trim();
+      if (repo) {
+        execSync(`gh api repos/${repo}/branches/mainline/protection`, {
+          encoding: "utf8",
+          stdio: ["pipe", "pipe", "pipe"],
+        });
+      }
+    } catch {
+      errors.push({
+        file: USAGE_PATH,
+        line: 0,
+        message: "GitHub mainline branch protection not detected (gh api 404) — enable via Settings or acp.branch-protection-setup.sh",
+        severity: "warning",
+      });
+    }
+  }
+
+  return errors;
+}
+
+function commandExists(cmd: string): boolean {
+  try {
+    execSync(`command -v ${cmd}`, { stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** M70 task-222: field-level lint for sessions.md and patterns.md (--memory) */
+export function validateMemoryFieldLint(): ValidationError[] {
+  const errors: ValidationError[] = [];
+
+  for (const [filePath, requiredKeys] of [
+    [SESSIONS_PATH, ["date:", "executor:", "done:"] as string[]],
+    [PATTERNS_PATH, ["date:", "name:"] as string[]],
+  ] as const) {
+    if (!existsSync(filePath)) continue;
+    const raw = readFileSync(filePath, "utf8");
+    const entries = splitYamlListEntries(raw, /\n(?=- date:)/);
+
+    for (let i = 0; i < entries.length; i++) {
+      const entry = entries[i];
+      for (const key of requiredKeys) {
+        if (!entry.includes(key)) {
+          errors.push({
+            file: filePath,
+            line: 0,
+            message: `Entry #${i + 1} missing required field ${key.replace(":", "")}`,
+            severity: "error",
+          });
+        }
+      }
+      if (filePath === PATTERNS_PATH && entry.includes("name:")) {
+        const nameMatch = entry.match(/name:\s*([^\n]+)/);
+        if (nameMatch && !/^[a-z0-9][a-z0-9-]*$/.test(nameMatch[1].trim())) {
+          errors.push({
+            file: filePath,
+            line: 0,
+            message: `Entry #${i + 1} name must be kebab-case`,
+            severity: "warning",
+          });
+        }
+      }
+    }
+  }
+
+  return errors;
+}
+
+/** M70 task-223: flag pending carryovers whose fix_target file already exists */
+export function validateCarryoverFreshness(
+  carryoversPath: string = CARRYOVERS_PATH
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(carryoversPath)) return errors;
+
+  const raw = readFileSync(carryoversPath, "utf8");
+  const blocks = raw.split(/\n  - audit_id:/).slice(1);
+
+  for (const block of blocks) {
+    if (!/status:\s*pending/.test(block)) continue;
+
+    const findingId = block.match(/finding_id:\s*(\S+)/)?.[1] ?? "?";
+    const fixTarget = block.match(/fix_target:\s*"([^"]+)"/)?.[1] ?? "";
+
+    const fileMatch = fixTarget.match(/([a-zA-Z0-9_./-]+\.(ts|sh|yaml|md))/);
+    if (!fileMatch) continue;
+
+    const targetFile = fileMatch[1];
+    if (existsSync(targetFile)) {
+      const snippet = fixTarget.match(/:\s*(.+)$/)?.[1];
+      if (snippet) {
+        try {
+          const content = readFileSync(targetFile, "utf8");
+          if (content.includes(snippet.slice(0, 40))) {
+            errors.push({
+              file: carryoversPath,
+              line: 0,
+              message: `${findingId}: pending carryover may be stale — fix_target pattern found in ${targetFile}`,
+              severity: "warning",
+            });
+          }
+        } catch {
+          // skip unreadable
+        }
+      }
+    }
+  }
+
+  return errors;
+}
+
+/** M70 task-229: IG-35 route files_affected drift (warn-only in validate) */
+export function validateIg35RouteDrift(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!commandExists("git")) return errors;
+
+  let changedFiles: string[] = [];
+  try {
+    const out = execSync("git diff --name-only HEAD~1..HEAD 2>/dev/null || git diff --name-only", {
+      encoding: "utf8",
+    });
+    changedFiles = out.split("\n").map((f) => f.trim()).filter(Boolean);
+  } catch {
+    return errors;
+  }
+
+  if (changedFiles.length === 0) return errors;
+
+  let commitMsg = "";
+  try {
+    commitMsg = execSync("git log -1 --format=%s", { encoding: "utf8" }).trim();
+  } catch {
+    return errors;
+  }
+
+  const routeMatch = commitMsg.match(/route-(\d+)/);
+  if (!routeMatch) return errors;
+
+  const routeFile = path.join("agent", "routing", "tasks", `route-${routeMatch[1]}.md`);
+  if (!existsSync(routeFile)) return errors;
+
+  const routeRaw = readFileSync(routeFile, "utf8");
+  const declared: string[] = [];
+  const faBlock = routeRaw.match(/files_affected:\s*\n((?:\s+-\s+.+\n?)*)/);
+  if (faBlock) {
+    for (const line of faBlock[1].split("\n")) {
+      const m = line.match(/^\s+-\s+(.+)$/);
+      if (m) declared.push(m[1].trim());
+    }
+  }
+
+  if (declared.length === 0) return errors;
+
+  for (const f of changedFiles) {
+    const normalized = f.replace(/^\.\//, "");
+    const covered = declared.some(
+      (d) => normalized === d || normalized.startsWith(d.replace(/\*$/, ""))
+    );
+    if (!covered && normalized.startsWith("agent/")) {
+      errors.push({
+        file: routeFile,
+        line: 0,
+        message: `IG-35: ${normalized} changed but not in files_affected for ${routeMatch[0]}`,
+        severity: "warning",
+      });
+    }
+  }
+
+  return errors;
+}
+
+function runMemoryValidation(): boolean {
+  let allOk = true;
+  const fieldErrors = validateMemoryFieldLint();
+  for (const err of fieldErrors) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+  if (fieldErrors.length === 0) {
+    console.log("✅ Memory field lint: sessions.md + patterns.md valid");
+  }
+  return allOk;
+}
+
+function runM70Guards(): boolean {
+  let allOk = true;
+
+  const bp = validateBranchProtectionDocs();
+  for (const err of bp) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+  if (bp.length === 0) {
+    console.log("✅ Branch protection docs: checklist complete");
+  }
+
+  const cf = validateCarryoverFreshness();
+  for (const err of cf) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+  if (cf.length === 0) {
+    console.log("✅ Carryover freshness: no stale pending patterns detected");
+  }
+
+  const ig35 = validateIg35RouteDrift();
+  for (const err of ig35) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+
+  return allOk;
+}
+
+function splitCarryoverEntries(raw: string): string[] {
+  const idx = raw.indexOf("carryovers:");
+  if (idx < 0) return [];
+  const body = raw.slice(idx);
+  return body
+    .split(/\n  - audit_id:/)
+    .slice(1)
+    .map((block) => `  - audit_id:${block}`);
+}
+
+/** M71 task-233: per-entry schema validation for YAML list memory documents */
+export function validateSchemaListEntries(
+  entryTexts: string[],
+  schema: Record<string, unknown>,
+  filePath: string,
+  fieldAliases: Record<string, string> = {}
+): ValidationError[] {
+  const requiredFields = schema["required_fields"] as string[] | undefined;
+  if (!requiredFields) return [];
+
+  const errors: ValidationError[] = [];
+
+  for (let i = 0; i < entryTexts.length; i++) {
+    const entryText = entryTexts[i];
+    let record: Record<string, unknown> = {};
+    try {
+      const loaded = yaml.load(entryText);
+      if (loaded && typeof loaded === "object" && !Array.isArray(loaded)) {
+        record = loaded as Record<string, unknown>;
+      }
+    } catch {
+      // fall through to line-based checks
+    }
+
+    for (const rf of requiredFields) {
+      const alias = fieldAliases[rf];
+      const hasField =
+        rf in record ||
+        (alias !== undefined && alias in record) ||
+        entryText.includes(`${rf}:`) ||
+        (alias !== undefined && entryText.includes(`${alias}:`));
+      if (!hasField) {
+        errors.push({
+          file: filePath,
+          line: 0,
+          message: `Entry #${i + 1} missing required field: ${rf}`,
+          severity: "error",
+        });
+      }
+    }
+  }
+
+  return errors;
+}
+
+function validateDecisionsAdrEntries(
+  filePath: string,
+  schema: Record<string, unknown>
+): { errors: ValidationError[]; entryCount: number } {
+  const raw = readFileSync(filePath, "utf8");
+  const blocks = raw.split(/\n(?=## ADR-\d+)/).filter((b) => /^## ADR-/.test(b));
+  const requiredFields = schema["required_fields"] as string[] | undefined;
+  const errors: ValidationError[] = [];
+  if (!requiredFields) return { errors, entryCount: blocks.length };
+
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i];
+    const header = block.match(/^## (ADR-\d+) \| (\d{4}-\d{2}-\d{2}) \|/);
+    const statusMatch = block.match(/\*\*Status:\*\*\s*(\S+)/);
+    const entry: Record<string, string> = {
+      id: header?.[1] ?? "",
+      date: header?.[2] ?? "",
+      status: statusMatch?.[1] ?? "",
+    };
+
+    if (!header) {
+      errors.push({
+        file: filePath,
+        line: 0,
+        message: `ADR block #${i + 1} missing id/date header`,
+        severity: "warning",
+      });
+      continue;
+    }
+
+    for (const rf of requiredFields) {
+      if (!entry[rf]) {
+        errors.push({
+          file: filePath,
+          line: 0,
+          message: `${entry.id} missing required field: ${rf}`,
+          severity: "error",
+        });
+      }
+    }
+  }
+
+  return { errors, entryCount: blocks.length };
+}
 
 function validateYamlAgainstSchema(
   dataYaml: unknown,
@@ -774,26 +1144,57 @@ function runSchemaEnforcement(): boolean {
       }
 
       const dataContent = readFileSync(dataFile, "utf8");
-      // sessions.md / lessons.md are multi-document YAML lists; try loading as-is
-      let dataYaml: unknown;
-      try {
-        dataYaml = yaml.load(dataContent);
-      } catch {
-        // If YAML parse fails, that's a pre-existing error from other validators
-        continue;
+      let schemaErrors: ValidationError[] = [];
+      let entryCount = 0;
+
+      if (schemaFile === "decisions.schema.yaml") {
+        const result = validateDecisionsAdrEntries(dataFile, schema);
+        schemaErrors = result.errors;
+        entryCount = result.entryCount;
+      } else if (
+        schemaFile === "lessons.schema.yaml" ||
+        schemaFile === "session.schema.yaml" ||
+        schemaFile === "patterns.schema.yaml"
+      ) {
+        const entries = splitYamlListEntries(dataContent, /\n(?=- date:)/);
+        entryCount = entries.length;
+        schemaErrors = validateSchemaListEntries(entries, schema, dataFile);
+      } else if (schemaFile === "audit-carryovers.schema.yaml") {
+        const entryTexts = splitCarryoverEntries(dataContent);
+        entryCount = entryTexts.length;
+        schemaErrors = validateSchemaListEntries(entryTexts, schema, dataFile, {
+          description: "finding",
+        });
+      } else {
+        let dataYaml: unknown;
+        try {
+          dataYaml = yaml.load(dataContent);
+        } catch {
+          console.log(`⚠️  Schema ${schemaFile}: YAML parse failed for ${dataFile} — skipping`);
+          continue;
+        }
+
+        if (!dataYaml) continue;
+
+        if (Array.isArray(dataYaml)) {
+          entryCount = dataYaml.length;
+          const parts = (dataYaml as Record<string, unknown>[]).map((e) => yaml.dump(e));
+          schemaErrors = validateSchemaListEntries(parts, schema, dataFile);
+        } else {
+          schemaErrors = validateYamlAgainstSchema(dataYaml, schema, dataFile);
+        }
       }
 
-      if (!dataYaml) continue;
-
-      const errors = validateYamlAgainstSchema(dataYaml, schema, dataFile);
-      if (errors.length > 0) {
-        for (const err of errors) {
+      if (schemaErrors.length > 0) {
+        for (const err of schemaErrors) {
           const prefix = err.severity === "error" ? "❌" : "⚠️";
           console.log(`${prefix} ${err.file}: ${err.message}  [schema: ${schemaFile}]`);
           if (err.severity === "error") allOk = false;
         }
       } else {
-        console.log(`✅ Schema ${schemaFile}: ${dataFile} valid`);
+        const label =
+          entryCount > 0 ? `${entryCount} entries valid` : `${dataFile} valid`;
+        console.log(`✅ Schema ${schemaFile}: ${label}`);
       }
     } catch (err) {
       console.error(`❌ Schema enforcement error: ${schemaFile} — ${err instanceof Error ? err.message : err}`);
@@ -1345,8 +1746,11 @@ function isDirectExecution(): boolean {
 
 // ── Main ───────────────────────────────────────────────────
 const args = process.argv.slice(2);
+const memoryMode = args.includes("--memory");
+const taskFileArgs = args.filter((a) => !a.startsWith("--"));
+
 if (isDirectExecution()) {
-if (args.length === 0) {
+if (taskFileArgs.length === 0) {
   // No args: run all command-file scans
   runPlaceholderScan();
   runFrontmatterScan();
@@ -1360,14 +1764,16 @@ if (args.length === 0) {
   const installUpdateOk = runInstallUpdateSafetyValidation();
   const commandE2eOk = runCommandE2eCoverageValidation();
   const schemasOk = runSchemaEnforcement();
+  const m70Ok = runM70Guards();
+  const memoryOk = memoryMode ? runMemoryValidation() : true;
   const consistencyOk = runConsistencyScan();
   checkStaleness(); // informational — non-blocking, does not affect exit code
-  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && handoffOk && installUpdateOk && commandE2eOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
+  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && handoffOk && installUpdateOk && commandE2eOk && schemasOk && m70Ok && memoryOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
 
 let overallFailed = false;
 
-for (const taskFile of args) {
+for (const taskFile of taskFileArgs) {
   const errors = validateTaskFile(taskFile);
   if (errors.length === 0) {
     console.log(`✓ ${taskFile}`);
