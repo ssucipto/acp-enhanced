@@ -212,7 +212,7 @@ commands:
       purpose: Verify AI-generated code trustworthiness and provenance — detect malicious patterns, hidden Unicode, exfiltration, supply chain risks, and CI injection surfaces across 55 rules and 6 bash scripts.
     - command: acp.review
       category: core
-      purpose: Enforce code quality, security, and consistency standards — 54 rules across OWASP Top 10:2025, TypeScript strictness, API conventions, and mobile MASVS v2.0.
+      purpose: Enforce code quality, security, and consistency standards — 64 rules (54 core + 10 Appendix A) across OWASP Top 10:2025, TypeScript strictness, API conventions, and mobile MASVS v2.0; Phase 1 via acp.review-scan.sh.
     - command: git.commit
       category: git
       purpose: Automate version detection, changelog updates, and git commits with proper semantic versioning.
@@ -221,7 +221,7 @@ commands:
       purpose: Initialize a git repository with an intelligent .gitignore based on detected project type.
 
 scripts:
-  count: 29
+  count: 43
   location: agent/scripts/
   naming: "acp.{feature}.sh"
   key_scripts:
@@ -287,6 +287,10 @@ scripts:
       implements: Pure POSIX shell YAML parser with a lexer, AST builder, and query engine; zero external dependencies, portable across macOS/Linux.
     - script: acp.yaml-validate.sh
       implements: Validates YAML files against ACP schema definitions, reporting typed errors and warnings with pass/fail counts.
+    - script: acp.review-scan.sh
+      implements: Deterministic Phase 1 scanner for /acp-review — EH-02, SC-01, TS-01, SH-01 with --ci and --json modes.
+    - script: acp.manifest-hash.sh
+      implements: Generates and verifies SHA-256 hashes in agent/integrity-manifest.yaml for integrity gateway tamper detection.
 
 schemas:
   count: 5
@@ -377,14 +381,14 @@ test_suites:
       coverage: /acp-receive incoming protocol — drift fixture behavioral check, resume bridge, active_handoff schema
       test_count: 24
     - suite: acp.integrity.test.sh
-      coverage: /acp-integrity v1.0 — 6 bash scripts, Unicode/entropy/network/git/dependency/manifest, false-positive baseline
-      test_count: 26
+      coverage: /acp-integrity v1.0 — 6 bash scripts, Unicode/entropy/network/git/dependency/integrity-manifest, false-positive baseline, INT-001/002 remediation
+      test_count: 67
     - suite: acp.recurring-tasks.test.sh
       coverage: M57 recurring tasks scheduler — schema validation, protocol Step 4.5, hooks block, template
       test_count: 16
     - suite: acp.review.test.sh
-      coverage: /acp-review — 77 rules, code quality + security enforcement, structural + behavioral with fixture violations
-      test_count: 49
+      coverage: /acp-review — 64 rules (54 core + 10 Appendix A), code quality + security enforcement, acp.review-scan.sh behavioral fixtures
+      test_count: 54
     - suite: acp.script-command-binding.test.sh
       coverage: Selective script installation based on command dependency declarations
       test_count: 8

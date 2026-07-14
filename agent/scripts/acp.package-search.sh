@@ -1,15 +1,13 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 # Agent Context Protocol (ACP) Package Search Script
 # Search for ACP packages on GitHub using the GitHub API
 
-# Note: set -euo pipefail disabled because while loop runs in subshell
-# and some commands may return non-zero without being errors.
-# Intentionally excluded from route-173 pipefail upgrade.
-# Explicit error handling used in while loop body.
+set -euo pipefail
+trap 'echo "Error: package-search.sh failed at line $LINENO" >&2; exit 3' ERR
 
 # Source common utilities
 SCRIPT_DIR="$(dirname "$0")"
+# shellcheck source=acp.common.sh
 . "${SCRIPT_DIR}/acp.common.sh"
 
 # Initialize colors
@@ -110,23 +108,27 @@ fi
 echo "${GREEN}📦 Found $TOTAL_COUNT package(s)${NC}"
 echo ""
 
-# Parse and display each result
+# Parse and display each result (while-read avoids mapfile — macOS bash 3.2 compat)
+REPO_NAMES=()
+while IFS= read -r _repo_name; do
+  [[ -n "$_repo_name" ]] && REPO_NAMES+=("$_repo_name")
+done < <(echo "$RESPONSE" | grep -o '"full_name": "[^"]*"' | cut -d'"' -f4)
 REPO_COUNT=0
 
-echo "$RESPONSE" | grep -o '"full_name": "[^"]*"' | cut -d'"' -f4 | while read -r full_name; do
+for full_name in "${REPO_NAMES[@]}"; do
     REPO_COUNT=$((REPO_COUNT + 1))
-    
+
     # Extract repo info from response
     REPO_DATA=$(echo "$RESPONSE" | grep -A 20 "\"full_name\":\"$full_name\"")
-    
+
     DESCRIPTION=$(echo "$REPO_DATA" | grep -o '"description"[: ]*"[^"]*"' | head -1 | sed 's/"description"[: ]*"//' | sed 's/"$//')
     STARS=$(echo "$REPO_DATA" | grep -o '"stargazers_count"[: ]*[0-9]*' | head -1 | grep -o '[0-9]*$')
     URL="https://github.com/$full_name"
-    
+
     # Fetch package.yaml to get version and tags
     PACKAGE_YAML_URL="https://raw.githubusercontent.com/$full_name/main/package.yaml"
-    PACKAGE_YAML=$(curl -s "$PACKAGE_YAML_URL" 2>/dev/null)
-    
+    PACKAGE_YAML=$(curl -s "$PACKAGE_YAML_URL" 2>/dev/null || true)
+
     if [ -n "$PACKAGE_YAML" ]; then
         VERSION=$(echo "$PACKAGE_YAML" | awk '/^version:/ {print $2; exit}')
         PACKAGE_NAME=$(echo "$PACKAGE_YAML" | awk '/^name:/ {print $2; exit}')
@@ -136,7 +138,7 @@ echo "$RESPONSE" | grep -o '"full_name": "[^"]*"' | cut -d'"' -f4 | while read -
         PACKAGE_NAME=$(echo "$full_name" | cut -d'/' -f2)
         TAGS=""
     fi
-    
+
     # Display result
     echo "${GREEN}$REPO_COUNT. $PACKAGE_NAME${NC} (${BLUE}$VERSION${NC}) ⭐ $STARS"
     echo "   $URL"
