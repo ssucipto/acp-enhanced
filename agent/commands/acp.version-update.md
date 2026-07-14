@@ -3,9 +3,9 @@
 > **🤖 Agent Directive**: If you are reading this file, the command `/acp-version-update` has been invoked. Follow the steps below to execute this command.
 
 **Namespace**: acp  
-**Version**: 1.1.0  
+**Version**: 1.2.0  
 **Created**: 2026-02-16  
-**Last Updated**: 2026-06-04  
+**Last Updated**: 2026-07-15  
 **Status**: Active  
 **Scripts**: acp.version-update.sh, acp.common.sh  
 
@@ -23,52 +23,38 @@
 |------|-------------|
 | `--diff` | Show what files would change without applying any updates |
 | `--preserve-project-core` | Skip overwriting project-specific core files (identity.yml, domain.yml, taxonomy.yml) |
-| `--force` | Skip all confirmation prompts; overwrite everything without asking |
+| `--yes` / `-y` | Auto-confirm prompts (CI / agent runs) |
 
-**Default behavior**: Before overwriting any `agent/core/*.yml` file that differs from the framework template, warn and ask for confirmation.
+**Default behavior (v6.24.0+)**: Tier-aware safe update — customized Tier B files are **preserved**; framework Tier C files refreshed. Requires `AGENTS.md` or `AGENT.md` at project root.
+
+---
+
+## File tier policy (authoritative)
+
+| Tier | Behavior | Examples |
+|------|----------|----------|
+| **A — Never overwrite** | Create-if-absent only | `agent/progress.yaml`, `agent/memory/*`, `agent/routing/tasks/route-*.md`, third-party `agent/commands/{ns}.*.md` (ns ≠ acp, git) |
+| **B — Preserve if customized** | Skip when local ≠ upstream SHA | `agent/core/identity.yml`, `agent/wiki/domain.yml`, `agent/routing/taxonomy.yml`, `agent/skills/local.*.md` |
+| **C — Always refresh** | Framework artifacts | `agent/commands/acp.*.md`, `agent/scripts/*.sh`, `AGENTS.md`, `agent/schemas/*` |
+| **D — Merge only** | acp-core block in manifest | `agent/manifest.yaml` — other packages untouched |
+
+> **Pre-v6.24.0**: Commit before updating. Older scripts blind-overwrote core files.
 
 ---
 
 ## What This Command Does
 
-This command updates your ACP Enhanced installation to the latest version by running the update script. It downloads the latest AGENT.md, template files, command docs, and utility scripts from the ACP Enhanced repository, replacing your current framework versions while **preserving your project-specific files**.
+This command updates your ACP Enhanced installation using **tier-aware** copy logic in `acp.version-update.sh`. Framework files refresh; project-owned configuration is preserved by default.
 
-Use this command when `/acp-version-check-for-updates` reports that updates are available, or when you want to get the latest ACP improvements. The update process is git-friendly and reversible.
+Use when `/acp-version-check-for-updates` reports updates available. Git commit before updating is still recommended.
 
-**⚠️ What gets overwritten (framework files):**
-- `AGENT.md` — the ACP Enhanced protocol document
-- `agent/commands/*.md` — all command docs (including any local customizations!)
-- `agent/scripts/*.sh` — all utility scripts
-- `agent/core/*.yml` — identity, constraints, routing config
-- `agent/skills/*.md` — skill files
-- `agent/wiki/*` — reference docs
-- `agent/routing/taxonomy.yml`, `rules.md`, `config.yml` — routing config
-- `agent/*.template.*` — all template files
-- `.opencode/commands/*.md` — opencode slash commands
+**Removed**: Contradictory overwrite lists — use the tier table above.
 
-**🛡️ What is preserved (your data — NEVER overwritten):**
-- `agent/memory/*` — sessions, lessons, decisions, patterns
-- `agent/routing/tasks/route-*.md` — your task route files
-- `agent/routing/ledger.md` — cost tracking ledger
-- `agent/progress.yaml` — milestone + task progress
-- `agent/manifest.yaml` — package manifest (acp-core version updated, rest untouched)
-- `agent/design/*.md` — your design documents (non-template)
-- `agent/milestones/*.md` — your milestone documents (non-template)
-- `agent/patterns/*.md` — your pattern documents (non-template)
-- `agent/preferences/` — your preference overrides
-- `agent/configurables/` — your configurable definitions
-- `agent/drafts/` — your draft documents
-- `agent/clarifications/` — your clarification documents
-- `agent/artifacts/` — your research artifacts
-- `agent/specs/` — your specs
-- `agent/index/` — your key file index
+---
 
-> **Important**: If you've customized `AGENT.md` or any files in `agent/commands/`, commit your changes before updating so you can recover them via `git diff` / `git checkout`.
->
-> **🔒 Project Core Files (v1.1.0+)**: Before overwriting `agent/core/identity.yml`,
-> `agent/core/domain.yml`, or `agent/core/taxonomy.yml`, the update now warns if these
-> files differ from framework defaults. Use `--diff` to preview changes, or
-> `--preserve-project-core` to skip these files entirely.
+## Legacy note (v1.1.0 doc-only — fixed v6.24.0)
+
+Project core paths: `agent/wiki/domain.yml` (not `agent/core/domain.yml`). `agent/routing/taxonomy.yml` for taxonomy.
 
 ---
 

@@ -372,7 +372,7 @@ priorities:
 repo: github.com/YOUR_USERNAME/YOUR_REPO
 YAML
 
-cat > agent/core/constraints.yml << 'YAML'
+[ -f agent/core/constraints.yml ] || cat > agent/core/constraints.yml << 'YAML'
 # Hard rules — never violate these
 # DO NOT add dynamic content to this file
 # TODO: Add project-specific code rules below
@@ -397,7 +397,7 @@ context_budget:
 #   - require_error_handling: true
 YAML
 
-cat > agent/core/routing.yml << 'YAML'
+[ -f agent/core/routing.yml ] || cat > agent/core/routing.yml << 'YAML'
 # Updated per session by dispatch script or manually
 # DO NOT mix static and dynamic content in the same file
 
@@ -473,7 +473,7 @@ MD
 
 MD
 
-cat > agent/wiki/domain.yml << 'YAML'
+[ -f agent/wiki/domain.yml ] || cat > agent/wiki/domain.yml << 'YAML'
 # Domain Entity Model
 # TODO: Describe the core entities your project works with
 # Run /acp-init to auto-populate from your source code
@@ -483,7 +483,7 @@ operations: []   # Key operations grouped by category
 modules: []      # Main modules or packages
 YAML
 
-cat > agent/wiki/integrations.md << 'MD'
+[ -f agent/wiki/integrations.md ] || cat > agent/wiki/integrations.md << 'MD'
 # Service Integrations — XML-tagged sections, load one section at a time
 # TODO: Replace with your actual external service config. Delete unused sections.
 
@@ -506,7 +506,7 @@ cat > agent/wiki/integrations.md << 'MD'
 </external_apis>
 MD
 
-cat > agent/wiki/architecture.md << 'MD'
+[ -f agent/wiki/architecture.md ] || cat > agent/wiki/architecture.md << 'MD'
 # System Architecture
 # Update monthly or when service boundaries change
 # last_verified: YYYY-MM-DD (update this date when you verify)
@@ -531,7 +531,7 @@ echo -e "${GREEN}✓ Memory and wiki stubs created${NC}"
 # --- 5. Routing Layer ---
 echo -e "${YELLOW}[5/8] Creating routing layer...${NC}"
 
-cat > agent/routing/config.yml << 'YAML'
+[ -f agent/routing/config.yml ] || cat > agent/routing/config.yml << 'YAML'
 version: "1.0"
 default_model: claude-sonnet
 
@@ -576,7 +576,7 @@ complexity_thresholds:
   high:   { max_files: 99, tokens_est: 25000 }
 YAML
 
-cat > agent/routing/taxonomy.yml << 'YAML'
+[ -f agent/routing/taxonomy.yml ] || cat > agent/routing/taxonomy.yml << 'YAML'
 # Project Task Taxonomy
 # Maps task types to executor + required context
 # TODO: Add task types specific to your project's domains
@@ -663,7 +663,7 @@ task_types:
     skill: backend
 YAML
 
-cat > agent/routing/rules.md << 'MD'
+[ -f agent/routing/rules.md ] || cat > agent/routing/rules.md << 'MD'
 # Routing Rules — Human-readable version of taxonomy.yml
 # AI reads this when taxonomy.yml match is ambiguous
 # TODO: Customize these rules for your project's executors and risk levels
