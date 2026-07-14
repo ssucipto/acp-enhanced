@@ -10,11 +10,12 @@ created: 2026-07-15
 started:
 completed:
 route: route-201
+audit_findings: [F-080-05]
 ---
 
 ## Objective
 
-Bootstrap re-run must not destroy customized Tier B files.
+Bootstrap re-run must not destroy customized Tier B files (F-080-05).
 
 ## Steps
 

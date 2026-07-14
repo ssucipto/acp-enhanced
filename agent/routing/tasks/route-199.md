@@ -36,7 +36,10 @@ Replace blind `cp` blocks in `acp.version-update.sh` with tier-aware helpers. Im
 - [ ] Default update preserves customized identity.yml
 - [ ] `--diff` exits without writes
 - [ ] Manifest uses Tier D merge only (fix F-004 class sed issues)
+- [ ] Copy only `acp.*.md` / `git.*.md` commands — preserve third-party namespaces (P-081-01)
+- [ ] Skip `local.*.md` skills on update — match install.sh behavior (P-081-02)
+- [ ] `export TEMP_DIR` before tier helper calls (P-081-08)
 
 ## Addresses
 
-audit-080 F-080-01, F-080-02, F-080-03, F-080-04, F-080-09; route-079 (reopened)
+audit-080 F-080-01, F-080-02, F-080-03, F-080-04, F-080-09; P-081-01, P-081-02, P-081-08; route-079 (reopened)
