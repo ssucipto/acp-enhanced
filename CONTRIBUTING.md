@@ -37,6 +37,15 @@ Every PR must pass these checks:
 CI runs on every push and PR to `develop` and `mainline`. It executes the full E2E suite
 and validation pipeline. A green CI run is required before merging.
 
+## Consumer safety — install and update (v6.24.0+)
+
+When recommending `/acp-version-update` or `acp.install.sh` to downstream projects:
+
+- **v6.24.0+** — safe by default: tier-aware copy preserves customized `identity.yml`, wiki, taxonomy, and third-party command namespaces.
+- **Pre-v6.24.0** — **do not** recommend `/acp-version-update` without a git commit; older scripts blind-overwrote `agent/core/*.yml`.
+- Always suggest `./agent/scripts/acp.version-update.sh --diff` first on production forks.
+- Design reference: `agent/design/safe-install-update-policy.md`
+
 ## Command Document Conventions
 
 Command documents live in `agent/commands/acp.<name>.md`. Every command document must have:
@@ -49,6 +58,18 @@ Command documents live in `agent/commands/acp.<name>.md`. Every command document
 - **`**Namespace**: acp`** — every command must declare its namespace.
 
 See [`agent/skills/commands.md`](agent/skills/commands.md) for the full skill reference.
+
+## Field Feedback Intake
+
+Structured feedback about ACP protocol gaps, command failures, or improvement ideas
+belongs in two places:
+
+- **`agent/proposals/`** — design proposals and RFC-style specs (e.g. cross-agent handoff v1)
+- **`agent/feedback/`** — field feedback captured via `/acp-feedback` (`feedback-NNN-*.md`)
+
+When contributing protocol changes, check both directories for related open items before
+opening a duplicate issue. Reference the originating feedback ID in milestone tasks and
+audit carryovers.
 
 ## Shell Script Conventions
 

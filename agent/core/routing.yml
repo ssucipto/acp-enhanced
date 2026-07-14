@@ -225,8 +225,13 @@ command_suggestions:
 
   acp-handoff:
     - acp-commit: "Commit session before handoff"
-    - acp-report: "Generate handoff report for next developer"
+    - acp-receive: "Incoming agent loads and verifies handoff (M67)"
+    - acp-report: "Generate session summary (distinct from executor handoff)"
     - acp-status: "Include status snapshot in handoff"
+  acp-receive:
+    - acp-proceed: "Start work after receive checklist"
+    - acp-resume: "Resume session with handoff path"
+    - acp-status: "Verify project state matches handoff pin"
 
   acp-install:
     - acp-version-check: "Verify ACP version after install"

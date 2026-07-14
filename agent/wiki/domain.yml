@@ -3,11 +3,11 @@
 # last_verified: 2026-06-15 (acp-sync — README/PRD aligned to v6.12.1)
 
 commands:
-  count: 71  # 71 total: 68 acp.* + 2 git.* + 1 command.template.md (verified 2026-06-15, M57)
+  count: 70  # 70 acp.* commands (M67 +acp.receive); plus 2 git.* + 1 command.template.md
   location: agent/commands/
   naming: "acp.{command-name}.md — dot notation, acp namespace for core; git.{command}.md for git namespace"
   categories:
-    core: [acp.audit, acp.carryover-query, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.integrity, acp.memory-sync, acp.plan, acp.proceed, acp.repair-tools, acp.report, acp.resume, acp.review, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
+    core: [acp.audit, acp.carryover-query, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.integrity, acp.memory-sync, acp.plan, acp.proceed, acp.receive, acp.repair-tools, acp.report, acp.resume, acp.review, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
     artifact: [acp.artifact-glossary, acp.artifact-reference, acp.artifact-research]
     clarification: [acp.clarification-address, acp.clarification-capture, acp.clarification-create]
     design: [acp.command-create, acp.design-create, acp.design-reference, acp.pattern-create]
@@ -33,8 +33,12 @@ commands:
     - command: acp.feedback
       category: core
       purpose: Capture structured developer feedback about ACP system failures, protocol gaps, or improvement suggestions; write to agent/feedback/feedback-NNN.md.
+    - command: acp.handoff
       category: core
-      purpose: Generate a context-aware handoff report for transferring work to an agent in a different context.
+      purpose: Generate context-aware handoff for same-repo executor transfer (plan → implement) or cross-repo problem transfer; v2 dual mode with mandatory git pin in executor mode.
+    - command: acp.receive
+      category: core
+      purpose: Load and verify an incoming handoff — resolve path or --latest, warn on git drift and session gap, print assignment checklist before work begins.
     - command: acp.index
       category: core
       purpose: Manage the key file index — list, add, remove, explore, and show indexed key files.
@@ -44,6 +48,7 @@ commands:
     - command: acp.install
       category: core
       purpose: Install or upgrade ACP Enhanced in the current project directory; copies static ACP files while preserving user state.
+    - command: acp.memory-sync
       category: core
       purpose: Compress old session history into monthly summaries, flag stale patterns, and check wiki files for re-verification — keeps the memory layer lean without losing history.
     - command: acp.plan
@@ -207,7 +212,7 @@ commands:
       purpose: Verify AI-generated code trustworthiness and provenance — detect malicious patterns, hidden Unicode, exfiltration, supply chain risks, and CI injection surfaces across 55 rules and 6 bash scripts.
     - command: acp.review
       category: core
-      purpose: Enforce code quality, security, and consistency standards — 54 rules across OWASP Top 10:2025, TypeScript strictness, API conventions, and mobile MASVS v2.0.
+      purpose: Enforce code quality, security, and consistency standards — 64 rules (54 core + 10 Appendix A) across OWASP Top 10:2025, TypeScript strictness, API conventions, and mobile MASVS v2.0; Phase 1 via acp.review-scan.sh.
     - command: git.commit
       category: git
       purpose: Automate version detection, changelog updates, and git commits with proper semantic versioning.
@@ -216,7 +221,7 @@ commands:
       purpose: Initialize a git repository with an intelligent .gitignore based on detected project type.
 
 scripts:
-  count: 29
+  count: 43
   location: agent/scripts/
   naming: "acp.{feature}.sh"
   key_scripts:
@@ -282,6 +287,10 @@ scripts:
       implements: Pure POSIX shell YAML parser with a lexer, AST builder, and query engine; zero external dependencies, portable across macOS/Linux.
     - script: acp.yaml-validate.sh
       implements: Validates YAML files against ACP schema definitions, reporting typed errors and warnings with pass/fail counts.
+    - script: acp.review-scan.sh
+      implements: Deterministic Phase 1 scanner for /acp-review — EH-02, SC-01, TS-01, SH-01 with --ci and --json modes.
+    - script: acp.manifest-hash.sh
+      implements: Generates and verifies SHA-256 hashes in agent/integrity-manifest.yaml for integrity gateway tamper detection.
 
 schemas:
   count: 5
@@ -314,6 +323,9 @@ test_suites:
     - suite: acp.experimental-features.test.sh
       coverage: Install/update behavior when experimental features flag is present in a package
       test_count: 6
+    - suite: acp.handoff.test.sh
+      coverage: /acp-handoff v2 dual mode — executor + cross-repo branches, §4 template fixture, active_handoff linkage
+      test_count: 20
     - suite: acp.index.test.sh
       coverage: Key-file index schema parsing, package integration, and edge cases
       test_count: 16
@@ -365,15 +377,18 @@ test_suites:
     - suite: acp.projects-sync.test.sh
       coverage: acp.projects-sync command — filesystem scan and registry sync
       test_count: 8
+    - suite: acp.receive.test.sh
+      coverage: /acp-receive incoming protocol — drift fixture behavioral check, resume bridge, active_handoff schema
+      test_count: 24
     - suite: acp.integrity.test.sh
-      coverage: /acp-integrity v1.0 — 6 bash scripts, Unicode/entropy/network/git/dependency/manifest, false-positive baseline
-      test_count: 26
+      coverage: /acp-integrity v1.0 — 6 bash scripts, Unicode/entropy/network/git/dependency/integrity-manifest, false-positive baseline, INT-001/002 remediation
+      test_count: 67
     - suite: acp.recurring-tasks.test.sh
       coverage: M57 recurring tasks scheduler — schema validation, protocol Step 4.5, hooks block, template
       test_count: 16
     - suite: acp.review.test.sh
-      coverage: /acp-review — 77 rules, code quality + security enforcement, structural + behavioral with fixture violations
-      test_count: 49
+      coverage: /acp-review — 64 rules (54 core + 10 Appendix A), code quality + security enforcement, acp.review-scan.sh behavioral fixtures
+      test_count: 54
     - suite: acp.script-command-binding.test.sh
       coverage: Selective script installation based on command dependency declarations
       test_count: 8
@@ -384,8 +399,22 @@ test_suites:
       coverage: contents.files template installation with target paths and variable substitution
       test_count: 15
     - suite: acp.version.test.sh
-      coverage: acp.version-check.sh, acp.version-check-for-updates.sh (--silent), acp.version-update.sh (structure only — no network in CI)
+      coverage: acp.version-check.sh, acp.version-check-for-updates.sh (--silent), acp.version-update.sh (syntax)
       test_count: 13
+    - suite: acp.version-update-preserve.test.sh
+      coverage: acp.version-update.sh tier preserve (offline ACP_UPSTREAM_ROOT), --diff, --preserve-project-core
+      test_count: 12
+    - suite: acp.install-preserve.test.sh
+      coverage: acp.install.sh manifest merge, acp_list_basenames, tier B preserve
+    - suite: acp.bootstrap-preserve.test.sh
+      coverage: acp-bootstrap.sh re-run create-if-absent — Tier B identity/wiki/taxonomy preserved
+    - suite: acp.tier2-workflow.test.sh
+      coverage: M63 tier 2 — package/project/version/preferences command docs + scripts
+    - suite: acp.tier3-memory-knowledge.test.sh
+      coverage: M63 tier 3 — memory/knowledge/workflow command docs + memory paths
+    - suite: acp.command-coverage-parity.test.sh
+      coverage: M63 — command-e2e-coverage.yaml registry completeness (0 untested)
+      test_count: 5
   unit_suites:
     - suite: acp.preferences-preset.test.sh
       coverage: load_preset(), get_preference_with_preset(), list_presets() in acp.preferences.sh

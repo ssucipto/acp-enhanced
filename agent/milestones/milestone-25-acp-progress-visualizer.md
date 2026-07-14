@@ -3,7 +3,7 @@
 **Goal**: Build a standalone TanStack Start web application that renders ACP `progress.yaml` files as an interactive dashboard — table and tree views of milestones/tasks, with search, filtering, and auto-refresh.  
 **Duration**: ~3 weeks (22–32 estimated agent-hours across 8 tasks)  
 **Dependencies**: M24 (AGENT.md Completeness) — completed ✅  
-**Status**: Not Started  
+**Status**: completed  
 **Repository**: `agent-context-protocol-visualizer` (new repo — greenfield)  
 **Design**: [`agent/design/visualizer.requirements.md`](../design/visualizer.requirements.md)  
 

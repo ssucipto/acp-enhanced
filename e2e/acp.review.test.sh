@@ -60,10 +60,12 @@ assert_contains "$(cat "${CMD_FILE}")" "acp-validate" "acp-validate cross-linked
 
 # ── Behavioral Assertions (7) ─────────────────────────────────────────────────
 
-# B1: Command doc has --diff flag documented
-print_test_header "B1 — --diff flag documented"
+# B1: Command doc has --diff and --self flags documented
+print_test_header "B1 — --diff and --self flags documented"
 assert_contains "$(cat "${CMD_FILE}")" "\`--diff\`" "--diff flag in backticks"
 assert_contains "$(cat "${CMD_FILE}")" "git diff --name-only" "git diff reference with --diff"
+assert_contains "$(cat "${CMD_FILE}")" "\`--self\`" "--self flag in backticks"
+assert_contains "$(cat "${CMD_FILE}")" "agent/scripts/" "--self references agent/scripts/"
 
 # B2: Language Scope section present
 print_test_header "B2 — Language Scope section present"
@@ -90,6 +92,7 @@ print_test_header "B6 — Appendix A has 10 self-review rules"
 assert_contains "$(cat "${CMD_FILE}")" "Appendix A" "Appendix A header"
 assert_contains "$(cat "${CMD_FILE}")" "SH-01" "SH-01 — set -euo pipefail"
 assert_contains "$(cat "${CMD_FILE}")" "SH-04" "SH-04 — no trap cleanup EXIT in functions"
+assert_contains "$(cat "${CMD_FILE}")" "ACP-01" "ACP-01 — Agent Directive header (Appendix A)"
 assert_contains "$(cat "${CMD_FILE}")" "SC-15" "SC-15 — lockfile qualifier"
 
 # B7: 54 total rule IDs across all categories (heuristic: count Rule ID patterns)
@@ -124,6 +127,7 @@ async function fetchUser(id: string): Promise<User | null> {
 TSEOF
 
 # Fixture 2: Hardcoded secret (SC-01 CRITICAL violation)
+# Intentional negative-test strings — not real credentials; isolated in mktemp dir (review-001 CR-008).
 cat > "${FIXTURE_DIR}/hardcoded-secret.ts" << 'TSEOF'
 const API_KEY = "sk-proj-abc123def456ghi789jkl";
 const config = {
@@ -139,44 +143,59 @@ function processData(data: any): any {
 }
 TSEOF
 
-print_test_header "B8 — Fixture: EH-02 empty catch rule matches fixture violation"
-# Count lines with 'catch' keyword (the fixture has 2: the catch clause + the comment)
-CATCH_LINES=$(grep -c 'catch' "${FIXTURE_DIR}/empty-catch.ts" || echo "0")
-[ "${CATCH_LINES}" -ge 1 ]
-assert_true "empty-catch.ts has at least 1 catch block" $?
-EH02_RULE="$(grep '| EH-02 |' "${CMD_FILE}" | head -1)"
-assert_contains "${EH02_RULE}" "empty" "EH-02 rule mentions 'empty' catch blocks"
+# Fixture 4: missing pipefail (SH-01 violation)
+cat > "${FIXTURE_DIR}/bad-shell.sh" << 'SHEOF'
+#!/usr/bin/env bash
+echo "no pipefail"
+SHEOF
 
-print_test_header "B9 — Fixture: SC-01 hardcoded secret rule matches fixture violation"
-SC_COUNT=$(grep -cE '(API_KEY|password|secret)' "${FIXTURE_DIR}/hardcoded-secret.ts" || echo "0")
-[ "${SC_COUNT}" -ge 2 ]
-assert_true "Fixture has hardcoded secrets (found ${SC_COUNT})" $?
-SC01_RULE="$(grep '| SC-01 |' "${CMD_FILE}" | head -1)"
-assert_contains "${SC01_RULE}" "hardcoded" "SC-01 rule mentions 'hardcoded'"
-assert_contains "${SC01_RULE}" "CRITICAL" "SC-01 severity is CRITICAL"
+REVIEW_SCAN="${PROJECT_ROOT}/agent/scripts/acp.review-scan.sh"
+assert_file_exists "${REVIEW_SCAN}" "acp.review-scan.sh exists"
+bash -n "${REVIEW_SCAN}" 2>/dev/null
+assert_true "acp.review-scan.sh passes bash -n" $?
 
-print_test_header "B10 — Fixture: TS-01 any-type rule matches fixture violation"
-assert_contains "$(cat "${FIXTURE_DIR}/any-type.ts")" ": any" "any-type.ts has 'any' type annotations"
-# Grep specifically in rule tables (lines starting with | TS-01 |)
-TS01_RULE="$(grep '^| TS-01 |' "${CMD_FILE}" | head -1)"
-assert_contains "${TS01_RULE}" "any" "TS-01 rule in table mentions 'any'"
-assert_contains "${TS01_RULE}" "HIGH" "TS-01 severity is HIGH"
+print_test_header "B8 — review-scan detects EH-02 empty catch in fixture"
+EH_OUT=$(bash "${REVIEW_SCAN}" "${FIXTURE_DIR}/empty-catch.ts" 2>&1 || true)
+assert_contains "${EH_OUT}" "EH-02" "review-scan reports EH-02 on empty catch fixture"
 
-print_test_header "B11 — Command doc has correct YAML output format example"
+print_test_header "B9 — review-scan detects SC-01 hardcoded secret in fixture"
+SC_OUT=$(bash "${REVIEW_SCAN}" "${FIXTURE_DIR}/hardcoded-secret.ts" 2>&1 || true)
+assert_contains "${SC_OUT}" "SC-01" "review-scan reports SC-01 on secret fixture"
+assert_contains "${SC_OUT}" "CRITICAL" "SC-01 severity CRITICAL"
+
+print_test_header "B10 — review-scan detects TS-01 any-type in fixture"
+TS_OUT=$(bash "${REVIEW_SCAN}" "${FIXTURE_DIR}/any-type.ts" 2>&1 || true)
+assert_contains "${TS_OUT}" "TS-01" "review-scan reports TS-01 on any-type fixture"
+
+print_test_header "B11 — review-scan detects SH-01 missing pipefail in fixture"
+SH_OUT=$(bash "${REVIEW_SCAN}" "${FIXTURE_DIR}/bad-shell.sh" 2>&1 || true)
+assert_contains "${SH_OUT}" "SH-01" "review-scan reports SH-01 on bad-shell fixture"
+
+print_test_header "B12 — review-scan --ci exits 1 on fixture violations"
+bash "${REVIEW_SCAN}" --ci "${FIXTURE_DIR}" >/dev/null 2>&1 || CI_EC=$?
+assert_true "review-scan --ci exits non-zero on violations" $([ "${CI_EC:-0}" -ne 0 ] && echo 0 || echo 1)
+
+print_test_header "B13 — review-scan clean on entropy-clean.ts fixture"
+CLEAN_FIXTURE="${PROJECT_ROOT}/agent/benchmarks/fixtures/integrity/entropy-clean.ts"
+CLEAN_OUT=$(bash "${REVIEW_SCAN}" "${CLEAN_FIXTURE}" 2>&1; echo "EXIT:$?")
+assert_contains "${CLEAN_OUT}" "No findings" "review-scan clean fixture silent"
+assert_contains "${CLEAN_OUT}" "EXIT:0" "review-scan clean fixture exits 0"
+
+print_test_header "B14 — Command doc has correct YAML output format example"
 assert_contains "$(cat "${CMD_FILE}")" "review-NNN.md" "Output references review-NNN.md"
 assert_contains "$(cat "${CMD_FILE}")" "findings_total:" "Output format has findings_total"
 assert_contains "$(cat "${CMD_FILE}")" "findings_critical:" "Output format has findings_critical"
 
-print_test_header "B12 — Total rule IDs in command doc (expected ~54+)"
-RULE_COUNT=$(grep -cE '^\| (EH|TS|NC|AP|CH|SC|SH|YM|AP)-\d+' "${CMD_FILE}" || echo "0")
+print_test_header "B15 — Total rule IDs in command doc (64 = 54 core + 10 appendix)"
+RULE_COUNT=$(grep -cE '^\| (EH|TS|NC|AP|CH|SC|SH|YM|ACP)-\d+' "${CMD_FILE}" || echo "0")
 echo "  Rule count: ${RULE_COUNT}"
-[ "${RULE_COUNT}" -ge 50 ]
-assert_true "At least 50+ rule IDs found (actual: ${RULE_COUNT})" $?
+[ "${RULE_COUNT}" -ge 64 ]
+assert_true "At least 64 rule IDs found (actual: ${RULE_COUNT})" $?
 
-print_test_header "B13 — All rule IDs have severity annotations"
-RULES_WITH_SEVERITY=$(grep -cE '^\| (EH|TS|NC|AP|CH|SC|SH|YM|AP)-\d+.*\| (CRITICAL|HIGH|MEDIUM|LOW) \|' "${CMD_FILE}" || echo "0")
+print_test_header "B16 — All rule IDs have severity annotations"
+RULES_WITH_SEVERITY=$(grep -cE '^\| (EH|TS|NC|AP|CH|SC|SH|YM|ACP)-\d+.*\| (CRITICAL|HIGH|MEDIUM|LOW) \|' "${CMD_FILE}" || echo "0")
 echo "  Rules with severity: ${RULES_WITH_SEVERITY}"
-[ "${RULES_WITH_SEVERITY}" -ge 50 ]
-assert_true "All rules have severity (expected >=50, actual: ${RULES_WITH_SEVERITY})" $?
+[ "${RULES_WITH_SEVERITY}" -ge 64 ]
+assert_true "All rules have severity (expected >=64, actual: ${RULES_WITH_SEVERITY})" $?
 
 print_suite_summary "/acp-review — E2E Tests"

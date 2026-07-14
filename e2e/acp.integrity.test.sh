@@ -253,4 +253,15 @@ for s in "${SCRIPTS_M64[@]}"; do
   bash -n "${PROJECT_ROOT}/${s}" 2>/dev/null || assert_true "bash -n ${s}" 1
 done
 
+print_test_header "B23 — integrity-manifest.yaml verifies clean (INT-001 remediation)"
+assert_file_exists "${PROJECT_ROOT}/agent/integrity-manifest.yaml" "integrity-manifest.yaml exists"
+manifest_verify_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.manifest-hash.sh" --verify 2>&1; echo "EXIT:$?")
+assert_contains "${manifest_verify_out}" "No findings" "manifest --verify reports clean"
+assert_contains "${manifest_verify_out}" "EXIT:0" "manifest --verify exits 0"
+
+print_test_header "B24 — git-provenance team_members parse (INT-002 remediation)"
+provenance_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.git-provenance.sh" 2>&1; echo "EXIT:$?")
+assert_not_contains "${provenance_out}" "IG-37" "No false IG-37 author alerts when team_members configured"
+assert_contains "${provenance_out}" "EXIT:0" "git-provenance exits 0"
+
 print_suite_summary
