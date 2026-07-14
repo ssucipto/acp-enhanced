@@ -479,7 +479,7 @@ milestones:
       domain e2e catalog, carryovers verified @079, HIGH-067-001 stale closure.
 
   M68:
-    name: Safe Install & Update Policy (v6.24.0)
+    name: Safe Install & Update Policy (v6.24.1)
     priority: 5
     status: completed
     progress: 100
@@ -491,8 +491,9 @@ milestones:
     file: agent/milestones/milestone-68-safe-install-update-policy.md
     design: agent/design/safe-install-update-policy.md
     notes: |
-      ✅ M68 COMPLETE (v6.24.0). Tier helpers, version-update route-079, install/bootstrap
-      preserve, E2E preserve suites, validate guard, audit-080/081 carryovers closed.
+      ✅ M68 COMPLETE (v6.24.1). Tier helpers, version-update route-079, install/bootstrap
+      preserve, E2E preserve suites (version-update 13, install 5, bootstrap 6), validate
+      guard, audit-080/081/082 carryovers closed. consumer-project safe on v6.24.0+.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4184,6 +4185,18 @@ tasks:
 recent_work:
   - date: 2026-07-15
     description: |
+      ✅ M68 audit-082 closure + housekeeping — validate/sync/update/commit session.
+      v6.24.1 shipped (bootstrap preserve E2E, install AGENTS.md, doc drift fixes).
+      All validate checks green; progress and design docs synced.
+    items:
+      - "✅ /acp-validate — 0 errors (v6.24.1, git tag OK, 70×3 parity)"
+      - "✅ M68 shipped v6.24.0 + audit-082 fixes v6.24.1 (ddbe92c)"
+      - "✅ E2E preserve suites — version-update 13, install 5, bootstrap 6 assertions"
+      - "✅ /acp-sync — design doc + route-204 AC + CHANGELOG assertion counts"
+      - "📋 current_milestone → M63 (test coverage tier 2/3)"
+
+  - date: 2026-07-15
+    description: |
       🔧 Maintenance session — validate/sync/update after develop branch sync.
       Fixed 191 duplicate YAML keys in progress.yaml; milestone status desyncs;
       created missing M27 milestone doc; validator schema mapping fix.
@@ -6465,29 +6478,22 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "/acp-proceed M63 — Test Coverage Sprint (Tier 2 & 3)"
+  - "/acp-proceed M63 — Test Coverage Sprint (Tier 2 & 3) — current milestone"
+  - "Push develop + tags v6.24.0/v6.24.1 to remote (if not pushed)"
+  - "consumer-project: run /acp-version-update on v6.24.1+ and close feedback-007 consumer path"
+  - "Run overdue /acp-review and /acp-integrity weekly scans (last run 2026-06-15)"
   - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md)"
-  - "Run overdue weekly /acp-review and /acp-integrity scans (due 2026-06-22)"
 
 current_blockers: []
 
 notes:
-  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M59–M66 complete; next M63"
-  - 66 milestone entries — M55–M66 shipped (v6.11–v6.21.0); M63 planned (test tier 2/3)
-  - 72 command docs (70 acp.* + 2 git.*); 70 slash-command wrappers (prompts + opencode + cursor parity)
-  - 9 skills (added code-review, code-integrity in M55/M56)
-  - 36 bash scripts (+ integrity scanners in M56)
-  - 42 E2E test files; 361 listed assertions across 34 suites (domain.yml, +handoff/receive M67)
-  - 70+ audit reports in agent/reports/ (audit-001 through audit-070)
-  - M55 COMPLETE — /acp-review (77 rules, 49-assertion E2E)
-  - M56 COMPLETE — /acp-integrity v1.0 (55 rules, 6 bash scripts, 26-assertion E2E)
-  - M57 COMPLETE — recurring tasks scheduler (5 tasks, Step 4.5, pre-commit hooks)
-  - M64/M65 planned — integrity gateway truth/test + tracking reconciliation (audit-070)
-  - 7 feedbacks integrated — 001–007
-  - Cursor IDE parity — .cursor/commands/ auto-generated during install/update/bootstrap
-  - M59 COMPLETE — critical-fix & CI integrity (v6.14.0): dispatch regression, package parity, CI validation, version check
-  - 2026-06-15 /acp-update — progress refreshed; M54 50%; M58 route-155 noted; 1 blocker (M59 critical unshipped)
-  - 2026-06-15 /acp-proceed M59 — shipped v6.14.0; blocker shifted to M64 (ADR-10)
+  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M67/M68 shipped; next M63"
+  - "68 milestone entries — M55–M68 shipped (v6.11–v6.24.1); M63 planned (test tier 2/3)"
+  - "72 command docs (70 acp.* + 2 git.*); 70 slash-command wrappers (prompts + opencode + cursor parity)"
+  - "9 skills; 36+ bash scripts; 56 E2E test files (incl. M68 preserve suites)"
+  - "82+ audit reports (audit-080–082 install/update safety)"
+  - "M68 COMPLETE v6.24.1 — safe install/update tier policy; consumer-project unblocked"
+  - "M67 COMPLETE v6.23.0 — cross-agent handoff + /acp-receive"
 
 # ── Recurring Tasks ──────────────────────────────────────────────
 # Added v6.12.1 (M57). Scheduled periodic reviews surfaced at
@@ -6501,7 +6507,7 @@ recurring_tasks:
     last_run: 2026-06-15
     next_due: 2026-06-22
     last_findings_count: 0
-    status: current
+    status: overdue
     description: "Weekly code quality review with carryover tracking"
 
   - id: weekly-integrity-scan
@@ -6511,7 +6517,7 @@ recurring_tasks:
     last_run: 2026-06-15
     next_due: 2026-06-22
     last_findings_count: 0
-    status: current
+    status: overdue
     description: "Weekly ACP framework integrity scan"
 
   - id: pre-commit-rule-audit
@@ -6531,7 +6537,7 @@ recurring_tasks:
     last_run: 2026-06-08
     next_due: 2026-07-08
     last_findings_count: 0
-    status: current
+    status: overdue
     description: "Monthly dependency and supply chain audit"
 
   - id: quarterly-deep-scan
