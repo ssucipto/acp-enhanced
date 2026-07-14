@@ -2,13 +2,13 @@
 id: task-223
 milestone: M70
 title: "validateCarryoverFreshness guard (F-086-04)"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 4
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15
+completed_date: 2026-07-15
 route: route-212
 audit_findings: [F-086-04]
 depends_on: []

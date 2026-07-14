@@ -2,13 +2,13 @@
 id: task-224
 milestone: M70
 title: "Two-phase review gate policy (F-086-03)"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15
+completed_date: 2026-07-15
 route: route-213
 audit_findings: [F-086-03]
 depends_on: []
