@@ -2,6 +2,110 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
+  tasks: [review-001, integrity-001, audit-085]
+  done:
+    - v6-25-2-review-integrity-audit-remediation
+    - acp-review-scan-phase1-scanner
+    - integrity-manifest-split-int-001
+    - vitest-cve-fix-review-001
+  deferred:
+    - audit-085-remaining-carryovers → acp-audit
+    - consumer-project-feedback-007-consumer-path → acp-version-update
+  key_fact: "integrity-manifest.yaml is separate from package manifest.yaml; acp.manifest-hash.sh --generate requires --output to persist hashes."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
+  tasks: [route-207, task-217, audit-084]
+  done:
+    - m63-amendment-deployed-v6-25-1
+    - git-tag-v6-25-1-pushed
+    - audit-084-carryovers-closed
+  deferred:
+    - consumer-project-feedback-007-consumer-path → acp-version-update
+  key_fact: "M63 amendment complete — v6.25.1 tagged and pushed; audit-084 deployment blockers closed."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
+  tasks: [route-206, audit-083]
+  done:
+    - audit-083-m63-gaps-closed-v6-25-1
+    - tier3-e2e-dynamic-loop-58-commands
+    - validate-command-e2e-coverage-vitest
+    - milestone-task-tracking-reconciled
+  deferred:
+    - consumer-project-feedback-007-consumer-path → acp-version-update
+  key_fact: "audit-083 closed SC-M63-01: tier3 E2E must loop all tier-3 docs — registry alone is insufficient for behavioral coverage."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
+  tasks: [route-206]
+  done:
+    - m63-test-coverage-tier-2-3-shipped-v6-25-0
+    - command-e2e-coverage-registry-70-commands
+    - validate-command-e2e-coverage-ci-guard
+    - tier2-tier3-parity-e2e-suites
+  deferred:
+    - consumer-project-feedback-007-consumer-path → acp-version-update
+  key_fact: "M63 ships validateCommandE2eCoverage() — 0 untested commands via registry; tier2/tier3 behavioral E2E complete CRIT-065-003 tier 2/3."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
+  tasks: [housekeeping]
+  done:
+    - acp-validate-sync-update-commit-housekeeping
+    - progress-yaml-next-steps-m68-notes-refreshed
+    - recurring-tasks-marked-overdue-weekly-monthly
+  deferred: []
+  key_fact: "v6.24.1 clean — validate 0 errors; weekly/monthly integrity scans overdue since June."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
+  tasks: [route-198, route-199, route-200, route-201, route-202, route-203, route-204, route-205]
+  done:
+    - m68-safe-install-update-policy-shipped-v6-24-0
+    - tier-helpers-version-update-install-bootstrap-e2e-validate
+    - audit-082-post-ship-gaps-doc-drift-install-agents-md-fixed
+  deferred: []
+  key_fact: "M68 audit-082 fully closed at v6.24.1 — bootstrap preserve E2E, carryovers re-verified @082, doc/install gaps fixed."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
+  tasks: [route-190, route-191, route-192, route-193, route-194, route-195, route-196, route-197]
+  done:
+    - m67-cross-agent-handoff-protocol-shipped-v6-23-0
+    - acp-handoff-v2-dual-mode-executor-cross-repo
+    - acp-receive-command-wrappers-e2e-fixtures
+    - active-handoff-schema-validate-ancestry-check
+    - audit-079-housekeeping-milestone-gates-task-stamps-carryovers
+  deferred:
+    - consumer-project-feedback-007-final-closure → consumer-acp-version-update
+  key_fact: "M67 shipped v6.23.0 with handoff v2 dual mode + /acp-receive + resume bridge; audit-079 found tracking/discoverability shortcuts (unchecked gates, planned tasks, stale README) — all upstream items closed; consumer-project must run /acp-version-update to retire local wiki workaround."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
+  tasks: [validate-sync-update]
+  done:
+    - develop-branch-synced-47-commits-fast-forward
+    - progress-yaml-191-duplicate-keys-removed-yaml-parse-restored
+    - acp-validate-zero-errors-milestone-status-sync-m27-doc-created
+    - acp-validate-ts-schema-mapping-and-array-type-fix
+    - git-tag-v6-21-0-created-progress-tracking-refreshed-m63
+    - readme-badges-updated-6-21-0-66-milestones
+  deferred:
+    - m63-test-coverage-tier-2-3 → route-tbd
+    - github-branch-protection → manual-enable
+  key_fact: "progress.yaml had 191 duplicate YAML keys (mostly duplicate completed_date in tasks section) causing js-yaml parse failure — validate used line-based fallback and missed deeper schema errors. After dedup, full YAML parse restored and cross-file validators became reliable again."
+
 # === Compacted Block: 2026-06-15 (10 sessions) ===
 - type: weekly-summary
   week: 2026-06-15
@@ -72,7 +176,7 @@
 
     Jun 1–8: M49–M57 — Command ecosystem spine. Dogfooding resolution (Windows + Cursor),
     install fixes, design-spec command (arc42/C4/IEEE/ISO), stakeholder report command,
-    bootstrap install fix. M55: /acp-review shipped (77 rules). M56: /acp-integrity v1.0
+    bootstrap install fix. M55: /acp-review shipped (64 rules). M56: /acp-integrity v1.0
     shipped (55 rules, 6 bash scripts, LLM/Script Boundary Rule). M57: Recurring tasks
     scheduler shipped (5 tasks, Step 4.5 protocol, pre-commit hooks).
 

@@ -1,8 +1,8 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.20.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.21.1-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
-[![Milestones](https://img.shields.io/badge/milestones-57%20shipped%20%7C%20M58%20active-blue)](https://github.com/ssucipto/acp-enhanced)
+[![Milestones](https://img.shields.io/badge/milestones-66%20shipped%20%7C%20M63%20next-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-69%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Visualizer](https://img.shields.io/badge/visualizer-v1.5.0-6e47ff)](https://github.com/ssucipto/ACPEnhanced-Visual)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -72,8 +72,10 @@ After it completes, **customize** `agent/core/identity.yml` for your project (na
 
 ### Update when this fork changes
 
-> **⚠️ The update overwrites framework files.** Commit your changes first (`git commit`).
-> See `agent/commands/acp.version-update.md` for the full list of preserved vs overwritten files.
+> **⚠️ Commit before updating** (`git commit`). On **v6.24.0+**, `/acp-version-update` uses tier-aware
+> copy logic — customized `identity.yml`, wiki, and taxonomy are **preserved by default**.
+> Pre-v6.24.0 scripts blind-overwrote `agent/core/*.yml`; do not update without a commit on older versions.
+> See `agent/commands/acp.version-update.md` for the authoritative tier table.
 
 ```
 /acp-version-update
@@ -81,9 +83,12 @@ After it completes, **customize** `agent/core/identity.yml` for your project (na
 Or run the update script directly:
 ```bash
 ./agent/scripts/acp.version-update.sh
+./agent/scripts/acp.version-update.sh --diff    # preview only
 ```
 
-All framework files (AGENT.md, agent/commands/, agent/scripts/, agent/core/, etc.) are replaced with the latest versions. Your data files (agent/memory/, agent/routing/tasks/, agent/design/, etc.) are preserved.
+**v6.24.0+ behavior**: Tier C framework files refresh (`AGENTS.md`, `agent/commands/acp.*`, scripts).
+Tier B project config is preserved when customized. Tier A data (`agent/memory/`, `agent/progress.yaml`,
+`agent/routing/tasks/`, third-party commands) is never overwritten.
 
 ---
 
@@ -113,24 +118,25 @@ This catches the most common AI coding mistake: letting the agent commit directl
 
 ## Slash Commands
 
-ACP Enhanced registers **69 slash commands** across two tools — available after bootstrapping:
+ACP Enhanced registers **70 slash commands** across two tools — available after bootstrapping:
 
 | Tool | How to invoke | Source files |
 |---|---|---|
 | VS Code Copilot | `/acp-*` — autocomplete in Copilot Chat | `.github/prompts/*.prompt.md` |
 | opencode | `/acp-*` — autocomplete in opencode TUI | `.opencode/commands/*.md` |
-| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (69 commands) |
+| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (70 commands) |
 
 ```text
 /acp-init          /acp-proceed       /acp-plan          /acp-status
-/acp-resume        /acp-report        /acp-audit         /acp-handoff
+/acp-resume        /acp-report        /acp-audit         /acp-handoff       /acp-receive
 /acp-package-*     /acp-project-*     /acp-preferences-* /acp-clarification-*
 /acp-design-*      /acp-artifact-*    /git-commit        /git-init
 ```
 
 > VS Code Copilot requires agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.  
 > opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.  
-> **Note**: All 69 commands are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.
+> **Note**: All 70 commands are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.  
+> **Cross-agent handoff**: See [`agent/wiki/cross-agent-handoff.md`](agent/wiki/cross-agent-handoff.md) for executor vs cross-repo modes, `/acp-receive`, and git drift checks.
 
 ---
 
@@ -246,8 +252,8 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Memory | None — every session starts cold | sessions.md + lessons.md + ADRs + patterns |
 | Task routing | None | Taxonomy-based routing to skill files |
 | Mistake learning | None | Correction log appended per task type |
-| VS Code commands | Manual file reference | 69 slash commands with autocomplete |
-| opencode support | None | 69 slash commands in `.opencode/commands/` |
+| VS Code commands | Manual file reference | 70 slash commands with autocomplete |
+| opencode support | None | 70 slash commands in `.opencode/commands/` |
 | Preferences | None | 4-level hierarchy (project > workspace > user > default) |
 | Project registry | None | Global `~/.acp/projects.yaml` for multi-project tracking |
 | Cost tracking | None | Per-task token + USD ledger via dispatch |
@@ -310,8 +316,9 @@ AI code integrity and malicious-pattern detection with deterministic scanners.
 #### M55 — /acp-review (v6.11.0, June 2026)
 Standards-based code quality and security review command.
 
-- **77 rules** across TypeScript, OWASP Top 10:2025, OWASP MASVS v2.0, API conventions, and ACP self-review (SH/YM/AP)
-- **`--diff`**, **`--carryover`**, **`--ci`** modes for targeted review and CI integration
+- **64 rules** (54 core + 10 Appendix A) across TypeScript, OWASP Top 10:2025, OWASP MASVS v2.0, API conventions, and ACP self-review (SH/YM/ACP)
+- **`--self`**, **`--diff`**, **`--carryover`**, **`--ci`** modes for ACP Enhanced self-review and CI integration
+- **`acp.review-scan.sh`** — deterministic Phase 1 checks (EH-02, SC-01, TS-01, SH-01)
 - E2E test: `e2e/acp.review.test.sh` (49 assertions)
 
 #### M52–M54 — Reporting, Cursor Parity, CI/CD (v6.10.0–v6.10.1)
@@ -844,7 +851,7 @@ This will:
 - **`/acp-sync`** - Sync documentation with code
 - **`/acp-validate`** - Validate ACP structure
 - **`/acp-audit`** - Audit task completion status, bugs, and improvement opportunities
-- **`/acp-review`** - Standards-based code quality and security review (77 rules)
+- **`/acp-review`** - Standards-based code quality and security review (64 rules)
 - **`/acp-integrity`** - AI code integrity scan — Unicode, entropy, supply chain (55 rules v1.0)
 - **`/acp-report`** - Generate session report
 - **`/acp-index`** - Manage the key file index (list, add, remove, explore, show)
@@ -1074,9 +1081,9 @@ project-root/
 ├── CLAUDE.md                       # Symlink → AGENT.md (Claude Code)
 ├── .github/
 │   ├── copilot-instructions.md     # Symlink → AGENT.md (GitHub Copilot)
-│   └── prompts/                    # 69 slash command prompts (*.prompt.md)
-├── .opencode/commands/             # 69 slash commands for opencode TUI
-├── .cursor/commands/               # 69 slash commands for Cursor Agent (auto-generated)
+│   └── prompts/                    # 70 slash command prompts (*.prompt.md)
+├── .opencode/commands/             # 70 slash commands for opencode TUI
+├── .cursor/commands/               # 70 slash commands for Cursor Agent (auto-generated)
 ├── agent/                          # Agent context directory
 │   ├── core/                       # Layer 1: always loaded, cached
 │   │   ├── identity.yml            # Project identity + stack
@@ -1107,7 +1114,7 @@ project-root/
 │   │   ├── rules.md                # Routing rules + conventions
 │   │   ├── ledger.md               # Cost + token tracking
 │   │   └── tasks/                  # Generated route files
-│   ├── commands/                   # 71 command docs (69 acp.* + 2 git.*)
+│   ├── commands/                   # 72 command docs (70 acp.* + 2 git.*)
 │   ├── scripts/                    # 36 shell scripts + TypeScript tools
 │   ├── design/                     # Design documents
 │   ├── milestones/                 # Milestone definitions

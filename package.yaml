@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.20.2
+version: 6.21.1
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
@@ -179,7 +179,8 @@ contents:
     
     - name: acp.review.md
       description: Standards enforcement for code quality, security, and consistency — OWASP, TypeScript, API convention rules
-      scripts: []
+      scripts:
+        - acp.review-scan.sh
     
     - name: acp.integrity.md
       description: AI code integrity & trustworthiness — hidden Unicode, exfiltration, supply chain, CI injection detection
@@ -356,7 +357,11 @@ contents:
         - acp.yaml-parser.sh
 
     - name: acp.handoff.md
-      description: Generate cross-context task handoff reports
+      description: Generate cross-context task handoff reports (v2 dual mode — executor + cross-repo)
+      scripts: []
+
+    - name: acp.receive.md
+      description: Load and verify incoming handoff before starting work (git drift, session gap, assignment checklist)
       scripts: []
 
     - name: acp.clarification-address.md
