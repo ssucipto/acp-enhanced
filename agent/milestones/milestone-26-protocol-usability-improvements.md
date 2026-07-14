@@ -3,7 +3,7 @@
 **Goal**: Reduce friction and confusion for new and existing ACP users by fixing systemic protocol gaps identified in audit-002 and the critical review of ACP Enhanced.  
 **Duration**: ~2 weeks (11–17 total agent-hours across 6 tasks)  
 **Dependencies**: M25 (ACP Progress Visualizer) — may run concurrently; no hard dependency  
-**Status**: Not Started
+**Status**: completed
 
 ---
 

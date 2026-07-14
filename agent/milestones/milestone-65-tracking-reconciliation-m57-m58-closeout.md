@@ -1,6 +1,6 @@
 # Milestone 65: Tracking Reconciliation & M57/M58 Closeout
 
-**Target version**: 6.20.2
+**Shipped version**: 6.20.2  
 **Status**: completed
 **Priority**: HIGH (single-source-of-truth integrity + unblocks M58 v2.0)
 **Estimated effort**: ~12h (5 routes)
