@@ -255,10 +255,9 @@ describe("validateInstallUpdateSafety", () => {
     expect(errors.filter((e) => e.severity === "error")).toHaveLength(0);
   });
 
-  it("flags blind cp agent/core/*.yml pattern", () => {
-    const bad = 'cp "$TEMP_DIR/agent/core/"*.yml agent/core/';
+  it("does not false-positive on M68 tier-aware scripts", () => {
     const errors = validateInstallUpdateSafety();
     const hasBlindCp = errors.some((e) => e.message.includes("agent/core/*.yml"));
-    expect(hasBlindCp || !bad).toBe(true);
+    expect(hasBlindCp).toBe(false);
   });
 });
