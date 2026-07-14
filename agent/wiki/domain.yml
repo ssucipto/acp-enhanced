@@ -319,6 +319,9 @@ test_suites:
     - suite: acp.experimental-features.test.sh
       coverage: Install/update behavior when experimental features flag is present in a package
       test_count: 6
+    - suite: acp.handoff.test.sh
+      coverage: /acp-handoff v2 dual mode — executor + cross-repo branches, §4 template fixture, active_handoff linkage
+      test_count: 20
     - suite: acp.index.test.sh
       coverage: Key-file index schema parsing, package integration, and edge cases
       test_count: 16
@@ -370,6 +373,9 @@ test_suites:
     - suite: acp.projects-sync.test.sh
       coverage: acp.projects-sync command — filesystem scan and registry sync
       test_count: 8
+    - suite: acp.receive.test.sh
+      coverage: /acp-receive incoming protocol — drift fixture behavioral check, resume bridge, active_handoff schema
+      test_count: 24
     - suite: acp.integrity.test.sh
       coverage: /acp-integrity v1.0 — 6 bash scripts, Unicode/entropy/network/git/dependency/manifest, false-positive baseline
       test_count: 26

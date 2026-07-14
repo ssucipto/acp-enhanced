@@ -643,9 +643,9 @@ carryovers:
     file: package.yaml
     finding: "13 command docs absent from package.yaml — /acp-package-install would ship a broken framework missing acp.commit, acp.decide, acp.dispatch, acp.route, acp.task, acp.feedback, acp.visualize, acp.wiki-update, acp.carryover-query, acp.cost-report, acp.memory-sync, acp.pattern-sync, acp.session-sync"
     fix_target: "Add the 13 commands to package.yaml; add CI guard asserting package.yaml command count == command file count"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
     escalated_to: null
 
   - audit_id: 67
@@ -1262,6 +1262,7 @@ carryovers:
 
   # ── AUDIT-077 FINDINGS — CROSS-AGENT HANDOFF (M67) ───────────────────────────
   # Field evidence: FIFOZ audit-245, feedback-007. Planned: M67 routes 190–197.
+  # Post-ship verification: audit-079 (2026-07-15)
 
   - audit_id: 77
     finding_id: H1
@@ -1272,7 +1273,7 @@ carryovers:
     fix_target: "acp.handoff.md v2 --mode executor with mandatory §4 template (route-190)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-190
 
   - audit_id: 77
@@ -1283,7 +1284,7 @@ carryovers:
     fix_target: "Create acp.receive.md + wrappers (route-191)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-191
 
   - audit_id: 77
@@ -1294,7 +1295,7 @@ carryovers:
     fix_target: "Outgoing ritual in handoff v2 command text (route-190)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-190
 
   - audit_id: 77
@@ -1305,7 +1306,7 @@ carryovers:
     fix_target: "/acp-receive step 3 git drift warning (route-191, route-195 E2E)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-191
 
   - audit_id: 77
@@ -1316,7 +1317,7 @@ carryovers:
     fix_target: "Standardize handoff-{to}-{scope}-{date}.md in command (route-190)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-190
 
   - audit_id: 77
@@ -1327,7 +1328,7 @@ carryovers:
     fix_target: "Template § Return handoff + wiki (route-190, route-194)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-194
 
   - audit_id: 77
@@ -1338,7 +1339,7 @@ carryovers:
     fix_target: "Mode split: executor assumes same repo; cross-repo retains v1 rule (route-190)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-190
 
   - audit_id: 77
@@ -1349,7 +1350,7 @@ carryovers:
     fix_target: "active_handoff field + wiki (route-193)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-193
 
   - audit_id: 77
@@ -1360,7 +1361,7 @@ carryovers:
     fix_target: "Schema extension + validate (route-193)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-193
 
   - audit_id: 77
@@ -1371,7 +1372,7 @@ carryovers:
     fix_target: "--mode cross-repo + optional target-repo frontmatter P2 (route-194)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-194
 
   - audit_id: 77
@@ -1382,7 +1383,7 @@ carryovers:
     fix_target: "Optional handoff path → receive protocol (route-192)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-192
 
   - audit_id: 77
@@ -1393,7 +1394,7 @@ carryovers:
     fix_target: "CONTRIBUTING.md intake section (route-196)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-196
 
   - audit_id: 77
@@ -1404,7 +1405,7 @@ carryovers:
     fix_target: "Finalize wiki on M67 ship (route-193)"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-193
 
   # ── AUDIT-078 FINDINGS — M67 PRE-IMPL (2026-07-15) ───────────────────────────
@@ -1418,5 +1419,107 @@ carryovers:
     fix_target: "route-196: split L33-37 into proper acp.feedback and acp.handoff entries; add acp.receive entry; update count to 70 acp commands"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: "078"
+    verified_in_audit: "079"
     escalated_to: M67 route-196
+
+  # ── AUDIT-079 FINDINGS — M67 POST-SHIP GAPS (2026-07-15) ─────────────────────
+  # Housekeeping closed in same session (audit-079 follow-up).
+
+  - audit_id: 79
+    finding_id: F-079-01
+    severity: medium
+    file: agent/milestones/milestone-67-cross-agent-handoff-protocol.md
+    finding: "Milestone status completed but verification gates L88-108 all unchecked"
+    fix_target: "Mark verification gates pass; align milestone doc with shipped state"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-02
+    severity: medium
+    file: agent/tasks/milestone-67-cross-agent-handoff-protocol/
+    finding: "task-195..202 still status planned while routes 190-197 completed"
+    fix_target: "Stamp all 8 task docs completed 2026-07-15"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-03
+    severity: medium
+    file: agent/memory/sessions.md
+    finding: "No sessions.md entry for M67 v6.23.0 ship"
+    fix_target: "Write session entry via /acp-commit"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-04
+    severity: medium
+    file: agent/feedback/feedback-007-cross-agent-handoff-protocol.md
+    finding: "feedback-007 section 6 acceptance criteria still unchecked"
+    fix_target: "Check acceptance boxes; document FIFOZ acp-version-update path"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-05
+    severity: low
+    file: README.md
+    finding: "README omits /acp-receive and cross-agent-handoff wiki"
+    fix_target: "Add receive to workflow list; link cross-agent-handoff.md"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-06
+    severity: low
+    file: .github/prompts/acp-handoff.prompt.md
+    finding: "Handoff wrapper description still v1 cross-context not v2 dual mode"
+    fix_target: "Update handoff wrapper descriptions on all 3 surfaces"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-07
+    severity: low
+    file: agent/wiki/domain.yml
+    finding: "e2e_suites catalog missing acp.handoff and acp.receive tests"
+    fix_target: "Add both suites to domain.yml test_suites"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-08
+    severity: low
+    file: agent/progress.yaml
+    finding: "notes still claim 69 commands after M67"
+    fix_target: "Update progress.yaml notes to 70 commands"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
+
+  - audit_id: 79
+    finding_id: F-079-11
+    severity: low
+    file: package.yaml
+    finding: "HIGH-067-001 still pending but 0/70 acp commands missing from package.yaml"
+    fix_target: "Re-verify HIGH-067-001; mark fixed if confirmed"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: "079"
+    escalated_to: null
