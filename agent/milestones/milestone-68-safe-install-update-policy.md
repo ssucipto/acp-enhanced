@@ -1,7 +1,7 @@
 # Milestone 68 — Safe Install & Update Policy (v6.24.0)
 
 **Milestone ID**: M68  
-**Status**: planned  
+**Status**: completed  
 **Target version**: v6.24.0  
 **Priority**: P0 (blocks FIFOZ `/acp-version-update` after M67)  
 **Estimated effort**: ~20–24h (8 routes, 8 tasks)  
@@ -159,4 +159,4 @@ After v6.24.0: FIFOZ runs `/acp-version-update` (default safe mode), verifies `i
 
 ---
 
-**Status**: planned — awaiting `/acp-proceed --complete M68`
+**Status**: completed — shipped v6.24.0 (2026-07-15)

@@ -395,8 +395,14 @@ test_suites:
       coverage: contents.files template installation with target paths and variable substitution
       test_count: 15
     - suite: acp.version.test.sh
-      coverage: acp.version-check.sh, acp.version-check-for-updates.sh (--silent), acp.version-update.sh (structure only — no network in CI)
+      coverage: acp.version-check.sh, acp.version-check-for-updates.sh (--silent), acp.version-update.sh (syntax)
       test_count: 13
+    - suite: acp.version-update-preserve.test.sh
+      coverage: acp.version-update.sh tier preserve (offline ACP_UPSTREAM_ROOT), --diff, --preserve-project-core
+      test_count: 12
+    - suite: acp.install-preserve.test.sh
+      coverage: acp.install.sh manifest merge, acp_list_basenames, tier B preserve
+      test_count: 5
   unit_suites:
     - suite: acp.preferences-preset.test.sh
       coverage: load_preset(), get_preference_with_preset(), list_presets() in acp.preferences.sh
