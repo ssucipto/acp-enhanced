@@ -1,7 +1,7 @@
 # Milestone 63: Test Coverage Sprint — Tier 2 & 3
 
-**Planned version**: 6.22.0  
-**Status**: planned  
+**Planned version**: 6.25.0  
+**Status**: completed  
 **Estimated effort**: ~12h (1 route, may split during planning)  
 **Source**: audit-065 (CRIT-065-003), audit-067 (Part D, M63)
 
@@ -13,9 +13,9 @@ Complete the E2E coverage effort begun in M60. Cover the remaining untested comm
 
 | Route | Title | Addresses | Est. | Status |
 |-------|-------|-----------|------|--------|
-| route-178 | E2E tests for remaining untested commands (Tier 2: package/project; Tier 3: memory/knowledge) | C2 (CRIT-065-003 tier 2/3) | 12h | created |
+| route-206 | E2E tier 2/3 + command↔test parity CI guard | C2 (CRIT-065-003 tier 2/3) | 12h | completed |
 
-> Note: route-178 will be split into per-tier or per-command routes during `/acp-proceed` if the scope proves too large for a single route.
+> Note: route-178 in routing/tasks is M62 validators (name collision). M63 coverage shipped as route-206.
 
 ## Tier 2 — Package/Project Workflow
 
@@ -27,9 +27,9 @@ Complete the E2E coverage effort begun in M60. Cover the remaining untested comm
 
 ## Industry-Standard Verification (double-verify gate)
 
-- ⏳ Every command in the repo has at least one E2E test file (0 untested commands at milestone exit)
-- ⏳ Coverage tracked: add a CI check asserting each `agent/commands/acp.*.md` has a matching `e2e/acp.*.test.sh`
-- ⏳ Negative assertions required (not happy-path only)
+- ✅ Every command in the repo has at least one E2E test file (0 untested — registry + validate)
+- ✅ Coverage tracked: `validateCommandE2eCoverage()` in acp-validate.ts
+- ✅ Negative assertions in tier2/tier3 suites + existing per-command E2E
 
 ## Success Criteria
 
