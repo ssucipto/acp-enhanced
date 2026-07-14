@@ -1704,3 +1704,61 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
+
+  # ── AUDIT-083 FINDINGS — M63 POST-SHIP (2026-07-15) ─────────────────────────
+
+  - audit_id: 83
+    finding_id: F-083-01
+    severity: high
+    file: e2e/acp.tier3-memory-knowledge.test.sh
+    finding: "Tier-3 E2E asserted only 26 of 58 commands while registry claimed full coverage"
+    description: "Static hand-picked command list gave false confidence; registry mapped all tier-3 slugs to one suite."
+    fix_target: "Dynamic loop over all non-tier-2 acp.*.md docs; meta-assertion TIER3_COUNT=58"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 083
+    escalated_to: null
+
+  - audit_id: 83
+    finding_id: F-083-02
+    severity: medium
+    file: agent/milestones/milestone-63-test-coverage-tier2-3.md
+    finding: "Success criteria referenced CHANGELOG v6.18.0 instead of v6.25.0"
+    fix_target: "Update success criteria and add verification gates"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 083
+    escalated_to: null
+
+  - audit_id: 83
+    finding_id: F-083-03
+    severity: medium
+    file: agent/tasks/milestone-63-test-coverage-tier2-3/
+    finding: "No M63 task tracking doc while route-206 marked complete"
+    fix_target: "Create task-211-route-206-coverage.md"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 083
+    escalated_to: null
+
+  - audit_id: 83
+    finding_id: F-083-04
+    severity: medium
+    file: scripts/acp-validate.test.ts
+    finding: "No vitest unit test for validateCommandE2eCoverage"
+    fix_target: "Add options param (repoRoot/commandsDir) + fixture + 3 vitest cases"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 083
+    escalated_to: null
+
+  - audit_id: 83
+    finding_id: F-083-06
+    severity: low
+    file: e2e/acp.tier2-workflow.test.sh
+    finding: "Agent Directive check case-sensitive — acp.proceed uses CRITICAL AGENT DIRECTIVE"
+    fix_target: "Use grep -qi for case-insensitive directive check in tier2/tier3 suites"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: 083
+    escalated_to: null

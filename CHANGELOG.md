@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.25.1] — 2026-07-15
+
+### Fixed
+- **audit-083** — tier3 E2E now exercises all 58 tier-3 command docs (was static 26-command subset);
+  case-insensitive Agent Directive checks; `validateCommandE2eCoverage()` accepts `repoRoot`/`commandsDir`
+  options for vitest; milestone/task tracking reconciled.
+
+### Added
+- **Vitest** — `validateCommandE2eCoverage` unit tests + gap fixture YAML.
+- **Task doc** — `task-211` for route-206 M63 coverage.
+
+---
+
 ## [6.25.0] — 2026-07-15
 
 ### Added

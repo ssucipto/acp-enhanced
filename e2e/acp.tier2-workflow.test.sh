@@ -36,7 +36,8 @@ assert_tier2_command_doc() {
   content="$(cat "${file}")"
   assert_contains "${content}" "## Steps" "${cmd} has Steps section"
   assert_contains "${content}" "## Verification" "${cmd} has Verification section"
-  assert_contains "${content}" "Agent Directive" "${cmd} has Agent Directive"
+  echo "${content}" | grep -qi "agent directive"
+  assert_true "${cmd} has Agent Directive" $?
 }
 
 print_suite_header "Tier 2 Workflow — E2E Tests (M63)"
