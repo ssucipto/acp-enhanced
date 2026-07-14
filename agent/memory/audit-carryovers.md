@@ -1523,3 +1523,116 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: null
+
+  # ── AUDIT-080 FINDINGS — VERSION-UPDATE OVERWRITE SAFETY (2026-07-15) ────────
+  # Field report: consumer-project /acp-version-update overwrote identity.yml. route-079 doc-only.
+
+  - audit_id: 80
+    finding_id: F-080-01
+    severity: critical
+    file: agent/scripts/acp.version-update.sh
+    finding: "route-079 guards (--diff, --preserve-project-core, --force) documented and marked complete but script has zero argument parsing"
+    fix_target: "Implement route-079 in acp.version-update.sh; reopen route-079 until E2E passes"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-02
+    severity: critical
+    file: agent/scripts/acp.version-update.sh
+    finding: "cp agent/core/*.yml blindly overwrites identity.yml on every version-update"
+    fix_target: "Tier B policy: never overwrite identity.yml without --force; hash-diff vs upstream default"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-03
+    severity: high
+    file: agent/scripts/acp.version-update.sh
+    finding: "agent/wiki/domain.yml and all wiki markdown overwritten on version-update"
+    fix_target: "Add wiki paths to preserve-project-core tier; skip if modified"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-04
+    severity: high
+    file: agent/scripts/acp.version-update.sh
+    finding: "routing taxonomy.yml, rules.md, config.yml overwritten on version-update"
+    fix_target: "Tier B preserve for consumer-customized routing config"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-05
+    severity: high
+    file: scripts/acp-bootstrap.sh
+    finding: "bootstrap re-run overwrites constraints.yml, routing.yml, wiki, taxonomy (only identity is create-if-absent)"
+    fix_target: "create-if-absent for all Tier B bootstrap stubs"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-06
+    severity: high
+    file: agent/scripts/acp.install.sh
+    finding: "acp.install.sh always cat > agent/manifest.yaml destroying third-party package entries on reinstall"
+    fix_target: "Merge acp-core block only; preserve existing packages: keys"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-07
+    severity: high
+    file: agent/scripts/acp.install.sh
+    finding: "acp.install.sh overwrites agent/core/*.yml on existing agent/ directory"
+    fix_target: "Tier B preserve on reinstall; match version-update policy"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-08
+    severity: medium
+    file: CHANGELOG.md
+    finding: "CHANGELOG v6.9.0 claims version-update core file protection shipped but script unchanged"
+    fix_target: "Reconcile CHANGELOG after script fix; note doc-only gap in audit-080"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-10
+    severity: medium
+    file: e2e/acp.version.test.sh
+    finding: "No behavioral E2E asserting project files preserved on version-update"
+    fix_target: "Add e2e/acp.version-update-preserve.test.sh with customized identity.yml fixture"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-11
+    severity: medium
+    file: agent/scripts/acp.install.sh
+    finding: "xargs in manifest generation fails on Windows Git Bash (sysconf error)"
+    fix_target: "Replace xargs basename loops with portable while-read loop"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
