@@ -31,12 +31,12 @@ Register acp.receive as 70th framework command with full parity. Audit routing.y
 
 ## Acceptance criteria
 
-- [ ] acp.receive in package.yaml
-- [ ] Repair `domain.yml` L33-37 corrupt acp.feedback/handoff entries (audit-078 P-078-01)
-- [ ] 70×3 command parity after `acp.receive` (baseline 69 acp + 1 new)
-- [ ] index entries for handoff/receive/resume
-- [ ] 70×3 wrapper parity passes
-- [ ] routing.yml validated against shipped command set
+- [x] acp.receive in package.yaml
+- [x] Repair `domain.yml` L33-37 corrupt acp.feedback/handoff entries (audit-078 P-078-01)
+- [x] 70×3 command parity after `acp.receive` (baseline 69 acp + 1 new)
+- [x] index entries for handoff/receive/resume
+- [x] 70×3 wrapper parity passes
+- [x] routing.yml validated against shipped command set
 
 ## Depends on
 

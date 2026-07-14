@@ -2,13 +2,13 @@
 id: task-197
 milestone: M67
 title: Resume handoff path integration (route-192)
-status: planned
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-192
 ---
 

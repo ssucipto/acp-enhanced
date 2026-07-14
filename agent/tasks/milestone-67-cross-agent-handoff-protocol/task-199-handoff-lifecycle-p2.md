@@ -2,13 +2,13 @@
 id: task-199
 milestone: M67
 title: Handoff lifecycle P2 — LATEST, superseded, ancestry (route-194)
-status: planned
+status: completed
 priority: 3
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-194
 ---
 
