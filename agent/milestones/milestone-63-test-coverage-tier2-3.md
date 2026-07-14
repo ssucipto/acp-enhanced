@@ -1,6 +1,6 @@
 # Milestone 63: Test Coverage Sprint — Tier 2 & 3
 
-**Target version**: 6.18.0  
+**Planned version**: 6.22.0  
 **Status**: planned  
 **Estimated effort**: ~12h (1 route, may split during planning)  
 **Source**: audit-065 (CRIT-065-003), audit-067 (Part D, M63)
@@ -27,9 +27,9 @@ Complete the E2E coverage effort begun in M60. Cover the remaining untested comm
 
 ## Industry-Standard Verification (double-verify gate)
 
-- Every command in the repo has at least one E2E test file (0 untested commands at milestone exit)
-- Coverage tracked: add a CI check asserting each `agent/commands/acp.*.md` has a matching `e2e/acp.*.test.sh`
-- Negative assertions required (not happy-path only)
+- ⏳ Every command in the repo has at least one E2E test file (0 untested commands at milestone exit)
+- ⏳ Coverage tracked: add a CI check asserting each `agent/commands/acp.*.md` has a matching `e2e/acp.*.test.sh`
+- ⏳ Negative assertions required (not happy-path only)
 
 ## Success Criteria
 
