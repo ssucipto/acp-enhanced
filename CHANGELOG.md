@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.23.0] — 2026-07-15
+
+### Added
+- **`/acp-handoff` v2.0.0** — dual mode: `--mode executor` (same-repo,
+  implementation package with ADR locks, task sequence, git pin) and
+  `--mode cross-repo` (v1 problem-only behaviour, default).
+- **`/acp-receive`** — incoming handoff protocol: git drift warning, session
+  gap check, assignment checklist, `--latest` resolution via `active_handoff`.
+- **`active_handoff`** optional field in `progress.yaml` schema + validate rule.
+- **E2E** — `e2e/acp.handoff.test.sh`, `e2e/acp.receive.test.sh` with M51-style
+  fixtures under `agent/benchmarks/fixtures/handoff/`.
+- **Wiki** — `agent/wiki/cross-agent-handoff.md` ritual documentation (M67).
+
+### Changed
+- **`/acp-resume` v1.1.0** — optional handoff path runs receive protocol before init.
+- **`package.yaml`**, `domain.yml`, `agent/index/acp.core.yaml` — register
+  `acp.receive` (70th command); repair corrupt domain.yml handoff/feedback entries.
+- **CONTRIBUTING.md** — field feedback intake via `agent/proposals/` and
+  `agent/feedback/`.
+
+### Fixed
+- **audit-077 / feedback-007** — cross-agent handoff protocol gaps H1–H10, U1–U3.
+- **audit-078 P-078-01** — `domain.yml` corrupt acp.feedback/handoff entries.
+
+---
+
 ## [6.21.1] — 2026-07-15
 
 ### Fixed
