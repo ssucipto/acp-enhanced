@@ -96,7 +96,7 @@ for project_name in $PROJECT_NAMES; do
         continue
     fi
     
-    # TODO: Tag filtering (requires array parsing)
+    # NOTE: Tag filtering deferred — requires array parsing in yaml-parser (no backlog task yet)
     
     # Display project
     DISPLAYED_COUNT=$((DISPLAYED_COUNT + 1))

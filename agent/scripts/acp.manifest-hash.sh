@@ -9,7 +9,7 @@ trap 'echo "Error: manifest-hash.sh failed at line $LINENO" >&2; exit 3' ERR
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-MANIFEST_FILE="${PROJECT_ROOT}/agent/manifest.yaml"
+MANIFEST_FILE="${PROJECT_ROOT}/agent/integrity-manifest.yaml"
 source "${SCRIPT_DIR}/acp.common.sh"
 # shellcheck source=acp.integrity-output.sh
 source "${SCRIPT_DIR}/acp.integrity-output.sh"
@@ -89,9 +89,9 @@ fi
 
 if [[ "$MODE" == "generate" ]]; then
   {
-    echo "# agent/manifest.yaml"
+    echo "# agent/integrity-manifest.yaml"
     echo "# SHA-256 hashes of ACP framework files — generated $(date +%Y-%m-%d)"
-    echo "# Used by /acp-integrity --diff for tamper detection"
+    echo "# Used by /acp-integrity --diff for tamper detection (separate from package manifest.yaml)"
     echo ""
     echo "version: \"1.1\""
     echo "generated: \"$(date +%Y-%m-%d)\""
@@ -112,27 +112,36 @@ if [[ "$MODE" == "generate" ]]; then
   exit 0
 fi
 
+lookup_manifest_sha256() {
+  local target="$1"
+  awk -v path="$target" '
+    /^[[:space:]]*- path:/ {
+      if (index($0, "\"" path "\"")) { found=1 } else { found=0 }
+      next
+    }
+    found && /^[[:space:]]*sha256:/ {
+      gsub(/^[[:space:]]*sha256:[[:space:]]*"/, "")
+      gsub(/".*$/, "")
+      print
+      exit
+    }
+  ' "$MANIFEST_FILE"
+}
+
 if [[ ! -f "$MANIFEST_FILE" ]]; then
   echo "Error: $MANIFEST_FILE not found. Run --generate first." >&2
   exit 2
 fi
 
 yaml_parse "$MANIFEST_FILE" >/dev/null 2>&1 || {
-  ig_emit_finding "$MANIFEST_FILE" "0" "IG-42" "manifest.yaml failed YAML parse"
+  ig_emit_finding "$MANIFEST_FILE" "0" "IG-42" "integrity-manifest.yaml failed YAML parse"
   ig_finalize_scan "manifest-hash"
 }
 
 while IFS= read -r f; do
   [[ -z "$f" ]] && continue
   actual=$(hash_file "${PROJECT_ROOT}/${f}")
-  expected=$(python3 -c "
-import yaml, sys
-data=yaml.safe_load(open('${MANIFEST_FILE}'))
-for item in data.get('files', []) or []:
-    if item.get('path')=='${f}':
-        print(item.get('sha256',''))
-        break
-" 2>/dev/null || echo "")
+  expected=$(lookup_manifest_sha256 "$f")
   if [[ -z "$expected" ]]; then
     ig_emit_finding "$f" "0" "IG-42" "file not in manifest (sha256: ${actual:0:12}...)"
   elif [[ "$actual" != "$expected" ]]; then
