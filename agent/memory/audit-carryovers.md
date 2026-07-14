@@ -1636,3 +1636,60 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-09
+    severity: medium
+    file: agent/scripts/acp.version-update.sh
+    finding: "Script entry check requires AGENT.md only; ACP Enhanced standard is AGENTS.md"
+    fix_target: "Accept AGENTS.md OR AGENT.md; triple-sync AGENTS→CLAUDE+copilot on update (route-199)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 80
+    finding_id: F-080-12
+    severity: low
+    file: agent/commands/acp.version-update.md
+    finding: "Command doc lists domain.yml under agent/core/ — actual path is agent/wiki/domain.yml"
+    fix_target: "Fix path in acp.version-update.md (route-203)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-081 PRE-IMPL GAPS — M68 (2026-07-15) ───────────────────────────────
+
+  - audit_id: 81
+    finding_id: P-081-01
+    severity: medium
+    file: agent/scripts/acp.version-update.sh
+    finding: "version-update L153 copies all agent/commands/*.*.md — overwrites third-party/custom command namespaces (Tier A)"
+    fix_target: "route-199: copy only acp.*.md and git.*.md; skip other namespaces per design Tier A"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 81
+    finding_id: P-081-02
+    severity: medium
+    file: agent/scripts/acp.version-update.sh
+    finding: "version-update L193 blind-copies all skills; install skips local.* — update must match"
+    fix_target: "route-199: skip local.*.md skills on update (Tier B); add E2E regression"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: 81
+    finding_id: P-081-03
+    severity: medium
+    file: e2e/acp.version-update-preserve.test.sh
+    finding: "E2E preserve test needs offline upstream fixture — domain.yml says no network for version-update in CI"
+    fix_target: "route-202: use ACP_UPSTREAM_ROOT=PROJECT_ROOT or copied fixture; no live git clone in CI"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
