@@ -30,7 +30,8 @@ Formalize audit-083 closure: report, carryover stamps, version bump v6.25.1.
 
 - [x] audit-083 report exists with verdict ALL GAPS CLOSED
 - [x] Carryovers stamped `verified_in_audit: 083`
-- [x] `npx tsx scripts/acp-validate.ts` — 0 errors (tag pending commit)
+- [x] `npx tsx scripts/acp-validate.ts` — 0 errors
+- [x] Git tag `v6.25.1` on release commit `a84b00a`
 
 ## User-Observable Acceptance
 
