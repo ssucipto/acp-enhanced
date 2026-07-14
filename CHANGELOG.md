@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.23.1] — 2026-07-15
+
+### Fixed
+- **audit-079 housekeeping** — M67 post-ship gap closure: milestone verification
+  gates checked, task-195..202 stamped completed, sessions.md entry, feedback-007
+  §6 upstream acceptance, README/QUICKSTART 70-command counts, handoff wrapper
+  v2 descriptions, domain.yml handoff/receive E2E catalog, audit carryovers
+  re-verified @079, HIGH-067-001 marked fixed (0/70 commands missing).
+
+---
+
 ## [6.23.0] — 2026-07-15
 
 ### Added

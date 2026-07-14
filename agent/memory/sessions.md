@@ -5,6 +5,20 @@
 - date: 2026-07-15
   executor: copilot
   branch: develop
+  tasks: [route-190, route-191, route-192, route-193, route-194, route-195, route-196, route-197]
+  done:
+    - m67-cross-agent-handoff-protocol-shipped-v6-23-0
+    - acp-handoff-v2-dual-mode-executor-cross-repo
+    - acp-receive-command-wrappers-e2e-fixtures
+    - active-handoff-schema-validate-ancestry-check
+    - audit-079-housekeeping-milestone-gates-task-stamps-carryovers
+  deferred:
+    - consumer-project-feedback-007-final-closure → consumer-acp-version-update
+  key_fact: "M67 shipped v6.23.0 with handoff v2 dual mode + /acp-receive + resume bridge; audit-079 found tracking/discoverability shortcuts (unchecked gates, planned tasks, stale README) — all upstream items closed; consumer-project must run /acp-version-update to retire local wiki workaround."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
   tasks: [validate-sync-update]
   done:
     - develop-branch-synced-47-commits-fast-forward

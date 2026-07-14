@@ -8,7 +8,7 @@ project:
   status: active
   current_milestone: M63
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.23.0. M67 shipped
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.23.1. M67 shipped
     cross-agent handoff protocol (handoff v2, receive, resume integration).
     M55–M66 shipped. Next: M63 test coverage tier 2/3.
 
@@ -475,6 +475,8 @@ milestones:
       ✅ M67 shipped v6.23.0 (2026-07-15). Routes route-190..197 complete.
       /acp-handoff v2 dual mode, /acp-receive, resume integration, active_handoff
       schema, E2E fixtures, ecosystem parity. Closes audit-077 H1–U3, feedback-007.
+      ✅ audit-079 housekeeping closed (2026-07-15): gates, task stamps, README 70×3,
+      domain e2e catalog, carryovers verified @079, HIGH-067-001 stale closure.
 
   M1:
     name: ACP Commands Infrastructure
@@ -6456,10 +6458,10 @@ current_blockers: []
 notes:
   - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M59–M66 complete; next M63"
   - 66 milestone entries — M55–M66 shipped (v6.11–v6.21.0); M63 planned (test tier 2/3)
-  - 71 command docs (69 acp.* + 2 git.*); 69 slash-command wrappers (prompts + opencode + cursor parity)
+  - 72 command docs (70 acp.* + 2 git.*); 70 slash-command wrappers (prompts + opencode + cursor parity)
   - 9 skills (added code-review, code-integrity in M55/M56)
   - 36 bash scripts (+ integrity scanners in M56)
-  - 40 E2E test files; 317 listed assertions across 32 suites (domain.yml)
+  - 42 E2E test files; 361 listed assertions across 34 suites (domain.yml, +handoff/receive M67)
   - 70+ audit reports in agent/reports/ (audit-001 through audit-070)
   - M55 COMPLETE — /acp-review (77 rules, 49-assertion E2E)
   - M56 COMPLETE — /acp-integrity v1.0 (55 rules, 6 bash scripts, 26-assertion E2E)
