@@ -264,4 +264,10 @@ provenance_out=$(bash "${PROJECT_ROOT}/agent/scripts/acp.git-provenance.sh" 2>&1
 assert_not_contains "${provenance_out}" "IG-37" "No false IG-37 author alerts when team_members configured"
 assert_contains "${provenance_out}" "EXIT:0" "git-provenance exits 0"
 
+print_test_header "B25 — recurring-complete advances next_due (F-068-03 / audit-086)"
+RECURRING_SCRIPT="${PROJECT_ROOT}/agent/scripts/acp.recurring-complete.sh"
+assert_file_exists "${RECURRING_SCRIPT}" "acp.recurring-complete.sh exists"
+bash -n "${RECURRING_SCRIPT}"
+assert_true "acp.recurring-complete.sh passes bash -n" $?
+
 print_suite_summary
