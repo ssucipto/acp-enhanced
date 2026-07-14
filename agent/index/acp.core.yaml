@@ -141,9 +141,21 @@ acp:
       weight: 0.5
       kind: command
       description: |
-        Cross-context task handoff report generation. Defines how
-        agents create handoff reports for work transfer between contexts.
+        Cross-agent handoff generation (v2 dual mode). Executor mode writes
+        disk handoffs with git pins, ADR locks, and task sequences; cross-repo
+        mode transfers problems between codebases.
       rationale: |
-        Reference when transferring work across projects or agents.
-        Defines freeform report format and target resolution.
-      applies: acp.handoff, acp.plan
+        Reference when transferring work between executors or repositories.
+        Executor mode requires mandatory §4 template and active_handoff update.
+      applies: acp.handoff, acp.receive, acp.resume
+
+    - path: agent/commands/acp.receive.md
+      weight: 0.5
+      kind: command
+      description: |
+        Incoming handoff verification gate. Resolves handoff path or --latest,
+        checks git drift and session gap, prints assignment checklist.
+      rationale: |
+        Receiving-side protocol for M67 cross-agent handoffs. Pair with
+        acp.handoff on the outgoing side and acp.resume for session start.
+      applies: acp.receive, acp.handoff, acp.resume
