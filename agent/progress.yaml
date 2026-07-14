@@ -523,6 +523,23 @@ milestones:
     notes: |
       ✅ M71 COMPLETE (audit-090). task-239 FIFOZ ops deferred. PR to mainline pending.
 
+  M72:
+    name: Validation Truth & Drift Hardening (v6.27.0)
+    priority: 5
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 0.5
+    tasks_completed: 0
+    tasks_total: 8
+    file: agent/milestones/milestone-72-validation-truth-drift-hardening.md
+    design: agent/design/m72-validation-truth-drift-hardening.md
+    notes: |
+      📋 M72 planned — audit-091 remediation (F-091-01..13) + CRIT-065-002.
+      Drift fixes ship WITH enforcement (guardrail #1). Routes 229-236, tasks 240-247.
+      Build order: 245 (commit tree) → 240 → 241 → 242/243/244 → 246 → 247 closure.
+
   M1:
     name: ACP Commands Infrastructure
     priority: 5
@@ -4534,6 +4551,87 @@ tasks:
       estimated_hours: 4
       notes: "route-228; F-086-02 P3 ops — does not block M71"
 
+  M72:
+    - id: task-240
+      name: "Drift closures — versions, instruction sync, registrations"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-240-drift-closures.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-229; F-091-01/02 fix half — stamped only with task-241"
+
+    - id: task-241
+      name: "Validator hardening — root anchor, zero-fail, hash, pkg, 5-surface parity"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-241-validator-hardening.md
+      started: null
+      completed_date: null
+      estimated_hours: 5
+      notes: "route-230; F-091-01..05 enforcement — depends task-240"
+
+    - id: task-242
+      name: "Wrapper strays + bootstrap dead-glob cleanup"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-242-wrapper-bootstrap-cleanup.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-231; F-091-04/06 — depends task-241"
+
+    - id: task-243
+      name: "Docs alignment — validate.md, lessons, notes, pipefail, verify pointer"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-243-docs-alignment.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-232; F-091-05(doc)/07/11/12 — depends task-241"
+
+    - id: task-244
+      name: "ShellCheck CI gate"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-244-shellcheck-ci.md
+      started: null
+      completed_date: null
+      estimated_hours: 3
+      notes: "route-233; F-091-10"
+
+    - id: task-245
+      name: "Hygiene ops — commit tree, sessions compaction, dependency audit"
+      priority: 3
+      status: planned
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-245-hygiene-ops.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-234; F-091-08/09/13 — runs FIRST (guardrail #9)"
+
+    - id: task-246
+      name: "Branch protection ops + PR develop → mainline"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-246-branch-protection-pr.md
+      started: null
+      completed_date: null
+      estimated_hours: 1
+      notes: "route-235; CRIT-065-002 — needs repo admin; depends task-245"
+
+    - id: task-247
+      name: "M72 closure audit (audit-092) + ship v6.27.0"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-247-m72-closure-ship.md
+      started: null
+      completed_date: null
+      estimated_hours: 3
+      notes: "route-236; independent re-verify all F-091 — depends 240-246"
+
 recent_work:
   - date: 2026-07-15
     description: |
@@ -6903,10 +7001,10 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "Open PR develop → mainline for v6.26.0 (or merge when branch protection enabled)"
-  - "Enable GitHub branch protection: bash agent/scripts/acp.branch-protection-setup.sh (CRIT-065-002)"
-  - "Optional ops: task-239 FIFOZ consumer verification (F-086-02)"
-  - "Plan next milestone after mainline merge"
+  - "Implement M72 (audit-091 remediation): start with task-245 (commit Claude-integration tree), then task-240 → 241 (guardrail #1: fixes ship with enforcement)"
+  - "task-246 folds in: branch protection (CRIT-065-002) + PR develop → mainline"
+  - "Optional ops: task-239 FIFOZ consumer verification (F-086-02, M71)"
+  - "Ship v6.27.0 via task-247 closure audit (audit-092)"
 
 current_blockers: []
 
