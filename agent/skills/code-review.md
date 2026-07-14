@@ -24,11 +24,12 @@
 
 1. **Pick executor** from table above based on `--rules` flag and project size
 2. **Read command spec**: `agent/commands/acp.review.md`
-3. **Apply rules**: All 54 rules across 7 categories
+3. **Apply rules**: 64 rules total (54 core + 10 Appendix A) across 7 categories
 4. **Scope rules**: Mobile rules (SC-19–SC-23) fire only for React Native/Expo
-5. **ACP self-review**: Appendix A auto-activates when `agent/commands/` exists
-6. **Output**: Structured YAML findings in `agent/reports/review-NNN.md`
-7. **Never auto-fix** — report only
+5. **ACP self-review**: Appendix A auto-activates when `agent/commands/` exists; use `--self` for ACP Enhanced paths
+6. **Phase 1 scanner**: Run `acp.review-scan.sh` for deterministic EH-02/SC-01/TS-01/SH-01 before agent review
+7. **Output**: Structured YAML findings in `agent/reports/review-NNN.md`
+8. **Never auto-fix** — report only
 
 ---
 
@@ -61,7 +62,7 @@
 ## Chunking Strategy (>20 files)
 
 For codebases exceeding 20 files, avoid token overrun:
-1. **Summary-first**: Apply all 54 rules at category level — produce per-category counts
+1. **Summary-first**: Apply all 64 rules at category level — produce per-category counts
 2. **Prioritize HIGH+**: Only per-file scan files with CRITICAL/HIGH findings
 3. **Batch by category**: 10 files/turn for DeepSeek V4 Pro, 5 files/turn for copilot
 4. **Aggregate**: Combine category batches into single `review-NNN.md` report
