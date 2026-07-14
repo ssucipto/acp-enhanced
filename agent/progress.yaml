@@ -8,7 +8,7 @@ project:
   status: active
   current_milestone: M71
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.26.0.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.26.0 shipped.
     M70 + M71 complete (audit-090). PR to mainline pending; branch protection ops deferred.
 
 milestones:
@@ -4537,6 +4537,16 @@ tasks:
 recent_work:
   - date: 2026-07-15
     description: |
+      ✅ v6.26.0 shipped — M70 gate hardening + M71 remediation (audit-090).
+      Commit d8b3dda, tag v6.26.0 pushed. Validate/sync/update/commit chain clean.
+    items:
+      - "✅ M70/M71 tasks 219–238 completed; task-239 consumer-project ops deferred"
+      - "✅ Schema enforcement: lessons, decisions, carryovers (175 entries)"
+      - "✅ atomic-write wired; 8-rule review scanner; review fixtures"
+      - "⏳ CRIT-065-002 branch protection — gh api 404 (ops deferral)"
+
+  - date: 2026-07-15
+    description: |
       📋 M71 planned — M70 remediation & release gate (audit-089).
       9 tasks (231–239), routes 220–228. Closes all audit-089 gaps before v6.26.0 ship.
     items:
@@ -6893,20 +6903,20 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "Start M71 Phase 1: /acp-proceed task-231 (commit + tag v6.26.0)"
-  - "Then M71 Phase 2: tasks 232–236 (code truth + docs parity)"
-  - "M71 Phase 3: task-237 branch protection (GitHub admin) + task-238 closure"
-  - "Optional ops: task-239 consumer-project consumer (F-086-02)"
+  - "Open PR develop → mainline for v6.26.0 (or merge when branch protection enabled)"
+  - "Enable GitHub branch protection: bash agent/scripts/acp.branch-protection-setup.sh (CRIT-065-002)"
+  - "Optional ops: task-239 consumer-project consumer verification (F-086-02)"
+  - "Plan next milestone after mainline merge"
 
 current_blockers: []
 
 notes:
-  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M63–M68 shipped (v6.25.3)"
-  - "68 milestone entries — M55–M68 shipped (v6.11–v6.25.3); M63 complete (test tier 2/3)"
+  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M71 shipped (v6.26.0)"
+  - "70 milestone entries — M55–M71 shipped; M70 gate hardening + M71 remediation complete"
   - "72 command docs (70 acp.* + 2 git.*); 70 slash-command wrappers (prompts + opencode + cursor parity)"
-  - "9 skills; 43 bash scripts; 56 E2E test files (incl. M68 preserve suites)"
-  - "82+ audit reports (audit-080–082 install/update safety)"
-  - "M68 COMPLETE v6.24.1 — safe install/update tier policy; consumer-project unblocked"
+  - "9 skills; 46 bash scripts; 56+ E2E test files"
+  - "90+ audit reports (audit-087–090 M70/M71 closure)"
+  - "M71 COMPLETE v6.26.0 — memory schema enforcement, 8-rule review, atomic-write"
   - "M67 COMPLETE v6.23.0 — cross-agent handoff + /acp-receive"
 
 # ── Recurring Tasks ──────────────────────────────────────────────
