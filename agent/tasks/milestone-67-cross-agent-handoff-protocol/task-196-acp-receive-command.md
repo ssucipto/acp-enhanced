@@ -2,13 +2,13 @@
 id: task-196
 milestone: M67
 title: New acp.receive.md — incoming protocol (route-191)
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-191
 ---
 
