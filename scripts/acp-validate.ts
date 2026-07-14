@@ -1101,6 +1101,61 @@ export function validateActiveHandoff(strict = false): ValidationError[] {
   return errors;
 }
 
+// ── Install/update destructive-pattern guard (M68 route-204) ───
+const DESTRUCTIVE_INSTALL_UPDATE_PATTERNS: Array<{ pattern: RegExp; message: string }> = [
+  {
+    pattern: /cp\s+["']?\$TEMP_DIR\/agent\/core\/["']?\*\.yml/,
+    message: "blind cp of agent/core/*.yml — use acp_copy_framework_file()",
+  },
+  {
+    pattern: /cat\s+>\s*["']?\$TARGET_DIR\/agent\/manifest\.yaml\s*<<\s*EOF[\s\S]{0,400}acp-core:/,
+    message: "cat > manifest.yaml with acp-core block wipes packages — use acp_install_manifest_acp_core()",
+  },
+  {
+    pattern: /find\s+["']?\$TEMP_DIR\/agent\/commands["']?[^;]*-exec\s+cp/,
+    message: "blind find commands -exec cp — copy acp.* and git.* only",
+  },
+];
+
+export function validateInstallUpdateSafety(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const targets = [
+    "agent/scripts/acp.version-update.sh",
+    "agent/scripts/acp.install.sh",
+  ];
+  for (const rel of targets) {
+    const full = path.join(process.cwd(), rel);
+    if (!existsSync(full)) continue;
+    const content = readFileSync(full, "utf8");
+    if (content.includes("acp_copy_framework_file") || content.includes("acp_merge_manifest_acp_core")) {
+      // expected — still scan for forbidden patterns
+    }
+    for (const { pattern, message } of DESTRUCTIVE_INSTALL_UPDATE_PATTERNS) {
+      if (pattern.test(content)) {
+        errors.push({
+          file: rel,
+          line: 0,
+          message,
+          severity: "error",
+        });
+      }
+    }
+  }
+  return errors;
+}
+
+function runInstallUpdateSafetyValidation(): boolean {
+  const errors = validateInstallUpdateSafety();
+  if (errors.length === 0) {
+    console.log("✅ Install/update safety: no destructive blind-copy patterns");
+    return true;
+  }
+  for (const err of errors) {
+    console.log(`❌ ${err.file}: ${err.message}`);
+  }
+  return false;
+}
+
 function runActiveHandoffValidation(): boolean {
   const strict =
     process.env["ACP_VALIDATE_STRICT"] === "true" || process.argv.includes("--strict");
@@ -1148,10 +1203,11 @@ if (args.length === 0) {
   const statusOk = validateStatusConsistency();
   const pointersOk = validateFilePointers();
   const handoffOk = runActiveHandoffValidation();
+  const installUpdateOk = runInstallUpdateSafetyValidation();
   const schemasOk = runSchemaEnforcement();
   const consistencyOk = runConsistencyScan();
   checkStaleness(); // informational — non-blocking, does not affect exit code
-  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && handoffOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
+  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && handoffOk && installUpdateOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
 
 let overallFailed = false;
