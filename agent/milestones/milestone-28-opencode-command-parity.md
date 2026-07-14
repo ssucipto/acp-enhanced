@@ -3,7 +3,7 @@
 **Goal**: Every `/acp-*` command available in GitHub Copilot is equally available in opencode (and any tool using `.opencode/commands/`), so both environments have identical capabilities.  
 **Duration**: ~1 week  
 **Dependencies**: None — can run concurrently with M25  
-**Status**: In Progress  
+**Status**: completed  
 **ADR**: ADR-6 — Cross-tool slash command parity via per-tool command directories
 
 ---

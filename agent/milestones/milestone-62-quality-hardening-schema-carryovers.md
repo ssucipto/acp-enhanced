@@ -1,6 +1,6 @@
 # Milestone 62: Quality Hardening, Schema Coverage & Carryover Resolution
 
-**Target version**: 6.21.0  
+**Shipped version**: 6.21.0  
 **Status**: completed  
 **Completed**: 2026-06-15  
 **Estimated effort**: ~21h (7 routes)  

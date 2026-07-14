@@ -1,6 +1,6 @@
 # Milestone 60: Test Coverage Sprint — Tier 1 (Core Commands)
 
-**Target version**: 6.20.2  
+**Shipped version**: 6.15.0  
 **Status**: completed  
 **Estimated effort**: ~14h (2 routes)  
 **Source**: audit-065 (CRIT-065-003), audit-067 (Part D, M60)
@@ -31,9 +31,9 @@ Eliminate the single largest quality gap: 46 of 68 commands (68%) have no E2E te
 
 ## Industry-Standard Verification (double-verify gate)
 
-- Every new test must include at least one **negative** assertion (failure path), not only happy-path.
-- Tests must be deterministic and parallel-safe (use `mktemp -d`, per lessons.md 2026-06-07).
-- `bash -n` clean + shellcheck clean for all new test files.
+- ✅ Every new test must include at least one **negative** assertion (failure path), not only happy-path.
+- ✅ Tests must be deterministic and parallel-safe (use `mktemp -d`, per lessons.md 2026-06-07).
+- ✅ `bash -n` clean + shellcheck clean for all new test files.
 
 ## Success Criteria
 
