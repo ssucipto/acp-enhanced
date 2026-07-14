@@ -1144,6 +1144,104 @@ export function validateInstallUpdateSafety(): ValidationError[] {
   return errors;
 }
 
+const COMMAND_E2E_COVERAGE_FILE = path.join("agent", "schemas", "command-e2e-coverage.yaml");
+
+export function validateCommandE2eCoverage(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(COMMAND_E2E_COVERAGE_FILE)) {
+    errors.push({
+      file: COMMAND_E2E_COVERAGE_FILE,
+      line: 0,
+      message: "missing command E2E coverage registry (M63)",
+      severity: "error",
+    });
+    return errors;
+  }
+
+  let doc: { commands?: Record<string, { suites?: string[]; tier?: number }> };
+  try {
+    doc = yaml.load(readFileSync(COMMAND_E2E_COVERAGE_FILE, "utf8")) as typeof doc;
+  } catch {
+    errors.push({
+      file: COMMAND_E2E_COVERAGE_FILE,
+      line: 0,
+      message: "invalid YAML in command E2E coverage registry",
+      severity: "error",
+    });
+    return errors;
+  }
+
+  const registry = doc.commands ?? {};
+  const commandFiles = readdirSync(COMMANDS_DIR).filter(
+    (f) => f.startsWith("acp.") && f.endsWith(".md") && f !== "command.template.md"
+  );
+
+  for (const file of commandFiles) {
+    const cmd = file.replace(/\.md$/, "");
+    const entry = registry[cmd];
+    if (!entry) {
+      errors.push({
+        file: COMMAND_E2E_COVERAGE_FILE,
+        line: 0,
+        message: `no E2E coverage entry for ${cmd}`,
+        severity: "error",
+      });
+      continue;
+    }
+    const suites = entry.suites ?? [];
+    if (suites.length === 0) {
+      errors.push({
+        file: COMMAND_E2E_COVERAGE_FILE,
+        line: 0,
+        message: `${cmd} has empty suites list`,
+        severity: "error",
+      });
+    }
+    for (const suite of suites) {
+      if (!existsSync(suite)) {
+        errors.push({
+          file: suite,
+          line: 0,
+          message: `missing E2E suite for ${cmd}: ${suite}`,
+          severity: "error",
+        });
+      }
+    }
+  }
+
+  for (const cmd of Object.keys(registry)) {
+    if (!existsSync(path.join(COMMANDS_DIR, `${cmd}.md`))) {
+      errors.push({
+        file: COMMAND_E2E_COVERAGE_FILE,
+        line: 0,
+        message: `orphan coverage entry ${cmd} — no command doc`,
+        severity: "warning",
+      });
+    }
+  }
+
+  return errors;
+}
+
+function runCommandE2eCoverageValidation(): boolean {
+  const errors = validateCommandE2eCoverage();
+  const blocking = errors.filter((e) => e.severity === "error");
+  if (blocking.length === 0) {
+    const cmdCount = readdirSync(COMMANDS_DIR).filter(
+      (f) => f.startsWith("acp.") && f.endsWith(".md") && f !== "command.template.md"
+    ).length;
+    console.log(`✅ Command E2E coverage: ${cmdCount} commands mapped (0 untested)`);
+    for (const err of errors.filter((e) => e.severity === "warning")) {
+      console.log(`⚠️  ${err.file}: ${err.message}`);
+    }
+    return true;
+  }
+  for (const err of blocking) {
+    console.log(`❌ ${err.file}: ${err.message}`);
+  }
+  return false;
+}
+
 function runInstallUpdateSafetyValidation(): boolean {
   const errors = validateInstallUpdateSafety();
   if (errors.length === 0) {
@@ -1204,10 +1302,11 @@ if (args.length === 0) {
   const pointersOk = validateFilePointers();
   const handoffOk = runActiveHandoffValidation();
   const installUpdateOk = runInstallUpdateSafetyValidation();
+  const commandE2eOk = runCommandE2eCoverageValidation();
   const schemasOk = runSchemaEnforcement();
   const consistencyOk = runConsistencyScan();
   checkStaleness(); // informational — non-blocking, does not affect exit code
-  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && handoffOk && installUpdateOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
+  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && handoffOk && installUpdateOk && commandE2eOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
 
 let overallFailed = false;
