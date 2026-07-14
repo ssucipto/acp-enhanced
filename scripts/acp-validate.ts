@@ -1146,11 +1146,21 @@ export function validateInstallUpdateSafety(): ValidationError[] {
 
 const COMMAND_E2E_COVERAGE_FILE = path.join("agent", "schemas", "command-e2e-coverage.yaml");
 
-export function validateCommandE2eCoverage(): ValidationError[] {
+export interface CommandE2eCoverageOptions {
+  commandsDir?: string;
+  repoRoot?: string;
+}
+
+export function validateCommandE2eCoverage(
+  coverageFile: string = COMMAND_E2E_COVERAGE_FILE,
+  options: CommandE2eCoverageOptions = {}
+): ValidationError[] {
   const errors: ValidationError[] = [];
-  if (!existsSync(COMMAND_E2E_COVERAGE_FILE)) {
+  const repoRoot = options.repoRoot ?? process.cwd();
+  const commandsDir = options.commandsDir ?? path.join(repoRoot, "agent", "commands");
+  if (!existsSync(coverageFile)) {
     errors.push({
-      file: COMMAND_E2E_COVERAGE_FILE,
+      file: coverageFile,
       line: 0,
       message: "missing command E2E coverage registry (M63)",
       severity: "error",
@@ -1160,10 +1170,10 @@ export function validateCommandE2eCoverage(): ValidationError[] {
 
   let doc: { commands?: Record<string, { suites?: string[]; tier?: number }> };
   try {
-    doc = yaml.load(readFileSync(COMMAND_E2E_COVERAGE_FILE, "utf8")) as typeof doc;
+    doc = yaml.load(readFileSync(coverageFile, "utf8")) as typeof doc;
   } catch {
     errors.push({
-      file: COMMAND_E2E_COVERAGE_FILE,
+      file: coverageFile,
       line: 0,
       message: "invalid YAML in command E2E coverage registry",
       severity: "error",
@@ -1172,7 +1182,16 @@ export function validateCommandE2eCoverage(): ValidationError[] {
   }
 
   const registry = doc.commands ?? {};
-  const commandFiles = readdirSync(COMMANDS_DIR).filter(
+  if (!existsSync(commandsDir)) {
+    errors.push({
+      file: commandsDir,
+      line: 0,
+      message: "missing commands directory for E2E coverage check",
+      severity: "error",
+    });
+    return errors;
+  }
+  const commandFiles = readdirSync(commandsDir).filter(
     (f) => f.startsWith("acp.") && f.endsWith(".md") && f !== "command.template.md"
   );
 
@@ -1181,7 +1200,7 @@ export function validateCommandE2eCoverage(): ValidationError[] {
     const entry = registry[cmd];
     if (!entry) {
       errors.push({
-        file: COMMAND_E2E_COVERAGE_FILE,
+        file: coverageFile,
         line: 0,
         message: `no E2E coverage entry for ${cmd}`,
         severity: "error",
@@ -1191,16 +1210,17 @@ export function validateCommandE2eCoverage(): ValidationError[] {
     const suites = entry.suites ?? [];
     if (suites.length === 0) {
       errors.push({
-        file: COMMAND_E2E_COVERAGE_FILE,
+        file: coverageFile,
         line: 0,
         message: `${cmd} has empty suites list`,
         severity: "error",
       });
     }
     for (const suite of suites) {
-      if (!existsSync(suite)) {
+      const suitePath = path.isAbsolute(suite) ? suite : path.join(repoRoot, suite);
+      if (!existsSync(suitePath)) {
         errors.push({
-          file: suite,
+          file: suitePath,
           line: 0,
           message: `missing E2E suite for ${cmd}: ${suite}`,
           severity: "error",
@@ -1210,9 +1230,9 @@ export function validateCommandE2eCoverage(): ValidationError[] {
   }
 
   for (const cmd of Object.keys(registry)) {
-    if (!existsSync(path.join(COMMANDS_DIR, `${cmd}.md`))) {
+    if (!existsSync(path.join(commandsDir, `${cmd}.md`))) {
       errors.push({
-        file: COMMAND_E2E_COVERAGE_FILE,
+        file: coverageFile,
         line: 0,
         message: `orphan coverage entry ${cmd} — no command doc`,
         severity: "warning",
@@ -1224,10 +1244,12 @@ export function validateCommandE2eCoverage(): ValidationError[] {
 }
 
 function runCommandE2eCoverageValidation(): boolean {
-  const errors = validateCommandE2eCoverage();
+  const repoRoot = process.cwd();
+  const errors = validateCommandE2eCoverage(COMMAND_E2E_COVERAGE_FILE, { repoRoot });
   const blocking = errors.filter((e) => e.severity === "error");
   if (blocking.length === 0) {
-    const cmdCount = readdirSync(COMMANDS_DIR).filter(
+    const commandsDir = path.join(repoRoot, "agent", "commands");
+    const cmdCount = readdirSync(commandsDir).filter(
       (f) => f.startsWith("acp.") && f.endsWith(".md") && f !== "command.template.md"
     ).length;
     console.log(`✅ Command E2E coverage: ${cmdCount} commands mapped (0 untested)`);
