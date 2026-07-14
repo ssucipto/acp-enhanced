@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.25.0] — 2026-07-15
+
+### Added
+- **M63 Test Coverage Tier 2 & 3** — `agent/schemas/command-e2e-coverage.yaml` maps all 70 `acp.*` commands.
+- **`validateCommandE2eCoverage()`** — CI guard: 0 untested commands; fails on missing registry/suite.
+- **E2E** — `acp.tier2-workflow.test.sh`, `acp.tier3-memory-knowledge.test.sh`,
+  `acp.command-coverage-parity.test.sh`.
+
+### Changed
+- `acp-validate.ts` — command↔test parity scan wired into default validate run.
+
+---
+
 ## [6.24.1] — 2026-07-15
 
 ### Added

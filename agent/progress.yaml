@@ -3,14 +3,13 @@
 
 project:
   name: agent-context-protocol
-  version: 6.24.1
+  version: 6.25.0
   started: 2026-02-16
   status: active
   current_milestone: M63
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.24.1. M68 audit-082 gaps closed
-    (bootstrap preserve E2E, install AGENTS.md, doc drift, carryovers @082).
-    install/update tier policy. M67 handoff protocol shipped. Next: M63 test coverage.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.25.0. M63 test coverage
+    tier 2/3 shipped — 0 untested commands, CI parity guard. M68 v6.24.1 safe install/update.
 
 milestones:
   M44:
@@ -385,22 +384,20 @@ milestones:
       M61 autonomous mode now have automated guards (validators + sweep).
 
   M63:
-    name: Test Coverage Sprint — Tier 2 & 3 (v6.18.0)
+    name: Test Coverage Sprint — Tier 2 & 3 (v6.25.0)
     priority: 3
-    status: planned
-    progress: 0
-    started:
-    completed:
+    status: completed
+    progress: 100
+    started: 2026-07-15
+    completed: 2026-07-15
     estimated_weeks: 1
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 1
     file: agent/milestones/milestone-63-test-coverage-tier2-3.md
     notes: |
-      📋 M63 planned (~12h, 1 route — split during /acp-proceed). E2E for remaining
-      untested commands (package/project + memory/knowledge), route-178. Adds CI
-      command↔test parity guard. Untested count → 0; Testing scorecard 🔴→🟢.
-      Addresses CRIT-065-003 (tier 2/3). Target: v6.18.0.
-      ✅ Route expanded into file 2026-06-15: route-178 (split into batches at /acp-proceed).
+      ✅ M63 COMPLETE (v6.25.0). command-e2e-coverage.yaml (70 commands),
+      validateCommandE2eCoverage() CI guard, tier2/tier3/parity E2E suites.
+      0 untested commands at exit. route-206.
 
   M64:
     name: Integrity Gateway v1.1 — Truth & Test (v6.19.0)
@@ -4185,6 +4182,17 @@ tasks:
 recent_work:
   - date: 2026-07-15
     description: |
+      ✅ M63 Test Coverage Tier 2 & 3 shipped v6.25.0 (route-206).
+      Command E2E coverage registry (70 commands), validateCommandE2eCoverage CI guard,
+      tier2/tier3/parity E2E suites — 0 untested commands.
+    items:
+      - "✅ agent/schemas/command-e2e-coverage.yaml — 70 commands mapped"
+      - "✅ validateCommandE2eCoverage() in acp-validate.ts"
+      - "✅ e2e tier2 (76), tier3 (96), parity (8) assertions — 100% pass"
+      - "✅ M63 milestone + progress.yaml completed"
+
+  - date: 2026-07-15
+    description: |
       ✅ M68 audit-082 closure + housekeeping — validate/sync/update/commit session.
       v6.24.1 shipped (bootstrap preserve E2E, install AGENTS.md, doc drift fixes).
       All validate checks green; progress and design docs synced.
@@ -6478,11 +6486,10 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "/acp-proceed M63 — Test Coverage Sprint (Tier 2 & 3) — current milestone"
-  - "Push develop + tags v6.24.0/v6.24.1 to remote (if not pushed)"
-  - "consumer-project: run /acp-version-update on v6.24.1+ and close feedback-007 consumer path"
-  - "Run overdue /acp-review and /acp-integrity weekly scans (last run 2026-06-15)"
-  - "Enable GitHub branch protection on mainline + develop (docs/USAGE.md)"
+  - "Pick next milestone from backlog (M63 complete — test coverage tier 2/3)"
+  - "Run overdue /acp-review and /acp-integrity weekly scans"
+  - "consumer-project: /acp-version-update on v6.24.1+ and close feedback-007"
+  - "Push develop + tags v6.24.x/v6.25.0 to remote"
 
 current_blockers: []
 
