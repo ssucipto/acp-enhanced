@@ -26,6 +26,8 @@ INJECT = re.compile(r"(ptrace|LD_PRELOAD|CreateRemoteThread|process\.inject)", r
 DYN_CMD = re.compile(r"\$\{|`\$\{|\+\s*[^\"']", re.I)
 
 SKIP = {"node_modules", ".git"}
+# Scanner sources contain pattern literals for documentation — skip self-scan (INT-004)
+SELF_SCANNER_NAMES = {"acp.pattern-scan.py", "acp.taint-scan.py"}
 EXT = {".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".py"}
 
 
@@ -37,6 +39,8 @@ def iter_files(root: Path):
         if not p.is_file() or p.suffix.lower() not in EXT:
             continue
         if any(part in SKIP for part in p.parts):
+            continue
+        if p.name in SELF_SCANNER_NAMES:
             continue
         yield p
 
