@@ -1827,3 +1827,249 @@ get_current_project_path() {
     # Expand ~ to HOME
     echo "$path" | sed "s|^~|$HOME|"
 }
+
+# ── Safe install/update tier helpers (M68) ───────────────────────────────────
+# Callers must export TEMP_DIR (upstream clone root) or set ACP_UPSTREAM_ROOT.
+# Control flags (export before copy): ACP_DIFF_ONLY, ACP_FORCE, ACP_PRESERVE_PROJECT_CORE, ACP_YES
+
+acp_upstream_root() {
+    echo "${TEMP_DIR:-${ACP_UPSTREAM_ROOT:-}}"
+}
+
+acp_sha256_file() {
+    calculate_checksum "$1"
+}
+
+acp_file_differs_from_upstream() {
+    local rel="$1"
+    local upstream_root
+    upstream_root=$(acp_upstream_root)
+    [ -z "$upstream_root" ] && return 1
+    local upstream_path="${upstream_root}/${rel}"
+    if [ ! -f "$upstream_path" ]; then
+        return 1
+    fi
+    if [ ! -f "$rel" ]; then
+        return 0
+    fi
+    local local_hash upstream_hash
+    local_hash=$(acp_sha256_file "$rel")
+    upstream_hash=$(acp_sha256_file "$upstream_path")
+    [ "$local_hash" != "$upstream_hash" ]
+}
+
+acp_identity_is_customized() {
+    local identity_file="${1:-agent/core/identity.yml}"
+    [ ! -f "$identity_file" ] && return 1
+    if grep -q 'YOUR_PROJECT_NAME' "$identity_file" 2>/dev/null; then
+        return 1
+    fi
+    if grep -q 'YOUR_USERNAME' "$identity_file" 2>/dev/null; then
+        return 1
+    fi
+    return 0
+}
+
+acp_should_skip_tier_b() {
+    local rel="$1"
+    if [ "${ACP_FORCE:-false}" = true ]; then
+        return 1
+    fi
+    if [ "${ACP_PRESERVE_PROJECT_CORE:-false}" = true ] && [ -f "$rel" ]; then
+        return 0
+    fi
+    case "$rel" in
+        agent/core/identity.yml)
+            if acp_identity_is_customized "$rel"; then
+                return 0
+            fi
+            ;;
+    esac
+    if [ -f "$rel" ] && acp_file_differs_from_upstream "$rel"; then
+        return 0
+    fi
+    return 1
+}
+
+# Tier-aware framework file copy. tier: A | B | C
+acp_copy_framework_file() {
+    local rel="$1"
+    local tier="$2"
+    local upstream_root dest_dir
+    upstream_root=$(acp_upstream_root)
+    local src="${upstream_root}/${rel}"
+    dest_dir=$(dirname "$rel")
+
+    case "$tier" in
+        A)
+            if [ -f "$rel" ]; then
+                if [ "${ACP_DIFF_ONLY:-false}" = true ]; then
+                    echo "  ⊘ preserved (tier A): ${rel}"
+                fi
+                return 0
+            fi
+            if [ ! -f "$src" ]; then
+                return 0
+            fi
+            mkdir -p "$dest_dir"
+            if [ "${ACP_DIFF_ONLY:-false}" = true ]; then
+                echo "  + create (tier A): ${rel}"
+            else
+                cp "$src" "$rel"
+                echo "  + created: ${rel}"
+            fi
+            ;;
+        B)
+            if acp_should_skip_tier_b "$rel"; then
+                if [ "${ACP_DIFF_ONLY:-false}" = true ]; then
+                    echo "  ⊘ preserved (tier B): ${rel}"
+                else
+                    echo "  ⊘ preserved: ${rel}"
+                fi
+                return 0
+            fi
+            if [ ! -f "$src" ]; then
+                return 0
+            fi
+            mkdir -p "$dest_dir"
+            if [ "${ACP_DIFF_ONLY:-false}" = true ]; then
+                echo "  ↻ would update (tier B): ${rel}"
+            else
+                cp "$src" "$rel"
+                echo "  ↻ updated: ${rel}"
+            fi
+            ;;
+        C)
+            if [ ! -f "$src" ]; then
+                return 0
+            fi
+            mkdir -p "$dest_dir"
+            if [ "${ACP_DIFF_ONLY:-false}" = true ]; then
+                echo "  ↻ would update (tier C): ${rel}"
+            else
+                cp "$src" "$rel"
+                echo "  ↻ updated: ${rel}"
+            fi
+            ;;
+        *)
+            echo "WARN: unknown tier '${tier}' for ${rel}" >&2
+            return 1
+            ;;
+    esac
+}
+
+# Portable basename list (no xargs — Windows Git Bash safe)
+acp_list_basenames() {
+    local dir="$1"
+    local pattern="$2"
+    local f
+    for f in "$dir"/$pattern; do
+        [ -e "$f" ] || continue
+        basename "$f"
+    done
+}
+
+# Tier D: merge acp-core version block only — never cat > whole manifest
+acp_merge_manifest_acp_core() {
+    local version="$1"
+    local manifest="${2:-agent/manifest.yaml}"
+    local source_url="${3:-https://github.com/ssucipto/acp-enhanced.git}"
+    local update_date
+    update_date=$(get_timestamp)
+
+    if [ ! -f "$manifest" ]; then
+        cat > "$manifest" <<EOF
+# ACP Package Manifest
+# Tracks installed packages and their versions
+
+packages:
+  acp-core:
+    source: ${source_url}
+    package_version: ${version}
+    installed_at: ${update_date}
+    updated_at: ${update_date}
+
+manifest_version: 1.0.0
+last_updated: ${update_date}
+EOF
+        return 0
+    fi
+
+    if grep -q '^  acp-core:' "$manifest" 2>/dev/null; then
+        _sed_i "s/^    package_version: .*/    package_version: ${version}/" "$manifest"
+        awk -v dt="$update_date" '
+            /^  acp-core:/ { in_core=1 }
+            in_core && /^    updated_at:/ { sub(/updated_at: .*/, "updated_at: " dt); in_core=0 }
+            { print }
+        ' "$manifest" > "${manifest}.tmp" && mv "${manifest}.tmp" "$manifest"
+    else
+        awk -v ver="$version" -v dt="$update_date" -v src="$source_url" '
+            /^packages:/ && !inserted {
+                print
+                print "  acp-core:"
+                print "    source: " src
+                print "    package_version: " ver
+                print "    installed_at: " dt
+                print "    updated_at: " dt
+                inserted=1
+                next
+            }
+            { print }
+        ' "$manifest" > "${manifest}.tmp" && mv "${manifest}.tmp" "$manifest"
+    fi
+
+    if grep -q '^last_updated:' "$manifest" 2>/dev/null; then
+        _sed_i "s/^last_updated: .*/last_updated: ${update_date}/" "$manifest"
+    else
+        printf '\nlast_updated: %s\n' "$update_date" >> "$manifest"
+    fi
+}
+
+# Install path: refresh acp-core files list while preserving other packages
+acp_install_manifest_acp_core() {
+    local target_dir="$1"
+    local version="$2"
+    local manifest="${target_dir}/agent/manifest.yaml"
+    local install_date
+    install_date=$(get_timestamp)
+    local source_url="https://github.com/ssucipto/acp-enhanced.git"
+
+    local cmd_block="" pat_block="" des_block="" name
+    while IFS= read -r name; do
+        [ -z "$name" ] && continue
+        cmd_block="${cmd_block}        - name: ${name}"$'\n'
+    done < <(acp_list_basenames "${target_dir}/agent/commands" "acp.*.md"; acp_list_basenames "${target_dir}/agent/commands" "git.*.md")
+    while IFS= read -r name; do
+        [ -z "$name" ] && continue
+        pat_block="${pat_block}        - name: ${name}"$'\n'
+    done < <(acp_list_basenames "${target_dir}/agent/patterns" "*.template.md")
+    while IFS= read -r name; do
+        [ -z "$name" ] && continue
+        des_block="${des_block}        - name: ${name}"$'\n'
+    done < <(acp_list_basenames "${target_dir}/agent/design" "*.template.md")
+
+    local has_other_packages=false
+    if [ -f "$manifest" ]; then
+        acp_merge_manifest_acp_core "$version" "$manifest" "$source_url"
+        return 0
+    fi
+
+    cat > "$manifest" <<EOF
+# ACP Package Manifest
+# Tracks installed packages and their versions
+
+packages:
+  acp-core:
+    source: ${source_url}
+    package_version: ${version}
+    installed_at: ${install_date}
+    updated_at: ${install_date}
+    files:
+      commands:
+${cmd_block}      patterns:
+${pat_block}      designs:
+${des_block}
+manifest_version: 1.0.0
+last_updated: ${install_date}
+EOF
+}
