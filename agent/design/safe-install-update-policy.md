@@ -166,8 +166,9 @@ Registry file (optional): `agent/schemas/install-tier-registry.yaml` listing pat
 
 | Test | Platform |
 |------|----------|
-| `e2e/acp.version-update-preserve.test.sh` | macOS + Linux CI |
+| `e2e/acp.version-update-preserve.test.sh` | macOS + Linux CI (13 assertions incl. `--force`) |
 | `e2e/acp.install-preserve.test.sh` | macOS + Linux + Windows CI |
+| `e2e/acp.bootstrap-preserve.test.sh` | macOS + Linux CI — re-run preserves Tier B |
 | Customized `identity.yml` survives default update | Required |
 | `progress.yaml` untouched | Required (F-080-13) |
 | Third-party command namespace preserved | Required (P-081-01) |

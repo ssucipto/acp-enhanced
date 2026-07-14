@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`acp_copy_framework_file`, `acp_merge_manifest_acp_core`, `acp_install_manifest_acp_core`).
 - **`/acp-version-update` route-079 for real** — `--diff`, `--preserve-project-core`,
   `--force`, `--yes`; accepts `AGENTS.md` or `AGENT.md`; offline `ACP_UPSTREAM_ROOT` for E2E.
-- **E2E** — `e2e/acp.version-update-preserve.test.sh` (12 assertions),
+- **E2E** — `e2e/acp.version-update-preserve.test.sh` (13 assertions incl. `--force`),
   `e2e/acp.install-preserve.test.sh` (manifest merge + tier B).
 - **Validate guard** — `validateInstallUpdateSafety()` blocks blind `cp agent/core/*.yml`
   and `cat > manifest.yaml` regressions.
