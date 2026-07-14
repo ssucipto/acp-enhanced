@@ -7,6 +7,152 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+---
+
+## [6.25.2] — 2026-07-15
+
+### Added
+- **`acp.review-scan.sh`** — deterministic Phase 1 scanner for `/acp-review` (EH-02, SC-01, TS-01, SH-01).
+- **`agent/integrity-manifest.yaml`** — SHA-256 manifest split from package `manifest.yaml` (INT-001).
+- **`/acp-review --self`** — self-review recipe for ACP Enhanced framework code (audit-085 F-085-01).
+
+### Changed
+- **Rule count** — reconciled to 64 total (54 core + 10 Appendix A) across README, domain.yml, wrappers.
+- **Appendix A IDs** — renamed AP-01/02/03 → ACP-01/02/03 in review command docs.
+
+### Fixed
+- **review-001** — vitest ^3.2.7 (0 npm audit CVEs); TypeScript strictness in `acp-validate.ts`; `err: unknown` in `acp-dispatch.ts`; `set -euo pipefail` in `acp.package-search.sh`.
+- **integrity-001** — INT-001/002: integrity manifest verify via awk; macOS BSD `sed`/`mapfile` fixes in git-provenance and network-whitelist scripts.
+- **audit-085** — F-085-01/05/06/07: Phase 1 scanner, `--self` flag, rule count, appendix naming.
+
+### Security
+- **npm audit** — scripts/ dev dependencies upgraded; 0 vulnerabilities.
+
+---
+
+## [6.25.1] — 2026-07-15
+
+### Fixed
+- **audit-083** — tier3 E2E now exercises all 58 tier-3 command docs (was static 26-command subset);
+  case-insensitive Agent Directive checks; `validateCommandE2eCoverage()` accepts `repoRoot`/`commandsDir`
+  options for vitest; milestone/task tracking reconciled.
+
+### Added
+- **Vitest** — `validateCommandE2eCoverage` unit tests + gap fixture YAML.
+- **Task doc** — `task-211` for route-206 M63 coverage; tasks 212–218 for audit-083 remediation.
+
+---
+
+## [6.25.0] — 2026-07-15
+
+### Added
+- **M63 Test Coverage Tier 2 & 3** — `agent/schemas/command-e2e-coverage.yaml` maps all 70 `acp.*` commands.
+- **`validateCommandE2eCoverage()`** — CI guard: 0 untested commands; fails on missing registry/suite.
+- **E2E** — `acp.tier2-workflow.test.sh`, `acp.tier3-memory-knowledge.test.sh`,
+  `acp.command-coverage-parity.test.sh`.
+
+### Changed
+- `acp-validate.ts` — command↔test parity scan wired into default validate run.
+
+---
+
+## [6.24.1] — 2026-07-15
+
+### Added
+- **E2E** — `e2e/acp.bootstrap-preserve.test.sh` (6 assertions) — bootstrap re-run preserves Tier B.
+- **`agent/schemas/install-tier-registry.yaml`** — path registry for tier policy docs/validate.
+
+### Fixed
+- **audit-082** — `acp.install.sh` copies `AGENTS.md` (not stale `AGENT.md` only); tier-aware install banner;
+  README/CONTRIBUTING consumer safety; `acp.version-update.md` steps reconciled to tier policy;
+  milestone gates + task stamps; `--force` E2E (V13); carryovers re-verified @ audit-082.
+
+---
+
+## [6.24.0] — 2026-07-15
+
+### Added
+- **Safe install/update policy (M68)** — tier A/B/C/D file policy in `acp.common.sh`
+  (`acp_copy_framework_file`, `acp_merge_manifest_acp_core`, `acp_install_manifest_acp_core`).
+- **`/acp-version-update` route-079 for real** — `--diff`, `--preserve-project-core`,
+  `--force`, `--yes`; accepts `AGENTS.md` or `AGENT.md`; offline `ACP_UPSTREAM_ROOT` for E2E.
+- **E2E** — `e2e/acp.version-update-preserve.test.sh` (13 assertions incl. `--force`),
+  `e2e/acp.install-preserve.test.sh` (manifest merge + tier B).
+- **Validate guard** — `validateInstallUpdateSafety()` blocks blind `cp agent/core/*.yml`
+  and `cat > manifest.yaml` regressions.
+
+### Fixed
+- **audit-080** — version-update no longer blind-overwrites `identity.yml`, wiki, routing;
+  install preserves Tier B on reinstall; manifest merge retains third-party packages;
+  bootstrap create-if-absent for Tier B stubs; Windows `xargs` replaced with `acp_list_basenames`.
+- **v6.9.0 doc-only gap** — route-079 guards were documented in M47 but never implemented
+  in shell until this release (SC-080-01).
+
+### Changed
+- `acp.version-update.md` v1.2.0 — single authoritative tier table (SC-080-05).
+- Third-party command namespaces and `local.*` skills preserved on update (P-081-01/02).
+
+---
+
+## [6.23.1] — 2026-07-15
+
+### Fixed
+- **audit-079 housekeeping** — M67 post-ship gap closure: milestone verification
+  gates checked, task-195..202 stamped completed, sessions.md entry, feedback-007
+  §6 upstream acceptance, README/QUICKSTART 70-command counts, handoff wrapper
+  v2 descriptions, domain.yml handoff/receive E2E catalog, audit carryovers
+  re-verified @079, HIGH-067-001 marked fixed (0/70 commands missing).
+
+---
+
+## [6.23.0] — 2026-07-15
+
+### Added
+- **`/acp-handoff` v2.0.0** — dual mode: `--mode executor` (same-repo,
+  implementation package with ADR locks, task sequence, git pin) and
+  `--mode cross-repo` (v1 problem-only behaviour, default).
+- **`/acp-receive`** — incoming handoff protocol: git drift warning, session
+  gap check, assignment checklist, `--latest` resolution via `active_handoff`.
+- **`active_handoff`** optional field in `progress.yaml` schema + validate rule.
+- **E2E** — `e2e/acp.handoff.test.sh`, `e2e/acp.receive.test.sh` with M51-style
+  fixtures under `agent/benchmarks/fixtures/handoff/`.
+- **Wiki** — `agent/wiki/cross-agent-handoff.md` ritual documentation (M67).
+
+### Changed
+- **`/acp-resume` v1.1.0** — optional handoff path runs receive protocol before init.
+- **`package.yaml`**, `domain.yml`, `agent/index/acp.core.yaml` — register
+  `acp.receive` (70th command); repair corrupt domain.yml handoff/feedback entries.
+- **CONTRIBUTING.md** — field feedback intake via `agent/proposals/` and
+  `agent/feedback/`.
+
+### Fixed
+- **audit-077 / feedback-007** — cross-agent handoff protocol gaps H1–H10, U1–U3.
+- **audit-078 P-078-01** — `domain.yml` corrupt acp.feedback/handoff entries.
+
+---
+
+## [6.21.1] — 2026-07-15
+
+### Fixed
+- **progress.yaml YAML integrity** — removed 191 duplicate task field keys
+  (mostly duplicate `completed_date` entries) restoring full js-yaml parse.
+- **Milestone status desync** — synced `**Status**` in M19, M24–M28, M47–M49
+  milestone docs to match progress.yaml (`completed`).
+- **Missing M27 milestone doc** — created
+  `agent/milestones/milestone-27-distribution-readiness-fixes.md`.
+- **acp-validate.ts** — removed incorrect `milestone.schema.yaml` →
+  `progress.yaml` mapping; fixed `Array.isArray` type check for schema warnings.
+- **Verification gates** — marked M59/M60/M63 industry-standard verification
+  items with ✅/⏳ status prefixes.
+
+### Changed
+- **progress.yaml tracking** — `current_milestone` → M63; `next_steps` and
+  `notes` refreshed after M66 completion.
+- **README badges** — version 6.21.1; 66 milestones shipped, M63 next.
+- **git tag** — retroactive `v6.21.0` tag on M66 release commit.
+
+---
+
 ## [6.21.0] — 2026-06-15
 
 ### Added
@@ -307,7 +453,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`/acp-review` command**: 54-rule standards enforcement covering TypeScript, OWASP Top 10:2025, OWASP MASVS v2.0, API conventions, naming, code health, and error handling
 - `agent/commands/acp.review.md` — full command document with 7 rule categories, quality gates, executor selection, and output format spec
 - `agent/skills/code-review.md` — compact skill file (copilot executor, Flash disqualified, OWASP→rule mapping)
-- Appendix A: 10 ACP self-review rules (SH-01–SH-04, YM-01–YM-03, AP-01–AP-03) auto-activate when `agent/commands/` detected
+- Appendix A: 10 ACP self-review rules (SH-01–SH-04, YM-01–YM-03, ACP-01–ACP-03) auto-activate when `agent/commands/` detected
 - `--diff` flag: review only files changed since last commit (git diff integration)
 - `--carryover` integration: writes HIGH+ findings to `agent/memory/audit-carryovers.md`
 - `--ci` mode: compact output, exit 1 on CRITICAL/HIGH findings

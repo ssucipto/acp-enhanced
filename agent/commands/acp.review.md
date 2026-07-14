@@ -8,11 +8,11 @@
 **Version**: 1.0.0  
 **Created**: 2026-06-07  
 **Status**: Active  
-**Scripts**: None  
+**Scripts**: acp.review-scan.sh  
 
 ---
 
-**Purpose**: Enforce code quality, security, and consistency standards across a project's codebase using a structured 54-rule ruleset aligned to OWASP Top 10:2025, OWASP MASVS v2.0, TypeScript strict mode, and industry best practices.  
+**Purpose**: Enforce code quality, security, and consistency standards across a project's codebase using a structured **64-rule** ruleset (54 core + 10 Appendix A) aligned to OWASP Top 10:2025, OWASP MASVS v2.0, TypeScript strict mode, and industry best practices.  
 **Category**: Code Quality / Security  
 **Frequency**: Per sprint, per PR, or pre-commit  
 
@@ -36,7 +36,33 @@ The v1.0.0 ruleset targets **TypeScript / JavaScript / Node.js** projects (React
 
 For Python, Go, Rust, or other languages, the structural review framework (output format, carryover integration, CI mode) still applies, but language-specific rules (TS-01–TS-13, NC-01–NC-09) will not fire. Language detection and ruleset expansion are planned for v2.0.0.
 
-When the project contains `agent/commands/` — i.e., an ACP-enhanced project self-reviewing — Appendix A (ACP Self-Review Rules) automatically activates.
+When the project contains `agent/commands/` — i.e., an ACP-enhanced project self-reviewing — Appendix A (ACP Self-Review Rules) automatically activates. Use `--self` to scan the standard ACP Enhanced paths without relying on `src/`.
+
+## Ruleset Size
+
+| Layer | Count | Rule prefixes |
+|-------|-------|----------------|
+| Core rules (Categories 1–6) | **54** | EH, TS, NC, AP, CH, SC |
+| Appendix A (ACP self-review) | **10** | SH, YM, ACP |
+| **Total distinct rule IDs** | **64** | v1.0.0 |
+
+> Phase 1 deterministic checks (EH-02, SC-01, TS-01, SH-01) run via `acp.review-scan.sh`. Remaining rules require agent reasoning.
+
+## ACP Enhanced Self-Review Recipe
+
+When reviewing this repository (no `src/` directory), use:
+
+```
+/acp-review --self --rules typescript,security,code-health --report
+/acp-validate
+/acp-integrity --self --fast
+```
+
+Or run the deterministic scanner directly:
+
+```bash
+bash agent/scripts/acp.review-scan.sh --ci scripts/ agent/scripts/
+```
 
 ---
 
@@ -44,7 +70,8 @@ When the project contains `agent/commands/` — i.e., an ACP-enhanced project se
 
 | Flag | Purpose |
 |------|---------|
-| `[path]` | File or directory; defaults to `src/` |
+| `[path]` | File or directory; defaults to `src/` when present, else project root |
+| `--self` | ACP Enhanced self-review: `scripts/`, `agent/scripts/`, `agent/commands/`, `e2e/` |
 | `--rules <category>` | Limit to one category: `error-handling`, `typescript`, `naming`, `api`, `code-health`, `security`, `mobile` |
 | `--severity <level>` | Minimum level: `critical`, `high`, `medium`, `low` |
 | `--scope <web\|mobile\|all>` | Platform scoping (default: `all`) |
@@ -303,11 +330,14 @@ full codebase, all rules           → Composer 2.5
 
 ## Steps
 
-1. **Invoke the command**: Run `/acp-review` with the desired rule set (`--rules <category>`, `--all`, or default).
-2. **Scan the codebase**: The agent examines project files against the 54-rule framework aligned to OWASP Top 10:2025 and TypeScript strict mode.
-3. **Produce findings**: Generate a structured findings report with rule IDs, severities (CRITICAL/HIGH/MEDIUM/LOW), file locations, and fix suggestions.
-4. **Prioritize fixes**: CRITICAL and HIGH findings should be addressed before commit. MEDIUM findings before PR merge. LOW findings tracked for next sprint.
-5. **Verify**: Run the **Verification Checklist** at the bottom of this document to confirm the review completed correctly.
+1. **Invoke the command**: Run `/acp-review` with the desired rule set (`--rules <category>`, `--self`, or default).
+2. **Run Phase 1 scanner** (optional, recommended for CI): `bash agent/scripts/acp.review-scan.sh [--ci] [path]` — deterministic EH-02, SC-01, TS-01, SH-01.
+3. **Scan the codebase**: The agent examines project files against the 64-rule framework aligned to OWASP Top 10:2025 and TypeScript strict mode.
+4. **Produce findings**: Generate a structured findings report with rule IDs, severities (CRITICAL/HIGH/MEDIUM/LOW), file locations, and fix suggestions.
+5. **Prioritize fixes**: CRITICAL and HIGH findings should be addressed before commit. MEDIUM findings before PR merge. LOW findings tracked for next sprint.
+6. **Verify**: Run the **Verification Checklist** at the bottom of this document to confirm the review completed correctly.
+
+**`--self` path resolution**: When `--self` is passed, scan these paths in order: `scripts/`, `agent/scripts/`, `agent/commands/`, `e2e/`. Skip missing directories silently.
 
 ---
 
@@ -324,9 +354,9 @@ Auto-activated when `agent/commands/` is detected in the project root.
 | YM-01 | All YAML files parse cleanly — no unquoted `{}` braces in flow sequences | HIGH |
 | YM-02 | All Markdown frontmatter parses as valid YAML | MEDIUM |
 | YM-03 | Version fields consistent across 8+ version-bearing files | HIGH |
-| AP-01 | Command docs have `🤖 Agent Directive` header | MEDIUM |
-| AP-02 | Every command has an E2E test file | MEDIUM |
-| AP-03 | Scripts follow naming convention `acp.{name}.sh` | LOW |
+| ACP-01 | Command docs have `🤖 Agent Directive` header | MEDIUM |
+| ACP-02 | Every command has an E2E test file | MEDIUM |
+| ACP-03 | Scripts follow naming convention `acp.{name}.sh` | LOW |
 
 ---
 
@@ -344,7 +374,7 @@ Auto-activated when `agent/commands/` is detected in the project root.
 
 ## Verification Checklist
 
-- [ ] All 54 rules documented with rule IDs, severities, and scopes
+- [ ] All 64 rules documented (54 core + 10 Appendix A) with rule IDs, severities, and scopes
 - [ ] Output format spec included with example YAML
 - [ ] Quality gates documented (8 rules)
 - [ ] Executor selection guide with disqualification rationale

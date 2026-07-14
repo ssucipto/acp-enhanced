@@ -12,6 +12,8 @@ import {
   validateGitTagsExist,
   validateGitignoreConflicts,
   validateGitattributesCoverage,
+  validateInstallUpdateSafety,
+  validateCommandE2eCoverage,
 } from "./acp-validate.ts";
 import type { ValidationError } from "./acp-validate.ts";
 
@@ -245,5 +247,47 @@ describe("validateGitattributesCoverage", () => {
     const errors = validateGitattributesCoverage();
     expect(Array.isArray(errors)).toBe(true);
     // State-tolerant: may return warnings depending on .gitattributes state
+  });
+});
+
+describe("validateInstallUpdateSafety", () => {
+  it("passes on M68 tier-aware scripts", () => {
+    const errors = validateInstallUpdateSafety();
+    expect(errors.filter((e) => e.severity === "error")).toHaveLength(0);
+  });
+
+  it("does not false-positive on M68 tier-aware scripts", () => {
+    const errors = validateInstallUpdateSafety();
+    const hasBlindCp = errors.some((e) => e.message.includes("agent/core/*.yml"));
+    expect(hasBlindCp).toBe(false);
+  });
+});
+
+describe("validateCommandE2eCoverage", () => {
+  const repoRoot = path.join(import.meta.dirname, "..");
+
+  it("errors when registry file is missing", () => {
+    const errors = validateCommandE2eCoverage("/nonexistent/command-e2e-coverage.yaml");
+    expect(errors.some((e) => e.message.includes("missing command E2E coverage registry"))).toBe(
+      true
+    );
+  });
+
+  it("errors when a command doc lacks registry entry", () => {
+    const fixture = path.join(repoRoot, "scripts/fixtures/command-e2e-coverage-gap.yaml");
+    const errors = validateCommandE2eCoverage(fixture, {
+      repoRoot,
+      commandsDir: path.join(repoRoot, "agent/commands"),
+    });
+    expect(errors.some((e) => e.message.includes("no E2E coverage entry for"))).toBe(true);
+  });
+
+  it("passes on full repo registry", () => {
+    const registry = path.join(repoRoot, "agent/schemas/command-e2e-coverage.yaml");
+    const errors = validateCommandE2eCoverage(registry, {
+      repoRoot,
+      commandsDir: path.join(repoRoot, "agent/commands"),
+    });
+    expect(errors.filter((e) => e.severity === "error")).toHaveLength(0);
   });
 });
