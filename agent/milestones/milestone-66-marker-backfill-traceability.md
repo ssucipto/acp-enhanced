@@ -1,6 +1,6 @@
 # Milestone 66: Marker Backfill & Metadata Traceability
 
-**Target version**: 6.21.0  
+**Shipped version**: 6.21.0  
 **Status**: completed
 **Completed**: 2026-06-15
 **Estimated effort**: ~2h (1 route)  
