@@ -2,13 +2,13 @@
 id: task-227
 milestone: M70
 title: "Commit sync atomicity enforcement (GAP-041-08)"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 4
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15
+completed_date: 2026-07-15
 route: route-216
 audit_findings: [GAP-041-08]
 depends_on: [task-226]

@@ -2,13 +2,13 @@
 id: task-229
 milestone: M70
 title: "IG-35 implement or wiki descope (F-086-01)"
-status: planned
+status: completed
 priority: 3
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15
+completed_date: 2026-07-15
 route: route-218
 audit_findings: [F-086-01]
 depends_on: []

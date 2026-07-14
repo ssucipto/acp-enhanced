@@ -2,13 +2,13 @@
 id: task-219
 milestone: M70
 title: "Enable GitHub branch protection on mainline (CRIT-065-002)"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15
+completed_date: 2026-07-15
 route: route-208
 audit_findings: [CRIT-065-002]
 depends_on: []

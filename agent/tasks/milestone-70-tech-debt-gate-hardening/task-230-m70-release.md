@@ -2,13 +2,13 @@
 id: task-230
 milestone: M70
 title: "M70 closure audit + v6.26.0 release"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15
+completed_date: 2026-07-15
 route: route-219
 audit_findings: [audit-086]
 depends_on: [task-219, task-221, task-223, task-224, task-226, task-227]

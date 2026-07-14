@@ -516,6 +516,18 @@ contents:
       description: YAML schema validation
       type: utility
 
+    - name: acp.atomic-write.sh
+      description: Atomic file write via temp-file and rename (M70 GAP-041-08)
+      type: utility
+
+    - name: acp.branch-protection-setup.sh
+      description: GitHub branch protection setup for mainline and develop (M70)
+      type: utility
+
+    - name: acp.recurring-complete.sh
+      description: Advance recurring_tasks next_due after scheduled scans
+      type: utility
+
   indices:
     - name: acp.core.yaml
       description: Key file index for core ACP command directives

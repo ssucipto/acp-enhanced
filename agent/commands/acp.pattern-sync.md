@@ -78,14 +78,16 @@ Read `agent/memory/patterns.md` and parse all YAML entries.
 
 ### 3. Sync Pattern Documents
 
-> **Atomicity (v6.9.1+)**: Write to `.tmp.{name}.md` first, then atomically rename
-> to `{name}.md`. Prevents partial writes from leaving corrupted documents.
+> **Atomicity (v6.9.1+, M71)**: Pipe generated content through `bash agent/scripts/acp.atomic-write.sh agent/patterns/{name}.md` (temp-file + atomic rename). Do not write directly to the target path.
 
 For each pattern in scope:
 
 1. **Determine filename**: `agent/patterns/{name}.md` where `{name}` is the `name:` field
 2. **Check existing**: If file exists with identical content → skip
-3. **Write/update**: Generate markdown document from registry entry:
+3. **Write/update**: Generate markdown document from registry entry, then:
+   ```bash
+   {generated_content} | bash agent/scripts/acp.atomic-write.sh "agent/patterns/{name}.md"
+   ```
 
 ```markdown
 # Pattern: {name}
