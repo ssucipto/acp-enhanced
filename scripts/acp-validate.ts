@@ -659,7 +659,7 @@ const SCHEMA_DATA_MAP: Record<string, string> = {
   "lessons.schema.yaml": "agent/memory/lessons.md",
   "decisions.schema.yaml": "agent/memory/decisions.md",
   "audit-carryovers.schema.yaml": "agent/memory/audit-carryovers.md",
-  "milestone.schema.yaml": "agent/progress.yaml", // milestones embedded in progress.yaml
+  // milestone.schema.yaml validates route-task frontmatter (id/title/status), not progress.yaml milestones map
 };
 
 function validateYamlAgainstSchema(
@@ -696,13 +696,16 @@ function validateYamlAgainstSchema(
     if (typeof dataYaml === "object" && dataYaml !== null && fieldName in (dataYaml as Record<string, unknown>)) {
       const val = (dataYaml as Record<string, unknown>)[fieldName];
       const expectedType = fieldDef["type"] as string | undefined;
-      if (expectedType && typeof val !== expectedType) {
+      if (expectedType) {
+        const actualType = Array.isArray(val) ? "array" : typeof val;
+        if (actualType !== expectedType) {
         errors.push({
           file: filePath,
           line: 0,
-          message: `Field "${fieldName}" expected type ${expectedType}, got ${typeof val}`,
+          message: `Field "${fieldName}" expected type ${expectedType}, got ${actualType}`,
           severity: "warning",
         });
+        }
       }
     }
   }
