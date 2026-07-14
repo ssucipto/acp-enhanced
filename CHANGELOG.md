@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.24.0] — 2026-07-15
+
+### Added
+- **Safe install/update policy (M68)** — tier A/B/C/D file policy in `acp.common.sh`
+  (`acp_copy_framework_file`, `acp_merge_manifest_acp_core`, `acp_install_manifest_acp_core`).
+- **`/acp-version-update` route-079 for real** — `--diff`, `--preserve-project-core`,
+  `--force`, `--yes`; accepts `AGENTS.md` or `AGENT.md`; offline `ACP_UPSTREAM_ROOT` for E2E.
+- **E2E** — `e2e/acp.version-update-preserve.test.sh` (12 assertions),
+  `e2e/acp.install-preserve.test.sh` (manifest merge + tier B).
+- **Validate guard** — `validateInstallUpdateSafety()` blocks blind `cp agent/core/*.yml`
+  and `cat > manifest.yaml` regressions.
+
+### Fixed
+- **audit-080** — version-update no longer blind-overwrites `identity.yml`, wiki, routing;
+  install preserves Tier B on reinstall; manifest merge retains third-party packages;
+  bootstrap create-if-absent for Tier B stubs; Windows `xargs` replaced with `acp_list_basenames`.
+- **v6.9.0 doc-only gap** — route-079 guards were documented in M47 but never implemented
+  in shell until this release (SC-080-01).
+
+### Changed
+- `acp.version-update.md` v1.2.0 — single authoritative tier table (SC-080-05).
+- Third-party command namespaces and `local.*` skills preserved on update (P-081-01/02).
+
+---
+
 ## [6.23.1] — 2026-07-15
 
 ### Fixed
