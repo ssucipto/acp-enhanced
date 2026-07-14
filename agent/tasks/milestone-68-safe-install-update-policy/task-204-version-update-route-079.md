@@ -2,13 +2,13 @@
 id: task-204
 milestone: M68
 title: version-update.sh route-079 implementation (route-199)
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 7
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-199
 audit_findings: [F-080-01, F-080-02, F-080-03, F-080-04, F-080-09, P-081-01, P-081-02, P-081-08]
 ---

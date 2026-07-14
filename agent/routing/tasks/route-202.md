@@ -27,8 +27,8 @@ Behavioral E2E (not grep-only): temp project with customized identity.yml + prog
 
 ## Acceptance criteria
 
-- [ ] `e2e/acp.version-update-preserve.test.sh` — ≥12 assertions, 100% pass
-- [ ] `e2e/acp.install-preserve.test.sh` — manifest merge + core preserve
+- [x] `e2e/acp.version-update-preserve.test.sh` — ≥12 assertions, 100% pass
+- [x] `e2e/acp.install-preserve.test.sh` — manifest merge + core preserve
 - [ ] Suites registered in `agent/wiki/domain.yml` test_suites
 - [ ] CRLF-safe assertions where needed (Windows)
 - [ ] Offline upstream fixture (`ACP_UPSTREAM_ROOT` or local copy) — no live git clone in CI (P-081-03)

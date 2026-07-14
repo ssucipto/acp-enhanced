@@ -115,30 +115,30 @@ All F-080-01..12, P-081-01..03, P-081-06..08, SC-080-01..04 carryover closure at
 
 ### Functional
 
-- [ ] `/acp-version-update` default — customized `identity.yml` preserved
-- [ ] `/acp-version-update --diff` — no writes; shows would-change list
-- [ ] `/acp-version-update --force` — overwrites Tier B with warning
-- [ ] Third-party command namespaces preserved on update (P-081-01)
-- [ ] `local.*` skills preserved on update (P-081-02)
-- [ ] `acp.install.sh` reinstall — Tier B preserved; manifest packages retained
-- [ ] `acp-bootstrap.sh` re-run — no Tier B overwrite
-- [ ] `progress.yaml` never touched by update/install/bootstrap (F-080-13)
+- [x] `/acp-version-update` default — customized `identity.yml` preserved
+- [x] `/acp-version-update --diff` — no writes; shows would-change list
+- [x] `/acp-version-update --force` — overwrites Tier B with warning
+- [x] Third-party command namespaces preserved on update (P-081-01)
+- [x] `local.*` skills preserved on update (P-081-02)
+- [x] `acp.install.sh` reinstall — Tier B preserved; manifest packages retained
+- [x] `acp-bootstrap.sh` re-run — no Tier B overwrite
+- [x] `progress.yaml` never touched by update/install/bootstrap (F-080-13)
 
 ### Quality
 
-- [ ] `e2e/acp.version-update-preserve.test.sh` — ≥12 assertions, 100% pass (offline fixture)
-- [ ] `e2e/acp.install-preserve.test.sh` — manifest merge + core preserve
-- [ ] Windows CI: install manifest path passes without `xargs`
-- [ ] route-079 verification checklist ✅ (in shell, not doc)
-- [ ] `npx tsx scripts/acp-validate.ts` — 0 errors (includes route-204 guard)
-- [ ] audit-080 F-080-01..12 → `status: fixed`
-- [ ] audit-081 P-081-01..03 → `status: fixed`
+- [x] `e2e/acp.version-update-preserve.test.sh` — ≥12 assertions, 100% pass (offline fixture)
+- [x] `e2e/acp.install-preserve.test.sh` — manifest merge + core preserve
+- [x] Windows CI: install manifest path passes without `xargs`
+- [x] route-079 verification checklist ✅ (in shell, not doc)
+- [x] `npx tsx scripts/acp-validate.ts` — 0 errors (includes route-204 guard)
+- [x] audit-080 F-080-01..12 → `status: fixed`
+- [x] audit-081 P-081-01..03 → `status: fixed`
 
 ### Release
 
-- [ ] CHANGELOG v6.24.0
-- [ ] FIFOZ consumer note: safe to run `/acp-version-update` on v6.24.0+
-- [ ] route-079 `completed:` stamped (post-E2E only)
+- [x] CHANGELOG v6.24.0
+- [x] FIFOZ consumer note: safe to run `/acp-version-update` on v6.24.0+
+- [x] route-079 `completed:` stamped (post-E2E only)
 
 ---
 

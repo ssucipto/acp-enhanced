@@ -2,13 +2,13 @@
 id: task-205
 milestone: M68
 title: install.sh tier preserve + manifest merge (route-200)
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-07-15
 started:
-completed:
+completed: 2026-07-15
 route: route-200
 ---
 

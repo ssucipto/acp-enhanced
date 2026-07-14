@@ -72,8 +72,10 @@ After it completes, **customize** `agent/core/identity.yml` for your project (na
 
 ### Update when this fork changes
 
-> **⚠️ The update overwrites framework files.** Commit your changes first (`git commit`).
-> See `agent/commands/acp.version-update.md` for the full list of preserved vs overwritten files.
+> **⚠️ Commit before updating** (`git commit`). On **v6.24.0+**, `/acp-version-update` uses tier-aware
+> copy logic — customized `identity.yml`, wiki, and taxonomy are **preserved by default**.
+> Pre-v6.24.0 scripts blind-overwrote `agent/core/*.yml`; do not update without a commit on older versions.
+> See `agent/commands/acp.version-update.md` for the authoritative tier table.
 
 ```
 /acp-version-update
@@ -81,9 +83,12 @@ After it completes, **customize** `agent/core/identity.yml` for your project (na
 Or run the update script directly:
 ```bash
 ./agent/scripts/acp.version-update.sh
+./agent/scripts/acp.version-update.sh --diff    # preview only
 ```
 
-All framework files (AGENT.md, agent/commands/, agent/scripts/, agent/core/, etc.) are replaced with the latest versions. Your data files (agent/memory/, agent/routing/tasks/, agent/design/, etc.) are preserved.
+**v6.24.0+ behavior**: Tier C framework files refresh (`AGENTS.md`, `agent/commands/acp.*`, scripts).
+Tier B project config is preserved when customized. Tier A data (`agent/memory/`, `agent/progress.yaml`,
+`agent/routing/tasks/`, third-party commands) is never overwritten.
 
 ---
 
