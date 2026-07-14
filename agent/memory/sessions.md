@@ -5,6 +5,19 @@
 - date: 2026-07-15
   executor: copilot
   branch: develop
+  tasks: [route-206, audit-083]
+  done:
+    - audit-083-m63-gaps-closed-v6-25-1
+    - tier3-e2e-dynamic-loop-58-commands
+    - validate-command-e2e-coverage-vitest
+    - milestone-task-tracking-reconciled
+  deferred:
+    - fifoz-feedback-007-consumer-path → acp-version-update
+  key_fact: "audit-083 closed SC-M63-01: tier3 E2E must loop all tier-3 docs — registry alone is insufficient for behavioral coverage."
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
   tasks: [route-206]
   done:
     - m63-test-coverage-tier-2-3-shipped-v6-25-0
