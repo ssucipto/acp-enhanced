@@ -26,7 +26,6 @@
 
 carryovers:
   # ── AUDIT-062 FINDINGS — M57 DEEP DIVE (2026-06-08) ─────────────────────────
-
   - audit_id: 62
     finding_id: F-062-01
     severity: medium
@@ -38,7 +37,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "078"
     escalated_to: null
-
   - audit_id: 62
     finding_id: F-062-02
     severity: medium
@@ -50,7 +48,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "078"
     escalated_to: null
-
   - audit_id: 62
     finding_id: F-062-03
     severity: high
@@ -62,7 +59,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "078"
     escalated_to: "M59 post-completion follow-up route (route-188 per audit-073). Automated next_due calculation deferred to M62 route-176 per audit-072 escalation. last_findings_count added (F-062-05)."
-
   - audit_id: 62
     finding_id: F-062-04
     severity: medium
@@ -74,7 +70,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "078"
     escalated_to: null
-
   - audit_id: 62
     finding_id: F-062-05
     severity: medium
@@ -88,7 +83,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-014 FINDINGS — ALL FIXED IN M41 (routes 022–035, v6.7.0) ──────────
-
   - audit_id: 14
     finding_id: BUG-001
     severity: critical
@@ -98,7 +92,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: "015"
     escalated_to: null
-
   - audit_id: 14
     finding_id: BUG-002
     severity: high
@@ -108,7 +101,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: "015"
     escalated_to: null
-
   - audit_id: 14
     finding_id: BUG-003a
     severity: high
@@ -118,7 +110,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: "015"
     escalated_to: null
-
   - audit_id: 14
     finding_id: BUG-003b
     severity: high
@@ -128,7 +119,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: "015"
     escalated_to: null
-
   - audit_id: 14
     finding_id: BUG-003c
     severity: high
@@ -138,7 +128,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: "015"
     escalated_to: null
-
   - audit_id: 14
     finding_id: BUG-003d
     severity: high
@@ -148,7 +137,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: "015"
     escalated_to: null
-
   - audit_id: 14
     finding_id: BUG-004
     severity: medium
@@ -158,7 +146,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: "015"
     escalated_to: null
-
   - audit_id: 14
     finding_id: GAP-001
     severity: low
@@ -168,7 +155,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: "015"
     escalated_to: null
-
   - audit_id: 14
     finding_id: GAP-002
     severity: medium
@@ -178,7 +164,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: "015"
     escalated_to: null
-
   - audit_id: 14
     finding_id: GAP-003
     severity: medium
@@ -188,7 +173,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: "015"
     escalated_to: null
-
   - audit_id: 14
     finding_id: GAP-004
     severity: medium
@@ -198,7 +182,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: "015"
     escalated_to: null
-
   - audit_id: 14
     finding_id: GAP-005
     severity: low
@@ -210,7 +193,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-015 FINDINGS — OPEN (from external final audit, verified vs v6.7.0) ─
-
   - audit_id: 15
     finding_id: BUG-003
     severity: high
@@ -225,7 +207,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
-
   - audit_id: 15
     finding_id: MEMORY-002
     severity: high
@@ -239,7 +220,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
-
   - audit_id: 15
     finding_id: VALIDATE-001
     severity: high
@@ -253,7 +233,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
-
   - audit_id: 15
     finding_id: ROUTING-001
     severity: high
@@ -268,7 +247,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
-
   - audit_id: 15
     finding_id: MEMORY-001
     severity: medium
@@ -282,7 +260,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
-
   - audit_id: 15
     finding_id: ROUTING-002
     severity: medium
@@ -294,7 +271,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
-
   - audit_id: 15
     finding_id: ROUTING-003
     severity: low
@@ -306,7 +282,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
-
   - audit_id: 15
     finding_id: VALIDATE-002
     severity: low
@@ -318,7 +293,6 @@ carryovers:
     fix_applied_date: 2026-05-11
     verified_in_audit: null
     escalated_to: null
-
   - audit_id: 15
     finding_id: STRUCT-003
     severity: low
@@ -331,7 +305,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-016 FINDINGS ──────────────────────────────────────────────────────
-
   - audit_id: 16
     finding_id: OBS-001
     severity: low
@@ -345,7 +318,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-017 FINDINGS ──────────────────────────────────────────────────────
-
   - audit_id: 17
     finding_id: GAP-001
     severity: high
@@ -359,7 +331,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-041 FINDINGS (M47 Pre-Implementation) ──────────────────────────────
-
   - audit_id: 41
     finding_id: GAP-041-04
     severity: low
@@ -371,7 +342,6 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: "M48 route-088"
-
   - audit_id: 41
     finding_id: GAP-041-06
     severity: medium
@@ -383,7 +353,6 @@ carryovers:
     fix_applied_date: 2026-06-04
     verified_in_audit: null
     escalated_to: null
-
   - audit_id: 41
     finding_id: GAP-041-07
     severity: medium
@@ -395,7 +364,6 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: "M48 routes 085-086"
-
   - audit_id: 41
     finding_id: GAP-041-08
     severity: medium
@@ -409,7 +377,6 @@ carryovers:
     escalated_to: "M48 route-087"
 
   # ── AUDIT-044 FINDINGS — POST-IMPLEMENTATION ENHANCEMENTS ─────────────
-
   - audit_id: 44
     finding_id: G-044-03
     severity: low
@@ -421,7 +388,6 @@ carryovers:
     fix_applied_date: 2026-06-07
     verified_in_audit: "052"
     escalated_to: null
-
   - audit_id: 44
     finding_id: G-044-06
     severity: low
@@ -433,7 +399,6 @@ carryovers:
     fix_applied_date: 2026-06-07
     verified_in_audit: "052"
     escalated_to: null
-
   - audit_id: 44
     finding_id: G-044-07
     severity: low
@@ -445,7 +410,6 @@ carryovers:
     fix_applied_date: 2026-06-07
     verified_in_audit: "052"
     escalated_to: null
-
   - audit_id: 44
     finding_id: DEFER-044-01
     severity: low
@@ -459,7 +423,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-045 FINDINGS — BOOTSTRAP INSTALL FAILURE ──────────────────
-
   - audit_id: 45
     finding_id: BUG-045-01
     severity: critical
@@ -471,7 +434,6 @@ carryovers:
     fix_applied_date: 2026-06-06
     verified_in_audit: "046"
     escalated_to: null
-
   - audit_id: 45
     finding_id: BUG-045-02
     severity: high
@@ -483,7 +445,6 @@ carryovers:
     fix_applied_date: 2026-06-06
     verified_in_audit: "046"
     escalated_to: null
-
   - audit_id: 45
     finding_id: BUG-045-03
     severity: medium
@@ -497,7 +458,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-065 FINDINGS — COMPREHENSIVE GAP ANALYSIS 2026-06-15 ──────────────
-
   - audit_id: 65
     finding_id: CRIT-065-001
     severity: medium  # DOWNGRADED by audit-066: decisions.md is gitignored instance data (.gitignore:34), not missing storage
@@ -509,7 +469,6 @@ carryovers:
     verified_in_audit: "073"
     verified_in_audit: "066 (reclassified)"
     escalated_to: null
-
   - audit_id: 65
     finding_id: CRIT-065-002
     severity: critical
@@ -520,7 +479,6 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
-
   - audit_id: 65
     finding_id: CRIT-065-003
     severity: critical
@@ -531,18 +489,16 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "074"
     escalated_to: null
-
   - audit_id: 65
     finding_id: HIGH-065-004
     severity: high
     file: agent/scripts/ (17 files)
     finding: "17 scripts use bare 'set -e' not 'set -euo pipefail' — unbound variable bugs silently succeed; pipeline failures masked"
     fix_target: "Batch-upgrade acp.install.sh, acp.package-*.sh, acp.project-info.sh, acp.project-update.sh, acp.sessions.sh, acp.uninstall.sh, acp.version-*.sh"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 65
     finding_id: HIGH-065-005
     severity: high
@@ -553,7 +509,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "075"
     escalated_to: null
-
   - audit_id: 65
     finding_id: HIGH-065-006
     severity: high
@@ -566,51 +521,46 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-066 FINDINGS — SECOND-ROUND DEEP GAPS 2026-06-15 ──────────────────
-
   - audit_id: 66
     finding_id: HIGH-066-001
     severity: high
     file: scripts/acp-dispatch.ts
     finding: "updateRoutingYml() overwrites entire core/routing.yml with a 4-line session stub — destroys context_modes + command_suggestions on every Persona B/C dispatch (tracked file = committed data loss)"
     fix_target: "Replace full-file writeFileSync with surgical session-block update (use yaml_set or targeted regex). Add regression test asserting context_modes survives dispatch."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 66
     finding_id: HIGH-066-005
     severity: high
     file: .github/workflows/ci.yaml
     finding: "acp-validate.ts never runs in CI — placeholder + frontmatter-field checks never execute; CI only runs ci-validate.sh"
     fix_target: "Add 'npx ts-node scripts/acp-validate.ts' as a CI step in ci.yaml validate job"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 66
     finding_id: HIGH-066-006
     severity: high
     file: scripts/ci-validate.sh
     finding: "ci-validate.sh frontmatter check is a no-op for command files — gates on head -1 grep '^---$' but command docs start with '# Command:' (inline bold markers, not --- YAML). No automated structural conformance check exists for command docs."
     fix_target: "Add command-doc structure validation (## Steps, ## Verification, **Namespace**: etc.) instead of gating on a --- line command files never have"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 66
     finding_id: MED-066-002
     severity: medium
     file: scripts/acp-dispatch.ts
     finding: "OPENROUTER_API_KEY non-null assertion (process.env.X!) — missing env var yields cryptic SDK error not a clear preflight message"
     fix_target: "Add preflight check: fail fast with clear message if OPENROUTER_API_KEY unset before client init"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 66
     finding_id: MED-066-003
     severity: medium
@@ -621,7 +571,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "075"
     escalated_to: null
-
   - audit_id: 66
     finding_id: MED-066-007
     severity: medium
@@ -636,7 +585,6 @@ carryovers:
   # ── AUDIT-067 FINDINGS — COMPLETE CONSOLIDATED AUDIT 2026-06-15 ─────────────
   # NOTE: audit-067 Part B is the canonical deduplicated backlog. Entries below
   # are NEW findings only; prior 065/066 entries remain authoritative above.
-
   - audit_id: 67
     finding_id: HIGH-067-001
     severity: high
@@ -647,18 +595,16 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: null
-
   - audit_id: 67
     finding_id: MED-067-002
     severity: medium
     file: AGENTS.md
     finding: "AGENTS.md version header reads v6.10.0 while project is 6.12.1 — auto-loaded context file is 2 minors stale; three sync files not byte-identical (AGENTS.md has extra version header line)"
     fix_target: "Update AGENTS.md header to current version; add version-header check to /acp-validate Step 2c consistency check"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 67
     finding_id: MED-067-003
     severity: medium
@@ -669,7 +615,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "074"
     escalated_to: null
-
   - audit_id: 67
     finding_id: MED-067-005
     severity: medium
@@ -680,22 +625,20 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "074"
     escalated_to: null
-
   - audit_id: 67
     finding_id: LOW-067-004
     severity: low
     file: agent/scripts/acp.git-provenance.sh
     finding: "Parses team_members with grep/while-read instead of YAML parser — violates scripts.md 'never parse YAML with grep' rule"
     fix_target: "Use yaml_get_array from acp.yaml-parser.sh to read team_members"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
 
   # ── AUDIT-068 FINDINGS — M57 & M58 IMPLEMENTATION DEEP DIVE (2026-06-15) ─────
   # Note: M57's own findings F-062-01..05 remain pending (mapped to route-176/M62);
   # not re-listed here. Below are NEW findings only. See audit-068 report for full detail.
-
   - audit_id: 68
     finding_id: F-068-01
     severity: high
@@ -707,7 +650,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "069"
     escalated_to: null
-
   - audit_id: 68
     finding_id: F-068-02
     severity: high
@@ -719,7 +661,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "069"
     escalated_to: null
-
   - audit_id: 68
     finding_id: F-068-03
     severity: high
@@ -727,11 +668,10 @@ carryovers:
     finding: "M57 shipped with HIGH carryover F-062-03 (no automated next_due -> manual date drift) still pending; currently queued late in route-176/M62"
     description: "A HIGH correctness gap lives in a shipped feature (recurring scheduler). Consider promoting F-062-03 out of M62 into the M59 critical track."
     fix_target: "Promote F-062-03 (auto next_due helper / --complete flag) to M59; keep F-062-01/02/04/05 in route-176."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 68
     finding_id: F-068-04
     severity: medium
@@ -743,7 +683,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "072"
     escalated_to: null
-
   - audit_id: 68
     finding_id: F-068-07
     severity: medium
@@ -755,7 +694,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "072"
     escalated_to: null
-
   - audit_id: 68
     finding_id: F-068-10
     severity: low
@@ -766,7 +704,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "072"
     escalated_to: null
-
   - audit_id: 68
     finding_id: F-068-12
     severity: low
@@ -783,7 +720,6 @@ carryovers:
   # Performed after merging origin/develop (commit 90239d9) which un-gitignored
   # milestones/tasks/routing/memory. Supersedes audit-068 F-068-01/02 (now fixed).
   # See agent/reports/audit-069-m57-m58-post-sync-reaudit.md for full detail.
-
   - audit_id: 69
     finding_id: F-069-01
     severity: high
@@ -795,7 +731,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "072"
     escalated_to: null
-
   - audit_id: 69
     finding_id: F-069-02
     severity: high
@@ -807,7 +742,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "072"
     escalated_to: null
-
   - audit_id: 69
     finding_id: F-069-03
     severity: high
@@ -819,7 +753,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "072"
     escalated_to: null
-
   - audit_id: 69
     finding_id: F-069-04
     severity: high
@@ -831,7 +764,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "072"
     escalated_to: null
-
   - audit_id: 69
     finding_id: F-069-05
     severity: high
@@ -843,7 +775,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "072"
     escalated_to: "M59 post-completion follow-up route (route-188 per audit-073). F-062-03 promoted."
-
   - audit_id: 69
     finding_id: F-069-09
     severity: medium
@@ -857,7 +788,6 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
-
   - audit_id: 69
     finding_id: F-069-10
     severity: low
@@ -870,7 +800,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-072 FINDINGS — M58 POST-IMPL VERIFICATION (2026-06-15) ─────────────
-
   - audit_id: 72
     finding_id: F-072-01
     severity: high
@@ -881,7 +810,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "072"
     escalated_to: null
-
   - audit_id: 72
     finding_id: F-072-02
     severity: high
@@ -892,7 +820,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "072"
     escalated_to: null
-
   - audit_id: 72
     finding_id: F-072-03
     severity: medium
@@ -905,7 +832,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-070 FINDINGS — M55–M58 GATEWAY DEEP DIVE (2026-06-15) ──────────────
-
   - audit_id: 70
     finding_id: F-070-01
     severity: high
@@ -917,7 +843,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: 071
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-02
     severity: high
@@ -925,11 +850,10 @@ carryovers:
     finding: "Claimed rule coverage >> implemented — ~18 of 55 v1.0 rules real. CRITICAL exfiltration (IG-07–13) and persistence (IG-21–26) categories have NO detection; IG-04/IG-05 also absent"
     description: "Command doc/wiki/skill/milestone present these as script-backed; the network script implements only IG-01,02,03,06. 18+ mostly-CRITICAL malicious-code rules silently pass — false assurance for a security gate."
     fix_target: "Implement the rules or relabel as 'documented, not enforced'; ship an accurate coverage matrix; gate --ci accordingly."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-03
     severity: high
@@ -941,7 +865,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: 071
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-04
     severity: high
@@ -952,7 +875,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: 071
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-05
     severity: medium
@@ -963,130 +885,118 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: 071
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-06
     severity: medium
     file: agent/scripts/acp.dependency-diff.sh
     finding: "--ci severity semantics contradict spec — doc says exit 1 on CRITICAL/HIGH only; scripts exit 1 on ANY finding. MEDIUM (IG-30/31) and IG-28 'postinstall present' break CI on normal projects"
     fix_target: "Scripts must emit severity; --ci filters to CRITICAL/HIGH only."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-07
     severity: medium
     file: agent/skills/code-integrity.md
     finding: "Skill 'Rules Covered' table overstates 4/6 scripts (git-prov claims IG-34/35 not impl, omits IG-36; dep-diff claims IG-29/32 not impl; network claims IG-05 not impl; unicode claims IG-16 homoglyphs not impl)"
     fix_target: "Align coverage tables (skill + script headers) to actual implementation."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-08
     severity: medium
     file: agent/scripts/acp.dependency-diff.sh
     finding: "Typosquatting is substring match over ~60 hardcoded packages, not Levenshtein 1–2 from top-1000 as claimed; misses real squats. IG-29 (shadow deps — the script's namesake) and IG-32 not implemented"
     fix_target: "Implement real Levenshtein (python helper); implement IG-29 by diffing imports/package.json vs lockfile; or descope honestly."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-09
     severity: medium
     file: agent/scripts/acp.network-whitelist-validate.sh
     finding: "YAML parsed with grep/sed across gateway — whitelist loader grabs ANY '- ' list item (not scoped to approved_hosts:), fail-open; same in git-provenance + manifest verify. Violates scripts.md (LOW-067-004 class)"
     fix_target: "Use agent/scripts/acp.yaml-parser.sh; scope extraction to the correct key."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-10
     severity: medium
     file: agent/scripts/acp.dependency-diff.sh
     finding: "IG-31 stale-lockfile uses file mtime — unreliable in git checkouts/CI (clone resets mtimes to checkout time)"
     fix_target: "Use git log -1 --format=%ct -- <file> for both files."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-11
     severity: medium
     file: agent/scripts/acp.git-provenance.sh
     finding: "IG-37 provenance is a no-op out of the box — identity.yml ships team_members: [] so author verification is silently skipped for every commit"
     fix_target: "Emit explicit IG-37 SKIPPED warning when team_members empty; document first-run setup."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-12
     severity: medium
     file: agent/scripts/acp.manifest-hash.sh
     finding: "IG-41 (new files in agent/core/ not in manifest) structurally undetectable — manifest tracks hardcoded 7-file list, never enumerates directory. --generate prints to stdout (not the file) while --verify reads the file"
     fix_target: "Glob tracked directories at generate time; have --generate write agent/manifest.yaml (with --stdout opt-out)."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-13
     severity: low
     file: agent/scripts/acp.unicode-scan.sh
     finding: "Mis-attributes rule IDs (JSON hardcodes IG-14 for all hidden-char hits; human output omits rule ID). Comment-detector ERE '/\\\\*' won't match real /* block comments"
     fix_target: "Map codepoint class → correct rule (IG-14/15/16); fix comment regex."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-14
     severity: low
     file: e2e/acp.integrity.test.sh
     finding: "Rule-count assertion uses grep -cE '^\\| IG-\\d+' — \\d is literal in ERE → count 0, [ 0 -ge 55 ] fails (masked by || echo 0). Same class as F-067-003"
     fix_target: "Use grep -cE '^\\| IG-[0-9]+'."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-15
     severity: low
     file: agent/scripts/acp.manifest-hash.sh
     finding: "Portability — shasum -a 256 only (many Linux CI images have sha256sum not shasum); unicode/entropy hard-require python3 and silently degrade to exit-2 warning if absent"
     fix_target: "Fall back to sha256sum/openssl dgst; document python3 requirement / make absence a hard error in --ci."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
-
   - audit_id: 70
     finding_id: F-070-16
     severity: low
     file: agent/skills/code-integrity.md
     finding: "Token-budget inconsistency — skill header says ≤800 tokens; M56 deliverable + checklist specified ≤500"
     fix_target: "Pick one budget; update M56 checklist to match."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
 
   # ── AUDIT-071 FINDINGS — M59/M64 POST-IMPL (2026-06-15) ─────────────────────
-
   - audit_id: 71
     finding_id: F-071-01
     severity: high
@@ -1100,7 +1010,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-073 FINDINGS — M65 POST-IMPL VERIFICATION (2026-06-15) ─────────────
-
   - audit_id: 73
     finding_id: F-073-04
     severity: low
@@ -1108,15 +1017,14 @@ carryovers:
     finding: "191 duplicate YAML mapping keys (started:, completed_date:) across task entries cause js-yaml parse failure; validate.ts fallback loader works but hides the symptom"
     description: "Systemic duplication from accumulated session writes. The fallback loader masks the issue but the underlying YAML is still corrupt. Fix requires a dedup script."
     fix_target: "Create acp.dedup-progress.sh or a one-time cleanup that deduplicates started:/completed_date: fields on task entries, keeping the most recent value. Deferred to M70 tech-debt track."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-086
     escalated_to: null
 
   # ── AUDIT-075 FINDINGS — M61 POST-IMPL DEEP DIVE (2026-06-15) ─────────────────
   # All findings were discovered and fixed in the same audit cycle. Listed
   # for historical traceability; status: fixed with fix_applied_date set.
-
   - audit_id: 75
     finding_id: F-075-001
     severity: high
@@ -1127,7 +1035,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "075"
     escalated_to: null
-
   - audit_id: 75
     finding_id: F-075-002
     severity: medium
@@ -1138,7 +1045,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "075"
     escalated_to: null
-
   - audit_id: 75
     finding_id: F-075-003
     severity: low
@@ -1149,7 +1055,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "075"
     escalated_to: null
-
   - audit_id: 75
     finding_id: F-075-004
     severity: high
@@ -1160,7 +1065,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "075"
     escalated_to: null
-
   - audit_id: 75
     finding_id: F-075-005
     severity: medium
@@ -1171,7 +1075,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "075"
     escalated_to: null
-
   - audit_id: 75
     finding_id: F-075-006
     severity: low
@@ -1182,7 +1085,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "075"
     escalated_to: null
-
   - audit_id: 76
     finding_id: F-076-001
     severity: high
@@ -1193,7 +1095,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "076"
     escalated_to: null
-
   - audit_id: 76
     finding_id: F-076-002
     severity: medium
@@ -1204,7 +1105,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "076"
     escalated_to: null
-
   - audit_id: 76
     finding_id: F-076-003
     severity: medium
@@ -1215,7 +1115,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "076"
     escalated_to: null
-
   - audit_id: 76
     finding_id: F-076-004
     severity: medium
@@ -1226,7 +1125,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "076"
     escalated_to: null
-
   - audit_id: 76
     finding_id: F-076-005
     severity: low
@@ -1237,7 +1135,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "076"
     escalated_to: null
-
   - audit_id: 76
     finding_id: F-076-006
     severity: low
@@ -1248,7 +1145,6 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "076"
     escalated_to: null
-
   - audit_id: 76
     finding_id: F-076-007
     severity: low
@@ -1263,7 +1159,6 @@ carryovers:
   # ── AUDIT-077 FINDINGS — CROSS-AGENT HANDOFF (M67) ───────────────────────────
   # Field evidence: consumer-project audit-245, feedback-007. Planned: M67 routes 190–197.
   # Post-ship verification: audit-079 (2026-07-15)
-
   - audit_id: 77
     finding_id: H1
     severity: high
@@ -1275,7 +1170,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-190
-
   - audit_id: 77
     finding_id: H2
     severity: high
@@ -1286,7 +1180,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-191
-
   - audit_id: 77
     finding_id: H3
     severity: high
@@ -1297,7 +1190,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-190
-
   - audit_id: 77
     finding_id: H4
     severity: medium
@@ -1308,7 +1200,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-191
-
   - audit_id: 77
     finding_id: H5
     severity: medium
@@ -1319,7 +1210,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-190
-
   - audit_id: 77
     finding_id: H6
     severity: medium
@@ -1330,7 +1220,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-194
-
   - audit_id: 77
     finding_id: H7
     severity: medium
@@ -1341,7 +1230,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-190
-
   - audit_id: 77
     finding_id: H8
     severity: low
@@ -1352,7 +1240,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-193
-
   - audit_id: 77
     finding_id: H9
     severity: low
@@ -1363,7 +1250,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-193
-
   - audit_id: 77
     finding_id: H10
     severity: low
@@ -1374,7 +1260,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-194
-
   - audit_id: 77
     finding_id: U1
     severity: medium
@@ -1385,7 +1270,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-192
-
   - audit_id: 77
     finding_id: U2
     severity: low
@@ -1396,7 +1280,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: M67 route-196
-
   - audit_id: 77
     finding_id: U3
     severity: low
@@ -1409,7 +1292,6 @@ carryovers:
     escalated_to: M67 route-193
 
   # ── AUDIT-078 FINDINGS — M67 PRE-IMPL (2026-07-15) ───────────────────────────
-
   - audit_id: 78
     finding_id: P-078-01
     severity: medium
@@ -1424,7 +1306,6 @@ carryovers:
 
   # ── AUDIT-079 FINDINGS — M67 POST-SHIP GAPS (2026-07-15) ─────────────────────
   # Housekeeping closed in same session (audit-079 follow-up).
-
   - audit_id: 79
     finding_id: F-079-01
     severity: medium
@@ -1435,7 +1316,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: null
-
   - audit_id: 79
     finding_id: F-079-02
     severity: medium
@@ -1446,7 +1326,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: null
-
   - audit_id: 79
     finding_id: F-079-03
     severity: medium
@@ -1457,7 +1336,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: null
-
   - audit_id: 79
     finding_id: F-079-04
     severity: medium
@@ -1468,7 +1346,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: null
-
   - audit_id: 79
     finding_id: F-079-05
     severity: low
@@ -1479,7 +1356,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: null
-
   - audit_id: 79
     finding_id: F-079-06
     severity: low
@@ -1490,7 +1366,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: null
-
   - audit_id: 79
     finding_id: F-079-07
     severity: low
@@ -1501,7 +1376,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: null
-
   - audit_id: 79
     finding_id: F-079-08
     severity: low
@@ -1512,7 +1386,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: "079"
     escalated_to: null
-
   - audit_id: 79
     finding_id: F-079-11
     severity: low
@@ -1526,7 +1399,6 @@ carryovers:
 
   # ── AUDIT-080 FINDINGS — VERSION-UPDATE OVERWRITE SAFETY (2026-07-15) ────────
   # Field report: consumer-project /acp-version-update overwrote identity.yml. route-079 doc-only.
-
   - audit_id: 80
     finding_id: F-080-01
     severity: critical
@@ -1537,7 +1409,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 80
     finding_id: F-080-02
     severity: critical
@@ -1548,7 +1419,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 80
     finding_id: F-080-03
     severity: high
@@ -1559,7 +1429,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 80
     finding_id: F-080-04
     severity: high
@@ -1570,7 +1439,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 80
     finding_id: F-080-05
     severity: high
@@ -1581,7 +1449,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 80
     finding_id: F-080-06
     severity: high
@@ -1592,7 +1459,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 80
     finding_id: F-080-07
     severity: high
@@ -1603,7 +1469,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 80
     finding_id: F-080-08
     severity: medium
@@ -1614,7 +1479,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 80
     finding_id: F-080-10
     severity: medium
@@ -1625,7 +1489,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 80
     finding_id: F-080-11
     severity: medium
@@ -1636,7 +1499,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 80
     finding_id: F-080-09
     severity: medium
@@ -1647,7 +1509,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 80
     finding_id: F-080-12
     severity: low
@@ -1660,7 +1521,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-081 PRE-IMPL GAPS — M68 (2026-07-15) ───────────────────────────────
-
   - audit_id: 81
     finding_id: P-081-01
     severity: medium
@@ -1671,7 +1531,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 81
     finding_id: P-081-02
     severity: medium
@@ -1682,7 +1541,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 81
     finding_id: P-081-03
     severity: medium
@@ -1693,7 +1551,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 082
     escalated_to: null
-
   - audit_id: 82
     finding_id: F-082-09
     severity: low
@@ -1706,7 +1563,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-083 FINDINGS — M63 POST-SHIP (2026-07-15) ─────────────────────────
-
   - audit_id: 83
     finding_id: F-083-01
     severity: high
@@ -1718,7 +1574,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 083
     escalated_to: null
-
   - audit_id: 83
     finding_id: F-083-02
     severity: medium
@@ -1729,7 +1584,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 083
     escalated_to: null
-
   - audit_id: 83
     finding_id: F-083-03
     severity: medium
@@ -1740,7 +1594,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 083
     escalated_to: null
-
   - audit_id: 83
     finding_id: F-083-04
     severity: medium
@@ -1751,7 +1604,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 083
     escalated_to: null
-
   - audit_id: 83
     finding_id: F-083-06
     severity: low
@@ -1764,7 +1616,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-084 FINDINGS — M63 PRE-DEPLOYMENT (2026-07-15) ────────────────────
-
   - audit_id: 84
     finding_id: F-084-01
     severity: high
@@ -1776,7 +1627,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 084
     escalated_to: null
-
   - audit_id: 84
     finding_id: F-084-02
     severity: high
@@ -1788,7 +1638,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 084
     escalated_to: null
-
   - audit_id: 84
     finding_id: F-084-03
     severity: medium
@@ -1799,7 +1648,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: 084
     escalated_to: null
-
   - audit_id: 84
     finding_id: F-084-04
     severity: medium
@@ -1812,7 +1660,6 @@ carryovers:
     escalated_to: null
 
   # ── REVIEW-001 FINDINGS — CODE REVIEW (2026-07-15) ───────────────────────────
-
   - audit_id: review-001
     finding_id: CR-001
     severity: critical
@@ -1824,7 +1671,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: review-001-remediation
     escalated_to: null
-
   - audit_id: review-001
     finding_id: CR-002
     severity: high
@@ -1835,7 +1681,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: review-001-remediation
     escalated_to: null
-
   - audit_id: review-001
     finding_id: CR-003
     severity: high
@@ -1846,7 +1691,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: review-001-remediation
     escalated_to: null
-
   - audit_id: review-001
     finding_id: CR-004
     severity: high
@@ -1857,7 +1701,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: review-001-remediation
     escalated_to: null
-
   - audit_id: review-001
     finding_id: CR-005
     severity: high
@@ -1870,7 +1713,6 @@ carryovers:
     escalated_to: null
 
   # ── INTEGRITY-001 FINDINGS — SELF SCAN (2026-07-15) ──────────────────────────
-
   - audit_id: integrity-001
     finding_id: INT-001
     severity: high
@@ -1881,7 +1723,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: integrity-001-remediation
     escalated_to: null
-
   - audit_id: integrity-001
     finding_id: INT-002
     severity: high
@@ -1894,7 +1735,6 @@ carryovers:
     escalated_to: null
 
   # ── AUDIT-085 FINDINGS — ACP-REVIEW SELF-COVERAGE (2026-07-15) ─────────────
-
   - audit_id: audit-085
     finding_id: F-085-01
     severity: high
@@ -1905,7 +1745,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: audit-085-remediation
     escalated_to: null
-
   - audit_id: audit-085
     finding_id: F-085-05
     severity: medium
@@ -1916,7 +1755,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: audit-085-remediation
     escalated_to: null
-
   - audit_id: audit-085
     finding_id: F-085-06
     severity: medium
@@ -1927,7 +1765,6 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: audit-085-remediation
     escalated_to: null
-
   - audit_id: audit-085
     finding_id: F-085-07
     severity: medium
@@ -1937,4 +1774,39 @@ carryovers:
     status: fixed
     fix_applied_date: 2026-07-15
     verified_in_audit: audit-085-remediation
+    escalated_to: null
+
+  # ── AUDIT-086 FINDINGS — CARRYOVER SECOND ROUND (2026-07-15) ───────────────
+
+  - audit_id: audit-086
+    finding_id: F-086-02
+    severity: medium
+    file: agent/feedback/feedback-007-cross-agent-handoff-protocol.md
+    finding: "consumer-project consumer path — /acp-version-update on downstream project not verified"
+    fix_target: "Run /acp-version-update on consumer-project (or test consumer) and retire local wiki workaround"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-086
+    finding_id: F-086-03
+    severity: medium
+    file: agent/commands/acp.review.md
+    finding: "/acp-review Phase 1 scanner covers 4/64 rules — not a standalone CI gate"
+    fix_target: "M70: expand acp.review-scan.sh or publish explicit two-phase gate policy"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-086
+    finding_id: F-086-04
+    severity: low
+    file: agent/memory/audit-carryovers.md
+    finding: "Carryover registry drift — 21 entries stale 30+ days before audit-086 hygiene"
+    fix_target: "M70: validateCarryoverFreshness() in acp-validate.ts flags pending entries with code fixes"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
     escalated_to: null

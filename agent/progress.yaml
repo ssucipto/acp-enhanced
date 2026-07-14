@@ -3,13 +3,13 @@
 
 project:
   name: agent-context-protocol
-  version: 6.25.2
+  version: 6.25.3
   started: 2026-02-16
   status: active
   current_milestone: M63
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.25.2. Review + integrity
-    remediation — acp.review-scan.sh, integrity-manifest split, audit-085 closure.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.25.3. audit-086 carryover
+    hygiene — 21 stale carryovers stamped, recurring-complete script, manifest default write.
 
 milestones:
   M44:
@@ -4294,6 +4294,17 @@ tasks:
 recent_work:
   - date: 2026-07-15
     description: |
+      ✅ v6.25.3 patch — audit-086 second-round carryover hygiene.
+      Stamped 21 stale carryovers fixed; acp.recurring-complete.sh; manifest --generate
+      default write; ci-validate Steps/Verification hard-fail; code-integrity truth pass.
+    items:
+      - "✅ audit-086 report — 21 stale, 5 genuinely open for M70"
+      - "✅ acp.recurring-complete.sh — F-068-03 next_due automation"
+      - "✅ integrity E2E 69/69; validate 0 errors"
+      - "✅ 5 open carryovers: CRIT-065-002, MED-066-007, F-086-02/03/04"
+
+  - date: 2026-07-15
+    description: |
       ✅ v6.25.2 patch — review-001, integrity-001, audit-085 remediation.
       acp.review-scan.sh Phase 1 scanner; integrity-manifest.yaml split; vitest CVE fix;
       macOS-compat integrity scripts; 64-rule count reconciled.
@@ -6620,15 +6631,15 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "Pick next milestone from backlog (M63 complete — v6.25.2 deployed)"
-  - "Run overdue /acp-review and /acp-integrity weekly scans"
-  - "consumer-project: /acp-version-update on v6.25.2+ and close feedback-007"
+  - "Plan M70 tech-debt milestone (branch protection, memory schemas, review gate policy)"
+  - "Run weekly /acp-review and /acp-integrity scans (due 2026-07-22)"
+  - "consumer-project: /acp-version-update on v6.25.3+ and close feedback-007"
 
 current_blockers: []
 
 notes:
-  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M63–M68 shipped (v6.25.2)"
-  - "68 milestone entries — M55–M68 shipped (v6.11–v6.25.2); M63 complete (test tier 2/3)"
+  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M63–M68 shipped (v6.25.3)"
+  - "68 milestone entries — M55–M68 shipped (v6.11–v6.25.3); M63 complete (test tier 2/3)"
   - "72 command docs (70 acp.* + 2 git.*); 70 slash-command wrappers (prompts + opencode + cursor parity)"
   - "9 skills; 43 bash scripts; 56 E2E test files (incl. M68 preserve suites)"
   - "82+ audit reports (audit-080–082 install/update safety)"
