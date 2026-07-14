@@ -324,3 +324,35 @@ fields:
         type: string
         required: false
         description: "One-line task description"
+
+  active_handoff:
+    type: object
+    required: false
+    description: "Active cross-agent handoff pointer (v6.23.0+ M67)"
+    fields:
+      path:
+        type: string
+        required: true
+        description: "Repo-relative path to handoff markdown file"
+      date:
+        type: string
+        required: true
+        pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        description: "Handoff date (YYYY-MM-DD)"
+      to_executor:
+        type: string
+        required: true
+        description: "Receiving executor (cursor, claude, fable, human, etc.)"
+      from_executor:
+        type: string
+        required: true
+        description: "Outgoing executor"
+      git_commit:
+        type: string
+        required: true
+        description: "Git commit SHA pinned in handoff"
+      status:
+        type: string
+        required: true
+        enum: [active, superseded, completed]
+        description: "Handoff lifecycle status"

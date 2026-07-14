@@ -1,0 +1,48 @@
+# Install/update tier registry (M68) — authoritative path lists for docs + validate
+# Source: agent/design/safe-install-update-policy.md
+
+schema_version: 1.0.0
+updated: 2026-07-15
+
+tiers:
+  A:
+    behavior: never_overwrite
+    paths:
+      - agent/progress.yaml
+      - agent/memory/**
+      - agent/design/**
+      - agent/milestones/**
+      - agent/routing/tasks/route-*.md
+      - agent/commands/{third-party}.*.md
+    notes: Third-party command namespaces (not acp, git) are tier A on update.
+
+  B:
+    behavior: preserve_if_customized
+    paths:
+      - agent/core/identity.yml
+      - agent/core/constraints.yml
+      - agent/core/routing.yml
+      - agent/wiki/**
+      - agent/routing/taxonomy.yml
+      - agent/routing/rules.md
+      - agent/routing/config.yml
+      - agent/skills/local.*.md
+    notes: SHA compare vs upstream; skip when local differs unless --force.
+
+  C:
+    behavior: always_refresh
+    paths:
+      - AGENTS.md
+      - CLAUDE.md
+      - .github/copilot-instructions.md
+      - agent/commands/acp.*.md
+      - agent/commands/git.*.md
+      - agent/scripts/*.sh
+      - agent/schemas/**
+      - agent/routing/tasks/route-template.md
+
+  D:
+    behavior: merge_acp_core_only
+    paths:
+      - agent/manifest.yaml
+    notes: Use acp_merge_manifest_acp_core — never cat > whole manifest when packages exist.

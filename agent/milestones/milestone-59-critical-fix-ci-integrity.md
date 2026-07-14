@@ -1,6 +1,6 @@
 # Milestone 59: Critical-Fix & CI Integrity Track
 
-**Target version**: 6.14.0  
+**Shipped version**: 6.14.0  
 **Status**: completed  
 **Completed**: 2026-06-15  
 **Estimated effort**: ~10h (6 routes)  
@@ -28,10 +28,10 @@ Each route must satisfy BOTH:
 2. **Manual proof**: a documented before/after command output in the route's User-Observable Acceptance.
 
 Milestone-level exit criteria:
-- `npm test` (new) green for dispatch regression (route-159)
-- CI job fails on a deliberately malformed command doc (route-161 proof)
-- `package.yaml` command count == command file count, enforced in CI (route-160)
-- Branch protection visibly enabled (screenshot/settings link in route-162)
+- ✅ `npm test` (new) green for dispatch regression (route-159)
+- ✅ CI job fails on a deliberately malformed command doc (route-161 proof)
+- ✅ `package.yaml` command count == command file count, enforced in CI (route-160)
+- ⏳ Branch protection visibly enabled (screenshot/settings link in route-162) — docs complete; manual GitHub enable pending
 
 ## Success Criteria
 

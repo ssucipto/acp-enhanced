@@ -1,0 +1,399 @@
+schema_version: 1.0.0
+updated: '2026-07-15'
+milestone: M63
+description: Maps each acp.* command to one or more E2E suites — enforced by validateCommandE2eCoverage()
+commands:
+  acp.artifact-glossary:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.artifact-reference:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.artifact-research:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.audit:
+    tier: 3
+    suites:
+      - e2e/acp.audit.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.carryover-query:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.clarification-address:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.clarification-capture:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.clarification-create:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.command-create:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.commit:
+    tier: 3
+    suites:
+      - e2e/acp.commit.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.cost-report:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.decide:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.design-create:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.design-reference:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.design-spec:
+    tier: 3
+    suites:
+      - e2e/acp.design-spec.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.dispatch:
+    tier: 3
+    suites:
+      - e2e/acp.dispatch.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.feedback:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.handoff:
+    tier: 3
+    suites:
+      - e2e/acp.handoff.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.index:
+    tier: 3
+    suites:
+      - e2e/acp.index.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.init:
+    tier: 3
+    suites:
+      - e2e/acp.init.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.install:
+    tier: 3
+    suites:
+      - e2e/acp.install.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.integrity:
+    tier: 3
+    suites:
+      - e2e/acp.integrity.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.memory-sync:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.package-create:
+    tier: 3
+    suites:
+      - e2e/acp.package-create.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.package-info:
+    tier: 3
+    suites:
+      - e2e/acp.package-info.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.package-install:
+    tier: 2
+    suites:
+      - e2e/acp.package-install-list.test.sh
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.package-list:
+    tier: 3
+    suites:
+      - e2e/acp.package-list.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.package-publish:
+    tier: 2
+    suites:
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.package-remove:
+    tier: 3
+    suites:
+      - e2e/acp.package-remove.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.package-search:
+    tier: 3
+    suites:
+      - e2e/acp.package-search.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.package-update:
+    tier: 3
+    suites:
+      - e2e/acp.package-update.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.package-validate:
+    tier: 3
+    suites:
+      - e2e/acp.package-validate.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.pattern-create:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.pattern-sync:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.plan:
+    tier: 3
+    suites:
+      - e2e/acp.plan.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.preferences-create:
+    tier: 2
+    suites:
+      - e2e/acp.preferences-cli.test.sh
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.preferences-get:
+    tier: 2
+    suites:
+      - e2e/acp.preferences-cli.test.sh
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.preferences-set:
+    tier: 2
+    suites:
+      - e2e/acp.preferences-cli.test.sh
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.preferences-show:
+    tier: 2
+    suites:
+      - e2e/acp.preferences-cli.test.sh
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.preferences-validate:
+    tier: 2
+    suites:
+      - e2e/acp.preferences-cli.test.sh
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.proceed:
+    tier: 3
+    suites:
+      - e2e/acp.proceed.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.project-create:
+    tier: 2
+    suites:
+      - e2e/acp.project-workflow.test.sh
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.project-info:
+    tier: 3
+    suites:
+      - e2e/acp.project-info.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.project-list:
+    tier: 3
+    suites:
+      - e2e/acp.project-list.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.project-remove:
+    tier: 3
+    suites:
+      - e2e/acp.project-remove.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.project-set:
+    tier: 3
+    suites:
+      - e2e/acp.project-set.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.project-update:
+    tier: 3
+    suites:
+      - e2e/acp.project-update.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.projects-restore:
+    tier: 2
+    suites:
+      - e2e/acp.project-workflow.test.sh
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.projects-sync:
+    tier: 3
+    suites:
+      - e2e/acp.projects-sync.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.receive:
+    tier: 3
+    suites:
+      - e2e/acp.receive.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.report:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.resume:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.review:
+    tier: 3
+    suites:
+      - e2e/acp.review.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.route:
+    tier: 3
+    suites:
+      - e2e/acp.route.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.rule-file-audit:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.session-sync:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.sessions:
+    tier: 3
+    suites:
+      - e2e/acp.sessions.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.spec:
+    tier: 3
+    suites:
+      - e2e/acp.spec.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.stakeholder-report:
+    tier: 3
+    suites:
+      - e2e/acp.stakeholder-report.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.status:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.sync:
+    tier: 3
+    suites:
+      - e2e/acp.sync.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.task:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.task-create:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.update:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.validate:
+    tier: 3
+    suites:
+      - e2e/acp.validate.test.sh
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.version-check:
+    tier: 2
+    suites:
+      - e2e/acp.version.test.sh
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.version-check-for-updates:
+    tier: 2
+    suites:
+      - e2e/acp.version.test.sh
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.version-update:
+    tier: 2
+    suites:
+      - e2e/acp.version.test.sh
+      - e2e/acp.version-update-preserve.test.sh
+      - e2e/acp.tier2-workflow.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.visualize:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh
+  acp.wiki-update:
+    tier: 3
+    suites:
+      - e2e/acp.tier3-memory-knowledge.test.sh
+      - e2e/acp.command-docs.test.sh

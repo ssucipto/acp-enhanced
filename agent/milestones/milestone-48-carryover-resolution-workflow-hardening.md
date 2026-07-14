@@ -1,6 +1,6 @@
 # Milestone 48 — Carryover Resolution & Workflow Hardening (v6.9.1)
 
-**Status**: Planned  
+**Status**: completed  
 **Priority**: P0–P2  
 **Started**: 2026-06-04  
 **Target**: 2026-06-11  
