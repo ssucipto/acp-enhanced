@@ -490,7 +490,23 @@ milestones:
     notes: |
       ✅ M68 COMPLETE (v6.24.1). Tier helpers, version-update route-079, install/bootstrap
       preserve, E2E preserve suites (version-update 13, install 5, bootstrap 6), validate
-      guard, audit-080/081/082 carryovers closed. FIFOZ safe on v6.24.0+.
+      guard,       audit-080/081/082 carryovers closed. FIFOZ safe on v6.24.0+.
+
+  M70:
+    name: Tech Debt & Gate Hardening (v6.26.0)
+    priority: 5
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 2
+    tasks_completed: 0
+    tasks_total: 12
+    file: agent/milestones/milestone-70-tech-debt-gate-hardening.md
+    design: agent/design/m70-tech-debt-gate-hardening.md
+    notes: |
+      📋 M70 PLANNED (audit-086). Close all open carryovers + shortcuts.
+      5 phases, 12 tasks, routes 208–219. Target v6.26.0 via PR to mainline.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4291,6 +4307,127 @@ tasks:
       notes: |
         v6.25.1. F-083-01..06 closed. tasks 212–218. tier3 loop + vitest + tracking.
 
+  M70:
+    - id: task-219
+      name: "Enable GitHub branch protection (CRIT-065-002)"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-219-branch-protection.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-208 Phase 1 P0"
+
+    - id: task-220
+      name: "Branch protection verify checklist"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-220-branch-protection-verify.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-208; depends task-219"
+
+    - id: task-221
+      name: "Memory-layer entity schemas (MED-066-007)"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-221-memory-schemas.md
+      started: null
+      completed_date: null
+      estimated_hours: 8
+      notes: "route-210 Phase 2 P1"
+
+    - id: task-222
+      name: "Memory registry field lint (GAP-041-04)"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-222-memory-field-lint.md
+      started: null
+      completed_date: null
+      estimated_hours: 6
+      notes: "route-211; depends task-221"
+
+    - id: task-223
+      name: "validateCarryoverFreshness (F-086-04)"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-223-carryover-freshness.md
+      started: null
+      completed_date: null
+      estimated_hours: 4
+      notes: "route-212 Phase 2 P1"
+
+    - id: task-224
+      name: "Two-phase review gate policy (F-086-03)"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-224-review-gate-policy.md
+      started: null
+      completed_date: null
+      estimated_hours: 4
+      notes: "route-213 Phase 3 P1"
+
+    - id: task-225
+      name: "Expand acp.review-scan.sh (F-086-03)"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-225-review-scanner-expand.md
+      started: null
+      completed_date: null
+      estimated_hours: 8
+      notes: "route-214; depends task-224"
+
+    - id: task-226
+      name: "Commit sync E2E (GAP-041-07)"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-226-commit-sync-e2e.md
+      started: null
+      completed_date: null
+      estimated_hours: 6
+      notes: "route-215 Phase 4 P2"
+
+    - id: task-227
+      name: "Commit sync atomicity (GAP-041-08)"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-227-commit-atomicity.md
+      started: null
+      completed_date: null
+      estimated_hours: 4
+      notes: "route-216; depends task-226"
+
+    - id: task-228
+      name: "FIFOZ consumer verification (F-086-02)"
+      priority: 3
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-228-fifoz-consumer.md
+      started: null
+      completed_date: null
+      estimated_hours: 4
+      notes: "route-217 Phase 5 P2 — ops"
+
+    - id: task-229
+      name: "IG-35 resolution (F-086-01)"
+      priority: 3
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-229-ig35-resolution.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-218"
+
+    - id: task-230
+      name: "M70 closure audit + v6.26.0 release"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-230-m70-release.md
+      started: null
+      completed_date: null
+      estimated_hours: 4
+      notes: "route-219; depends tasks 219,221,223,224,226,227"
+
 recent_work:
   - date: 2026-07-15
     description: |
@@ -6631,9 +6768,9 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "Plan M70 tech-debt milestone (branch protection, memory schemas, review gate policy)"
-  - "Run weekly /acp-review and /acp-integrity scans (due 2026-07-22)"
-  - "FIFOZ: /acp-version-update on v6.25.3+ and close feedback-007"
+  - "Start M70 Phase 1: task-219 branch protection (CRIT-065-002)"
+  - "Run /acp-proceed M70 or /acp-proceed task-219"
+  - "FIFOZ: /acp-version-update on v6.25.3+ (task-228 in M70 Phase 5)"
 
 current_blockers: []
 
