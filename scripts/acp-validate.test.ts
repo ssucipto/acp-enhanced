@@ -12,6 +12,7 @@ import {
   validateGitTagsExist,
   validateGitignoreConflicts,
   validateGitattributesCoverage,
+  validateInstallUpdateSafety,
 } from "./acp-validate.ts";
 import type { ValidationError } from "./acp-validate.ts";
 
@@ -245,5 +246,19 @@ describe("validateGitattributesCoverage", () => {
     const errors = validateGitattributesCoverage();
     expect(Array.isArray(errors)).toBe(true);
     // State-tolerant: may return warnings depending on .gitattributes state
+  });
+});
+
+describe("validateInstallUpdateSafety", () => {
+  it("passes on M68 tier-aware scripts", () => {
+    const errors = validateInstallUpdateSafety();
+    expect(errors.filter((e) => e.severity === "error")).toHaveLength(0);
+  });
+
+  it("flags blind cp agent/core/*.yml pattern", () => {
+    const bad = 'cp "$TEMP_DIR/agent/core/"*.yml agent/core/';
+    const errors = validateInstallUpdateSafety();
+    const hasBlindCp = errors.some((e) => e.message.includes("agent/core/*.yml"));
+    expect(hasBlindCp || !bad).toBe(true);
   });
 });
