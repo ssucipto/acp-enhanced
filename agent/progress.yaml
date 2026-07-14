@@ -3,13 +3,13 @@
 
 project:
   name: agent-context-protocol
-  version: 6.25.1
+  version: 6.25.2
   started: 2026-02-16
   status: active
   current_milestone: M63
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.25.1. M63 test coverage
-    tier 2/3 shipped — 0 untested commands, CI parity guard; audit-083 tier3 loop fix.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.25.2. Review + integrity
+    remediation — acp.review-scan.sh, integrity-manifest split, audit-085 closure.
 
 milestones:
   M44:
@@ -4294,6 +4294,17 @@ tasks:
 recent_work:
   - date: 2026-07-15
     description: |
+      ✅ v6.25.2 patch — review-001, integrity-001, audit-085 remediation.
+      acp.review-scan.sh Phase 1 scanner; integrity-manifest.yaml split; vitest CVE fix;
+      macOS-compat integrity scripts; 64-rule count reconciled.
+    items:
+      - "✅ review-001 carryovers CR-001..CR-005 fixed (vitest, TS strict, pipefail)"
+      - "✅ integrity-001 INT-001/002 fixed — integrity-manifest.yaml + awk verify"
+      - "✅ audit-085 F-085-01/05/06/07 fixed — --self, acp.review-scan.sh, 64 rules"
+      - "✅ e2e review 54/54, integrity 67/67, validate 0 errors"
+
+  - date: 2026-07-15
+    description: |
       ✅ M63 amendment deployed v6.25.1 (route-207, audit-084 closure).
       Tier3 dynamic loop (58 docs, 259 assertions), vitest validator tests,
       git tag v6.25.1, develop + tags pushed.
@@ -6609,17 +6620,17 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "Pick next milestone from backlog (M63 complete — v6.25.1 deployed)"
+  - "Pick next milestone from backlog (M63 complete — v6.25.2 deployed)"
   - "Run overdue /acp-review and /acp-integrity weekly scans"
-  - "FIFOZ: /acp-version-update on v6.25.1+ and close feedback-007"
+  - "FIFOZ: /acp-version-update on v6.25.2+ and close feedback-007"
 
 current_blockers: []
 
 notes:
-  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M63–M68 shipped (v6.25.1)"
-  - "68 milestone entries — M55–M68 shipped (v6.11–v6.25.1); M63 complete (test tier 2/3)"
+  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M63–M68 shipped (v6.25.2)"
+  - "68 milestone entries — M55–M68 shipped (v6.11–v6.25.2); M63 complete (test tier 2/3)"
   - "72 command docs (70 acp.* + 2 git.*); 70 slash-command wrappers (prompts + opencode + cursor parity)"
-  - "9 skills; 36+ bash scripts; 56 E2E test files (incl. M68 preserve suites)"
+  - "9 skills; 43 bash scripts; 56 E2E test files (incl. M68 preserve suites)"
   - "82+ audit reports (audit-080–082 install/update safety)"
   - "M68 COMPLETE v6.24.1 — safe install/update tier policy; FIFOZ unblocked"
   - "M67 COMPLETE v6.23.0 — cross-agent handoff + /acp-receive"
@@ -6633,20 +6644,20 @@ recurring_tasks:
     command: /acp-review --report --carryover
     frequency: weekly
     executor: copilot
-    last_run: 2026-06-15
-    next_due: 2026-06-22
+    last_run: 2026-07-15
+    next_due: 2026-07-22
     last_findings_count: 0
-    status: overdue
+    status: current
     description: "Weekly code quality review with carryover tracking"
 
   - id: weekly-integrity-scan
     command: /acp-integrity --self --report --carryover
     frequency: weekly
     executor: copilot
-    last_run: 2026-06-15
-    next_due: 2026-06-22
+    last_run: 2026-07-15
+    next_due: 2026-07-22
     last_findings_count: 0
-    status: overdue
+    status: current
     description: "Weekly ACP framework integrity scan"
 
   - id: pre-commit-rule-audit
