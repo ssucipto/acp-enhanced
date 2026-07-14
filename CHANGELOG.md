@@ -9,6 +9,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.26.0] — 2026-07-15
+
+### Added
+- **M70** — Tech Debt & Gate Hardening milestone (12 tasks, routes 208–219).
+- **`acp.atomic-write.sh`** — temp-file + rename helper for commit sync atomicity (GAP-041-08).
+- **`acp.branch-protection-setup.sh`** — GitHub branch protection automation (CRIT-065-002).
+- **`patterns.schema.yaml`** — memory pattern entry schema + validate enforcement.
+- **`validateMemoryFieldLint()`**, **`validateCarryoverFreshness()`**, **`validateIg35RouteDrift()`** in `acp-validate.ts`.
+- **Review Phase 1 expansion** — 8 rules (EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01).
+- **IG-35** — route `files_affected` drift check in `acp.git-provenance.sh`.
+
+### Changed
+- **`acp.review.md`** — two-phase gate policy (8 automated + 56 agent-required).
+- **`command-e2e-coverage.yaml`** — registers `commit-sync` and `repair-tools` suites.
+- **`acp.review-scan.sh`** — expanded from 4 to 8 deterministic rules.
+
+### Fixed
+- **MED-066-007**, **GAP-041-04**, **GAP-041-07**, **GAP-041-08**, **F-086-03**, **F-086-04**, **F-086-01** (IG-35).
+
+### Deferred (ops)
+- **CRIT-065-002** — GitHub branch protection requires repo admin (`acp.branch-protection-setup.sh`).
+- **F-086-02** — consumer-project `/acp-version-update` consumer verification (external project access).
+
+---
+
 ## [6.25.3] — 2026-07-15
 
 ### Added
