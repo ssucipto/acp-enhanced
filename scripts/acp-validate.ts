@@ -1059,6 +1059,75 @@ function validateFilePointers(): boolean {
   return allOk;
 }
 
+// ── Active handoff validation (M67 route-198) ─────────────────
+export function validateActiveHandoff(strict = false): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const progressYaml = loadProgressSafe();
+  if (!progressYaml) return errors;
+
+  const activeHandoff = progressYaml.active_handoff as Record<string, unknown> | undefined;
+  if (!activeHandoff || !activeHandoff.path) return errors;
+
+  const handoffPath = String(activeHandoff.path);
+  if (!existsSync(handoffPath)) {
+    errors.push({
+      file: PROGRESS_PATH,
+      line: 0,
+      message: `active_handoff.path "${handoffPath}" does not exist`,
+      severity: "error",
+    });
+    return errors;
+  }
+
+  const gitCommit = activeHandoff.git_commit ? String(activeHandoff.git_commit) : "";
+  if (strict && gitCommit) {
+    try {
+      const { execSync } = require("child_process");
+      execSync(`git merge-base --is-ancestor ${gitCommit} HEAD`, {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "pipe"],
+      });
+    } catch {
+      errors.push({
+        file: PROGRESS_PATH,
+        line: 0,
+        message: `active_handoff.git_commit "${gitCommit}" is not an ancestor of HEAD`,
+        severity: "warning",
+      });
+    }
+  }
+
+  return errors;
+}
+
+function runActiveHandoffValidation(): boolean {
+  const strict =
+    process.env["ACP_VALIDATE_STRICT"] === "true" || process.argv.includes("--strict");
+  const errors = validateActiveHandoff(strict);
+  if (errors.length === 0) {
+    const progressYaml = loadProgressSafe();
+    const hasHandoff = Boolean(
+      progressYaml &&
+        (progressYaml.active_handoff as Record<string, unknown> | undefined)?.path
+    );
+    if (hasHandoff) {
+      console.log("✅ Active handoff: path exists");
+    } else {
+      console.log("✅ Active handoff: none configured — skipped");
+    }
+    return true;
+  }
+
+  let allOk = true;
+  for (const err of errors) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+  return allOk;
+}
+
 // ── CLI entry (skip when imported by tests) ───────────────────
 function isDirectExecution(): boolean {
   const entry = process.argv[1] ?? "";
@@ -1078,10 +1147,11 @@ if (args.length === 0) {
   const versionOk = validateVersionConsistency().length === 0;
   const statusOk = validateStatusConsistency();
   const pointersOk = validateFilePointers();
+  const handoffOk = runActiveHandoffValidation();
   const schemasOk = runSchemaEnforcement();
   const consistencyOk = runConsistencyScan();
   checkStaleness(); // informational — non-blocking, does not affect exit code
-  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
+  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && handoffOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
 }
 
 let overallFailed = false;
