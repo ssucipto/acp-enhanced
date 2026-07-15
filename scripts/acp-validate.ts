@@ -1071,6 +1071,32 @@ function splitYamlListEntries(raw: string, entryMarker: RegExp): string[] {
   return stripped.split(entryMarker).filter((p) => p.trim().startsWith("- "));
 }
 
+/** True when CRIT-065-002 is explicitly deferred (e.g. GitHub Free — manual merge discipline). */
+export function isBranchProtectionDeferred(
+  carryoversPath: string = CARRYOVERS_PATH
+): boolean {
+  if (!existsSync(carryoversPath)) return false;
+  const raw = readFileSync(carryoversPath, "utf8");
+  const idx = raw.indexOf("finding_id: CRIT-065-002");
+  if (idx === -1) return false;
+  const slice = raw.slice(idx, idx + 800);
+  return /status:\s*deferred/.test(slice);
+}
+
+function resolveOriginGithubRepo(): string | null {
+  if (!commandExists("git")) return null;
+  try {
+    const url = execSync("git remote get-url origin", {
+      encoding: "utf8",
+      stdio: ["pipe", "pipe", "pipe"],
+    }).trim();
+    const match = url.match(/[:/]([^/]+\/[^/\s]+?)(?:\.git)?$/);
+    return match ? match[1] : null;
+  } catch {
+    return null;
+  }
+}
+
 /** M70 task-220: warn when branch protection checklist in USAGE.md is incomplete */
 export function validateBranchProtectionDocs(): ValidationError[] {
   const errors: ValidationError[] = [];
@@ -1104,12 +1130,9 @@ export function validateBranchProtectionDocs(): ValidationError[] {
     });
   }
 
-  if (commandExists("gh")) {
+  if (commandExists("gh") && !isBranchProtectionDeferred()) {
     try {
-      const repo = execSync("gh repo view --json nameWithOwner -q .nameWithOwner", {
-        encoding: "utf8",
-        stdio: ["pipe", "pipe", "pipe"],
-      }).trim();
+      const repo = resolveOriginGithubRepo();
       if (repo) {
         execSync(`gh api repos/${repo}/branches/mainline/protection`, {
           encoding: "utf8",
@@ -1120,10 +1143,13 @@ export function validateBranchProtectionDocs(): ValidationError[] {
       errors.push({
         file: USAGE_PATH,
         line: 0,
-        message: "GitHub mainline branch protection not detected (gh api 404) — enable via Settings or acp.branch-protection-setup.sh",
+        message:
+          "GitHub mainline branch protection not detected (gh api 404) — enable via Settings or acp.branch-protection-setup.sh",
         severity: "warning",
       });
     }
+  } else if (isBranchProtectionDeferred()) {
+    // CRIT-065-002 deferred — skip live gh api gate (documented in carryovers)
   }
 
   return errors;
