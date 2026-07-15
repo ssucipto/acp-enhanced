@@ -45,12 +45,16 @@ ACP Enhanced maintains a **two-tier storage model** for patterns and sessions:
 ```
 /acp-commit
   Step 2  → writes agent/memory/sessions.md (registry)
-  Step 2b → auto-syncs agent/sessions/*.md (documents) [v6.9+]
+  Step 2b → auto-syncs agent/sessions/*.md via acp.atomic-write.sh (documents) [v6.9+]
   Step 3  → writes agent/memory/patterns.md (registry)
-  Step 3b → auto-syncs agent/patterns/*.md (documents) [v6.9+]
+  Step 3b → auto-syncs agent/patterns/*.md via acp.atomic-write.sh (documents) [v6.9+]
   Step 6  → compact sessions (>15 entries)
   Step 6b → re-sync affected documents after compaction [v6.9+]
 ```
+
+### Atomic Writes (v6.26.0+)
+- `agent/scripts/acp.atomic-write.sh` — temp-file + rename; used by commit sync (2b/3b), `/acp-pattern-sync`, and `/acp-session-sync`
+- Prevents partial writes if sync is interrupted mid-file
 
 ### Repair Path
 - `/acp-pattern-sync --all` — regenerate all pattern documents from registry

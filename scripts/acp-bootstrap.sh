@@ -1322,27 +1322,12 @@ for _oc_src in .github/prompts/*.prompt.md; do
   _oc_count=$((_oc_count + 1))
 done
 echo -e "${GREEN}✓ ${_oc_count} opencode slash commands generated in .opencode/commands/${NC}"
-
-  # Generate Cursor command wrappers (same format as opencode)
-  echo -e "${YELLOW}Generating Cursor slash commands...${NC}"
-  mkdir -p .cursor/commands
-  _cursor_count=0
-  for _f in .opencode/commands/acp.*.md; do
-    [ -f "$_f" ] || continue
-    _cb=$(basename "$_f")
-    cp "$_f" ".cursor/commands/$_cb"
-    _cursor_count=$((_cursor_count + 1))
-  done
-  echo -e "${GREEN}✓ ${_cursor_count} Cursor slash commands generated in .cursor/commands/${NC}"
+if [ "$_oc_count" -eq 0 ]; then
+  echo -e "${YELLOW}⚠️  0 opencode commands generated — check .github/prompts/*.prompt.md${NC}"
+fi
 else
   echo -e "${YELLOW}  (no prompt files found — run with --generate-prompts first, or generate prompts in Copilot chat)${NC}"
 fi
-fi
-
-# Generate Cursor slash commands from installed command docs (if sync script exists)
-if [ -f "agent/scripts/acp.cursor-commands-sync.sh" ]; then
-  echo -e "${YELLOW}Generating Cursor slash commands...${NC}"
-  bash agent/scripts/acp.cursor-commands-sync.sh
 fi
 
 # --- 7. Install agent/ commands, scripts and schemas ---
@@ -1373,6 +1358,22 @@ else
     echo "  bash /path/to/acp-enhanced/agent/scripts/acp.install.sh"
     exit 1
   fi
+fi
+echo ""
+
+# Generate Cursor + Claude wrappers from command docs (after agent/scripts installed)
+if [ -f "agent/scripts/acp.cursor-commands-sync.sh" ]; then
+  echo -e "${YELLOW}Generating Cursor slash commands...${NC}"
+  bash agent/scripts/acp.cursor-commands-sync.sh
+elif [ ! -d ".cursor/commands" ] || [ -z "$(ls -A .cursor/commands 2>/dev/null)" ]; then
+  echo -e "${YELLOW}⚠️  Cursor sync script not found — 0 cursor commands generated${NC}"
+fi
+
+if [ -f "agent/scripts/acp.claude-commands-sync.sh" ]; then
+  echo -e "${YELLOW}Generating Claude Code slash commands...${NC}"
+  bash agent/scripts/acp.claude-commands-sync.sh
+elif [ ! -d ".claude/commands" ] || [ -z "$(ls -A .claude/commands 2>/dev/null)" ]; then
+  echo -e "${YELLOW}⚠️  Claude sync script not found — 0 claude commands generated${NC}"
 fi
 echo ""
 
@@ -1437,6 +1438,7 @@ echo "  /acp-memory-sync Monthly compaction"
 echo "  /acp-wiki-update Update wiki after changes"
 echo ""
 echo "opencode slash commands: same /acp-* set (via .opencode/commands/)"
+echo "Claude Code slash commands: same /acp-* set (via .claude/commands/)"
 echo ""
 
 # Post-install verification
@@ -1463,6 +1465,12 @@ if [ "$_CURSOR_COUNT" -ge "$_CMD_SOURCE_COUNT" ] 2>/dev/null; then
   echo -e "  ${GREEN}✅ .cursor/commands/: ${_CURSOR_COUNT} files${NC}"
 else
   echo -e "  ${YELLOW}⚠️ .cursor/commands/: ${_CURSOR_COUNT} files (expected ≥${_CMD_SOURCE_COUNT})${NC}"
+fi
+_CLAUDE_COUNT=$(find .claude/commands -maxdepth 1 -name "*.md" 2>/dev/null | wc -l | tr -d ' ') || true
+if [ "$_CLAUDE_COUNT" -ge "$_CMD_SOURCE_COUNT" ] 2>/dev/null; then
+  echo -e "  ${GREEN}✅ .claude/commands/: ${_CLAUDE_COUNT} files${NC}"
+else
+  echo -e "  ${YELLOW}⚠️ .claude/commands/: ${_CLAUDE_COUNT} files (expected ≥${_CMD_SOURCE_COUNT})${NC}"
 fi
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 

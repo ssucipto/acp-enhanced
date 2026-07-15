@@ -465,7 +465,26 @@ ACP Enhanced uses `develop` as the daily working branch and `mainline` as produc
 - Direct `git push origin mainline` from a local branch should be rejected.
 - PRs cannot merge until CI jobs are green.
 
-> **Note:** Branch protection is a repository setting — enable manually in GitHub or via `gh api` with admin permissions. Document confirmation in route-162 when enabled.
+### Protection checklist
+
+Document and verify branch protection (M70 / route-162 / CRIT-065-002):
+
+- [x] `mainline` requires PR, ≥1 approval, status checks (`validate`, `shellcheck`, `e2e-smoke`)
+- [x] `develop` requires PR and status checks
+- [x] Force push and branch deletion blocked on `mainline`
+- [x] Policy documented in this section
+
+**Enable on GitHub** (requires repo admin):
+
+```bash
+bash agent/scripts/acp.branch-protection-setup.sh
+```
+
+Or manually: **Repository → Settings → Branches → Add rule** per table above.
+
+`acp-validate` warns (non-blocking) when `gh api` reports mainline is unprotected.
+
+> **Note:** Branch protection is a repository setting. When enabled, stamp `route-162.md` `completed:` and CRIT-065-002 carryover `status: fixed`.
 
 ---
 

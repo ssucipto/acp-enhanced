@@ -3,6 +3,20 @@ import yaml from "js-yaml";
 import { readFileSync, existsSync, readdirSync, statSync } from "fs";
 import { execSync } from "child_process";
 import path from "path";
+import { fileURLToPath } from "url";
+import { createHash } from "crypto";
+
+// ── Repo root (D1 — cwd-independent) ─────────────────────────
+const _SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
+export const REPO_ROOT = path.resolve(_SCRIPT_DIR, "..");
+
+export function getRepoRoot(): string {
+  return process.env["ACP_REPO_ROOT"] ?? REPO_ROOT;
+}
+
+function repoPath(...parts: string[]): string {
+  return path.join(getRepoRoot(), ...parts);
+}
 
 // ── Shared types ─────────────────────────────────────────────
 export interface ValidationError {
@@ -48,9 +62,25 @@ interface ProgressYaml {
   };
 }
 
+export function assertRepoRoot(): ValidationError[] {
+  const marker = repoPath("agent", "commands");
+  if (!existsSync(marker)) {
+    return [
+      {
+        file: getRepoRoot(),
+        line: 0,
+        message: `Not an ACP repo root — missing ${marker}. Run from repo root or fix ACP_REPO_ROOT.`,
+        severity: "error",
+      },
+    ];
+  }
+  return [];
+}
+
 // ── Placeholder detection ─────────────────────────────────────
 // Env var ACP_COMMANDS_DIR overrides default — used in tests
-const COMMANDS_DIR = process.env["ACP_COMMANDS_DIR"] ?? path.join("agent", "commands");
+const COMMANDS_DIR =
+  process.env["ACP_COMMANDS_DIR"] ?? repoPath("agent", "commands");
 
 export function validatePlaceholders(filePath: string): ValidationError[] {
   const errors: ValidationError[] = [];
@@ -181,87 +211,413 @@ function runFrontmatterScan(): void {
   }
 }
 
-// ── Triple-file parity check ──────────────────────────────────
-// Env vars ACP_PROMPTS_DIR / ACP_OPENCODE_DIR override defaults — used in tests
-const PROMPTS_DIR = process.env["ACP_PROMPTS_DIR"] ?? path.join(".github", "prompts");
-const OPENCODE_DIR = process.env["ACP_OPENCODE_DIR"] ?? path.join(".opencode", "commands");
+// ── Five-surface parity check (D5) ────────────────────────────
+const PROMPTS_DIR =
+  process.env["ACP_PROMPTS_DIR"] ?? repoPath(".github", "prompts");
+const OPENCODE_DIR =
+  process.env["ACP_OPENCODE_DIR"] ?? repoPath(".opencode", "commands");
+const CURSOR_DIR =
+  process.env["ACP_CURSOR_DIR"] ?? repoPath(".cursor", "commands");
+const CLAUDE_DIR =
+  process.env["ACP_CLAUDE_DIR"] ?? repoPath(".claude", "commands");
 
-function runParityCheck(): void {
-  const commandFiles = existsSync(COMMANDS_DIR)
-    ? readdirSync(COMMANDS_DIR).filter(
-        (f) => f.startsWith("acp.") && f.endsWith(".md") && !f.endsWith(".template.md")
-      )
-    : [];
+function commandStem(filename: string): { prefix: "acp" | "git"; stem: string } | null {
+  const m = filename.match(/^(acp|git)\.(.+)\.md$/);
+  if (!m || filename.endsWith(".template.md")) return null;
+  return { prefix: m[1] as "acp" | "git", stem: m[2] };
+}
 
-  const promptFiles = existsSync(PROMPTS_DIR)
-    ? readdirSync(PROMPTS_DIR).filter(
-        (f) => f.startsWith("acp-") && f.endsWith(".prompt.md")
-      )
-    : [];
+function hyphenWrapperName(prefix: "acp" | "git", stem: string): string {
+  return `${prefix}-${stem}`;
+}
 
-  const opencodeFiles = existsSync(OPENCODE_DIR)
-    ? readdirSync(OPENCODE_DIR).filter(
-        (f) => f.startsWith("acp-") && f.endsWith(".md")
-      )
-    : [];
+function listDirSafe(dir: string): string[] {
+  return existsSync(dir) ? readdirSync(dir) : [];
+}
 
-  // Build normalized name sets (strip prefix/suffix for comparison)
-  const commandsSet = new Set(
-    commandFiles.map((f) => f.replace(/^\.?acp\./, "").replace(/\.md$/, ""))
-  );
-  const promptsSet = new Set(
-    promptFiles.map((f) => f.replace(/^acp-/, "").replace(/\.prompt\.md$/, ""))
+function detectDotStrays(dir: string, label: string): ValidationError[] {
+  const errors: ValidationError[] = [];
+  for (const f of listDirSafe(dir)) {
+    if (/^acp\.[^/]+\.(md|prompt\.md)$/.test(f)) {
+      errors.push({
+        file: path.join(dir, f),
+        line: 0,
+        message: `Dot-form stray wrapper in ${label}: ${f} (use hyphen form acp-name.md)`,
+        severity: "error",
+      });
+    }
+  }
+  return errors;
+}
+
+export function validateParityCheck(options?: {
+  commandsDir?: string;
+  promptsDir?: string;
+  opencodeDir?: string;
+  cursorDir?: string;
+  claudeDir?: string;
+}): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const commandsDir = options?.commandsDir ?? COMMANDS_DIR;
+  const promptsDir = options?.promptsDir ?? PROMPTS_DIR;
+  const opencodeDir = options?.opencodeDir ?? OPENCODE_DIR;
+  const cursorDir = options?.cursorDir ?? CURSOR_DIR;
+  const claudeDir = options?.claudeDir ?? CLAUDE_DIR;
+
+  const commandFiles = listDirSafe(commandsDir).filter((f) => commandStem(f) !== null);
+
+  if (commandFiles.length === 0) {
+    errors.push({
+      file: commandsDir,
+      line: 0,
+      message: "Zero command docs found — vacuous parity pass forbidden (D2)",
+      severity: "error",
+    });
+    return errors;
+  }
+
+  for (const [dir, label] of [
+    [promptsDir, "prompts"],
+    [opencodeDir, "opencode"],
+    [cursorDir, "cursor"],
+    [claudeDir, "claude"],
+  ] as const) {
+    errors.push(...detectDotStrays(dir, label));
+  }
+
+  const acpCommands: string[] = [];
+  const gitCommands: string[] = [];
+  for (const f of commandFiles) {
+    const parsed = commandStem(f);
+    if (!parsed) continue;
+    if (parsed.prefix === "acp") acpCommands.push(parsed.stem);
+    else gitCommands.push(parsed.stem);
+  }
+
+  const promptSet = new Set(
+    listDirSafe(promptsDir)
+      .filter((f) => f.startsWith("acp-") && f.endsWith(".prompt.md"))
+      .map((f) => f.replace(/^acp-/, "").replace(/\.prompt\.md$/, ""))
   );
   const opencodeSet = new Set(
-    opencodeFiles.map((f) => f.replace(/^acp-/, "").replace(/\.md$/, ""))
+    listDirSafe(opencodeDir)
+      .filter((f) => f.startsWith("acp-") && f.endsWith(".md"))
+      .map((f) => f.replace(/^acp-/, "").replace(/\.md$/, ""))
+  );
+  const cursorSet = new Set(
+    listDirSafe(cursorDir)
+      .filter((f) => (f.startsWith("acp-") || f.startsWith("git-")) && f.endsWith(".md"))
+      .map((f) => f.replace(/^(acp|git)-/, "").replace(/\.md$/, ""))
+  );
+  const claudeSet = new Set(
+    listDirSafe(claudeDir)
+      .filter((f) => (f.startsWith("acp-") || f.startsWith("git-")) && f.endsWith(".md"))
+      .map((f) => f.replace(/^(acp|git)-/, "").replace(/\.md$/, ""))
   );
 
-  const missingItems: string[] = [];
+  const requireSurface = (
+    stem: string,
+    prefix: "acp" | "git",
+    surface: Set<string>,
+    surfaceLabel: string,
+    relPath: string
+  ) => {
+    if (!surface.has(stem)) {
+      errors.push({
+        file: relPath,
+        line: 0,
+        message: `Parity: ${prefix}.${stem}.md missing ${surfaceLabel} wrapper`,
+        severity: "error",
+      });
+    }
+  };
 
-  // Commands missing prompt or opencode companion
-  for (const name of commandsSet) {
-    if (!promptsSet.has(name)) {
-      missingItems.push(
-        `❌ Parity: acp.${name}.md has no prompt companion (.github/prompts/acp-${name}.prompt.md)`
-      );
-    }
-    if (!opencodeSet.has(name)) {
-      missingItems.push(
-        `❌ Parity: acp.${name}.md has no opencode companion (.opencode/commands/acp-${name}.md)`
-      );
-    }
+  for (const stem of acpCommands) {
+    requireSurface(stem, "acp", promptSet, "prompt", path.join(promptsDir, `acp-${stem}.prompt.md`));
+    requireSurface(stem, "acp", opencodeSet, "opencode", path.join(opencodeDir, `acp-${stem}.md`));
+    requireSurface(stem, "acp", cursorSet, "cursor", path.join(cursorDir, `acp-${stem}.md`));
+    requireSurface(stem, "acp", claudeSet, "claude", path.join(claudeDir, `acp-${stem}.md`));
   }
 
-  // Prompts with no matching command doc
-  for (const name of promptsSet) {
-    if (!commandsSet.has(name)) {
-      missingItems.push(
-        `❌ Parity: .github/prompts/acp-${name}.prompt.md has no command doc (agent/commands/acp.${name}.md)`
-      );
-    }
+  for (const stem of gitCommands) {
+    requireSurface(stem, "git", cursorSet, "cursor", path.join(cursorDir, `git-${stem}.md`));
+    requireSurface(stem, "git", claudeSet, "claude", path.join(claudeDir, `git-${stem}.md`));
   }
 
-  // Opencode files with no matching command doc
+  // Orphan wrappers (hyphen form without command doc)
+  const allCommandStems = new Set([...acpCommands, ...gitCommands]);
+  for (const name of promptSet) {
+    if (!acpCommands.includes(name)) {
+      errors.push({
+        file: path.join(promptsDir, `acp-${name}.prompt.md`),
+        line: 0,
+        message: `Orphan prompt wrapper — no agent/commands/acp.${name}.md`,
+        severity: "error",
+      });
+    }
+  }
   for (const name of opencodeSet) {
-    if (!commandsSet.has(name)) {
-      missingItems.push(
-        `❌ Parity: .opencode/commands/acp-${name}.md has no command doc (agent/commands/acp.${name}.md)`
-      );
+    if (!acpCommands.includes(name)) {
+      errors.push({
+        file: path.join(opencodeDir, `acp-${name}.md`),
+        line: 0,
+        message: `Orphan opencode wrapper — no agent/commands/acp.${name}.md`,
+        severity: "error",
+      });
     }
   }
 
-  const cc = commandFiles.length;
-  const pc = promptFiles.length;
-  const oc = opencodeFiles.length;
+  return errors;
+}
 
-  if (missingItems.length === 0) {
-    console.log(`✅ Parity: ${cc} commands × 3 surfaces — all matched`);
-  } else {
-    console.warn(`Parity check: ${cc} commands / ${pc} prompts / ${oc} opencode — ${missingItems.length} mismatch(es)`);
-    for (const m of missingItems) {
-      console.warn(`  ${m}`);
+function runParityCheck(): boolean {
+  const errors = validateParityCheck();
+  const blocking = errors.filter((e) => e.severity === "error");
+  const commandCount = listDirSafe(COMMANDS_DIR).filter((f) => commandStem(f) !== null).length;
+
+  if (blocking.length === 0) {
+    console.log(`✅ Parity: ${commandCount} commands × 5 surfaces — all matched`);
+    return true;
+  }
+  console.error(`❌ Parity: ${blocking.length} mismatch(es) across 5 surfaces`);
+  for (const err of blocking) {
+    console.error(`  ❌ ${err.file}: ${err.message}`);
+  }
+  return false;
+}
+
+export function validateInstructionFileHash(root?: string): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const base = root ?? getRepoRoot();
+  const relFiles = ["AGENTS.md", "CLAUDE.md", ".github/copilot-instructions.md"];
+  const contents: { rel: string; hash: string; lines: string[] }[] = [];
+
+  for (const rel of relFiles) {
+    const abs = path.join(base, rel);
+    if (!existsSync(abs)) {
+      errors.push({
+        file: rel,
+        line: 0,
+        message: "Instruction file missing for hash sync check",
+        severity: "error",
+      });
+      return errors;
+    }
+    const text = readFileSync(abs, "utf8");
+    contents.push({
+      rel,
+      hash: createHash("sha256").update(text).digest("hex"),
+      lines: text.split("\n"),
+    });
+  }
+
+  const ref = contents[0];
+  for (let i = 1; i < contents.length; i++) {
+    const cur = contents[i];
+    if (cur.hash !== ref.hash) {
+      let diffLine = 1;
+      const max = Math.max(ref.lines.length, cur.lines.length);
+      for (let ln = 0; ln < max; ln++) {
+        if (ref.lines[ln] !== cur.lines[ln]) {
+          diffLine = ln + 1;
+          break;
+        }
+      }
+      errors.push({
+        file: cur.rel,
+        line: diffLine,
+        message: `Content hash mismatch with ${ref.rel} (first diff line ${diffLine})`,
+        severity: "error",
+      });
     }
   }
+
+  if (errors.length === 0) {
+    console.log("✅ Instruction files: SHA-256 content hash identical (AGENTS/CLAUDE/copilot)");
+  }
+  return errors;
+}
+
+export function validatePackageYamlVersion(root?: string): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const base = root ?? getRepoRoot();
+  const identityPath = path.join(base, "agent", "core", "identity.yml");
+  const packagePath = path.join(base, "package.yaml");
+
+  if (!existsSync(identityPath) || !existsSync(packagePath)) {
+    errors.push({
+      file: packagePath,
+      line: 0,
+      message: "package.yaml or identity.yml missing for version check",
+      severity: "error",
+    });
+    return errors;
+  }
+
+  const identity = yaml.load(readFileSync(identityPath, "utf-8")) as { version?: string };
+  const pkg = yaml.load(readFileSync(packagePath, "utf-8")) as { version?: string };
+  const idVer = String(identity.version ?? "").trim();
+  const pkgVer = String(pkg.version ?? "").trim();
+
+  if (!pkgVer) {
+    errors.push({
+      file: packagePath,
+      line: 0,
+      message: "package.yaml missing version field",
+      severity: "error",
+    });
+  } else if (idVer && pkgVer !== idVer) {
+    errors.push({
+      file: packagePath,
+      line: 0,
+      message: `package.yaml version ${pkgVer} != identity.yml version ${idVer}`,
+      severity: "error",
+    });
+  } else if (idVer) {
+    console.log(`✅ package.yaml version: ${pkgVer} matches identity.yml`);
+  }
+
+  return errors;
+}
+
+export function validateScriptRegistration(root?: string): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const base = root ?? getRepoRoot();
+  const scriptsDir = path.join(base, "agent", "scripts");
+  const packagePath = path.join(base, "package.yaml");
+  const manifestPath = path.join(base, "agent", "integrity-manifest.yaml");
+
+  if (!existsSync(scriptsDir) || !existsSync(packagePath)) return errors;
+
+  const pkg = yaml.load(readFileSync(packagePath, "utf-8")) as {
+    contents?: { scripts?: { name: string }[] };
+  };
+  const registered = new Set((pkg.contents?.scripts ?? []).map((s) => s.name));
+
+  const manifestPaths = new Set<string>();
+  if (existsSync(manifestPath)) {
+    const manifest = yaml.load(readFileSync(manifestPath, "utf-8")) as {
+      files?: { path: string }[];
+    };
+    for (const entry of manifest.files ?? []) {
+      manifestPaths.add(entry.path);
+    }
+  }
+
+  const onDisk = readdirSync(scriptsDir).filter((f) => f.endsWith(".sh"));
+  for (const script of onDisk) {
+    if (!registered.has(script)) {
+      errors.push({
+        file: packagePath,
+        line: 0,
+        message: `agent/scripts/${script} not registered in package.yaml contents.scripts`,
+        severity: "error",
+      });
+    }
+    const manifestKey = `agent/scripts/${script}`;
+    if (manifestPaths.size > 0 && !manifestPaths.has(manifestKey)) {
+      errors.push({
+        file: manifestPath,
+        line: 0,
+        message: `${manifestKey} not listed in integrity-manifest.yaml`,
+        severity: "warning",
+      });
+    }
+  }
+
+  if (errors.length === 0) {
+    console.log(`✅ Script registration: ${onDisk.length} scripts in package.yaml`);
+  }
+  return errors;
+}
+
+export function validateProtocolDirAddability(root?: string): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const base = root ?? getRepoRoot();
+  const probeDirs = ["agent/reports", "agent/feedback", "agent/memory", "agent/tasks"];
+
+  for (const dir of probeDirs) {
+    const probe = path.join(base, dir, "__acp_addability_probe__.md");
+    try {
+      execSync(`git check-ignore -q "${probe}"`, {
+        cwd: base,
+        stdio: ["pipe", "pipe", "pipe"],
+      });
+      errors.push({
+        file: path.join(dir, ".gitignore"),
+        line: 0,
+        message: `Protocol dir ${dir}/ rejects new files (git check-ignore probe)`,
+        severity: "error",
+      });
+    } catch {
+      // not ignored — good
+    }
+  }
+
+  for (const dir of ["agent/reports", "agent/feedback"]) {
+    const absDir = path.join(base, dir);
+    if (!existsSync(absDir)) continue;
+    const walk = (sub: string) => {
+      for (const entry of readdirSync(sub, { withFileTypes: true })) {
+        const full = path.join(sub, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else {
+          if (entry.name.startsWith(".") || entry.name === ".DS_Store") continue;
+          const rel = path.relative(base, full).replace(/\\/g, "/");
+          try {
+            const tracked = execSync(`git ls-files --error-unmatch "${rel}"`, {
+              cwd: base,
+              encoding: "utf8",
+              stdio: ["pipe", "pipe", "pipe"],
+            });
+            if (!tracked.trim()) {
+              errors.push({
+                file: rel,
+                line: 0,
+                message: `Untracked evidence file in ${dir}/ (D9)`,
+                severity: "error",
+              });
+            }
+          } catch {
+            errors.push({
+              file: rel,
+              line: 0,
+              message: `Untracked evidence file in ${dir}/ (D9)`,
+              severity: "error",
+            });
+          }
+        }
+      }
+    };
+    walk(absDir);
+  }
+
+  if (errors.length === 0) {
+    console.log("✅ Protocol dirs: addability probe passed; evidence files tracked");
+  }
+  return errors;
+}
+
+function runInstructionAndPackageChecks(): boolean {
+  let ok = true;
+  for (const err of validateInstructionFileHash()) {
+    console.error(`❌ ${err.file}:${err.line} — ${err.message}`);
+    if (err.severity === "error") ok = false;
+  }
+  for (const err of validatePackageYamlVersion()) {
+    console.error(`❌ ${err.file}: ${err.message}`);
+    if (err.severity === "error") ok = false;
+  }
+  for (const err of validateScriptRegistration()) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") ok = false;
+  }
+  for (const err of validateProtocolDirAddability()) {
+    console.error(`❌ ${err.file}: ${err.message}`);
+    if (err.severity === "error") ok = false;
+  }
+  return ok;
 }
 
 // ============================================================
@@ -448,7 +804,7 @@ function checkStaleness(): boolean {
 
 // ── Validate AGENTS.md / CLAUDE.md byte size (VALIDATE-001) ─
 function validateAgentsMdSize(): boolean {
-  const constraintsPath = path.join("agent", "core", "constraints.yml");
+  const constraintsPath = repoPath("agent", "core", "constraints.yml");
   if (!existsSync(constraintsPath)) {
     console.warn("⚠️  constraints.yml not found — skipping AGENTS.md size check");
     return true;
@@ -467,11 +823,12 @@ function validateAgentsMdSize(): boolean {
 
   let allOk = true;
   for (const file of filesToCheck) {
-    if (!existsSync(file)) {
+    const absFile = path.isAbsolute(file) ? file : repoPath(file);
+    if (!existsSync(absFile)) {
       console.warn(`⚠️  ${file}: not found — skipping size check`);
       continue;
     }
-    const size = statSync(file).size;
+    const size = statSync(absFile).size;
     if (size > maxBytes) {
       console.error(`❌ ${file}: ${size} bytes — exceeds ${maxBytes} byte limit`);
       allOk = false;
@@ -486,7 +843,7 @@ function validateAgentsMdSize(): boolean {
 
 // ── Validate sessions.md YAML structure (MEMORY-002) ─────────
 function validateSessionsMemory(): boolean {
-  const sessionsPath = path.join("agent", "memory", "sessions.md");
+  const sessionsPath = repoPath("agent", "memory", "sessions.md");
   if (!existsSync(sessionsPath)) {
     console.warn("⚠️  sessions.md: file not found — skipping structure check");
     return true;
@@ -535,7 +892,7 @@ function validateSessionsMemory(): boolean {
 // ── Version consistency (identity.yml ↔ AGENTS.md ↔ CLAUDE.md ↔ CHANGELOG) ────
 export function validateVersionConsistency(): ValidationError[] {
   const errors: ValidationError[] = [];
-  const identityPath = path.join("agent", "core", "identity.yml");
+  const identityPath = repoPath("agent", "core", "identity.yml");
   const files: Record<string, string> = {};
 
   // Extract version from identity.yml
@@ -546,22 +903,25 @@ export function validateVersionConsistency(): ValidationError[] {
   }
 
   // AGENTS.md first line
-  if (existsSync("AGENTS.md")) {
-    const raw = readFileSync("AGENTS.md", "utf8");
+  const agentsPath = repoPath("AGENTS.md");
+  if (existsSync(agentsPath)) {
+    const raw = readFileSync(agentsPath, "utf8");
     const match = raw.match(/^> v([\d.]+)/m);
     if (match) files["AGENTS.md"] = match[1];
   }
 
   // CLAUDE.md first line
-  if (existsSync("CLAUDE.md")) {
-    const raw = readFileSync("CLAUDE.md", "utf8");
+  const claudePath = repoPath("CLAUDE.md");
+  if (existsSync(claudePath)) {
+    const raw = readFileSync(claudePath, "utf8");
     const match = raw.match(/^> v([\d.]+)/m);
     if (match) files["CLAUDE.md"] = match[1];
   }
 
   // CHANGELOG.md first release entry
-  if (existsSync("CHANGELOG.md")) {
-    const raw = readFileSync("CHANGELOG.md", "utf8");
+  const changelogPath = repoPath("CHANGELOG.md");
+  if (existsSync(changelogPath)) {
+    const raw = readFileSync(changelogPath, "utf8");
     const match = raw.match(/^## \[([\d.]+)\]/m);
     if (match) files["CHANGELOG.md"] = match[1];
   }
@@ -591,7 +951,7 @@ export function validateVersionConsistency(): ValidationError[] {
 
 // ── Cross-layer status consistency (route-186) ─────────────────
 // FAIL if a milestone doc's **Status**: disagrees with progress.yaml
-const PROGRESS_PATH = path.join("agent", "progress.yaml");
+const PROGRESS_PATH = repoPath("agent", "progress.yaml");
 
 function loadProgressSafe(): ProgressYaml | null {
   if (!existsSync(PROGRESS_PATH)) return null;
@@ -696,8 +1056,422 @@ const SCHEMA_DATA_MAP: Record<string, string> = {
   "lessons.schema.yaml": "agent/memory/lessons.md",
   "decisions.schema.yaml": "agent/memory/decisions.md",
   "audit-carryovers.schema.yaml": "agent/memory/audit-carryovers.md",
+  "patterns.schema.yaml": "agent/memory/patterns.md",
   // milestone.schema.yaml validates route-task frontmatter (id/title/status), not progress.yaml milestones map
 };
+
+const USAGE_PATH = "docs/USAGE.md";
+const CARRYOVERS_PATH = "agent/memory/audit-carryovers.md";
+const PATTERNS_PATH = "agent/memory/patterns.md";
+const SESSIONS_PATH = "agent/memory/sessions.md";
+
+function splitYamlListEntries(raw: string, entryMarker: RegExp): string[] {
+  const stripped = raw.replace(/^(#[^\n]*\n|\s*\n)*/m, "");
+  if (stripped.trim() === "") return [];
+  return stripped.split(entryMarker).filter((p) => p.trim().startsWith("- "));
+}
+
+/** M70 task-220: warn when branch protection checklist in USAGE.md is incomplete */
+export function validateBranchProtectionDocs(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(USAGE_PATH)) {
+    errors.push({
+      file: USAGE_PATH,
+      line: 0,
+      message: "USAGE.md missing — cannot verify branch protection checklist",
+      severity: "warning",
+    });
+    return errors;
+  }
+
+  const raw = readFileSync(USAGE_PATH, "utf8");
+  if (!raw.includes("## Git Branch Protection")) {
+    errors.push({
+      file: USAGE_PATH,
+      line: 0,
+      message: "Missing § Git Branch Protection section",
+      severity: "warning",
+    });
+    return errors;
+  }
+
+  if (!raw.includes("### Protection checklist")) {
+    errors.push({
+      file: USAGE_PATH,
+      line: 0,
+      message: "Missing ### Protection checklist under Git Branch Protection",
+      severity: "warning",
+    });
+  }
+
+  if (commandExists("gh")) {
+    try {
+      const repo = execSync("gh repo view --json nameWithOwner -q .nameWithOwner", {
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "pipe"],
+      }).trim();
+      if (repo) {
+        execSync(`gh api repos/${repo}/branches/mainline/protection`, {
+          encoding: "utf8",
+          stdio: ["pipe", "pipe", "pipe"],
+        });
+      }
+    } catch {
+      errors.push({
+        file: USAGE_PATH,
+        line: 0,
+        message: "GitHub mainline branch protection not detected (gh api 404) — enable via Settings or acp.branch-protection-setup.sh",
+        severity: "warning",
+      });
+    }
+  }
+
+  return errors;
+}
+
+function commandExists(cmd: string): boolean {
+  try {
+    execSync(`command -v ${cmd}`, { stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** M70 task-222: field-level lint for sessions.md and patterns.md (--memory) */
+export function validateMemoryFieldLint(): ValidationError[] {
+  const errors: ValidationError[] = [];
+
+  for (const [filePath, requiredKeys] of [
+    [SESSIONS_PATH, ["date:", "executor:", "done:"] as string[]],
+    [PATTERNS_PATH, ["date:", "name:"] as string[]],
+  ] as const) {
+    if (!existsSync(filePath)) continue;
+    const raw = readFileSync(filePath, "utf8");
+    const entries = splitYamlListEntries(raw, /\n(?=- date:)/);
+
+    for (let i = 0; i < entries.length; i++) {
+      const entry = entries[i];
+      for (const key of requiredKeys) {
+        if (!entry.includes(key)) {
+          errors.push({
+            file: filePath,
+            line: 0,
+            message: `Entry #${i + 1} missing required field ${key.replace(":", "")}`,
+            severity: "error",
+          });
+        }
+      }
+      if (filePath === PATTERNS_PATH && entry.includes("name:")) {
+        const nameMatch = entry.match(/name:\s*([^\n]+)/);
+        if (nameMatch && !/^[a-z0-9][a-z0-9-]*$/.test(nameMatch[1].trim())) {
+          errors.push({
+            file: filePath,
+            line: 0,
+            message: `Entry #${i + 1} name must be kebab-case`,
+            severity: "warning",
+          });
+        }
+      }
+    }
+  }
+
+  return errors;
+}
+
+/** M70 task-223: flag pending carryovers whose fix_target file already exists */
+export function validateCarryoverFreshness(
+  carryoversPath: string = CARRYOVERS_PATH
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(carryoversPath)) return errors;
+
+  const raw = readFileSync(carryoversPath, "utf8");
+  const blocks = raw.split(/\n  - audit_id:/).slice(1);
+
+  for (const block of blocks) {
+    if (!/status:\s*pending/.test(block)) continue;
+
+    const findingId = block.match(/finding_id:\s*(\S+)/)?.[1] ?? "?";
+    const fixTarget = block.match(/fix_target:\s*"([^"]+)"/)?.[1] ?? "";
+
+    const fileMatch = fixTarget.match(/([a-zA-Z0-9_./-]+\.(ts|sh|yaml|md))/);
+    if (!fileMatch) continue;
+
+    const targetFile = fileMatch[1];
+    const absTarget = path.isAbsolute(targetFile)
+      ? targetFile
+      : path.join(getRepoRoot(), targetFile);
+    if (existsSync(absTarget)) {
+      const snippet = fixTarget.match(/:\s*(.+)$/)?.[1];
+      if (snippet) {
+        try {
+          const content = readFileSync(absTarget, "utf8");
+          if (content.includes(snippet.slice(0, 40))) {
+            errors.push({
+              file: carryoversPath,
+              line: 0,
+              message: `${findingId}: pending carryover may be stale — fix_target pattern found in ${targetFile}`,
+              severity: "warning",
+            });
+          }
+        } catch {
+          // skip unreadable
+        }
+      }
+    }
+  }
+
+  return errors;
+}
+
+/** M73 task-248: detect false audit-093 stamps on pre-M72 fixes */
+export function validateCarryoverAuditStamps(
+  carryoversPath: string = CARRYOVERS_PATH
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(carryoversPath)) return errors;
+
+  const raw = readFileSync(carryoversPath, "utf8");
+  const blocks = raw.split(/\n  - audit_id:/).slice(1);
+  const m72ClosureDay = "2026-07-15";
+
+  for (const block of blocks) {
+    const findingId = block.match(/finding_id:\s*(\S+)/)?.[1] ?? "?";
+    const verified = block.match(/verified_in_audit:\s*(\S+)/)?.[1] ?? "";
+    const fixDate = block.match(/fix_applied_date:\s*(\S+)/)?.[1] ?? "";
+
+    if (verified !== "audit-093") continue;
+
+    if (fixDate && fixDate < m72ClosureDay) {
+      errors.push({
+        file: carryoversPath,
+        line: 0,
+        message: `${findingId}: verified_in_audit audit-093 on pre-M72 fix (${fixDate}) — restore from git history`,
+        severity: "error",
+      });
+    }
+  }
+
+  return errors;
+}
+
+/** M70 task-229: IG-35 route files_affected drift (warn-only in validate) */
+export function validateIg35RouteDrift(): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!commandExists("git")) return errors;
+
+  let changedFiles: string[] = [];
+  try {
+    const out = execSync("git diff --name-only HEAD~1..HEAD 2>/dev/null || git diff --name-only", {
+      encoding: "utf8",
+    });
+    changedFiles = out.split("\n").map((f) => f.trim()).filter(Boolean);
+  } catch {
+    return errors;
+  }
+
+  if (changedFiles.length === 0) return errors;
+
+  let commitMsg = "";
+  try {
+    commitMsg = execSync("git log -1 --format=%s", { encoding: "utf8" }).trim();
+  } catch {
+    return errors;
+  }
+
+  const routeMatch = commitMsg.match(/route-(\d+)/);
+  if (!routeMatch) return errors;
+
+  const routeFile = path.join("agent", "routing", "tasks", `route-${routeMatch[1]}.md`);
+  if (!existsSync(routeFile)) return errors;
+
+  const routeRaw = readFileSync(routeFile, "utf8");
+  const declared: string[] = [];
+  const faBlock = routeRaw.match(/files_affected:\s*\n((?:\s+-\s+.+\n?)*)/);
+  if (faBlock) {
+    for (const line of faBlock[1].split("\n")) {
+      const m = line.match(/^\s+-\s+(.+)$/);
+      if (m) declared.push(m[1].trim());
+    }
+  }
+
+  if (declared.length === 0) return errors;
+
+  for (const f of changedFiles) {
+    const normalized = f.replace(/^\.\//, "");
+    const covered = declared.some(
+      (d) => normalized === d || normalized.startsWith(d.replace(/\*$/, ""))
+    );
+    if (!covered && normalized.startsWith("agent/")) {
+      errors.push({
+        file: routeFile,
+        line: 0,
+        message: `IG-35: ${normalized} changed but not in files_affected for ${routeMatch[0]}`,
+        severity: "warning",
+      });
+    }
+  }
+
+  return errors;
+}
+
+function runMemoryValidation(): boolean {
+  let allOk = true;
+  const fieldErrors = validateMemoryFieldLint();
+  for (const err of fieldErrors) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+  if (fieldErrors.length === 0) {
+    console.log("✅ Memory field lint: sessions.md + patterns.md valid");
+  }
+  return allOk;
+}
+
+function runM70Guards(): boolean {
+  let allOk = true;
+
+  const bp = validateBranchProtectionDocs();
+  for (const err of bp) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+  if (bp.length === 0) {
+    console.log("✅ Branch protection docs: checklist complete");
+  }
+
+  const cf = validateCarryoverFreshness();
+  for (const err of cf) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+  if (cf.length === 0) {
+    console.log("✅ Carryover freshness: no stale pending patterns detected");
+  }
+
+  const cas = validateCarryoverAuditStamps();
+  for (const err of cas) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+  if (cas.length === 0) {
+    console.log("✅ Carryover audit stamps: no false audit-093 pointers");
+  }
+
+  const ig35 = validateIg35RouteDrift();
+  for (const err of ig35) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+
+  return allOk;
+}
+
+function splitCarryoverEntries(raw: string): string[] {
+  const idx = raw.indexOf("carryovers:");
+  if (idx < 0) return [];
+  const body = raw.slice(idx);
+  return body
+    .split(/\n  - audit_id:/)
+    .slice(1)
+    .map((block) => `  - audit_id:${block}`);
+}
+
+/** M71 task-233: per-entry schema validation for YAML list memory documents */
+export function validateSchemaListEntries(
+  entryTexts: string[],
+  schema: Record<string, unknown>,
+  filePath: string,
+  fieldAliases: Record<string, string> = {}
+): ValidationError[] {
+  const requiredFields = schema["required_fields"] as string[] | undefined;
+  if (!requiredFields) return [];
+
+  const errors: ValidationError[] = [];
+
+  for (let i = 0; i < entryTexts.length; i++) {
+    const entryText = entryTexts[i];
+    let record: Record<string, unknown> = {};
+    try {
+      const loaded = yaml.load(entryText);
+      if (loaded && typeof loaded === "object" && !Array.isArray(loaded)) {
+        record = loaded as Record<string, unknown>;
+      }
+    } catch {
+      // fall through to line-based checks
+    }
+
+    for (const rf of requiredFields) {
+      const alias = fieldAliases[rf];
+      const hasField =
+        rf in record ||
+        (alias !== undefined && alias in record) ||
+        entryText.includes(`${rf}:`) ||
+        (alias !== undefined && entryText.includes(`${alias}:`));
+      if (!hasField) {
+        errors.push({
+          file: filePath,
+          line: 0,
+          message: `Entry #${i + 1} missing required field: ${rf}`,
+          severity: "error",
+        });
+      }
+    }
+  }
+
+  return errors;
+}
+
+function validateDecisionsAdrEntries(
+  filePath: string,
+  schema: Record<string, unknown>
+): { errors: ValidationError[]; entryCount: number } {
+  const raw = readFileSync(filePath, "utf8");
+  const blocks = raw.split(/\n(?=## ADR-\d+)/).filter((b) => /^## ADR-/.test(b));
+  const requiredFields = schema["required_fields"] as string[] | undefined;
+  const errors: ValidationError[] = [];
+  if (!requiredFields) return { errors, entryCount: blocks.length };
+
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i];
+    const header = block.match(/^## (ADR-\d+) \| (\d{4}-\d{2}-\d{2}) \|/);
+    const statusMatch = block.match(/\*\*Status:\*\*\s*(\S+)/);
+    const entry: Record<string, string> = {
+      id: header?.[1] ?? "",
+      date: header?.[2] ?? "",
+      status: statusMatch?.[1] ?? "",
+    };
+
+    if (!header) {
+      errors.push({
+        file: filePath,
+        line: 0,
+        message: `ADR block #${i + 1} missing id/date header`,
+        severity: "warning",
+      });
+      continue;
+    }
+
+    for (const rf of requiredFields) {
+      if (!entry[rf]) {
+        errors.push({
+          file: filePath,
+          line: 0,
+          message: `${entry.id} missing required field: ${rf}`,
+          severity: "error",
+        });
+      }
+    }
+  }
+
+  return { errors, entryCount: blocks.length };
+}
 
 function validateYamlAgainstSchema(
   dataYaml: unknown,
@@ -774,26 +1548,57 @@ function runSchemaEnforcement(): boolean {
       }
 
       const dataContent = readFileSync(dataFile, "utf8");
-      // sessions.md / lessons.md are multi-document YAML lists; try loading as-is
-      let dataYaml: unknown;
-      try {
-        dataYaml = yaml.load(dataContent);
-      } catch {
-        // If YAML parse fails, that's a pre-existing error from other validators
-        continue;
+      let schemaErrors: ValidationError[] = [];
+      let entryCount = 0;
+
+      if (schemaFile === "decisions.schema.yaml") {
+        const result = validateDecisionsAdrEntries(dataFile, schema);
+        schemaErrors = result.errors;
+        entryCount = result.entryCount;
+      } else if (
+        schemaFile === "lessons.schema.yaml" ||
+        schemaFile === "session.schema.yaml" ||
+        schemaFile === "patterns.schema.yaml"
+      ) {
+        const entries = splitYamlListEntries(dataContent, /\n(?=- date:)/);
+        entryCount = entries.length;
+        schemaErrors = validateSchemaListEntries(entries, schema, dataFile);
+      } else if (schemaFile === "audit-carryovers.schema.yaml") {
+        const entryTexts = splitCarryoverEntries(dataContent);
+        entryCount = entryTexts.length;
+        schemaErrors = validateSchemaListEntries(entryTexts, schema, dataFile, {
+          description: "finding",
+        });
+      } else {
+        let dataYaml: unknown;
+        try {
+          dataYaml = yaml.load(dataContent);
+        } catch {
+          console.log(`⚠️  Schema ${schemaFile}: YAML parse failed for ${dataFile} — skipping`);
+          continue;
+        }
+
+        if (!dataYaml) continue;
+
+        if (Array.isArray(dataYaml)) {
+          entryCount = dataYaml.length;
+          const parts = (dataYaml as Record<string, unknown>[]).map((e) => yaml.dump(e));
+          schemaErrors = validateSchemaListEntries(parts, schema, dataFile);
+        } else {
+          schemaErrors = validateYamlAgainstSchema(dataYaml, schema, dataFile);
+        }
       }
 
-      if (!dataYaml) continue;
-
-      const errors = validateYamlAgainstSchema(dataYaml, schema, dataFile);
-      if (errors.length > 0) {
-        for (const err of errors) {
+      if (schemaErrors.length > 0) {
+        for (const err of schemaErrors) {
           const prefix = err.severity === "error" ? "❌" : "⚠️";
           console.log(`${prefix} ${err.file}: ${err.message}  [schema: ${schemaFile}]`);
           if (err.severity === "error") allOk = false;
         }
       } else {
-        console.log(`✅ Schema ${schemaFile}: ${dataFile} valid`);
+        const label =
+          entryCount > 0 ? `${entryCount} entries valid` : `${dataFile} valid`;
+        console.log(`✅ Schema ${schemaFile}: ${label}`);
       }
     } catch (err) {
       console.error(`❌ Schema enforcement error: ${schemaFile} — ${err instanceof Error ? err.message : err}`);
@@ -1278,7 +2083,7 @@ export function validateCommandE2eCoverage(
 }
 
 function runCommandE2eCoverageValidation(): boolean {
-  const repoRoot = process.cwd();
+  const repoRoot = getRepoRoot();
   const errors = validateCommandE2eCoverage(COMMAND_E2E_COVERAGE_FILE, { repoRoot });
   const blocking = errors.filter((e) => e.severity === "error");
   if (blocking.length === 0) {
@@ -1345,12 +2150,23 @@ function isDirectExecution(): boolean {
 
 // ── Main ───────────────────────────────────────────────────
 const args = process.argv.slice(2);
+const memoryMode = args.includes("--memory");
+const taskFileArgs = args.filter((a) => !a.startsWith("--"));
+
 if (isDirectExecution()) {
-if (args.length === 0) {
+if (taskFileArgs.length === 0) {
   // No args: run all command-file scans
+  const rootErrors = assertRepoRoot();
+  if (rootErrors.length > 0) {
+    for (const err of rootErrors) {
+      console.error(`❌ ${err.file}: ${err.message}`);
+    }
+    process.exit(1);
+  }
   runPlaceholderScan();
   runFrontmatterScan();
-  runParityCheck();
+  const parityOk = runParityCheck();
+  const instructionOk = runInstructionAndPackageChecks();
   const sizeOk = validateAgentsMdSize();
   const sessionsValid = validateSessionsMemory();
   const versionOk = validateVersionConsistency().length === 0;
@@ -1360,14 +2176,34 @@ if (args.length === 0) {
   const installUpdateOk = runInstallUpdateSafetyValidation();
   const commandE2eOk = runCommandE2eCoverageValidation();
   const schemasOk = runSchemaEnforcement();
+  const m70Ok = runM70Guards();
+  const memoryOk = memoryMode ? runMemoryValidation() : true;
   const consistencyOk = runConsistencyScan();
   checkStaleness(); // informational — non-blocking, does not affect exit code
-  process.exit(sizeOk && sessionsValid && versionOk && statusOk && pointersOk && handoffOk && installUpdateOk && commandE2eOk && schemasOk && consistencyOk && (process.exitCode ?? 0) === 0 ? 0 : 1);
+  process.exit(
+    parityOk &&
+      instructionOk &&
+      sizeOk &&
+      sessionsValid &&
+      versionOk &&
+      statusOk &&
+      pointersOk &&
+      handoffOk &&
+      installUpdateOk &&
+      commandE2eOk &&
+      schemasOk &&
+      m70Ok &&
+      memoryOk &&
+      consistencyOk &&
+      (process.exitCode ?? 0) === 0
+      ? 0
+      : 1
+  );
 }
 
 let overallFailed = false;
 
-for (const taskFile of args) {
+for (const taskFile of taskFileArgs) {
   const errors = validateTaskFile(taskFile);
   if (errors.length === 0) {
     console.log(`✓ ${taskFile}`);
