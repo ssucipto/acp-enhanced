@@ -159,3 +159,11 @@ acp:
         Receiving-side protocol for M67 cross-agent handoffs. Pair with
         acp.handoff on the outgoing side and acp.resume for session start.
       applies: acp.receive, acp.handoff, acp.resume
+
+    - path: null
+      weight: 0.6
+      kind: note
+      description: |
+        "Verify" intent maps to /acp-review (standards enforcement) and
+        /acp-validate (consistency + schema). There is no /acp-verify command.
+      applies: acp.proceed, acp.validate, acp.review
