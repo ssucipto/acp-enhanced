@@ -184,3 +184,11 @@
     !drafts/.gitkeep
     !drafts/draft.template.md
     EOF
+  extension_2026_07_15: |
+    Found the same bug class in the SOURCE agent/.gitignore itself (audit-091, F-091-14),
+    not just embedded copies: a bare `reports/` line (fixed in root .gitignore's
+    `!agent/reports/` form for drafts/ already, but reports/ was left bare) silently
+    blocked all new files under agent/reports/ — 61 of 88 audit reports were untracked.
+    Extended rule: whenever auditing for this bug class, grep the WHOLE gitignore file
+    for every bare `dir/` line and check whether ANY whitelist (`!...`) rule sits below
+    it anywhere in the file (root or nested) — not just the directory being actively fixed.

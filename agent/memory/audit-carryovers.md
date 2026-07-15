@@ -2060,3 +2060,38 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-091 HYGIENE — task-245 (2026-07-15) ─────────────────────────────
+
+  - audit_id: audit-091
+    finding_id: F-091-08
+    severity: low
+    file: agent/memory/sessions.md
+    finding: "sessions.md had 17 entries; protocol threshold >15 requires compaction"
+    fix_target: "Compact oldest 10 into weekly-summary block"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: task-245
+    escalated_to: null
+
+  - audit_id: audit-091
+    finding_id: F-091-09
+    severity: low
+    file: agent/progress.yaml
+    finding: "monthly-dependency-audit overdue since 2026-07-08"
+    fix_target: "Run acp.dependency-diff.sh; refresh recurring_tasks dates"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: task-245
+    escalated_to: null
+
+  - audit_id: audit-091
+    finding_id: F-091-13
+    severity: info
+    file: git
+    finding: "Uncommitted Claude-integration work post v6.26.0"
+    fix_target: "feat(claude) commit 2b92528"
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: task-245
+    escalated_to: null
