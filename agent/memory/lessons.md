@@ -269,3 +269,25 @@
     immediately create both companion files as part of the same task. Verify with:
     diff <(ls agent/commands/*.md | grep -v template | ...) <(ls .github/prompts/...)
   priority: high
+
+- date: 2026-07-15
+  task_type: memory-write
+  mistake: >
+    New agent/memory/sessions.md entries were appended near the tail of the file
+    (after existing compacted blocks) instead of prepended to the top, as
+    acp.commit.md Step 2 requires ("Prepend a YAML entry"). This left the file in
+    non-chronological order — a 2026-07-15 entry sat below 2026-06-15 entries —
+    and wasn't caught until the next /acp-commit inspected the full file (audit-091
+    session). Also surfaced: agent/.gitignore's bare `reports/` rule (not `reports/**`
+    + `!agent/reports/`) silently overrides the root .gitignore whitelist — 61 of 88
+    audit reports were never version-controlled, undetected because the validator's
+    gitignore-conflict check only inspects already-tracked paths, never probes
+    addability of new files in protocol directories.
+  correction: >
+    Always prepend new sessions.md entries immediately after the header comment
+    block (top of file), never append near existing entries or compacted blocks.
+    Separately: when fixing a gitignore bare-dir bug for one directory, grep the
+    WHOLE file for other bare `dir/` rules sitting above a `!whitelist` line —
+    they silently block it too (see patterns.md: install-script-gitignore-heredoc-sync,
+    extended 2026-07-15 with the agent/.gitignore reports/ instance).
+  priority: high
