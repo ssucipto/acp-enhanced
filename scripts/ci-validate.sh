@@ -80,12 +80,12 @@ check_command_doc() {
     failed=1
   fi
   if ! grep -q '^## Steps' "$f"; then
-    echo "  WARN: $f — missing ## Steps (allowlisted until M62 route-174)"
-    WARNINGS=$((WARNINGS + 1))
+    echo "  FAIL: $f — missing ## Steps"
+    failed=1
   fi
   if ! grep -q '^## Verification' "$f"; then
-    echo "  WARN: $f — missing ## Verification (allowlisted until M62 route-174)"
-    WARNINGS=$((WARNINGS + 1))
+    echo "  FAIL: $f — missing ## Verification"
+    failed=1
   fi
 
   if [ "$failed" -eq 0 ]; then

@@ -2,7 +2,7 @@
 
 > **Command binding**: `/acp-integrity`  
 > **Task type**: `code-integrity-scan`  
-> **Token budget**: ≤800 tokens  
+> **Token budget**: ≤500 tokens (M56 checklist); v2.0 content may exceed — load sections on demand
 > **Version**: v2.0 (M58 Phase 2)
 
 ---
@@ -14,6 +14,9 @@
 ---
 
 ## Script Table (v2.0)
+
+> **Coverage note**: Exfiltration (IG-07–13) and persistence (IG-21–26) are enforced by
+> `acp.pattern-scan.sh`, not the network script. Gateway coverage is multi-script.
 
 | Script | Rules | Type |
 |--------|-------|------|

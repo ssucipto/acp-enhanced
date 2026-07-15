@@ -175,6 +175,53 @@ print_test_header "B12 — review-scan --ci exits 1 on fixture violations"
 bash "${REVIEW_SCAN}" --ci "${FIXTURE_DIR}" >/dev/null 2>&1 || CI_EC=$?
 assert_true "review-scan --ci exits non-zero on violations" $([ "${CI_EC:-0}" -ne 0 ] && echo 0 || echo 1)
 
+# Fixture 5: missing return type (TS-02)
+cat > "${FIXTURE_DIR}/no-return-type.ts" << 'TSEOF'
+export function getUser(id: string) {
+  return { id };
+}
+TSEOF
+
+# Fixture 6: async without try (EH-01)
+cat > "${FIXTURE_DIR}/async-no-try.ts" << 'TSEOF'
+export async function loadData(): Promise<void> {
+  const r = await fetch("/api");
+  console.log(r);
+}
+TSEOF
+
+# Fixture 7: API without envelope (AP-01)
+cat > "${FIXTURE_DIR}/bad-api.ts" << 'TSEOF'
+export function handler(res: { json: (v: unknown) => void }) {
+  res.json({ users: [] });
+}
+TSEOF
+
+# Fixture 8: snake_case (NC-01)
+cat > "${FIXTURE_DIR}/snake-case.ts" << 'TSEOF'
+const user_name = "test";
+TSEOF
+
+print_test_header "B12b — Gate Policy section in command doc"
+assert_contains "$(cat "${CMD_FILE}")" "Phase 1 Gate Policy" "Phase 1 Gate Policy section present"
+assert_contains "$(cat "${CMD_FILE}")" "8 rules" "8 Phase 1 rules documented"
+
+print_test_header "B17 — review-scan detects TS-02 missing return type"
+TS2_OUT=$(bash "${REVIEW_SCAN}" "${FIXTURE_DIR}/no-return-type.ts" 2>&1 || true)
+assert_contains "${TS2_OUT}" "TS-02" "review-scan reports TS-02"
+
+print_test_header "B18 — review-scan detects EH-01 async without try"
+EH1_OUT=$(bash "${REVIEW_SCAN}" "${FIXTURE_DIR}/async-no-try.ts" 2>&1 || true)
+assert_contains "${EH1_OUT}" "EH-01" "review-scan reports EH-01"
+
+print_test_header "B19 — review-scan detects AP-01 missing data envelope"
+AP_OUT=$(bash "${REVIEW_SCAN}" "${FIXTURE_DIR}/bad-api.ts" 2>&1 || true)
+assert_contains "${AP_OUT}" "AP-01" "review-scan reports AP-01"
+
+print_test_header "B20 — review-scan detects NC-01 snake_case"
+NC_OUT=$(bash "${REVIEW_SCAN}" "${FIXTURE_DIR}/snake-case.ts" 2>&1 || true)
+assert_contains "${NC_OUT}" "NC-01" "review-scan reports NC-01"
+
 print_test_header "B13 — review-scan clean on entropy-clean.ts fixture"
 CLEAN_FIXTURE="${PROJECT_ROOT}/agent/benchmarks/fixtures/integrity/entropy-clean.ts"
 CLEAN_OUT=$(bash "${REVIEW_SCAN}" "${CLEAN_FIXTURE}" 2>&1; echo "EXIT:$?")

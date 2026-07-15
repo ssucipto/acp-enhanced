@@ -1,6 +1,7 @@
 {
   "name": "acp-enhanced",
   "version": "1.0.0",
+  "type": "module",
   "description": "ACP Enhanced dispatch and validation scripts",
   "scripts": {
     "dispatch": "ts-node acp-dispatch.ts",

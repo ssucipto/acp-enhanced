@@ -85,6 +85,41 @@ while IFS= read -r commit_hash; do
   fi
 done < <(git log --format="%H" -n "$SINCE" 2>/dev/null || true)
 
+# IG-35: files modified outside declared route files_affected
+while IFS= read -r commit_hash; do
+  [[ -z "$commit_hash" ]] && continue
+  commit_msg=$(git log --format="%s" -n 1 "$commit_hash" 2>/dev/null || echo "")
+  route_id=$(echo "$commit_msg" | grep -oE 'route-[0-9]+' | head -1 || true)
+  [[ -z "$route_id" ]] && continue
+  route_file="${PROJECT_ROOT}/agent/routing/tasks/${route_id}.md"
+  [[ ! -f "$route_file" ]] && continue
+
+  declared_files=()
+  in_fa=false
+  while IFS= read -r line; do
+    if [[ "$line" =~ ^files_affected: ]]; then in_fa=true; continue; fi
+    if $in_fa && [[ "$line" =~ ^[[:space:]]+-[[:space:]]+ ]]; then
+      f=$(echo "$line" | sed -E 's/^[[:space:]]*-[[:space:]]*//')
+      declared_files+=("$f")
+    elif $in_fa && [[ -n "$line" ]] && [[ ! "$line" =~ ^[[:space:]] ]]; then
+      in_fa=false
+    fi
+  done < "$route_file"
+
+  [[ ${#declared_files[@]} -eq 0 ]] && continue
+
+  while IFS= read -r changed; do
+    [[ -z "$changed" ]] && continue
+    covered=false
+    for d in "${declared_files[@]}"; do
+      if [[ "$changed" == "$d" ]] || [[ "$changed" == "$d"* ]]; then covered=true; break; fi
+    done
+    if ! $covered && [[ "$changed" == agent/* ]]; then
+      ig_emit_finding "$changed" "0" "IG-35" "changed outside ${route_id} files_affected (${commit_hash:0:7})"
+    fi
+  done < <(git diff-tree --no-commit-id --name-only -r "$commit_hash" 2>/dev/null || true)
+done < <(git log --format="%H" -n "$SINCE" 2>/dev/null || true)
+
 while IFS= read -r entry; do
   [[ -z "$entry" ]] && continue
   commit_hash="${entry%% *}"
