@@ -1922,9 +1922,9 @@ carryovers:
     file: .github/copilot-instructions.md
     finding: "copilot-instructions.md stale at v6.24.0 (two releases behind); pre-commit AGENTS.md sync hook not installed in this repo; validator size-only guard masked the drift"
     fix_target: "Re-copy AGENTS.md to copilot-instructions.md; install pre-commit sync hook in framework repo; change validator instruction-file check from byte-size to content hash"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: task-241
     escalated_to: null
 
   - audit_id: audit-091
@@ -1933,9 +1933,9 @@ carryovers:
     file: package.yaml
     finding: "package.yaml version 6.21.1 vs canonical 6.26.0; acp.validate.md Step 2c documents package.yaml as hard requirement but acp-validate.ts never checks it; acp.cursor-commands-sync.sh, acp.claude-commands-sync.sh, acp.post-milestone-sweep.sh unregistered in package.yaml and integrity-manifest.yaml"
     fix_target: "Bump package.yaml to 6.26.0; implement package.yaml version check in acp-validate.ts; register the 3 missing scripts in package.yaml and integrity-manifest.yaml"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: task-241
     escalated_to: null
 
   - audit_id: audit-091
@@ -1944,9 +1944,9 @@ carryovers:
     file: scripts/acp-validate.ts
     finding: "Validator is cwd-sensitive with no repo-root detection; documented invocation in acp.validate.md Step 11.6 '(cd scripts && npx ts-node acp-validate.ts)' yields vacuous all-green run including 'Parity: 0 commands x 3 surfaces — all matched'"
     fix_target: "Add repo-root detection (walk up to agent/ or fail loudly); make parity check hard-fail on 0 commands found; fix Step 11.6 invocation text to 'npx tsx scripts/acp-validate.ts' from root"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: task-241
     escalated_to: null
 
   - audit_id: audit-091
@@ -1955,9 +1955,9 @@ carryovers:
     file: .github/prompts/
     finding: "6 stale dot-named duplicate wrappers (acp.carryover-query, acp.pattern-sync, acp.session-sync in both .github/prompts/ and .opencode/commands/) coexist with hyphen-named twins; invisible to parity check due to startsWith('acp-') filter; show as duplicates in slash pickers"
     fix_target: "Delete the 6 dot-named files; extend parity check to detect dot-named strays"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: task-241
     escalated_to: null
 
   - audit_id: audit-091
