@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+---
+
+## [6.27.1] — 2026-07-15
+
+### Fixed (M73 — Closure Honesty Remediation)
+- **Carryover integrity** — restored 17 false `audit-093` stamps; `validateCarryoverAuditStamps()` guard (F-094-01).
+- **Independent closure** — audit-095 with seeded negative probes supersedes audit-093 self-cert (F-094-02).
+- **Tracking sync** — task-246 honestly deferred; M72 task frontmatter aligned (F-094-03/05).
+- **D4 ratchet** — 13 scripts registered in `package.yaml`; unregistered script → ERROR (F-094-06/07).
+- **Post-milestone-sweep** — 6/6 gates; tsc NodeNext; token budget + gitattributes gate fixes (F-094-04).
+
+### Changed
+- **`acp.post-milestone-sweep.sh`** — align token budget with constraints (5000 total); escape glob in gitattributes check.
+- **M72 milestone gates** — checked with evidence; cwd gate amended for D1 module ROOT (F-094-10).
+
+---
+
 ## [6.27.0] — 2026-07-15
 
 ### Added

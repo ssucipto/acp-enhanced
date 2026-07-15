@@ -3,13 +3,13 @@
 
 project:
   name: agent-context-protocol
-  version: 6.27.0
+  version: 6.27.1
   started: 2026-02-16
   status: active
-  current_milestone: M72
+  current_milestone: M73
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.27.0 shipped; M72 complete.
-      task-245 hygiene complete; wrappers across 4 surfaces (prompts, opencode, cursor, claude).
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.27.1 shipped; M73 closure honesty complete.
+      M72 runtime + M73 process remediation; CRIT-065-002 deferred (admin).
 
 milestones:
   M44:
@@ -546,12 +546,12 @@ milestones:
   M73:
     name: M72 Closure Honesty & Carryover Integrity Remediation (v6.27.1)
     priority: 5
-    status: planned
-    progress: 0
-    started: null
-    completed: null
+    status: completed
+    progress: 100
+    started: 2026-07-15
+    completed: 2026-07-15
     estimated_weeks: 0.25
-    tasks_completed: 0
+    tasks_completed: 7
     tasks_total: 7
     file: agent/milestones/milestone-73-m72-closure-honesty-remediation.md
     design: agent/design/m73-m72-closure-honesty-remediation.md
@@ -4606,10 +4606,10 @@ tasks:
     - id: task-243
       name: "Docs alignment — validate.md, lessons, notes, pipefail, verify pointer"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-243-docs-alignment.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T02:15:00Z
+      completed_date: 2026-07-15T02:30:00Z
       estimated_hours: 2
       notes: "route-232; F-091-05(doc)/07/11/12 — depends task-241"
 
@@ -4636,10 +4636,10 @@ tasks:
     - id: task-246
       name: "Branch protection ops + PR develop → mainline"
       priority: 5
-      status: completed
+      status: deferred
       file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-246-branch-protection-pr.md
-      started: 2026-07-15T02:45:00Z
-      completed_date: 2026-07-15T03:00:00Z
+      started: null
+      completed_date: null
       estimated_hours: 1
       notes: "route-235; CRIT-065-002 deferred — gh api 404 (admin required)"
 
@@ -4657,80 +4657,80 @@ tasks:
     - id: task-248
       name: "Carryover integrity restore + verified_in_audit guard"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-248-carryover-integrity-restore.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T09:50:00Z
+      completed_date: 2026-07-15T10:00:00Z
       estimated_hours: 2
-      notes: "route-237; F-094-01 critical — restore 19 corrupted audit stamps"
+      notes: "route-237; 17 stamps restored; validateCarryoverAuditStamps guard"
 
     - id: task-249
       name: "Tracking truth sync — progress, tasks, gates, notes"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-249-tracking-truth-sync.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T10:00:00Z
+      completed_date: 2026-07-15T10:10:00Z
       estimated_hours: 2
-      notes: "route-238; F-094-03/05/08/09/10 — revert task-246 false complete"
+      notes: "route-238; task-246 deferred; M72 gates checked"
 
     - id: task-250
       name: "Script registration + D4 WARN→ERROR ratchet"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-250-script-registration-d4-ratchet.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T10:10:00Z
+      completed_date: 2026-07-15T10:20:00Z
       estimated_hours: 2
-      notes: "route-239; F-094-06/07 — 14 scripts + ERROR ratchet"
+      notes: "route-239; 13 scripts registered; D4 ERROR"
 
     - id: task-251
       name: "Post-milestone-sweep 6/6 — tsc and gate fixes"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-251-sweep-gates-green.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T10:20:00Z
+      completed_date: 2026-07-15T10:30:00Z
       estimated_hours: 2
-      notes: "route-240; F-094-04 — currently 2/6 sweep gates"
+      notes: "route-240; sweep 6/6; tsc NodeNext; gate fixes"
 
     - id: task-252
       name: "Independent closure audit-095 — seeded negative probes"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-252-independent-closure-audit-095.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T10:30:00Z
+      completed_date: 2026-07-15T10:40:00Z
       estimated_hours: 2
-      notes: "route-241; F-094-02/06 — supersedes audit-093 self-cert"
+      notes: "route-241; audit-095 PASS; supersedes audit-093"
 
     - id: task-253
       name: "Branch protection ops — CRIT-065-002 honest track"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-253-branch-protection-ops.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T10:40:00Z
+      completed_date: 2026-07-15T10:45:00Z
       estimated_hours: 1
-      notes: "route-242; CRIT-065-002 — gh api 404 until admin"
+      notes: "route-242; gh api 404 documented; CRIT-065-002 stays pending"
 
     - id: task-254
       name: "M73 closure audit-096 + ship v6.27.1 patch"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-254-m73-closure-ship.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T10:45:00Z
+      completed_date: 2026-07-15T11:00:00Z
       estimated_hours: 1
-      notes: "route-243; honest M72 closure + v6.27.1 tag"
+      notes: "route-243; audit-096 PASS; tag v6.27.1"
 
 recent_work:
   - date: 2026-07-15
     description: |
-      🎉 M72 COMPLETE — Validation Truth & Drift Hardening v6.27.0
-      Tasks 240-247 (autonomous run); audit-093 PASS WITH DEFERRALS.
-      Validator: ROOT anchor, hash sync, 5-surface parity, D9 addability.
-      7 commits; tag v6.27.0. CRIT-065-002 deferred (admin).
+      🎉 M73 COMPLETE — Closure Honesty Remediation v6.27.1
+      Tasks 248-254; audit-094 findings F-094-01..10 fixed.
+      audit-095 independent M72 closure; carryover integrity restored.
+      CRIT-065-002 still deferred (gh api 404).
   - date: 2026-07-15
     description: |
       ✅ v6.26.0 shipped — M70 gate hardening + M71 remediation (audit-090).
@@ -7099,11 +7099,9 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "M73 task-248: restore corrupted carryover verified_in_audit (F-094-01 P0)"
-  - "M73 task-249: revert task-246 false complete; sync tracking layers"
-  - "M73 task-252: independent audit-095 with seeded negative probes"
-  - "CRIT-065-002: enable mainline branch protection (admin) — task-253"
-  - "Push develop with v6.27.0 tag after M73 closure (v6.27.1)"
+  - "CRIT-065-002: enable mainline branch protection (GitHub admin) — task-246/task-253"
+  - "Push develop with v6.27.0 + v6.27.1 tags"
+  - "Plan next milestone or routine /acp-proceed work"
 
 current_blockers: []
 
