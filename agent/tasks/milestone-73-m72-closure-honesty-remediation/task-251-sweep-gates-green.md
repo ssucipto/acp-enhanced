@@ -2,7 +2,7 @@
 id: task-251
 milestone: M73
 title: "Post-milestone-sweep 6/6 — tsc and gate fixes"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 2

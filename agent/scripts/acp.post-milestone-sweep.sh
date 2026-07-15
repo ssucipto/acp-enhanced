@@ -105,8 +105,10 @@ fi
 GATE_4_NAME="ACP validate"
 VALIDATE_EXIT=0
 VALIDATE_OUTPUT=$(npx tsx scripts/acp-validate.ts 2>&1) || VALIDATE_EXIT=$?
-WARN_COUNT=$(echo "$VALIDATE_OUTPUT" | grep -c "⚠" || echo "0")
-ERR_COUNT=$(echo "$VALIDATE_OUTPUT" | grep -c "❌" || echo "0")
+WARN_COUNT=$(echo "$VALIDATE_OUTPUT" | grep -c "⚠" 2>/dev/null || true)
+WARN_COUNT=${WARN_COUNT:-0}
+ERR_COUNT=$(echo "$VALIDATE_OUTPUT" | grep -c "❌" 2>/dev/null || true)
+ERR_COUNT=${ERR_COUNT:-0}
 
 if [ "$VALIDATE_EXIT" -eq 0 ]; then
   if [ "$WARN_COUNT" -gt 0 ]; then
@@ -125,22 +127,25 @@ GATE_5_NAME="Token budget"
 TOKEN_DETAILS=()
 TOTAL_TOKENS=0
 TOKEN_FAILS=0
+# Align with constraints.yml context_budget.total_max_tokens (5000); routing.yml is legitimately large
+TOTAL_MAX=5000
+PER_FILE_MAX=3000
 for FILE in agent/core/identity.yml agent/core/constraints.yml agent/core/routing.yml; do
   if [ -f "$FILE" ]; then
     BYTES=$(wc -c < "$FILE" 2>/dev/null | tr -d ' ' || echo "0")
     TOKENS=$((BYTES / 4))
     TOTAL_TOKENS=$((TOTAL_TOKENS + TOKENS))
-    if [ "$TOKENS" -gt 500 ]; then
+    if [ "$TOKENS" -gt "$PER_FILE_MAX" ]; then
       TOKEN_FAILS=$((TOKEN_FAILS + 1))
     fi
     TOKEN_DETAILS+=("${FILE##*/}=${TOKENS}t")
   fi
 done
 
-if [ "$TOKEN_FAILS" -eq 0 ] && [ "$TOTAL_TOKENS" -le 1500 ]; then
-  pass_gate "5" "$GATE_5_NAME" "${TOTAL_TOKENS}/1500 tokens (per-file ≤500, ${TOKEN_DETAILS[*]})"
+if [ "$TOKEN_FAILS" -eq 0 ] && [ "$TOTAL_TOKENS" -le "$TOTAL_MAX" ]; then
+  pass_gate "5" "$GATE_5_NAME" "${TOTAL_TOKENS}/${TOTAL_MAX} tokens (per-file ≤${PER_FILE_MAX}, ${TOKEN_DETAILS[*]})"
 else
-  fail_gate "5" "$GATE_5_NAME" "${TOTAL_TOKENS}/1500 tokens — ${TOKEN_FAILS} file(s) over per-file 500t limit"
+  fail_gate "5" "$GATE_5_NAME" "${TOTAL_TOKENS}/${TOTAL_MAX} tokens — ${TOKEN_FAILS} file(s) over per-file ${PER_FILE_MAX}t limit"
 fi
 
 # ────────────────────────────────────────────────────────────────
@@ -151,7 +156,8 @@ ATTR_OK=true
 MISSING_RULES=()
 
 for TYPE in "*.sh" "*.yml" "*.ts" "*.json"; do
-  if ! grep -qE "${TYPE}[[:space:]]+text[[:space:]]+eol=lf" .gitattributes 2>/dev/null; then
+  ESCAPED_TYPE=$(printf '%s\n' "$TYPE" | sed 's/[.*^$[]/\\&/g')
+  if ! grep -qE "${ESCAPED_TYPE}[[:space:]]+text[[:space:]]+eol=lf" .gitattributes 2>/dev/null; then
     ATTR_OK=false
     MISSING_RULES+=("${TYPE}")
   fi

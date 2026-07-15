@@ -2,13 +2,14 @@
 id: task-243
 milestone: M72
 title: "Docs alignment — validate.md corrections, lessons, notes, pipefail rationale, /acp-verify pointer"
-status: planned
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15T02:15:00Z
+completed: 2026-07-15
+completed_date: 2026-07-15T02:30:00Z
 route: route-232
 audit_findings: [F-091-05, F-091-07, F-091-11, F-091-12]
 depends_on: [task-241]

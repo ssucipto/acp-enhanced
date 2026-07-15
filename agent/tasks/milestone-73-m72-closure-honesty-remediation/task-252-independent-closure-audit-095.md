@@ -2,7 +2,7 @@
 id: task-252
 milestone: M73
 title: "Independent closure audit-095 — seeded negative probes"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 2
