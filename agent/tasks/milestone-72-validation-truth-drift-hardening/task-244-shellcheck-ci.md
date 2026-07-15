@@ -10,7 +10,7 @@ created: 2026-07-15
 started: null
 completed_date: null
 route: route-233
-audit_findings: [F-091-10]
+audit_findings: [F-091-10, F-092-04]
 depends_on: []
 design_reference: [Design: M72 Validation Truth](../design/m72-validation-truth-drift-hardening.md)
 ---
@@ -24,6 +24,10 @@ Add the industry-standard lint gate audit-091 found missing: ShellCheck over the
 - No shellcheck in any workflow; ci.yaml already follows SHA-pinning best practice (checkout, setup-node, trufflehog all pinned) — the new job must match.
 - Ratchet strategy: land at `--severity=error` so the gate goes green immediately; warning-level cleanup is an accepted deferral.
 - The 4 sourced libraries get `# shellcheck` directives where needed rather than blanket excludes (rationale documented by task-243).
+
+## Prerequisites (F-092-04)
+
+- [ ] `brew install shellcheck` (audit-092 confirmed shellcheck is NOT installed locally — install before sizing the work; finding count at error severity is unknowable until then)
 
 ## Steps
 
