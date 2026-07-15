@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.21.1
+version: 6.26.0
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
@@ -522,6 +522,18 @@ contents:
 
     - name: acp.branch-protection-setup.sh
       description: GitHub branch protection setup for mainline and develop (M70)
+      type: utility
+
+    - name: acp.cursor-commands-sync.sh
+      description: Generate .cursor/commands wrappers from agent/commands (ADR-17)
+      type: utility
+
+    - name: acp.claude-commands-sync.sh
+      description: Generate .claude/commands wrappers from agent/commands (ADR-18)
+      type: utility
+
+    - name: acp.post-milestone-sweep.sh
+      description: Post-milestone deliverables audit sweep (M71)
       type: utility
 
     - name: acp.recurring-complete.sh
