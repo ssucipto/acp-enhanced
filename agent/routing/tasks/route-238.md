@@ -12,7 +12,7 @@ files_affected:
   - agent/reports/audit-093-m72-closure.md
 tokens_est: 2500
 created: 2026-07-15
-completed:
+completed: 2026-07-15
 ---
 
 ## Objective
