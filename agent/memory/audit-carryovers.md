@@ -2095,3 +2095,82 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: task-245
     escalated_to: null
+
+  # ── AUDIT-094 FINDINGS — M72 IMPLEMENTATION GAPS (2026-07-15) ───────────────
+
+  - audit_id: audit-094
+    finding_id: F-094-01
+    severity: critical
+    file: agent/memory/audit-carryovers.md
+    finding: "replace_all on verified_in_audit:null→audit-093 corrupted 19 historical carryover entries (audit-015/016/041) with false audit-093 verification pointers"
+    fix_target: "Restore verified_in_audit from pre-07ab4d5 git history for non-M72 entries; add acp-validate guard against bulk verified_in_audit overwrite"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-094
+    finding_id: F-094-02
+    severity: critical
+    file: agent/reports/audit-093-m72-closure.md
+    finding: "audit-093 was self-certification by implementing agent — no independent re-verify with seeded negative probes (audit-088 precedent)"
+    fix_target: "Run audit-095 independent closure with documented negative probes; do not treat audit-093 as authoritative"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-094
+    finding_id: F-094-03
+    severity: high
+    file: agent/progress.yaml
+    finding: "task-246 marked completed while CRIT-065-002 pending, no PR, task file status:planned"
+    fix_target: "Set task-246 status deferred/blocked in progress.yaml; document admin blocker; do not stamp CRIT-065-002 fixed"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-094
+    finding_id: F-094-04
+    severity: high
+    file: agent/scripts/acp.post-milestone-sweep.sh
+    finding: "task-247 required post-milestone-sweep at closure; live run 2/6 pass (tsc import.meta CJS, token budget, gitattributes parse)"
+    fix_target: "Fix tsc/sweep gates or document exclusions; re-run sweep to 6/6 before next release"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-094
+    finding_id: F-094-05
+    severity: medium
+    file: agent/tasks/milestone-72-validation-truth-drift-hardening/
+    finding: "task-243/244/246/247 frontmatter status:planned drifts from progress.yaml completed"
+    fix_target: "Sync task YAML frontmatter completed: dates with progress.yaml or revert progress status"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-094
+    finding_id: F-094-06
+    severity: medium
+    file: package.yaml
+    finding: "14 agent/scripts/*.sh on disk not registered in package.yaml contents.scripts (D4 WARN-only)"
+    fix_target: "Register all on-disk scripts; ratchet validateScriptRegistration to ERROR"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-094
+    finding_id: F-094-07
+    severity: medium
+    file: agent/milestones/milestone-72-validation-truth-drift-hardening.md
+    finding: "All 11 milestone verification gate checkboxes remain unchecked despite milestone completed"
+    fix_target: "Check gates with evidence or amend milestone status to reflect honest deferrals"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
