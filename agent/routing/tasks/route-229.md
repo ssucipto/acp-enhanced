@@ -12,7 +12,7 @@ files_affected:
   - agent/integrity-manifest.yaml
 tokens_est: 2000
 created: 2026-07-15
-completed:
+completed: 2026-07-15
 ---
 
 ## Objective
