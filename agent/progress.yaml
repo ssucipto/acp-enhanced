@@ -7101,7 +7101,6 @@ recent_work:
 next_steps:
   - "CRIT-065-002: enable mainline branch protection (GitHub admin)"
   - "F-086-02: consumer-project consumer /acp-version-update verification (task-239, ops)"
-  - "Push develop with v6.27.0 + v6.27.1 tags"
   - "Plan next milestone or routine /acp-proceed work"
 
 current_blockers: []
