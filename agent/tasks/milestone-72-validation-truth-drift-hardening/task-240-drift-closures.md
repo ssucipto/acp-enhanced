@@ -2,13 +2,14 @@
 id: task-240
 milestone: M72
 title: "Drift closures — versions, instruction-file sync, script registrations"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15T01:16:00Z
+completed: 2026-07-15
+completed_date: 2026-07-15T01:30:00Z
 route: route-229
 audit_findings: [F-091-01, F-091-02, F-091-14, F-092-03, F-092-04]
 depends_on: []
