@@ -1334,6 +1334,18 @@ echo -e "${GREEN}✓ ${_oc_count} opencode slash commands generated in .opencode
     _cursor_count=$((_cursor_count + 1))
   done
   echo -e "${GREEN}✓ ${_cursor_count} Cursor slash commands generated in .cursor/commands/${NC}"
+
+  # Generate Claude Code command wrappers (same format as opencode)
+  echo -e "${YELLOW}Generating Claude Code slash commands...${NC}"
+  mkdir -p .claude/commands
+  _claude_count=0
+  for _f in .opencode/commands/acp.*.md; do
+    [ -f "$_f" ] || continue
+    _cb=$(basename "$_f")
+    cp "$_f" ".claude/commands/$_cb"
+    _claude_count=$((_claude_count + 1))
+  done
+  echo -e "${GREEN}✓ ${_claude_count} Claude Code slash commands generated in .claude/commands/${NC}"
 else
   echo -e "${YELLOW}  (no prompt files found — run with --generate-prompts first, or generate prompts in Copilot chat)${NC}"
 fi
@@ -1343,6 +1355,12 @@ fi
 if [ -f "agent/scripts/acp.cursor-commands-sync.sh" ]; then
   echo -e "${YELLOW}Generating Cursor slash commands...${NC}"
   bash agent/scripts/acp.cursor-commands-sync.sh
+fi
+
+# Generate Claude Code slash commands from installed command docs (if sync script exists)
+if [ -f "agent/scripts/acp.claude-commands-sync.sh" ]; then
+  echo -e "${YELLOW}Generating Claude Code slash commands...${NC}"
+  bash agent/scripts/acp.claude-commands-sync.sh
 fi
 
 # --- 7. Install agent/ commands, scripts and schemas ---
@@ -1437,6 +1455,7 @@ echo "  /acp-memory-sync Monthly compaction"
 echo "  /acp-wiki-update Update wiki after changes"
 echo ""
 echo "opencode slash commands: same /acp-* set (via .opencode/commands/)"
+echo "Claude Code slash commands: same /acp-* set (via .claude/commands/)"
 echo ""
 
 # Post-install verification
@@ -1463,6 +1482,12 @@ if [ "$_CURSOR_COUNT" -ge "$_CMD_SOURCE_COUNT" ] 2>/dev/null; then
   echo -e "  ${GREEN}✅ .cursor/commands/: ${_CURSOR_COUNT} files${NC}"
 else
   echo -e "  ${YELLOW}⚠️ .cursor/commands/: ${_CURSOR_COUNT} files (expected ≥${_CMD_SOURCE_COUNT})${NC}"
+fi
+_CLAUDE_COUNT=$(find .claude/commands -maxdepth 1 -name "*.md" 2>/dev/null | wc -l | tr -d ' ') || true
+if [ "$_CLAUDE_COUNT" -ge "$_CMD_SOURCE_COUNT" ] 2>/dev/null; then
+  echo -e "  ${GREEN}✅ .claude/commands/: ${_CLAUDE_COUNT} files${NC}"
+else
+  echo -e "  ${YELLOW}⚠️ .claude/commands/: ${_CLAUDE_COUNT} files (expected ≥${_CMD_SOURCE_COUNT})${NC}"
 fi
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
