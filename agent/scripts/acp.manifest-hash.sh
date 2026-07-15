@@ -28,6 +28,7 @@ TRACKED_FILES=(
 TRACKED_DIRS=(
   "agent/core"
   "agent/skills"
+  "agent/scripts"
   ".cursor/commands"
 )
 
