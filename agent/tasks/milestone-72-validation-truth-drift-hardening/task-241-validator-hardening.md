@@ -2,13 +2,14 @@
 id: task-241
 milestone: M72
 title: "Validator hardening — root anchor, zero-found=fail, hash sync, package.yaml, 5-surface parity"
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 5
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15T01:30:00Z
+completed: 2026-07-15
+completed_date: 2026-07-15T02:00:00Z
 route: route-230
 audit_findings: [F-091-01, F-091-02, F-091-03, F-091-04, F-091-05, F-091-14]
 depends_on: [task-240]
