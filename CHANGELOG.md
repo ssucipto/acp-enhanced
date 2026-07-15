@@ -9,6 +9,86 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+---
+
+## [6.27.1] — 2026-07-15
+
+### Fixed (M73 — Closure Honesty Remediation)
+- **Carryover integrity** — restored 17 false `audit-093` stamps; `validateCarryoverAuditStamps()` guard (F-094-01).
+- **Independent closure** — audit-095 with seeded negative probes supersedes audit-093 self-cert (F-094-02).
+- **Tracking sync** — task-246 honestly deferred; M72 task frontmatter aligned (F-094-03/05).
+- **D4 ratchet** — 13 scripts registered in `package.yaml`; unregistered script → ERROR (F-094-06/07).
+- **Post-milestone-sweep** — 6/6 gates; tsc NodeNext; token budget + gitattributes gate fixes (F-094-04).
+
+### Changed
+- **`acp.post-milestone-sweep.sh`** — align token budget with constraints (5000 total); escape glob in gitattributes check.
+- **M72 milestone gates** — checked with evidence; cwd gate amended for D1 module ROOT (F-094-10).
+
+---
+
+## [6.27.0] — 2026-07-15
+
+### Added
+- **M72** — Validation Truth & Drift Hardening (8 tasks, routes 229–236).
+- **Validator D1–D5** — ROOT-anchored `acp-validate.ts`, instruction SHA-256 hash sync, `package.yaml` version check, 5-surface parity, dot-stray detection, protocol-dir addability (D9).
+- **+8 vitests** — 36 validate tests (58 total in scripts/).
+- **ShellCheck CI** — scoped error-severity gate for `agent/scripts`, `scripts`, `e2e`, `tests`.
+
+### Changed
+- **D9 evidence dirs** — `agent/reports/` + `agent/feedback/` tracked; 88 closure-evidence files added.
+- **`acp-bootstrap.sh`** — cursor/claude sync after step 7; dead `acp.*.md` copy loops removed.
+- **`acp.validate.md`** — Step 11.6/11.7 aligned with enforced reality.
+
+### Fixed
+- **F-091-01..14** (audit-093 re-verified); **F-092-01..04** plan amendments landed.
+
+### Deferred (ops)
+- **CRIT-065-002** — GitHub branch protection (`gh api` 404; requires repo admin).
+
+---
+
+## [6.26.0] — 2026-07-15
+
+### Added
+- **M70** — Tech Debt & Gate Hardening milestone (12 tasks, routes 208–219).
+- **`acp.atomic-write.sh`** — temp-file + rename helper for commit sync atomicity (GAP-041-08).
+- **`acp.branch-protection-setup.sh`** — GitHub branch protection automation (CRIT-065-002).
+- **`patterns.schema.yaml`** — memory pattern entry schema + validate enforcement.
+- **`validateMemoryFieldLint()`**, **`validateCarryoverFreshness()`**, **`validateIg35RouteDrift()`** in `acp-validate.ts`.
+- **Review Phase 1 expansion** — 8 rules (EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01).
+- **IG-35** — route `files_affected` drift check in `acp.git-provenance.sh`.
+
+### Changed
+- **`acp.review.md`** — two-phase gate policy (8 automated + 56 agent-required).
+- **`command-e2e-coverage.yaml`** — registers `commit-sync` and `repair-tools` suites.
+- **`acp.review-scan.sh`** — expanded from 4 to 8 deterministic rules.
+
+### Fixed
+- **MED-066-007**, **GAP-041-04**, **GAP-041-07**, **GAP-041-08**, **F-086-03**, **F-086-04**, **F-086-01** (IG-35).
+
+### Deferred (ops)
+- **CRIT-065-002** — GitHub branch protection requires repo admin (`acp.branch-protection-setup.sh`).
+- **F-086-02** — consumer-project `/acp-version-update` consumer verification (external project access).
+
+---
+
+## [6.25.3] — 2026-07-15
+
+### Added
+- **`acp.recurring-complete.sh`** — auto-advance `recurring_tasks.next_due` after weekly/monthly scans (F-068-03).
+- **audit-086** — second-round carryover re-verification report and planning matrix.
+
+### Changed
+- **`acp.manifest-hash.sh`** — `--generate` writes to `integrity-manifest.yaml` by default.
+- **`ci-validate.sh`** — missing `## Steps` / `## Verification` in command docs now FAIL (not warn).
+- **`code-integrity.md`** — honest multi-script gateway coverage note (pattern-scan owns exfil/persistence).
+
+### Fixed
+- **audit-086** — stamped 21 stale carryovers as fixed (audit-065/066/070 items closed in M59–M64/v6.25.2).
+- **F-086-01** — descoped IG-35 from `git-provenance.sh` header (not implemented).
+
+---
+
 ## [6.25.2] — 2026-07-15
 
 ### Added
