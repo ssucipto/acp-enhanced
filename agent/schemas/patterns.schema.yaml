@@ -1,0 +1,33 @@
+# Pattern Entry Schema
+# Schema for validating ACP pattern entries (agent/memory/patterns.md)
+# Version: 1.0.0
+
+schema_version: 1.0.0
+description: Schema for individual pattern entries in agent/memory/patterns.md
+
+required_fields:
+  - date
+  - name
+
+fields:
+  date:
+    type: string
+    required: true
+    pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    description: "Pattern discovery date (YYYY-MM-DD)"
+  name:
+    type: string
+    required: true
+    description: "Kebab-case pattern identifier"
+  task_type:
+    type: string
+    required: false
+    description: "Task type that triggered this pattern"
+  code_ref:
+    type: string
+    required: false
+    description: "Reference to code or milestone"
+  description:
+    type: string
+    required: false
+    description: "Pattern description (may be multiline block scalar)"

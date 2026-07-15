@@ -77,8 +77,7 @@ Read `agent/memory/sessions.md` and parse all YAML entries. Skip `type: weekly-s
 
 ### 3. Sync Session Documents
 
-> **Atomicity (v6.9.1+)**: Write to `.tmp.{date}-{slug}.md` first, then atomically
-> rename to `{date}-{slug}.md`. Prevents partial writes.
+> **Atomicity (v6.9.1+, M71)**: Pipe generated content through `bash agent/scripts/acp.atomic-write.sh agent/sessions/{date}-{slug}.md` (temp-file + atomic rename).
 
 For each session in scope:
 
@@ -87,7 +86,10 @@ For each session in scope:
    - `{slug}` = kebab-case of first `done:` item (truncated to ~50 chars), or executor name if empty
 2. **Create directory** if `agent/sessions/` does not exist
 3. **Check existing**: If file exists with identical content → skip
-4. **Write/update**: Generate markdown document from registry entry:
+4. **Write session document** via atomic helper:
+   ```bash
+   {generated_content} | bash agent/scripts/acp.atomic-write.sh "agent/sessions/{date}-{slug}.md"
+   ```
 
 ```markdown
 # Session: {date}
