@@ -1966,9 +1966,9 @@ carryovers:
     file: scripts/acp-validate.ts
     finding: "Wrapper parity check covers 3 of 5 surfaces — .cursor/commands/ and .claude/commands/ unchecked (pre-noted in ADR-18); progress.yaml summary line and lessons.md companion-file lesson still name only prompts+opencode(+cursor)"
     fix_target: "Extend runParityCheck() to 5 surfaces; update progress.yaml summary line and the high-priority lessons.md entry to name all 4 wrapper directories"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: task-243
     escalated_to: null
 
   - audit_id: audit-091
@@ -1999,9 +1999,9 @@ carryovers:
     file: agent/commands/acp.validate.md
     finding: "Step 11.6 doc claims sessions entries require tasks_completed; enforced session.schema.yaml requires only date/executor/done and real entries use tasks:"
     fix_target: "Align Step 11.6 text with session.schema.yaml required_fields"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: task-243
     escalated_to: null
 
   - audit_id: audit-091

@@ -9,7 +9,7 @@ project:
   current_milestone: M72
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.26.0 shipped; M72 in progress.
-    task-245 hygiene complete; validator hardening (task-240+) next.
+      task-245 hygiene complete; wrappers across 4 surfaces (prompts, opencode, cursor, claude).
 
 milestones:
   M44:
@@ -527,11 +527,11 @@ milestones:
     name: Validation Truth & Drift Hardening (v6.27.0)
     priority: 5
     status: in_progress
-    progress: 50
+    progress: 62
     started: 2026-07-15
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 8
     file: agent/milestones/milestone-72-validation-truth-drift-hardening.md
     design: agent/design/m72-validation-truth-drift-hardening.md
