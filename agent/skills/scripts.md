@@ -16,6 +16,13 @@
 - Help text: every script must have a `usage()` function and handle `--help`
 </rules>
 
+<sourced_library_exemptions>
+Four libraries are **sourced** (not executed) and intentionally omit `set -euo pipefail`
+because `-e` propagates into the parent shell and breaks caller control flow:
+`acp.common.sh`, `acp.yaml-parser.sh`, `acp.driver-yaml.sh`, `acp.integrity-output.sh`.
+Use `# shellcheck disable=SC2034` etc. where needed; document rationale inline.
+</sourced_library_exemptions>
+
 <patterns>
 Script header (copy verbatim):
 ```bash
