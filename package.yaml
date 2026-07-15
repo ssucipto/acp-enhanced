@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.27.0
+version: 6.27.1
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
@@ -535,6 +535,58 @@ contents:
     - name: acp.post-milestone-sweep.sh
       description: Post-milestone deliverables audit sweep (M71)
       type: utility
+
+    - name: acp.backfill-markers.sh
+      description: Backfill ACP meta markers in command documents
+      type: internal
+
+    - name: acp.dependency-diff.sh
+      description: Compare declared vs installed dependency versions
+      type: internal
+
+    - name: acp.driver-yaml.sh
+      description: Driver YAML query helpers for delegated tooling
+      type: utility
+
+    - name: acp.entropy-scan.sh
+      description: Entropy scan for integrity command
+      type: internal
+
+    - name: acp.git-provenance.sh
+      description: Git provenance metadata for integrity scans
+      type: internal
+
+    - name: acp.integrity-output.sh
+      description: Shared integrity scan output formatting
+      type: utility
+
+    - name: acp.manifest-hash.sh
+      description: Generate and verify integrity manifest hashes
+      type: utility
+
+    - name: acp.memory-scan.sh
+      description: Memory registry scan for integrity command
+      type: internal
+
+    - name: acp.network-whitelist-validate.sh
+      description: Validate network whitelist configuration
+      type: internal
+
+    - name: acp.pattern-scan.sh
+      description: Pattern registry scan for integrity command
+      type: internal
+
+    - name: acp.review-scan.sh
+      description: Review scan utilities for /acp-review command
+      type: internal
+
+    - name: acp.taint-scan.sh
+      description: Taint analysis scan for integrity command
+      type: internal
+
+    - name: acp.unicode-scan.sh
+      description: Unicode normalization scan for integrity command
+      type: internal
 
     - name: acp.recurring-complete.sh
       description: Advance recurring_tasks next_due after scheduled scans
