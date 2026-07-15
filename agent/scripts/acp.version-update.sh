@@ -264,6 +264,10 @@ if [ "$ACP_DIFF_ONLY" = false ]; then
         echo "Regenerating Cursor slash commands..."
         bash agent/scripts/acp.cursor-commands-sync.sh 2>/dev/null || echo "${YELLOW}Note: Cursor slash command sync skipped${NC}"
     fi
+    if [ -f "agent/scripts/acp.claude-commands-sync.sh" ]; then
+        echo "Regenerating Claude Code slash commands..."
+        bash agent/scripts/acp.claude-commands-sync.sh 2>/dev/null || echo "${YELLOW}Note: Claude Code slash command sync skipped${NC}"
+    fi
 fi
 
 echo "${GREEN}✓${NC} ACP Enhanced context layer updated"
