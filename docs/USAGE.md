@@ -482,9 +482,9 @@ bash agent/scripts/acp.branch-protection-setup.sh
 
 Or manually: **Repository → Settings → Branches → Add rule** per table above.
 
-`acp-validate` warns (non-blocking) when `gh api` reports mainline is unprotected.
+`acp-validate` warns (non-blocking) when `gh api` reports mainline is unprotected — unless CRIT-065-002 is `status: deferred` in `audit-carryovers.md` (e.g. GitHub Free private repo).
 
-> **Note:** Branch protection is a repository setting. When enabled, stamp `route-162.md` `completed:` and CRIT-065-002 carryover `status: fixed`.
+> **Note:** Branch protection is a repository setting. When enabled, stamp `route-162.md` `completed:` and CRIT-065-002 carryover `status: fixed`. On **GitHub Free** (private repos), defer with `status: deferred` and use manual develop→mainline merge discipline.
 
 ---
 
