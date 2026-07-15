@@ -1977,9 +1977,9 @@ carryovers:
     file: scripts/acp-bootstrap.sh
     finding: "Cursor/Claude wrapper copy loops (lines ~1330, ~1342) glob '.opencode/commands/acp.*.md' but opencode files are hyphen-named — dead code printing misleading '0 generated' success; on fresh bootstrap sync scripts do not exist yet at that step"
     fix_target: "Fix glob to acp-*.md or remove copy loops in favor of invoking sync scripts after agent/ install step 7"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: task-242
     escalated_to: null
 
   - audit_id: audit-091
