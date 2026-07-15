@@ -264,10 +264,11 @@
     was created. The command was therefore invisible to VS Code Copilot and opencode
     users. Caught during audit-013 milestone completion check.
   correction: >
-    Every new command doc in agent/commands/*.md MUST have a matching prompt file
-    in .github/prompts/ and .opencode/commands/. When creating a command file,
-    immediately create both companion files as part of the same task. Verify with:
-    diff <(ls agent/commands/*.md | grep -v template | ...) <(ls .github/prompts/...)
+    Every new command doc in agent/commands/*.md MUST have matching wrapper files in
+    all four surfaces: .github/prompts/acp-{name}.prompt.md, .opencode/commands/acp-{name}.md,
+    .cursor/commands/acp-{name}.md, .claude/commands/acp-{name}.md (run acp.cursor-commands-sync.sh
+    and acp.claude-commands-sync.sh after edits). git.* commands need cursor + claude only.
+    Verify with: npx tsx scripts/acp-validate.ts (parity check).
   priority: high
 
 - date: 2026-07-15
