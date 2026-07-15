@@ -288,7 +288,7 @@ scripts:
     - script: acp.yaml-validate.sh
       implements: Validates YAML files against ACP schema definitions, reporting typed errors and warnings with pass/fail counts.
     - script: acp.review-scan.sh
-      implements: Deterministic Phase 1 scanner for /acp-review — EH-02, SC-01, TS-01, SH-01 with --ci and --json modes.
+      implements: Deterministic Phase 1 scanner for /acp-review — EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01 (8 rules) with --ci and --json modes.
     - script: acp.manifest-hash.sh
       implements: Generates and verifies SHA-256 hashes in agent/integrity-manifest.yaml for integrity gateway tamper detection.
 
