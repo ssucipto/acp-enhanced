@@ -7099,20 +7099,22 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "CRIT-065-002: enable mainline branch protection (GitHub admin) — task-246/task-253"
+  - "CRIT-065-002: enable mainline branch protection (GitHub admin)"
+  - "F-086-02: consumer-project consumer /acp-version-update verification (task-239, ops)"
   - "Push develop with v6.27.0 + v6.27.1 tags"
   - "Plan next milestone or routine /acp-proceed work"
 
 current_blockers: []
 
 notes:
-  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M71 shipped (v6.26.0)"
-  - "70 milestone entries — M55–M71 shipped; M70 gate hardening + M71 remediation complete"
-  - "72 command docs (70 acp.* + 2 git.*); 70 slash-command wrappers (prompts + opencode + cursor parity)"
-  - "9 skills; 46 bash scripts; 56+ E2E test files"
-  - "90+ audit reports (audit-087–090 M70/M71 closure)"
-  - "M71 COMPLETE v6.26.0 — memory schema enforcement, 8-rule review, atomic-write"
+  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.1)"
+  - "73 milestone entries — M72 runtime (v6.27.0) + M73 closure honesty (v6.27.1)"
+  - "72 command docs (70 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode, cursor, claude)"
+  - "9 skills; 47 bash scripts; 61 vitest in scripts/; 56+ E2E test files"
+  - "96+ audit reports (audit-094/095/096 M72/M73 closure)"
+  - "M73 COMPLETE v6.27.1 — carryover integrity, D4 ERROR, sweep 6/6, audit-095 independent closure"
   - "M67 COMPLETE v6.23.0 — cross-agent handoff + /acp-receive"
+  - "Ops deferrals: CRIT-065-002 (branch protection), F-086-02 (consumer-project consumer task-239)"
 
 # ── Recurring Tasks ──────────────────────────────────────────────
 # Added v6.12.1 (M57). Scheduled periodic reviews surfaced at
