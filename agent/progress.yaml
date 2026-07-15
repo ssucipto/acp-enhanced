@@ -527,11 +527,11 @@ milestones:
     name: Validation Truth & Drift Hardening (v6.27.0)
     priority: 5
     status: in_progress
-    progress: 12
+    progress: 25
     started: 2026-07-15
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 8
     file: agent/milestones/milestone-72-validation-truth-drift-hardening.md
     design: agent/design/m72-validation-truth-drift-hardening.md
@@ -4557,12 +4557,12 @@ tasks:
     - id: task-240
       name: "Drift closures — versions, instruction sync, registrations"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-240-drift-closures.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T01:16:00Z
+      completed_date: 2026-07-15T01:30:00Z
       estimated_hours: 2
-      notes: "route-229; F-091-01/02/14 + F-092-03/04 (D9) fix half — stamped only with task-241"
+      notes: "route-229; F-091-01/02/14 fix half — enforcement in task-241"
 
     - id: task-241
       name: "Validator hardening — root anchor, zero-fail, hash, pkg, 5-surface parity"
