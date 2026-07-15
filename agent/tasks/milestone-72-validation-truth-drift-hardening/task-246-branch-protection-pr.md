@@ -2,12 +2,13 @@
 id: task-246
 milestone: M72
 title: "Branch protection ops + PR develop → mainline"
-status: planned
+status: deferred
 priority: 5
 complexity: low
 estimated_hours: 1
 created: 2026-07-15
 started: null
+completed: null
 completed_date: null
 route: route-235
 audit_findings: [CRIT-065-002]

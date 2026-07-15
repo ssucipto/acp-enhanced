@@ -2,7 +2,7 @@
 id: task-250
 milestone: M73
 title: "Script registration completeness + D4 WARN→ERROR ratchet"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 2

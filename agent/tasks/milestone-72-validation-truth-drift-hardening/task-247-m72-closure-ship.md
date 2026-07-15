@@ -2,13 +2,14 @@
 id: task-247
 milestone: M72
 title: "M72 closure audit (audit-093) + ship v6.27.0"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15T03:00:00Z
+completed: 2026-07-15
+completed_date: 2026-07-15T03:30:00Z
 route: route-236
 audit_findings: [F-091-01, F-091-02, F-091-03, F-091-04, F-091-05, F-091-06, F-091-07, F-091-08, F-091-09, F-091-10, F-091-13, F-091-14, F-092-01, F-092-02, F-092-03, F-092-04]
 depends_on: [task-240, task-241, task-242, task-243, task-244, task-245, task-246]
