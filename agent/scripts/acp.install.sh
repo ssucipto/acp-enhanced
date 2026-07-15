@@ -224,6 +224,12 @@ if [ -f "$TARGET_DIR/agent/scripts/acp.cursor-commands-sync.sh" ]; then
     chmod +x "$TARGET_DIR/agent/scripts/acp.cursor-commands-sync.sh"
     (cd "$TARGET_DIR" && bash agent/scripts/acp.cursor-commands-sync.sh)
 fi
+# Generate Claude Code slash commands (.claude/commands/) from installed command docs
+if [ -f "$TARGET_DIR/agent/scripts/acp.claude-commands-sync.sh" ]; then
+    echo "Generating Claude Code slash commands..."
+    chmod +x "$TARGET_DIR/agent/scripts/acp.claude-commands-sync.sh"
+    (cd "$TARGET_DIR" && bash agent/scripts/acp.claude-commands-sync.sh)
+fi
 
 # Create user-state files only if absent (never overwrite existing state)
 _create_if_absent() {
