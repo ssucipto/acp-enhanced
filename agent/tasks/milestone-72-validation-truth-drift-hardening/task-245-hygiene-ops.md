@@ -2,13 +2,13 @@
 id: task-245
 milestone: M72
 title: "Hygiene ops — commit Claude-integration tree, sessions compaction, dependency audit"
-status: planned
+status: completed
 priority: 3
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15
+completed_date: 2026-07-15
 route: route-234
 audit_findings: [F-091-08, F-091-09, F-091-13]
 depends_on: []
