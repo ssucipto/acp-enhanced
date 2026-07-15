@@ -1,12 +1,12 @@
 ---
 id: route-236
-title: "M72 closure audit (audit-092) + ship v6.27.0"
+title: "M72 closure audit (audit-093) + ship v6.27.0"
 task_type: milestone-delivery
 milestone: M72
 complexity: medium
 executor: copilot
 files_affected:
-  - agent/reports/audit-092-m72-closure.md
+  - agent/reports/audit-093-m72-closure.md
   - agent/memory/audit-carryovers.md
   - CHANGELOG.md
   - agent/core/identity.yml
