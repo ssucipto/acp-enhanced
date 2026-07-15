@@ -2,7 +2,7 @@
 id: task-254
 milestone: M73
 title: "M73 closure audit-096 + ship v6.27.1 patch"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 1

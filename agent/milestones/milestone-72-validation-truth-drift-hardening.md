@@ -8,7 +8,7 @@ updated: 2026-07-15
 @acp.meta.end -->
 
 **Planned version**: 6.27.0
-**Status**: completed (8/8 — audit-093 PASS WITH DEFERRALS)
+**Status**: completed (8/8 runtime — closure honest per audit-095/096)
 **Estimated effort**: ~20h (8 tasks)
 **Source**: audit-091 (whole-system gaps & standards)
 **Amended**: 2026-07-15 per audit-092 pre-impl readiness — F-092-01 (manifest regen), F-092-02 (closure renumbered → audit-093), F-092-03 (gitignore scope/D9 policy), F-092-04 (shellcheck prereq, field shapes)
@@ -64,17 +64,17 @@ Binding for every task (full text in design doc §Anti-Shortcut Guardrails):
 
 ## Verification Gates
 
-- [ ] `npx tsx scripts/acp-validate.ts` from repo root: 0 errors; from `scripts/` cwd: loud failure (not vacuous pass)
-- [ ] Parity reports 5 surfaces, 0 strays; deliberately breaking one wrapper file makes it fail (negative test)
-- [ ] `package.yaml` version check present and passing at 6.27.0
-- [ ] AGENTS.md / CLAUDE.md / copilot-instructions.md content-hash identical
-- [ ] ShellCheck job green in CI
-- [ ] vitest suite ≥ 34 passing (28 + ≥6 new)
-- [ ] `gh api repos/.../branches/mainline/protection` returns 200
-- [ ] `agent/integrity-manifest.yaml` regenerated; `/acp-integrity --diff` clean (F-092-01)
-- [ ] `git ls-files agent/reports agent/feedback` covers all on-disk files; clarifications/drafts/preferences still ignored (D9)
-- [ ] audit-093 PASS verdict; all F-091 + F-092 carryovers `fixed` with audit-093 pointer
-- [ ] `git tag v6.27.0` exists; CHANGELOG entry present
+- [x] `npx tsx scripts/acp-validate.ts` from repo root: 0 errors; from `scripts/` cwd: passes via D1 module ROOT (amended per F-094-10)
+- [x] Parity reports 5 surfaces, 0 strays; dot-stray probe fails correctly (audit-095 probe 2)
+- [x] `package.yaml` version check present and passing at 6.27.0
+- [x] AGENTS.md / CLAUDE.md / copilot-instructions.md content-hash identical
+- [x] ShellCheck job green in CI
+- [x] vitest suite ≥ 34 passing (61 as of M73)
+- [ ] `gh api repos/.../branches/mainline/protection` returns 200 — **deferred** CRIT-065-002
+- [x] `agent/integrity-manifest.yaml` regenerated; manifest verify clean (F-092-01)
+- [x] `git ls-files agent/reports agent/feedback` covers all on-disk files; clarifications/drafts/preferences still ignored (D9)
+- [x] audit-095 PASS verdict; F-091 + F-092 carryovers `verified_in_audit: audit-095`
+- [x] `git tag v6.27.0` exists; CHANGELOG entry present
 
 ## Accepted Deferrals
 

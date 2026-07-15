@@ -2,7 +2,7 @@
 id: task-249
 milestone: M73
 title: "Tracking truth sync — progress, task frontmatter, milestone gates"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2

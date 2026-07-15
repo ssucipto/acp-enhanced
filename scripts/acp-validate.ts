@@ -511,7 +511,7 @@ export function validateScriptRegistration(root?: string): ValidationError[] {
         file: packagePath,
         line: 0,
         message: `agent/scripts/${script} not registered in package.yaml contents.scripts`,
-        severity: "warning",
+        severity: "error",
       });
     }
     const manifestKey = `agent/scripts/${script}`;
@@ -1225,6 +1225,37 @@ export function validateCarryoverFreshness(
   return errors;
 }
 
+/** M73 task-248: detect false audit-093 stamps on pre-M72 fixes */
+export function validateCarryoverAuditStamps(
+  carryoversPath: string = CARRYOVERS_PATH
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  if (!existsSync(carryoversPath)) return errors;
+
+  const raw = readFileSync(carryoversPath, "utf8");
+  const blocks = raw.split(/\n  - audit_id:/).slice(1);
+  const m72ClosureDay = "2026-07-15";
+
+  for (const block of blocks) {
+    const findingId = block.match(/finding_id:\s*(\S+)/)?.[1] ?? "?";
+    const verified = block.match(/verified_in_audit:\s*(\S+)/)?.[1] ?? "";
+    const fixDate = block.match(/fix_applied_date:\s*(\S+)/)?.[1] ?? "";
+
+    if (verified !== "audit-093") continue;
+
+    if (fixDate && fixDate < m72ClosureDay) {
+      errors.push({
+        file: carryoversPath,
+        line: 0,
+        message: `${findingId}: verified_in_audit audit-093 on pre-M72 fix (${fixDate}) — restore from git history`,
+        severity: "error",
+      });
+    }
+  }
+
+  return errors;
+}
+
 /** M70 task-229: IG-35 route files_affected drift (warn-only in validate) */
 export function validateIg35RouteDrift(): ValidationError[] {
   const errors: ValidationError[] = [];
@@ -1320,6 +1351,16 @@ function runM70Guards(): boolean {
   }
   if (cf.length === 0) {
     console.log("✅ Carryover freshness: no stale pending patterns detected");
+  }
+
+  const cas = validateCarryoverAuditStamps();
+  for (const err of cas) {
+    const prefix = err.severity === "error" ? "❌" : "⚠️";
+    console.log(`${prefix} ${err.file}: ${err.message}`);
+    if (err.severity === "error") allOk = false;
+  }
+  if (cas.length === 0) {
+    console.log("✅ Carryover audit stamps: no false audit-093 pointers");
   }
 
   const ig35 = validateIg35RouteDrift();
