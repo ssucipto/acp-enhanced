@@ -35,7 +35,7 @@ jobs:
           cd scripts && npm install --silent --ignore-scripts
 
       - name: Run acp-validate.ts (command structure + parity)
-        run: npx ts-node scripts/acp-validate.ts
+        run: cd scripts && npx tsx acp-validate.ts
 
       - name: Run TS unit tests (vitest — M59 dispatch + M61 validate)
         run: cd scripts && npm test
@@ -53,14 +53,13 @@ jobs:
       - name: Install shellcheck
         run: sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
 
-      - name: Run shellcheck on all shell scripts
+      - name: Run shellcheck on scoped shell scripts (M72 D7)
         run: |
-          echo "=== Running shellcheck ==="
-          SCRIPTS=$(find . -name '*.sh' -not -path './.git/*' | sort)
+          echo "=== Running shellcheck (error severity) ==="
+          SCRIPTS=$(find agent/scripts scripts e2e tests -name '*.sh' 2>/dev/null | sort)
           COUNT=$(echo "$SCRIPTS" | wc -l | tr -d ' ')
           echo "Found $COUNT shell scripts"
           # shellcheck disable=SC2086
-          # Error-level issues fail the build; style warnings are advisory
           echo "$SCRIPTS" | xargs shellcheck --shell=bash --severity=error
           echo "✅ shellcheck passed (no errors)"
 

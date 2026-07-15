@@ -1988,9 +1988,9 @@ carryovers:
     file: .github/workflows/ci.yaml
     finding: "No ShellCheck lint gate in CI for a bash-first project (47 scripts in agent/scripts/)"
     fix_target: "Add shellcheck job to ci.yaml (SHA-pinned action), triage initial findings"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: task-244
     escalated_to: null
 
   - audit_id: audit-091
