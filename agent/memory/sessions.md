@@ -5,137 +5,48 @@
 - date: 2026-07-15
   executor: copilot
   branch: develop
-  tasks: [task-231, task-232, task-233, task-234, task-235, task-236, task-237, task-238]
+  tasks: [task-245]
   done:
-    - m71-remediation-v6-26-0-ship
-    - validate-sync-update-commit-chain
-    - audit-090-closure-pass-with-ops-deferrals
+    - claude-integration-committed-adr-18-2b92528
+    - sessions-compaction-f-091-08
+    - monthly-dependency-audit-refreshed-f-091-09
+    - task-245-hygiene-phase-complete
   deferred:
-    - crit-065-002-branch-protection → github-admin
+    - m72-validator-tasks → task-240-241
+    - crit-065-002-branch-protection → task-246
+  key_fact: "task-245 guardrail #9 satisfied — Claude tree committed (2b92528) before validator edits; acp.dependency-diff.sh 0 findings; sessions compacted to ≤8 entries."
+
+- date: 2026-07-15
+  executor: claude-code
+  branch: develop
+  tasks: [audit-091, plan-m72, audit-092, plan-m72-amendment]
+  done:
+    - audit-091-whole-system-gaps-standards-14-findings
+    - m72-milestone-planned-design-8-tasks-8-routes-committed
+    - audit-092-pre-impl-m72-readiness-ready-with-4-amendments
+    - discovered-f-091-14-agent-reports-gitignore-blackhole-mid-report-commit
+    - m72-amended-per-audit-092-d9-d10-guardrails-10-11-closure-renumbered-093
+    - f-092-01-02-03-04-carryovers-stamped-fixed-plan-level-audit-093-verifies
+  deferred:
+    - m72-validator-implementation → task-240-247
+    - crit-065-002-branch-protection → task-246
     - f-086-02-consumer-project-consumer → task-239
-    - pr-develop-to-mainline → manual-gh
-  key_fact: "v6.26.0 tagged and pushed; only validate warning is branch protection (ops). Array schema enforcement must bypass full-file yaml.load for lessons/decisions/carryovers."
+  key_fact: "F-091-14: agent/.gitignore bare reports/ blocked 61 audit reports from git; sessions prepend protocol violation fixed; task-245 hygiene unblocks M72 validator work."
+  commits: [1a1dc70 "plan(M72)", 57c0464 "audit(092)", ad29c3c "plan(M72) amend", 2b92528 "feat(claude)"]
 
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [audit-086]
-  done:
-    - audit-086-second-round-carryover-hygiene
-    - stamp-21-stale-carryovers-fixed
-    - acp-recurring-complete-script-f068-03
-    - manifest-generate-default-write
-  deferred:
-    - crit-065-002-branch-protection → manual-github
-    - med-066-007-memory-schemas → m70
-    - f-086-02-consumer-project-consumer → acp-version-update
-  key_fact: "21 of 27 carryovers were stale — fixed in M59-M64/v6.25.2 but never stamped; only CRIT-065-002 and MED-066-007 remain genuinely open in code."
+# === Compacted Block: 2026-07-15 (10 sessions) ===
+- type: weekly-summary
+  week: 2026-07-15
+  key_facts:
+    - "M71 remediation shipped v6.26.0 — memory schema enforcement, 8-rule review scanner, atomic-write (audit-090)."
+    - "audit-086 stamped 21 stale carryovers; acp.recurring-complete.sh added."
+    - "v6.25.2 review/integrity remediation — acp.review-scan.sh Phase 1, integrity-manifest split."
+    - "M63 amendment v6.25.1 — tier3 E2E dynamic loop; audit-083/084 closed."
+    - "M68 safe install/update v6.24.1; M67 handoff v6.23.0."
+    - "progress.yaml 191 duplicate YAML keys fixed — js-yaml parse restored."
+  tasks_completed: [task-231..238, audit-086, review-001, route-207, route-206, route-198..205, route-190..197, validate-sync-update]
 
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [review-001, integrity-001, audit-085]
-  done:
-    - v6-25-2-review-integrity-audit-remediation
-    - acp-review-scan-phase1-scanner
-    - integrity-manifest-split-int-001
-    - vitest-cve-fix-review-001
-  deferred:
-    - audit-085-remaining-carryovers → acp-audit
-    - consumer-project-feedback-007-consumer-path → acp-version-update
-  key_fact: "integrity-manifest.yaml is separate from package manifest.yaml; acp.manifest-hash.sh --generate requires --output to persist hashes."
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [route-207, task-217, audit-084]
-  done:
-    - m63-amendment-deployed-v6-25-1
-    - git-tag-v6-25-1-pushed
-    - audit-084-carryovers-closed
-  deferred:
-    - consumer-project-feedback-007-consumer-path → acp-version-update
-  key_fact: "M63 amendment complete — v6.25.1 tagged and pushed; audit-084 deployment blockers closed."
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [route-206, audit-083]
-  done:
-    - audit-083-m63-gaps-closed-v6-25-1
-    - tier3-e2e-dynamic-loop-58-commands
-    - validate-command-e2e-coverage-vitest
-    - milestone-task-tracking-reconciled
-  deferred:
-    - consumer-project-feedback-007-consumer-path → acp-version-update
-  key_fact: "audit-083 closed SC-M63-01: tier3 E2E must loop all tier-3 docs — registry alone is insufficient for behavioral coverage."
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [route-206]
-  done:
-    - m63-test-coverage-tier-2-3-shipped-v6-25-0
-    - command-e2e-coverage-registry-70-commands
-    - validate-command-e2e-coverage-ci-guard
-    - tier2-tier3-parity-e2e-suites
-  deferred:
-    - consumer-project-feedback-007-consumer-path → acp-version-update
-  key_fact: "M63 ships validateCommandE2eCoverage() — 0 untested commands via registry; tier2/tier3 behavioral E2E complete CRIT-065-003 tier 2/3."
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [housekeeping]
-  done:
-    - acp-validate-sync-update-commit-housekeeping
-    - progress-yaml-next-steps-m68-notes-refreshed
-    - recurring-tasks-marked-overdue-weekly-monthly
-  deferred: []
-  key_fact: "v6.24.1 clean — validate 0 errors; weekly/monthly integrity scans overdue since June."
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [route-198, route-199, route-200, route-201, route-202, route-203, route-204, route-205]
-  done:
-    - m68-safe-install-update-policy-shipped-v6-24-0
-    - tier-helpers-version-update-install-bootstrap-e2e-validate
-    - audit-082-post-ship-gaps-doc-drift-install-agents-md-fixed
-  deferred: []
-  key_fact: "M68 audit-082 fully closed at v6.24.1 — bootstrap preserve E2E, carryovers re-verified @082, doc/install gaps fixed."
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [route-190, route-191, route-192, route-193, route-194, route-195, route-196, route-197]
-  done:
-    - m67-cross-agent-handoff-protocol-shipped-v6-23-0
-    - acp-handoff-v2-dual-mode-executor-cross-repo
-    - acp-receive-command-wrappers-e2e-fixtures
-    - active-handoff-schema-validate-ancestry-check
-    - audit-079-housekeeping-milestone-gates-task-stamps-carryovers
-  deferred:
-    - consumer-project-feedback-007-final-closure → consumer-acp-version-update
-  key_fact: "M67 shipped v6.23.0 with handoff v2 dual mode + /acp-receive + resume bridge; audit-079 found tracking/discoverability shortcuts (unchecked gates, planned tasks, stale README) — all upstream items closed; consumer-project must run /acp-version-update to retire local wiki workaround."
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [validate-sync-update]
-  done:
-    - develop-branch-synced-47-commits-fast-forward
-    - progress-yaml-191-duplicate-keys-removed-yaml-parse-restored
-    - acp-validate-zero-errors-milestone-status-sync-m27-doc-created
-    - acp-validate-ts-schema-mapping-and-array-type-fix
-    - git-tag-v6-21-0-created-progress-tracking-refreshed-m63
-    - readme-badges-updated-6-21-0-66-milestones
-  deferred:
-    - m63-test-coverage-tier-2-3 → route-tbd
-    - github-branch-protection → manual-enable
-  key_fact: "progress.yaml had 191 duplicate YAML keys (mostly duplicate completed_date in tasks section) causing js-yaml parse failure — validate used line-based fallback and missed deeper schema errors. After dedup, full YAML parse restored and cross-file validators became reliable again."
-
-# === Compacted Block: 2026-06-15 (10 sessions) ===
+# === Compacted Block: 2026-06-08 – 2026-06-15 (6 sessions) ===
 - type: weekly-summary
   week: 2026-06-15
   key_facts:
@@ -149,28 +60,12 @@
     - "M59 closed silent correctness bugs: routing.yml overwrite, package.yaml gaps, CI no-op. 6 routes shipped as v6.14.0."
     - "Audit-070 proved /acp-integrity v1.0 gives false assurance (~18/55 rules implemented, entropy scanner crashes). M64 (gateway truth/test) must ship before M58 v2.0."
     - "M57: v1-to-v2 audit cycle pattern caught 26 errors across two specs. Discipline: audit AGAINST live codebase, not the spec itself."
-  tasks_completed: 26
-
-- date: 2026-06-08
-  executor: copilot
-  branch: develop
-  tasks: [route-150, route-151, route-152, route-153, route-154, audit-059, audit-060, audit-061]
-  done:
-    - m57-autonomous-implementation-all-5-routes-completed
-    - route-150-progress-yaml-recurring-tasks-block-5-default-tasks
-    - route-150-progress-template-yaml-recurring-tasks-section
-    - route-151-agents-md-step-4-5-synced-to-claude-copilot-instructions
-    - route-152-constraints-yml-hooks-block-progress-schema-yaml-recurring-tasks
-    - route-153-acp-validate-md-step-2d-recurring-tasks-validation
-    - route-154-e2e-16-16-assertions-version-bump-6-12-1-changelog
-    - audit-059-m57-m58-cross-milestone-audit-all-clean
-    - audit-060-m57-pre-impl-readiness-all-findings-resolved
-    - audit-061-m57-post-impl-verification-no-gaps
-    - e2e-91-91-assertions-pass-49-review-26-integrity-16-recurring-tasks
-    - version-consistency-8-files-all-6-12-1
-    - 5-routes-stamped-completed-150-through-154
-  deferred: []
-  key_fact: "Even a small milestone (M57, ~3h, 5 routes) benefits from the same 3-round audit discipline as larger milestones. audit-059 (cross-milestone), audit-060 (pre-impl), and audit-061 (post-impl) collectively caught 0 new bugs — because the implementation followed the pre-established patterns from M55/M56. The discipline itself prevents bugs, not just catches them."
+    - "M57 autonomous implementation (5 routes, route-150..154): recurring_tasks block shipped in progress.yaml + schema; 91/91 E2E assertions. Even a small milestone benefits from the same 3-round audit discipline (059 cross-milestone, 060 pre-impl, 061 post-impl) as larger ones — 0 new bugs found because implementation followed pre-established M55/M56 patterns. Discipline prevents bugs, not just catches them."
+    - "M60 (route-165/166): 8 E2E test suites created in one milestone (init/proceed/plan/dispatch/commit/validate/audit/route); integrity rule count fixed to exact 70; CONTRIBUTING.md created. CRLF line endings on Windows require tr -d '\\r' before bash execution."
+    - "M62 (7 routes): 17 scripts upgraded to set -euo pipefail (0 bare remaining); 7 memory-layer schemas enforced; 5 audit-062 carryovers resolved; 7 cross-file consistency validators + post-milestone-sweep script deployed as post-M61 shortcut prevention. Pre-commit hook caught ACP rule changes on commit."
+    - "M66 marker backfill: 100% @acp.meta.* coverage across 232 files (from 3.9%) via scripts/acp-backfill-markers.py — unlocked meta-scan inventory, validate probes, and acp-sync traceability maps repo-wide."
+    - "audit-073 (M65 followup): cross-subagent audit catches what solo audit misses — a subagent found 19 findings vs my own 8, including E2E gaps and carryover status drift."
+  tasks_completed: 34
 
 
 # === Compacted Block: 2026-02-16 – 2026-06-08 (20 sessions) ===
@@ -223,61 +118,3 @@
     - "Never use set -e without trap ERR in bash scripts"
     - "Never write bash that breaks on macOS (BSD sed, date differences)"
     - "Python subprocess calls must use os.environ — never string-interpolate variables"
-
-- date: 2026-06-15
-  executor: copilot
-  tasks: [route-185..189, audit-073, F-065-AUDIT]
-  done:
-    - m65-audit-followup-fix-11-subagent-findings
-    - e2e-acp-validate-cross-layer-test-created
-    - quarterly-deep-scan-gated-blocked
-    - f-062-03-escalation-recorded
-    - f-069-05-malformed-entry-repaired
-    - version-canonicalized-v6-20-2
-    - m54-progress-50-to-100-completed-date
-    - route-185-verification-checkboxes-stamped
-    - carryover-statuses-fixed-f-068-12-f-069-09-crit-065-001
-    - cross-refs-added-acp-validate-md-steps-2e-2f
-  deferred: []
-  key_fact: "Cross-subagent audit catches what solo audit misses. My own audit-073 found 8 findings, but the F-065 subagent found 19 — including E2E test gaps and carryover status drift I missed."
-
-- date: 2026-06-15
-  executor: copilot
-  tasks: [route-165, route-166]
-  done:
-    - m60-route-165-8-e2e-tests-created-all-passing
-    - m60-route-166-integrity-rule-count-fixed-70-exact
-    - m60-route-166-contributing-md-created
-    - integrity-test-62-62-green
-  deferred: []
-  key_fact: "8 E2E test suites (init, proceed, plan, dispatch, commit, validate, audit, route) created in one milestone — each with structural+negative assertions following patterns/local.e2e-testing.md. CRLF line endings on Windows require tr -d '\r' conversion before bash execution."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [route-173, route-174, route-175, route-176, route-177, route-178, route-179]
-  done:
-    - m62-complete-7-routes-all-v6-21-0
-    - route-173-pipefail-upgrade-17-scripts-set-euo-pipefail
-    - route-174-command-doc-structural-conformance-steps-verification
-    - route-175-memory-layer-schemas-7-files-enforced-in-acp-validate
-    - route-176-audit-062-carryovers-f-062-01-through-05
-    - route-177-low-severity-cleanups-l1-l4
-    - route-178-cross-file-consistency-validators-7-checks
-    - route-179-post-milestone-sweep-script-e2e-test
-  deferred: []
-  key_fact: "M62 completed in under 3 hours — all 7 routes shipped. 17 scripts upgraded to set -euo pipefail (0 bare remaining). 7 memory-layer schemas created + enforced. 5 audit-062 carryovers resolved (F-062-01..05). Post-M61 shortcut prevention deployed: 7 cross-file consistency validators in acp-validate.ts (40/40 tests) + acp.post-milestone-sweep.sh (6 gates). Pre-commit hook active — caught ACP rule changes on commits."
-
-- date: 2026-06-15
-  executor: copilot
-  branch: develop
-  tasks: [route-m66-marker-backfill]
-  done:
-    - m66-marker-backfill-232-files-100pct-coverage
-    - m66-design-markers-28-files-100pct
-    - m66-task-markers-195-files-100pct
-    - m66-pattern-markers-9-files-100pct
-    - m66-created-backfill-script-acp-backfill-markers-py
-    - m66-stripped-superseded-status-prose-fields
-  deferred: []
-  key_fact: "M66 completed: 100% @acp.meta.* marker coverage across 232 files (from 3.9%). The full traceability chain is now unlocked: meta-scan can inventory all files, acp-validate probes are no longer blind, and acp-sync traceability maps work on the entire codebase. Created scripts/acp-backfill-markers.py as a reusable tool for future marker work."
