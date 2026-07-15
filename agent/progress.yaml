@@ -3,12 +3,12 @@
 
 project:
   name: agent-context-protocol
-  version: 6.26.0
+  version: 6.27.0
   started: 2026-02-16
   status: active
   current_milestone: M72
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.26.0 shipped; M72 in progress.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.27.0 shipped; M72 complete.
       task-245 hygiene complete; wrappers across 4 surfaces (prompts, opencode, cursor, claude).
 
 milestones:
@@ -526,12 +526,12 @@ milestones:
   M72:
     name: Validation Truth & Drift Hardening (v6.27.0)
     priority: 5
-    status: in_progress
-    progress: 62
+    status: completed
+    progress: 100
     started: 2026-07-15
-    completed: null
+    completed: 2026-07-15
     estimated_weeks: 0.5
-    tasks_completed: 5
+    tasks_completed: 8
     tasks_total: 8
     file: agent/milestones/milestone-72-validation-truth-drift-hardening.md
     design: agent/design/m72-validation-truth-drift-hardening.md
@@ -4597,12 +4597,12 @@ tasks:
     - id: task-244
       name: "ShellCheck CI gate"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-244-shellcheck-ci.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T02:30:00Z
+      completed_date: 2026-07-15T02:45:00Z
       estimated_hours: 3
-      notes: "route-233; F-091-10 + F-092-04 shellcheck prereq"
+      notes: "route-233; F-091-10 fixed; scoped shellcheck CI"
 
     - id: task-245
       name: "Hygiene ops — commit tree, sessions compaction, dependency audit"
@@ -4617,24 +4617,30 @@ tasks:
     - id: task-246
       name: "Branch protection ops + PR develop → mainline"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-246-branch-protection-pr.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T02:45:00Z
+      completed_date: 2026-07-15T03:00:00Z
       estimated_hours: 1
-      notes: "route-235; CRIT-065-002 — needs repo admin; depends task-245"
+      notes: "route-235; CRIT-065-002 deferred — gh api 404 (admin required)"
 
     - id: task-247
       name: "M72 closure audit (audit-093) + ship v6.27.0"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-247-m72-closure-ship.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T03:00:00Z
+      completed_date: 2026-07-15T03:30:00Z
       estimated_hours: 3
-      notes: "route-236; audit-093 re-verifies all F-091 + F-092 + manifest gate — depends 240-246"
+      notes: "route-236; audit-093 PASS WITH DEFERRALS; tag v6.27.0"
 
 recent_work:
+  - date: 2026-07-15
+    description: |
+      🎉 M72 COMPLETE — Validation Truth & Drift Hardening v6.27.0
+      Tasks 240-247 (autonomous run); audit-093 PASS WITH DEFERRALS.
+      Validator: ROOT anchor, hash sync, 5-surface parity, D9 addability.
+      7 commits; tag v6.27.0. CRIT-065-002 deferred (admin).
   - date: 2026-07-15
     description: |
       ✅ v6.26.0 shipped — M70 gate hardening + M71 remediation (audit-090).
@@ -7003,11 +7009,9 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "M72 task-240: drift closures (versions, instruction sync, script registrations)"
-  - "M72 task-241: validator hardening (root anchor, 5-surface parity, package.yaml check)"
-  - "M72 tasks 242–244: wrapper cleanup, docs, ShellCheck CI"
-  - "task-246: branch protection + PR develop → mainline (admin)"
-  - "Ship v6.27.0 via task-247 closure audit (audit-093)"
+  - "CRIT-065-002: enable mainline branch protection (admin) + PR develop → mainline"
+  - "Push develop with v6.27.0 tag"
+  - "Plan next milestone or routine /acp-proceed work"
 
 current_blockers: []
 

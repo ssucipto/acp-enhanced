@@ -205,7 +205,7 @@ carryovers:
     fix_target: Move updateRoutingYml() to after appendLedger(); add SIGINT handler to flush partial ledger
     status: fixed
     fix_applied_date: 2026-05-11
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
   - audit_id: 15
     finding_id: MEMORY-002
@@ -218,7 +218,7 @@ carryovers:
     fix_target: Add validateSessionsMemory() function to no-args validate path
     status: fixed
     fix_applied_date: 2026-05-11
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
   - audit_id: 15
     finding_id: VALIDATE-001
@@ -231,7 +231,7 @@ carryovers:
     fix_target: Add validateAgentsMdSize() to acp-validate.ts + agents_md_rules to constraints.yml
     status: fixed
     fix_applied_date: 2026-05-11
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
   - audit_id: 15
     finding_id: ROUTING-001
@@ -245,7 +245,7 @@ carryovers:
     fix_target: Add 9 entries to taxonomy.yml with correct executor, context_required, tokens_est, skill
     status: fixed
     fix_applied_date: 2026-05-11
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
   - audit_id: 15
     finding_id: MEMORY-001
@@ -258,7 +258,7 @@ carryovers:
     fix_target: Add status/superseded_by fields; update getFilteredLessons() to skip status:archived
     status: fixed
     fix_applied_date: 2026-05-11
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
   - audit_id: 15
     finding_id: ROUTING-002
@@ -269,7 +269,7 @@ carryovers:
     fix_target: Add explicit crosscutTypes array in getSkillFile() after ROUTING-001 is done
     status: fixed
     fix_applied_date: 2026-05-11
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
   - audit_id: 15
     finding_id: ROUTING-003
@@ -280,7 +280,7 @@ carryovers:
     fix_target: Add last_updated: field to taxonomy.yml header; add checkStaleness() to acp-validate.ts
     status: fixed
     fix_applied_date: 2026-05-11
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
   - audit_id: 15
     finding_id: VALIDATE-002
@@ -291,7 +291,7 @@ carryovers:
     fix_target: Compute symmetric difference in runParityCheck() and print missing filenames
     status: fixed
     fix_applied_date: 2026-05-11
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
   - audit_id: 15
     finding_id: STRUCT-003
@@ -301,7 +301,7 @@ carryovers:
     fix_target: Move to agent/design/acp-ux-review.md; add to domain.yml design entries
     status: fixed
     fix_applied_date: 2026-05-11
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
 
   # ── AUDIT-016 FINDINGS ──────────────────────────────────────────────────────
@@ -314,7 +314,7 @@ carryovers:
     fix_target: Move checkStaleness() call to after validateAgentsMdSize() and validateSessionsMemory() in the no-args main block (acp-validate.ts ~line 503-509)
     status: fixed
     fix_applied_date: 2026-05-12
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
 
   # ── AUDIT-017 FINDINGS ──────────────────────────────────────────────────────
@@ -327,7 +327,7 @@ carryovers:
     fix_target: Add shell-scripting entry to taxonomy.yml aliasing to bash-script-fix (deepseek-v4-flash, tokens_est 4000), or update route-005 task_type to bash-script-create and route-011 to bash-script-fix
     status: fixed
     fix_applied_date: 2026-05-12
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
 
   # ── AUDIT-041 FINDINGS (M47 Pre-Implementation) ──────────────────────────────
@@ -351,7 +351,7 @@ carryovers:
     fix_target: "Add CHANGELOG.md update to M47 completion criteria or create route-085"
     status: fixed
     fix_applied_date: 2026-06-04
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
   - audit_id: 41
     finding_id: GAP-041-07
@@ -713,7 +713,7 @@ carryovers:
     status: fixed
     fix_applied_date: 2026-06-15
     verified_in_audit: "073"
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
 
   # ── AUDIT-069 FINDINGS — M57 & M58 POST-SYNC RE-AUDIT (2026-06-15) ───────────
@@ -786,7 +786,7 @@ carryovers:
     fix_applied_date: 2026-06-15
     verified_in_audit: "073"
     fix_applied_date: null
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
   - audit_id: 69
     finding_id: F-069-10
@@ -2010,9 +2010,9 @@ carryovers:
     file: agent/.gitignore
     finding: "agent/.gitignore reports/ rule overrides root !agent/reports/ whitelist — new reports silently excluded from version control; audit-078..090 (incl. M71 closure evidence) untracked; validator gitignore check inspects tracked paths only so it passes"
     fix_target: "Remove/whitelist reports/ in agent/.gitignore; git add untracked reports; extend validator gitignore check to probe new-file addability in protocol dirs (task-240 fix + task-241 enforcement)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-093
     escalated_to: null
 
   # ── AUDIT-092 FINDINGS — M72 PRE-IMPL READINESS (2026-07-15) ────────────────
@@ -2025,7 +2025,7 @@ carryovers:
     fix_target: "PLAN FIXED (amendment 2026-07-15, design D10 + guardrail 10): manifest regen added to task-242 step 5, task-243 step 7, task-247 gate 2b (closure refused while /acp-integrity --diff dirty). Runtime effect verified at audit-093"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
 
   - audit_id: audit-092
@@ -2036,7 +2036,7 @@ carryovers:
     fix_target: "FIXED by plan amendment 2026-07-15 (not deferred to task-245): all 16 closure references renumbered audit-092 → audit-093 across task-246/247, route-236, milestone doc, design doc, progress.yaml; grep confirms 0 stale. Verified at audit-093"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
 
   - audit_id: audit-092
@@ -2047,7 +2047,7 @@ carryovers:
     fix_target: "PLAN FIXED (amendment 2026-07-15, design D9): policy decided — track reports/ + feedback/, keep clarifications/drafts/preferences local-only; task-240 steps/verification updated (surgical whitelist, check-ignore probes both ways), task-241 addability probe covers feedback/. Runtime gitignore fix lands in task-240; verified at audit-093"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
 
   - audit_id: audit-092
@@ -2058,7 +2058,7 @@ carryovers:
     fix_target: "FIXED by plan amendment 2026-07-15: task-244 Prerequisites section added (brew install shellcheck); task-240 step 4 corrected to name+description+type. Verified at audit-093"
     status: fixed
     fix_applied_date: 2026-07-15
-    verified_in_audit: null
+    verified_in_audit: audit-093
     escalated_to: null
 
   # ── AUDIT-091 HYGIENE — task-245 (2026-07-15) ─────────────────────────────

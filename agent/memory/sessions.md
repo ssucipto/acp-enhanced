@@ -5,6 +5,18 @@
 - date: 2026-07-15
   executor: copilot
   branch: develop
+  tasks: [task-240, task-241, task-242, task-243, task-244, task-246, task-247]
+  done:
+    - m72-autonomous-complete-audit-093
+    - validator-hardening-5-surface-parity
+    - v6-27-0-tagged
+  deferred:
+    - crit-065-002-branch-protection → admin-ops
+  key_fact: M72 shipped v6.27.0 with ROOT-anchored validator; CRIT-065-002 remains pending (gh api 404).
+
+- date: 2026-07-15
+  executor: copilot
+  branch: develop
   tasks: [task-245]
   done:
     - claude-integration-committed-adr-18-2b92528

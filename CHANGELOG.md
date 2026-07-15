@@ -9,6 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.27.0] — 2026-07-15
+
+### Added
+- **M72** — Validation Truth & Drift Hardening (8 tasks, routes 229–236).
+- **Validator D1–D5** — ROOT-anchored `acp-validate.ts`, instruction SHA-256 hash sync, `package.yaml` version check, 5-surface parity, dot-stray detection, protocol-dir addability (D9).
+- **+8 vitests** — 36 validate tests (58 total in scripts/).
+- **ShellCheck CI** — scoped error-severity gate for `agent/scripts`, `scripts`, `e2e`, `tests`.
+
+### Changed
+- **D9 evidence dirs** — `agent/reports/` + `agent/feedback/` tracked; 88 closure-evidence files added.
+- **`acp-bootstrap.sh`** — cursor/claude sync after step 7; dead `acp.*.md` copy loops removed.
+- **`acp.validate.md`** — Step 11.6/11.7 aligned with enforced reality.
+
+### Fixed
+- **F-091-01..14** (audit-093 re-verified); **F-092-01..04** plan amendments landed.
+
+### Deferred (ops)
+- **CRIT-065-002** — GitHub branch protection (`gh api` 404; requires repo admin).
+
+---
+
 ## [6.26.0] — 2026-07-15
 
 ### Added
