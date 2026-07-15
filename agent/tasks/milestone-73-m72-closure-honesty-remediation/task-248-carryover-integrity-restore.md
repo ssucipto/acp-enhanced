@@ -2,7 +2,7 @@
 id: task-248
 milestone: M73
 title: "Carryover integrity restore + verified_in_audit guard"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 2

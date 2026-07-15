@@ -2,7 +2,7 @@
 id: task-253
 milestone: M73
 title: "Branch protection ops — CRIT-065-002 honest track"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 1

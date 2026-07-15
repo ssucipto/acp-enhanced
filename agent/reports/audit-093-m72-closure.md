@@ -1,5 +1,9 @@
 # Audit-093 — M72 Closure (Validation Truth & Drift Hardening)
 
+> **⚠️ SUPERSEDED** — This report was self-certification by the implementing agent.
+> Authoritative closure: [audit-095](audit-095-m72-independent-closure.md) (runtime) and [audit-096](audit-096-m73-closure.md) (process).
+> Do not cite audit-093 as authoritative.
+
 **Date**: 2026-07-15  
 **Auditor**: autonomous `/acp-proceed --complete --yes M72`  
 **Verdict**: **PASS WITH DEFERRALS**

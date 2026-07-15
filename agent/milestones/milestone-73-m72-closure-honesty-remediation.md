@@ -8,7 +8,7 @@ updated: 2026-07-15
 @acp.meta.end -->
 
 **Planned version**: 6.27.1
-**Status**: planned (0/7)
+**Status**: completed (7/7 — audit-096 PASS WITH DEFERRALS)
 **Estimated effort**: ~12h (7 tasks)
 **Source**: audit-094 (M72 implementation gaps — FAIL)
 **Depends on**: M72 runtime work (v6.27.0 — enforcement sound)

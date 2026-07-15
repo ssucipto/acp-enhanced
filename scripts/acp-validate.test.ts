@@ -16,6 +16,8 @@ import {
   validateCommandE2eCoverage,
   validateMemoryFieldLint,
   validateCarryoverFreshness,
+  validateCarryoverAuditStamps,
+  validateScriptRegistration,
   validateBranchProtectionDocs,
   validateSchemaListEntries,
   assertRepoRoot,
@@ -442,5 +444,47 @@ describe("validateProtocolDirAddability (M72)", () => {
   it("returns array without throwing on live repo", () => {
     const errors = validateProtocolDirAddability(getRepoRoot());
     expect(Array.isArray(errors)).toBe(true);
+  });
+});
+
+describe("validateCarryoverAuditStamps (M73)", () => {
+  it("passes on live carryovers after restore", () => {
+    const errors = validateCarryoverAuditStamps().filter((e) => e.severity === "error");
+    expect(errors).toHaveLength(0);
+  });
+
+  it("flags audit-093 on pre-M72 fix date", () => {
+    const fixture = path.join(testDir, "carryovers-bad-stamp.md");
+    writeFileSync(
+      fixture,
+      `carryovers:
+  - audit_id: audit-015
+    finding_id: FIXTURE-BAD
+    status: fixed
+    fix_applied_date: 2026-05-11
+    verified_in_audit: audit-093
+`,
+      "utf-8"
+    );
+    const errors = validateCarryoverAuditStamps(fixture);
+    expect(errors.some((e) => e.message.includes("FIXTURE-BAD"))).toBe(true);
+  });
+});
+
+describe("validateScriptRegistration D4 ERROR (M73)", () => {
+  it("errors on unregistered script on disk", () => {
+    const root = path.join(testDir, "script-reg");
+    const scriptsDir = path.join(root, "agent", "scripts");
+    mkdirSync(scriptsDir, { recursive: true });
+    writeFileSync(path.join(scriptsDir, "acp.orphan.sh"), "#!/bin/bash\n", "utf-8");
+    writeFileSync(
+      path.join(root, "package.yaml"),
+      "contents:\n  scripts:\n    - name: acp.known.sh\n",
+      "utf-8"
+    );
+    const errors = validateScriptRegistration(root);
+    expect(errors.some((e) => e.severity === "error" && e.message.includes("acp.orphan.sh"))).toBe(
+      true
+    );
   });
 });
