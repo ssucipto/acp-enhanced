@@ -12,7 +12,7 @@ files_affected:
   - scripts/acp-validate.test.ts
 tokens_est: 3500
 created: 2026-07-15
-completed:
+completed: 2026-07-15
 ---
 
 ## Objective
