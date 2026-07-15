@@ -474,10 +474,10 @@ carryovers:
     severity: critical
     file: GitHub repository settings
     finding: "No branch protection rules on mainline or develop — force-push and direct commits unblocked"
-    fix_target: "Run acp.branch-protection-setup.sh (requires GitHub repo admin)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: audit-088
+    fix_target: "Deferred — GitHub Free tier (private repo); manual merge discipline on develop→mainline until upgrade or public repo rules. Script acp.branch-protection-setup.sh ready when available. mainline merged from develop 2026-07-15 (v6.27.1)."
+    status: deferred
+    fix_applied_date: 2026-07-15
+    verified_in_audit: audit-097-deferred
     escalated_to: null
   - audit_id: 65
     finding_id: CRIT-065-003
