@@ -11,7 +11,7 @@ files_affected:
   - agent/commands/acp.validate.md
 tokens_est: 8000
 created: 2026-07-15
-completed:
+completed: 2026-07-15
 ---
 
 ## Objective
