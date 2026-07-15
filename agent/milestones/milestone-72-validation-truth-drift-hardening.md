@@ -8,7 +8,7 @@ updated: 2026-07-15
 @acp.meta.end -->
 
 **Planned version**: 6.27.0
-**Status**: in_progress (3/8 — task-241 complete)
+**Status**: completed (8/8 — audit-093 PASS WITH DEFERRALS)
 **Estimated effort**: ~20h (8 tasks)
 **Source**: audit-091 (whole-system gaps & standards)
 **Amended**: 2026-07-15 per audit-092 pre-impl readiness — F-092-01 (manifest regen), F-092-02 (closure renumbered → audit-093), F-092-03 (gitignore scope/D9 policy), F-092-04 (shellcheck prereq, field shapes)

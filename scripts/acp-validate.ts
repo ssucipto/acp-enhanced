@@ -1199,11 +1199,14 @@ export function validateCarryoverFreshness(
     if (!fileMatch) continue;
 
     const targetFile = fileMatch[1];
-    if (existsSync(targetFile)) {
+    const absTarget = path.isAbsolute(targetFile)
+      ? targetFile
+      : path.join(getRepoRoot(), targetFile);
+    if (existsSync(absTarget)) {
       const snippet = fixTarget.match(/:\s*(.+)$/)?.[1];
       if (snippet) {
         try {
-          const content = readFileSync(targetFile, "utf8");
+          const content = readFileSync(absTarget, "utf8");
           if (content.includes(snippet.slice(0, 40))) {
             errors.push({
               file: carryoversPath,
