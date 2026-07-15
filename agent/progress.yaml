@@ -531,7 +531,7 @@ milestones:
     started: 2026-07-15
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 4
+    tasks_completed: 5
     tasks_total: 8
     file: agent/milestones/milestone-72-validation-truth-drift-hardening.md
     design: agent/design/m72-validation-truth-drift-hardening.md
