@@ -13,7 +13,7 @@ files_affected:
   - agent/progress.yaml
 tokens_est: 5000
 created: 2026-07-15
-completed:
+completed: 2026-07-15
 ---
 
 ## Objective
