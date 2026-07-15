@@ -847,6 +847,17 @@ When `scripts/acp-validate.ts` runs (including via `/acp-validate`), these M70 c
 | IG-35 route drift | always | warning | `validateIg35RouteDrift()` — changed files vs `files_affected` on commit-referenced route |
 | Schema enforcement | always | error/warning | `runSchemaEnforcement()` — progress, session, patterns, **lessons**, **decisions** (ADR headers), **audit-carryovers** per-entry |
 
+## M72 Validators (v6.27.0)
+
+| Check | Flag / trigger | Severity | Description |
+|-------|----------------|----------|-------------|
+| Repo root anchor | always | error | `assertRepoRoot()` — module-path ROOT; fails if `agent/commands` missing |
+| Instruction hash sync | always | error | `validateInstructionFileHash()` — SHA-256 equality AGENTS/CLAUDE/copilot |
+| package.yaml version | always | error | `validatePackageYamlVersion()` — must match `identity.yml` |
+| Script registration | always | warning | `validateScriptRegistration()` — on-disk `agent/scripts/*.sh` in package.yaml |
+| Five-surface parity | always | error | `validateParityCheck()` — 5 surfaces, zero-population fail, dot-stray detection |
+| Protocol dir addability | always | error | `validateProtocolDirAddability()` — D9 probe + untracked evidence files |
+
 **Usage**:
 ```bash
 npx tsx scripts/acp-validate.ts           # standard + schema enforcement
