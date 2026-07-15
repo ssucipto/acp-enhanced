@@ -162,7 +162,7 @@ files:
     sha256: "4c0dbc96c6b133aa95e78b1a05d5f4c0700028b9729de2177151d4060fc09048"
     last_verified: "2026-07-15"
   - path: ".cursor/commands/acp-review.md"
-    sha256: "2474a80d8c0678329827fdbddf1fe08c6a2ef84ccf1de484b93a5e4dbfdaa32d"
+    sha256: "5e6fb0e54a919b3a7a2900cdd5332b99fdc04c178d9eed41ea6dfdb1c9dc9503"
     last_verified: "2026-07-15"
   - path: ".cursor/commands/acp-route.md"
     sha256: "26121ed35f91191efd57eed07c3869e3faf89b9c5f183869a0fb0a52820df6e1"

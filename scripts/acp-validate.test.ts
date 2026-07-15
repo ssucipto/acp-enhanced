@@ -18,6 +18,12 @@ import {
   validateCarryoverFreshness,
   validateBranchProtectionDocs,
   validateSchemaListEntries,
+  assertRepoRoot,
+  validateParityCheck,
+  validateInstructionFileHash,
+  validatePackageYamlVersion,
+  validateProtocolDirAddability,
+  getRepoRoot,
 } from "./acp-validate.ts";
 import type { ValidationError } from "./acp-validate.ts";
 
@@ -336,5 +342,107 @@ describe("validateSchemaListEntries (M71)", () => {
       "agent/memory/lessons.md"
     );
     expect(errors.some((e) => e.message.includes("date"))).toBe(true);
+  });
+});
+
+describe("assertRepoRoot (M72)", () => {
+  it("fails when agent/commands is missing", () => {
+    const prev = process.env["ACP_REPO_ROOT"];
+    process.env["ACP_REPO_ROOT"] = testDir;
+    const errors = assertRepoRoot();
+    expect(errors.some((e) => e.severity === "error")).toBe(true);
+    if (prev) process.env["ACP_REPO_ROOT"] = prev;
+    else delete process.env["ACP_REPO_ROOT"];
+  });
+});
+
+describe("validateParityCheck (M72)", () => {
+  it("fails on zero command population", () => {
+    const empty = path.join(testDir, "empty-cmds");
+    mkdirSync(empty, { recursive: true });
+    const errors = validateParityCheck({ commandsDir: empty });
+    expect(errors.some((e) => e.message.includes("Zero command docs"))).toBe(true);
+  });
+
+  it("detects dot-form stray wrappers", () => {
+    const prompts = path.join(testDir, "prompts");
+    mkdirSync(prompts, { recursive: true });
+    writeFileSync(path.join(prompts, "acp.fake.prompt.md"), "---\n", "utf-8");
+    const cmds = path.join(testDir, "cmds");
+    mkdirSync(cmds, { recursive: true });
+    writeFileSync(path.join(cmds, "acp.fake.md"), "# fake\n", "utf-8");
+    const errors = validateParityCheck({
+      commandsDir: cmds,
+      promptsDir: prompts,
+      opencodeDir: path.join(testDir, "oc"),
+      cursorDir: path.join(testDir, "cur"),
+      claudeDir: path.join(testDir, "cl"),
+    });
+    expect(errors.some((e) => e.message.includes("Dot-form stray"))).toBe(true);
+  });
+
+  it("detects missing claude wrapper", () => {
+    const root = mkdtempSync(path.join(testDir, "parity-missing-"));
+    const cmds = path.join(root, "agent", "commands");
+    const prompts = path.join(root, ".github", "prompts");
+    const oc = path.join(root, "opencode");
+    const cur = path.join(root, "cursor");
+    const cl = path.join(root, "claude");
+    for (const d of [cmds, prompts, oc, cur, cl]) mkdirSync(d, { recursive: true });
+    writeFileSync(path.join(cmds, "acp.demo.md"), "# demo\n", "utf-8");
+    writeFileSync(path.join(prompts, "acp-demo.prompt.md"), "---\n", "utf-8");
+    writeFileSync(path.join(oc, "acp-demo.md"), "---\n", "utf-8");
+    writeFileSync(path.join(cur, "acp-demo.md"), "---\n", "utf-8");
+    const errors = validateParityCheck({
+      commandsDir: cmds,
+      promptsDir: prompts,
+      opencodeDir: oc,
+      cursorDir: cur,
+      claudeDir: cl,
+    });
+    expect(errors.length).toBeGreaterThan(0);
+    expect(errors.some((e) => e.file.includes("claude"))).toBe(true);
+  });
+});
+
+describe("validateInstructionFileHash (M72)", () => {
+  it("detects content hash mismatch", () => {
+    const root = path.join(testDir, "hash-mismatch");
+    mkdirSync(path.join(root, ".github"), { recursive: true });
+    writeFileSync(path.join(root, "AGENTS.md"), "line-a\n", "utf-8");
+    writeFileSync(path.join(root, "CLAUDE.md"), "line-b\n", "utf-8");
+    writeFileSync(path.join(root, ".github/copilot-instructions.md"), "line-a\n", "utf-8");
+    const errors = validateInstructionFileHash(root);
+    expect(errors.some((e) => e.message.includes("hash mismatch"))).toBe(true);
+  });
+
+  it("passes when all three files identical", () => {
+    const root = path.join(testDir, "hash-ok");
+    mkdirSync(path.join(root, ".github"), { recursive: true });
+    const text = "> v6.26.0\nsame\n";
+    writeFileSync(path.join(root, "AGENTS.md"), text, "utf-8");
+    writeFileSync(path.join(root, "CLAUDE.md"), text, "utf-8");
+    writeFileSync(path.join(root, ".github/copilot-instructions.md"), text, "utf-8");
+    expect(validateInstructionFileHash(root)).toHaveLength(0);
+  });
+});
+
+describe("validatePackageYamlVersion (M72)", () => {
+  it("errors on version mismatch", () => {
+    const root = path.join(testDir, "pkg-mismatch");
+    mkdirSync(path.join(root, "agent", "core"), { recursive: true });
+    writeFileSync(path.join(root, "agent", "core", "identity.yml"), "version: 6.26.0\n", "utf-8");
+    writeFileSync(path.join(root, "package.yaml"), "version: 0.0.0\n", "utf-8");
+    const errors = validatePackageYamlVersion(root);
+    expect(errors.some((e) => e.message.includes("0.0.0"))).toBe(true);
+  });
+});
+
+describe("validateProtocolDirAddability (M72)", () => {
+  it("passes on live repo evidence dirs", () => {
+    const errors = validateProtocolDirAddability(getRepoRoot()).filter(
+      (e) => e.severity === "error"
+    );
+    expect(errors).toHaveLength(0);
   });
 });
