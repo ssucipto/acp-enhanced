@@ -7099,7 +7099,6 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "CRIT-065-002: enable mainline branch protection (GitHub admin)"
   - "F-086-02: consumer-project consumer /acp-version-update verification (task-239, ops)"
   - "Plan next milestone or routine /acp-proceed work"
 
@@ -7113,7 +7112,7 @@ notes:
   - "96+ audit reports (audit-094/095/096 M72/M73 closure)"
   - "M73 COMPLETE v6.27.1 — carryover integrity, D4 ERROR, sweep 6/6, audit-095 independent closure"
   - "M67 COMPLETE v6.23.0 — cross-agent handoff + /acp-receive"
-  - "Ops deferrals: CRIT-065-002 (branch protection), F-086-02 (consumer-project consumer task-239)"
+  - "Ops deferrals: CRIT-065-002 (branch protection — GitHub Free, manual merge), F-086-02 (consumer-project task-239)"
 
 # ── Recurring Tasks ──────────────────────────────────────────────
 # Added v6.12.1 (M57). Scheduled periodic reviews surfaced at
