@@ -8,6 +8,7 @@ updated: 2026-07-15
 @acp.meta.end -->
 
 **Source**: audit-091 (`agent/reports/audit-091-whole-system-gaps-standards.md`)
+**Amended**: 2026-07-15 per audit-092 pre-impl readiness (F-092-01..04 — closure renumbered to audit-093, D9 + guardrail #10 added)
 **Created**: 2026-07-15
 **Planned version**: 6.27.0
 
@@ -35,17 +36,23 @@ Audit-091 found the system's *shipped state* healthy but its *enforcement layer*
 
 **D8 — v6.27.0 (minor).** New validator capabilities + new CI gate = minor bump per SemVer. Full release discipline: CHANGELOG entry, tag, package.yaml (now enforced by D4), instruction-file headers (enforced by D3).
 
+**D9 — evidence-directory version-control policy (audit-092 amendment, resolves F-092-03).** `agent/reports/` and `agent/feedback/` are **tracked** — audit reports are closure evidence and feedback files are cited by carryovers (e.g., feedback-007 ← F-086-02); 61 untracked reports and 25 untracked feedback files get `git add`-ed in task-240. `agent/clarifications/`, `agent/drafts/**` (except templates), and `agent/preferences/` remain **local-only by design** (`acp.plan.md` Step 10 explicitly never commits clarifications). Therefore the `agent/.gitignore` fix is surgical: delete/whitelist the `reports/` and `feedback/` lines only — never blanket-remove the file. The task-241 addability probe covers `agent/reports/`, `agent/feedback/`, `agent/memory/`, `agent/tasks/` (and deliberately NOT clarifications/drafts/preferences).
+
+**D10 — integrity-manifest regeneration discipline (audit-092 amendment, resolves F-092-01).** `agent/integrity-manifest.yaml` SHA-pins framework files including wrapper directories. Any M72 task that changes manifest-covered files (task-242/243 wrapper regens at minimum) runs `bash agent/scripts/acp.manifest-hash.sh` (with its `--output` persistence flag — the generator does not write in place by default) before its own verification step, and task-247's closure gates require a clean `/acp-integrity --diff`. Newly generated `.claude/commands/` wrappers enter the manifest at first regeneration.
+
 ## Anti-Shortcut Guardrails (binding for all M72 tasks)
 
 1. **No doc-only fixes.** A drift finding is `fixed` only when the fix lands *together with* the enforcement check that would have caught it (F-091-01/02 close only alongside task-241 validators).
 2. **No vacuous greens** (D2) — reviewer must grep new checks for zero-population behavior.
-3. **No carryover stamped `fixed` without re-verification** in the M72 closure audit (audit-092), matching the M71/audit-090 protocol.
+3. **No carryover stamped `fixed` without re-verification** in the M72 closure audit (audit-093), matching the M71/audit-090 protocol.
 4. **No command-doc edit without wrapper regen** — after editing any `agent/commands/*.md`, run all four sync/generation paths and re-run parity.
 5. **No untested validator change** — every new/changed check in `acp-validate.ts` ships with a vitest (positive + negative fixture), keeping the 28-test suite growing.
 6. **No release without the full chain** — CHANGELOG + tag + package.yaml + instruction headers; D4/D3 make skipping mechanically fail.
 7. **Memory writes at moment of discovery** — sessions/lessons/decisions written per phase, not end-of-milestone dump.
 8. **Repo-root discipline** — all documented invocations run from repo root; D1 makes wrong-cwd fail loudly instead of lying.
 9. **No mixed commits** — pre-existing Claude-integration working-tree changes are committed as their own logical commit (task-245) before validator work begins on the same files.
+10. **No manifest drift** (D10) — any task touching manifest-covered files regenerates `agent/integrity-manifest.yaml` in the same task; task-247 refuses closure while `/acp-integrity --diff` reports differences.
+11. **No silent policy changes** — the D9 evidence-directory decision (track reports+feedback, keep clarifications/drafts/preferences local) is recorded here and in task-240; future changes to what's version-controlled require an ADR, not an inline gitignore edit.
 
 ## Out of Scope
 
