@@ -11,7 +11,7 @@ files_affected:
   - scripts/acp-bootstrap.sh
 tokens_est: 2500
 created: 2026-07-15
-completed:
+completed: 2026-07-15
 ---
 
 ## Objective
