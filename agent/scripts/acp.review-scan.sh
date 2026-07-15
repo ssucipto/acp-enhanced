@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# acp.review-scan.sh — Deterministic Phase 1 scanner for /acp-review (audit-085 F-085-07)
+# acp.review-scan.sh — Deterministic Phase 1 scanner for /acp-review (audit-085 F-085-07, M70 task-225)
 #
-# Covered rules: EH-02, SC-01, TS-01, SH-01
+# Covered rules: EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01 (8 rules)
 # Usage: acp.review-scan.sh [--ci] [--json] [file|dir]
 
 set -euo pipefail
@@ -46,6 +46,22 @@ scan_ts_js() {
     if echo "$line" | grep -qE ':\s*any\b|as\s+any\b' 2>/dev/null; then
       ig_emit_finding "$file" "$line_num" "TS-01" "any type usage" "HIGH"
     fi
+
+    if echo "$line" | grep -qE '^export (async )?function [a-zA-Z0-9_]+\([^)]*\)\s*\{' 2>/dev/null; then
+      if ! echo "$line" | grep -qE '\)\s*:\s*[A-Za-z{[]' 2>/dev/null; then
+        ig_emit_finding "$file" "$line_num" "TS-02" "exported function missing return type" "HIGH"
+      fi
+    fi
+
+    if echo "$line" | grep -qE 'res\.(json|send)\([^)]*\)' 2>/dev/null; then
+      if ! echo "$line" | grep -qE '(data\s*:|"data"\s*:)' 2>/dev/null; then
+        ig_emit_finding "$file" "$line_num" "AP-01" "response missing data envelope" "HIGH"
+      fi
+    fi
+
+    if echo "$line" | grep -qE '^(const|let|var) [a-z]+_[a-z0-9_]*\s*=' 2>/dev/null; then
+      ig_emit_finding "$file" "$line_num" "NC-01" "snake_case variable in TS/JS" "MEDIUM"
+    fi
   done < "$file"
 
   if command -v python3 &>/dev/null; then
@@ -62,6 +78,32 @@ for m in re.finditer(r"catch\s*\([^)]*\)\s*\{([^}]*)\}", text, re.DOTALL):
     if not body.strip():
         line = text[: m.start()].count("\n") + 1
         print(line)
+PY
+)
+
+    while IFS= read -r eh_line; do
+      [[ -z "$eh_line" ]] && continue
+      ig_emit_finding "$file" "$eh_line" "EH-01" "async without try/catch" "HIGH"
+    done < <(ACP_REVIEW_FILE="$file" python3 - <<'PY' 2>/dev/null || true
+import os, re
+path = os.environ["ACP_REVIEW_FILE"]
+text = open(path, encoding="utf-8", errors="replace").read()
+for m in re.finditer(r"async\s+function\s+\w+[^{]*\{", text):
+    start = m.end() - 1
+    depth = 0
+    i = start
+    while i < len(text):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                body = text[start + 1 : i]
+                if "try" not in body and ".catch(" not in body:
+                    line = text[: m.start()].count("\n") + 1
+                    print(line)
+                break
+        i += 1
 PY
 )
   fi
