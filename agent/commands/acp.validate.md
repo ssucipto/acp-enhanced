@@ -553,32 +553,39 @@ If `agent/driver.yaml` exists:
 
 Run the TypeScript validator to check structural health outside the document layer.
 
-**Prerequisites**: `cd scripts && npm install` (one-time, installs ts-node + js-yaml)
+**Prerequisites**: `npm install` at repo root (one-time, installs tsx + js-yaml)
 
-**Command**: `(cd scripts && npx ts-node acp-validate.ts)` — run from repo root
+**Command**: `npx tsx scripts/acp-validate.ts` — **from repo root** (ROOT-anchored since v6.27.0; wrong relative invocations no longer vacuous-pass)
 
 **Actions** (all run automatically when invoked with no arguments):
 1. **Placeholder scan** — detects `{PLACEHOLDER}` / `{TODO}` / `{EXAMPLE}` in command files
 2. **Frontmatter scan** — validates required YAML fields in routing task files (`agent/routing/tasks/route-*.md`)
-3. **Triple-file parity check** — diffs `agent/commands/*.md`, `.github/prompts/*.prompt.md`, `.opencode/commands/*.md` per filename; prints `❌` for mismatches, `✓` for clean
-4. **Staleness check** (informational, non-blocking) — warns if `agent/routing/taxonomy.yml` `last_updated` field is >90 days old, or any model `last_verified` in `agent/routing/config.yml` is >180 days old
-5. **AGENTS.md size guard** — checks `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` byte sizes against `agents_md_rules` in `agent/core/constraints.yml` (hard limit: 15KB, warn: 12KB); exits 1 if exceeded
-6. **sessions.md structure** — validates that each entry in `agent/memory/sessions.md` has required keys (`date`, `executor`, `tasks_completed`, `done`) and that `date` values match YYYY-MM-DD format; exits 1 if malformed
+3. **Five-surface parity check** — diffs `agent/commands/{acp,git}.*.md` against `.github/prompts/`, `.opencode/commands/`, `.cursor/commands/`, `.claude/commands/`; ERROR on mismatches or dot-form strays
+4. **Instruction hash sync** — SHA-256 equality across `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`
+5. **package.yaml version** — must match `agent/core/identity.yml`
+6. **Staleness check** (informational, non-blocking) — warns if `agent/routing/taxonomy.yml` `last_updated` field is >90 days old, or any model `last_verified` in `agent/routing/config.yml` is >180 days old
+7. **AGENTS.md size guard** — byte sizes against `agents_md_rules` in `agent/core/constraints.yml` (hard limit: 15KB, warn: 12KB)
+8. **sessions.md structure** — validates that each entry has required keys (`date`, `executor`, `tasks`, `done`) per `session.schema.yaml`; exits 1 if malformed
 
-Exit code: 0 if size guard + sessions check pass; 1 otherwise. Staleness is informational and does not affect exit code.
+Exit code: 0 only when all error-severity checks pass. Staleness is informational.
 
-**Expected Outcome**: Report from each check. Failures on size guard or sessions structure are errors; staleness warnings are informational.
+**Expected Outcome**: Report from each check. Parity, hash sync, package version, and sessions structure failures are errors.
 
-### 11.7. Validate Command Wrapper Parity (v6.9.2+)
+### 11.7. Validate Command Wrapper Parity (v6.27.0+)
 
-> **This step runs in ALL modes.** Warns when command docs lack prompt/opencode wrappers.
+> **Enforced by `scripts/acp-validate.ts` (`validateParityCheck`)** — five surfaces, ERROR severity.
 
-For each `agent/commands/acp.*.md` (excluding templates and non-acp commands):
-- Check `.github/prompts/acp.{name}.prompt.md` exists → ✅ / ⚠️ MISSING
-- Check `.opencode/commands/acp.{name}.md` exists → ✅ / ⚠️ MISSING
+For each `agent/commands/acp.*.md` (excluding templates):
+- `.github/prompts/acp-{name}.prompt.md` → required
+- `.opencode/commands/acp-{name}.md` → required
+- `.cursor/commands/acp-{name}.md` → required
+- `.claude/commands/acp-{name}.md` → required
 
-⚠️ Warnings only — do not affect exit code. Templates (`*.template.md`) and
-non-acp commands (`git.*`) are skipped.
+For each `agent/commands/git.*.md`:
+- `.cursor/commands/git-{name}.md` and `.claude/commands/git-{name}.md` → required
+- prompts/opencode: excluded by design (historical scope)
+
+Dot-form strays (`acp.{name}.md` in wrapper dirs) → ERROR. Run `acp.cursor-commands-sync.sh` + `acp.claude-commands-sync.sh` after command-doc edits.
 
 ### 12. Generate Validation Report
 
@@ -832,6 +839,37 @@ Recommendations:
 **Cause**: Very large project with many documents  
 
 **Solution**: This is normal for large projects, consider validating specific directories only, run less frequently  
+
+---
+
+## M70 Validators (v6.26.0)
+
+When `scripts/acp-validate.ts` runs (including via `/acp-validate`), these M70 checks apply:
+
+| Check | Flag / trigger | Severity | Description |
+|-------|----------------|----------|-------------|
+| Branch protection docs | always (when `docs/USAGE.md` exists) | warning | `validateBranchProtectionDocs()` — Git Branch Protection checklist; warns if `gh api` shows mainline unprotected |
+| Memory field lint | `--memory` | error | `validateMemoryFieldLint()` — required keys on `sessions.md` and `patterns.md` entries |
+| Carryover freshness | always | warning | `validateCarryoverFreshness()` — pending carryovers whose `fix_target` snippet already exists in repo |
+| IG-35 route drift | always | warning | `validateIg35RouteDrift()` — changed files vs `files_affected` on commit-referenced route |
+| Schema enforcement | always | error/warning | `runSchemaEnforcement()` — progress, session, patterns, **lessons**, **decisions** (ADR headers), **audit-carryovers** per-entry |
+
+## M72 Validators (v6.27.0)
+
+| Check | Flag / trigger | Severity | Description |
+|-------|----------------|----------|-------------|
+| Repo root anchor | always | error | `assertRepoRoot()` — module-path ROOT; fails if `agent/commands` missing |
+| Instruction hash sync | always | error | `validateInstructionFileHash()` — SHA-256 equality AGENTS/CLAUDE/copilot |
+| package.yaml version | always | error | `validatePackageYamlVersion()` — must match `identity.yml` |
+| Script registration | always | warning | `validateScriptRegistration()` — on-disk `agent/scripts/*.sh` in package.yaml |
+| Five-surface parity | always | error | `validateParityCheck()` — 5 surfaces, zero-population fail, dot-stray detection |
+| Protocol dir addability | always | error | `validateProtocolDirAddability()` — D9 probe + untracked evidence files |
+
+**Usage**:
+```bash
+npx tsx scripts/acp-validate.ts           # standard + schema enforcement
+npx tsx scripts/acp-validate.ts --memory  # + memory field lint
+```
 
 ---
 

@@ -1,13 +1,10 @@
 # Agent Context Protocol - Local Files
 # These files are generated locally and should not be committed
 
-# Reports / scratch directories
-reports/
+# Local-only protocol dirs (D9 — reports/ and feedback/ are tracked)
 clarifications/
-feedback/
 drafts/**
 !drafts/.gitkeep
 !drafts/draft.template.md
 preferences/
-
 

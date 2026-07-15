@@ -3,13 +3,13 @@
 
 project:
   name: agent-context-protocol
-  version: 6.25.2
+  version: 6.27.1
   started: 2026-02-16
   status: active
-  current_milestone: M63
+  current_milestone: M73
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.25.2. Review + integrity
-    remediation — acp.review-scan.sh, integrity-manifest split, audit-085 closure.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.27.1 shipped; M73 closure honesty complete.
+      M72 runtime + M73 process remediation; CRIT-065-002 deferred (admin).
 
 milestones:
   M44:
@@ -490,7 +490,76 @@ milestones:
     notes: |
       ✅ M68 COMPLETE (v6.24.1). Tier helpers, version-update route-079, install/bootstrap
       preserve, E2E preserve suites (version-update 13, install 5, bootstrap 6), validate
-      guard, audit-080/081/082 carryovers closed. consumer-project safe on v6.24.0+.
+      guard,       audit-080/081/082 carryovers closed. consumer-project safe on v6.24.0+.
+
+  M70:
+    name: Tech Debt & Gate Hardening (v6.26.0)
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-07-15
+    completed: 2026-07-15
+    estimated_weeks: 2
+    tasks_completed: 12
+    tasks_total: 12
+    file: agent/milestones/milestone-70-tech-debt-gate-hardening.md
+    design: agent/design/m70-tech-debt-gate-hardening.md
+    notes: |
+      ✅ M70 COMPLETE (v6.26.0). Gate hardening, memory schemas, 8-rule review scanner,
+      atomic-write, IG-35. Closure via M71 audit-090.
+
+  M71:
+    name: M70 Remediation & Release Gate (v6.26.0)
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-07-15
+    completed: 2026-07-15
+    estimated_weeks: 0.5
+    tasks_completed: 8
+    tasks_total: 9
+    file: agent/milestones/milestone-71-m70-remediation-release-gate.md
+    design: agent/design/m71-m70-remediation-release-gate.md
+    notes: |
+      ✅ M71 COMPLETE (audit-090). task-239 consumer-project ops deferred. PR to mainline pending.
+
+  M72:
+    name: Validation Truth & Drift Hardening (v6.27.0)
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-07-15
+    completed: 2026-07-15
+    estimated_weeks: 0.5
+    tasks_completed: 8
+    tasks_total: 8
+    file: agent/milestones/milestone-72-validation-truth-drift-hardening.md
+    design: agent/design/m72-validation-truth-drift-hardening.md
+    notes: |
+      📋 M72 planned — audit-091 remediation (F-091-01..14) + CRIT-065-002.
+      Amended 2026-07-15 per audit-092 pre-impl (READY): F-092-01 manifest regen (D10),
+      F-092-02 closure renumbered → audit-093, F-092-03 gitignore D9 policy, F-092-04 prereqs.
+      Drift fixes ship WITH enforcement (guardrail #1). Routes 229-236, tasks 240-247.
+      Build order: 245 (commit tree) → 240 → 241 → 242/243/244 → 246 → 247 closure.
+      ⚠️ audit-094 FAIL — runtime OK; closure dishonest. M73 remediation required.
+
+  M73:
+    name: M72 Closure Honesty & Carryover Integrity Remediation (v6.27.1)
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-07-15
+    completed: 2026-07-15
+    estimated_weeks: 0.25
+    tasks_completed: 7
+    tasks_total: 7
+    file: agent/milestones/milestone-73-m72-closure-honesty-remediation.md
+    design: agent/design/m73-m72-closure-honesty-remediation.md
+    notes: |
+      📋 M73 planned — audit-094 remediation (F-094-01..10) + honest M72 closure.
+      Runtime v6.27.0 enforcement sound; process/metadata/carryover integrity regressed.
+      Independent audit-095 required (no self-cert). Routes 237-243, tasks 248-254.
+      Build order: 248/249 → 250/251 → 252 → 253 → 254 closure v6.27.1.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4291,7 +4360,417 @@ tasks:
       notes: |
         v6.25.1. F-083-01..06 closed. tasks 212–218. tier3 loop + vitest + tracking.
 
+  M70:
+    - id: task-219
+      name: "Enable GitHub branch protection (CRIT-065-002)"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-219-branch-protection.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
+      estimated_hours: 2
+      notes: "route-208 — setup script + USAGE checklist; GitHub admin enable deferred"
+
+    - id: task-220
+      name: "Branch protection verify checklist"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-220-branch-protection-verify.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
+      estimated_hours: 2
+      notes: "validateBranchProtectionDocs() + gh api warn"
+
+    - id: task-221
+      name: "Memory-layer entity schemas (MED-066-007)"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-221-memory-schemas.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
+      estimated_hours: 8
+      notes: "patterns.schema.yaml + SCHEMA_DATA_MAP wire"
+
+    - id: task-222
+      name: "Memory registry field lint (GAP-041-04)"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-222-memory-field-lint.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
+      estimated_hours: 6
+      notes: "validateMemoryFieldLint() + --memory flag"
+
+    - id: task-223
+      name: "validateCarryoverFreshness (F-086-04)"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-223-carryover-freshness.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
+      estimated_hours: 4
+      notes: "validateCarryoverFreshness() in acp-validate.ts"
+
+    - id: task-224
+      name: "Two-phase review gate policy (F-086-03)"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-224-review-gate-policy.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
+      estimated_hours: 4
+      notes: "Gate Policy in acp.review.md + code-review skill"
+
+    - id: task-225
+      name: "Expand acp.review-scan.sh (F-086-03)"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-225-review-scanner-expand.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
+      estimated_hours: 8
+      notes: "8 rules: EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01"
+
+    - id: task-226
+      name: "Commit sync E2E (GAP-041-07)"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-226-commit-sync-e2e.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
+      estimated_hours: 6
+      notes: "command-e2e-coverage registry parity"
+
+    - id: task-227
+      name: "Commit sync atomicity (GAP-041-08)"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-227-commit-atomicity.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
+      estimated_hours: 4
+      notes: "acp.atomic-write.sh"
+
+    - id: task-228
+      name: "consumer-project consumer verification (F-086-02)"
+      priority: 3
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-228-consumer-project-consumer.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
+      estimated_hours: 4
+      notes: "Deferred — documented blocker in feedback-007; ops follow-up"
+
+    - id: task-229
+      name: "IG-35 resolution (F-086-01)"
+      priority: 3
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-229-ig35-resolution.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T07:10:00Z
+      estimated_hours: 2
+      notes: "IG-35 in acp.git-provenance.sh + validateIg35RouteDrift"
+
+    - id: task-230
+      name: "M70 closure audit + v6.26.0 release"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-70-tech-debt-gate-hardening/task-230-m70-release.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 4
+      notes: "route-219; closed via M71 audit-090"
+
+  M71:
+    - id: task-231
+      name: "Release artifacts — commit + tag v6.26.0 + task sync"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-231-release-artifacts.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 2
+      notes: "route-220 Phase 1 P0 — F-089-01, F-089-04"
+
+    - id: task-232
+      name: "Wire acp.atomic-write.sh into sync commands"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-232-atomic-write-wire.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 3
+      notes: "route-221; GAP-041-08 — depends task-231"
+
+    - id: task-233
+      name: "Memory array schema enforcement"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-233-array-schema-enforcement.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 4
+      notes: "route-222; MED-066-007 — depends task-231"
+
+    - id: task-234
+      name: "Docs/wiki parity (domain, package, validate, review)"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-234-docs-wiki-parity.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 3
+      notes: "route-223; F-089-06,09,10,11,12"
+
+    - id: task-235
+      name: "Route files_affected + review fixtures"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-235-route-fixtures.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 3
+      notes: "route-224; F-089-07, F-089-08"
+
+    - id: task-236
+      name: "validateCarryoverFreshness vitest"
+      priority: 3
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-236-carryover-vitest.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 2
+      notes: "route-225; F-086-04 — depends task-233"
+
+    - id: task-237
+      name: "GitHub branch protection ops"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-237-branch-protection-ops.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 2
+      notes: "route-226; CRIT-065-002 — depends task-231"
+
+    - id: task-238
+      name: "M71 closure audit + ship v6.26.0"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-238-m71-closure-ship.md
+      started: 2026-07-15T00:00:00Z
+      completed_date: 2026-07-15T08:00:00Z
+      estimated_hours: 3
+      notes: "route-227; audit-090 — depends 232-237"
+
+    - id: task-239
+      name: "consumer-project consumer verification (ops optional)"
+      priority: 3
+      status: planned
+      file: agent/tasks/milestone-71-m70-remediation-release-gate/task-239-consumer-project-consumer-ops.md
+      started: null
+      completed_date: null
+      estimated_hours: 4
+      notes: "route-228; F-086-02 P3 ops — does not block M71"
+
+  M72:
+    - id: task-240
+      name: "Drift closures — versions, instruction sync, registrations"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-240-drift-closures.md
+      started: 2026-07-15T01:16:00Z
+      completed_date: 2026-07-15T01:30:00Z
+      estimated_hours: 2
+      notes: "route-229; F-091-01/02/14 fix half — enforcement in task-241"
+
+    - id: task-241
+      name: "Validator hardening — root anchor, zero-fail, hash, pkg, 5-surface parity"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-241-validator-hardening.md
+      started: 2026-07-15T01:30:00Z
+      completed_date: 2026-07-15T02:00:00Z
+      estimated_hours: 5
+      notes: "route-230; F-091-01..04 fixed; vitest 36; dot-strays removed"
+
+    - id: task-242
+      name: "Wrapper strays + bootstrap dead-glob cleanup"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-242-wrapper-bootstrap-cleanup.md
+      started: 2026-07-15T02:00:00Z
+      completed_date: 2026-07-15T02:15:00Z
+      estimated_hours: 2
+      notes: "route-231; F-091-04/06 + F-092-01 manifest regen (D10) — depends task-241"
+
+    - id: task-243
+      name: "Docs alignment — validate.md, lessons, notes, pipefail, verify pointer"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-243-docs-alignment.md
+      started: 2026-07-15T02:15:00Z
+      completed_date: 2026-07-15T02:30:00Z
+      estimated_hours: 2
+      notes: "route-232; F-091-05(doc)/07/11/12 — depends task-241"
+
+    - id: task-244
+      name: "ShellCheck CI gate"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-244-shellcheck-ci.md
+      started: 2026-07-15T02:30:00Z
+      completed_date: 2026-07-15T02:45:00Z
+      estimated_hours: 3
+      notes: "route-233; F-091-10 fixed; scoped shellcheck CI"
+
+    - id: task-245
+      name: "Hygiene ops — commit tree, sessions compaction, dependency audit"
+      priority: 3
+      status: completed
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-245-hygiene-ops.md
+      started: 2026-07-15T01:00:00Z
+      completed_date: 2026-07-15T09:15:00Z
+      estimated_hours: 2
+      notes: "route-234; F-091-08/09/13 fixed; commit 2b92528"
+
+    - id: task-246
+      name: "Branch protection ops + PR develop → mainline"
+      priority: 5
+      status: deferred
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-246-branch-protection-pr.md
+      started: null
+      completed_date: null
+      estimated_hours: 1
+      notes: "route-235; CRIT-065-002 deferred — gh api 404 (admin required)"
+
+    - id: task-247
+      name: "M72 closure audit (audit-093) + ship v6.27.0"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-247-m72-closure-ship.md
+      started: 2026-07-15T03:00:00Z
+      completed_date: 2026-07-15T03:30:00Z
+      estimated_hours: 3
+      notes: "route-236; audit-093 PASS WITH DEFERRALS; tag v6.27.0 — SUPERSEDED by audit-094 FAIL"
+
+  M73:
+    - id: task-248
+      name: "Carryover integrity restore + verified_in_audit guard"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-248-carryover-integrity-restore.md
+      started: 2026-07-15T09:50:00Z
+      completed_date: 2026-07-15T10:00:00Z
+      estimated_hours: 2
+      notes: "route-237; 17 stamps restored; validateCarryoverAuditStamps guard"
+
+    - id: task-249
+      name: "Tracking truth sync — progress, tasks, gates, notes"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-249-tracking-truth-sync.md
+      started: 2026-07-15T10:00:00Z
+      completed_date: 2026-07-15T10:10:00Z
+      estimated_hours: 2
+      notes: "route-238; task-246 deferred; M72 gates checked"
+
+    - id: task-250
+      name: "Script registration + D4 WARN→ERROR ratchet"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-250-script-registration-d4-ratchet.md
+      started: 2026-07-15T10:10:00Z
+      completed_date: 2026-07-15T10:20:00Z
+      estimated_hours: 2
+      notes: "route-239; 13 scripts registered; D4 ERROR"
+
+    - id: task-251
+      name: "Post-milestone-sweep 6/6 — tsc and gate fixes"
+      priority: 4
+      status: completed
+      file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-251-sweep-gates-green.md
+      started: 2026-07-15T10:20:00Z
+      completed_date: 2026-07-15T10:30:00Z
+      estimated_hours: 2
+      notes: "route-240; sweep 6/6; tsc NodeNext; gate fixes"
+
+    - id: task-252
+      name: "Independent closure audit-095 — seeded negative probes"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-252-independent-closure-audit-095.md
+      started: 2026-07-15T10:30:00Z
+      completed_date: 2026-07-15T10:40:00Z
+      estimated_hours: 2
+      notes: "route-241; audit-095 PASS; supersedes audit-093"
+
+    - id: task-253
+      name: "Branch protection ops — CRIT-065-002 honest track"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-253-branch-protection-ops.md
+      started: 2026-07-15T10:40:00Z
+      completed_date: 2026-07-15T10:45:00Z
+      estimated_hours: 1
+      notes: "route-242; gh api 404 documented; CRIT-065-002 stays pending"
+
+    - id: task-254
+      name: "M73 closure audit-096 + ship v6.27.1 patch"
+      priority: 5
+      status: completed
+      file: agent/tasks/milestone-73-m72-closure-honesty-remediation/task-254-m73-closure-ship.md
+      started: 2026-07-15T10:45:00Z
+      completed_date: 2026-07-15T11:00:00Z
+      estimated_hours: 1
+      notes: "route-243; audit-096 PASS; tag v6.27.1"
+
 recent_work:
+  - date: 2026-07-15
+    description: |
+      🎉 M73 COMPLETE — Closure Honesty Remediation v6.27.1
+      Tasks 248-254; audit-094 findings F-094-01..10 fixed.
+      audit-095 independent M72 closure; carryover integrity restored.
+      CRIT-065-002 still deferred (gh api 404).
+  - date: 2026-07-15
+    description: |
+      ✅ v6.26.0 shipped — M70 gate hardening + M71 remediation (audit-090).
+      Commit d8b3dda, tag v6.26.0 pushed. Validate/sync/update/commit chain clean.
+    items:
+      - "✅ M70/M71 tasks 219–238 completed; task-239 consumer-project ops deferred"
+      - "✅ Schema enforcement: lessons, decisions, carryovers (175 entries)"
+      - "✅ atomic-write wired; 8-rule review scanner; review fixtures"
+      - "⏳ CRIT-065-002 branch protection — gh api 404 (ops deferral)"
+
+  - date: 2026-07-15
+    description: |
+      📋 M71 planned — M70 remediation & release gate (audit-089).
+      9 tasks (231–239), routes 220–228. Closes all audit-089 gaps before v6.26.0 ship.
+    items:
+      - "📋 design/m71-m70-remediation-release-gate.md"
+      - "📋 milestone-71 + 9 task docs + 9 routes"
+      - "⚠️ M70 reverted to in_progress 11/12 — task-230 via M71"
+      - "📋 Finding map: F-089-01..13 → tasks 231–238"
+
+  - date: 2026-07-15
+    description: |
+      M70 implementation landed (uncommitted) — memory validation, review scanner, IG-35.
+      audit-089 blocked release; superseded by M71 plan.
+    items:
+      - "✅ 11/12 M70 tasks implemented in working tree"
+      - "❌ audit-089 BLOCKED — gaps require M71"
+      - "⏳ Ops deferrals: CRIT-065-002, F-086-02"
+
+  - date: 2026-07-15
+    description: |
+      ✅ v6.25.3 patch — audit-086 second-round carryover hygiene.
+      Stamped 21 stale carryovers fixed; acp.recurring-complete.sh; manifest --generate
+      default write; ci-validate Steps/Verification hard-fail; code-integrity truth pass.
+    items:
+      - "✅ audit-086 report — 21 stale, 5 genuinely open for M70"
+      - "✅ acp.recurring-complete.sh — F-068-03 next_due automation"
+      - "✅ integrity E2E 69/69; validate 0 errors"
+      - "✅ 5 open carryovers: CRIT-065-002, MED-066-007, F-086-02/03/04"
+
   - date: 2026-07-15
     description: |
       ✅ v6.25.2 patch — review-001, integrity-001, audit-085 remediation.
@@ -6620,20 +7099,21 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "Pick next milestone from backlog (M63 complete — v6.25.2 deployed)"
-  - "Run overdue /acp-review and /acp-integrity weekly scans"
-  - "consumer-project: /acp-version-update on v6.25.2+ and close feedback-007"
+  - "CRIT-065-002: enable mainline branch protection (GitHub admin)"
+  - "F-086-02: consumer-project consumer /acp-version-update verification (task-239, ops)"
+  - "Plan next milestone or routine /acp-proceed work"
 
 current_blockers: []
 
 notes:
-  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M63–M68 shipped (v6.25.2)"
-  - "68 milestone entries — M55–M68 shipped (v6.11–v6.25.2); M63 complete (test tier 2/3)"
-  - "72 command docs (70 acp.* + 2 git.*); 70 slash-command wrappers (prompts + opencode + cursor parity)"
-  - "9 skills; 43 bash scripts; 56 E2E test files (incl. M68 preserve suites)"
-  - "82+ audit reports (audit-080–082 install/update safety)"
-  - "M68 COMPLETE v6.24.1 — safe install/update tier policy; consumer-project unblocked"
+  - "Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.1)"
+  - "73 milestone entries — M72 runtime (v6.27.0) + M73 closure honesty (v6.27.1)"
+  - "72 command docs (70 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode, cursor, claude)"
+  - "9 skills; 47 bash scripts; 61 vitest in scripts/; 56+ E2E test files"
+  - "96+ audit reports (audit-094/095/096 M72/M73 closure)"
+  - "M73 COMPLETE v6.27.1 — carryover integrity, D4 ERROR, sweep 6/6, audit-095 independent closure"
   - "M67 COMPLETE v6.23.0 — cross-agent handoff + /acp-receive"
+  - "Ops deferrals: CRIT-065-002 (branch protection), F-086-02 (consumer-project consumer task-239)"
 
 # ── Recurring Tasks ──────────────────────────────────────────────
 # Added v6.12.1 (M57). Scheduled periodic reviews surfaced at
@@ -6674,10 +7154,10 @@ recurring_tasks:
     command: /acp-integrity --rules dependencies
     frequency: monthly
     executor: deepseek-v4-pro
-    last_run: 2026-06-08
-    next_due: 2026-07-08
+    last_run: 2026-07-15
+    next_due: 2026-08-15
     last_findings_count: 0
-    status: overdue
+    status: current
     description: "Monthly dependency and supply chain audit"
 
   - id: quarterly-deep-scan

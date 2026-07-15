@@ -38,6 +38,13 @@ For Python, Go, Rust, or other languages, the structural review framework (outpu
 
 When the project contains `agent/commands/` — i.e., an ACP-enhanced project self-reviewing — Appendix A (ACP Self-Review Rules) automatically activates. Use `--self` to scan the standard ACP Enhanced paths without relying on `src/`.
 
+> **Phase 1 Gate Policy (M70)**: Deterministic checks run via `acp.review-scan.sh` (**8 rules**: EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01). **Phase 2** agent review is **required** for release — 56 semantic rules (EH-03+, NC-02+, CH-*, MASVS, Appendix A partial) cannot be scripted. CI may run Phase 1 only; do not claim "64/64 automated."
+
+| Phase | Rules | Executor | CI gate? |
+|-------|-------|----------|----------|
+| **Phase 1** | 8 deterministic | `acp.review-scan.sh` | Optional pre-merge |
+| **Phase 2** | 56 semantic | Agent (`/acp-review`) | Required before release |
+
 ## Ruleset Size
 
 | Layer | Count | Rule prefixes |
@@ -46,7 +53,7 @@ When the project contains `agent/commands/` — i.e., an ACP-enhanced project se
 | Appendix A (ACP self-review) | **10** | SH, YM, ACP |
 | **Total distinct rule IDs** | **64** | v1.0.0 |
 
-> Phase 1 deterministic checks (EH-02, SC-01, TS-01, SH-01) run via `acp.review-scan.sh`. Remaining rules require agent reasoning.
+> Phase 1 deterministic checks (EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01) run via `acp.review-scan.sh`. Remaining 56 rules require agent reasoning (Phase 2).
 
 ## ACP Enhanced Self-Review Recipe
 
@@ -104,31 +111,31 @@ bash agent/scripts/acp.review-scan.sh --ci scripts/ agent/scripts/
 ### Category 1 — Error Handling (CRITICAL priority)
 **Standard**: OWASP A10:2025 — Mishandling of Exceptional Conditions
 
-| Rule ID | Rule | Severity | Scope |
-|---------|------|----------|-------|
-| EH-01 | Every `async` function must have `try/catch` or explicit `.catch()` handler | HIGH | ALL |
-| EH-02 | `catch` blocks must not be empty — must log, rethrow, or return typed error | HIGH | ALL |
-| EH-03 | `catch(e) { console.log(e) }` without rethrow is a swallowed error | HIGH | ALL |
-| EH-04 | `Promise.all()` must have `.catch()` or be inside `try/catch` | HIGH | ALL |
-| EH-05 | Error responses must use consistent shape: `{ code: string, message: string, details?: unknown }` | MEDIUM | ALL |
-| EH-06 | Route handlers must call `next(err)` or return error response — never silent `return` | MEDIUM | WEB |
-| EH-07 | `finally` blocks must not contain `return` — masks thrown errors | MEDIUM | ALL |
-| EH-08 | Custom error classes must extend `Error`, set `this.name`, pass `options.cause` | LOW | ALL |
-| EH-09 | Global unhandled rejection handler registered: `process.on('unhandledRejection', ...)` | HIGH | WEB |
-| EH-10 | React error boundaries at top-level and around each major feature boundary | HIGH | WEB/MOB |
-| EH-11 | Mobile: all network calls handle offline/timeout states — never assume connectivity | HIGH | MOB |
+| Rule ID | Rule | Severity | Scope | Phase 1 |
+|---------|------|----------|-------|---------|
+| EH-01 | Every `async` function must have `try/catch` or explicit `.catch()` handler | HIGH | ALL | **Y** |
+| EH-02 | `catch` blocks must not be empty — must log, rethrow, or return typed error | HIGH | ALL | **Y** |
+| EH-03 | `catch(e) { console.log(e) }` without rethrow is a swallowed error | HIGH | ALL | N |
+| EH-04 | `Promise.all()` must have `.catch()` or be inside `try/catch` | HIGH | ALL | N |
+| EH-05 | Error responses must use consistent shape: `{ code: string, message: string, details?: unknown }` | MEDIUM | ALL | N |
+| EH-06 | Route handlers must call `next(err)` or return error response — never silent `return` | MEDIUM | WEB | N |
+| EH-07 | `finally` blocks must not contain `return` — masks thrown errors | MEDIUM | ALL | N |
+| EH-08 | Custom error classes must extend `Error`, set `this.name`, pass `options.cause` | LOW | ALL | N |
+| EH-09 | Global unhandled rejection handler registered: `process.on('unhandledRejection', ...)` | HIGH | WEB | N |
+| EH-10 | React error boundaries at top-level and around each major feature boundary | HIGH | WEB/MOB | N |
+| EH-11 | Mobile: all network calls handle offline/timeout states — never assume connectivity | HIGH | MOB | N |
 
 ---
 
 ### Category 2 — TypeScript Strictness (HIGH priority)
 **Standard**: TypeScript strict mode v5.x, Google TypeScript Style Guide 2025
 
-| Rule ID | Rule | Severity | Scope |
-|---------|------|----------|-------|
-| TS-01 | No `any` in function parameters, return types, or variable declarations | HIGH | ALL |
-| TS-02 | All exported functions must have explicit return type annotations | HIGH | ALL |
-| TS-03 | `as any` casts require inline comment explaining why | MEDIUM | ALL |
-| TS-04 | `!` non-null assertions require inline comment explaining guarantee | MEDIUM | ALL |
+| Rule ID | Rule | Severity | Scope | Phase 1 |
+|---------|------|----------|-------|---------|
+| TS-01 | No `any` in function parameters, return types, or variable declarations | HIGH | ALL | **Y** |
+| TS-02 | All exported functions must have explicit return type annotations | HIGH | ALL | **Y** |
+| TS-03 | `as any` casts require inline comment explaining why | MEDIUM | ALL | N |
+| TS-04 | `!` non-null assertions require inline comment explaining guarantee | MEDIUM | ALL | N |
 | TS-05 | Use `interface` for extensible shapes; `type` for unions, intersections | LOW | ALL |
 | TS-06 | Use `const enum` or union literals — avoid plain `enum` for tree-shaking | LOW | ALL |
 | TS-07 | `unknown` preferred over `any` in catch clauses: `catch (e: unknown)` | MEDIUM | ALL |
@@ -144,10 +151,10 @@ bash agent/scripts/acp.review-scan.sh --ci scripts/ agent/scripts/
 ### Category 3 — Naming Conventions (MEDIUM priority)
 **Standard**: Airbnb JS Style Guide, Google TypeScript Style Guide 2025
 
-| Rule ID | Rule | Severity | Scope |
-|---------|------|----------|-------|
-| NC-01 | Variables and functions: `camelCase` | MEDIUM | ALL |
-| NC-02 | Classes, interfaces, type aliases, React components: `PascalCase` | MEDIUM | ALL |
+| Rule ID | Rule | Severity | Scope | Phase 1 |
+|---------|------|----------|-------|---------|
+| NC-01 | Variables and functions: `camelCase` | MEDIUM | ALL | **Y** |
+| NC-02 | Classes, interfaces, type aliases, React components: `PascalCase` | MEDIUM | ALL | N |
 | NC-03 | Module-level immutable constants: `UPPER_SNAKE_CASE` | LOW | ALL |
 | NC-04 | File names: `kebab-case.ts` for modules; `PascalCase.tsx` for React components | LOW | ALL |
 | NC-05 | Boolean variables use prefix: `is`, `has`, `can`, `should`, `will` | LOW | ALL |
@@ -161,10 +168,10 @@ bash agent/scripts/acp.review-scan.sh --ci scripts/ agent/scripts/
 ### Category 4 — API Response Consistency (HIGH priority)
 **Standard**: Google API Design Guide, JSON:API spec
 
-| Rule ID | Rule | Severity | Scope |
-|---------|------|----------|-------|
-| AP-01 | Success responses use consistent envelope: `{ data: T, meta?: M }` | HIGH | WEB |
-| AP-02 | Error responses use: `{ error: { code: string, message: string, details?: unknown } }` | HIGH | WEB |
+| Rule ID | Rule | Severity | Scope | Phase 1 |
+|---------|------|----------|-------|---------|
+| AP-01 | Success responses use consistent envelope: `{ data: T, meta?: M }` | HIGH | WEB | **Y** |
+| AP-02 | Error responses use: `{ error: { code: string, message: string, details?: unknown } }` | HIGH | WEB | N |
 | AP-03 | HTTP status codes must be semantically correct — no `200` with `{ error: ... }` | HIGH | WEB |
 | AP-04 | Paginated responses include `{ data: T[], meta: { page, pageSize, total } }` | MEDIUM | WEB |
 | AP-05 | No raw database model objects in API responses — use DTOs / response mappers | MEDIUM | ALL |
@@ -198,10 +205,10 @@ bash agent/scripts/acp.review-scan.sh --ci scripts/ agent/scripts/
 
 #### 6a — Secrets & Input (OWASP A05:2025)
 
-| Rule ID | Rule | Severity | Scope |
-|---------|------|----------|-------|
-| SC-01 | No hardcoded secrets, tokens, passwords, or API keys in source files | CRITICAL | ALL |
-| SC-02 | All user-supplied input validated before use — `zod` schemas or equivalent | HIGH | ALL |
+| Rule ID | Rule | Severity | Scope | Phase 1 |
+|---------|------|----------|-------|---------|
+| SC-01 | No hardcoded secrets, tokens, passwords, or API keys in source files | CRITICAL | ALL | **Y** |
+| SC-02 | All user-supplied input validated before use — `zod` schemas or equivalent | HIGH | ALL | N |
 | SC-03 | `eval()`, `new Function()`, `setTimeout(string)`, `dangerouslySetInnerHTML` without sanitisation forbidden | HIGH | WEB |
 | SC-04 | Database queries use parameterised inputs or ORMs — no string concatenation | HIGH | WEB |
 | SC-05 | Sensitive data (PII, tokens, passwords) must not appear in logs | HIGH | ALL |
@@ -331,7 +338,7 @@ full codebase, all rules           → Composer 2.5
 ## Steps
 
 1. **Invoke the command**: Run `/acp-review` with the desired rule set (`--rules <category>`, `--self`, or default).
-2. **Run Phase 1 scanner** (optional, recommended for CI): `bash agent/scripts/acp.review-scan.sh [--ci] [path]` — deterministic EH-02, SC-01, TS-01, SH-01.
+2. **Run Phase 1 scanner** (optional, recommended for CI): `bash agent/scripts/acp.review-scan.sh [--ci] [path]` — deterministic EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01 (8 rules).
 3. **Scan the codebase**: The agent examines project files against the 64-rule framework aligned to OWASP Top 10:2025 and TypeScript strict mode.
 4. **Produce findings**: Generate a structured findings report with rule IDs, severities (CRITICAL/HIGH/MEDIUM/LOW), file locations, and fix suggestions.
 5. **Prioritize fixes**: CRITICAL and HIGH findings should be addressed before commit. MEDIUM findings before PR merge. LOW findings tracked for next sprint.
@@ -345,10 +352,10 @@ full codebase, all rules           → Composer 2.5
 
 Auto-activated when `agent/commands/` is detected in the project root.
 
-| Rule ID | Rule | Severity |
-|---------|------|----------|
-| SH-01 | All `.sh` files use `set -euo pipefail` with `trap ERR` | HIGH |
-| SH-02 | No BSD/GNU sed incompatibility — `sed -i ''` on macOS only | HIGH |
+| Rule ID | Rule | Severity | Phase 1 |
+|---------|------|----------|---------|
+| SH-01 | All `.sh` files use `set -euo pipefail` with `trap ERR` | HIGH | **Y** |
+| SH-02 | No BSD/GNU sed incompatibility — `sed -i ''` on macOS only | HIGH | N |
 | SH-03 | No unquoted variables in scripts | MEDIUM |
 | SH-04 | No `trap cleanup EXIT` inside sourced functions (subshell inheritance risk) | CRITICAL |
 | YM-01 | All YAML files parse cleanly — no unquoted `{}` braces in flow sequences | HIGH |
