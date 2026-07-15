@@ -258,7 +258,7 @@ files:
     sha256: "197a39a42702ae96686baf89cb6ef3ed8d65fc90c431679c8d3581e0930941c7"
     last_verified: "2026-07-15"
   - path: "agent/skills/scripts.md"
-    sha256: "6272e2162fa8993ab50cf0f4bf56c1b22d5e540ed9257587272f53189fdf7cfc"
+    sha256: "4b2d19b98375c0989efa9ce59afe261d2bafa3dfa0e618b170cc39ee07f6ae75"
     last_verified: "2026-07-15"
   - path: "agent/skills/testing.md"
     sha256: "1433540fe65a1cecfdb38a01f5f07d1cb974fefd3e68abd65cb979b9853016bc"

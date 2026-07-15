@@ -2,13 +2,14 @@
 id: task-242
 milestone: M72
 title: "Wrapper stray deletion + bootstrap dead-glob fix"
-status: planned
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 2
 created: 2026-07-15
-started: null
-completed_date: null
+started: 2026-07-15T02:00:00Z
+completed: 2026-07-15
+completed_date: 2026-07-15T02:15:00Z
 route: route-231
 audit_findings: [F-091-04, F-091-06, F-092-01]
 depends_on: [task-241]
