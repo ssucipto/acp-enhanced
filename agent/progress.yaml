@@ -6,10 +6,10 @@ project:
   version: 6.26.0
   started: 2026-02-16
   status: active
-  current_milestone: M71
+  current_milestone: M72
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.26.0 shipped.
-    M70 + M71 complete (audit-090). PR to mainline pending; branch protection ops deferred.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.26.0 shipped; M72 in progress.
+    task-245 hygiene complete; validator hardening (task-240+) next.
 
 milestones:
   M44:
@@ -526,12 +526,12 @@ milestones:
   M72:
     name: Validation Truth & Drift Hardening (v6.27.0)
     priority: 5
-    status: planned
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 12
+    started: 2026-07-15
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 8
     file: agent/milestones/milestone-72-validation-truth-drift-hardening.md
     design: agent/design/m72-validation-truth-drift-hardening.md
@@ -4607,12 +4607,12 @@ tasks:
     - id: task-245
       name: "Hygiene ops — commit tree, sessions compaction, dependency audit"
       priority: 3
-      status: planned
+      status: completed
       file: agent/tasks/milestone-72-validation-truth-drift-hardening/task-245-hygiene-ops.md
-      started: null
-      completed_date: null
+      started: 2026-07-15T01:00:00Z
+      completed_date: 2026-07-15T09:15:00Z
       estimated_hours: 2
-      notes: "route-234; F-091-08/09/13 — runs FIRST (guardrail #9)"
+      notes: "route-234; F-091-08/09/13 fixed; commit 2b92528"
 
     - id: task-246
       name: "Branch protection ops + PR develop → mainline"
@@ -7003,9 +7003,10 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "Implement M72 (audit-091 remediation): start with task-245 (commit Claude-integration tree), then task-240 → 241 (guardrail #1: fixes ship with enforcement)"
-  - "task-246 folds in: branch protection (CRIT-065-002) + PR develop → mainline"
-  - "Optional ops: task-239 FIFOZ consumer verification (F-086-02, M71)"
+  - "M72 task-240: drift closures (versions, instruction sync, script registrations)"
+  - "M72 task-241: validator hardening (root anchor, 5-surface parity, package.yaml check)"
+  - "M72 tasks 242–244: wrapper cleanup, docs, ShellCheck CI"
+  - "task-246: branch protection + PR develop → mainline (admin)"
   - "Ship v6.27.0 via task-247 closure audit (audit-093)"
 
 current_blockers: []
@@ -7058,10 +7059,10 @@ recurring_tasks:
     command: /acp-integrity --rules dependencies
     frequency: monthly
     executor: deepseek-v4-pro
-    last_run: 2026-06-08
-    next_due: 2026-07-08
+    last_run: 2026-07-15
+    next_due: 2026-08-15
     last_findings_count: 0
-    status: overdue
+    status: current
     description: "Monthly dependency and supply chain audit"
 
   - id: quarterly-deep-scan
