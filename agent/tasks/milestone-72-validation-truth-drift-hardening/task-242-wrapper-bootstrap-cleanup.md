@@ -10,7 +10,7 @@ created: 2026-07-15
 started: null
 completed_date: null
 route: route-231
-audit_findings: [F-091-04, F-091-06]
+audit_findings: [F-091-04, F-091-06, F-092-01]
 depends_on: [task-241]
 design_reference: [Design: M72 Validation Truth](../design/m72-validation-truth-drift-hardening.md)
 ---
@@ -30,7 +30,8 @@ Remove the 6 stale dot-named duplicate wrappers and fix the two dead-glob copy l
 2. Fix bootstrap: replace both dead copy loops — either correct glob to `acp-*.md` or (preferred) drop the copy loops and move the two sync-script invocations to run **after** step 7 installs `agent/scripts/`
 3. Ensure bootstrap output never claims success with 0 files: print a warning when count is 0
 4. Regenerate all wrapper surfaces (cursor + claude sync scripts; verify prompts/opencode untouched)
-5. Re-run task-241's parity check (5 surfaces, 0 strays) and `e2e/acp.cursor-commands-sync.test.sh` + `e2e/acp.claude-commands-sync.test.sh`
+5. **F-092-01 / D10**: regenerate `agent/integrity-manifest.yaml` via `bash agent/scripts/acp.manifest-hash.sh` (use its `--output` persistence flag) — the manifest SHA-pins `.cursor/commands/` files this task changes; `.claude/commands/` wrappers enter the manifest here
+6. Re-run task-241's parity check (5 surfaces, 0 strays) and `e2e/acp.cursor-commands-sync.test.sh` + `e2e/acp.claude-commands-sync.test.sh`
 
 ## Verification
 
@@ -38,6 +39,7 @@ Remove the 6 stale dot-named duplicate wrappers and fix the two dead-glob copy l
 - [ ] `bash -n scripts/acp-bootstrap.sh` passes; no `acp.*.md` glob against wrapper dirs remains
 - [ ] Parity: 5 surfaces matched, 0 strays
 - [ ] Both wrapper e2e tests pass (10/10 each)
+- [ ] `/acp-integrity --diff` clean after manifest regen (no tamper false-positives from this task's changes)
 - [ ] Carryovers F-091-04/06 stamped `fixed`
 
 ## User-Observable Acceptance

@@ -38,7 +38,7 @@ Close the longest-standing critical carryover: enable GitHub branch protection o
 - [ ] `gh api .../branches/mainline/protection` → 200
 - [ ] Validator run shows no branch-protection warning
 - [ ] PR develop → mainline open (URL recorded in session entry)
-- [ ] CRIT-065-002 `fixed` with audit-092 pointer — or explicitly left `pending` with blocker documented
+- [ ] CRIT-065-002 `fixed` with audit-093 pointer — or explicitly left `pending` with blocker documented
 
 ## User-Observable Acceptance
 

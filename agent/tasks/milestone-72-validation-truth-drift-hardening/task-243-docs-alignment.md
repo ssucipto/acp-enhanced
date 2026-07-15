@@ -34,6 +34,7 @@ Bring every doc that audit-091 caught lying (or lagging) back in line with enfor
 4. `agent/skills/scripts.md`: add sourced-library strict-mode exemption rationale (set -e propagation into the sourcing shell); name the 4 files
 5. `/acp-verify` discoverability: add an `agent/index/` inline note (kind: note) mapping "verify" intent → `/acp-review` (standards) and `/acp-validate` (consistency)
 6. Guardrail #4: after editing `acp.validate.md`, regenerate all 4 wrapper surfaces and re-run parity
+7. Guardrail #10 (D10): wrapper regen changes manifest-covered files — regenerate `agent/integrity-manifest.yaml` via `acp.manifest-hash.sh` (skip if task-242 already ran in the same sitting and no wrapper content changed after its regen; verify with `/acp-integrity --diff`)
 
 ## Verification
 
