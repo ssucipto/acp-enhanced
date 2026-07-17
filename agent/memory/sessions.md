@@ -7,6 +7,20 @@
   branch: develop
   tasks: []
   done:
+    - validate-all-clean-v6-27-2
+    - agent-md-legacy-version-sync
+    - adr-19-m74-gate-documented
+  deferred:
+    - m74-plan → adr-19-adoption-gate
+    - crit-065-002-merge-pr3 → mainline
+    - f-086-02-fifoz-consumer → task-239
+  key_fact: "AGENT.md legacy header was 15 minors stale (6.12.1) while AGENTS.md/identity were 6.27.2 — hard validators only check AGENTS.md, not AGENT.md."
+
+- date: 2026-07-17
+  executor: copilot
+  branch: develop
+  tasks: []
+  done:
     - validate-sync-update-chain-clean
     - readme-badge-drift-fixed-v6-27-2
     - research-direction-docs-on-develop
