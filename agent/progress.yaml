@@ -8,8 +8,8 @@ project:
   status: active
   current_milestone: M73
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.27.2 docs sync; M73 complete.
-      Research direction M74–M77 (buy detection / build governance); CRIT-065-002 deferred.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.27.2; M73 complete.
+      M74–M77 gated per ADR-19 until CodeRabbit + Aikido operational on consumer-project repo.
 
 milestones:
   M44:
@@ -4727,6 +4727,16 @@ tasks:
 recent_work:
   - date: 2026-07-17
     description: |
+      ✅ Validate/sync/update chain — all checks pass at v6.27.2.
+      AGENT.md legacy header synced (6.12.1→6.27.2); AGENTS.md already aligned.
+      ADR-19 gates M74–M77 until CodeRabbit + Aikido operational (commit 24fbddf).
+    items:
+      - "✅ acp-validate.ts — 0 errors; git tags OK; 19 ADRs in decisions schema"
+      - "✅ AGENT.md version/milestone header + progress.yaml table count"
+      - "📋 ADR-19: buy detection / build governance; M74 plan-only until adoption gate"
+      - "⏳ Install CodeRabbit + Aikido free tiers (ops, no milestone)"
+  - date: 2026-07-17
+    description: |
       ✅ Validate/sync/update chain — README badges drift fixed (6.21.1→6.27.2).
       AGENTS.md v6.27.2 aligned with identity/package; validate 0 errors.
       Research direction docs (CodeRabbit/Aikido gap, MCP layering) on develop.
@@ -7127,6 +7137,7 @@ notes:
   - "M67 COMPLETE v6.23.0 — cross-agent handoff + /acp-receive"
   - "Ops deferrals: CRIT-065-002 (GitHub Free, manual merge, PR #3), F-086-02 (consumer-project task-239)"
   - "Direction research: agent/reports/research-acp-direction-mcp-2026.md, research-acp-vs-coderabbit-aikido-2026.md"
+  - "ADR-19 (2026-07-17): M74–M77 gated on operational CodeRabbit + Aikido + 2 weeks findings"
 
 # ── Recurring Tasks ──────────────────────────────────────────────
 # Added v6.12.1 (M57). Scheduled periodic reviews surfaced at
