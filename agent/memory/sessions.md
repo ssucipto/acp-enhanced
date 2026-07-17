@@ -2,6 +2,19 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-07-17
+  executor: copilot
+  branch: develop
+  tasks: []
+  done:
+    - validate-sync-update-chain-clean
+    - readme-badge-drift-fixed-v6-27-2
+    - research-direction-docs-on-develop
+  deferred:
+    - crit-065-002-merge-pr3 → mainline
+    - f-086-02-fifoz-consumer → task-239
+  key_fact: "README version badge was soft drift (6.21.1) invisible to hard validators — acp-validate.ts only checks AGENTS/identity/package/CHANGELOG, not README shields.io URL."
+
 - date: 2026-07-15
   executor: copilot
   branch: develop
