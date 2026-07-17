@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+---
+
+## [6.27.2] — 2026-07-17
+
+### Changed
+- **README badges** — version 6.27.2; 73 milestones shipped (M74 next); 72 slash commands.
+- **progress.yaml** — recent work for validate/sync chain; M74 roadmap in next_steps; research report pointers.
+- **M73 milestone marker** — `@acp.meta.milestone status:` aligned to `completed`.
+
+### Fixed
+- **Version drift** — README shields.io badge was 6.21.1 while canonical identity/AGENTS was 6.27.1.
+
+---
+
 ## [6.27.1] — 2026-07-15
 
 ### Fixed (M73 — Closure Honesty Remediation)
