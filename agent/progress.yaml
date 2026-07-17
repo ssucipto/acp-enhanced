@@ -7110,7 +7110,8 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "/acp-plan M74 — policy spine + buy-detection/build-governance ADR (research-acp-vs-coderabbit-aikido-2026.md)"
+  - "GATED (ADR-19): M74–M77 tool-integration roadmap stays plan-only until CodeRabbit + Aikido are operational on a Rygan repo with 2+ weeks of real findings — then /acp-plan M74"
+  - "Ops toward gate: install CodeRabbit (free tier) + Aikido (free tier) on first active repo — no ACP milestone required"
   - "Merge PR #3 (develop→mainline) — CRIT-065-002 deferral + validate origin fix"
   - "F-086-02: FIFOZ consumer /acp-version-update verification (task-239, ops)"
 
