@@ -1,12 +1,14 @@
 # Agent Context Protocol Enhanced (ACP Enhanced)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.12.1
+**Version**: 6.27.2
 **Fork of**: [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol)
 **Maintained by**: [ssucipto/acp-enhanced](https://github.com/ssucipto/acp-enhanced)
 **Created**: 2026-02-11
-**Updated**: 2026-06-06
-**Status**: Production Pattern — 49 milestones complete
+**Updated**: 2026-07-17
+**Status**: Production Pattern — 73 milestones complete (M74–M77 gated per ADR-19)
+
+> **Canonical protocol file**: `AGENTS.md` (auto-loaded by Cursor/Copilot/Claude). This `AGENT.md` is the legacy comprehensive reference; keep its `**Version**` in sync with `agent/core/identity.yml` via `/acp-sync`.
 
 ---
 
@@ -108,7 +110,7 @@ ACP Enhanced uses two key files for project state. They serve different purposes
 | File | Purpose | Update Frequency | Content |
 |------|---------|:---:|---------|
 | `agent/manifest.yaml` | Static project identity — name, version, stack, constraints, packages | Rarely (team changes, new platform) | Packages installed, framework version, metadata |
-| `agent/progress.yaml` | Live tracking — milestones, tasks, recent work, next steps, blockers | Daily (`/acp-update`, `/acp-proceed`) | All 43 milestones, task status, observability |
+| `agent/progress.yaml` | Live tracking — milestones, tasks, recent work, next steps, blockers | Daily (`/acp-update`, `/acp-proceed`) | All milestones (73 shipped), task status, observability |
 
 **Rule of thumb**: Manifest is "set once and forget." Progress is "update daily."
 
