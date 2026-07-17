@@ -3,7 +3,7 @@
 <!-- @acp.meta.milestone
 topic: audit-094, carryover-integrity, closure-process
 description: Restore honest M72 closure — fix process shortcuts without re-doing runtime hardening
-status: planned
+status: completed
 updated: 2026-07-15
 @acp.meta.end -->
 
