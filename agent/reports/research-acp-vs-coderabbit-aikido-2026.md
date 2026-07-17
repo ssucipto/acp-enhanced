@@ -2,6 +2,7 @@
 
 **Type**: Direction research (follow-up to research-acp-direction-mcp-2026.md)
 **Date**: 2026-07-15
+**Status**: Roadmap accepted as plan of record but **GATED per ADR-19 (2026-07-17)** — M74–M77 stay plan-only (no progress.yaml entries) until CodeRabbit + Aikido are operational on a Rygan repo with 2+ weeks of real findings
 **Reframe**: ACP Enhanced is NOT a commercial product — it is the standardized development method for the startup (quality, reviewed, tested, secure-by-design). Question: how big is the gap vs CodeRabbit and Aikido, can/should we close it, and do we still need both services?
 
 ---
