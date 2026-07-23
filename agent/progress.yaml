@@ -565,11 +565,11 @@ milestones:
     name: CodeRabbit Optionality Foundation (v6.28.0)
     priority: 4
     status: in_progress
-    progress: 50
+    progress: 67
     started: 2026-07-23
     completed: null
     estimated_weeks: 0.4
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 6
     file: agent/milestones/milestone-78-coderabbit-optionality-foundation.md
     notes: |
@@ -4783,10 +4783,11 @@ tasks:
     - id: task-258
       name: "E2E — all three CodeRabbit degradation branches"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-258-e2e-degradation.md
-      started: null
-      completed_date: null
+      started: 2026-07-23T13:00:00Z
+      completed_date: 2026-07-23T13:30:00Z
+      actual_hours: 0.5
       estimated_hours: 3
       notes: "route-247; asserts output values (test_quality_gate); depends task-255/256"
 
