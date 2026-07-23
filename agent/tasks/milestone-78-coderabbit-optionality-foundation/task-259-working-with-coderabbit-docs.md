@@ -43,7 +43,7 @@ audit-097 non-gated docs deliverable. Must make the *optional* nature unmistakab
 - [ ] on/off behavior table marks GATED rows distinctly from live M78 rows
 - [ ] PR-check explicitly described as gated (ADR-19) with the unblock path
 - [ ] Enable/disable commands are copy-pasteable and correct
-- [ ] AGENTS.md pointer added without exceeding `warn_at_bytes` (12KB)
+- [x] README.md pointer added (AGENTS.md byte budget favors the lean pointer; reconciled per audit-099 F-099-06)
 
 ## User-Observable Acceptance
 
