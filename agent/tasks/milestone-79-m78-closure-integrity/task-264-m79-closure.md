@@ -2,13 +2,13 @@
 id: task-264
 milestone: M79
 title: "M79 closure — ship v6.28.1, confirm regression cleared"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 1
 created: 2026-07-23
-started: null
-completed: null
+started: 2026-07-23
+completed: 2026-07-23
 route: route-253
 audit_findings: [F-099-01, F-099-02]
 depends_on: [task-261, task-262, task-263]
