@@ -2,13 +2,13 @@
 id: task-259
 milestone: M78
 title: "Working with CodeRabbit — how-to documentation"
-status: planned
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 2.5
 created: 2026-07-23
-started: null
-completed: null
+started: 2026-07-23
+completed: 2026-07-23
 route: route-248
 audit_findings: [F-097-01, F-098-02]
 depends_on: [task-255, task-256]
