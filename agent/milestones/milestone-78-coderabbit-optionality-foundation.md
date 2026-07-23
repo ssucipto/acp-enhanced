@@ -3,12 +3,13 @@
 <!-- @acp.meta.milestone
 topic: coderabbit, optionality, preferences, feature-detection, ADR-21
 description: Non-gated foundation for optional CodeRabbit integration — preference toggle, feature detection, graceful degradation, docs
-status: planned
+status: completed
 updated: 2026-07-23
 @acp.meta.end -->
 
 **Planned version**: 6.28.0
-**Status**: in_progress (1/6)
+**Status**: completed (6/6 — v6.28.0, PASS WITH DEFERRALS)
+**Closure note**: M78 deliverables all green (coderabbit E2E 11/11, vitest 61/61, acp-validate clean, leak-check clean). Full E2E suite has **8 pre-existing failures unrelated to M78** — verified identical at baseline 5137aa5 (zero M78 regression), recorded as carryover F-M78-01 for separate remediation (candidate M79).
 **Estimated effort**: ~13h (6 tasks)
 **Source**: audit-097 (optional CodeRabbit integration) + ADR-21 (carve-out from ADR-19 gate)
 **Pre-impl review**: audit-098 — 7 findings folded in (F-098-01..07). Helpers live in a dedicated `acp.coderabbit.sh` (not common.sh — circular source); docs in `agent/wiki/`; detection config-file-only; `generate_on_commit` deferred to M75.
