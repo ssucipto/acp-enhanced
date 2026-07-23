@@ -13,6 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.28.0] — 2026-07-23
+
+### Added (M78 — CodeRabbit Optionality Foundation)
+- **Optional CodeRabbit integration** — `integrations.coderabbit.{enabled,config_path}` preferences (both OFF/inert by default). ACP stays fully functional without CodeRabbit (audit-097, ADR-21).
+- **Detection helpers** — `agent/scripts/acp.coderabbit.sh` (`coderabbit_available` / `coderabbit_active` / hint); config-file detection only, sources preferences (not common.sh — avoids circular source, audit-098 F-098-01).
+- **Pattern** — `agent/patterns/local.optional-external-tool.md`: three-gate contract (opt-in → detection → silent degradation) reusable for Aikido and future tools.
+- **E2E** — `e2e/coderabbit-optionality.test.sh`: 4 states, 11 value assertions.
+- **Docs** — `agent/wiki/coderabbit-integration.md` how-to guide + README pointer.
+
+### Notes
+- **GATED (ADR-19)**: CodeRabbit PR-check, `acp.findings-import.sh`, `.coderabbit.yaml` generation, and recurring-task rewire remain plan-only (M74/M75) until CodeRabbit is operational on a repo with 2+ weeks of findings.
+- **ADR-20** backfilled (hooks `task_id`-array format); **ADR-21** added (optionality carve-out).
+
+---
+
 ## [6.27.2] — 2026-07-17
 
 ### Changed
