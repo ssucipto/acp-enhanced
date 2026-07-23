@@ -565,11 +565,11 @@ milestones:
     name: CodeRabbit Optionality Foundation (v6.28.0)
     priority: 4
     status: in_progress
-    progress: 17
+    progress: 33
     started: 2026-07-23
     completed: null
     estimated_weeks: 0.4
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 6
     file: agent/milestones/milestone-78-coderabbit-optionality-foundation.md
     notes: |
@@ -4761,10 +4761,11 @@ tasks:
     - id: task-256
       name: "Feature-detection helpers coderabbit_available / coderabbit_active"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-256-feature-detection.md
-      started: null
-      completed_date: null
+      started: 2026-07-23T12:15:00Z
+      completed_date: 2026-07-23T12:40:00Z
+      actual_hours: 0.4
       estimated_hours: 2
       notes: "route-245; NEW acp.coderabbit.sh (not common.sh, F-098-01); config-file detect only; ==true (F-098-03); depends 255"
 
