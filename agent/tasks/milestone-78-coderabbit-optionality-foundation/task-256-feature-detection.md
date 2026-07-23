@@ -2,13 +2,13 @@
 id: task-256
 milestone: M78
 title: "Feature-detection helpers coderabbit_available / coderabbit_active in a dedicated acp.coderabbit.sh"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-07-23
-started: null
-completed: null
+started: 2026-07-23
+completed: 2026-07-23
 route: route-245
 audit_findings: [F-097-01, F-098-01, F-098-03, F-098-04]
 depends_on: [task-255]
