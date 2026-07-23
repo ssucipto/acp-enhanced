@@ -10,14 +10,16 @@ created: 2026-07-23
 started: null
 completed: null
 route: route-248
-audit_findings: [F-097-01]
+audit_findings: [F-097-01, F-098-02]
 depends_on: [task-255, task-256]
 design_reference: [ADR-21](../../memory/decisions.md)
 ---
 
+> **Amended per audit-098 (F-098-02)**: doc lives at `agent/wiki/coderabbit-integration.md`, not the nonexistent `agent/docs/`. This matches the wiki `*-integration.md` precedent (`claude-integration.md`, `cursor-integration.md`) and is covered by the wiki-freshness validation check. Use `/acp-wiki-update` conventions.
+
 ## Objective
 
-Write `agent/docs/working-with-coderabbit.md` — the user-facing guide the developer asked for: what CodeRabbit is, how to turn the optional integration on/off in ACP, exactly what changes when it is on vs off, and the roadmap for the gated PR-check work.
+Write `agent/wiki/coderabbit-integration.md` — the user-facing guide the developer asked for: what CodeRabbit is, how to turn the optional integration on/off in ACP, exactly what changes when it is on vs off, and the roadmap for the gated PR-check work.
 
 ## Context
 
@@ -25,7 +27,7 @@ audit-097 non-gated docs deliverable. Must make the *optional* nature unmistakab
 
 ## Steps
 
-1. Create `agent/docs/working-with-coderabbit.md` covering:
+1. Create `agent/wiki/coderabbit-integration.md` covering:
    - **What CodeRabbit is** (LLM PR review + 40+ engines; free tier exists) — 1 short paragraph, link to source.
    - **Is it required?** No. ACP's `/acp-review` + carryover loop are fully functional standalone. CodeRabbit augments, never replaces them.
    - **Enabling it**: `/acp-preferences-set acp integrations.coderabbit.enabled true` (+ `config_path` if non-default). Show the default-off state.

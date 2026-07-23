@@ -31,8 +31,8 @@ audit-097 defined the contract but it lives only in a report. Promoting it to a 
    - Gate 2 detection → `<tool>_available()` helper, `command -v` / config-file style
    - Gate 3 degradation → silent no-op when absent/disabled; optional one-line hint when enabled-but-absent
 3. State the binding rule: **the tool augments, never gates** an ACP code path; absence is normal, not an error (contrast `gh` in branch-protection, which is required).
-4. Give the `coderabbit_available` / `coderabbit_active` pair as the reference implementation.
-5. Cross-reference audit-097, ADR-21, and `acp.branch-protection-setup.sh:27`.
+4. Give the `coderabbit_available` / `coderabbit_active` pair (in `agent/scripts/acp.coderabbit.sh` — a dedicated script sourcing preferences.sh, per audit-098 F-098-01) as the reference implementation. Note the layering rule: an optional-tool script sources `acp.preferences.sh`, never the reverse (common.sh must stay dependency-free of preferences).
+5. Cross-reference audit-097, audit-098, ADR-21, and `acp.branch-protection-setup.sh:27`.
 
 ## Verification
 
