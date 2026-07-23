@@ -136,7 +136,8 @@ ACP Enhanced registers **70 slash commands** across two tools — available afte
 > VS Code Copilot requires agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.  
 > opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.  
 > **Note**: All 70 commands are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.  
-> **Cross-agent handoff**: See [`agent/wiki/cross-agent-handoff.md`](agent/wiki/cross-agent-handoff.md) for executor vs cross-repo modes, `/acp-receive`, and git drift checks.
+> **Cross-agent handoff**: See [`agent/wiki/cross-agent-handoff.md`](agent/wiki/cross-agent-handoff.md) for executor vs cross-repo modes, `/acp-receive`, and git drift checks.  
+> **CodeRabbit (optional)**: See [`agent/wiki/coderabbit-integration.md`](agent/wiki/coderabbit-integration.md) — off by default; ACP is fully functional without it. PR-check integration is gated (ADR-19).
 
 ---
 
