@@ -215,6 +215,36 @@ describe("validateVersionConsistency", () => {
     // Test that the function runs without throwing
     expect(Array.isArray(errors)).toBe(true);
   });
+
+  // audit-099 F-099-02: progress.yaml project.version must participate.
+  it("flags a progress.yaml version that diverges from identity.yml", () => {
+    const root = mkdtempSync(path.join(tmpdir(), "acp-verconsist-"));
+    mkdirSync(path.join(root, "agent", "core"), { recursive: true });
+    writeFileSync(path.join(root, "agent", "core", "identity.yml"), "version: 6.28.1\n", "utf-8");
+    writeFileSync(
+      path.join(root, "agent", "progress.yaml"),
+      "project:\n  name: x\n  version: 6.27.2\n",
+      "utf-8",
+    );
+    const errors = validateVersionConsistency(root);
+    expect(errors.length).toBeGreaterThan(0);
+    expect(errors.some((e) => e.message.includes("progress.yaml"))).toBe(true);
+    rmSync(root, { recursive: true, force: true });
+  });
+
+  it("passes when progress.yaml version matches identity.yml", () => {
+    const root = mkdtempSync(path.join(tmpdir(), "acp-verconsist-ok-"));
+    mkdirSync(path.join(root, "agent", "core"), { recursive: true });
+    writeFileSync(path.join(root, "agent", "core", "identity.yml"), "version: 6.28.1\n", "utf-8");
+    writeFileSync(
+      path.join(root, "agent", "progress.yaml"),
+      "project:\n  name: x\n  version: 6.28.1\n",
+      "utf-8",
+    );
+    const errors = validateVersionConsistency(root);
+    expect(errors.length).toBe(0);
+    rmSync(root, { recursive: true, force: true });
+  });
 });
 
 describe("validateNextStepsFreshness", () => {
