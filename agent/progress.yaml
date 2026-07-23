@@ -6,7 +6,7 @@ project:
   version: 6.27.2
   started: 2026-02-16
   status: active
-  current_milestone: M78
+  current_milestone: M79
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.27.2; M73 complete.
       M74–M77 gated per ADR-19 until CodeRabbit + Aikido operational on Rygan repo.
@@ -582,6 +582,25 @@ milestones:
       ⚙️ Pre-impl audit-098: 7 findings folded in — helpers in acp.coderabbit.sh
       (NOT common.sh, circular source F-098-01); docs in agent/wiki/; config-file
       detection only; generate_on_commit deferred to M75. Amended same session.
+
+  M79:
+    name: M78 Closure-Integrity Remediation (v6.28.1)
+    priority: 5
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 0.15
+    tasks_completed: 0
+    tasks_total: 4
+    file: agent/milestones/milestone-79-m78-closure-integrity.md
+    notes: |
+      📋 M79 planned — audit-099 M78 gaps. Fixes v6.28.0 version regression
+      (progress.yaml version: field missed), closes validator gap so it can't
+      recur, closes carryover ledger (F-098-01..07 + F-097-01 implemented but
+      never marked fixed), hardens detection + reconciles docs. Ships v6.28.1.
+      Routes 250-253, tasks 261-264. The ~6 genuine pre-existing E2E failures
+      (F-M78-01) stay DEFERRED — old debt, not an M78/M79 shortcut.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4813,6 +4832,47 @@ tasks:
       estimated_hours: 2
       notes: "route-249; leak-check clean (no gated artifacts); v6.28.0; F-097-01 closed; ADR-19 unchanged"
 
+  M79:
+    - id: task-261
+      name: "M78 version regression fix + carryover ledger closure + doc reconcile"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-79-m78-closure-integrity/task-261-version-regression-carryover-closure.md
+      started: null
+      completed_date: null
+      estimated_hours: 1.5
+      notes: "route-250; F-099-01/03/04/06; progress.yaml version 6.28.0; close F-098-*/F-097-01"
+
+    - id: task-262
+      name: "acp-validate.ts checks progress.yaml version consistency"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-79-m78-closure-integrity/task-262-validate-progress-version-check.md
+      started: null
+      completed_date: null
+      estimated_hours: 1.5
+      notes: "route-251; F-099-02 validator gap; +vitest neg case; depends 261"
+
+    - id: task-263
+      name: "Harden coderabbit_available for repo-root detection"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-79-m78-closure-integrity/task-263-coderabbit-reporoot-detection.md
+      started: null
+      completed_date: null
+      estimated_hours: 1
+      notes: "route-252; F-099-05 git rev-parse root; +E2E subdir case"
+
+    - id: task-264
+      name: "M79 closure — ship v6.28.1, confirm regression cleared"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-79-m78-closure-integrity/task-264-m79-closure.md
+      started: null
+      completed_date: null
+      estimated_hours: 1
+      notes: "route-253; v6.28.1; assertion-level regression confirm; F-M78-01 stays deferred; depends 261-263"
+
 recent_work:
   - date: 2026-07-23
     description: |
@@ -7223,7 +7283,8 @@ recent_work:
 
 next_steps:
   - "M78 COMPLETE (v6.28.0, ADR-21): CodeRabbit optionality foundation shipped — toggle + acp.coderabbit.sh detection + optional-external-tool pattern + E2E + wiki docs. F-097-01 closed."
-  - "DEFERRED (F-M78-01): 8 pre-existing E2E failures (package-info, post-milestone-sweep, project-update, validate-cross-layer, version, e2e-workflow, security, validate-ts) — present at baseline 5137aa5, NOT M78 regressions. Triage in candidate M79."
+  - "M79 PLANNED (v6.28.1): audit-099 M78 closure-integrity — /acp-proceed task-261 (version regression + carryover closure + validator gap + detection hardening)"
+  - "DEFERRED (F-M78-01): ~6 GENUINELY pre-existing E2E failures (validate-cross-layer cp package.json, version exit2, project-update git-tags, package-info, post-milestone-sweep, validate-ts placeholder) — root-caused in audit-099; NOT M78/M79 shortcuts; triage later. (e2e-workflow+security clear once F-099-01 lands.)"
   - "GATED (ADR-19): M74–M77 tool-integration roadmap (incl. CodeRabbit PR-check + findings-import) stays plan-only until CodeRabbit + Aikido are operational on a Rygan repo with 2+ weeks of real findings — then /acp-plan M74"
   - "Ops toward gate: install CodeRabbit (free tier) + Aikido (free tier) on first active repo — no ACP milestone required"
   - "Merge PR #3 (develop→mainline) — CRIT-065-002 deferral + validate origin fix"
