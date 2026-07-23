@@ -6,7 +6,7 @@ project:
   version: 6.28.1
   started: 2026-02-16
   status: active
-  current_milestone: M79
+  current_milestone: M80
   description: |
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.28.1; M78 complete.
       M74–M77 gated per ADR-19 until CodeRabbit + Aikido operational on consumer-project repo.
@@ -601,6 +601,24 @@ milestones:
       never marked fixed), hardens detection + reconciles docs. Ships v6.28.1.
       Routes 250-253, tasks 261-264. The ~6 genuine pre-existing E2E failures
       (F-M78-01) stay DEFERRED — old debt, not an M78/M79 shortcut.
+
+  M80:
+    name: E2E Suite Debt Remediation & Open Carryover Closure (v6.28.2)
+    priority: 4
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 0.2
+    tasks_completed: 0
+    tasks_total: 4
+    file: agent/milestones/milestone-80-e2e-debt-carryover-closure.md
+    notes: |
+      📋 M80 planned — close the 2 remaining open carryovers. F-M78-01: the 7
+      root-caused pre-existing E2E failures (audit-099) — test-side fixes (265)
+      + script-vs-test reconcile (266), NO blind greening. F-086-02: consumer-project
+      downstream verify (267, ops-gated on consumer repo access). Closure 268
+      ships v6.28.2. Routes 254-257, tasks 265-268.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4877,6 +4895,47 @@ tasks:
       estimated_hours: 1
       notes: "route-253; v6.28.1; assertion-level regression confirm; F-M78-01 stays deferred; depends 261-263"
 
+  M80:
+    - id: task-265
+      name: "Fix test-side E2E bugs (stale expectations, wrong file ref, fixtures)"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-265-test-side-e2e-fixes.md
+      started: null
+      completed_date: null
+      estimated_hours: 2.5
+      notes: "route-254; F-M78-01; e2e-workflow light-mode regex, validate-cross-layer package.json, validate-ts fixtures"
+
+    - id: task-266
+      name: "Reconcile script-vs-test behavior mismatches"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-266-behavior-mismatch-reconcile.md
+      started: null
+      completed_date: null
+      estimated_hours: 2.5
+      notes: "route-255; F-M78-01; version exit-code, package-info, project-update git, post-milestone-sweep; no blind greening"
+
+    - id: task-267
+      name: "F-086-02 consumer-project downstream version-update verification (ops)"
+      priority: 3
+      status: planned
+      file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-267-consumer-project-downstream-verify.md
+      started: null
+      completed_date: null
+      estimated_hours: 1
+      notes: "route-256; F-086-02; BLOCKED on consumer-repo access; honest closure only"
+
+    - id: task-268
+      name: "M80 closure — full suite, ship v6.28.2, close carryovers"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-268-m80-closure.md
+      started: null
+      completed_date: null
+      estimated_hours: 1
+      notes: "route-257; v6.28.2; assertion-level count check; settle F-M78-01/F-086-02 truthfully; depends 265-267"
+
 recent_work:
   - date: 2026-07-23
     description: |
@@ -7302,7 +7361,7 @@ recent_work:
 next_steps:
   - "M78 COMPLETE (v6.28.0, ADR-21): CodeRabbit optionality foundation shipped — toggle + acp.coderabbit.sh detection + optional-external-tool pattern + E2E + wiki docs. F-097-01 closed."
   - "M79 COMPLETE (v6.28.1): audit-099 M78 closure-integrity — version regression fixed, validator gap closed (progress.yaml version now checked), carryover ledger closed (F-098-*/F-097-01 verified), subdir detection, docs reconciled. tests/acp.security now 8/0 green."
-  - "DEFERRED (F-M78-01): ~6 GENUINELY pre-existing E2E failures (validate-cross-layer cp package.json, version exit2, project-update git-tags, package-info, post-milestone-sweep, validate-ts placeholder) — root-caused in audit-099; NOT M78/M79 shortcuts; triage later. (e2e-workflow+security clear once F-099-01 lands.)"
+  - "M80 PLANNED (v6.28.2): close remaining carryovers — /acp-proceed task-265. F-M78-01 (7 pre-existing E2E failures, root-caused) via test-side fixes + script-vs-test reconcile (no blind greening); F-086-02 consumer-project downstream (ops-gated)."
   - "GATED (ADR-19): M74–M77 tool-integration roadmap (incl. CodeRabbit PR-check + findings-import) stays plan-only until CodeRabbit + Aikido are operational on a consumer-project repo with 2+ weeks of real findings — then /acp-plan M74"
   - "Ops toward gate: install CodeRabbit (free tier) + Aikido (free tier) on first active repo — no ACP milestone required"
   - "Merge PR #3 (develop→mainline) — CRIT-065-002 deferral + validate origin fix"
