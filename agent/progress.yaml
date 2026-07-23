@@ -565,11 +565,11 @@ milestones:
     name: CodeRabbit Optionality Foundation (v6.28.0)
     priority: 4
     status: in_progress
-    progress: 33
+    progress: 50
     started: 2026-07-23
     completed: null
     estimated_weeks: 0.4
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 6
     file: agent/milestones/milestone-78-coderabbit-optionality-foundation.md
     notes: |
@@ -4772,10 +4772,11 @@ tasks:
     - id: task-257
       name: "Optional-external-tool pattern (3-gate contract)"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-257-optional-tool-pattern.md
-      started: null
-      completed_date: null
+      started: 2026-07-23T12:40:00Z
+      completed_date: 2026-07-23T13:00:00Z
+      actual_hours: 0.3
       estimated_hours: 1.5
       notes: "route-246; reusable for Aikido; depends task-255/256"
 
