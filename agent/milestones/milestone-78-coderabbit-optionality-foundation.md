@@ -13,7 +13,7 @@ updated: 2026-07-23
 **Estimated effort**: ~13h (6 tasks)
 **Source**: audit-097 (optional CodeRabbit integration) + ADR-21 (carve-out from ADR-19 gate)
 **Pre-impl review**: audit-098 — 7 findings folded in (F-098-01..07). Helpers live in a dedicated `acp.coderabbit.sh` (not common.sh — circular source); docs in `agent/wiki/`; detection config-file-only; `generate_on_commit` deferred to M75.
-**Depends on**: preferences system (M6/M19), `acp.common.sh` detection idiom, `acp.branch-protection-setup.sh:27` exemplar
+**Depends on**: preferences system (M6/M19), `acp.branch-protection-setup.sh:27` detection exemplar (helpers ship in dedicated `acp.coderabbit.sh`)
 **Governance**: [ADR-21](../memory/decisions.md) — this milestone is the **non-gated** foundation; the integration surface (PR-check, findings-import, `.coderabbit.yaml` generator) stays **GATED under [ADR-19](../memory/decisions.md)**.
 
 ## Goal
@@ -40,7 +40,7 @@ audit-097 found that prior research (research-acp-vs-coderabbit-aikido-2026.md) 
 | Phase | Route | Task | Title | Est. | Priority |
 |-------|-------|------|-------|------|----------|
 | **1** | route-244 | task-255 | Reserve `integrations.coderabbit.*` preference keys | 2h | P0 |
-| **1** | route-245 | task-256 | Feature-detection helpers in `acp.common.sh` | 2h | P0 |
+| **1** | route-245 | task-256 | Feature-detection helpers in `acp.coderabbit.sh` (dedicated script; not common.sh — F-098-01) | 2h | P0 |
 | **2** | route-246 | task-257 | `local.optional-external-tool.md` pattern (3-gate contract) | 1.5h | P1 |
 | **2** | route-247 | task-258 | E2E: all three degradation branches | 3h | P0 |
 | **3** | route-248 | task-259 | "Working with CodeRabbit" how-to documentation | 2.5h | P1 |
