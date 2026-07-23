@@ -2196,9 +2196,83 @@ carryovers:
     file: e2e/
     finding: "8 E2E test files fail on develop — PRE-EXISTING, not caused by M78 (verified identical at baseline commit 5137aa5): acp.package-info, acp.post-milestone-sweep, acp.project-update, acp.validate-cross-layer, acp.version, acp.e2e-workflow, acp.security, acp.validate-ts"
     description: "M78 full-suite run: 60/68 pass. The 8 failures reproduce exactly at pre-session baseline 5137aa5 with M78 changes stashed AND checked out — zero M78 regression. M78's own gates are green: coderabbit-optionality 11/11, vitest 61/61, acp-validate clean (bar the closure git tag). Symptoms sampled: package-info exit 1≠0; project-update tag/duplicate assertions; version-check exits 1≠2 on missing AGENT.md. Unrelated to CodeRabbit optionality."
-    fix_target: "Triage the 8 pre-existing E2E failures in a dedicated remediation milestone (candidate M79). Do NOT bundle into M78 — out of scope, and fixing 8 unrelated suites autonomously would be scope creep."
+    fix_target: "Triage the pre-existing E2E failures in a dedicated remediation milestone. audit-099 root-caused all 8: validate-cross-layer (cp package.json — file absent, project uses package.yaml), version (exit 1≠2 on missing AGENT.md), project-update (git-tag fixture asserts), package-info (exit 1≠0), post-milestone-sweep (4/5), validate-ts (placeholder-check flags temp fixtures). NOTE: e2e-workflow + security also carried NEW version-mismatch assertions from the F-099-01 regression — those clear once F-099-01 is fixed. Remaining ~6 are genuine pre-existing debt."
     status: pending
     planned_in: null
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: audit-099
+    note: "audit-098 called these purely pre-existing at FILE level; audit-099 found the comparison masked 2 assertion-level regressions from F-099-01."
+
+  # ── AUDIT-099 FINDINGS — M78 IMPLEMENTATION GAPS (2026-07-23) ───────────────
+  - audit_id: audit-099
+    finding_id: F-099-01
+    severity: high
+    file: agent/progress.yaml
+    finding: "M78 version bump missed agent/progress.yaml:6 version: field (still 6.27.2 while identity=6.28.0). REGRESSION: caught by tests/acp.e2e-workflow.test.sh:57 + tests/acp.security.test.sh:97 cross-file checks, NOT by acp-validate.ts. My audit-098 'zero regression' claim was file-level and masked these new assertion failures."
+    fix_target: "Bump agent/progress.yaml version: → 6.28.0 (line 6) and description (line 11); ship v6.28.1. Historical recent_work 6.27.2 refs stay."
+    status: pending
+    planned_in: M79
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-099
+    finding_id: F-099-02
+    severity: medium
+    file: scripts/acp-validate.ts
+    finding: "validateVersionConsistency() checks identity/AGENTS/CLAUDE/CHANGELOG/package but NOT progress.yaml version — this gap let the F-099-01 regression pass validate while E2E caught it."
+    fix_target: "Add agent/progress.yaml project.version to validateVersionConsistency() so future version bumps can't skip it."
+    status: pending
+    planned_in: M79
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-099
+    finding_id: F-099-03
+    severity: medium
+    file: agent/memory/audit-carryovers.md
+    finding: "F-098-01..07 and F-097-01 were all implemented in M78 but remain status:pending — carryover-ledger integrity failure (audit-094 lesson)."
+    fix_target: "Mark F-098-01..07 + F-097-01 status:fixed, verified_in_audit: audit-099 (each was verified implemented in this audit)."
+    status: pending
+    planned_in: M79
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-099
+    finding_id: F-099-04
+    severity: low
+    file: agent/milestones/milestone-78-coderabbit-optionality-foundation.md
+    finding: "Build Order table (line 43) still says task-256 helpers in acp.common.sh; contradicts Task Map (acp.coderabbit.sh) and what shipped."
+    fix_target: "Correct Build Order line 43 + Depends-on line 16 to reference acp.coderabbit.sh."
+    status: pending
+    planned_in: M79
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-099
+    finding_id: F-099-05
+    severity: low
+    file: agent/scripts/acp.coderabbit.sh
+    finding: "coderabbit_available uses [[ -f config_path ]] against CWD; from a subdirectory a CodeRabbit-configured repo mis-reports as unavailable (verified)."
+    fix_target: "Resolve config_path against the git repo root (git rev-parse --show-toplevel) before the -f test; keep CWD fallback."
+    status: pending
+    planned_in: M79
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-099
+    finding_id: F-099-06
+    severity: low
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-259-working-with-coderabbit-docs.md
+    finding: "task-259 verification says 'AGENTS.md pointer added' but the pointer shipped in README.md only."
+    fix_target: "Reconcile task-259 acceptance line to README (AGENTS.md byte budget favors the lean pointer)."
+    status: pending
+    planned_in: M79
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null

@@ -4,6 +4,12 @@
 #
 # Optional fields added in v6.8.0:
 
+- date: 2026-07-23
+  task_type: audit-run
+  mistake: "M78 closure (audit-098) declared '8 pre-existing E2E failures, zero regression' based on a FILE-LEVEL baseline comparison. audit-099 found this masked 2 NEW assertion-level failures I introduced: the v6.28.0 bump missed agent/progress.yaml's own version: field, so cross-file version checks in tests/acp.e2e-workflow + tests/acp.security failed — but the FILES were already failing at baseline for other reasons, so the file-level count stayed 8 and hid my regression. acp-validate.ts also passed because it never checks progress.yaml version."
+  correction: "Regression comparison after a change MUST be assertion-level, not file-level — a test file already failing can silently absorb a new regression. When bumping a version, enumerate EVERY version-bearing field including agent/progress.yaml project.version (not just the acp-validate-checked set identity/AGENTS/CLAUDE/CHANGELOG/package), and close the loop by running the cross-file E2E version checks, not only acp-validate.ts. When a validator misses a real inconsistency an E2E catches, fix the validator too (add the missed field) so the gap can't recur."
+  priority: high
+
 - date: 2026-06-15
   task_type: all
   mistake: "Autonomous mode (M61) took 4 shortcuts: route-172 tests were only return-type checks (not behavioral), tsc --noEmit never ran, Layer 1 token budget unverified, A3.5 full test suite never ran"
