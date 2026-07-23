@@ -579,6 +579,9 @@ milestones:
       (those stay GATED under ADR-19 → M74/M75). Routes 244-249, tasks 255-260.
       Build order: 255 → 256 → 257/258 → 259 → 260 closure v6.28.0.
       Resolves carryover F-097-01 (foundation half); integration half stays gated.
+      ⚙️ Pre-impl audit-098: 7 findings folded in — helpers in acp.coderabbit.sh
+      (NOT common.sh, circular source F-098-01); docs in agent/wiki/; config-file
+      detection only; generate_on_commit deferred to M75. Amended same session.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4752,7 +4755,7 @@ tasks:
       started: null
       completed_date: null
       estimated_hours: 2
-      notes: "route-244; gate 1 opt-in; enabled=false default; audit-097 F-097-01"
+      notes: "route-244; gate 1 opt-in; 2 keys enabled+config_path (generate_on_commit→M75, F-098-04); audit-097/098"
 
     - id: task-256
       name: "Feature-detection helpers coderabbit_available / coderabbit_active"
@@ -4762,7 +4765,7 @@ tasks:
       started: null
       completed_date: null
       estimated_hours: 2
-      notes: "route-245; gates 2+3; models branch-protection-setup.sh:27; depends task-255"
+      notes: "route-245; NEW acp.coderabbit.sh (not common.sh, F-098-01); config-file detect only; ==true (F-098-03); depends 255"
 
     - id: task-257
       name: "Optional-external-tool pattern (3-gate contract)"
@@ -4792,7 +4795,7 @@ tasks:
       started: null
       completed_date: null
       estimated_hours: 2.5
-      notes: "route-248; optional nature + gated PR-check roadmap; depends task-255/256"
+      notes: "route-248; agent/wiki/coderabbit-integration.md (F-098-02); optional + gated PR-check; depends 255/256"
 
     - id: task-260
       name: "M78 closure — validate, ship v6.28.0, close F-097-01"
