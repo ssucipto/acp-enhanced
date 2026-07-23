@@ -561,6 +561,25 @@ milestones:
       Independent audit-095 required (no self-cert). Routes 237-243, tasks 248-254.
       Build order: 248/249 → 250/251 → 252 → 253 → 254 closure v6.27.1.
 
+  M78:
+    name: CodeRabbit Optionality Foundation (v6.28.0)
+    priority: 4
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 0.4
+    tasks_completed: 0
+    tasks_total: 6
+    file: agent/milestones/milestone-78-coderabbit-optionality-foundation.md
+    notes: |
+      📋 M78 planned — audit-097 optionality foundation; NON-GATED per ADR-21.
+      Preference toggle + feature detection + degradation pattern + E2E + docs.
+      Scope-bound: NO generator / findings-import / recurring-rewire / PR-check
+      (those stay GATED under ADR-19 → M74/M75). Routes 244-249, tasks 255-260.
+      Build order: 255 → 256 → 257/258 → 259 → 260 closure v6.28.0.
+      Resolves carryover F-097-01 (foundation half); integration half stays gated.
+
   M1:
     name: ACP Commands Infrastructure
     priority: 5
@@ -4724,6 +4743,67 @@ tasks:
       estimated_hours: 1
       notes: "route-243; audit-096 PASS; tag v6.27.1"
 
+  M78:
+    - id: task-255
+      name: "Reserve integrations.coderabbit.* preference keys (off/inert)"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-255-preference-keys.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-244; gate 1 opt-in; enabled=false default; audit-097 F-097-01"
+
+    - id: task-256
+      name: "Feature-detection helpers coderabbit_available / coderabbit_active"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-256-feature-detection.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-245; gates 2+3; models branch-protection-setup.sh:27; depends task-255"
+
+    - id: task-257
+      name: "Optional-external-tool pattern (3-gate contract)"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-257-optional-tool-pattern.md
+      started: null
+      completed_date: null
+      estimated_hours: 1.5
+      notes: "route-246; reusable for Aikido; depends task-255/256"
+
+    - id: task-258
+      name: "E2E — all three CodeRabbit degradation branches"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-258-e2e-degradation.md
+      started: null
+      completed_date: null
+      estimated_hours: 3
+      notes: "route-247; asserts output values (test_quality_gate); depends task-255/256"
+
+    - id: task-259
+      name: "Working with CodeRabbit — how-to documentation"
+      priority: 4
+      status: planned
+      file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-259-working-with-coderabbit-docs.md
+      started: null
+      completed_date: null
+      estimated_hours: 2.5
+      notes: "route-248; optional nature + gated PR-check roadmap; depends task-255/256"
+
+    - id: task-260
+      name: "M78 closure — validate, ship v6.28.0, close F-097-01"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-260-m78-closure.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-249; leak-check no gated artifacts; ADR-19 unchanged; depends all"
+
 recent_work:
   - date: 2026-07-17
     description: |
@@ -7120,7 +7200,8 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "GATED (ADR-19): M74–M77 tool-integration roadmap stays plan-only until CodeRabbit + Aikido are operational on a consumer-project repo with 2+ weeks of real findings — then /acp-plan M74"
+  - "M78 PLANNED (ADR-21, non-gated): CodeRabbit optionality foundation — /acp-proceed task-255 to start (pref keys → detection → pattern/E2E → docs → v6.28.0)"
+  - "GATED (ADR-19): M74–M77 tool-integration roadmap (incl. CodeRabbit PR-check + findings-import) stays plan-only until CodeRabbit + Aikido are operational on a consumer-project repo with 2+ weeks of real findings — then /acp-plan M74"
   - "Ops toward gate: install CodeRabbit (free tier) + Aikido (free tier) on first active repo — no ACP milestone required"
   - "Merge PR #3 (develop→mainline) — CRIT-065-002 deferral + validate origin fix"
   - "F-086-02: consumer-project consumer /acp-version-update verification (task-239, ops)"
@@ -7138,6 +7219,8 @@ notes:
   - "Ops deferrals: CRIT-065-002 (GitHub Free, manual merge, PR #3), F-086-02 (consumer-project task-239)"
   - "Direction research: agent/reports/research-acp-direction-mcp-2026.md, research-acp-vs-coderabbit-aikido-2026.md"
   - "ADR-19 (2026-07-17): M74–M77 gated on operational CodeRabbit + Aikido + 2 weeks findings"
+  - "ADR-21 (2026-07-23): M78 CodeRabbit optionality foundation carved out of ADR-19 gate (non-gated) — audit-097"
+  - "M78 PLANNED (v6.28.0, 6 tasks 255-260): optional CodeRabbit — toggle + detection + degradation + docs; PR-check stays gated"
 
 # ── Recurring Tasks ──────────────────────────────────────────────
 # Added v6.12.1 (M57). Scheduled periodic reviews surfaced at

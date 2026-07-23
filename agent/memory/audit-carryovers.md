@@ -2174,3 +2174,17 @@ carryovers:
     fix_applied_date: 2026-07-15
     verified_in_audit: audit-096
     escalated_to: null
+
+  - audit_id: audit-097
+    finding_id: F-097-01
+    severity: low
+    file: agent/reports/audit-097-optional-coderabbit-integration.md
+    finding: "CodeRabbit integration must satisfy the optionality contract (preference opt-in + feature detection + graceful degradation); ACP consumers may not have CodeRabbit"
+    description: "Prior research/ADR-19 framed CodeRabbit as consumer-project's own tooling and did not specify an absent-tool path. Any CodeRabbit code path shipped in the distributed framework must degrade cleanly when CodeRabbit is absent — modeled on acp.branch-protection-setup.sh:27 command-v-gh detection."
+    fix_target: "PLANNED as M78 (ADR-21, non-gated): tasks 255-260 build the foundation half — pref keys, coderabbit_available/active detection, optional-external-tool pattern, E2E, docs. Close (status:fixed) at task-260. Integration half (PR-check, findings-import, .coderabbit.yaml generator) stays GATED under ADR-19 → M74/M75."
+    status: pending
+    planned_in: M78
+    gated_remainder: ADR-19
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
