@@ -2188,3 +2188,89 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-098 FINDINGS — M78 PRE-IMPL READINESS (2026-07-23) ────────────────
+  # All 7 folded into M78 tasks via /acp-plan amendment same session. Verify at task-260.
+  - audit_id: audit-098
+    finding_id: F-098-01
+    severity: high
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-256-feature-detection.md
+    finding: "coderabbit_available/active placed in acp.common.sh, but acp.preferences.sh sources common.sh (line 32) — calling get_preference from common.sh is a circular source"
+    fix_target: "New dedicated agent/scripts/acp.coderabbit.sh sources acp.preferences.sh; helpers live there. Amend task-256 + milestone map + ADR-21 location phrase."
+    status: pending
+    planned_in: M78
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-02
+    severity: medium
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-259-working-with-coderabbit-docs.md
+    finding: "task-259 targets agent/docs/ which does not exist; how-to/integration docs live in agent/wiki/ (claude-integration.md, cursor-integration.md)"
+    fix_target: "Relocate to agent/wiki/coderabbit-integration.md; follow /acp-wiki-update conventions."
+    status: pending
+    planned_in: M78
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-03
+    severity: medium
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-256-feature-detection.md
+    finding: "boolean enabled=false resolves as non-empty string 'false'; presence checks misread false as 'set'"
+    fix_target: "coderabbit_active compares [[ \"$(get_preference …)\" == \"true\" ]]; never has_preference for enabled."
+    status: pending
+    planned_in: M78
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-04
+    severity: medium
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-255-preference-keys.md
+    finding: "Speculative vendor assumptions: command -v coderabbit CLI name unverified; generate_on_commit reserves a gated-generator key with no consumer (ADR-19 no-speculative-interface)"
+    fix_target: "M78 detection = config-file presence only (defer CLI detect to adoption); drop generate_on_commit from M78 — reserve only enabled + config_path."
+    status: pending
+    planned_in: M78
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-05
+    severity: low
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-258-e2e-degradation.md
+    finding: "task-258 'register test in CI' step is wrong — run-e2e-tests.sh:90 auto-discovers e2e/*.test.sh"
+    fix_target: "Remove CI-registration step; note auto-discovery + offline (--skip-network) requirement."
+    status: pending
+    planned_in: M78
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-06
+    severity: low
+    file: agent/milestones/milestone-78-coderabbit-optionality-foundation.md
+    finding: "route-244..249 referenced but no route files on disk (not validate-blocking; M73 had them)"
+    fix_target: "Note 'routes created at /acp-dispatch time' in milestone, or create stubs."
+    status: pending
+    planned_in: M78
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-07
+    severity: low
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-260-m78-closure.md
+    finding: "version bump under-specified — 10 stamped files incl. AGENTS.md header-sync gate"
+    fix_target: "Reference /acp-version-update; enumerate CLAUDE/AGENT/AGENTS/README/CHANGELOG/package.yaml/progress/identity."
+    status: pending
+    planned_in: M78
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
