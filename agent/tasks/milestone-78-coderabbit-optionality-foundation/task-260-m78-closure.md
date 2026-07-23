@@ -2,13 +2,13 @@
 id: task-260
 milestone: M78
 title: "M78 closure — validate, ship v6.28.0, close carryover F-097-01"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-07-23
-started: null
-completed: null
+started: 2026-07-23
+completed: 2026-07-23
 route: route-249
 audit_findings: [F-097-01, F-098-07]
 depends_on: [task-255, task-256, task-257, task-258, task-259]
@@ -20,6 +20,10 @@ design_reference: [ADR-21](../../memory/decisions.md)
 ## Objective
 
 Close M78 honestly: green validation + tests, ship v6.28.0, mark carryover F-097-01 fixed (foundation half), and confirm no gated work leaked in.
+
+## Closure Deferrals (honest closure — audit-094 lesson)
+
+The full E2E suite is **not** fully green: **8 pre-existing failures** (`acp.package-info`, `acp.post-milestone-sweep`, `acp.project-update`, `acp.validate-cross-layer`, `acp.version`, `acp.e2e-workflow`, `acp.security`, `acp.validate-ts`). These fail **identically at baseline 5137aa5** with all M78 work removed — **zero M78 regression**. M78's own gates ARE green (coderabbit-optionality 11/11, vitest 61/61, acp-validate clean, leak-check clean). The 8 failures are recorded as carryover **F-M78-01** and deferred to a separate remediation milestone (candidate M79). Bundling them into M78 would be out-of-scope scope creep. **M78 verdict: PASS WITH DEFERRALS.**
 
 ## Context
 
