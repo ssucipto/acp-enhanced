@@ -18,8 +18,8 @@
 # To override globally, create:
 #   ~/.acp/agent/preferences/acp.default.yaml
 #
-# Version: 1.1.0
-# Last Updated: 2026-05-01
+# Version: 1.2.0
+# Last Updated: 2026-07-23
 
 acp:
 
@@ -70,3 +70,14 @@ acp:
     auto_commit:
       enabled: false
       # When true, equivalent to always using /acp-proceed --commit in single-task mode
+
+  # ── Integration preferences ────────────────────────────────────────────────
+  # Optional external-tool integrations — all OFF by default (M78, ADR-21).
+  # ACP is fully functional without CodeRabbit. See agent/wiki/coderabbit-integration.md
+
+  integrations:
+    coderabbit:
+      enabled: false
+      # When true AND a CodeRabbit config is detected, ACP enables CodeRabbit-aware hints.
+      config_path: .coderabbit.yaml
+      # Repo-relative file whose presence signals a CodeRabbit-configured repo.
