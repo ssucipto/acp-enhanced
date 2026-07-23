@@ -587,13 +587,14 @@ milestones:
     name: M78 Closure-Integrity Remediation (v6.28.1)
     priority: 5
     status: in_progress
-    progress: 25
+    progress: 50
     started: 2026-07-23
     completed: null
     estimated_weeks: 0.15
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 4
-    x |
+    file: agent/milestones/milestone-79-m78-closure-integrity.md
+    notes: |
       📋 M79 planned — audit-099 M78 gaps. Fixes v6.28.0 version regression
       (progress.yaml version: field missed), closes validator gap so it can't
       recur, closes carryover ledger (F-098-01..07 + F-097-01 implemented but
@@ -4846,10 +4847,11 @@ tasks:
     - id: task-262
       name: "acp-validate.ts checks progress.yaml version consistency"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-79-m78-closure-integrity/task-262-validate-progress-version-check.md
-      started: null
-      completed_date: null
+      started: 2026-07-23T14:50:00Z
+      completed_date: 2026-07-23T15:15:00Z
+      actual_hours: 0.4
       estimated_hours: 1.5
       notes: "route-251; F-099-02 validator gap; +vitest neg case; depends 261"
 
