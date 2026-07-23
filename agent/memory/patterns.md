@@ -2,6 +2,21 @@
 # Populated automatically by /acp-commit when patterns are identified
 # Format: date-stamped YAML entries, max 60 days active
 
+- date: 2026-07-23
+  name: optional-external-tool
+  task_type: bash-scripting
+  code_ref: agent/scripts/acp.coderabbit.sh + agent/patterns/local.optional-external-tool.md (M78, ADR-21)
+  description: |
+    Three-gate contract for integrating a tool ACP consumers may not have:
+    (1) opt-in preference default false; (2) output-free detection
+    (config-file / command -v); (3) silent graceful degradation — absence is
+    a no-op exit 0, never an error. Binding rule: the tool augments, never
+    gates, an ACP code path. Two hard gotchas: a boolean false default
+    resolves as the non-empty string "false" (compare == "true", not
+    has_preference); and the helper must live in a dedicated script sourcing
+    acp.preferences.sh — never in acp.common.sh, which preferences.sh already
+    sources (circular). Reference instance: CodeRabbit; next: Aikido.
+
 - date: 2026-06-15
   name: spec-audit-fix-publish-cycle
   task_type: docs-update
