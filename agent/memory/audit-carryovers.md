@@ -2223,9 +2223,9 @@ carryovers:
     file: scripts/acp-validate.ts
     finding: "validateVersionConsistency() checks identity/AGENTS/CLAUDE/CHANGELOG/package but NOT progress.yaml version — this gap let the F-099-01 regression pass validate while E2E caught it."
     fix_target: "Add agent/progress.yaml project.version to validateVersionConsistency() so future version bumps can't skip it."
-    status: pending
+    status: fixed
     planned_in: M79
-    fix_applied_date: null
+    fix_applied_date: 2026-07-23
     verified_in_audit: null
     escalated_to: null
 
