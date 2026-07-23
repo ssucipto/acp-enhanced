@@ -2,13 +2,13 @@
 id: task-258
 milestone: M78
 title: "E2E test — all three CodeRabbit degradation branches"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-07-23
-started: null
-completed: null
+started: 2026-07-23
+completed: 2026-07-23
 route: route-247
 audit_findings: [F-097-01, F-098-05]
 depends_on: [task-255, task-256]
