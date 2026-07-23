@@ -2,13 +2,13 @@
 id: task-261
 milestone: M79
 title: "M78 version regression fix + carryover ledger closure + doc reconcile"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 1.5
 created: 2026-07-23
-started: null
-completed: null
+started: 2026-07-23
+completed: 2026-07-23
 route: route-250
 audit_findings: [F-099-01, F-099-03, F-099-04, F-099-06]
 depends_on: []
