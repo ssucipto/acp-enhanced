@@ -255,7 +255,7 @@ files:
     sha256: "de32125d605d262523d150585591ab811b0c132956097c91c1a5601b0d1b27cf"
     last_verified: "2026-07-23"
   - path: "agent/scripts/acp.coderabbit.sh"
-    sha256: "f99ce22f0ebe095db6a02489bdd72848e7a3352bd908178275dcdcf478270c28"
+    sha256: "2661935cddf9fa04667d566171e060e283081a0a764a8721493f0f636c08d096"
     last_verified: "2026-07-23"
   - path: "agent/scripts/acp.common.sh"
     sha256: "3deeb733ac471939ccc84d1b45b73d854d431af915d964035710872b527f5bec"
