@@ -2259,9 +2259,9 @@ carryovers:
     file: agent/scripts/acp.coderabbit.sh
     finding: "coderabbit_available uses [[ -f config_path ]] against CWD; from a subdirectory a CodeRabbit-configured repo mis-reports as unavailable (verified)."
     fix_target: "Resolve config_path against the git repo root (git rev-parse --show-toplevel) before the -f test; keep CWD fallback."
-    status: pending
+    status: fixed
     planned_in: M79
-    fix_applied_date: null
+    fix_applied_date: 2026-07-23
     verified_in_audit: null
     escalated_to: null
 

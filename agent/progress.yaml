@@ -587,11 +587,11 @@ milestones:
     name: M78 Closure-Integrity Remediation (v6.28.1)
     priority: 5
     status: in_progress
-    progress: 50
+    progress: 75
     started: 2026-07-23
     completed: null
     estimated_weeks: 0.15
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 4
     file: agent/milestones/milestone-79-m78-closure-integrity.md
     notes: |
@@ -4858,10 +4858,11 @@ tasks:
     - id: task-263
       name: "Harden coderabbit_available for repo-root detection"
       priority: 4
-      status: planned
+      status: completed
       file: agent/tasks/milestone-79-m78-closure-integrity/task-263-coderabbit-reporoot-detection.md
-      started: null
-      completed_date: null
+      started: 2026-07-23T15:15:00Z
+      completed_date: 2026-07-23T15:35:00Z
+      actual_hours: 0.3
       estimated_hours: 1
       notes: "route-252; F-099-05 git rev-parse root; +E2E subdir case"
 
