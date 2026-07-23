@@ -2,13 +2,13 @@
 id: task-257
 milestone: M78
 title: "Codify the optional-external-tool pattern (3-gate contract)"
-status: planned
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 1.5
 created: 2026-07-23
-started: null
-completed: null
+started: 2026-07-23
+completed: 2026-07-23
 route: route-246
 audit_findings: [F-097-01]
 depends_on: [task-255, task-256]
