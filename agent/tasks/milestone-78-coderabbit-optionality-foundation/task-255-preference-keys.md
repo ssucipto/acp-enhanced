@@ -2,13 +2,13 @@
 id: task-255
 milestone: M78
 title: "Reserve integrations.coderabbit.* preference keys (off/inert defaults)"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-07-23
-started: null
-completed: null
+started: 2026-07-23
+completed: 2026-07-23
 route: route-244
 audit_findings: [F-097-01]
 depends_on: []
