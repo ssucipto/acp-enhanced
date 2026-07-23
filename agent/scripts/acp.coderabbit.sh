@@ -20,35 +20,54 @@ _ACP_CODERABBIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=acp.preferences.sh
 source "${_ACP_CODERABBIT_DIR}/acp.preferences.sh"
 
+# _coderabbit_repo_root — the git repo root, or "." outside a git repo.
+# Both preference resolution (get_preference reads ./agent/preferences relative
+# to CWD) and config-file detection are anchored here so the helpers work from
+# any subdirectory (audit-099 F-099-05).
+_coderabbit_repo_root() {
+  git rev-parse --show-toplevel 2>/dev/null || echo "."
+}
+
+# _coderabbit_enabled — resolve the opt-in preference from the repo root.
+# Exact-string compare (F-098-03): a `false` default resolves as the non-empty
+# string "false", so a presence/has_preference check would misread it as "set".
+_coderabbit_enabled() {
+  local root
+  root="$(_coderabbit_repo_root)"
+  ( cd "$root" 2>/dev/null && get_preference "acp" "integrations.coderabbit.enabled" 2>/dev/null ) || echo false
+}
+
 # coderabbit_available — Gate 2 (feature detection).
-# Returns 0 if the repo is CodeRabbit-configured (config file present at CWD),
-# 1 otherwise. Config-file detection only (F-098-04): the CodeRabbit CLI name
-# is not assumed until verified during real adoption. No output; no findings
-# parsing. Absence is normal — this is not an error.
+# Returns 0 if the repo is CodeRabbit-configured (config file present), 1 otherwise.
+# Preference resolution and the file check are anchored to the repo root, so
+# detection works from any subdirectory (F-099-05). Absolute config_path is used
+# as-is. Config-file detection only (F-098-04): the CodeRabbit CLI name is not
+# assumed until verified during real adoption. No output; no findings parsing.
+# Absence is normal — not an error.
 coderabbit_available() {
-  local config_path
-  config_path="$(get_preference_or "acp" "integrations.coderabbit.config_path" ".coderabbit.yaml")"
-  [[ -f "$config_path" ]]
+  local config_path root target
+  root="$(_coderabbit_repo_root)"
+  config_path="$( ( cd "$root" 2>/dev/null && get_preference_or "acp" "integrations.coderabbit.config_path" ".coderabbit.yaml" ) )"
+  [[ -n "$config_path" ]] || config_path=".coderabbit.yaml"
+  if [[ "$config_path" == /* ]]; then
+    target="$config_path"
+  else
+    target="${root}/${config_path}"
+  fi
+  [[ -f "$target" ]]
 }
 
 # coderabbit_active — Gate 1 (opt-in) AND Gate 2 (available).
-# Returns 0 (usable) only when the preference is enabled AND a config is
-# detected. Callers guard CodeRabbit-specific branches with this.
-# Exact-string compare (F-098-03): a `false` default resolves as the non-empty
-# string "false", so a presence/has_preference check would misread it as "set".
+# Returns 0 (usable) only when the preference is enabled AND a config is detected.
 coderabbit_active() {
-  local enabled
-  enabled="$(get_preference "acp" "integrations.coderabbit.enabled" 2>/dev/null || echo false)"
-  [[ "$enabled" == "true" ]] && coderabbit_available
+  [[ "$(_coderabbit_enabled)" == "true" ]] && coderabbit_available
 }
 
 # coderabbit_hint_if_missing — Gate 3 (graceful degradation).
 # When the user has opted in but no config is detected, emit ONE non-fatal
 # stderr hint. Silent in every other state (disabled, or enabled+available).
 coderabbit_hint_if_missing() {
-  local enabled
-  enabled="$(get_preference "acp" "integrations.coderabbit.enabled" 2>/dev/null || echo false)"
-  if [[ "$enabled" == "true" ]] && ! coderabbit_available; then
+  if [[ "$(_coderabbit_enabled)" == "true" ]] && ! coderabbit_available; then
     echo "[ACP] CodeRabbit is enabled but no config was detected — add a .coderabbit.yaml or set integrations.coderabbit.enabled false." >&2
   fi
 }

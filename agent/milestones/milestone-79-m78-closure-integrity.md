@@ -8,7 +8,7 @@ updated: 2026-07-23
 @acp.meta.end -->
 
 **Planned version**: 6.28.1
-**Status**: in_progress (2/4)
+**Status**: in_progress (3/4)
 **Estimated effort**: ~5h (4 tasks)
 **Source**: audit-099 (M78 implementation gaps)
 **Depends on**: M78 (v6.28.0)

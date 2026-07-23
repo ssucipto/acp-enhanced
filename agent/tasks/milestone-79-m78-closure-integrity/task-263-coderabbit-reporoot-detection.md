@@ -7,8 +7,8 @@ priority: 4
 complexity: low
 estimated_hours: 1
 created: 2026-07-23
-started: null
-completed: null
+started: 2026-07-23
+completed: 2026-07-23
 route: route-252
 audit_findings: [F-099-05]
 depends_on: []
