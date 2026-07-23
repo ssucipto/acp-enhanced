@@ -1,0 +1,77 @@
+# Milestone 78: CodeRabbit Optionality Foundation
+
+<!-- @acp.meta.milestone
+topic: coderabbit, optionality, preferences, feature-detection, ADR-21
+description: Non-gated foundation for optional CodeRabbit integration — preference toggle, feature detection, graceful degradation, docs
+status: planned
+updated: 2026-07-23
+@acp.meta.end -->
+
+**Planned version**: 6.28.0
+**Status**: planned (0/6)
+**Estimated effort**: ~13h (6 tasks)
+**Source**: audit-097 (optional CodeRabbit integration) + ADR-21 (carve-out from ADR-19 gate)
+**Depends on**: preferences system (M6/M19), `acp.common.sh` detection idiom, `acp.branch-protection-setup.sh:27` exemplar
+**Governance**: [ADR-21](../memory/decisions.md) — this milestone is the **non-gated** foundation; the integration surface (PR-check, findings-import, `.coderabbit.yaml` generator) stays **GATED under [ADR-19](../memory/decisions.md)**.
+
+## Goal
+
+Make CodeRabbit integration **optional-by-construction** before any integration surface is built. ACP is a distributed framework; a fresh install with no CodeRabbit must behave exactly as today. This milestone ships the three-gate optionality contract from audit-097 — **preference opt-in → feature detection → silent graceful degradation** — plus the pattern, tests, and user documentation that let future (gated) PR-check work land safely for users who don't have CodeRabbit.
+
+## Context
+
+audit-097 found that prior research (research-acp-vs-coderabbit-aikido-2026.md) and ADR-19 framed CodeRabbit as Rygan's *own* tooling and specified **no absent-tool path**. ADR-21 carves the optionality foundation out of ADR-19's gate: the foundation never parses CodeRabbit output, so it is not the speculative-interface work ADR-19 defers. Everything requiring live findings stays gated.
+
+## Scope Boundary (binding — see ADR-21)
+
+| In scope (M78, non-gated) | Out of scope (GATED under ADR-19 → M74/M75) |
+|---|---|
+| `integrations.coderabbit.*` preference keys | `.coderabbit.yaml` generator from patterns/lessons |
+| `coderabbit_available()` / `coderabbit_active()` detection | `acp.findings-import.sh` (findings → carryovers) |
+| optional-external-tool pattern | Recurring-task rewire (weekly-code-review → CodeRabbit) |
+| E2E for all degradation branches | Policy 64-rule → owner map |
+| "Working with CodeRabbit" how-to doc | **PR-check integration** (the core gated deliverable) |
+
+## Build Order
+
+| Phase | Route | Task | Title | Est. | Priority |
+|-------|-------|------|-------|------|----------|
+| **1** | route-244 | task-255 | Reserve `integrations.coderabbit.*` preference keys | 2h | P0 |
+| **1** | route-245 | task-256 | Feature-detection helpers in `acp.common.sh` | 2h | P0 |
+| **2** | route-246 | task-257 | `local.optional-external-tool.md` pattern (3-gate contract) | 1.5h | P1 |
+| **2** | route-247 | task-258 | E2E: all three degradation branches | 3h | P0 |
+| **3** | route-248 | task-259 | "Working with CodeRabbit" how-to documentation | 2.5h | P1 |
+| **3** | route-249 | task-260 | M78 closure — validate, version 6.28.0, close carryover F-097-01 | 2h | P0 |
+
+Dependency notes: task-256 depends on task-255 (helpers read the preference). task-257 generalizes 255+256 into a reusable pattern. task-258 depends on 255+256 (tests exercise the real helpers). task-259 documents the shipped behavior (depends on 255+256). task-260 depends on all.
+
+## Task Map
+
+| Task | Route | Deliverable | Gate |
+|------|-------|-------------|------|
+| [task-255](../tasks/milestone-78-coderabbit-optionality-foundation/task-255-preference-keys.md) | route-244 | 3 keys in configurables + defaults, off/inert, `_index` updated, preferences validate | keys resolve at all 4 precedence levels |
+| [task-256](../tasks/milestone-78-coderabbit-optionality-foundation/task-256-feature-detection.md) | route-245 | `coderabbit_available()` + `coderabbit_active()` in `acp.common.sh` | detection-only, no findings parsing |
+| [task-257](../tasks/milestone-78-coderabbit-optionality-foundation/task-257-optional-tool-pattern.md) | route-246 | `agent/patterns/local.optional-external-tool.md` | 3-gate contract reusable for Aikido |
+| [task-258](../tasks/milestone-78-coderabbit-optionality-foundation/task-258-e2e-degradation.md) | route-247 | `e2e/coderabbit-optionality.test.sh` | 3 branches assert on output values |
+| [task-259](../tasks/milestone-78-coderabbit-optionality-foundation/task-259-working-with-coderabbit-docs.md) | route-248 | `agent/docs/working-with-coderabbit.md` + README/AGENT pointer | covers optional nature + gated PR-check roadmap |
+| [task-260](../tasks/milestone-78-coderabbit-optionality-foundation/task-260-m78-closure.md) | route-249 | validate green, v6.28.0, F-097-01 closed | M78 complete |
+
+## Anti-Shortcut Guardrails (binding)
+
+1. **`/acp-review` + carryover loop stay standalone-complete** — CodeRabbit augments, never gates them. No code path becomes incorrect when CodeRabbit is absent.
+2. **Every CodeRabbit path has a tested absent branch** — absence is normal, exits 0 silently (unlike `gh` in branch-protection, which is *required*).
+3. **No gated work built here** — no `.coderabbit.yaml` generator, no findings-import, no recurring-task rewire (ADR-19 / ADR-21).
+4. **E2E asserts on output values**, not `typeof` (constraints.yml `test_quality_gate`).
+5. **No M74–M77 progress.yaml entries created** — ADR-19 unchanged.
+6. **Defaults are inert** — `enabled: false`, `generate_on_commit: false`; a fresh install behaves exactly as today.
+
+## Verification Gates (M78 closure)
+
+- [ ] `bash agent/scripts/acp.preferences.sh get acp integrations.coderabbit.enabled` resolves `false` on a clean project (task-255)
+- [ ] `coderabbit_active()` returns false when key off OR `.coderabbit.yaml` absent; true only when both hold (task-256)
+- [ ] `e2e/coderabbit-optionality.test.sh` covers off/silent, on+absent/skip-hint, on+present/detected — each asserting a specific output string (task-258)
+- [ ] `agent/patterns/local.optional-external-tool.md` referenced by task-256 helper comments (task-257)
+- [ ] `agent/docs/working-with-coderabbit.md` states integration is optional and PR-check is gated per ADR-19 (task-259)
+- [ ] `npx tsx scripts/acp-validate.ts` exit 0; `npx vitest run` + E2E green (task-260)
+- [ ] audit-carryovers F-097-01 → `status: fixed`, `verified_in_audit` set (task-260)
+- [ ] v6.28.0 tagged; CHANGELOG entry (task-260)
