@@ -2186,7 +2186,7 @@ carryovers:
     planned_in: M78
     gated_remainder: ADR-19
     fix_applied_date: 2026-07-23
-    verified_in_audit: null
+    verified_in_audit: audit-099
     escalated_to: null
 
   # ── M78 CLOSURE SWEEP — pre-existing E2E debt surfaced (2026-07-23) ─────────
@@ -2211,9 +2211,9 @@ carryovers:
     file: agent/progress.yaml
     finding: "M78 version bump missed agent/progress.yaml:6 version: field (still 6.27.2 while identity=6.28.0). REGRESSION: caught by tests/acp.e2e-workflow.test.sh:57 + tests/acp.security.test.sh:97 cross-file checks, NOT by acp-validate.ts. My audit-098 'zero regression' claim was file-level and masked these new assertion failures."
     fix_target: "Bump agent/progress.yaml version: → 6.28.0 (line 6) and description (line 11); ship v6.28.1. Historical recent_work 6.27.2 refs stay."
-    status: pending
+    status: fixed
     planned_in: M79
-    fix_applied_date: null
+    fix_applied_date: 2026-07-23
     verified_in_audit: null
     escalated_to: null
 
@@ -2235,9 +2235,9 @@ carryovers:
     file: agent/memory/audit-carryovers.md
     finding: "F-098-01..07 and F-097-01 were all implemented in M78 but remain status:pending — carryover-ledger integrity failure (audit-094 lesson)."
     fix_target: "Mark F-098-01..07 + F-097-01 status:fixed, verified_in_audit: audit-099 (each was verified implemented in this audit)."
-    status: pending
+    status: fixed
     planned_in: M79
-    fix_applied_date: null
+    fix_applied_date: 2026-07-23
     verified_in_audit: null
     escalated_to: null
 
@@ -2247,9 +2247,9 @@ carryovers:
     file: agent/milestones/milestone-78-coderabbit-optionality-foundation.md
     finding: "Build Order table (line 43) still says task-256 helpers in acp.common.sh; contradicts Task Map (acp.coderabbit.sh) and what shipped."
     fix_target: "Correct Build Order line 43 + Depends-on line 16 to reference acp.coderabbit.sh."
-    status: pending
+    status: fixed
     planned_in: M79
-    fix_applied_date: null
+    fix_applied_date: 2026-07-23
     verified_in_audit: null
     escalated_to: null
 
@@ -2271,9 +2271,9 @@ carryovers:
     file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-259-working-with-coderabbit-docs.md
     finding: "task-259 verification says 'AGENTS.md pointer added' but the pointer shipped in README.md only."
     fix_target: "Reconcile task-259 acceptance line to README (AGENTS.md byte budget favors the lean pointer)."
-    status: pending
+    status: fixed
     planned_in: M79
-    fix_applied_date: null
+    fix_applied_date: 2026-07-23
     verified_in_audit: null
     escalated_to: null
 
@@ -2285,10 +2285,10 @@ carryovers:
     file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-256-feature-detection.md
     finding: "coderabbit_available/active placed in acp.common.sh, but acp.preferences.sh sources common.sh (line 32) — calling get_preference from common.sh is a circular source"
     fix_target: "New dedicated agent/scripts/acp.coderabbit.sh sources acp.preferences.sh; helpers live there. Amend task-256 + milestone map + ADR-21 location phrase."
-    status: pending
+    status: fixed
     planned_in: M78
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
     escalated_to: null
 
   - audit_id: audit-098
@@ -2297,10 +2297,10 @@ carryovers:
     file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-259-working-with-coderabbit-docs.md
     finding: "task-259 targets agent/docs/ which does not exist; how-to/integration docs live in agent/wiki/ (claude-integration.md, cursor-integration.md)"
     fix_target: "Relocate to agent/wiki/coderabbit-integration.md; follow /acp-wiki-update conventions."
-    status: pending
+    status: fixed
     planned_in: M78
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
     escalated_to: null
 
   - audit_id: audit-098
@@ -2309,10 +2309,10 @@ carryovers:
     file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-256-feature-detection.md
     finding: "boolean enabled=false resolves as non-empty string 'false'; presence checks misread false as 'set'"
     fix_target: "coderabbit_active compares [[ \"$(get_preference …)\" == \"true\" ]]; never has_preference for enabled."
-    status: pending
+    status: fixed
     planned_in: M78
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
     escalated_to: null
 
   - audit_id: audit-098
@@ -2321,10 +2321,10 @@ carryovers:
     file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-255-preference-keys.md
     finding: "Speculative vendor assumptions: command -v coderabbit CLI name unverified; generate_on_commit reserves a gated-generator key with no consumer (ADR-19 no-speculative-interface)"
     fix_target: "M78 detection = config-file presence only (defer CLI detect to adoption); drop generate_on_commit from M78 — reserve only enabled + config_path."
-    status: pending
+    status: fixed
     planned_in: M78
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
     escalated_to: null
 
   - audit_id: audit-098
@@ -2333,10 +2333,10 @@ carryovers:
     file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-258-e2e-degradation.md
     finding: "task-258 'register test in CI' step is wrong — run-e2e-tests.sh:90 auto-discovers e2e/*.test.sh"
     fix_target: "Remove CI-registration step; note auto-discovery + offline (--skip-network) requirement."
-    status: pending
+    status: fixed
     planned_in: M78
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
     escalated_to: null
 
   - audit_id: audit-098
@@ -2345,10 +2345,10 @@ carryovers:
     file: agent/milestones/milestone-78-coderabbit-optionality-foundation.md
     finding: "route-244..249 referenced but no route files on disk (not validate-blocking; M73 had them)"
     fix_target: "Note 'routes created at /acp-dispatch time' in milestone, or create stubs."
-    status: pending
+    status: fixed
     planned_in: M78
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
     escalated_to: null
 
   - audit_id: audit-098
@@ -2357,8 +2357,8 @@ carryovers:
     file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-260-m78-closure.md
     finding: "version bump under-specified — 10 stamped files incl. AGENTS.md header-sync gate"
     fix_target: "Reference /acp-version-update; enumerate CLAUDE/AGENT/AGENTS/README/CHANGELOG/package.yaml/progress/identity."
-    status: pending
+    status: fixed
     planned_in: M78
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
     escalated_to: null
