@@ -21,6 +21,8 @@ FIX="$(mktemp -d)"
 trap 'rm -rf "$FIX"' EXIT
 mkdir -p "$FIX/agent/configurables" "$FIX/agent/preferences"
 cp "$CONFIGURABLES" "$FIX/agent/configurables/acp.configurables.yaml"
+# Make the fixture a git repo so repo-root detection (F-099-05) resolves from subdirs
+( cd "$FIX" && git init -q 2>/dev/null && git config user.email t@t && git config user.name t ) || true
 
 # Helper: write the project preference file with a given enabled value
 write_pref() {
@@ -62,5 +64,13 @@ write_pref false
 touch "$FIX/.coderabbit.yaml"
 ( cd "$FIX" && bash "$CR" available >/dev/null 2>&1 ); assert_true "available true (config present)" $?
 ( cd "$FIX" && bash "$CR" active >/dev/null 2>&1 ); assert_false "active false despite config (opt-in precedence)" $?
+
+# ── S5 — repo-root detection from a subdirectory (F-099-05) ──────────────────
+print_test_header "S5 — detection works from a subdirectory (repo-root resolved)"
+write_pref true
+touch "$FIX/.coderabbit.yaml"
+mkdir -p "$FIX/deep/nested"
+( cd "$FIX/deep/nested" && bash "$CR" available >/dev/null 2>&1 ); assert_true "available from subdir (config at repo root)" $?
+( cd "$FIX/deep/nested" && bash "$CR" active >/dev/null 2>&1 ); assert_true "active from subdir (enabled + repo-root config)" $?
 
 print_test_summary
