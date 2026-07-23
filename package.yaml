@@ -488,6 +488,10 @@ contents:
     - name: acp.preferences.sh
       description: Unified preferences utilities (get, set, validate, generate, presets)
 
+    - name: acp.coderabbit.sh
+      description: Optional CodeRabbit detection helpers — coderabbit_available/active (M78, ADR-21)
+      type: utility
+
     # Installation Scripts
     - name: acp.install.sh
       description: ACP installation script
