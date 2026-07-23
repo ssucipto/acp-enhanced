@@ -8,7 +8,7 @@ updated: 2026-07-23
 @acp.meta.end -->
 
 **Planned version**: 6.28.0
-**Status**: planned (0/6)
+**Status**: in_progress (1/6)
 **Estimated effort**: ~13h (6 tasks)
 **Source**: audit-097 (optional CodeRabbit integration) + ADR-21 (carve-out from ADR-19 gate)
 **Pre-impl review**: audit-098 — 7 findings folded in (F-098-01..07). Helpers live in a dedicated `acp.coderabbit.sh` (not common.sh — circular source); docs in `agent/wiki/`; detection config-file-only; `generate_on_commit` deferred to M75.
