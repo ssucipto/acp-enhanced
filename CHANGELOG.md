@@ -13,6 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.28.1] — 2026-07-23
+
+### Fixed (M79 — M78 Closure-Integrity Remediation, audit-099)
+- **Version regression** — the v6.28.0 bump missed `agent/progress.yaml`'s own `version:` field (still 6.27.2), caught by cross-file E2E version checks but not `acp-validate.ts` (F-099-01). Now consistent.
+- **Validator gap** — `acp-validate.ts validateVersionConsistency()` now includes `agent/progress.yaml project.version` so a future bump can't skip it; +2 vitest cases (F-099-02). This immediately caught a progress.yaml corruption during remediation.
+- **Carryover ledger** — F-098-01..07 + F-097-01 (implemented in M78 but left `pending`) marked `fixed`/`verified_in_audit: audit-099` (F-099-03).
+- **Subdirectory detection** — `coderabbit_available`/`coderabbit_active` now anchor config detection AND preference resolution to the git repo root, so detection works from any subdirectory (F-099-05).
+- **Doc reconcile** — milestone-78 Build Order corrected to `acp.coderabbit.sh`; task-259 pointer reconciled to README (F-099-04, F-099-06).
+
+### Notes
+- ~6 genuinely pre-existing E2E failures (F-M78-01) remain deferred with root causes documented in audit-099 — not M78/M79 shortcuts.
+
+---
+
 ## [6.28.0] — 2026-07-23
 
 ### Added (M78 — CodeRabbit Optionality Foundation)
