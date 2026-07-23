@@ -3,12 +3,12 @@
 <!-- @acp.meta.milestone
 topic: m78, closure-integrity, version-regression, carryover-hygiene, audit-099
 description: Fix the M78 v6.28.0 version regression, close the carryover ledger honestly, harden the validator and detection helper
-status: planned
+status: in_progress
 updated: 2026-07-23
 @acp.meta.end -->
 
 **Planned version**: 6.28.1
-**Status**: planned (0/4)
+**Status**: in_progress (2/4)
 **Estimated effort**: ~5h (4 tasks)
 **Source**: audit-099 (M78 implementation gaps)
 **Depends on**: M78 (v6.28.0)
