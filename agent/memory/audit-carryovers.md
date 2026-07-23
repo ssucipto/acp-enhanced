@@ -2181,10 +2181,24 @@ carryovers:
     file: agent/reports/audit-097-optional-coderabbit-integration.md
     finding: "CodeRabbit integration must satisfy the optionality contract (preference opt-in + feature detection + graceful degradation); ACP consumers may not have CodeRabbit"
     description: "Prior research/ADR-19 framed CodeRabbit as Rygan's own tooling and did not specify an absent-tool path. Any CodeRabbit code path shipped in the distributed framework must degrade cleanly when CodeRabbit is absent — modeled on acp.branch-protection-setup.sh:27 command-v-gh detection."
-    fix_target: "PLANNED as M78 (ADR-21, non-gated): tasks 255-260 build the foundation half — pref keys, coderabbit_available/active detection, optional-external-tool pattern, E2E, docs. Close (status:fixed) at task-260. Integration half (PR-check, findings-import, .coderabbit.yaml generator) stays GATED under ADR-19 → M74/M75."
-    status: pending
+    fix_target: "FIXED in M78 (v6.28.0, ADR-21): foundation half shipped — pref keys, acp.coderabbit.sh detection, optional-external-tool pattern, E2E (11 assertions), wiki docs. Integration half (PR-check, findings-import, .coderabbit.yaml generator) stays GATED under ADR-19 → M74/M75 (a separate concern, not this carryover)."
+    status: fixed
     planned_in: M78
     gated_remainder: ADR-19
+    fix_applied_date: 2026-07-23
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── M78 CLOSURE SWEEP — pre-existing E2E debt surfaced (2026-07-23) ─────────
+  - audit_id: m78-closure
+    finding_id: F-M78-01
+    severity: medium
+    file: e2e/
+    finding: "8 E2E test files fail on develop — PRE-EXISTING, not caused by M78 (verified identical at baseline commit 5137aa5): acp.package-info, acp.post-milestone-sweep, acp.project-update, acp.validate-cross-layer, acp.version, acp.e2e-workflow, acp.security, acp.validate-ts"
+    description: "M78 full-suite run: 60/68 pass. The 8 failures reproduce exactly at pre-session baseline 5137aa5 with M78 changes stashed AND checked out — zero M78 regression. M78's own gates are green: coderabbit-optionality 11/11, vitest 61/61, acp-validate clean (bar the closure git tag). Symptoms sampled: package-info exit 1≠0; project-update tag/duplicate assertions; version-check exits 1≠2 on missing AGENT.md. Unrelated to CodeRabbit optionality."
+    fix_target: "Triage the 8 pre-existing E2E failures in a dedicated remediation milestone (candidate M79). Do NOT bundle into M78 — out of scope, and fixing 8 unrelated suites autonomously would be scope creep."
+    status: pending
+    planned_in: null
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
