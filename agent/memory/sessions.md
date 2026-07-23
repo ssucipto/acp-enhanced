@@ -2,6 +2,23 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-07-23
+  executor: claude-opus-4-8
+  branch: develop
+  tasks: []
+  done:
+    - audit-097-optional-coderabbit-distributed-framework-lens
+    - plan-m78-optionality-foundation-6-tasks-255-260
+    - adr-21-coderabbit-optionality-carved-out-of-adr-19-gate
+    - adr-20-backfill-hooks-task_id-array-format
+    - audit-098-preimpl-7-findings-folded-into-m78
+  deferred:
+    - m78-implementation → acp-proceed-complete (this session, next)
+    - m74-m77-pr-check-findings-import → adr-19-adoption-gate
+    - crit-065-002-merge-pr3 → mainline
+    - f-086-02-consumer-project-consumer → task-239
+  key_fact: "acp.preferences.sh sources acp.common.sh, so optional-tool detection helpers that call get_preference must live in a dedicated script (acp.coderabbit.sh) sourcing preferences.sh — never in common.sh (circular source). Caught in pre-impl audit-098 before any code was written. Also: ADR-19 gates CodeRabbit *integration* (PR-check/findings-import); the *optionality foundation* (toggle+detection+docs) is a separate non-gated concern (ADR-21)."
+
 - date: 2026-07-17
   executor: copilot
   branch: develop
