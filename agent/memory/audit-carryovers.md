@@ -2182,10 +2182,10 @@ carryovers:
     file: agent/reports/audit-097-optional-coderabbit-integration.md
     finding: "CodeRabbit integration must satisfy the optionality contract (preference opt-in + feature detection + graceful degradation); ACP consumers may not have CodeRabbit"
     description: "Prior research/ADR-19 framed CodeRabbit as Rygan's own tooling and did not specify an absent-tool path. Any CodeRabbit code path shipped in the distributed framework must degrade cleanly when CodeRabbit is absent — modeled on acp.branch-protection-setup.sh:27 command-v-gh detection."
-    fix_target: "FIXED in M78 (v6.28.0, ADR-21): foundation half shipped — pref keys, acp.coderabbit.sh detection, optional-external-tool pattern, E2E (11 assertions), wiki docs. Integration half (PR-check, findings-import, .coderabbit.yaml generator) stays GATED under ADR-19 → M74/M75 (a separate concern, not this carryover)."
+    fix_target: "FIXED in M78 (v6.28.0, ADR-21): foundation half shipped — pref keys, acp.coderabbit.sh detection, optional-external-tool pattern, E2E (11 assertions), wiki docs. Integration half (findings-import, review wiring) → ADR-22/M81 (CodeRabbit-only carve-out)."
     status: fixed
     planned_in: M78
-    gated_remainder: ADR-19
+    gated_remainder: ADR-22/M81
     fix_applied_date: 2026-07-23
     verified_in_audit: audit-099
     escalated_to: null
@@ -2435,10 +2435,10 @@ carryovers:
     finding: "Milestone says 'Supersedes (partially) ADR-19' — ADR-19 is DO NOT re-open; must use ADR-21 carve-out language, not supersede"
     description: "Illegal reopen risk. ADR-22 must carve CodeRabbit-only M81 out of ADR-19's Aikido-coupled gate while leaving ADR-19 in force for Aikido/M76/M77."
     fix_target: "task-269: rewrite milestone + write ADR-22 as carve-out (not supersede/reopen)"
-    status: pending
+    status: fixed
     planned_in: M81
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-24
+    verified_in_audit: task-269
     escalated_to: null
 
   - audit_id: audit-101
@@ -2474,10 +2474,10 @@ carryovers:
     finding: "task-269 frontmatter gate blocks ADR-22 writing until consumer findings exist — ADR must land before gate"
     description: "Adoption gate should block import/integration tasks 270-274 only; ADR-22 + policy map + wiki sync are ungated planning/docs."
     fix_target: "task-269: remove gate from frontmatter; document gate applies to 270+"
-    status: pending
+    status: fixed
     planned_in: M81
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-24
+    verified_in_audit: task-269
     escalated_to: null
 
   - audit_id: audit-101
@@ -2513,10 +2513,10 @@ carryovers:
     finding: "Policy map owner:coderabbit must not skip ACP Phase 1 / critical rules (SC-01 etc.) when CodeRabbit active"
     description: "Layered defense: Phase 1 deterministic rules never deferred. Only Phase 2 semantic overlap may be annotated as also covered by CodeRabbit."
     fix_target: "task-269/272: bind Phase 1 never-deferred rule in policy map + review doc"
-    status: pending
+    status: fixed
     planned_in: M81
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-24
+    verified_in_audit: task-269
     escalated_to: null
 
   - audit_id: audit-101
@@ -2526,8 +2526,8 @@ carryovers:
     finding: "Wiki/configurables/research still point to ADR-19 → /acp-plan M74 for findings-import"
     description: "Stale consumer guidance after M81 plan. Update roadmap to M81/ADR-22; keep M74-M77 as deferred Aikido/golden-path track."
     fix_target: "task-269: sync wiki, configurables comment, research §5"
-    status: pending
+    status: fixed
     planned_in: M81
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-24
+    verified_in_audit: task-269
     escalated_to: null
