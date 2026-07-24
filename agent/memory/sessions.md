@@ -5,6 +5,19 @@
 - date: 2026-07-24
   executor: cursor
   branch: develop
+  tasks: []
+  done:
+    - f-m82-01-through-07-remediated
+    - e2e-cross-layer-and-optionality-hardening
+    - js-yaml-4-3-0-audit-clean
+  deferred:
+    - m81-270-274 → fixture-gate
+    - coderabbit-workflows-cli-chunk → optional-rate-limit
+  key_fact: "M82 findings F-M82-01..07 fixed: SCHEMAS_DIR+gh execFileSync, project-update tags loop, sweep token message, SH-01 allowlist, js-yaml 4.3.0; e2e CLI chunk done; workflows still rate-limited."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
   tasks: [task-275, task-276, task-277, task-278, task-279]
   done:
     - m82-local-thorough-review-campaign

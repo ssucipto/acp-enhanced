@@ -1,7 +1,7 @@
 import matter from "gray-matter";
 import yaml from "js-yaml";
 import { readFileSync, existsSync, readdirSync, statSync } from "fs";
-import { execSync } from "child_process";
+import { execSync, execFileSync } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createHash } from "crypto";
@@ -1067,7 +1067,14 @@ function validateStatusConsistency(): boolean {
 }
 
 // ── Memory-layer schema enforcement ────────────────────────────
-const SCHEMAS_DIR = process.env["ACP_SCHEMAS_DIR"] ?? repoPath("agent", "schemas");
+// F-M82-01: relative ACP_SCHEMAS_DIR must resolve from repo root (CI runs from scripts/)
+const _schemasDirOverride = process.env["ACP_SCHEMAS_DIR"];
+const SCHEMAS_DIR =
+  _schemasDirOverride === undefined
+    ? repoPath("agent", "schemas")
+    : path.isAbsolute(_schemasDirOverride)
+      ? _schemasDirOverride
+      : repoPath(_schemasDirOverride);
 // Map schema files to data files they validate
 const SCHEMA_DATA_MAP: Record<string, string> = {
   "progress.schema.yaml": "agent/progress.yaml",
@@ -1102,15 +1109,47 @@ export function isBranchProtectionDeferred(
   return /status:\s*deferred/.test(slice);
 }
 
+/**
+ * Parse owner/repo from a git remote URL (F-M82-02).
+ * Accepts github.com HTTPS/SSH and common SSH host aliases.
+ * Rejects owner/repo segments that are not safe path tokens (blocks shell metacharacters).
+ */
+export function parseGithubOwnerRepo(url: string): string | null {
+  const trimmed = url.trim();
+  let owner = "";
+  let repo = "";
+
+  const ssh = trimmed.match(/^git@([^:]+):([^/]+)\/([^/\s]+?)(?:\.git)?$/i);
+  if (ssh) {
+    owner = ssh[2];
+    repo = ssh[3];
+  } else {
+    try {
+      const normalized = trimmed.includes("://") ? trimmed : `https://${trimmed}`;
+      const u = new URL(normalized);
+      const parts = u.pathname.replace(/^\/+/, "").replace(/\.git$/i, "").split("/");
+      if (parts.length < 2) return null;
+      owner = parts[0];
+      repo = parts[1];
+    } catch {
+      return null;
+    }
+  }
+
+  // Safe path tokens only — never pass unvalidated strings into gh argv
+  if (!/^[A-Za-z0-9_.-]+$/.test(owner) || !/^[A-Za-z0-9_.-]+$/.test(repo)) return null;
+  if (owner === "." || owner === ".." || repo === "." || repo === "..") return null;
+  return `${owner}/${repo}`;
+}
+
 function resolveOriginGithubRepo(): string | null {
   if (!commandExists("git")) return null;
   try {
-    const url = execSync("git remote get-url origin", {
+    const url = execFileSync("git", ["remote", "get-url", "origin"], {
       encoding: "utf8",
       stdio: ["pipe", "pipe", "pipe"],
     }).trim();
-    const match = url.match(/[:/]([^/]+\/[^/\s]+?)(?:\.git)?$/);
-    return match ? match[1] : null;
+    return parseGithubOwnerRepo(url);
   } catch {
     return null;
   }
@@ -1153,7 +1192,8 @@ export function validateBranchProtectionDocs(): ValidationError[] {
     try {
       const repo = resolveOriginGithubRepo();
       if (repo) {
-        execSync(`gh api repos/${repo}/branches/mainline/protection`, {
+        // F-M82-02: never shell-interpolate owner/repo into a command string
+        execFileSync("gh", ["api", `repos/${repo}/branches/mainline/protection`], {
           encoding: "utf8",
           stdio: ["pipe", "pipe", "pipe"],
         });

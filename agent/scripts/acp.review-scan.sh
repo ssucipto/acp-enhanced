@@ -111,11 +111,16 @@ PY
 
 scan_sh() {
   local file="$1"
+  # Sourced function libraries deliberately omit set -euo (would leak into callers).
+  # F-M82-05: allowlist + honor explicit exemption comment in first 40 lines.
   case "$file" in
-    */acp.common.sh|*/acp.yaml-parser.sh|*/acp.integrity-output.sh|*/acp.driver-yaml.sh|*/e2e/*)
+    */acp.common.sh|*/acp.yaml-parser.sh|*/acp.integrity-output.sh|*/acp.driver-yaml.sh|*/acp.coderabbit.sh|*/acp.preferences.sh|*/e2e/*)
       return 0
       ;;
   esac
+  if head -40 "$file" | grep -qiE 'sourced function library|deliberately does NOT set `set -euo|when sourced'; then
+    return 0
+  fi
   if ! head -40 "$file" | grep -q 'set -euo pipefail'; then
     ig_emit_finding "$file" "1" "SH-01" "missing set -euo pipefail" "HIGH"
   fi
