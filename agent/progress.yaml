@@ -611,14 +611,14 @@ milestones:
     completed: null
     estimated_weeks: 0.2
     tasks_completed: 0
-    tasks_total: 4
+    tasks_total: 3
     file: agent/milestones/milestone-80-e2e-debt-carryover-closure.md
     notes: |
-      📋 M80 planned — close the 2 remaining open carryovers. F-M78-01: the 7
-      root-caused pre-existing E2E failures (audit-099) — test-side fixes (265)
-      + script-vs-test reconcile (266), NO blind greening. F-086-02: FIFOZ
-      downstream verify (267, ops-gated on consumer repo access). Closure 268
-      ships v6.28.2. Routes 254-257, tasks 265-268.
+      📋 M80 planned — F-M78-01: the 7 root-caused pre-existing E2E failures
+      (audit-099) — test-side fixes (265) + script-vs-test reconcile (266), NO
+      blind greening. Closure 268 ships v6.28.2. Routes 254,255,257, tasks
+      265,266,268. (task-267/F-086-02 removed — FIFOZ downstream already done,
+      developer-confirmed 2026-07-24.)
 
   M1:
     name: ACP Commands Infrastructure
@@ -4916,16 +4916,6 @@ tasks:
       estimated_hours: 2.5
       notes: "route-255; F-M78-01; version exit-code, package-info, project-update git, post-milestone-sweep; no blind greening"
 
-    - id: task-267
-      name: "F-086-02 FIFOZ downstream version-update verification (ops)"
-      priority: 3
-      status: planned
-      file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-267-fifoz-downstream-verify.md
-      started: null
-      completed_date: null
-      estimated_hours: 1
-      notes: "route-256; F-086-02; BLOCKED on consumer-repo access; honest closure only"
-
     - id: task-268
       name: "M80 closure — full suite, ship v6.28.2, close carryovers"
       priority: 5
@@ -4934,7 +4924,7 @@ tasks:
       started: null
       completed_date: null
       estimated_hours: 1
-      notes: "route-257; v6.28.2; assertion-level count check; settle F-M78-01/F-086-02 truthfully; depends 265-267"
+      notes: "route-257; v6.28.2; assertion-level count check; settle F-M78-01 truthfully; depends 265-266 (F-086-02 already done)"
 
 recent_work:
   - date: 2026-07-23
