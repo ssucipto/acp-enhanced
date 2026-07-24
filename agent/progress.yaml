@@ -6140,6 +6140,11 @@ tasks:
     notes: review-002; CLI ≠ ADR-22 gate
 recent_work:
 - date: 2026-07-24
+  description: M82 carryover remediation F-M82-01..07 fixed
+  items:
+  - F-M82-01..07 fixed and validated
+  - e2e chunk retry completed; workflows remained optionally rate-limited
+- date: 2026-07-24
   description: 'M82 COMPLETE — local thorough review campaign closed with ACP weeklies,
 
     review-002, and CodeRabbit CLI chunk artifacts. 2/4 CLI chunks completed;
@@ -8995,12 +9000,11 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- 'M82 COMPLETE: review-002 published; carryovers F-M82-01..07 logged. Residual F-M82-06
-  tracks remaining CLI chunks after rate limiting.'
 - 'M81 IN PROGRESS: task-269 ✅ (ADR-22). BLOCKED 270-274 on tests/fixtures/coderabbit-findings-sample.json
   (sanitized real CodeRabbit PR export). current_milestone remains M81.'
-- 'HIGH fixes follow-up: triage and implement accepted M82 carryovers in priority
-  order, starting with review-002 / F-M82-01..07.'
+- 'M82 COMPLETE: carryovers F-M82-01..07 are fixed and validated. e2e retry finished;
+  .github/workflows retry remains optional ops residual under prior rate limiting.'
+- 'Await the M81 fixture gate, then resume 270-274; M82 findings are closed.'
 - 'M80 COMPLETE (v6.28.2): F-M78-01 closed — full E2E suite 68/68; F-100-01..05 settled
   at m80-closure-2026-07-24.'
 - 'M78 COMPLETE (v6.28.0, ADR-21): CodeRabbit optionality foundation shipped — toggle
