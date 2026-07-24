@@ -2531,3 +2531,94 @@ carryovers:
     fix_applied_date: 2026-07-24
     verified_in_audit: task-269
     escalated_to: null
+
+  - audit_id: coderabbit-local-2026-07-24
+    finding_id: F-M82-01
+    severity: medium
+    file: scripts/acp-validate.ts
+    finding: "Relative ACP_SCHEMAS_DIR overrides are cwd-relative, not repo-root-relative"
+    description: "SCHEMAS_DIR uses process.env.ACP_SCHEMAS_DIR ?? repoPath(...). A relative override resolves from cwd (often scripts/ in CI), breaking schema loading. Absolute overrides and unset default are fine."
+    fix_target: "Resolve relative ACP_SCHEMAS_DIR via repoPath(); keep absolute paths as-is"
+    status: pending
+    planned_in: M82
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: coderabbit-local-2026-07-24
+    finding_id: F-M82-02
+    severity: high
+    file: scripts/acp-validate.ts
+    finding: "GitHub API call via shell-interpolated execSync(gh api …) after parsing origin URL"
+    description: "resolveOriginGithubRepo + downstream gh api should use execFileSync with argv array; validate owner/repo segments and approved GitHub hostnames before use."
+    fix_target: "Replace shell execSync with execFileSync('gh', ['api', endpoint], …); harden URL parse"
+    status: pending
+    planned_in: M82
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: coderabbit-local-2026-07-24
+    finding_id: F-M82-03
+    severity: high
+    file: agent/scripts/acp.project-update.sh
+    finding: "current_tags yaml_query runs once before ADD_TAGS loop — duplicate tags risk on multi-add"
+    description: "Reading tags once before mutating the registry can miss prior-iteration updates when adding multiple tags."
+    fix_target: "Re-query current_tags inside the ADD_TAGS loop body before each mutation"
+    status: pending
+    planned_in: M82
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: coderabbit-local-2026-07-24
+    finding_id: F-M82-04
+    severity: low
+    file: agent/scripts/acp.post-milestone-sweep.sh
+    finding: "Gate 5 failure message may omit TOTAL_TOKENS > TOTAL_MAX when TOKEN_FAILS is zero"
+    description: "Total-budget violation should be reported even if per-file TOKEN_FAILS count is zero."
+    fix_target: "Include total-budget violation in fail_gate message when TOTAL_TOKENS exceeds TOTAL_MAX"
+    status: pending
+    planned_in: M82
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: coderabbit-local-2026-07-24
+    finding_id: F-M82-05
+    severity: low
+    file: agent/scripts/acp.review-scan.sh
+    finding: "SH-01 flags sourced libraries (e.g. acp.coderabbit.sh) that deliberately omit set -euo pipefail"
+    description: "Phase 1 scan reported HIGH on acp.coderabbit.sh; file documents sourced-library exemption. Scanner should allowlist sourced libs or skip files with explicit exemption comment."
+    fix_target: "Improve SH-01 to skip sourced function libraries (or honor exemption marker)"
+    status: pending
+    planned_in: M82
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: coderabbit-local-2026-07-24
+    finding_id: F-M82-06
+    severity: low
+    file: agent/reports/coderabbit-local-2026-07-24/MANIFEST.md
+    finding: "M82 CLI campaign incomplete — e2e and .github/workflows chunks blocked by CodeRabbit rate limits"
+    description: "Only 2/4 planned chunks completed (scripts, agent/scripts). Residual: re-run e2e + workflows when rate limit clears."
+    fix_target: "Ops: rerun blocked chunks; append findings to this campaign or a follow-up report"
+    status: pending
+    planned_in: M82
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: acp-review-2026-07-24
+    finding_id: F-M82-07
+    severity: high
+    file: scripts/package.json
+    finding: "npm audit high — js-yaml 4.0.0–4.2.0 quadratic CPU via YAML merge-key chains"
+    description: "scripts/ npm audit --audit-level=high reported js-yaml advisory; vitest is already ^3.2.7 (prior CR-001/002 vitest CVEs addressed)."
+    fix_target: "cd scripts && npm audit fix (or bump js-yaml); re-run vitest"
+    status: pending
+    planned_in: M82
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
