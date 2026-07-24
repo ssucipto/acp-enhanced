@@ -5,6 +5,17 @@
 - date: 2026-07-24
   executor: cursor
   branch: develop
+  tasks: []
+  done:
+    - acp-validate-clean-post-m80
+    - acp-sync-handoff-completed-progress-notes-refreshed
+  deferred:
+    - m74-m77-coderabbit-pr-check → adr-19-gate
+  key_fact: "ADR-19 gates M74–M77 integration milestones (not tool install) until CodeRabbit + Aikido run on a consumer-project repo with 2+ weeks of real findings; M78 optionality foundation shipped separately per ADR-21."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
   tasks: [task-265, task-266, task-268]
   done:
     - m80-e2e-debt-remediation-shipped-v6-28-2
