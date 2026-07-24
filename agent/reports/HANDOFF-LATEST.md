@@ -4,15 +4,19 @@ handoff_mode: executor
 from_executor: claude
 to_executor: cursor
 date: 2026-07-24
-status: active
+status: completed
 supersedes: null
+completed_date: 2026-07-24
+completed_commit: d080a25
 git_branch: develop
-git_commit: e263e9beca512795ba62f0d14ec743d1538a81da
+git_commit: d080a25
 git_remote: git@github-ssucipto:ssucipto/acp-enhanced.git
-app_version: 6.28.1
+app_version: 6.28.2
 ---
 
 # Handoff: M80 E2E Suite Debt Remediation → cursor
+
+**Status: COMPLETED** (2026-07-24) — v6.28.2 shipped; full E2E suite **68/68** green. This handoff is retained for history only.
 
 ## Model / executor requirements
 - **Cursor Composer 2.5, non-fast** (deterministic multi-file edits across bash + TS + YAML).
@@ -26,7 +30,7 @@ app_version: 6.28.1
 4. Read `agent/reports/audit-100-m80-pre-impl-readiness.md` — it has verified root causes + exact line numbers for every fix.
 
 ## Problem / context
-M78 (CodeRabbit optionality, v6.28.0) and M79 (closure-integrity, v6.28.1) shipped. During M79, audit-099 root-caused **7 pre-existing E2E test failures** that predate this work (they fail identically at baseline commit 5137aa5). M80 exists to close that debt (carryover **F-M78-01**). audit-100 (`--pre-impl`) verified each root cause against the real tests + scripts and folded 5 refinements into the task docs. Everything is local; no external dependency. Full suite is currently **61/68 (7 failing)** — the 7 are the M80 targets.
+M78 (CodeRabbit optionality, v6.28.0) and M79 (closure-integrity, v6.28.1) shipped. M80 closed carryover **F-M78-01** (7 pre-existing E2E failures). **Result:** full suite **68/68** green at v6.28.2 (`d080a25`).
 
 ## Locked decisions (do not re-litigate)
 - **ADR-19** — CodeRabbit/Aikido PR-check + findings-import stay GATED (M74–M77). Do not build them.
