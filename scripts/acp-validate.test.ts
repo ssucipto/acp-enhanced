@@ -28,6 +28,7 @@ import {
   validateProtocolDirAddability,
   validateActiveHandoff,
   getRepoRoot,
+  parseGithubOwnerRepo,
   resolveProgressPointerPath,
 } from "./acp-validate.ts";
 import type { ValidationError } from "./acp-validate.ts";
@@ -554,5 +555,24 @@ describe("progress.yaml pointer resolution", () => {
   it("validates active_handoff.path relative to repo root when cwd is scripts", () => {
     const errors = validateActiveHandoff();
     expect(errors).toHaveLength(0);
+  });
+});
+
+describe("parseGithubOwnerRepo (F-M82-02)", () => {
+  it("parses https and ssh remotes", () => {
+    expect(parseGithubOwnerRepo("https://github.com/ssucipto/acp-enhanced.git")).toBe(
+      "ssucipto/acp-enhanced"
+    );
+    expect(parseGithubOwnerRepo("git@github.com:ssucipto/acp-enhanced.git")).toBe(
+      "ssucipto/acp-enhanced"
+    );
+    expect(parseGithubOwnerRepo("git@github-ssucipto:ssucipto/acp-enhanced.git")).toBe(
+      "ssucipto/acp-enhanced"
+    );
+  });
+
+  it("rejects unsafe owner/repo tokens", () => {
+    expect(parseGithubOwnerRepo("git@github.com:evil;rm/acp-enhanced.git")).toBeNull();
+    expect(parseGithubOwnerRepo("https://github.com/../acp-enhanced")).toBeNull();
   });
 });
