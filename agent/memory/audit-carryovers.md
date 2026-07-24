@@ -1784,10 +1784,11 @@ carryovers:
     file: agent/feedback/feedback-007-cross-agent-handoff-protocol.md
     finding: "consumer-project consumer path — /acp-version-update on downstream project not verified"
     fix_target: "Run /acp-version-update on consumer-project when consumer repo access available"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: audit-088-deferred
+    status: fixed
+    fix_applied_date: 2026-07-24
+    verified_in_audit: developer-confirmed-2026-07-24
     escalated_to: null
+    note: "Developer confirmed the downstream consumer-project /acp-version-update was already performed/verified (2026-07-24). Planned M80 task-267 removed as redundant."
 
   - audit_id: audit-086
     finding_id: F-086-03
@@ -2361,4 +2362,66 @@ carryovers:
     planned_in: M78
     fix_applied_date: 2026-07-23
     verified_in_audit: audit-099
+    escalated_to: null
+
+  # ── AUDIT-100 FINDINGS — M80 PRE-IMPL READINESS (2026-07-24) ────────────────
+  # All 5 folded into M80 tasks via /acp-plan amendment same session. Verify at task-268.
+  - audit_id: audit-100
+    finding_id: F-100-01
+    severity: low
+    file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-266-behavior-mismatch-reconcile.md
+    finding: "post-milestone-sweep root cause is a missing executable bit (git mode 100644 on acp.post-milestone-sweep.sh), not a behavior mismatch; the test's `|| true # Windows` does not suppress the recorded FAIL"
+    fix_target: "task-266: fix via chmod +x + git update-index --chmod=+x agent/scripts/acp.post-milestone-sweep.sh"
+    status: pending
+    planned_in: M80
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-100
+    finding_id: F-100-02
+    severity: low
+    file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-266-behavior-mismatch-reconcile.md
+    finding: "acp.version exit-code (1 vs 2 on missing AGENT.md) has NO documented convention (command doc silent) — free choice; also acp.version-check.sh has duplicate ERR traps (lines 7-8)"
+    fix_target: "task-266: pick 1 or 2, document the contract in the script header; remove the duplicate ERR trap"
+    status: pending
+    planned_in: M80
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-100
+    finding_id: F-100-03
+    severity: medium
+    file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-265-test-side-e2e-fixes.md
+    finding: "AUTO-SYNC TRAP: .github/copilot-instructions.md is auto-generated from AGENTS.md by the pre-commit hook; fixing the e2e-workflow 'light mode' failure by editing copilot-instructions.md directly is reverted on commit"
+    fix_target: "task-265: fix test-side (regex to match 'light + full modes') OR edit AGENTS.md source; never edit copilot-instructions.md directly"
+    status: pending
+    planned_in: M80
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-100
+    finding_id: F-100-04
+    severity: low
+    file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-265-test-side-e2e-fixes.md
+    finding: "validate-cross-layer `cp package.json` occurs at THREE sites (lines 23, 59, 74); project has no root package.json (uses package.yaml) — all three must be fixed"
+    fix_target: "task-265: make each cp conditional or use package.yaml at all 3 sites"
+    status: pending
+    planned_in: M80
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-100
+    finding_id: F-100-05
+    severity: low
+    file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-266-behavior-mismatch-reconcile.md
+    finding: "project-update empty output = script exits before its tag logic (acp.project-update.sh:227 emits 'Added tag'); likely the --add-tag test block's test-project registration, not the script. version-check exit-code change is low-risk (no test/script depends on exit 1)"
+    fix_target: "task-266: trace the --add-tag block's fixture setup (register_project) before touching the script"
+    status: pending
+    planned_in: M80
+    fix_applied_date: null
+    verified_in_audit: null
     escalated_to: null
