@@ -5,7 +5,7 @@
 - date: 2026-07-24
   executor: claude-opus-4-8
   branch: develop
-  tasks_completed: [task-255, task-256, task-257, task-258, task-259, task-260, task-261, task-262, task-263, task-264]
+  tasks: [task-255, task-256, task-257, task-258, task-259, task-260, task-261, task-262, task-263, task-264]
   done:
     - m78-coderabbit-optionality-foundation-shipped-v6-28-0
     - m79-closure-integrity-remediation-shipped-v6-28-1
