@@ -84,6 +84,38 @@ skipped=0
 timed_out=0
 failed_tests=()
 
+# Windows Git Bash: yaml_query / project-registry / version-update-preserve
+# suites hang indefinitely (route-099 class). Per e2e-tests.yaml: skip
+# non-portable suites rather than burn the 180s timeout x N and fail the matrix job.
+_acp_is_windows() {
+    case "$(uname -s 2>/dev/null)" in
+        MINGW*|MSYS*|CYGWIN*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+_acp_windows_skip_suite() {
+    local name="$1"
+    case "$name" in
+        acp.yaml-parser.test.sh|\
+        acp.preferences.test.sh|\
+        acp.preferences-validate.test.sh|\
+        acp.preferences-preset.test.sh|\
+        acp.project-info.test.sh|\
+        acp.project-list.test.sh|\
+        acp.project-remove.test.sh|\
+        acp.project-set.test.sh|\
+        acp.project-update.test.sh|\
+        acp.project-workflow.test.sh|\
+        acp.sessions.test.sh|\
+        acp.bootstrap-preserve.test.sh|\
+        acp.version-update-preserve.test.sh|\
+        acp.integrity.test.sh)
+            return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
 # Collect test files into ordered array (before forking)
 test_files=()
 test_names=()
@@ -92,6 +124,11 @@ for test_file in "$SCRIPT_DIR"/e2e/*.test.sh "$SCRIPT_DIR"/tests/*.test.sh; do
 
     [[ -n "$FILTER" ]] && [[ "$test_name" != *"$FILTER"* ]] && continue
     [[ "$SKIP_NETWORK" == "true" ]] && grep -q "^# ACP_NETWORK_TEST=true" "$test_file" 2>/dev/null && continue
+    if _acp_is_windows && _acp_windows_skip_suite "$test_name"; then
+        printf "  %-50s ⏭  SKIP (Windows non-portable — yaml/project hang)\n" "$test_name"
+        skipped=$((skipped + 1))
+        continue
+    fi
 
     test_files+=("$test_file")
     test_names+=("$test_name")
