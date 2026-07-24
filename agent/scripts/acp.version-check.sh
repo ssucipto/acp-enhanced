@@ -2,10 +2,11 @@
 
 # ACP Version Check Script
 # Extracts and displays the current ACP version from AGENT.md
+#
+# Exit codes: 0 success | 1 missing AGENT.md or parse error | 2 reserved
 
 set -euo pipefail
 trap 'echo "[acp.version-check] Error on line $LINENO" >&2; exit 1' ERR
-trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Colors for output using tput (more reliable than ANSI codes)
 if command -v tput >/dev/null 2>&1 && [ -t 1 ]; then
