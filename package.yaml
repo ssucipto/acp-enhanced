@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.27.2
+version: 6.28.2
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
@@ -487,6 +487,10 @@ contents:
     # Preferences Scripts
     - name: acp.preferences.sh
       description: Unified preferences utilities (get, set, validate, generate, presets)
+
+    - name: acp.coderabbit.sh
+      description: Optional CodeRabbit detection helpers — coderabbit_available/active (M78, ADR-21)
+      type: utility
 
     # Installation Scripts
     - name: acp.install.sh

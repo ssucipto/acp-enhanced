@@ -203,6 +203,8 @@ main() {
 
   # Add tags
   if [ ${#ADD_TAGS[@]} -gt 0 ]; then
+    local current_tags
+    current_tags=$(yaml_query ".projects.${PROJECT_NAME}.tags" 2>/dev/null || echo "")
     for tag in "${ADD_TAGS[@]}"; do
       # Check if tag already exists by searching the raw YAML file
       # (yaml_query can't reliably return array element values)

@@ -2,6 +2,105 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
+  tasks: [task-269]
+  done:
+    - task-269-adr22-policy-map-lite
+    - acp-validate-clean
+    - m81-status-synced-in-progress-1-of-6
+    - changelog-unreleased-m81-wip
+  deferred:
+    - m81-270-274 → fixture-gate
+    - aikido-m76-m77 → adr-19
+  key_fact: "M81 halted after task-269: need tests/fixtures/coderabbit-findings-sample.json before 270+; ADR-22 carve-out live; F-101-01/04/07/08 fixed; pending F-101-02/03/05/06 for import/wiring tasks."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
+  tasks: [task-269, task-270, task-271, task-272, task-273, task-274]
+  done:
+    - audit-101-f101-findings-folded-into-m81-plan
+    - task-269-ungated-for-adr22
+    - m81-ready-for-implementation-after-fixture
+  deferred:
+    - m81-270-274 → fixture-gate
+    - aikido-m76-m77 → adr-19
+  key_fact: "M81 plan amended per audit-101: ADR-22 carve-out (not supersede); task-269 ungated; findings-import v1 is --input fixture only; weekly-code-review is single command:/optional wrapper; Phase 1 never deferred to CodeRabbit."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
+  tasks: []
+  done:
+    - audit-101-m81-pre-impl-readiness
+    - f-101-01-through-08-carryovers-written
+  deferred:
+    - m81-plan-amend-f101 → before-acp-proceed
+    - m81-gate-artifact-findings-fixture → consumer-export
+    - aikido-m74-m77 → deferred-cost
+  key_fact: "M81 READY WITH AMENDMENTS (audit-101): carve ADR-22 out of ADR-19 (never supersede); fixture-first --input import only; weekly-code-review is a single command string; Phase 1 rules never defer to CodeRabbit; ungate task-269 for ADR writing."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
+  tasks: []
+  done:
+    - acp-validate-clean-post-m80
+    - acp-sync-handoff-completed-progress-notes-refreshed
+  deferred:
+    - m74-m77-coderabbit-pr-check → adr-19-gate
+  key_fact: "ADR-19 gates M74–M77 integration milestones (not tool install) until CodeRabbit + Aikido run on a consumer-project repo with 2+ weeks of real findings; M78 optionality foundation shipped separately per ADR-21."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
+  tasks: [task-265, task-266, task-268]
+  done:
+    - m80-e2e-debt-remediation-shipped-v6-28-2
+    - f-m78-01-closed-68-68-e2e-suite
+    - audit-100-carryovers-f-100-01-through-05-settled
+    - test-side-fixes-workflow-cross-layer-validate-ts
+    - behavior-reconcile-version-package-info-project-update-sweep
+  deferred:
+    - m74-m77-coderabbit-pr-check → adr-19-gate
+    - crit-065-002-merge-pr3 → mainline
+  key_fact: "F-M78-01 closed with honest code-vs-test triage (no blind greening): validate-cross-layer needed conditional package.yaml copy + milestone awk; validate-ts needed isolated 5-surface parity dirs; version-check-for-updates needed ${1:-} under set -u; project-update needed current_tags init before ADD_TAGS block."
+
+- date: 2026-07-24
+  executor: claude-opus-4-8
+  branch: develop
+  tasks: [task-255, task-256, task-257, task-258, task-259, task-260, task-261, task-262, task-263, task-264]
+  done:
+    - m78-coderabbit-optionality-foundation-shipped-v6-28-0
+    - m79-closure-integrity-remediation-shipped-v6-28-1
+    - audit-099-caught-own-version-regression-honest-correction
+    - audit-100-m80-preimpl-5-findings-folded
+    - m80-planned-3-tasks-after-task-267-removed
+  deferred:
+    - m80-implementation → cursor-executor-handoff (tasks 265,266,268)
+    - m74-m77-coderabbit-pr-check → adr-19-gate
+    - crit-065-002-merge-pr3 → mainline
+  key_fact: "Regression comparison MUST be assertion-level, not file-level — audit-098 declared M78 'zero regression' by file-count but audit-099 found the v6.28.0 bump missed agent/progress.yaml's version: field, adding 2 assertion failures inside already-failing test files. Fix incl. a validator gap: acp-validate.ts now checks progress.yaml version (it caught a YAML corruption I introduced mid-fix). M80 = 7 pre-existing E2E failures (root-caused audit-099) + F-100-03 auto-sync trap (copilot-instructions.md regenerated from AGENTS.md)."
+
+- date: 2026-07-23
+  executor: claude-opus-4-8
+  branch: develop
+  tasks: []
+  done:
+    - audit-097-optional-coderabbit-distributed-framework-lens
+    - plan-m78-optionality-foundation-6-tasks-255-260
+    - adr-21-coderabbit-optionality-carved-out-of-adr-19-gate
+    - adr-20-backfill-hooks-task_id-array-format
+    - audit-098-preimpl-7-findings-folded-into-m78
+  deferred:
+    - m78-implementation → acp-proceed-complete (this session, next)
+    - m74-m77-pr-check-findings-import → adr-19-adoption-gate
+    - crit-065-002-merge-pr3 → mainline
+    - f-086-02-consumer-project-consumer → task-239
+  key_fact: "acp.preferences.sh sources acp.common.sh, so optional-tool detection helpers that call get_preference must live in a dedicated script (acp.coderabbit.sh) sourcing preferences.sh — never in common.sh (circular source). Caught in pre-impl audit-098 before any code was written. Also: ADR-19 gates CodeRabbit *integration* (PR-check/findings-import); the *optionality foundation* (toggle+detection+docs) is a separate non-gated concern (ADR-21)."
+
 - date: 2026-07-17
   executor: copilot
   branch: develop
