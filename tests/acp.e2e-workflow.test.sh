@@ -39,8 +39,9 @@ grep -q "TEAM_SIZE" "$BS" && grep -q "observability:" "$PY" \
     || { echo "  ✗ [065] missing bootstrap flag or observability"; FAIL=$((FAIL+1)); }
 
 # === Integration: copilot-instructions.md references light mode ===
+# Doc phrasing is "light + full modes" (AGENTS.md source); match intentional wording (F-100-03).
 CI="$PROJECT_ROOT/.github/copilot-instructions.md"
-grep -q "light mode\|Light mode\|light-mode\|light_mode" "$CI" \
+grep -qE "light \+ full|light mode|Light mode|light-mode|light_mode" "$CI" \
     && { echo "  ✓ Integrated: copilot-instructions.md references light mode"; PASS=$((PASS+1)); } \
     || { echo "  ✗ copilot-instructions.md missing light mode reference"; FAIL=$((FAIL+1)); }
 
