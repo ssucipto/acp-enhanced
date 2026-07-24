@@ -7,11 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
----
+## [Unreleased]
 
----
+### Added (M81 — in progress, not shipped)
+- **ADR-22** — CodeRabbit-only M81 carved out of ADR-19’s Aikido-coupled gate (task-269).
+- **Policy map lite** — `agent/wiki/coderabbit-policy-map-lite.md` (Phase 1 never deferred to CodeRabbit).
+- Wiki/config/research roadmap points to M81/ADR-22 for CodeRabbit consumers; Aikido/M76/M77 stay ADR-19-gated.
 
----
+### Notes
+- Tasks 270–274 blocked until `tests/fixtures/coderabbit-findings-sample.json` (sanitized real export) exists. Planned ship: **v6.29.0**.
 
 ---
 
@@ -49,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Docs** — `agent/wiki/coderabbit-integration.md` how-to guide + README pointer.
 
 ### Notes
-- **GATED (ADR-19)**: CodeRabbit PR-check, `acp.findings-import.sh`, `.coderabbit.yaml` generation, and recurring-task rewire remain plan-only (M74/M75) until CodeRabbit is operational on a repo with 2+ weeks of findings.
+- **GATED at ship time (ADR-19)**: full M74–M77 tool-integration track (CodeRabbit + Aikido). Later **ADR-22** carved CodeRabbit-only M81 out of that Aikido-coupled gate — see [Unreleased].
 - **ADR-20** backfilled (hooks `task_id`-array format); **ADR-21** added (optionality carve-out).
 
 ---
