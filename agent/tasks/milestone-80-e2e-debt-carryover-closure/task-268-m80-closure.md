@@ -2,7 +2,7 @@
 id: task-268
 milestone: M80
 title: "M80 closure — full suite, ship v6.28.2, close carryovers"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 1

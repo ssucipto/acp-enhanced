@@ -2,7 +2,7 @@
 id: task-265
 milestone: M80
 title: "Fix test-side E2E bugs (stale expectations, wrong file ref, fixtures)"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 2.5

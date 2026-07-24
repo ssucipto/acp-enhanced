@@ -3,6 +3,21 @@
 # DO NOT edit manually — updated by /acp-commit
 
 - date: 2026-07-24
+  executor: cursor
+  branch: develop
+  tasks: [task-265, task-266, task-268]
+  done:
+    - m80-e2e-debt-remediation-shipped-v6-28-2
+    - f-m78-01-closed-68-68-e2e-suite
+    - audit-100-carryovers-f-100-01-through-05-settled
+    - test-side-fixes-workflow-cross-layer-validate-ts
+    - behavior-reconcile-version-package-info-project-update-sweep
+  deferred:
+    - m74-m77-coderabbit-pr-check → adr-19-gate
+    - crit-065-002-merge-pr3 → mainline
+  key_fact: "F-M78-01 closed with honest code-vs-test triage (no blind greening): validate-cross-layer needed conditional package.yaml copy + milestone awk; validate-ts needed isolated 5-surface parity dirs; version-check-for-updates needed ${1:-} under set -u; project-update needed current_tags init before ADD_TAGS block."
+
+- date: 2026-07-24
   executor: claude-opus-4-8
   branch: develop
   tasks: [task-255, task-256, task-257, task-258, task-259, task-260, task-261, task-262, task-263, task-264]
