@@ -57,3 +57,8 @@
 - `agent/reports/coderabbit-local-2026-07-24/chunk-scripts.raw.txt`
 - `agent/reports/coderabbit-local-2026-07-24/chunk-workflows.attempt1.meta.json`
 - `agent/reports/coderabbit-local-2026-07-24/chunk-workflows.json`
+
+## Remediation follow-up
+
+- `e2e` chunk completed on retry with `3` findings; those were addressed in the e2e test hardening pass.
+- `.github/workflows` remained rate-limited, so workflow retry remains an optional residual ops step.
