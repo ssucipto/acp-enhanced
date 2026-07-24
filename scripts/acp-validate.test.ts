@@ -1,5 +1,6 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from "vitest";
 import { writeFileSync, mkdtempSync, rmSync, mkdirSync } from "fs";
+import { fileURLToPath } from "url";
 import { tmpdir } from "os";
 import path from "path";
 import {
@@ -25,12 +26,17 @@ import {
   validateInstructionFileHash,
   validatePackageYamlVersion,
   validateProtocolDirAddability,
+  validateActiveHandoff,
   getRepoRoot,
+  resolveProgressPointerPath,
 } from "./acp-validate.ts";
 import type { ValidationError } from "./acp-validate.ts";
 
 let testDir: string;
 const originalCommandsDir = process.env["ACP_COMMANDS_DIR"];
+const originalRepoRoot = process.env["ACP_REPO_ROOT"];
+const originalCwd = process.cwd();
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 
 beforeAll(() => {
   testDir = mkdtempSync(path.join(tmpdir(), "acp-validate-test-"));
@@ -46,6 +52,12 @@ afterAll(() => {
   } else {
     delete process.env["ACP_COMMANDS_DIR"];
   }
+  if (originalRepoRoot) {
+    process.env["ACP_REPO_ROOT"] = originalRepoRoot;
+  } else {
+    delete process.env["ACP_REPO_ROOT"];
+  }
+  process.chdir(originalCwd);
 });
 
 // ── Placeholder detection (lines 3-4 only) ────────────────────
@@ -516,5 +528,31 @@ describe("validateScriptRegistration D4 ERROR (M73)", () => {
     expect(errors.some((e) => e.severity === "error" && e.message.includes("acp.orphan.sh"))).toBe(
       true
     );
+  });
+});
+
+
+describe("progress.yaml pointer resolution", () => {
+  beforeEach(() => {
+    process.env["ACP_REPO_ROOT"] = getRepoRoot();
+    process.chdir(scriptDir);
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+  });
+
+  it("resolves relative pointers from repo root", () => {
+    expect(resolveProgressPointerPath("agent/progress.yaml")).toBe(path.join(getRepoRoot(), "agent", "progress.yaml"));
+  });
+
+  it("preserves absolute pointers", () => {
+    const absolute = path.join(getRepoRoot(), "agent", "progress.yaml");
+    expect(resolveProgressPointerPath(absolute)).toBe(absolute);
+  });
+
+  it("validates active_handoff.path relative to repo root when cwd is scripts", () => {
+    const errors = validateActiveHandoff();
+    expect(errors).toHaveLength(0);
   });
 });
