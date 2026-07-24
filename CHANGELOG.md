@@ -7,9 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
----
+## [Unreleased]
+
+### Added (M81 — in progress, not shipped)
+- **ADR-22** — CodeRabbit-only M81 carved out of ADR-19’s Aikido-coupled gate (task-269).
+- **Policy map lite** — `agent/wiki/coderabbit-policy-map-lite.md` (Phase 1 never deferred to CodeRabbit).
+- Wiki/config/research roadmap points to M81/ADR-22 for CodeRabbit consumers; Aikido/M76/M77 stay ADR-19-gated.
+
+### Notes
+- Tasks 270–274 blocked until `tests/fixtures/coderabbit-findings-sample.json` (sanitized real export) exists. Planned ship: **v6.29.0**.
 
 ---
+
+## [6.28.2] — 2026-07-24
+
+### Fixed (M80 — E2E suite debt remediation)
+- **7 pre-existing E2E failures (F-M78-01)** — full suite **68/68** green (`run-e2e-tests.sh --skip-network`).
+- **Test-side (task-265)**: e2e-workflow light-mode regex; validate-cross-layer conditional `package.yaml` copy; validate-ts 5-surface parity fixtures.
+- **Behavior (task-266)**: `acp.version-check-for-updates.sh` `${1:-}` fix (exit 2 without AGENT.md); `acp.project-update.sh` unbound `current_tags`; `acp.package-info.sh` empty-line count bug; `acp.post-milestone-sweep.sh` executable bit in git index.
+- **audit-100 carryovers F-100-01..05** — verified at closure.
+
+---
+
+## [6.28.1] — 2026-07-23
+
+### Fixed (M79 — M78 Closure-Integrity Remediation, audit-099)
+- **Version regression** — the v6.28.0 bump missed `agent/progress.yaml`'s own `version:` field (still 6.27.2), caught by cross-file E2E version checks but not `acp-validate.ts` (F-099-01). Now consistent.
+- **Validator gap** — `acp-validate.ts validateVersionConsistency()` now includes `agent/progress.yaml project.version` so a future bump can't skip it; +2 vitest cases (F-099-02). This immediately caught a progress.yaml corruption during remediation.
+- **Carryover ledger** — F-098-01..07 + F-097-01 (implemented in M78 but left `pending`) marked `fixed`/`verified_in_audit: audit-099` (F-099-03).
+- **Subdirectory detection** — `coderabbit_available`/`coderabbit_active` now anchor config detection AND preference resolution to the git repo root, so detection works from any subdirectory (F-099-05).
+- **Doc reconcile** — milestone-78 Build Order corrected to `acp.coderabbit.sh`; task-259 pointer reconciled to README (F-099-04, F-099-06).
+
+### Notes
+- ~6 genuinely pre-existing E2E failures (F-M78-01) remain deferred with root causes documented in audit-099 — not M78/M79 shortcuts.
+
+---
+
+## [6.28.0] — 2026-07-23
+
+### Added (M78 — CodeRabbit Optionality Foundation)
+- **Optional CodeRabbit integration** — `integrations.coderabbit.{enabled,config_path}` preferences (both OFF/inert by default). ACP stays fully functional without CodeRabbit (audit-097, ADR-21).
+- **Detection helpers** — `agent/scripts/acp.coderabbit.sh` (`coderabbit_available` / `coderabbit_active` / hint); config-file detection only, sources preferences (not common.sh — avoids circular source, audit-098 F-098-01).
+- **Pattern** — `agent/patterns/local.optional-external-tool.md`: three-gate contract (opt-in → detection → silent degradation) reusable for Aikido and future tools.
+- **E2E** — `e2e/coderabbit-optionality.test.sh`: 4 states, 11 value assertions.
+- **Docs** — `agent/wiki/coderabbit-integration.md` how-to guide + README pointer.
+
+### Notes
+- **GATED at ship time (ADR-19)**: full M74–M77 tool-integration track (CodeRabbit + Aikido). Later **ADR-22** carved CodeRabbit-only M81 out of that Aikido-coupled gate — see [Unreleased].
+- **ADR-20** backfilled (hooks `task_id`-array format); **ADR-21** added (optionality carve-out).
 
 ---
 
