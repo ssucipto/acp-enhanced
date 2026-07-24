@@ -18,6 +18,10 @@ function repoPath(...parts: string[]): string {
   return path.join(getRepoRoot(), ...parts);
 }
 
+export function resolveProgressPointerPath(pointerPath: string): string {
+  return path.isAbsolute(pointerPath) ? pointerPath : repoPath(pointerPath);
+}
+
 // ── Shared types ─────────────────────────────────────────────
 export interface ValidationError {
   file: string;
@@ -721,8 +725,8 @@ function validateTaskFile(taskFilePath: string): string[] {
 
 // ── Staleness checks (ROUTING-003) ───────────────────────────
 function checkStaleness(): boolean {
-  const TAXONOMY_PATH_LOCAL = path.join("agent", "routing", "taxonomy.yml");
-  const CONFIG_PATH_LOCAL = path.join("agent", "routing", "config.yml");
+  const TAXONOMY_PATH_LOCAL = repoPath("agent", "routing", "taxonomy.yml");
+  const CONFIG_PATH_LOCAL = repoPath("agent", "routing", "config.yml");
   const DAY_MS = 1000 * 60 * 60 * 24;
   const now = Date.now();
   let hasWarnings = false;
@@ -978,7 +982,8 @@ function loadProgressSafe(): ProgressYaml | null {
     let currentMid: string | null = null;
     let currentBlock: string[] = [];
     for (const line of lines) {
-      const mKeyMatch = line.match(/^\s{2}(M\d{1,2}):\s*$/);
+      // M100+ milestones exist; {1,2} wrongly dropped M999 in E2E V3 probes
+      const mKeyMatch = line.match(/^\s{2}(M\d+):\s*$/);
       if (mKeyMatch) {
         if (currentMid) {
           const block = currentBlock.join("\n");
@@ -1032,9 +1037,10 @@ function validateStatusConsistency(): boolean {
     const pyStatus = mdata.status as string | undefined;
     const docFile = mdata.file as string | undefined;
     if (!pyStatus || !docFile) continue;
-    if (!existsSync(docFile)) continue; // handled by validateFilePointers
+    const resolvedDocFile = resolveProgressPointerPath(docFile);
+    if (!existsSync(resolvedDocFile)) continue; // handled by validateFilePointers
 
-    const docContent = readFileSync(docFile, "utf-8");
+    const docContent = readFileSync(resolvedDocFile, "utf-8");
     const statusMatch = docContent.match(/^\*\*Status\*\*:\s*(.+)/m);
     if (!statusMatch) continue;
 
@@ -1061,7 +1067,7 @@ function validateStatusConsistency(): boolean {
 }
 
 // ── Memory-layer schema enforcement ────────────────────────────
-const SCHEMAS_DIR = process.env["ACP_SCHEMAS_DIR"] ?? path.join("agent", "schemas");
+const SCHEMAS_DIR = process.env["ACP_SCHEMAS_DIR"] ?? repoPath("agent", "schemas");
 // Map schema files to data files they validate
 const SCHEMA_DATA_MAP: Record<string, string> = {
   "progress.schema.yaml": "agent/progress.yaml",
@@ -1073,10 +1079,10 @@ const SCHEMA_DATA_MAP: Record<string, string> = {
   // milestone.schema.yaml validates route-task frontmatter (id/title/status), not progress.yaml milestones map
 };
 
-const USAGE_PATH = "docs/USAGE.md";
-const CARRYOVERS_PATH = "agent/memory/audit-carryovers.md";
-const PATTERNS_PATH = "agent/memory/patterns.md";
-const SESSIONS_PATH = "agent/memory/sessions.md";
+const USAGE_PATH = repoPath("docs", "USAGE.md");
+const CARRYOVERS_PATH = repoPath("agent", "memory", "audit-carryovers.md");
+const PATTERNS_PATH = repoPath("agent", "memory", "patterns.md");
+const SESSIONS_PATH = repoPath("agent", "memory", "sessions.md");
 
 function splitYamlListEntries(raw: string, entryMarker: RegExp): string[] {
   const stripped = raw.replace(/^(#[^\n]*\n|\s*\n)*/m, "");
@@ -1581,17 +1587,18 @@ function runSchemaEnforcement(): boolean {
       const schemaContent = readFileSync(schemaPath, "utf8");
       const schema = yaml.load(schemaContent) as Record<string, unknown>;
 
-      if (!existsSync(dataFile)) {
+      const resolvedDataFile = path.isAbsolute(dataFile) ? dataFile : repoPath(dataFile);
+      if (!existsSync(resolvedDataFile)) {
         console.log(`⚠️  Schema ${schemaFile}: data file ${dataFile} not found — skipping`);
         continue;
       }
 
-      const dataContent = readFileSync(dataFile, "utf8");
+      const dataContent = readFileSync(resolvedDataFile, "utf8");
       let schemaErrors: ValidationError[] = [];
       let entryCount = 0;
 
       if (schemaFile === "decisions.schema.yaml") {
-        const result = validateDecisionsAdrEntries(dataFile, schema);
+        const result = validateDecisionsAdrEntries(resolvedDataFile, schema);
         schemaErrors = result.errors;
         entryCount = result.entryCount;
       } else if (
@@ -1601,7 +1608,7 @@ function runSchemaEnforcement(): boolean {
       ) {
         const entries = splitYamlListEntries(dataContent, /\n(?=- date:)/);
         entryCount = entries.length;
-        schemaErrors = validateSchemaListEntries(entries, schema, dataFile);
+        schemaErrors = validateSchemaListEntries(entries, schema, resolvedDataFile);
       } else if (schemaFile === "audit-carryovers.schema.yaml") {
         const entryTexts = splitCarryoverEntries(dataContent);
         entryCount = entryTexts.length;
@@ -1650,7 +1657,7 @@ function runSchemaEnforcement(): boolean {
 
 // ── Cross-file Consistency Validators (route-178) ──────────────
 
-const IDENTITY_PATH = "agent/core/identity.yml";
+const IDENTITY_PATH = repoPath("agent", "core", "identity.yml");
 
 export function validateNextStepsFreshness(): ValidationError[] {
   const errors: ValidationError[] = [];
@@ -1692,7 +1699,7 @@ export function validateMilestoneDocVersion(): ValidationError[] {
   if (!idMatch) return errors;
   const identityVer = idMatch[1];
 
-  const milestonesDir = "agent/milestones";
+  const milestonesDir = repoPath("agent", "milestones");
   if (!existsSync(milestonesDir)) return errors;
 
   const milestoneFiles = readdirSync(milestonesDir).filter(
@@ -1725,7 +1732,7 @@ export function validateMilestoneDocVersion(): ValidationError[] {
 
 export function validateVerificationGates(): ValidationError[] {
   const errors: ValidationError[] = [];
-  const milestonesDir = "agent/milestones";
+  const milestonesDir = repoPath("agent", "milestones");
   if (!existsSync(milestonesDir)) return errors;
 
   const milestoneFiles = readdirSync(milestonesDir).filter(
@@ -1805,7 +1812,7 @@ export function validateGitignoreConflicts(): ValidationError[] {
   for (const tp of trackedPaths) {
     try {
       execSync(`git check-ignore "${tp}"`, {
-        cwd: process.cwd(),
+        cwd: getRepoRoot(),
         encoding: "utf8",
         stdio: ["pipe", "pipe", "pipe"],
       });
@@ -1826,7 +1833,7 @@ export function validateGitignoreConflicts(): ValidationError[] {
 
 export function validateGitattributesCoverage(): ValidationError[] {
   const errors: ValidationError[] = [];
-  const attrPath = ".gitattributes";
+  const attrPath = repoPath(".gitattributes");
   if (!existsSync(attrPath)) {
     errors.push({
       file: attrPath,
@@ -1918,7 +1925,8 @@ function validateFilePointers(): boolean {
     if (docFile) {
       if (seen.has(docFile)) continue;
       seen.add(docFile);
-      if (!existsSync(docFile)) {
+      const resolvedDocFile = resolveProgressPointerPath(docFile);
+      if (!existsSync(resolvedDocFile)) {
         console.error(`❌ Dangling pointer: M${mid.replace(/^M/, "")} file: "${docFile}" does not exist`);
         allOk = false;
       }
@@ -1948,7 +1956,8 @@ export function validateActiveHandoff(strict = false): ValidationError[] {
   if (!activeHandoff || !activeHandoff.path) return errors;
 
   const handoffPath = String(activeHandoff.path);
-  if (!existsSync(handoffPath)) {
+  const resolvedHandoffPath = resolveProgressPointerPath(handoffPath);
+  if (!existsSync(resolvedHandoffPath)) {
     errors.push({
       file: PROGRESS_PATH,
       line: 0,
@@ -1962,7 +1971,7 @@ export function validateActiveHandoff(strict = false): ValidationError[] {
   if (strict && gitCommit) {
     try {
       execSync(`git merge-base --is-ancestor ${gitCommit} HEAD`, {
-        cwd: process.cwd(),
+        cwd: getRepoRoot(),
         encoding: "utf8",
         stdio: ["pipe", "pipe", "pipe"],
       });
@@ -2022,7 +2031,7 @@ export function validateInstallUpdateSafety(): ValidationError[] {
   return errors;
 }
 
-const COMMAND_E2E_COVERAGE_FILE = path.join("agent", "schemas", "command-e2e-coverage.yaml");
+const COMMAND_E2E_COVERAGE_FILE = repoPath("agent", "schemas", "command-e2e-coverage.yaml");
 
 export interface CommandE2eCoverageOptions {
   commandsDir?: string;
@@ -2034,7 +2043,7 @@ export function validateCommandE2eCoverage(
   options: CommandE2eCoverageOptions = {}
 ): ValidationError[] {
   const errors: ValidationError[] = [];
-  const repoRoot = options.repoRoot ?? process.cwd();
+  const repoRoot = options.repoRoot ?? getRepoRoot();
   const commandsDir = options.commandsDir ?? path.join(repoRoot, "agent", "commands");
   if (!existsSync(coverageFile)) {
     errors.push({
