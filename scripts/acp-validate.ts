@@ -978,7 +978,8 @@ function loadProgressSafe(): ProgressYaml | null {
     let currentMid: string | null = null;
     let currentBlock: string[] = [];
     for (const line of lines) {
-      const mKeyMatch = line.match(/^\s{2}(M\d{1,2}):\s*$/);
+      // M100+ milestones exist; {1,2} wrongly dropped M999 in E2E V3 probes
+      const mKeyMatch = line.match(/^\s{2}(M\d+):\s*$/);
       if (mKeyMatch) {
         if (currentMid) {
           const block = currentBlock.join("\n");
