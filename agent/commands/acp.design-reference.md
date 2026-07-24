@@ -1,4 +1,4 @@
-# Directive: design-reference
+# Command: design-reference
 
 > **🤖 Agent Directive**: This is a **SHARED DIRECTIVE**, not a user-invocable command.
 > It is referenced by `/acp-task-create`, `/acp-plan` (via task-create delegation), and `/acp-proceed` to discover and cross-reference design documents, ensuring tasks contain all implementation detail.
