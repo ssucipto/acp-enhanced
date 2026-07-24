@@ -5,6 +5,20 @@
 - date: 2026-07-24
   executor: cursor
   branch: develop
+  tasks: [task-269]
+  done:
+    - task-269-adr22-policy-map-lite
+    - acp-validate-clean
+    - m81-status-synced-in-progress-1-of-6
+    - changelog-unreleased-m81-wip
+  deferred:
+    - m81-270-274 → fixture-gate
+    - aikido-m76-m77 → adr-19
+  key_fact: "M81 halted after task-269: need tests/fixtures/coderabbit-findings-sample.json before 270+; ADR-22 carve-out live; F-101-01/04/07/08 fixed; pending F-101-02/03/05/06 for import/wiring tasks."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
   tasks: [task-269, task-270, task-271, task-272, task-273, task-274]
   done:
     - audit-101-f101-findings-folded-into-m81-plan
