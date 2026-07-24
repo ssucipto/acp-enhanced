@@ -12,38 +12,70 @@ completed: null
 route: route-259
 depends_on: [task-269]
 design_reference: [agent/patterns/local.optional-external-tool.md](../../patterns/local.optional-external-tool.md)
-gate: "Archived real CodeRabbit export samples required before coding import parser"
+audit_findings: [F-101-03, F-101-05]
+gate: "tests/fixtures/coderabbit-findings-sample.json exists (sanitized real export) AND ADR-22 accepted"
+files_affected:
+  - agent/scripts/acp.findings-import.sh
+  - tests/fixtures/coderabbit-findings-sample.json
+  - package.yaml
+  - agent/wiki/domain.yml
+  - agent/wiki/coderabbit-integration.md
+  - agent/integrity-manifest.yaml
 ---
 
 ## Objective
 
-Ship `agent/scripts/acp.findings-import.sh` that imports CodeRabbit PR review findings into `agent/memory/audit-carryovers.md` when `coderabbit_active`, and **no-ops silently** otherwise.
+Ship `agent/scripts/acp.findings-import.sh` that imports CodeRabbit findings into `agent/memory/audit-carryovers.md` when `coderabbit_active`, and **no-ops silently** otherwise.
 
 ## Context
 
-This is the core M75 deliverable from the original roadmap, scoped CodeRabbit-only. Format must be designed from **archived real findings** (2-week gate artifact), not vendor documentation alone.
+audit-101 F-101-05 / F-098-04: no speculative `--pr`/API until verified. F-101-03: match **live** carryover shape (validator maps schema `description` → field `finding`).
+
+## Gate artifact (required before coding parser)
+
+| Artifact | Path | Rules |
+|----------|------|-------|
+| Sanitized findings sample | `tests/fixtures/coderabbit-findings-sample.json` | From real consumer export; no secrets/PII; committed |
+
+Create `tests/fixtures/` directory if absent.
 
 ## Steps
 
-1. Collect/archive sample CodeRabbit output from consumer repo (JSON export, GitHub review comments API dump, or CLI output — whichever is available).
-2. Add fixture: `tests/fixtures/coderabbit-findings-sample.json` (sanitized, no secrets).
-3. Implement `acp.findings-import.sh`:
-   - Source `acp.coderabbit.sh`; exit 0 immediately if `! coderabbit_active`
-   - Flags: `--dry-run`, `--input <file>`, `--pr <number>` (if API path)
-   - Map severity → carryover schema (`critical|high|medium|low`)
-   - Dedup by `finding_id` (idempotent re-import)
-   - Append `status: pending`, `planned_in: M81-import`, `source: coderabbit`
-4. Register script in `package.yaml`; update `agent/wiki/domain.yml` E2E mapping.
-5. Command doc stub or section in `acp.coderabbit.sh` header / wiki (no full `/acp-findings-import` command doc unless maintainer requests — script-first per ADR-13).
+1. Confirm fixture present (or create from maintainer-supplied sanitized export).
+2. Implement `acp.findings-import.sh`:
+   - Source `acp.coderabbit.sh`; exit 0 immediately if `! coderabbit_active` (silent when disabled; hint path via existing helper when enabled+absent)
+   - **v1 flags only:** `--dry-run`, `--input <file>`
+   - **Do NOT implement `--pr` or network fetch in M81** (F-101-05) — document as deferred
+   - Map severities to **lowercase** live values: `critical|high|medium|low`
+   - Append entries matching live ledger shape:
+     ```yaml
+     - audit_id: coderabbit-import
+       finding_id: CR-<stable-hash-or-vendor-id>
+       severity: medium
+       file: <path-or-e2e/>
+       finding: "<one-line> (imported from CodeRabbit)"
+       description: "<optional fuller text>"
+       fix_target: "<suggested or TBD>"
+       status: pending
+       planned_in: M81
+       fix_applied_date: null
+       verified_in_audit: null
+       escalated_to: null
+     ```
+   - **Do not** invent `source:` or `planned_in: M81-import` (F-101-03)
+   - Dedup by `finding_id` (idempotent)
+3. Register in `package.yaml`; update `agent/wiki/domain.yml`; wiki usage: `bash agent/scripts/acp.findings-import.sh --input …`
+4. Regenerate integrity-manifest when script lands (or leave to task-274 if same PR)
 
 ## Verification
 
-- [ ] `bash agent/scripts/acp.findings-import.sh` exits 0 with no output when `enabled=false`
-- [ ] `--dry-run --input tests/fixtures/coderabbit-findings-sample.json` prints mapped entries when `enabled=true` + config present
-- [ ] Re-run does not duplicate existing `finding_id`
-- [ ] Carryover schema validates via `acp-validate`
+- [ ] Exit 0, no carryover writes when `enabled=false`
+- [ ] `--dry-run --input tests/fixtures/coderabbit-findings-sample.json` works when active
+- [ ] Re-run does not duplicate `finding_id`
+- [ ] `npx tsx scripts/acp-validate.ts` accepts appended entries
+- [ ] No `--pr` flag in shipped script help
 - [ ] macOS + Linux clean
 
 ## User-Observable Acceptance
 
-Maintainer runs one command after a CodeRabbit-reviewed PR and sees findings in `audit-carryovers.md` ready for `/acp-audit` closure workflow — without touching Aikido.
+`bash agent/scripts/acp.findings-import.sh --input tests/fixtures/coderabbit-findings-sample.json` populates carryovers for opted-in repos; absent CodeRabbit → silent no-op.
