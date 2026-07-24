@@ -2,6 +2,22 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-07-24
+  executor: claude-opus-4-8
+  branch: develop
+  tasks_completed: [task-255, task-256, task-257, task-258, task-259, task-260, task-261, task-262, task-263, task-264]
+  done:
+    - m78-coderabbit-optionality-foundation-shipped-v6-28-0
+    - m79-closure-integrity-remediation-shipped-v6-28-1
+    - audit-099-caught-own-version-regression-honest-correction
+    - audit-100-m80-preimpl-5-findings-folded
+    - m80-planned-3-tasks-after-task-267-removed
+  deferred:
+    - m80-implementation → cursor-executor-handoff (tasks 265,266,268)
+    - m74-m77-coderabbit-pr-check → adr-19-gate
+    - crit-065-002-merge-pr3 → mainline
+  key_fact: "Regression comparison MUST be assertion-level, not file-level — audit-098 declared M78 'zero regression' by file-count but audit-099 found the v6.28.0 bump missed agent/progress.yaml's version: field, adding 2 assertion failures inside already-failing test files. Fix incl. a validator gap: acp-validate.ts now checks progress.yaml version (it caught a YAML corruption I introduced mid-fix). M80 = 7 pre-existing E2E failures (root-caused audit-099) + F-100-03 auto-sync trap (copilot-instructions.md regenerated from AGENTS.md)."
+
 - date: 2026-07-23
   executor: claude-opus-4-8
   branch: develop
