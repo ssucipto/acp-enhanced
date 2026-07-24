@@ -48,6 +48,9 @@ jobs:
         run: bash run-e2e-tests.sh --parallel 4 --skip-network
         # Note on Windows: Test suites that are not Windows-portable should be
         # skipped within individual test scripts with a documented reason.
-        # If a suite fails on Windows due to platform-specific bash differences
-        # (e.g., /dev/fd, realpath, mktemp), mark it as SKIP in that suite and
-        # file a follow-up issue. The matrix is fail-fast: false so all OSes report.
+        # run-e2e-tests.sh also skips yaml-parser / preferences / project-* /
+        # sessions / bootstrap-preserve / integrity suites on MINGW/MSYS/CYGWIN
+        # (yaml_query hang — route-099). If a suite fails on Windows due to
+        # platform-specific bash differences (e.g., /dev/fd, realpath, mktemp),
+        # mark it as SKIP in that suite and file a follow-up issue. The matrix
+        # is fail-fast: false so all OSes report.
