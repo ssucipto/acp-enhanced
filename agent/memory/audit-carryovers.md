@@ -2425,3 +2425,109 @@ carryovers:
     fix_applied_date: 2026-07-24
     verified_in_audit: m80-closure-2026-07-24
     escalated_to: null
+
+  # ── AUDIT-101 FINDINGS — M81 PRE-IMPL READINESS (2026-07-24) ────────────────
+  # Fold into M81 plan via /acp-plan amendment before /acp-proceed.
+  - audit_id: audit-101
+    finding_id: F-101-01
+    severity: high
+    file: agent/milestones/milestone-81-coderabbit-integration-layer.md
+    finding: "Milestone says 'Supersedes (partially) ADR-19' — ADR-19 is DO NOT re-open; must use ADR-21 carve-out language, not supersede"
+    description: "Illegal reopen risk. ADR-22 must carve CodeRabbit-only M81 out of ADR-19's Aikido-coupled gate while leaving ADR-19 in force for Aikido/M76/M77."
+    fix_target: "task-269: rewrite milestone + write ADR-22 as carve-out (not supersede/reopen)"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-02
+    severity: high
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-272-review-recurring-wiring.md
+    finding: "task-272 assumes weekly-code-review has addable steps — progress.yaml entry is a single command string"
+    description: "recurring_tasks weekly-code-review command: /acp-review --report --carryover — no step array. Conditional CodeRabbit behavior must live in review doc/helper or a wrapper script referenced by command:."
+    fix_target: "task-272: implement via /acp-review augmentation and/or thin wrapper script; do not invent step list"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-03
+    severity: medium
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-270-findings-import.md
+    finding: "task-270 invents carryover fields source: coderabbit and planned_in: M81-import — not live ledger shape"
+    description: "Validator maps schema description→finding; live entries use lowercase severity, finding, planned_in: M81, file, fix_target. Invented fields risk validate/ledger drift."
+    fix_target: "task-270: match live carryover entry shape; put origin in finding/notes text"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-04
+    severity: medium
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-269-adr22-policy-map-lite.md
+    finding: "task-269 frontmatter gate blocks ADR-22 writing until consumer findings exist — ADR must land before gate"
+    description: "Adoption gate should block import/integration tasks 270-274 only; ADR-22 + policy map + wiki sync are ungated planning/docs."
+    fix_target: "task-269: remove gate from frontmatter; document gate applies to 270+"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-05
+    severity: high
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-270-findings-import.md
+    finding: "Speculative --pr/API import path without verified CodeRabbit contract or committed fixture (F-098-04 class)"
+    description: "v1 must be --input file only against tests/fixtures/coderabbit-findings-sample.json from real sanitized export. Defer network/PR fetch until API verified."
+    fix_target: "task-270: fixture-first; drop --pr from M81 v1; create tests/fixtures/"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-06
+    severity: medium
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-272-review-recurring-wiring.md
+    finding: "task-272 references /acp-findings-import slash command but task-270 is script-first with no command doc"
+    description: "Inconsistent surface: either script-only docs everywhere or full command + 5-surface wrappers. Prefer script-only for M81."
+    fix_target: "task-272: reference bash agent/scripts/acp.findings-import.sh only"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-07
+    severity: medium
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-269-adr22-policy-map-lite.md
+    finding: "Policy map owner:coderabbit must not skip ACP Phase 1 / critical rules (SC-01 etc.) when CodeRabbit active"
+    description: "Layered defense: Phase 1 deterministic rules never deferred. Only Phase 2 semantic overlap may be annotated as also covered by CodeRabbit."
+    fix_target: "task-269/272: bind Phase 1 never-deferred rule in policy map + review doc"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-08
+    severity: low
+    file: agent/wiki/coderabbit-integration.md
+    finding: "Wiki/configurables/research still point to ADR-19 → /acp-plan M74 for findings-import"
+    description: "Stale consumer guidance after M81 plan. Update roadmap to M81/ADR-22; keep M74-M77 as deferred Aikido/golden-path track."
+    fix_target: "task-269: sync wiki, configurables comment, research §5"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null

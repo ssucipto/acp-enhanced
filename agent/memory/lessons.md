@@ -4,6 +4,13 @@
 #
 # Optional fields added in v6.8.0:
 
+- date: 2026-07-24
+  task_type: audit-run
+  mistake: "M81 plan used 'Supersedes (partially) ADR-19' and speculative --pr/API import + invented carryover fields before a real findings fixture existed — would reopen a DO-NOT-re-open ADR and repeat F-098-04 speculative-vendor shortcuts."
+  correction: "Narrowing an adoption gate is an ADR carve-out (ADR-21 pattern), never a supersede/reopen of a DO-NOT-re-open decision. Integration parsers must be fixture-first from sanitized live exports; match live carryover ledger shape; read recurring_tasks as the single command: string they actually are."
+  priority: high
+  trigger: plan-amend
+
 - date: 2026-07-23
   task_type: audit-run
   mistake: "M78 closure (audit-098) declared '8 pre-existing E2E failures, zero regression' based on a FILE-LEVEL baseline comparison. audit-099 found this masked 2 NEW assertion-level failures I introduced: the v6.28.0 bump missed agent/progress.yaml's own version: field, so cross-file version checks in tests/acp.e2e-workflow + tests/acp.security failed — but the FILES were already failing at baseline for other reasons, so the file-level count stayed 8 and hid my regression. acp-validate.ts also passed because it never checks progress.yaml version."
