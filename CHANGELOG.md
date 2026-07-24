@@ -13,6 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+---
+
+## [6.28.2] — 2026-07-24
+
+### Fixed (M80 — E2E suite debt remediation)
+- **7 pre-existing E2E failures (F-M78-01)** — full suite **68/68** green (`run-e2e-tests.sh --skip-network`).
+- **Test-side (task-265)**: e2e-workflow light-mode regex; validate-cross-layer conditional `package.yaml` copy; validate-ts 5-surface parity fixtures.
+- **Behavior (task-266)**: `acp.version-check-for-updates.sh` `${1:-}` fix (exit 2 without AGENT.md); `acp.project-update.sh` unbound `current_tags`; `acp.package-info.sh` empty-line count bug; `acp.post-milestone-sweep.sh` executable bit in git index.
+- **audit-100 carryovers F-100-01..05** — verified at closure.
+
+---
+
 ## [6.28.1] — 2026-07-23
 
 ### Fixed (M79 — M78 Closure-Integrity Remediation, audit-099)
