@@ -3,21 +3,21 @@
 
 project:
   name: agent-context-protocol
-  version: 6.28.1
+  version: 6.28.2
   started: 2026-02-16
   status: active
-  current_milestone: M80
+  current_milestone: null
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.28.1; M78 complete.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.28.2; M80 complete.
       M74–M77 gated per ADR-19 until CodeRabbit + Aikido operational on Rygan repo.
 
 active_handoff:
-  path: agent/reports/handoff-cursor-m80-e2e-debt-2026-07-24.md
-  date: "2026-07-24"
-  to_executor: cursor
-  from_executor: claude
-  git_commit: e263e9beca512795ba62f0d14ec743d1538a81da
-  status: active
+  path: null
+  date: null
+  to_executor: null
+  from_executor: null
+  git_commit: null
+  status: cleared
 
 milestones:
   M44:
@@ -613,20 +613,17 @@ milestones:
   M80:
     name: E2E Suite Debt Remediation & Open Carryover Closure (v6.28.2)
     priority: 4
-    status: planned
-    progress: 0
-    started: null
-    completed: null
+    status: completed
+    progress: 100
+    started: 2026-07-24
+    completed: 2026-07-24
     estimated_weeks: 0.2
-    tasks_completed: 0
+    tasks_completed: 3
     tasks_total: 3
     file: agent/milestones/milestone-80-e2e-debt-carryover-closure.md
     notes: |
-      📋 M80 planned — F-M78-01: the 7 root-caused pre-existing E2E failures
-      (audit-099) — test-side fixes (265) + script-vs-test reconcile (266), NO
-      blind greening. Closure 268 ships v6.28.2. Routes 254,255,257, tasks
-      265,266,268. (task-267/F-086-02 removed — FIFOZ downstream already done,
-      developer-confirmed 2026-07-24.)
+      ✅ M80 complete — F-M78-01 closed (68/68 E2E suite). Test-side fixes (265),
+      behavior reconcile (266), closure v6.28.2 (268). Routes 254,255,257.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4907,34 +4904,47 @@ tasks:
     - id: task-265
       name: "Fix test-side E2E bugs (stale expectations, wrong file ref, fixtures)"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-265-test-side-e2e-fixes.md
-      started: null
-      completed_date: null
+      started: 2026-07-24T00:00:00Z
+      completed_date: 2026-07-24
+      actual_hours: 1.5
       estimated_hours: 2.5
-      notes: "route-254; F-M78-01; e2e-workflow light-mode regex, validate-cross-layer package.json, validate-ts fixtures"
+      notes: "route-254; F-M78-01; e2e-workflow, validate-cross-layer, validate-ts"
 
     - id: task-266
       name: "Reconcile script-vs-test behavior mismatches"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-266-behavior-mismatch-reconcile.md
-      started: null
-      completed_date: null
+      started: 2026-07-24T00:00:00Z
+      completed_date: 2026-07-24
+      actual_hours: 1.0
       estimated_hours: 2.5
-      notes: "route-255; F-M78-01; version exit-code, package-info, project-update git, post-milestone-sweep; no blind greening"
+      notes: "route-255; version-check, package-info, project-update, post-milestone-sweep"
 
     - id: task-268
       name: "M80 closure — full suite, ship v6.28.2, close carryovers"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-268-m80-closure.md
-      started: null
-      completed_date: null
+      started: 2026-07-24T00:00:00Z
+      completed_date: 2026-07-24
+      actual_hours: 0.5
       estimated_hours: 1
-      notes: "route-257; v6.28.2; assertion-level count check; settle F-M78-01 truthfully; depends 265-266 (F-086-02 already done)"
+      notes: "route-257; v6.28.2; 68/68 suite; F-M78-01 + F-100-01..05 settled"
 
 recent_work:
+  - date: 2026-07-24
+    description: |
+      ✅ M80 E2E Suite Debt Remediation shipped v6.28.2 (3/3, m80-closure).
+      Closed F-M78-01: full E2E suite 68/68 green. Test-side fixes (validate-cross-layer,
+      validate-ts, e2e-workflow) + behavior reconcile (version-check, package-info,
+      project-update, post-milestone-sweep). audit-100 carryovers F-100-01..05 settled.
+    items:
+      - "task-265: test-side E2E fixes"
+      - "task-266: script-vs-test behavior reconcile"
+      - "task-268: v6.28.2 closure + carryover settlement"
   - date: 2026-07-23
     description: |
       ✅ M79 M78 Closure-Integrity Remediation shipped v6.28.1 (4/4, audit-099).
@@ -7357,9 +7367,9 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
+  - "M80 COMPLETE (v6.28.2): F-M78-01 closed — full E2E suite 68/68; F-100-01..05 settled at m80-closure-2026-07-24."
   - "M78 COMPLETE (v6.28.0, ADR-21): CodeRabbit optionality foundation shipped — toggle + acp.coderabbit.sh detection + optional-external-tool pattern + E2E + wiki docs. F-097-01 closed."
   - "M79 COMPLETE (v6.28.1): audit-099 M78 closure-integrity — version regression fixed, validator gap closed (progress.yaml version now checked), carryover ledger closed (F-098-*/F-097-01 verified), subdir detection, docs reconciled. tests/acp.security now 8/0 green."
-  - "M80 PLANNED (v6.28.2): close remaining carryovers — /acp-proceed task-265. F-M78-01 (7 pre-existing E2E failures, root-caused) via test-side fixes + script-vs-test reconcile (no blind greening); F-086-02 FIFOZ downstream (ops-gated)."
   - "GATED (ADR-19): M74–M77 tool-integration roadmap (incl. CodeRabbit PR-check + findings-import) stays plan-only until CodeRabbit + Aikido are operational on a Rygan repo with 2+ weeks of real findings — then /acp-plan M74"
   - "Ops toward gate: install CodeRabbit (free tier) + Aikido (free tier) on first active repo — no ACP milestone required"
   - "Merge PR #3 (develop→mainline) — CRIT-065-002 deferral + validate origin fix"

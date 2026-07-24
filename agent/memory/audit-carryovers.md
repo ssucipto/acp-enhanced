@@ -2198,12 +2198,12 @@ carryovers:
     finding: "8 E2E test files fail on develop — PRE-EXISTING, not caused by M78 (verified identical at baseline commit 5137aa5): acp.package-info, acp.post-milestone-sweep, acp.project-update, acp.validate-cross-layer, acp.version, acp.e2e-workflow, acp.security, acp.validate-ts"
     description: "M78 full-suite run: 60/68 pass. The 8 failures reproduce exactly at pre-session baseline 5137aa5 with M78 changes stashed AND checked out — zero M78 regression. M78's own gates are green: coderabbit-optionality 11/11, vitest 61/61, acp-validate clean (bar the closure git tag). Symptoms sampled: package-info exit 1≠0; project-update tag/duplicate assertions; version-check exits 1≠2 on missing AGENT.md. Unrelated to CodeRabbit optionality."
     fix_target: "Triage the pre-existing E2E failures in a dedicated remediation milestone. audit-099 root-caused all 8: validate-cross-layer (cp package.json — file absent, project uses package.yaml), version (exit 1≠2 on missing AGENT.md), project-update (git-tag fixture asserts), package-info (exit 1≠0), post-milestone-sweep (4/5), validate-ts (placeholder-check flags temp fixtures). NOTE: e2e-workflow + security also carried NEW version-mismatch assertions from the F-099-01 regression — those clear once F-099-01 is fixed. Remaining ~6 are genuine pre-existing debt."
-    status: pending
-    planned_in: null
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    planned_in: M80
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
     escalated_to: audit-099
-    note: "audit-098 called these purely pre-existing at FILE level; audit-099 found the comparison masked 2 assertion-level regressions from F-099-01."
+    note: "M80 complete: full E2E suite 68/68 green (tasks 265-266)."
 
   # ── AUDIT-099 FINDINGS — M78 IMPLEMENTATION GAPS (2026-07-23) ───────────────
   - audit_id: audit-099
@@ -2372,10 +2372,10 @@ carryovers:
     file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-266-behavior-mismatch-reconcile.md
     finding: "post-milestone-sweep root cause is a missing executable bit (git mode 100644 on acp.post-milestone-sweep.sh), not a behavior mismatch; the test's `|| true # Windows` does not suppress the recorded FAIL"
     fix_target: "task-266: fix via chmod +x + git update-index --chmod=+x agent/scripts/acp.post-milestone-sweep.sh"
-    status: pending
+    status: fixed
     planned_in: M80
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
     escalated_to: null
 
   - audit_id: audit-100
@@ -2384,10 +2384,10 @@ carryovers:
     file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-266-behavior-mismatch-reconcile.md
     finding: "acp.version exit-code (1 vs 2 on missing AGENT.md) has NO documented convention (command doc silent) — free choice; also acp.version-check.sh has duplicate ERR traps (lines 7-8)"
     fix_target: "task-266: pick 1 or 2, document the contract in the script header; remove the duplicate ERR trap"
-    status: pending
+    status: fixed
     planned_in: M80
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
     escalated_to: null
 
   - audit_id: audit-100
@@ -2396,10 +2396,10 @@ carryovers:
     file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-265-test-side-e2e-fixes.md
     finding: "AUTO-SYNC TRAP: .github/copilot-instructions.md is auto-generated from AGENTS.md by the pre-commit hook; fixing the e2e-workflow 'light mode' failure by editing copilot-instructions.md directly is reverted on commit"
     fix_target: "task-265: fix test-side (regex to match 'light + full modes') OR edit AGENTS.md source; never edit copilot-instructions.md directly"
-    status: pending
+    status: fixed
     planned_in: M80
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
     escalated_to: null
 
   - audit_id: audit-100
@@ -2408,10 +2408,10 @@ carryovers:
     file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-265-test-side-e2e-fixes.md
     finding: "validate-cross-layer `cp package.json` occurs at THREE sites (lines 23, 59, 74); project has no root package.json (uses package.yaml) — all three must be fixed"
     fix_target: "task-265: make each cp conditional or use package.yaml at all 3 sites"
-    status: pending
+    status: fixed
     planned_in: M80
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
     escalated_to: null
 
   - audit_id: audit-100
@@ -2420,8 +2420,8 @@ carryovers:
     file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-266-behavior-mismatch-reconcile.md
     finding: "project-update empty output = script exits before its tag logic (acp.project-update.sh:227 emits 'Added tag'); likely the --add-tag test block's test-project registration, not the script. version-check exit-code change is low-risk (no test/script depends on exit 1)"
     fix_target: "task-266: trace the --add-tag block's fixture setup (register_project) before touching the script"
-    status: pending
+    status: fixed
     planned_in: M80
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
     escalated_to: null

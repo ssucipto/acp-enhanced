@@ -2,7 +2,7 @@
 id: task-266
 milestone: M80
 title: "Reconcile script-vs-test behavior mismatches"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 2.5
