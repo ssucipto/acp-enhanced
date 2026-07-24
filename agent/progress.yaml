@@ -625,6 +625,23 @@ milestones:
       ✅ M80 complete — F-M78-01 closed (68/68 E2E suite). Test-side fixes (265),
       behavior reconcile (266), closure v6.28.2 (268). Routes 254,255,257.
 
+  M81:
+    name: CodeRabbit Integration Layer — CodeRabbit-only (v6.29.0)
+    priority: 4
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 0.5
+    tasks_completed: 0
+    tasks_total: 6
+    file: agent/milestones/milestone-81-coderabbit-integration-layer.md
+    notes: |
+      📋 M81 planned — CodeRabbit-only integration (ADR-22 gate). findings-import,
+      policy map lite, review/recurring wiring, E2E. Aikido deferred. Implementation
+      blocked until CodeRabbit on ≥1 consumer repo + 2 weeks real findings.
+      Routes 258-263, tasks 269-274. Does NOT reopen full M74-M77 roadmap.
+
   M1:
     name: ACP Commands Infrastructure
     priority: 5
@@ -4934,6 +4951,67 @@ tasks:
       estimated_hours: 1
       notes: "route-257; v6.28.2; 68/68 suite; F-M78-01 + F-100-01..05 settled"
 
+  M81:
+    - id: task-269
+      name: "ADR-22 + CodeRabbit policy map lite"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-81-coderabbit-integration-layer/task-269-adr22-policy-map-lite.md
+      started: null
+      completed_date: null
+      estimated_hours: 3
+      notes: "route-258; narrow ADR-19 gate — CodeRabbit only, no Aikido; gate before impl"
+
+    - id: task-270
+      name: "acp.findings-import.sh — CodeRabbit findings → carryovers"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-81-coderabbit-integration-layer/task-270-findings-import.md
+      started: null
+      completed_date: null
+      estimated_hours: 6
+      notes: "route-259; requires archived real CodeRabbit export samples; depends 269"
+
+    - id: task-271
+      name: ".coderabbit.yaml starter template + documentation"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-81-coderabbit-integration-layer/task-271-coderabbit-yaml-starter.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-260; template only — not patterns/lessons generator; depends 269"
+
+    - id: task-272
+      name: "Wire /acp-review + weekly-code-review for coderabbit_active"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-81-coderabbit-integration-layer/task-272-review-recurring-wiring.md
+      started: null
+      completed_date: null
+      estimated_hours: 4
+      notes: "route-261; augment never gate; depends 269,270,271"
+
+    - id: task-273
+      name: "E2E integration + optionality regression tests"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-81-coderabbit-integration-layer/task-273-e2e-integration.md
+      started: null
+      completed_date: null
+      estimated_hours: 3
+      notes: "route-262; cases A-D matrix; depends 270,272"
+
+    - id: task-274
+      name: "M81 closure — ship v6.29.0"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-81-coderabbit-integration-layer/task-274-m81-closure.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "route-263; v6.29.0; depends 269-273"
+
 recent_work:
   - date: 2026-07-24
     description: |
@@ -7374,11 +7452,12 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
+  - "M81 PLANNED (v6.29.0): CodeRabbit-only integration — /acp-proceed when ADR-22 gate clears (CodeRabbit on ≥1 repo + 2 weeks findings). Aikido deferred."
   - "M80 COMPLETE (v6.28.2): F-M78-01 closed — full E2E suite 68/68; F-100-01..05 settled at m80-closure-2026-07-24."
   - "M78 COMPLETE (v6.28.0, ADR-21): CodeRabbit optionality foundation shipped — toggle + acp.coderabbit.sh detection + optional-external-tool pattern + E2E + wiki docs. F-097-01 closed."
   - "M79 COMPLETE (v6.28.1): audit-099 M78 closure-integrity — version regression fixed, validator gap closed (progress.yaml version now checked), carryover ledger closed (F-098-*/F-097-01 verified), subdir detection, docs reconciled. tests/acp.security now 8/0 green."
-  - "GATED (ADR-19): M74–M77 tool-integration roadmap (incl. CodeRabbit PR-check + findings-import) stays plan-only until CodeRabbit + Aikido are operational on a Rygan repo with 2+ weeks of real findings — then /acp-plan M74"
-  - "Ops toward gate: install CodeRabbit (free tier) + Aikido (free tier) on first active repo — no ACP milestone required"
+  - "GATED (ADR-19, superseded for CodeRabbit by ADR-22/M81): full M74–M77 roadmap (Aikido + golden path) stays plan-only"
+  - "Ops toward M81 gate: CodeRabbit on consumer repo; collect 2 weeks PR findings export — no Aikido required"
   - "Merge PR #3 (develop→mainline) — CRIT-065-002 deferral + validate origin fix"
   - "F-086-02: FIFOZ consumer /acp-version-update verification (task-239, ops)"
 
