@@ -5,6 +5,19 @@
 - date: 2026-07-24
   executor: cursor
   branch: develop
+  tasks: [task-275, task-276, task-277, task-278, task-279]
+  done:
+    - m82-local-thorough-review-campaign
+    - review-002-coderabbit-cli-chunks
+    - f-m82-01-through-07-carryovers
+  deferred:
+    - m82-e2e-workflows-cli-chunks → F-M82-06
+    - m81-270-274 → fixture-gate
+  key_fact: "M82 closed: Phase1+CodeRabbit CLI (2/4 chunks; rate-limited remainder). 7 carryovers F-M82-01..07. CLI does not satisfy ADR-22 M81 fixture. current_milestone remains M81."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
   tasks: [task-269]
   done:
     - task-269-adr22-policy-map-lite

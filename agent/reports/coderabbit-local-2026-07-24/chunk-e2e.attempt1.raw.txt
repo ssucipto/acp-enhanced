@@ -1,0 +1,4 @@
+{"type":"review_context","reviewType":"all","currentBranch":"develop","baseBranch":"v6.27.0","workingDirectory":"$REPO/e2e"}
+{"type":"status","phase":"connecting","status":"connecting_to_review_service"}
+{"type":"status","phase":"setup","status":"setting_up"}
+{"type":"error","errorType":"rate_limit","message":"Rate limit exceeded","recoverable":true,"details":{},"metadata":{"isProUser":false,"waitTime":"27 minutes","policyGuidance":"Enable **[usage-based reviews](https://app.coderabbit.ai/settings/billing?tab=usage&orgId=4cbf0d14-f8e5-4221-99b2-4e73a32d47d0)** in Billing to review now. Otherwise, wait until the next included review is available.\nYou're only billed for reviews past your plan's rate limits ($0.25/file).","orgAttributed":true,"cliReviewPolicyMode":"normal"}}

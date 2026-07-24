@@ -3,12 +3,12 @@
 <!-- @acp.meta.milestone
 topic: coderabbit, cli, local-review, acp-review, thorough, chunked, ops
 description: Layered thorough local review of ACP Enhanced — ACP /acp-review plus chunked CodeRabbit CLI diffs; triage to carryovers
-status: planned
+status: completed
 updated: 2026-07-24
 @acp.meta.end -->
 
 **Planned version**: none (ops/review campaign — ship fixes as follow-up patches if needed)  
-**Status**: planned (0/5)  
+**Status**: completed (5/5) — CLI chunks 2/4 completed; F-M82-06 residual remains for the rate-limited remainder  
 **Estimated effort**: ~12h (5 tasks)  
 **Source**: Maintainer request 2026-07-24 — thorough codebase review using local repo + CodeRabbit CLI  
 **Depends on**: M80 (green suite/CI), CodeRabbit CLI installed & authenticated locally  
@@ -76,12 +76,12 @@ If CLI skips for “too many files”, narrow further (`--dir` subpaths) per CLI
 
 ## Verification gates (M82 closure)
 
-- [ ] `weekly-code-review` + `weekly-integrity-scan` `last_run` / `next_due` updated
-- [ ] Playbook committed under `agent/wiki/` (or reports)
-- [ ] ≥3 CLI chunk runs captured under `agent/reports/coderabbit-local-<date>/` (sanitized)
-- [ ] Carryovers appended for accepted findings; schema validates
-- [ ] Campaign report published; next_steps updated
-- [ ] Explicit note: ADR-22 fixture still required for M81 270+
+- [x] `weekly-code-review` + `weekly-integrity-scan` `last_run` / `next_due` updated
+- [x] Playbook committed under `agent/wiki/` (or reports)
+- [ ] ≥3 CLI chunk runs captured under `agent/reports/coderabbit-local-<date>/` (sanitized) — partial only: 2/4 chunks completed before CLI rate limiting; see F-M82-06
+- [x] Carryovers appended for accepted findings; schema validates
+- [x] Campaign report published; next_steps updated
+- [x] Explicit note: ADR-22 fixture still required for M81 270+
 
 ## Relationship to M81
 

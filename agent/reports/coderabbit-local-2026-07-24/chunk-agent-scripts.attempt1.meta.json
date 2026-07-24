@@ -1,0 +1,15 @@
+{
+  "chunk": "agent-scripts",
+  "attempt": 1,
+  "command": [
+    "coderabbit",
+    "review",
+    "--dir",
+    "agent/scripts",
+    "--agent",
+    "--base",
+    "v6.27.0"
+  ],
+  "exit_code": 1,
+  "elapsed_seconds": 5.61
+}

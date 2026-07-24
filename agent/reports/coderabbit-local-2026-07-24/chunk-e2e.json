@@ -1,0 +1,33 @@
+{
+  "chunk": "e2e",
+  "status": "blocked",
+  "base": "v6.27.0",
+  "resolved_tag_commit": "fe22a1323501cf95c7c55adc40b7bd2548e972c2",
+  "fallback_parent_base_commit": "6ed6e2e69ef5e7ad5bf5ac9537e28fd5def9cb47",
+  "changed_files": [
+    "e2e/acp.validate-cross-layer.test.sh",
+    "e2e/coderabbit-optionality.test.sh"
+  ],
+  "attempt_count": 1,
+  "attempts": [
+    {
+      "command": [
+        "coderabbit",
+        "review",
+        "--dir",
+        "e2e",
+        "--agent",
+        "--base",
+        "v6.27.0"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 9.07,
+      "raw_file": "agent/reports/coderabbit-local-2026-07-24/chunk-e2e.attempt1.raw.txt",
+      "meta_file": "agent/reports/coderabbit-local-2026-07-24/chunk-e2e.attempt1.meta.json"
+    }
+  ],
+  "finding_count": 0,
+  "findings_by_severity": {},
+  "findings": [],
+  "note": "Blocked by CodeRabbit rate limiting (27 minutes wait), which exceeded the requested 10-minute per-review cap."
+}

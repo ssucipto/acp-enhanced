@@ -1,0 +1,19 @@
+{
+  "chunk": "workflows",
+  "attempt": 1,
+  "command": [
+    "coderabbit",
+    "review",
+    "--dir",
+    ".github/workflows",
+    "--base",
+    "v6.28.0",
+    "--light",
+    "--agent"
+  ],
+  "exit_code": null,
+  "elapsed_seconds": 720.0,
+  "base": "v6.28.0",
+  "status": "stalled",
+  "note": "Stopped after the requested 12-minute total wait budget expired without any CLI output."
+}

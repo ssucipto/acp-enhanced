@@ -1,0 +1,33 @@
+{
+  "chunk": "workflows",
+  "status": "blocked",
+  "base": "v6.28.0",
+  "fallback_base": "v6.28.2",
+  "attempt_count": 1,
+  "attempts": [
+    {
+      "attempt": 1,
+      "base": "v6.28.0",
+      "command": [
+        "coderabbit",
+        "review",
+        "--dir",
+        ".github/workflows",
+        "--base",
+        "v6.28.0",
+        "--light",
+        "--agent"
+      ],
+      "exit_code": null,
+      "elapsed_seconds": 720.0,
+      "meta_file": "agent/reports/coderabbit-local-2026-07-24/chunk-workflows.attempt1.meta.json",
+      "raw_file": null,
+      "note": "No CLI output was produced before the 12-minute total wait budget expired."
+    }
+  ],
+  "finding_count": 0,
+  "findings_by_severity": {},
+  "findings": [],
+  "reviewed_files": [],
+  "note": "Blocked: the explicit workflows retry produced no output before the requested 12-minute total wait budget expired, so no fallback run was started."
+}

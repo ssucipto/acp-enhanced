@@ -2,13 +2,13 @@
 id: task-276
 milestone: M82
 title: "Document chunked CodeRabbit CLI playbook"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 2
 created: 2026-07-24
 started: null
-completed: null
+completed: 2026-07-24
 depends_on: [task-275]
 files_affected:
   - agent/wiki/coderabbit-local-thorough-review.md

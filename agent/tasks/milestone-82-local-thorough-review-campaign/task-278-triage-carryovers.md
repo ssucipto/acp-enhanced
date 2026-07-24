@@ -2,13 +2,13 @@
 id: task-278
 milestone: M82
 title: "Triage CLI + ACP findings into carryovers"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-07-24
 started: null
-completed: null
+completed: 2026-07-24
 depends_on: [task-275, task-277]
 files_affected:
   - agent/memory/audit-carryovers.md

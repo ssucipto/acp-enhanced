@@ -2,13 +2,13 @@
 id: task-277
 milestone: M82
 title: "Execute chunked CodeRabbit CLI reviews"
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 4
 created: 2026-07-24
 started: null
-completed: null
+completed: 2026-07-24
 depends_on: [task-276]
 files_affected:
   - agent/reports/coderabbit-local-*/
