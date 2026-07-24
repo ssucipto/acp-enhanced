@@ -3,12 +3,13 @@
 <!-- @acp.meta.milestone
 topic: coderabbit, integration, findings-import, ADR-22, optionality, multi-tenant
 description: CodeRabbit-only integration surface — policy map, findings-import, review wiring; Aikido deferred; ADR-22 carve-out from ADR-19
-status: planned
+status: in_progress
 updated: 2026-07-24
 @acp.meta.end -->
 
 **Planned version**: 6.29.0  
-**Status**: planned (0/6) — **READY WITH AMENDMENTS** (audit-101 folded 2026-07-24)  
+**Status**: in_progress (1/6) — task-269 ✅; **BLOCKED** 270–274 on findings fixture  
+
 **Estimated effort**: ~20h (6 tasks)  
 **Source**: Maintainer request 2026-07-24 — one CodeRabbit consumer; Aikido cost unjustified; ADR-19 gate too broad for user base  
 **Depends on**: M78 (optionality, v6.28.0), M80 (E2E 68/68, v6.28.2), **audit-101** (F-101-01..08)  
