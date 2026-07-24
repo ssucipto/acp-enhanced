@@ -6,10 +6,11 @@ project:
   version: 6.28.2
   started: 2026-02-16
   status: active
-  current_milestone: null
+  current_milestone: M81
   description: |
-    Agent Context Protocol Enhanced (ACP Enhanced) — v6.28.2; M80 complete.
-      M74–M77 gated per ADR-19 until CodeRabbit + Aikido operational on consumer-project repo.
+    Agent Context Protocol Enhanced (ACP Enhanced) — v6.28.2; M81 in progress
+      (task-269 done / ADR-22). Tasks 270-274 blocked on findings fixture.
+      M74–M77 Aikido track remains ADR-19 gated.
 
 active_handoff:
   path: null
@@ -629,19 +630,17 @@ milestones:
     name: CodeRabbit Integration Layer — CodeRabbit-only (v6.29.0)
     priority: 4
     status: planned
-    progress: 0
-    started: null
+    progress: 17
+    started: 2026-07-24
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 6
     file: agent/milestones/milestone-81-coderabbit-integration-layer.md
     notes: |
-      📋 M81 planned — audit-101 amendments folded (F-101-01..08). ADR-22 is a
-      carve-out of ADR-19 (not supersede). task-269 UNGATED (ADR+docs now);
-      270-274 gated on fixture + ADR-22. Fixture-first --input import; no --pr;
-      Phase 1 never deferred; weekly = single command:/wrapper. Aikido deferred.
-      Routes 258-263 (dispatch-time), tasks 269-274.
+      🚧 M81 in progress — task-269 ✅ (ADR-22 carve-out, policy map, docs).
+      BLOCKED 270-274: missing tests/fixtures/coderabbit-findings-sample.json
+      (audit-101 / ADR-22 gate). Do not invent speculative fixture.
 
   M1:
     name: ACP Commands Infrastructure
@@ -4956,12 +4955,13 @@ tasks:
     - id: task-269
       name: "ADR-22 + CodeRabbit policy map lite"
       priority: 5
-      status: planned
+      status: completed
       file: agent/tasks/milestone-81-coderabbit-integration-layer/task-269-adr22-policy-map-lite.md
-      started: null
-      completed_date: null
+      started: 2026-07-24T02:00:00Z
+      completed_date: 2026-07-24
+      actual_hours: 1.5
       estimated_hours: 3
-      notes: "route-258; UNGATED; F-101-01/04/07/08 — ADR carve-out + policy map + doc sync"
+      notes: "route-258; ADR-22 carve-out; policy map lite; F-101-01/04/07/08 fixed"
 
     - id: task-270
       name: "acp.findings-import.sh — CodeRabbit findings → carryovers"
@@ -7460,7 +7460,7 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "M81 READY (audit-101 amended): /acp-proceed task-269 NOW (ungated ADR-22). Tasks 270-274 after fixture tests/fixtures/coderabbit-findings-sample.json. Aikido deferred."
+  - "M81 IN PROGRESS: task-269 ✅ (ADR-22). BLOCKED 270-274 — need tests/fixtures/coderabbit-findings-sample.json (sanitized real CodeRabbit export). Then /acp-proceed task-270."
   - "M80 COMPLETE (v6.28.2): F-M78-01 closed — full E2E suite 68/68; F-100-01..05 settled at m80-closure-2026-07-24."
   - "M78 COMPLETE (v6.28.0, ADR-21): CodeRabbit optionality foundation shipped — toggle + acp.coderabbit.sh detection + optional-external-tool pattern + E2E + wiki docs. F-097-01 closed."
   - "M79 COMPLETE (v6.28.1): audit-099 M78 closure-integrity — version regression fixed, validator gap closed (progress.yaml version now checked), carryover ledger closed (F-098-*/F-097-01 verified), subdir detection, docs reconciled. tests/acp.security now 8/0 green."
