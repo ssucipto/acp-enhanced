@@ -5,7 +5,6 @@
 
 set -euo pipefail
 trap 'echo "[acp.version-check-for-updates] Error on line $LINENO" >&2; exit 1' ERR
-trap 'echo "ERROR: $(basename "$0") failed at line $LINENO -- check output above for details." >&2; exit 1' ERR
 
 # Colors for output using tput (more reliable than ANSI codes)
 if command -v tput >/dev/null 2>&1 && [ -t 1 ]; then
@@ -31,7 +30,7 @@ CHANGELOG_URL="$REPO_URL/CHANGELOG.md"
 
 # Silent mode (no output, just exit codes)
 SILENT=false
-if [ "$1" = "--silent" ] || [ "$1" = "-s" ]; then
+if [ "${1:-}" = "--silent" ] || [ "${1:-}" = "-s" ]; then
     SILENT=true
 fi
 
