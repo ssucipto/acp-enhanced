@@ -3,12 +3,12 @@
 <!-- @acp.meta.milestone
 topic: e2e-debt, pre-existing-failures, carryover-closure, F-M78-01, F-086-02
 description: Fix the 7 root-caused pre-existing E2E failures and close the remaining open carryovers honestly
-status: planned
+status: completed
 updated: 2026-07-24
 @acp.meta.end -->
 
 **Planned version**: 6.28.2
-**Status**: planned (0/3)
+**Status**: completed (3/3)
 **Estimated effort**: ~6h (3 tasks)
 **Source**: audit-099 (F-M78-01 root-cause triage)
 **Depends on**: M79 (v6.28.1)
