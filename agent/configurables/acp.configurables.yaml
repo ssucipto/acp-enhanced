@@ -174,9 +174,10 @@ acp:
 
   # ── Integration preferences ───────────────────────────────────────────────
   # Optional external-tool integrations. All OFF by default — ACP is fully
-  # functional without any of them. Added M78 (audit-097, ADR-21). CodeRabbit
-  # PR-check / findings-import stay GATED under ADR-19; these keys drive only
-  # the non-gated optionality foundation (detection + graceful degradation).
+  # functional without any of them. Added M78 (audit-097, ADR-21). Detection
+  # keys (enabled, config_path) are live. CodeRabbit findings-import / review
+  # wiring ships under ADR-22 / M81 (gated on findings fixture). Aikido and
+  # M76/M77 remain gated under ADR-19.
 
   integrations:
     coderabbit:

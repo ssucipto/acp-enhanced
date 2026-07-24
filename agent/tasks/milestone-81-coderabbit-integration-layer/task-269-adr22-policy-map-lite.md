@@ -2,13 +2,13 @@
 id: task-269
 milestone: M81
 title: "ADR-22 + CodeRabbit policy map lite"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-07-24
-started: null
-completed: null
+started: 2026-07-24
+completed: 2026-07-24
 route: route-258
 depends_on: []
 design_reference: [ADR-19](../../memory/decisions.md), [ADR-21](../../memory/decisions.md)
