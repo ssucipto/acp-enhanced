@@ -84,9 +84,9 @@ skipped=0
 timed_out=0
 failed_tests=()
 
-# Windows Git Bash: yaml_query / project-registry suites hang indefinitely
-# (route-099 / install-windows feedback). Per e2e-tests.yaml: skip non-portable
-# suites rather than burn the 180s timeout × N and fail the matrix job.
+# Windows Git Bash: yaml_query / project-registry / version-update-preserve
+# suites hang indefinitely (route-099 class). Per e2e-tests.yaml: skip
+# non-portable suites rather than burn the 180s timeout x N and fail the matrix job.
 _acp_is_windows() {
     case "$(uname -s 2>/dev/null)" in
         MINGW*|MSYS*|CYGWIN*) return 0 ;;
@@ -109,6 +109,7 @@ _acp_windows_skip_suite() {
         acp.project-workflow.test.sh|\
         acp.sessions.test.sh|\
         acp.bootstrap-preserve.test.sh|\
+        acp.version-update-preserve.test.sh|\
         acp.integrity.test.sh)
             return 0 ;;
         *) return 1 ;;
