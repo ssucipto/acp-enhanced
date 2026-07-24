@@ -890,9 +890,10 @@ function validateSessionsMemory(): boolean {
 }
 
 // ── Version consistency (identity.yml ↔ AGENTS.md ↔ CLAUDE.md ↔ CHANGELOG) ────
-export function validateVersionConsistency(): ValidationError[] {
+export function validateVersionConsistency(root?: string): ValidationError[] {
   const errors: ValidationError[] = [];
-  const identityPath = repoPath("agent", "core", "identity.yml");
+  const base = root ?? getRepoRoot();
+  const identityPath = path.join(base, "agent", "core", "identity.yml");
   const files: Record<string, string> = {};
 
   // Extract version from identity.yml
@@ -903,7 +904,7 @@ export function validateVersionConsistency(): ValidationError[] {
   }
 
   // AGENTS.md first line
-  const agentsPath = repoPath("AGENTS.md");
+  const agentsPath = path.join(base, "AGENTS.md");
   if (existsSync(agentsPath)) {
     const raw = readFileSync(agentsPath, "utf8");
     const match = raw.match(/^> v([\d.]+)/m);
@@ -911,7 +912,7 @@ export function validateVersionConsistency(): ValidationError[] {
   }
 
   // CLAUDE.md first line
-  const claudePath = repoPath("CLAUDE.md");
+  const claudePath = path.join(base, "CLAUDE.md");
   if (existsSync(claudePath)) {
     const raw = readFileSync(claudePath, "utf8");
     const match = raw.match(/^> v([\d.]+)/m);
@@ -919,11 +920,23 @@ export function validateVersionConsistency(): ValidationError[] {
   }
 
   // CHANGELOG.md first release entry
-  const changelogPath = repoPath("CHANGELOG.md");
+  const changelogPath = path.join(base, "CHANGELOG.md");
   if (existsSync(changelogPath)) {
     const raw = readFileSync(changelogPath, "utf8");
     const match = raw.match(/^## \[([\d.]+)\]/m);
     if (match) files["CHANGELOG.md"] = match[1];
+  }
+
+  // agent/progress.yaml project.version (audit-099 F-099-02: this field was
+  // previously unchecked, so a stale progress.yaml version passed validate while
+  // cross-file E2E checks caught it. Include it so a bump can't skip it.)
+  const progressPath = path.join(base, "agent", "progress.yaml");
+  if (existsSync(progressPath)) {
+    const prog = yaml.load(readFileSync(progressPath, "utf-8")) as
+      | { project?: { version?: string } }
+      | undefined;
+    const ver = String(prog?.project?.version ?? "").trim();
+    if (ver) files["progress.yaml"] = ver;
   }
 
   const versions = Object.entries(files);
