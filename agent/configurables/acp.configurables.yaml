@@ -22,8 +22,8 @@
 # Packages may define their own configurables in:
 #   agent/configurables/<package-name>.configurables.yaml
 #
-# Version: 1.1.0
-# Last Updated: 2026-05-01
+# Version: 1.2.0
+# Last Updated: 2026-07-23
 
 acp:
 
@@ -37,6 +37,8 @@ acp:
     - validation.strict_mode.enabled
     - output.verbosity.level
     - git.auto_commit.enabled
+    - integrations.coderabbit.enabled
+    - integrations.coderabbit.config_path
 
   # ── Plan command preferences ──────────────────────────────────────────────
 
@@ -169,6 +171,34 @@ acp:
           per-task regardless of this setting.
         default: false
         type: boolean
+
+  # ── Integration preferences ───────────────────────────────────────────────
+  # Optional external-tool integrations. All OFF by default — ACP is fully
+  # functional without any of them. Added M78 (audit-097, ADR-21). Detection
+  # keys (enabled, config_path) are live. CodeRabbit findings-import / review
+  # wiring ships under ADR-22 / M81 (gated on findings fixture). Aikido and
+  # M76/M77 remain gated under ADR-19.
+
+  integrations:
+    coderabbit:
+      enabled:
+        id: 'integrations.coderabbit.enabled'
+        description: |
+          Enable optional CodeRabbit-aware behavior in ACP commands. Off by
+          default; ACP's /acp-review and carryover loop are fully functional
+          without CodeRabbit. When true AND a CodeRabbit config is detected,
+          ACP may surface CodeRabbit-aware hints. See agent/wiki/coderabbit-integration.md.
+        default: false
+        type: boolean
+
+      config_path:
+        id: 'integrations.coderabbit.config_path'
+        description: |
+          Repo-relative path ACP checks to detect a CodeRabbit-configured
+          repository. Presence of this file is the detection signal used by
+          coderabbit_available() (agent/scripts/acp.coderabbit.sh).
+        default: .coderabbit.yaml
+        type: string
 
 
 # Packages may define their own configurables here or in separate files:
