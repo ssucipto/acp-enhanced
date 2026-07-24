@@ -10,7 +10,8 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 source "${PROJECT_ROOT}/tests/common.sh"
 
 VALIDATE_SCRIPT="${PROJECT_ROOT}/scripts/acp-validate.ts"
-VALIDATE_CMD="npx tsx ${VALIDATE_SCRIPT}"
+TS_NODE_ESM="${PROJECT_ROOT}/scripts/node_modules/ts-node/dist/bin-esm.js"
+VALIDATE_CMD=(node "${TS_NODE_ESM}" "${VALIDATE_SCRIPT}")
 
 _copy_fixture_workspace() {
   local dest="$1"
@@ -28,6 +29,11 @@ _copy_fixture_workspace() {
     mkdir -p "${dest}/.github"
     cp "${PROJECT_ROOT}/AGENTS.md" "${dest}/.github/copilot-instructions.md"
   fi
+}
+
+_run_validator() {
+  local repo_root="$1"
+  ACP_REPO_ROOT="${repo_root}" "${VALIDATE_CMD[@]}"
 }
 
 print_suite_header "/acp-validate cross-layer checks"
@@ -58,7 +64,7 @@ else
       sed 's/\*\*Status\*\*: *completed/\*\*Status\*\*: planned/' "${TARGET_DOC}" > "${TARGET_DOC}.tmp" && mv "${TARGET_DOC}.tmp" "${TARGET_DOC}"
 
       pushd "${TMPDIR}" > /dev/null
-      VALIDATE_OUT=$(${VALIDATE_CMD} 2>&1) || VALIDATE_RC=$?
+      VALIDATE_OUT=$(_run_validator "${TMPDIR}" 2>&1) || VALIDATE_RC=$?
       popd > /dev/null
 
       assert_not_empty "${VALIDATE_OUT}" "Validator produced output"
@@ -83,7 +89,7 @@ trap 'rm -rf "${TMPDIR2}" ${TMPDIR}' EXIT
 _copy_fixture_workspace "${TMPDIR2}"
 
 pushd "${TMPDIR2}" > /dev/null
-VALIDATE_OUT2=$(${VALIDATE_CMD} 2>&1) || VALIDATE_RC2=$?
+VALIDATE_OUT2=$(_run_validator "${TMPDIR2}" 2>&1) || VALIDATE_RC2=$?
 popd > /dev/null
 
 DESYNC_FOUND2=$(echo "${VALIDATE_OUT2}" | grep -ci "Status desync\|status.*disagree" || true)
@@ -95,22 +101,30 @@ trap 'rm -rf "${TMPDIR2}" "${TMPDIR3}" ${TMPDIR}' EXIT
 
 _copy_fixture_workspace "${TMPDIR3}"
 
-{
-  echo "  M999:"
-  echo "    name: Nonexistent Test Milestone"
-  echo "    status: active"
-  echo "    file: agent/milestones/milestone-999-does-not-exist.md"
-} >> "${TMPDIR3}/agent/progress.yaml"
+# Insert under milestones: (appending at EOF breaks YAML and is ignored by parsers).
+# Use M99 — unused id; must stay a real milestones: child so validateFilePointers sees it.
+PROGRESS3="${TMPDIR3}/agent/progress.yaml"
+awk '
+  /^milestones:[[:space:]]*$/ {
+    print
+    print "  M99:"
+    print "    name: Nonexistent Test Milestone"
+    print "    status: active"
+    print "    file: agent/milestones/milestone-99-does-not-exist.md"
+    next
+  }
+  { print }
+' "${PROGRESS3}" > "${PROGRESS3}.tmp" && mv "${PROGRESS3}.tmp" "${PROGRESS3}"
 
 pushd "${TMPDIR3}" > /dev/null
-VALIDATE_OUT3=$(${VALIDATE_CMD} 2>&1) || VALIDATE_RC3=$?
+VALIDATE_OUT3=$(_run_validator "${TMPDIR3}" 2>&1) || VALIDATE_RC3=$?
 popd > /dev/null
 
 DANGLING_FOUND=$(echo "${VALIDATE_OUT3}" | grep -ci "dangling\|not found\|does not exist\|missing.*file" || true)
 if [[ "${DANGLING_FOUND}" -ge 1 ]]; then
-  assert_true "Validator flagged dangling file pointer for M999" 0
+  assert_true "Validator flagged dangling file pointer for M99" 0
 else
-  assert_true "Validator flagged dangling file pointer for M999" 1
+  assert_true "Validator flagged dangling file pointer for M99" 1
 fi
 
 print_test_summary
