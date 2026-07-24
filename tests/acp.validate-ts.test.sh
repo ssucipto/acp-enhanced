@@ -14,13 +14,15 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 source "${PROJECT_ROOT}/tests/common.sh"
 
-VALIDATE_CMD="node ${PROJECT_ROOT}/scripts/node_modules/.bin/ts-node ${PROJECT_ROOT}/scripts/acp-validate.ts"
+VALIDATE_CMD="npx tsx ${PROJECT_ROOT}/scripts/acp-validate.ts"
 
 # ── Fixture setup ─────────────────────────────────────────────
 
 TMPDIR_CMD="$(mktemp -d)"
 TMPDIR_PROMPTS="$(mktemp -d)"
 TMPDIR_OPENCODE="$(mktemp -d)"
+TMPDIR_CURSOR="$(mktemp -d)"
+TMPDIR_CLAUDE="$(mktemp -d)"
 
 # Fixture: valid command file (no placeholders, all required fields)
 cat > "${TMPDIR_CMD}/acp.valid-command.md" << 'EOF'
@@ -115,10 +117,12 @@ Line 4.
 **Status**: Active
 EOF
 
-# Matching prompt/opencode files for parity (equal count = 7 each)
+# Matching prompt/opencode/cursor/claude wrappers (5-surface parity — M72)
 for f in valid-command placeholder-line3 placeholder-line4 code-block-placeholder numeric-braces missing-status missing-multi; do
   touch "${TMPDIR_PROMPTS}/acp-${f}.prompt.md"
   touch "${TMPDIR_OPENCODE}/acp-${f}.md"
+  touch "${TMPDIR_CURSOR}/acp-${f}.md"
+  touch "${TMPDIR_CLAUDE}/acp-${f}.md"
 done
 
 print_suite_header "acp-validate.ts — E2E Tests (M35)"
@@ -126,11 +130,17 @@ print_suite_header "acp-validate.ts — E2E Tests (M35)"
 # ── Placeholder detection (task-178) ──────────────────────────
 
 print_test_header "placeholder: valid file — no errors"
-output="$(ACP_COMMANDS_DIR="${TMPDIR_CMD}" ACP_PROMPTS_DIR="${TMPDIR_PROMPTS}" ACP_OPENCODE_DIR="${TMPDIR_OPENCODE}" ${VALIDATE_CMD} 2>&1)"
+output="$(ACP_COMMANDS_DIR="${TMPDIR_CMD}" ACP_PROMPTS_DIR="${TMPDIR_PROMPTS}" ACP_OPENCODE_DIR="${TMPDIR_OPENCODE}" ACP_CURSOR_DIR="${TMPDIR_CURSOR}" ACP_CLAUDE_DIR="${TMPDIR_CLAUDE}" ${VALIDATE_CMD} 2>&1 || true)"
 assert_not_contains "${output}" "acp.valid-command.md" "valid file not reported in errors"
 
+_validate_env() {
+  ACP_COMMANDS_DIR="${TMPDIR_CMD}" ACP_PROMPTS_DIR="${TMPDIR_PROMPTS}" \
+  ACP_OPENCODE_DIR="${TMPDIR_OPENCODE}" ACP_CURSOR_DIR="${TMPDIR_CURSOR}" \
+  ACP_CLAUDE_DIR="${TMPDIR_CLAUDE}" ${VALIDATE_CMD} 2>&1
+}
+
 print_test_header "placeholder: {COMMAND_NAME} on line 3 — detected"
-output="$(ACP_COMMANDS_DIR="${TMPDIR_CMD}" ACP_PROMPTS_DIR="${TMPDIR_PROMPTS}" ACP_OPENCODE_DIR="${TMPDIR_OPENCODE}" ${VALIDATE_CMD} 2>&1)"
+output="$(_validate_env || true)"
 assert_contains "${output}" "acp.placeholder-line3.md" "placeholder on line 3 detected"
 
 print_test_header "placeholder: {NAMESPACE} on line 4 — detected"
@@ -178,13 +188,13 @@ TMPDIR_MISMATCH_PROMPTS="$(mktemp -d)"
 for f in valid-command placeholder-line3 placeholder-line4 code-block-placeholder numeric-braces missing-status; do
   touch "${TMPDIR_MISMATCH_PROMPTS}/acp-${f}.prompt.md"
 done
-mismatch_output="$(ACP_COMMANDS_DIR="${TMPDIR_CMD}" ACP_PROMPTS_DIR="${TMPDIR_MISMATCH_PROMPTS}" ACP_OPENCODE_DIR="${TMPDIR_OPENCODE}" ${VALIDATE_CMD} 2>&1)"
+mismatch_output="$(ACP_COMMANDS_DIR="${TMPDIR_CMD}" ACP_PROMPTS_DIR="${TMPDIR_MISMATCH_PROMPTS}" ACP_OPENCODE_DIR="${TMPDIR_OPENCODE}" ACP_CURSOR_DIR="${TMPDIR_CURSOR}" ACP_CLAUDE_DIR="${TMPDIR_CLAUDE}" ${VALIDATE_CMD} 2>&1)"
 assert_contains "${mismatch_output}" "mismatch" "parity mismatch reported when counts differ"
 rm -rf "${TMPDIR_MISMATCH_PROMPTS}"
 
 # ── Cleanup ───────────────────────────────────────────────────
 
-rm -rf "${TMPDIR_CMD}" "${TMPDIR_PROMPTS}" "${TMPDIR_OPENCODE}"
+rm -rf "${TMPDIR_CMD}" "${TMPDIR_PROMPTS}" "${TMPDIR_OPENCODE}" "${TMPDIR_CURSOR}" "${TMPDIR_CLAUDE}"
 
 # ── Summary ───────────────────────────────────────────────────
 
