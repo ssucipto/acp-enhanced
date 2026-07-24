@@ -22,7 +22,8 @@ trap 'rm -rf "$FIX"' EXIT
 mkdir -p "$FIX/agent/configurables" "$FIX/agent/preferences"
 cp "$CONFIGURABLES" "$FIX/agent/configurables/acp.configurables.yaml"
 # Make the fixture a git repo so repo-root detection (F-099-05) resolves from subdirs
-( cd "$FIX" && git init -q 2>/dev/null && git config user.email t@t && git config user.name t ) || true
+# Fail loud if git init fails — do not mask with || true (M82 CodeRabbit finding)
+( cd "$FIX" && git init -q && git config user.email t@t && git config user.name t )
 
 # Helper: write the project preference file with a given enabled value
 write_pref() {
