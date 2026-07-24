@@ -2,13 +2,13 @@
 id: task-279
 milestone: M82
 title: "Campaign report + M81 fixture gap note"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 1
 created: 2026-07-24
 started: null
-completed: null
+completed: 2026-07-24
 depends_on: [task-278]
 files_affected:
   - agent/reports/review-002-local-thorough-campaign.md

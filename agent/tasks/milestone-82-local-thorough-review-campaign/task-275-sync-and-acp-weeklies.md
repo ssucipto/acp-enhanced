@@ -2,13 +2,13 @@
 id: task-275
 milestone: M82
 title: "Sync branches + run overdue ACP weeklies"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-07-24
 started: null
-completed: null
+completed: 2026-07-24
 depends_on: []
 files_affected:
   - agent/progress.yaml
