@@ -4,8 +4,8 @@ How to use ACP's **optional** CodeRabbit integration — and what it does (and d
 
 > **TL;DR** — CodeRabbit is entirely optional. ACP's `/acp-review` and carryover
 > loop work fully without it. The integration is **off by default**; turn it on
-> only if your repo uses CodeRabbit. PR-review integration is **not yet wired** —
-> see [Roadmap](#roadmap).
+> only if your repo uses CodeRabbit. Findings-import + review annotations are
+> **M81 / ADR-22** (CodeRabbit-only) — see [Roadmap](#roadmap).
 
 ---
 
@@ -46,6 +46,13 @@ Check the resolved value:
 bash agent/scripts/acp.preferences.sh get acp integrations.coderabbit.enabled
 ```
 
+Quick detection:
+
+```bash
+bash agent/scripts/acp.coderabbit.sh available
+bash agent/scripts/acp.coderabbit.sh active
+```
+
 ## How ACP behaves — on vs off
 
 Detection lives in `agent/scripts/acp.coderabbit.sh` (`coderabbit_available` / `coderabbit_active`). The three-gate contract is: **opt-in → detection → silent degradation** (see the pattern `agent/patterns/local.optional-external-tool.md`).
@@ -59,29 +66,42 @@ Detection lives in `agent/scripts/acp.coderabbit.sh` (`coderabbit_available` / `
 
 **Absence is normal, not an error** — unlike a required dependency (e.g. `gh` in `acp.branch-protection-setup.sh`, where absence is a hard failure).
 
-## What is live in this release (v6.28.0, M78)
+## What is live (M78 optionality + M81 planning)
 
 - ✅ Preference toggle (`integrations.coderabbit.*`)
 - ✅ Feature detection helpers (`acp.coderabbit.sh`)
 - ✅ Graceful-degradation contract + pattern + E2E coverage
-- ✅ This guide
+- ✅ This guide + [policy map lite](coderabbit-policy-map-lite.md) (ADR-22)
+- ⏳ `acp.findings-import.sh` + review wiring — **M81 tasks 270–274** (blocked until findings fixture exists)
 
-## Roadmap — what is NOT yet built (GATED)
+## Roadmap
 
-The following stay **gated under [ADR-19](../memory/decisions.md)** until CodeRabbit is operational on a real repo with 2+ weeks of findings — they are designed against the tool's *live output*, not vendor docs:
+### CodeRabbit-only path — [ADR-22](../memory/decisions.md) / M81
 
-- ❌ **PR-check integration** (ACP consuming CodeRabbit's PR review results)
-- ❌ `acp.findings-import.sh` — CodeRabbit findings → audit-carryover ledger
-- ❌ `.coderabbit.yaml` **generation** from ACP patterns/lessons (and the `generate_on_commit` preference)
-- ❌ Recurring-task rewire (`weekly-code-review` → CodeRabbit analytics)
+When CodeRabbit is on a consumer repo **and** a sanitized findings sample is at `tests/fixtures/coderabbit-findings-sample.json`:
 
-**Do we still need CodeRabbit PR review?** Yes — it is the core deliverable of the gated M74/M75 roadmap. When the adoption gate clears, run `/acp-plan M74`. Nothing here forecloses it; this foundation is what makes it safe to add for users who don't have CodeRabbit.
+- `acp.findings-import.sh` — `--input` file → `audit-carryovers.md`
+- `/acp-review` Phase 2 annotations from the policy map (Phase 1 **never** deferred)
+- Optional weekly wrapper / review-doc path
+
+Start: `/acp-proceed task-270` after the fixture is committed. **Do not** run `/acp-plan M74` for CodeRabbit-only needs.
+
+### Still gated under [ADR-19](../memory/decisions.md) (Aikido + broader track)
+
+- Aikido SCA/CVE ingest
+- Full patterns/lessons → `.coderabbit.yaml` generator (`generate_on_commit`)
+- M76 golden-path scaffold (ACP + CodeRabbit + Aikido)
+- M77 AI supply-chain moat
+
+Aikido is **deferred for current user-base cost**, not abandoned.
 
 ---
 
 ## References
 
-- [ADR-21](../memory/decisions.md) — optionality foundation carved out of the ADR-19 gate
-- [ADR-19](../memory/decisions.md) — M74–M77 tool-integration roadmap gated on operational adoption
-- `agent/patterns/local.optional-external-tool.md` — the reusable 3-gate contract
-- `agent/reports/audit-097-optional-coderabbit-integration.md`, `audit-098-m78-pre-impl-readiness.md`
+- [ADR-22](../memory/decisions.md) — CodeRabbit-only M81 carve-out from ADR-19
+- [ADR-21](../memory/decisions.md) — optionality foundation
+- [ADR-19](../memory/decisions.md) — Aikido / M76 / M77 remain gated
+- [Policy map lite](coderabbit-policy-map-lite.md)
+- `agent/patterns/local.optional-external-tool.md`
+- `agent/reports/audit-097-optional-coderabbit-integration.md`, `audit-101-m81-pre-impl-readiness.md`
