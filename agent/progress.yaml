@@ -11,6 +11,14 @@ project:
     Agent Context Protocol Enhanced (ACP Enhanced) — v6.28.1; M78 complete.
       M74–M77 gated per ADR-19 until CodeRabbit + Aikido operational on consumer-project repo.
 
+active_handoff:
+  path: agent/reports/handoff-cursor-m80-e2e-debt-2026-07-24.md
+  date: "2026-07-24"
+  to_executor: cursor
+  from_executor: claude
+  git_commit: e263e9beca512795ba62f0d14ec743d1538a81da
+  status: active
+
 milestones:
   M44:
     name: Feedback-Driven Improvements (v6.9.0)
