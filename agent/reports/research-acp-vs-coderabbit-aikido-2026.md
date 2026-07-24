@@ -2,7 +2,7 @@
 
 **Type**: Direction research (follow-up to research-acp-direction-mcp-2026.md)
 **Date**: 2026-07-15
-**Status**: Roadmap accepted as plan of record. **CodeRabbit integration**: M81 planned (ADR-22 gate — CodeRabbit only, no Aikido). **Full M74–M77** (incl. Aikido) stays gated per ADR-19 until explicitly re-planned.
+**Status**: Roadmap accepted as plan of record. **CodeRabbit**: M81 / **ADR-22** carve-out (CodeRabbit-only; Aikido not required). **Aikido + M76/M77**: still gated per **ADR-19** until explicitly re-planned. Aikido deferred for current user-base cost — not abandoned.
 **Reframe**: ACP Enhanced is NOT a commercial product — it is the standardized development method for the startup (quality, reviewed, tested, secure-by-design). Question: how big is the gap vs CodeRabbit and Aikido, can/should we close it, and do we still need both services?
 
 ---
@@ -32,12 +32,12 @@
 
 ## 3. Answer: do we still need CodeRabbit + Aikido?
 
-**Yes — both.** The strategy is **BUY detection, BUILD governance, INTEGRATE the two**:
+**Strategy unchanged: buy detection, build governance.** For the **current ACP Enhanced user base**:
 
-- ACP defines *policy* and *process*; CodeRabbit and Aikido supply *detection*; ACP's carryover ledger + closure audits supply *accountability* over their findings.
-- Cost is trivial vs. build: CodeRabbit free tier → $24/dev/mo; Aikido free tier for small teams. One month of engineering on a homegrown SAST engine costs more and delivers less.
-- Never re-attempt heuristic detection where a real engine exists — codify this as an ADR extending ADR-13's LLM/Script boundary with a third clause: *deterministic → script; semantic → LLM; **detection-at-depth → commercial engine, ingested***.
+- **CodeRabbit — yes** (free tier available): PR review + engines; integrate via **M81 / ADR-22**.
+- **Aikido — deferred** (cost/complexity vs user base): SCA/CVE/runtime depth still valuable later; **not required** to ship CodeRabbit governance. ADR-19 remains the gate when Aikido is adopted.
 
+Long-term ideal remains both tools; short-term is CodeRabbit-only without pretending Aikido is free.
 ## 4. How to NARROW the gap (integration, not reimplementation)
 
 The gap that matters isn't detection — it's that today the commercial tools and ACP don't talk. Close that:
@@ -48,17 +48,21 @@ The gap that matters isn't detection — it's that today the commercial tools an
 4. **Golden path**: `acp.project-create`/bootstrap scaffolds every new startup repo with ACP + `.coderabbit.yaml` + Aikido CI + branch protection + pinned actions + SECURITY.md — *new repos are compliant by default*.
 5. **Deepen the moat**: `/acp-integrity` focuses where both tools are blind — agent rule-file injection scanning, MCP config scanning, AI-code provenance. M58 Phase 2 is now unblocked (ADR-10 gate cleared) and aligns exactly here.
 
-## 5. Recommended roadmap (supersedes the monetization-flavored M76 from research-acp-direction-mcp-2026.md)
+## 5. Recommended roadmap
 
-| Milestone | Title | Deliverables | Est. |
-|---|---|---|---|
-| **M74** | Policy spine + honest descoping | ADR "buy detection / build governance / integrate" (extends ADR-13); 64-rule → owner map; re-scope `/acp-review` to policy + orchestration; label/retire heuristic detection claims per audit-070 lesson | ~8h |
-| **M75** | Tool integration layer | `.coderabbit.yaml` generator from patterns/lessons (+ sync trigger in /acp-commit); `acp.findings-import.sh` (Aikido/CodeRabbit → carryovers); recurring tasks rewired; E2E tests | ~16h |
-| **M76** | Secure-by-design golden path | project-create/bootstrap scaffolds ACP + CodeRabbit + Aikido CI + branch protection + SECURITY.md; verification gate: "fresh repo passes all standards day 0" | ~12h |
-| **M77** | AI supply-chain moat (M58 Phase 2 alignment) | Rule-file/MCP-config injection scanning hardened; provenance manifest v2; taint Phase 2 per calibration research — scoped to agent-context surface only | ~20h |
-| **cont.** | Quarterly overlap audit | Recurring task: verify policy-map coverage vs actual tool configs; drift = carryover | 1h/qtr |
+| Milestone | Title | Deliverables | Est. | Status |
+|---|---|---|---|---|
+| **M78** | CodeRabbit optionality foundation | Pref toggle, detection, E2E, wiki | ~13h | ✅ shipped v6.28.0 (ADR-21) |
+| **M81** | CodeRabbit integration (CodeRabbit-only) | ADR-22, policy map lite, findings-import `--input`, review wiring | ~20h | 📋 planned — fixture gate for 270–274 |
+| **M74** (deferred) | Full policy spine + Aikido | Full 64-rule map; Aikido owner rows | ~8h | Gated ADR-19 until Aikido |
+| **M75** (partial → M81) | Tool integration | Generator + dual import | — | CodeRabbit half → M81; Aikido half deferred |
+| **M76** | Golden path | ACP + CR + Aikido scaffold | ~12h | Gated ADR-19 |
+| **M77** | AI supply-chain moat | Rule-file/MCP injection hardening | ~20h | Gated ADR-19 |
+| **cont.** | Quarterly overlap audit | Policy-map vs tool configs | 1h/qtr | After M81 |
 
-MCP-server work from the previous research note is **deferred, not dead** — an MCP adapter for the toolkit becomes relevant again the day non-CLI surfaces (dashboards, Desktop) need to invoke ACP checks; nothing in M74–M77 forecloses it.
+**Next action for CodeRabbit consumers:** commit sanitized findings to `tests/fixtures/coderabbit-findings-sample.json`, then `/acp-proceed task-270`. **Do not** start with `/acp-plan M74` unless adopting Aikido.
+
+MCP-server work from the previous research note is **deferred, not dead**.
 
 ## Sources
 
