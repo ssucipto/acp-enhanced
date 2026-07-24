@@ -629,7 +629,7 @@ milestones:
   M81:
     name: CodeRabbit Integration Layer — CodeRabbit-only (v6.29.0)
     priority: 4
-    status: planned
+    status: in_progress
     progress: 17
     started: 2026-07-24
     completed: null
@@ -5014,6 +5014,15 @@ tasks:
       notes: "route-263; full version file set F-098-07; settle F-101-01..08"
 
 recent_work:
+  - date: 2026-07-24
+    description: |
+      M81 task-269 complete (ADR-22 carve-out, policy map lite, wiki/config sync).
+      F-101-01/04/07/08 fixed. Halted 270-274 — need coderabbit-findings-sample.json.
+      /acp-validate clean; milestone status synced to in_progress (1/6).
+    items:
+      - "task-269 ✅ ADR-22 + policy map"
+      - "BLOCKED fixture gate for 270-274"
+      - "M81 status → in_progress"
   - date: 2026-07-24
     description: |
       /acp-plan amendment — folded audit-101 F-101-01..08 into M81 milestone + tasks
