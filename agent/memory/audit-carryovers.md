@@ -1784,10 +1784,11 @@ carryovers:
     file: agent/feedback/feedback-007-cross-agent-handoff-protocol.md
     finding: "FIFOZ consumer path — /acp-version-update on downstream project not verified"
     fix_target: "Run /acp-version-update on FIFOZ when consumer repo access available"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: audit-088-deferred
+    status: fixed
+    fix_applied_date: 2026-07-24
+    verified_in_audit: developer-confirmed-2026-07-24
     escalated_to: null
+    note: "Developer confirmed the downstream FIFOZ /acp-version-update was already performed/verified (2026-07-24). Planned M80 task-267 removed as redundant."
 
   - audit_id: audit-086
     finding_id: F-086-03
@@ -2173,4 +2174,360 @@ carryovers:
     status: fixed
     fix_applied_date: 2026-07-15
     verified_in_audit: audit-096
+    escalated_to: null
+
+  - audit_id: audit-097
+    finding_id: F-097-01
+    severity: low
+    file: agent/reports/audit-097-optional-coderabbit-integration.md
+    finding: "CodeRabbit integration must satisfy the optionality contract (preference opt-in + feature detection + graceful degradation); ACP consumers may not have CodeRabbit"
+    description: "Prior research/ADR-19 framed CodeRabbit as Rygan's own tooling and did not specify an absent-tool path. Any CodeRabbit code path shipped in the distributed framework must degrade cleanly when CodeRabbit is absent — modeled on acp.branch-protection-setup.sh:27 command-v-gh detection."
+    fix_target: "FIXED in M78 (v6.28.0, ADR-21): foundation half shipped — pref keys, acp.coderabbit.sh detection, optional-external-tool pattern, E2E (11 assertions), wiki docs. Integration half (findings-import, review wiring) → ADR-22/M81 (CodeRabbit-only carve-out)."
+    status: fixed
+    planned_in: M78
+    gated_remainder: ADR-22/M81
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
+    escalated_to: null
+
+  # ── M78 CLOSURE SWEEP — pre-existing E2E debt surfaced (2026-07-23) ─────────
+  - audit_id: m78-closure
+    finding_id: F-M78-01
+    severity: medium
+    file: e2e/
+    finding: "8 E2E test files fail on develop — PRE-EXISTING, not caused by M78 (verified identical at baseline commit 5137aa5): acp.package-info, acp.post-milestone-sweep, acp.project-update, acp.validate-cross-layer, acp.version, acp.e2e-workflow, acp.security, acp.validate-ts"
+    description: "M78 full-suite run: 60/68 pass. The 8 failures reproduce exactly at pre-session baseline 5137aa5 with M78 changes stashed AND checked out — zero M78 regression. M78's own gates are green: coderabbit-optionality 11/11, vitest 61/61, acp-validate clean (bar the closure git tag). Symptoms sampled: package-info exit 1≠0; project-update tag/duplicate assertions; version-check exits 1≠2 on missing AGENT.md. Unrelated to CodeRabbit optionality."
+    fix_target: "Triage the pre-existing E2E failures in a dedicated remediation milestone. audit-099 root-caused all 8: validate-cross-layer (cp package.json — file absent, project uses package.yaml), version (exit 1≠2 on missing AGENT.md), project-update (git-tag fixture asserts), package-info (exit 1≠0), post-milestone-sweep (4/5), validate-ts (placeholder-check flags temp fixtures). NOTE: e2e-workflow + security also carried NEW version-mismatch assertions from the F-099-01 regression — those clear once F-099-01 is fixed. Remaining ~6 are genuine pre-existing debt."
+    status: fixed
+    planned_in: M80
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
+    escalated_to: audit-099
+    note: "M80 complete: full E2E suite 68/68 green (tasks 265-266)."
+
+  # ── AUDIT-099 FINDINGS — M78 IMPLEMENTATION GAPS (2026-07-23) ───────────────
+  - audit_id: audit-099
+    finding_id: F-099-01
+    severity: high
+    file: agent/progress.yaml
+    finding: "M78 version bump missed agent/progress.yaml:6 version: field (still 6.27.2 while identity=6.28.0). REGRESSION: caught by tests/acp.e2e-workflow.test.sh:57 + tests/acp.security.test.sh:97 cross-file checks, NOT by acp-validate.ts. My audit-098 'zero regression' claim was file-level and masked these new assertion failures."
+    fix_target: "Bump agent/progress.yaml version: → 6.28.0 (line 6) and description (line 11); ship v6.28.1. Historical recent_work 6.27.2 refs stay."
+    status: fixed
+    planned_in: M79
+    fix_applied_date: 2026-07-23
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-099
+    finding_id: F-099-02
+    severity: medium
+    file: scripts/acp-validate.ts
+    finding: "validateVersionConsistency() checks identity/AGENTS/CLAUDE/CHANGELOG/package but NOT progress.yaml version — this gap let the F-099-01 regression pass validate while E2E caught it."
+    fix_target: "Add agent/progress.yaml project.version to validateVersionConsistency() so future version bumps can't skip it."
+    status: fixed
+    planned_in: M79
+    fix_applied_date: 2026-07-23
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-099
+    finding_id: F-099-03
+    severity: medium
+    file: agent/memory/audit-carryovers.md
+    finding: "F-098-01..07 and F-097-01 were all implemented in M78 but remain status:pending — carryover-ledger integrity failure (audit-094 lesson)."
+    fix_target: "Mark F-098-01..07 + F-097-01 status:fixed, verified_in_audit: audit-099 (each was verified implemented in this audit)."
+    status: fixed
+    planned_in: M79
+    fix_applied_date: 2026-07-23
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-099
+    finding_id: F-099-04
+    severity: low
+    file: agent/milestones/milestone-78-coderabbit-optionality-foundation.md
+    finding: "Build Order table (line 43) still says task-256 helpers in acp.common.sh; contradicts Task Map (acp.coderabbit.sh) and what shipped."
+    fix_target: "Correct Build Order line 43 + Depends-on line 16 to reference acp.coderabbit.sh."
+    status: fixed
+    planned_in: M79
+    fix_applied_date: 2026-07-23
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-099
+    finding_id: F-099-05
+    severity: low
+    file: agent/scripts/acp.coderabbit.sh
+    finding: "coderabbit_available uses [[ -f config_path ]] against CWD; from a subdirectory a CodeRabbit-configured repo mis-reports as unavailable (verified)."
+    fix_target: "Resolve config_path against the git repo root (git rev-parse --show-toplevel) before the -f test; keep CWD fallback."
+    status: fixed
+    planned_in: M79
+    fix_applied_date: 2026-07-23
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-099
+    finding_id: F-099-06
+    severity: low
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-259-working-with-coderabbit-docs.md
+    finding: "task-259 verification says 'AGENTS.md pointer added' but the pointer shipped in README.md only."
+    fix_target: "Reconcile task-259 acceptance line to README (AGENTS.md byte budget favors the lean pointer)."
+    status: fixed
+    planned_in: M79
+    fix_applied_date: 2026-07-23
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-098 FINDINGS — M78 PRE-IMPL READINESS (2026-07-23) ────────────────
+  # All 7 folded into M78 tasks via /acp-plan amendment same session. Verify at task-260.
+  - audit_id: audit-098
+    finding_id: F-098-01
+    severity: high
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-256-feature-detection.md
+    finding: "coderabbit_available/active placed in acp.common.sh, but acp.preferences.sh sources common.sh (line 32) — calling get_preference from common.sh is a circular source"
+    fix_target: "New dedicated agent/scripts/acp.coderabbit.sh sources acp.preferences.sh; helpers live there. Amend task-256 + milestone map + ADR-21 location phrase."
+    status: fixed
+    planned_in: M78
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-02
+    severity: medium
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-259-working-with-coderabbit-docs.md
+    finding: "task-259 targets agent/docs/ which does not exist; how-to/integration docs live in agent/wiki/ (claude-integration.md, cursor-integration.md)"
+    fix_target: "Relocate to agent/wiki/coderabbit-integration.md; follow /acp-wiki-update conventions."
+    status: fixed
+    planned_in: M78
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-03
+    severity: medium
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-256-feature-detection.md
+    finding: "boolean enabled=false resolves as non-empty string 'false'; presence checks misread false as 'set'"
+    fix_target: "coderabbit_active compares [[ \"$(get_preference …)\" == \"true\" ]]; never has_preference for enabled."
+    status: fixed
+    planned_in: M78
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-04
+    severity: medium
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-255-preference-keys.md
+    finding: "Speculative vendor assumptions: command -v coderabbit CLI name unverified; generate_on_commit reserves a gated-generator key with no consumer (ADR-19 no-speculative-interface)"
+    fix_target: "M78 detection = config-file presence only (defer CLI detect to adoption); drop generate_on_commit from M78 — reserve only enabled + config_path."
+    status: fixed
+    planned_in: M78
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-05
+    severity: low
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-258-e2e-degradation.md
+    finding: "task-258 'register test in CI' step is wrong — run-e2e-tests.sh:90 auto-discovers e2e/*.test.sh"
+    fix_target: "Remove CI-registration step; note auto-discovery + offline (--skip-network) requirement."
+    status: fixed
+    planned_in: M78
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-06
+    severity: low
+    file: agent/milestones/milestone-78-coderabbit-optionality-foundation.md
+    finding: "route-244..249 referenced but no route files on disk (not validate-blocking; M73 had them)"
+    fix_target: "Note 'routes created at /acp-dispatch time' in milestone, or create stubs."
+    status: fixed
+    planned_in: M78
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
+    escalated_to: null
+
+  - audit_id: audit-098
+    finding_id: F-098-07
+    severity: low
+    file: agent/tasks/milestone-78-coderabbit-optionality-foundation/task-260-m78-closure.md
+    finding: "version bump under-specified — 10 stamped files incl. AGENTS.md header-sync gate"
+    fix_target: "Reference /acp-version-update; enumerate CLAUDE/AGENT/AGENTS/README/CHANGELOG/package.yaml/progress/identity."
+    status: fixed
+    planned_in: M78
+    fix_applied_date: 2026-07-23
+    verified_in_audit: audit-099
+    escalated_to: null
+
+  # ── AUDIT-100 FINDINGS — M80 PRE-IMPL READINESS (2026-07-24) ────────────────
+  # All 5 folded into M80 tasks via /acp-plan amendment same session. Verify at task-268.
+  - audit_id: audit-100
+    finding_id: F-100-01
+    severity: low
+    file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-266-behavior-mismatch-reconcile.md
+    finding: "post-milestone-sweep root cause is a missing executable bit (git mode 100644 on acp.post-milestone-sweep.sh), not a behavior mismatch; the test's `|| true # Windows` does not suppress the recorded FAIL"
+    fix_target: "task-266: fix via chmod +x + git update-index --chmod=+x agent/scripts/acp.post-milestone-sweep.sh"
+    status: fixed
+    planned_in: M80
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
+    escalated_to: null
+
+  - audit_id: audit-100
+    finding_id: F-100-02
+    severity: low
+    file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-266-behavior-mismatch-reconcile.md
+    finding: "acp.version exit-code (1 vs 2 on missing AGENT.md) has NO documented convention (command doc silent) — free choice; also acp.version-check.sh has duplicate ERR traps (lines 7-8)"
+    fix_target: "task-266: pick 1 or 2, document the contract in the script header; remove the duplicate ERR trap"
+    status: fixed
+    planned_in: M80
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
+    escalated_to: null
+
+  - audit_id: audit-100
+    finding_id: F-100-03
+    severity: medium
+    file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-265-test-side-e2e-fixes.md
+    finding: "AUTO-SYNC TRAP: .github/copilot-instructions.md is auto-generated from AGENTS.md by the pre-commit hook; fixing the e2e-workflow 'light mode' failure by editing copilot-instructions.md directly is reverted on commit"
+    fix_target: "task-265: fix test-side (regex to match 'light + full modes') OR edit AGENTS.md source; never edit copilot-instructions.md directly"
+    status: fixed
+    planned_in: M80
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
+    escalated_to: null
+
+  - audit_id: audit-100
+    finding_id: F-100-04
+    severity: low
+    file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-265-test-side-e2e-fixes.md
+    finding: "validate-cross-layer `cp package.json` occurs at THREE sites (lines 23, 59, 74); project has no root package.json (uses package.yaml) — all three must be fixed"
+    fix_target: "task-265: make each cp conditional or use package.yaml at all 3 sites"
+    status: fixed
+    planned_in: M80
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
+    escalated_to: null
+
+  - audit_id: audit-100
+    finding_id: F-100-05
+    severity: low
+    file: agent/tasks/milestone-80-e2e-debt-carryover-closure/task-266-behavior-mismatch-reconcile.md
+    finding: "project-update empty output = script exits before its tag logic (acp.project-update.sh:227 emits 'Added tag'); likely the --add-tag test block's test-project registration, not the script. version-check exit-code change is low-risk (no test/script depends on exit 1)"
+    fix_target: "task-266: trace the --add-tag block's fixture setup (register_project) before touching the script"
+    status: fixed
+    planned_in: M80
+    fix_applied_date: 2026-07-24
+    verified_in_audit: m80-closure-2026-07-24
+    escalated_to: null
+
+  # ── AUDIT-101 FINDINGS — M81 PRE-IMPL READINESS (2026-07-24) ────────────────
+  # Fold into M81 plan via /acp-plan amendment before /acp-proceed.
+  - audit_id: audit-101
+    finding_id: F-101-01
+    severity: high
+    file: agent/milestones/milestone-81-coderabbit-integration-layer.md
+    finding: "Milestone says 'Supersedes (partially) ADR-19' — ADR-19 is DO NOT re-open; must use ADR-21 carve-out language, not supersede"
+    description: "Illegal reopen risk. ADR-22 must carve CodeRabbit-only M81 out of ADR-19's Aikido-coupled gate while leaving ADR-19 in force for Aikido/M76/M77."
+    fix_target: "task-269: rewrite milestone + write ADR-22 as carve-out (not supersede/reopen)"
+    status: fixed
+    planned_in: M81
+    fix_applied_date: 2026-07-24
+    verified_in_audit: task-269
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-02
+    severity: high
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-272-review-recurring-wiring.md
+    finding: "task-272 assumes weekly-code-review has addable steps — progress.yaml entry is a single command string"
+    description: "recurring_tasks weekly-code-review command: /acp-review --report --carryover — no step array. Conditional CodeRabbit behavior must live in review doc/helper or a wrapper script referenced by command:."
+    fix_target: "task-272: implement via /acp-review augmentation and/or thin wrapper script; do not invent step list"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-03
+    severity: medium
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-270-findings-import.md
+    finding: "task-270 invents carryover fields source: coderabbit and planned_in: M81-import — not live ledger shape"
+    description: "Validator maps schema description→finding; live entries use lowercase severity, finding, planned_in: M81, file, fix_target. Invented fields risk validate/ledger drift."
+    fix_target: "task-270: match live carryover entry shape; put origin in finding/notes text"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-04
+    severity: medium
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-269-adr22-policy-map-lite.md
+    finding: "task-269 frontmatter gate blocks ADR-22 writing until consumer findings exist — ADR must land before gate"
+    description: "Adoption gate should block import/integration tasks 270-274 only; ADR-22 + policy map + wiki sync are ungated planning/docs."
+    fix_target: "task-269: remove gate from frontmatter; document gate applies to 270+"
+    status: fixed
+    planned_in: M81
+    fix_applied_date: 2026-07-24
+    verified_in_audit: task-269
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-05
+    severity: high
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-270-findings-import.md
+    finding: "Speculative --pr/API import path without verified CodeRabbit contract or committed fixture (F-098-04 class)"
+    description: "v1 must be --input file only against tests/fixtures/coderabbit-findings-sample.json from real sanitized export. Defer network/PR fetch until API verified."
+    fix_target: "task-270: fixture-first; drop --pr from M81 v1; create tests/fixtures/"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-06
+    severity: medium
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-272-review-recurring-wiring.md
+    finding: "task-272 references /acp-findings-import slash command but task-270 is script-first with no command doc"
+    description: "Inconsistent surface: either script-only docs everywhere or full command + 5-surface wrappers. Prefer script-only for M81."
+    fix_target: "task-272: reference bash agent/scripts/acp.findings-import.sh only"
+    status: pending
+    planned_in: M81
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-07
+    severity: medium
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-269-adr22-policy-map-lite.md
+    finding: "Policy map owner:coderabbit must not skip ACP Phase 1 / critical rules (SC-01 etc.) when CodeRabbit active"
+    description: "Layered defense: Phase 1 deterministic rules never deferred. Only Phase 2 semantic overlap may be annotated as also covered by CodeRabbit."
+    fix_target: "task-269/272: bind Phase 1 never-deferred rule in policy map + review doc"
+    status: fixed
+    planned_in: M81
+    fix_applied_date: 2026-07-24
+    verified_in_audit: task-269
+    escalated_to: null
+
+  - audit_id: audit-101
+    finding_id: F-101-08
+    severity: low
+    file: agent/wiki/coderabbit-integration.md
+    finding: "Wiki/configurables/research still point to ADR-19 → /acp-plan M74 for findings-import"
+    description: "Stale consumer guidance after M81 plan. Update roadmap to M81/ADR-22; keep M74-M77 as deferred Aikido/golden-path track."
+    fix_target: "task-269: sync wiki, configurables comment, research §5"
+    status: fixed
+    planned_in: M81
+    fix_applied_date: 2026-07-24
+    verified_in_audit: task-269
     escalated_to: null
