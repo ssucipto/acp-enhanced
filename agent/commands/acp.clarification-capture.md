@@ -1,4 +1,4 @@
-# Directive: clarification-capture
+# Command: clarification-capture
 
 > **🤖 Agent Directive**: This is a **SHARED DIRECTIVE**, not a user-invocable command.
 > It is referenced by create commands (`design-create`, `task-create`, `pattern-create`, `command-create`) to capture clarification decisions into entity documents.
