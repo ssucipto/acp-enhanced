@@ -12,34 +12,49 @@ completed: null
 route: route-261
 depends_on: [task-269, task-270, task-271]
 design_reference: [agent/commands/acp.review.md](../../commands/acp.review.md), [ADR-21](../../memory/decisions.md)
+audit_findings: [F-101-02, F-101-06, F-101-07]
+gate: "tasks 269-271 complete; fixture import working"
+files_affected:
+  - agent/commands/acp.review.md
+  - agent/scripts/acp.coderabbit-weekly.sh
+  - agent/progress.yaml
+  - package.yaml
+  - agent/wiki/coderabbit-integration.md
 ---
 
 ## Objective
 
-Augment `/acp-review` and the `weekly-code-review` recurring task with **conditional** CodeRabbit-aware behavior when `coderabbit_active` — unchanged behavior when inactive.
+Augment `/acp-review` (and optionally the weekly recurring entry) with CodeRabbit-aware behavior when `coderabbit_active` — **identical** behavior when inactive.
 
 ## Context
 
-Binding rule: CodeRabbit augments, never gates. Phase 1 (`acp.review-scan.sh`) unchanged. Phase 2 agent instructions gain deferral notes from policy map lite. Recurring task adds an optional step, not a replacement.
+**F-101-02:** `weekly-code-review` in `progress.yaml` is a **single `command:` string** (`/acp-review --report --carryover`), not a step list. Do not invent steps.
+
+**F-101-06:** Reference `bash agent/scripts/acp.findings-import.sh` — never `/acp-findings-import`.
+
+**F-101-07:** Phase 1 rules never deferred.
 
 ## Steps
 
 1. Update `agent/commands/acp.review.md`:
-   - New subsection: "CodeRabbit augmentation (when `coderabbit_active`)"
-   - Phase 2: for rules owned by `coderabbit` in policy map, report as "deferred to CodeRabbit — verify via PR review or `/acp-findings-import`"
-   - Explicit: Phase 2 still runs for ACP-owned rules; total review remains valid standalone
-2. Update `agent/progress.yaml` → `recurring_tasks` → `weekly-code-review`:
-   - Add conditional step (documented in task notes): when `coderabbit_active`, include "check open CodeRabbit PR threads / run findings-import"
-   - Implementation: shell guard in recurring task doc OR small helper `acp.coderabbit-weekly.sh` sourced only when active
-3. Do **not** modify `acp.review-scan.sh` to call CodeRabbit APIs
+   - Subsection “CodeRabbit augmentation (when `coderabbit_active`)”
+   - **Phase 1:** always run all 8 deterministic rules — never skip for CodeRabbit (F-101-07)
+   - **Phase 2:** for policy-map `owner: coderabbit|both`, annotate “also covered by CodeRabbit — verify via PR review or `bash agent/scripts/acp.findings-import.sh --input …`”
+   - ACP-owned Phase 2 rules always run; review remains valid standalone when inactive
+2. Weekly recurring (**pick one**, document choice in task notes):
+   - **Preferred:** Keep `command: /acp-review --report --carryover` unchanged; put all CR behavior inside the review command doc (agent follows it when active). Inactive path = zero code change.
+   - **Alternative:** Change `command:` to a thin wrapper `bash agent/scripts/acp.coderabbit-weekly.sh` that: runs the same review invocation; if `coderabbit_active`, optionally reminds to run findings-import on latest fixture/export. Wrapper must no-op CR branch when inactive so behavior matches pre-M81.
+3. Do **not** modify `acp.review-scan.sh` to call CodeRabbit APIs.
+4. Do **not** add slash command wrappers for findings-import (F-101-06).
 
 ## Verification
 
-- [ ] `/acp-review` command doc has no requirement for CodeRabbit when inactive
-- [ ] Policy map rules marked `coderabbit` appear in sample review report template when active
-- [ ] `weekly-code-review` command string unchanged when `coderabbit_active` false
-- [ ] Manual test: run review self-check on acp-enhanced repo with `enabled=false` — identical to pre-M81
+- [ ] Review doc has no CodeRabbit requirement when inactive
+- [ ] Phase 1 never listed as deferrable
+- [ ] All docs say `bash agent/scripts/acp.findings-import.sh` (no `/acp-findings-import`)
+- [ ] Inactive path on acp-enhanced (`enabled=false`) matches pre-M81
+- [ ] If wrapper used: registered in package.yaml; inactive = same exit/output as direct review
 
 ## User-Observable Acceptance
 
-CodeRabbit user sees review reports that acknowledge CodeRabbit coverage and point to imported carryovers. Non-CodeRabbit user sees no difference.
+CodeRabbit repos get review annotations + import pointer; everyone else sees no change.

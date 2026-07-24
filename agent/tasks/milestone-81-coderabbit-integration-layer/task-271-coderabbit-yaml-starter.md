@@ -12,33 +12,32 @@ completed: null
 route: route-260
 depends_on: [task-269]
 design_reference: [agent/wiki/coderabbit-integration.md](../../wiki/coderabbit-integration.md)
+audit_findings: [F-101-08]
+gate: "ADR-22 accepted (task-269)"
+files_affected:
+  - agent/templates/coderabbit.yaml.template
+  - agent/wiki/coderabbit-integration.md
+  - agent/scripts/acp.coderabbit.sh
 ---
 
 ## Objective
 
-Ship a **starter** `.coderabbit.yaml` template and documentation so CodeRabbit consumers can bootstrap quickly. This is **not** the full patterns/lessons generator (deferred).
-
-## Context
-
-audit-097 noted a generated `.coderabbit.yaml` is inert in non-CodeRabbit repos. A static template is safe for all installs; copying it is opt-in via maintainer or future `project-create` hook.
+Ship a **starter** `.coderabbit.yaml` template and bootstrap docs. Not the patterns/lessons generator.
 
 ## Steps
 
-1. Add `agent/templates/coderabbit.yaml.template` with commented sections:
-   - Path instructions aligned to ACP repo layout (`agent/`, `scripts/`, `e2e/`)
-   - Plain-English pre-merge checks referencing `/acp-review` policy map lite (task-269)
-2. Document in `agent/wiki/coderabbit-integration.md`:
-   - "Bootstrap CodeRabbit" section: copy template, install GitHub app, enable preference
-   - Explicit: template is manual copy today; auto-generate deferred
-3. Optional: `bash agent/scripts/acp.coderabbit.sh hint` mentions template path when enabled+absent
+1. Add `agent/templates/coderabbit.yaml.template` (valid YAML; commented ACP path hints; no Aikido).
+2. Wiki “Bootstrap CodeRabbit”: copy template → `.coderabbit.yaml`, install GitHub app, `integrations.coderabbit.enabled true`.
+3. Explicit: manual copy today; auto-generate deferred (no `generate_on_commit` key).
+4. Optional: `coderabbit_hint_if_missing` mentions template path.
 
 ## Verification
 
-- [ ] Template is valid YAML (parseable)
-- [ ] Wiki bootstrap section complete with copy commands
-- [ ] No `generate_on_commit` preference added (deferred — no generator yet)
-- [ ] Template does not reference Aikido
+- [ ] Template parseable YAML
+- [ ] Wiki bootstrap complete; roadmap already points to M81 (from task-269)
+- [ ] No `generate_on_commit` preference
+- [ ] No Aikido references
 
 ## User-Observable Acceptance
 
-The one CodeRabbit consumer can copy the template, commit `.coderabbit.yaml`, set `enabled: true`, and pass `coderabbit_active` without custom ACP code.
+CodeRabbit consumer can copy template, enable preference, and pass `coderabbit_active`.
