@@ -642,6 +642,21 @@ milestones:
       BLOCKED 270-274: missing tests/fixtures/coderabbit-findings-sample.json
       (audit-101 / ADR-22 gate). Do not invent speculative fixture.
 
+  M82:
+    name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
+    priority: 4
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 0.3
+    tasks_completed: 0
+    tasks_total: 5
+    file: agent/milestones/milestone-82-local-thorough-review-campaign.md
+    notes: |
+      Parallel ops track (does not replace M81). Diff-only CLI → chunked reviews
+      + overdue /acp-review. CLI sample ≠ ADR-22 PR fixture.
+
   M1:
     name: ACP Commands Infrastructure
     priority: 5
@@ -5013,7 +5028,66 @@ tasks:
       estimated_hours: 2
       notes: "route-263; full version file set F-098-07; settle F-101-01..08"
 
+  M82:
+    - id: task-275
+      name: "Sync branches + run overdue ACP weeklies"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-82-local-thorough-review-campaign/task-275-sync-and-acp-weeklies.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "acp-review + integrity; stamp recurring_tasks"
+
+    - id: task-276
+      name: "Document chunked CodeRabbit CLI playbook"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-82-local-thorough-review-campaign/task-276-cli-chunk-playbook.md
+      started: null
+      completed_date: null
+      estimated_hours: 2
+      notes: "wiki playbook; diff-only constraint; chunk map"
+
+    - id: task-277
+      name: "Execute chunked CodeRabbit CLI reviews"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-82-local-thorough-review-campaign/task-277-execute-cli-chunks.md
+      started: null
+      completed_date: null
+      estimated_hours: 4
+      notes: "agent/reports/coderabbit-local-*/; sanitize"
+
+    - id: task-278
+      name: "Triage CLI + ACP findings into carryovers"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-82-local-thorough-review-campaign/task-278-triage-carryovers.md
+      started: null
+      completed_date: null
+      estimated_hours: 3
+      notes: "live ledger shape; dedupe; no invented fields"
+
+    - id: task-279
+      name: "Campaign report + M81 fixture gap note"
+      priority: 5
+      status: planned
+      file: agent/tasks/milestone-82-local-thorough-review-campaign/task-279-campaign-report.md
+      started: null
+      completed_date: null
+      estimated_hours: 1
+      notes: "review-002; CLI ≠ ADR-22 gate"
+
 recent_work:
+  - date: 2026-07-24
+    description: |
+      /acp-plan M82 — Local Thorough Review Campaign (CodeRabbit CLI + ACP).
+      Diff-only CLI → chunked reviews + overdue weeklies. Parallel to M81;
+      does not satisfy ADR-22 fixture gate.
+    items:
+      - "M82 planned (5 tasks 275-279)"
+      - "current_milestone remains M81"
   - date: 2026-07-24
     description: |
       M81 task-269 complete (ADR-22 carve-out, policy map lite, wiki/config sync).
@@ -7469,13 +7543,13 @@ recent_work:
       - 🎊 ACP Commands v1.1.0 fully complete!
 
 next_steps:
-  - "M81 IN PROGRESS: task-269 ✅ (ADR-22). BLOCKED 270-274 — need tests/fixtures/coderabbit-findings-sample.json (sanitized real CodeRabbit export). Then /acp-proceed task-270."
+  - "M82 PLANNED (ops): Local thorough review — /acp-proceed task-275 (weeklies) then 276–279. Diff-only CodeRabbit CLI → chunked. Does NOT unblock M81 fixture."
+  - "M81 IN PROGRESS: task-269 ✅ (ADR-22). BLOCKED 270-274 — need tests/fixtures/coderabbit-findings-sample.json (sanitized real CodeRabbit PR export). Then /acp-proceed task-270."
   - "M80 COMPLETE (v6.28.2): F-M78-01 closed — full E2E suite 68/68; F-100-01..05 settled at m80-closure-2026-07-24."
   - "M78 COMPLETE (v6.28.0, ADR-21): CodeRabbit optionality foundation shipped — toggle + acp.coderabbit.sh detection + optional-external-tool pattern + E2E + wiki docs. F-097-01 closed."
   - "M79 COMPLETE (v6.28.1): audit-099 M78 closure-integrity — version regression fixed, validator gap closed (progress.yaml version now checked), carryover ledger closed (F-098-*/F-097-01 verified), subdir detection, docs reconciled. tests/acp.security now 8/0 green."
   - "GATED (ADR-19 carve-out via ADR-22/M81 for CodeRabbit only): Aikido + M76/M77 stay plan-only"
   - "Ops toward M81 gate artifact: sanitize CodeRabbit findings export → tests/fixtures/coderabbit-findings-sample.json"
-  - "Merge PR #3 (develop→mainline) — CRIT-065-002 deferral + validate origin fix"
   - "F-086-02: FIFOZ consumer /acp-version-update verification (task-239, ops)"
 
 current_blockers: []
