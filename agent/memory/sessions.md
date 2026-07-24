@@ -5,6 +5,32 @@
 - date: 2026-07-24
   executor: cursor
   branch: develop
+  tasks: [task-269, task-270, task-271, task-272, task-273, task-274]
+  done:
+    - audit-101-f101-findings-folded-into-m81-plan
+    - task-269-ungated-for-adr22
+    - m81-ready-for-implementation-after-fixture
+  deferred:
+    - m81-270-274 → fixture-gate
+    - aikido-m76-m77 → adr-19
+  key_fact: "M81 plan amended per audit-101: ADR-22 carve-out (not supersede); task-269 ungated; findings-import v1 is --input fixture only; weekly-code-review is single command:/optional wrapper; Phase 1 never deferred to CodeRabbit."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
+  tasks: []
+  done:
+    - audit-101-m81-pre-impl-readiness
+    - f-101-01-through-08-carryovers-written
+  deferred:
+    - m81-plan-amend-f101 → before-acp-proceed
+    - m81-gate-artifact-findings-fixture → consumer-export
+    - aikido-m74-m77 → deferred-cost
+  key_fact: "M81 READY WITH AMENDMENTS (audit-101): carve ADR-22 out of ADR-19 (never supersede); fixture-first --input import only; weekly-code-review is a single command string; Phase 1 rules never defer to CodeRabbit; ungate task-269 for ADR writing."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
   tasks: []
   done:
     - acp-validate-clean-post-m80

@@ -12,35 +12,34 @@ completed: null
 route: route-262
 depends_on: [task-270, task-272]
 design_reference: [task-258](../milestone-78-coderabbit-optionality-foundation/task-258-e2e-degradation.md)
+audit_findings: [F-101-05]
+gate: "task-270 import + task-272 wiring complete"
+files_affected:
+  - e2e/coderabbit-integration.test.sh
+  - e2e/coderabbit-optionality.test.sh
 ---
 
 ## Objective
 
-Add `e2e/coderabbit-integration.test.sh` covering the M81 optionality matrix (cases A–D) plus findings-import behavior, while keeping `e2e/coderabbit-optionality.test.sh` (M78) green.
-
-## Context
-
-audit-097 + M78: every CodeRabbit path needs a tested absent branch. M81 adds import + review wiring — regression guard for multi-tenant safety.
+Add `e2e/coderabbit-integration.test.sh` for matrix A–D + import behavior; keep M78 `e2e/coderabbit-optionality.test.sh` green.
 
 ## Steps
 
-1. Create `e2e/coderabbit-integration.test.sh` (auto-discovered by `run-e2e-tests.sh`):
-   - **Case A** (`enabled=false`, no config): `findings-import` exit 0, no carryover writes
-   - **Case B** (`enabled=true`, no config): hint emitted; import no-op
-   - **Case C** (`enabled=true`, config + fixture): import writes expected carryover fields
-   - **Case D** (`enabled=false`, config present): import no-op (opt-in wins)
-2. Assert concrete strings / exit codes — no `typeof`-only checks
-3. Isolated temp fixtures; trap cleanup
-4. Offline (`--skip-network`) — use fixture files only, no live CodeRabbit API in CI
-5. Run full suite: `bash run-e2e-tests.sh --skip-network` — 68/68+ pass
+1. Create `e2e/coderabbit-integration.test.sh` (auto-discovered; offline `--skip-network`):
+   - **A** `enabled=false`, no config → import exit 0, no writes
+   - **B** `enabled=true`, no config → hint; import no-op
+   - **C** `enabled=true`, config + fixture → import writes expected `finding_id` / live fields
+   - **D** `enabled=false`, config present → import no-op (opt-in wins)
+2. Value/exit assertions only — no `typeof`-only
+3. Temp fixtures + trap cleanup; use committed sample under `tests/fixtures/`
+4. Confirm M78 optionality suite still passes
 
 ## Verification
 
-- [ ] Cases A–D implemented with value assertions
-- [ ] M78 `e2e/coderabbit-optionality.test.sh` still passes unchanged
-- [ ] Test passes macOS + Linux
-- [ ] No network required
+- [ ] Cases A–D green
+- [ ] M78 suite unchanged green
+- [ ] macOS + Linux; no network
 
 ## User-Observable Acceptance
 
-CI fails if a future change makes findings-import mandatory, breaks idempotency, or removes the absent-tool branch.
+CI fails if import becomes mandatory or absent-tool branch is dropped.
