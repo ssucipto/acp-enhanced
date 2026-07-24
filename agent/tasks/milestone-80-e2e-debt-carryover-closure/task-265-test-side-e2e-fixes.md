@@ -10,10 +10,12 @@ created: 2026-07-24
 started: null
 completed: null
 route: route-254
-audit_findings: [F-M78-01]
+audit_findings: [F-M78-01, F-100-03, F-100-04]
 depends_on: []
 design_reference: [Audit: audit-099](../../reports/audit-099-m78-implementation-gaps.md)
 ---
+
+> **Amended per audit-100**: (F-100-03) `.github/copilot-instructions.md` is **auto-generated from AGENTS.md by the pre-commit hook** — editing it directly is reverted on commit. Fix e2e-workflow test-side (regex) or edit the AGENTS.md source, never copilot-instructions.md. (F-100-04) the `cp package.json` bug is at **three** sites (lines 23, 59, 74), all must be fixed.
 
 ## Objective
 
@@ -21,8 +23,8 @@ Fix the three F-M78-01 failures whose root cause is clearly test-side (not a pro
 
 ## Sub-items
 
-1. **acp.e2e-workflow** — the assertion greps `.github/copilot-instructions.md` for `"light mode"`, but the doc phrasing is "light + full modes" (line 3). Decide: broaden the regex to also match "light + full" / "light … mode**s**", OR add an explicit "light mode" phrase to the source (AGENTS.md → synced). Prefer fixing the **test regex** (the doc phrasing is intentional). Add a one-line rationale comment.
-2. **acp.validate-cross-layer** — hard error `cp .../package.json` (file absent; project uses `package.yaml`). Fix the test to reference `package.yaml` (or drop the copy if unused). Confirm the test then runs its real assertions.
+1. **acp.e2e-workflow** — the assertion (`tests/acp.e2e-workflow.test.sh:43`) greps `.github/copilot-instructions.md` for `"light mode"`, but the canonical doc phrasing is "light + full modes" (line 3). **Prefer the test-regex fix**: broaden to match `light + full` / `light.*mode` so it passes for the right reason. **Do NOT edit copilot-instructions.md directly (F-100-03)** — it is regenerated from AGENTS.md by the pre-commit hook; if a doc-side fix is chosen, edit `AGENTS.md`. Add a one-line rationale comment on the assertion.
+2. **acp.validate-cross-layer** — hard error `cp "${PROJECT_ROOT}/package.json"` at **lines 23, 59, and 74** (file absent; project uses `package.yaml`). Fix **all three** identically: make the copy conditional (`[ -f "$PROJECT_ROOT/package.json" ] && cp …`) or drop it if the cross-layer validation doesn't need it. Confirm the test then runs its real assertions.
 3. **acp.validate-ts** — placeholder-check flags the temp fixtures (`{COMMAND_NAME}`, `{NAMESPACE}`). Determine whether the test intends those fixtures to be flagged (positive detection) or excluded; fix the assertion/fixture so the test passes for the right reason (assert the placeholder fixtures ARE flagged and the valid fixture is NOT).
 
 ## Steps
