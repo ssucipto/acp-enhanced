@@ -2,13 +2,13 @@
 id: task-281
 milestone: M83
 title: "Executing E2E harness for the review scanner"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 1
 depends_on: [task-280]
 audit_findings: [F-102-08]
@@ -46,11 +46,11 @@ This task is the milestone's guardrail: every later phase depends on it to preve
 
 ## Verification
 
-- [ ] Suite fails when task-280's fixes are reverted (proves it detects the real defects)
-- [ ] All assertions pass on the fixed scanner
-- [ ] Appended to `acp.review.suites[]` (no new registry key); `acp-validate.ts` E2E coverage check passes
-- [ ] `domain.yml:390` no longer claims fixture coverage that does not exist
-- [ ] Runs on macOS + Linux; no CRLF issues
+- [x] Suite fails when task-280's fixes are reverted (proves it detects the real defects)
+- [x] All assertions pass on the fixed scanner
+- [x] Appended to `acp.review.suites[]` (no new registry key); `acp-validate.ts` E2E coverage check passes
+- [x] `domain.yml:390` no longer claims fixture coverage that does not exist
+- [x] Runs on macOS + Linux; no CRLF issues
 
 ## User-Observable Acceptance
 

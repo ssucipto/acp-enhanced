@@ -2,13 +2,13 @@
 id: task-280
 milestone: M83
 title: "Scanner scope fixes — multi-path, --self, .mjs/.cjs"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 3
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 1
 depends_on: []
 audit_findings: [F-102-01, F-102-02, F-102-03]
@@ -39,13 +39,13 @@ Make `acp.review-scan.sh` scan every path it is given, support the documented `-
 
 ## Verification
 
-- [ ] Two directories each seeding one finding produce **2** findings
-- [ ] `--self` runs without error and scans all four paths
-- [ ] `--self` skips missing directories silently
-- [ ] A `.mjs` file under a scanned directory is detected
-- [ ] Missing path still exits 2; `--ci` still exits 1 on CRITICAL/HIGH
-- [ ] `scripts/ --ci` (flag **after** path) does not treat `--ci` as a scan target (F-104-06)
-- [ ] macOS + Linux clean
+- [x] Two directories each seeding one finding produce **2** findings
+- [x] `--self` runs without error and scans all four paths
+- [x] `--self` skips missing directories silently
+- [x] A `.mjs` file under a scanned directory is detected
+- [x] Missing path still exits 2; `--ci` still exits 1 on CRITICAL/HIGH
+- [x] `scripts/ --ci` (flag **after** path) does not treat `--ci` as a scan target (F-104-06)
+- [x] macOS + Linux clean
 
 ## User-Observable Acceptance
 

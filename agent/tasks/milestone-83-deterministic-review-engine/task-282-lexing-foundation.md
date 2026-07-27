@@ -2,20 +2,22 @@
 id: task-282
 milestone: M83
 title: "Precision foundation — comment/string stripping + token-boundary matching"
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 6
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 1b
 depends_on: [task-281]
 audit_findings: [F-103-01, F-103-02]
 blocks: [task-286, task-287, task-288, task-289]
 files_affected:
   - agent/scripts/acp.review-scan.sh
+  - agent/scripts/acp.review-scan-ts.py
   - tests/fixtures/review-scan/
+  - e2e/acp.review-scan.test.sh
 ---
 
 ## Objective
@@ -43,13 +45,18 @@ Stop matching rule patterns against raw source text. Strip comments and string l
 
 ## Verification
 
-- [ ] `// … : any …` in a comment produces no TS-01 finding
-- [ ] `"use as any …"` in a string produces no TS-01 finding
-- [ ] `async` fn whose body contains `"retry"` **and** an unhandled `await` **is** flagged EH-01
-- [ ] Reported line numbers still point at the original source lines
-- [ ] Template literals with `${}` interpolation handled without crashing
-- [ ] No regression in the 8 existing rules' true positives
+- [x] `// … : any …` in a comment produces no TS-01 finding
+- [x] `"use as any …"` in a string produces no TS-01 finding
+- [x] `async` fn whose body contains `"retry"` **and** an unhandled `await` **is** flagged EH-01
+- [x] Reported line numbers still point at the original source lines
+- [x] Template literals with `${}` interpolation handled without crashing
+- [x] No regression in the 8 existing rules' true positives
 
 ## User-Observable Acceptance
 
 Findings point at real code. Comments and strings never produce findings.
+
+## Implementation notes
+
+- Helper: `agent/scripts/acp.review-scan-ts.py` (avoid nested bash heredoc quoting).
+- SC-01 uses **comment-only** stripping so string-literal secrets remain detectable; other rules use full comment+string neutralization.
