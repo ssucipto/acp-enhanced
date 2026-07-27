@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # acp.review-scan.sh — Deterministic Phase 1 scanner for /acp-review (audit-085 F-085-07, M70 task-225)
 #
-# Covered rules: EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01 (8 rules)
-# Usage: acp.review-scan.sh [--ci] [--json] [--self] [file|dir ...]
+# Covered rules: EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01 (+ SH-03 via shellcheck when available)
+# Usage: acp.review-scan.sh [--ci] [--json] [--self] [--include-tests] [file|dir ...]
 # M83 task-280: accumulate all paths (F-102-01); implement --self (F-102-02);
 # include .mjs/.cjs in directory find (F-102-03); re-handle flags after positionals (F-104-06).
 
@@ -15,17 +15,22 @@ source "${SCRIPT_DIR}/acp.integrity-output.sh"
 
 TARGETS=()
 SELF_MODE=false
+INCLUDE_TESTS=false
 IG_REMAINING_ARGS=()
 ig_parse_common_args "$@"
 set -- "${IG_REMAINING_ARGS[@]:-}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -h|--help)
-      echo "Usage: acp.review-scan.sh [--ci] [--json] [--self] [file|dir ...]"
+      echo "Usage: acp.review-scan.sh [--ci] [--json] [--self] [--include-tests] [file|dir ...]"
       exit 0
       ;;
     --self)
       SELF_MODE=true
+      shift
+      ;;
+    --include-tests)
+      INCLUDE_TESTS=true
       shift
       ;;
     # F-104-06: ig_parse_common_args stops at first positional; flags after paths
@@ -90,10 +95,8 @@ scan_ts_js() {
   done < <(ACP_REVIEW_FILE="$file" python3 "${SCRIPT_DIR}/acp.review-scan-ts.py" 2>/dev/null || true)
 }
 
-scan_sh() {
+is_sh_allowlisted() {
   local file="$1"
-  # Sourced function libraries deliberately omit set -euo (would leak into callers).
-  # F-M82-05: allowlist + honor explicit exemption comment in first 40 lines.
   case "$file" in
     */acp.common.sh|*/acp.yaml-parser.sh|*/acp.integrity-output.sh|*/acp.driver-yaml.sh|*/acp.coderabbit.sh|*/acp.preferences.sh|*/e2e/*)
       return 0
@@ -102,13 +105,74 @@ scan_sh() {
   if head -40 "$file" | grep -qiE 'sourced function library|deliberately does NOT set `set -euo|when sourced'; then
     return 0
   fi
+  return 1
+}
+
+shellcheck_available() {
+  command -v shellcheck >/dev/null 2>&1
+}
+
+scan_sh_shellcheck() {
+  local file="$1"
+  local min_severity="$2"
+  local line=""
+  local line_num=""
+  local code=""
+  local message=""
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+    if [[ "$line" =~ ^([^:]+):([0-9]+):[0-9]+:\ (.+)\ \[(SC[0-9]+)\]$ ]]; then
+      line_num="${BASH_REMATCH[2]}"
+      message="${BASH_REMATCH[3]}"
+      code="${BASH_REMATCH[4]}"
+      case "$code" in
+        SC2046|SC2068|SC2086)
+          ig_emit_finding "$file" "$line_num" "SH-03" "shellcheck ${code}: ${message}" "MEDIUM"
+          ;;
+      esac
+    fi
+  done < <(shellcheck -f gcc -S "$min_severity" "$file" 2>/dev/null || true)
+}
+
+scan_sh() {
+  local file="$1"
+  # Sourced function libraries deliberately omit set -euo (would leak into callers).
+  # F-M82-05: allowlist + honor explicit exemption comment in first 40 lines.
+  if is_sh_allowlisted "$file"; then
+    return 0
+  fi
   if ! head -40 "$file" | grep -q 'set -euo pipefail'; then
     ig_emit_finding "$file" "1" "SH-01" "missing set -euo pipefail" "HIGH"
   fi
+  if shellcheck_available; then
+    scan_sh_shellcheck "$file" "warning"
+    # SC2086/SC2046/SC2068 are note-level quote-safety findings; promote only these.
+    scan_sh_shellcheck "$file" "style"
+  fi
+}
+
+should_skip_path() {
+  local path="$1"
+  case "$path" in
+    node_modules/*|*/node_modules/*|.git/*|*/.git/*)
+      return 0
+      ;;
+  esac
+  if [[ "$INCLUDE_TESTS" != "true" ]]; then
+    case "$path" in
+      *test*|*spec*|*fixture*|*__mocks__*|*.generated.*|*.min.js)
+        return 0
+        ;;
+    esac
+  fi
+  return 1
 }
 
 scan_path() {
   local path="$1"
+  if should_skip_path "$path"; then
+    return 0
+  fi
   if [[ -f "$path" ]]; then
     case "$path" in
       *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs) scan_ts_js "$path" ;;

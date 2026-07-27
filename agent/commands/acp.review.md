@@ -8,7 +8,7 @@
 **Version**: 1.0.0  
 **Created**: 2026-06-07  
 **Status**: Active  
-**Scripts**: acp.review-scan.sh  
+**Scripts**: acp.review-scan.sh, acp.review-measure.sh  
 
 ---
 
@@ -45,6 +45,23 @@ When the project contains `agent/commands/` — i.e., an ACP-enhanced project se
 | **Phase 1** | 8 deterministic | `acp.review-scan.sh` | Optional pre-merge |
 | **Phase 2** | 56 semantic | Agent (`/acp-review`) | Required before release |
 
+## Phase 1 Measurement
+
+Regenerate the deterministic scanner metrics with:
+
+```bash
+bash agent/scripts/acp.review-measure.sh --ci
+```
+
+| Metric | Current corpus-backed value |
+|-------|-----------------------------|
+| Corpus cases | 18 files across 9 measured rules (`SH-03` requires `shellcheck`) |
+| Aggregate recall | 100.0% |
+| Aggregate precision | 100.0% |
+| CI floor | Fails below 90.0% recall or 90.0% precision |
+
+These figures are intentionally reproducible from `tests/fixtures/review-corpus/expected.yaml`, not hand-maintained prose.
+
 ## Ruleset Size
 
 | Layer | Count | Rule prefixes |
@@ -71,6 +88,12 @@ Or run the deterministic scanner directly:
 bash agent/scripts/acp.review-scan.sh --ci scripts/ agent/scripts/
 ```
 
+For fixture corpora or intentionally bad samples, opt back into excluded paths:
+
+```bash
+bash agent/scripts/acp.review-scan.sh --include-tests tests/fixtures/review-corpus/
+```
+
 ---
 
 ## Arguments
@@ -79,6 +102,7 @@ bash agent/scripts/acp.review-scan.sh --ci scripts/ agent/scripts/
 |------|---------|
 | `[path]` | File or directory; defaults to `src/` when present, else project root |
 | `--self` | ACP Enhanced self-review: `scripts/`, `agent/scripts/`, `agent/commands/`, `e2e/` |
+| `--include-tests` | Include default-excluded paths matching `*test*`, `*spec*`, `*fixture*`, `*__mocks__*`, `*.generated.*`, `*.min.js` |
 | `--rules <category>` | Limit to one category: `error-handling`, `typescript`, `naming`, `api`, `code-health`, `security`, `mobile` |
 | `--severity <level>` | Minimum level: `critical`, `high`, `medium`, `low` |
 | `--scope <web\|mobile\|all>` | Platform scoping (default: `all`) |
@@ -348,6 +372,29 @@ full codebase, all rules           → Composer 2.5
 
 ---
 
+## Default Exclusions
+
+To avoid high-noise false positives from test data, the deterministic scanner skips these path patterns by default:
+
+- `*test*`
+- `*spec*`
+- `*fixture*`
+- `*__mocks__*`
+- `*.generated.*`
+- `*.min.js`
+
+Use `--include-tests` when scanning labelled corpora, intentionally bad fixtures, or generated samples that are part of review verification.
+
+---
+
+## Optional Tool Delegation
+
+`SH-03` is delegated to `shellcheck` when it is installed locally. The scanner runs the normal `shellcheck -f gcc -S warning` pass, then promotes quote-safety findings `SC2046`, `SC2068`, and `SC2086` from a filtered style-level pass into `SH-03` findings. Sourced-library allowlists match `SH-01` so utility libraries and `e2e/` helpers do not create known-benign noise.
+
+When `shellcheck` is absent, the scanner stays silent and `SH-03` remains a Phase 2/manual review concern.
+
+---
+
 ## Appendix A — ACP Self-Review Rules
 
 Auto-activated when `agent/commands/` is detected in the project root.
@@ -356,7 +403,7 @@ Auto-activated when `agent/commands/` is detected in the project root.
 |---------|------|----------|---------|
 | SH-01 | All `.sh` files use `set -euo pipefail` with `trap ERR` | HIGH | **Y** |
 | SH-02 | No BSD/GNU sed incompatibility — `sed -i ''` on macOS only | HIGH | N |
-| SH-03 | No unquoted variables in scripts | MEDIUM |
+| SH-03 | No unquoted variables in scripts (delegated to `shellcheck` when available) | MEDIUM |
 | SH-04 | No `trap cleanup EXIT` inside sourced functions (subshell inheritance risk) | CRITICAL |
 | YM-01 | All YAML files parse cleanly — no unquoted `{}` braces in flow sequences | HIGH |
 | YM-02 | All Markdown frontmatter parses as valid YAML | MEDIUM |

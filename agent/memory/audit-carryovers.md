@@ -2682,10 +2682,10 @@ carryovers:
     finding: "shellcheck is installed and covers SH-03 (221 findings on agent/scripts/) but is not wired into /acp-review"
     description: "SH-03 (no unquoted variables) is an Appendix A rule with no implementation, while shellcheck delivers it plus SC2155/SC2034 classes at zero cost. Should be gated behind command -v per the 3-gate optional-tool pattern."
     fix_target: "M83 Phase 2: wrap shellcheck -f gcc -S warning, map to SH-03, allowlist accepted classes"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B21-B22
     escalated_to: null
 
   - audit_id: audit-102
@@ -2773,10 +2773,10 @@ carryovers:
     finding: "TS-02 misses arrow functions, generics, export default, and multi-line signatures — 0/4 recall"
     description: "Pattern '^export (async )?function [a-zA-Z0-9_]+\\([^)]*\\)' cannot match export const f = () =>, export function f<T>(, export default function, or params spanning lines. Multi-line signatures are common in real TypeScript."
     fix_target: "acp.review-scan.sh:50-54: broaden TS-02 to arrow/generic/default forms; handle multi-line signatures"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B16-B18
     escalated_to: null
 
   - audit_id: audit-103
@@ -2786,10 +2786,10 @@ carryovers:
     finding: "TS-01 misses any inside generic parameters — Record<string, any> and Promise<any> undetected"
     description: "Pattern ':\\s*any\\b|as\\s+any\\b' only catches annotation and cast positions, not type arguments. Generic-position any is common in real code."
     fix_target: "acp.review-scan.sh:46: add generic-argument position (e.g. <..., any> and <any>) to the TS-01 pattern"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B15
     escalated_to: null
 
   - audit_id: audit-103
@@ -2799,10 +2799,10 @@ carryovers:
     finding: "NC-01 anchored at column 0 — misses every indented snake_case declaration"
     description: "Pattern '^(const|let|var) ...' requires the declaration to start at column 0, so any variable inside a function or block is never checked. Most real declarations are indented."
     fix_target: "acp.review-scan.sh:62: allow leading whitespace in the NC-01 anchor"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B19
     escalated_to: null
 
   - audit_id: audit-103
@@ -2812,10 +2812,10 @@ carryovers:
     finding: "No test/fixture/generated-file exclusion — test data containing dummy credentials will emit CRITICAL findings"
     description: "Directory traversal excludes only node_modules and .git. Test fixtures routinely contain placeholder secrets and intentionally bad patterns; flagging them as CRITICAL is the classic credibility-destroying false positive."
     fix_target: "acp.review-scan.sh: exclude test/spec/fixture/generated paths by default with an opt-in flag to include them"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B20
     escalated_to: null
 
   - audit_id: audit-103
