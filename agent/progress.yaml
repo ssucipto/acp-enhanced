@@ -802,21 +802,19 @@ milestones:
   M83:
     name: Deterministic Local Review Engine (v6.29.0)
     priority: 5
-    status: planned
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 18
+    started: 2026-07-27
     completed: null
     estimated_weeks: 1.5
-    tasks_completed: 0
+    tasks_completed: 3
     tasks_total: 17
     file: agent/milestones/milestone-83-deterministic-review-engine.md
-    notes: 'Planned 2026-07-27 from audit-102 + audit-103. Measured Phase 1 scanner at
+    notes: '🚧 Phase 1 + 1b.282 done 2026-07-27 — scope E2E + lexing/EH-01 token match.
 
-      ~8% recall / 0% precision; multi-path scope bug masked 2 HIGH findings.
+      Next: task-283 (rule patterns) then 284 (corpus measure). Phase 3 still gated.
 
-      BINDING: Phase 3 (rule expansion) gated on Phase 1b (lexing) + 1c (corpus).
-
-      Closes 18 carryovers F-102-01..08 + F-103-01..10. NOT blocked by M81/ADR-22.
+      current_milestone remains M81 (fixture gate). M83 independent of M81/ADR-22.
 
       '
   M82:
@@ -6116,30 +6114,30 @@ tasks:
   - id: task-280
     name: Scanner scope fixes — multi-path, --self, .mjs/.cjs
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-280-scanner-scope-fixes.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 3
-    notes: phase 1; F-102-01/02/03; unmasks 2 HIGH in scripts/
+    notes: phase 1; F-102-01/02/03 + F-104-06 fixed; guarded by e2e B1/B2/B3/B7
   - id: task-281
     name: Executing E2E harness for the review scanner
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-281-executing-e2e-harness.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 4
-    notes: phase 1; F-102-08; must fail if 280 reverted
+    notes: phase 1; F-102-08 + F-104-03/04/07; e2e/acp.review-scan.test.sh 20/20
   - id: task-282
     name: Precision foundation — comment/string stripping + token matching
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-282-lexing-foundation.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 6
-    notes: phase 1b; F-103-01/02; BLOCKS phase 3
+    notes: phase 1b; F-103-01/02; acp.review-scan-ts.py; SC-01 comment-only strip
   - id: task-283
     name: Rule pattern fixes — TS-01, TS-02, NC-01, test exclusion
     priority: 5

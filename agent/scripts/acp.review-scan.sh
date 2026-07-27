@@ -2,7 +2,9 @@
 # acp.review-scan.sh — Deterministic Phase 1 scanner for /acp-review (audit-085 F-085-07, M70 task-225)
 #
 # Covered rules: EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01 (8 rules)
-# Usage: acp.review-scan.sh [--ci] [--json] [file|dir]
+# Usage: acp.review-scan.sh [--ci] [--json] [--self] [file|dir ...]
+# M83 task-280: accumulate all paths (F-102-01); implement --self (F-102-02);
+# include .mjs/.cjs in directory find (F-102-03); re-handle flags after positionals (F-104-06).
 
 set -euo pipefail
 trap 'echo "Error: review-scan.sh failed at line $LINENO" >&2; exit 3' ERR
@@ -11,102 +13,81 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=acp.integrity-output.sh
 source "${SCRIPT_DIR}/acp.integrity-output.sh"
 
-TARGET="."
+TARGETS=()
+SELF_MODE=false
 IG_REMAINING_ARGS=()
 ig_parse_common_args "$@"
 set -- "${IG_REMAINING_ARGS[@]:-}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -h|--help)
-      echo "Usage: acp.review-scan.sh [--ci] [--json] [file|dir]"
+      echo "Usage: acp.review-scan.sh [--ci] [--json] [--self] [file|dir ...]"
       exit 0
       ;;
-    *) TARGET="$1"; shift ;;
+    --self)
+      SELF_MODE=true
+      shift
+      ;;
+    # F-104-06: ig_parse_common_args stops at first positional; flags after paths
+    # must be re-handled here so they are never appended as scan targets.
+    --ci)
+      IG_CI_MODE=true
+      shift
+      ;;
+    --json)
+      IG_JSON_MODE=true
+      shift
+      ;;
+    -*)
+      echo "Error: unexpected flag: $1" >&2
+      exit 2
+      ;;
+    *)
+      TARGETS+=("$1")
+      shift
+      ;;
   esac
 done
 
-if [[ ! -e "$TARGET" ]]; then
-  echo "Error: $TARGET not found" >&2
-  exit 2
+if [[ "$SELF_MODE" == "true" ]]; then
+  # Documented at acp.review.md — skip missing directories silently (F-102-02)
+  for _self_path in scripts/ agent/scripts/ agent/commands/ e2e/; do
+    if [[ -d "$_self_path" ]]; then
+      TARGETS+=("$_self_path")
+    fi
+  done
 fi
+
+if [[ ${#TARGETS[@]} -eq 0 ]]; then
+  if [[ "$SELF_MODE" == "true" ]]; then
+    # All --self paths missing — nothing to scan; clean exit
+    ig_finalize_scan "review-scan"
+  fi
+  TARGETS=(".")
+fi
+
+for _t in "${TARGETS[@]}"; do
+  if [[ ! -e "$_t" ]]; then
+    echo "Error: $_t not found" >&2
+    exit 2
+  fi
+done
 
 scan_ts_js() {
   local file="$1"
-  local line_num=0
 
-  while IFS= read -r line || [[ -n "$line" ]]; do
-    line_num=$((line_num + 1))
-
-    if echo "$line" | grep -qE '(API_KEY|api[_-]?key|jwtSecret|databasePassword)\s*=\s*["'"'"'][^"'"'"']+["'"'"']' 2>/dev/null; then
-      ig_emit_finding "$file" "$line_num" "SC-01" "hardcoded secret pattern" "CRITICAL"
-    elif echo "$line" | grep -qiE '(password|secret)\s*:\s*["'"'"'][^"'"'"']+["'"'"']' 2>/dev/null; then
-      ig_emit_finding "$file" "$line_num" "SC-01" "hardcoded secret pattern" "CRITICAL"
-    fi
-
-    if echo "$line" | grep -qE ':\s*any\b|as\s+any\b' 2>/dev/null; then
-      ig_emit_finding "$file" "$line_num" "TS-01" "any type usage" "HIGH"
-    fi
-
-    if echo "$line" | grep -qE '^export (async )?function [a-zA-Z0-9_]+\([^)]*\)\s*\{' 2>/dev/null; then
-      if ! echo "$line" | grep -qE '\)\s*:\s*[A-Za-z{[]' 2>/dev/null; then
-        ig_emit_finding "$file" "$line_num" "TS-02" "exported function missing return type" "HIGH"
-      fi
-    fi
-
-    if echo "$line" | grep -qE 'res\.(json|send)\([^)]*\)' 2>/dev/null; then
-      if ! echo "$line" | grep -qE '(data\s*:|"data"\s*:)' 2>/dev/null; then
-        ig_emit_finding "$file" "$line_num" "AP-01" "response missing data envelope" "HIGH"
-      fi
-    fi
-
-    if echo "$line" | grep -qE '^(const|let|var) [a-z]+_[a-z0-9_]*\s*=' 2>/dev/null; then
-      ig_emit_finding "$file" "$line_num" "NC-01" "snake_case variable in TS/JS" "MEDIUM"
-    fi
-  done < "$file"
-
-  if command -v python3 &>/dev/null; then
-    while IFS= read -r eh_line; do
-      [[ -z "$eh_line" ]] && continue
-      ig_emit_finding "$file" "$eh_line" "EH-02" "empty catch block" "HIGH"
-    done < <(ACP_REVIEW_FILE="$file" python3 - <<'PY' 2>/dev/null || true
-import os, re
-path = os.environ["ACP_REVIEW_FILE"]
-text = open(path, encoding="utf-8", errors="replace").read()
-for m in re.finditer(r"catch\s*\([^)]*\)\s*\{([^}]*)\}", text, re.DOTALL):
-    body = re.sub(r"//.*?$", "", m.group(1), flags=re.MULTILINE)
-    body = re.sub(r"/\*.*?\*/", "", body, flags=re.DOTALL)
-    if not body.strip():
-        line = text[: m.start()].count("\n") + 1
-        print(line)
-PY
-)
-
-    while IFS= read -r eh_line; do
-      [[ -z "$eh_line" ]] && continue
-      ig_emit_finding "$file" "$eh_line" "EH-01" "async without try/catch" "HIGH"
-    done < <(ACP_REVIEW_FILE="$file" python3 - <<'PY' 2>/dev/null || true
-import os, re
-path = os.environ["ACP_REVIEW_FILE"]
-text = open(path, encoding="utf-8", errors="replace").read()
-for m in re.finditer(r"async\s+function\s+\w+[^{]*\{", text):
-    start = m.end() - 1
-    depth = 0
-    i = start
-    while i < len(text):
-        if text[i] == "{":
-            depth += 1
-        elif text[i] == "}":
-            depth -= 1
-            if depth == 0:
-                body = text[start + 1 : i]
-                if "try" not in body and ".catch(" not in body:
-                    line = text[: m.start()].count("\n") + 1
-                    print(line)
-                break
-        i += 1
-PY
-)
+  # M83 task-282: neutralize comments/strings before non-secret rules (F-103-01);
+  # SC-01 still runs on comment-stripped-only text so string secrets remain visible;
+  # EH-01 uses token-boundary \btry\b / \.catch\s*\( (F-103-02).
+  if ! command -v python3 &>/dev/null; then
+    echo "Warning: python3 required for TS/JS review-scan rules; skipping $file" >&2
+    return 0
   fi
+
+  while IFS=$'\t' read -r line_num rule message severity || [[ -n "${line_num:-}" ]]; do
+    [[ -z "${line_num:-}" ]] && continue
+    ig_emit_finding "$file" "$line_num" "$rule" "$message" "$severity"
+  done < <(ACP_REVIEW_FILE="$file" python3 "${SCRIPT_DIR}/acp.review-scan-ts.py" 2>/dev/null || true)
 }
 
 scan_sh() {
@@ -138,10 +119,12 @@ scan_path() {
   if [[ -d "$path" ]]; then
     while IFS= read -r f; do
       scan_path "$f"
-    done < <(find "$path" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.sh' \) \
+    done < <(find "$path" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.mjs' -o -name '*.cjs' -o -name '*.sh' \) \
       ! -path '*/node_modules/*' ! -path '*/.git/*' 2>/dev/null || true)
   fi
 }
 
-scan_path "$TARGET"
+for _t in "${TARGETS[@]}"; do
+  scan_path "$_t"
+done
 ig_finalize_scan "review-scan"
