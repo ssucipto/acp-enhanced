@@ -1,0 +1,78 @@
+{
+  "cases": [
+    {
+      "file": "positive/eh01.ts",
+      "findings": [{ "rule": "EH-01", "line": 1 }]
+    },
+    {
+      "file": "negative/eh01.ts",
+      "findings": []
+    },
+    {
+      "file": "positive/eh02.ts",
+      "findings": [{ "rule": "EH-02", "line": 4 }]
+    },
+    {
+      "file": "negative/eh02.ts",
+      "findings": []
+    },
+    {
+      "file": "positive/sc01.ts",
+      "findings": [{ "rule": "SC-01", "line": 1 }]
+    },
+    {
+      "file": "negative/sc01.ts",
+      "findings": []
+    },
+    {
+      "file": "positive/ts01.ts",
+      "findings": [{ "rule": "TS-01", "line": 1 }]
+    },
+    {
+      "file": "negative/ts01.ts",
+      "findings": []
+    },
+    {
+      "file": "positive/ts02.ts",
+      "findings": [{ "rule": "TS-02", "line": 1 }]
+    },
+    {
+      "file": "negative/ts02.ts",
+      "findings": []
+    },
+    {
+      "file": "positive/ap01.ts",
+      "findings": [{ "rule": "AP-01", "line": 2 }]
+    },
+    {
+      "file": "negative/ap01.ts",
+      "findings": []
+    },
+    {
+      "file": "positive/nc01.ts",
+      "findings": [{ "rule": "NC-01", "line": 2 }]
+    },
+    {
+      "file": "negative/nc01.ts",
+      "findings": []
+    },
+    {
+      "file": "positive/sh01.sh",
+      "findings": [{ "rule": "SH-01", "line": 1 }]
+    },
+    {
+      "file": "negative/sh01.sh",
+      "findings": []
+    },
+    {
+      "file": "positive/sh03.sh",
+      "optional_tool": "shellcheck",
+      "findings": [{ "rule": "SH-03", "line": 6 }]
+    },
+    {
+      "file": "negative/sh03.sh",
+      "optional_tool": "shellcheck",
+      "findings": []
+    }
+  ]
+}
