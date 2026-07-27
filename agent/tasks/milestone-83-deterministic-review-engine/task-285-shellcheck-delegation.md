@@ -2,13 +2,13 @@
 id: task-285
 milestone: M83
 title: "shellcheck delegation for SH-03"
-status: planned
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 3
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 2
 depends_on: [task-281]
 audit_findings: [F-102-05]
@@ -39,11 +39,11 @@ Per audit-103 shortcut #2 (don't reinvent what a mature tool does), delegation b
 
 ## Verification
 
-- [ ] With shellcheck present: SH-03 findings emitted with correct file:line
-- [ ] With shellcheck absent (`PATH` stripped in test): exit 0, no output, no error
-- [ ] Allowlisted classes produce no findings on sourced libraries
-- [ ] Corpus recall/precision for SH-03 ≥ 90%
-- [ ] Existing scanner exit-code semantics unchanged
+- [x] With shellcheck present: SH-03 findings emitted with correct file:line
+- [x] With shellcheck absent (`PATH` stripped in test): exit 0, no output, no error
+- [x] Allowlisted classes produce no findings on sourced libraries
+- [x] Corpus recall/precision for SH-03 ≥ 90%
+- [x] Existing scanner exit-code semantics unchanged
 
 ## User-Observable Acceptance
 

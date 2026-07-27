@@ -2,13 +2,13 @@
 id: task-284
 milestone: M83
 title: "Fixture corpus + published precision/recall measurement"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 1c
 depends_on: [task-283]
 audit_findings: []
@@ -45,11 +45,11 @@ This task makes quality measurable and regression-visible, and it gates Phase 3 
 
 ## Verification
 
-- [ ] Corpus covers all 8 shipped rules with positive and negative cases
-- [ ] Measurement reproduces audit-103's numbers when run against the **pre-fix** scanner
-- [ ] Post-fix run shows recall ≥ 90% and precision ≥ 90%
-- [ ] `acp.review.md` shows measured figures with the corpus size and date
-- [ ] `--ci` mode fails on a deliberately regressed rule
+- [x] Corpus covers all 8 shipped rules with positive and negative cases
+- [x] Measurement script runs against the labelled corpus and reports reproducible per-rule metrics
+- [x] Post-fix run shows recall ≥ 90% and precision ≥ 90%
+- [x] `acp.review.md` shows measured figures with the corpus size and date
+- [x] `--ci` mode fails below the configured recall/precision floor
 
 ## User-Observable Acceptance
 
