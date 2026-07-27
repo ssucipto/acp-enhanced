@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed (M83 — in progress)
 - **Scanner false positives** — TS-01 no longer fires inside comments or string literals; `"retry"` in a string no longer suppresses EH-01.
+- **Rule pattern recall (task-283)** — TS-01/02 generic and export forms; NC-01 indented declarations; default test/fixture path exclusion with `--include-tests`.
+
+### Added (M83 — in progress, continued)
+- **Measurement harness (task-284)** — `tests/fixtures/review-corpus/`, `acp.review-measure.sh`; published recall/precision table in `acp.review.md`.
+- **shellcheck SH-03 (task-285)** — optional delegation when `shellcheck` is on PATH; silent when absent.
+- **ADR-23 (task-291)** — local-analyzer carve-out, Variant B detection-as-consent, assisted-install boundary.
 
 ### Notes
 - M83 progress: **3/17** tasks (Phase 1 + Phase 1b.282). Phase 3 still gated on tasks 283–284. Planned ship: **v6.29.0** (task-296).

@@ -2,13 +2,13 @@
 id: task-283
 milestone: M83
 title: "Rule pattern fixes — TS-01, TS-02, NC-01, test/fixture exclusion"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 5
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 1b
 depends_on: [task-282]
 audit_findings: [F-103-04, F-103-05, F-103-06, F-103-07]
@@ -44,12 +44,12 @@ Measured recall on seeded fixtures — each item below was **missed**:
 
 ## Verification
 
-- [ ] All 4 TS-02 forms from the audit-103 fixture are detected
-- [ ] `Record<string, any>` and `Promise<any>` detected
-- [ ] Indented `const my_snake_var` detected
-- [ ] A fixture file with a placeholder secret is skipped by default, flagged with `--include-tests`
-- [ ] No new false positives on the clean fixture
-- [ ] Exclusion list documented in `acp.review.md`
+- [x] All 4 TS-02 forms from the audit-103 fixture are detected
+- [x] `Record<string, any>` and `Promise<any>` detected
+- [x] Indented `const my_snake_var` detected
+- [x] A fixture file with a placeholder secret is skipped by default, flagged with `--include-tests`
+- [x] No new false positives on the clean fixture
+- [x] Exclusion list documented in `acp.review.md`
 
 ## User-Observable Acceptance
 
