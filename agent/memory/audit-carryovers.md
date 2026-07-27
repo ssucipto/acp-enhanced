@@ -2622,3 +2622,237 @@ carryovers:
     fix_applied_date: 2026-07-24
     verified_in_audit: m82-remediation
     escalated_to: null
+
+  - audit_id: audit-102
+    finding_id: F-102-01
+    severity: high
+    file: agent/scripts/acp.review-scan.sh
+    finding: "Multi-path invocation silently drops all but the last path — documented self-review recipe scanned only agent/scripts/"
+    description: "Arg loop assigns TARGET=\"$1\" per path instead of accumulating, so `acp.review-scan.sh --ci scripts/ agent/scripts/` (acp.review.md:71) scans agent/scripts/ only. Unmasked 2 real HIGH findings in scripts/. M82 review-002 Phase 1 result understated scope."
+    fix_target: "acp.review-scan.sh: accumulate paths into an array; scan every path"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-102
+    finding_id: F-102-02
+    severity: high
+    file: agent/scripts/acp.review-scan.sh
+    finding: "--self documented in acp.review.md flag table and self-review recipe but unimplemented in the scanner (exits 2)"
+    description: "acp.review.md:81 and :347 define --self path resolution (scripts/, agent/scripts/, agent/commands/, e2e/). The scanner treats --self as a path and exits 2 'not found'."
+    fix_target: "acp.review-scan.sh: implement --self expanding to the four documented paths, skipping missing dirs"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-102
+    finding_id: F-102-03
+    severity: medium
+    file: agent/scripts/acp.review-scan.sh
+    finding: "*.mjs/*.cjs scanned in file mode but omitted from directory find traversal — silent scope gap"
+    description: "scan_path case at :133 accepts mjs/cjs; the find at :141 lists only ts/tsx/js/jsx/sh, so mjs/cjs under a directory are never scanned. Verified empirically."
+    fix_target: "acp.review-scan.sh: add -o -name '*.mjs' -o -name '*.cjs' to the find predicate"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-102
+    finding_id: F-102-04
+    severity: medium
+    file: agent/commands/acp.review.md
+    finding: "Doc claims 56 rules 'cannot be scripted'; at least 30 are deterministic and 2 (YM-03, ACP-02) are already automated in acp-validate.ts"
+    description: "Phase 1/2 table (:41,:56) understates automatable surface ~4x, discouraging automation that CodeRabbit rate limiting now makes necessary. Reclassification in audit-102 Gap Analysis."
+    fix_target: "acp.review.md: correct Phase 1/Phase 2 counts and tables after M83 Phase 3 rule expansion"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-102
+    finding_id: F-102-05
+    severity: medium
+    file: agent/commands/acp.review.md
+    finding: "shellcheck is installed and covers SH-03 (221 findings on agent/scripts/) but is not wired into /acp-review"
+    description: "SH-03 (no unquoted variables) is an Appendix A rule with no implementation, while shellcheck delivers it plus SC2155/SC2034 classes at zero cost. Should be gated behind command -v per the 3-gate optional-tool pattern."
+    fix_target: "M83 Phase 2: wrap shellcheck -f gcc -S warning, map to SH-03, allowlist accepted classes"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-102
+    finding_id: F-102-06
+    severity: low
+    file: agent/commands/acp.review.md
+    finding: "Rule ownership between /acp-validate and /acp-review undocumented — YM-03 and ACP-02 double-counted as review-semantic"
+    description: "scripts/acp-validate.ts:1913 implements version consistency (YM-03) and :2182 command E2E coverage (ACP-02), but acp.review.md counts both among its unimplemented semantic rules."
+    fix_target: "Document validate-vs-review rule ownership in acp.review.md and coderabbit-policy-map-lite.md"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-102
+    finding_id: F-102-07
+    severity: medium
+    file: agent/commands/acp.review.md
+    finding: "CH-05 duplicate-code detection has no implementation path; needs AST fingerprinting, not regex"
+    description: "dupehound (MIT, Rust, tree-sitter + winnowing, offline, no rate limit) is the candidate, but is v0.1.2 with 153 total downloads — adopt via the 3-gate optional-external-tool pattern only, never as a dependency. Unlike M81/CodeRabbit there is no fixture gate: a real --json fixture can be generated locally."
+    fix_target: "M83 Phase 4: ADR for local-deterministic-analyzer class + acp.dupehound.sh 3-gate helper + local fixture"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-102
+    finding_id: F-102-08
+    severity: medium
+    file: e2e/acp.review.test.sh
+    finding: "Review E2E asserts only command-doc content — no test executes acp.review-scan.sh, which is why F-102-01/02 survived a full review campaign"
+    description: "248 lines of assert_contains against acp.review.md, package.yaml, taxonomy.yml. Zero scanner invocations, so multi-path scope loss and the missing --self flag were undetectable by CI."
+    fix_target: "M83 Phase 1 T-e: E2E executing the scanner — multi-path, --self, .mjs, exit codes, allowlist branches"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-103
+    finding_id: F-103-01
+    severity: high
+    file: agent/scripts/acp.review-scan.sh
+    finding: "No comment or string-literal stripping — every line-regex rule fires inside comments and string literals"
+    description: "Measured 2/2 false positives on a clean fixture: a TS-01 hit on a code comment and one on a string literal. Root cause of F-103-05/06 too. Blocks safe expansion of the ruleset."
+    fix_target: "acp.review-scan.sh: strip comments and string literals (or tokenize) before applying line regexes"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-103
+    finding_id: F-103-02
+    severity: high
+    file: agent/scripts/acp.review-scan.sh
+    finding: "EH-01 uses substring test 'try' not in body — any body containing retry/telemetry/entry/country silently disables the rule"
+    description: "acp.review-scan.sh:102. Proven: an async function with an unhandled await and the string 'retry' in its body produces no finding. Suppression words are common in exactly the async retry/telemetry code EH-01 targets."
+    fix_target: "acp.review-scan.sh:102: use word-boundary/token matching for try and .catch( instead of substring 'in'"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-103
+    finding_id: F-103-03
+    severity: high
+    file: agent/scripts/acp.review-scan.sh
+    finding: "SC-01 misses all real-world token formats — 0/4 recall on ghp_, AKIA, xoxb-, and 'const secret ='"
+    description: "Pattern 1 lacks bare 'secret' with = assignment; pattern 2 requires a colon. No known-prefix patterns and no entropy. gitleaks ships ~200 rules, TruffleHog 800+. Industry guidance ranks secrets as the highest-impact lowest-FP rule; ours has the worst recall of the eight."
+    fix_target: "Decide secrets strategy: delegate to gitleaks via the 3-gate optional-tool pattern, plus prefix patterns as always-on fallback. Do not grow hand-rolled regexes."
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-103
+    finding_id: F-103-04
+    severity: high
+    file: agent/scripts/acp.review-scan.sh
+    finding: "TS-02 misses arrow functions, generics, export default, and multi-line signatures — 0/4 recall"
+    description: "Pattern '^export (async )?function [a-zA-Z0-9_]+\\([^)]*\\)' cannot match export const f = () =>, export function f<T>(, export default function, or params spanning lines. Multi-line signatures are common in real TypeScript."
+    fix_target: "acp.review-scan.sh:50-54: broaden TS-02 to arrow/generic/default forms; handle multi-line signatures"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-103
+    finding_id: F-103-05
+    severity: medium
+    file: agent/scripts/acp.review-scan.sh
+    finding: "TS-01 misses any inside generic parameters — Record<string, any> and Promise<any> undetected"
+    description: "Pattern ':\\s*any\\b|as\\s+any\\b' only catches annotation and cast positions, not type arguments. Generic-position any is common in real code."
+    fix_target: "acp.review-scan.sh:46: add generic-argument position (e.g. <..., any> and <any>) to the TS-01 pattern"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-103
+    finding_id: F-103-06
+    severity: medium
+    file: agent/scripts/acp.review-scan.sh
+    finding: "NC-01 anchored at column 0 — misses every indented snake_case declaration"
+    description: "Pattern '^(const|let|var) ...' requires the declaration to start at column 0, so any variable inside a function or block is never checked. Most real declarations are indented."
+    fix_target: "acp.review-scan.sh:62: allow leading whitespace in the NC-01 anchor"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-103
+    finding_id: F-103-07
+    severity: medium
+    file: agent/scripts/acp.review-scan.sh
+    finding: "No test/fixture/generated-file exclusion — test data containing dummy credentials will emit CRITICAL findings"
+    description: "Directory traversal excludes only node_modules and .git. Test fixtures routinely contain placeholder secrets and intentionally bad patterns; flagging them as CRITICAL is the classic credibility-destroying false positive."
+    fix_target: "acp.review-scan.sh: exclude test/spec/fixture/generated paths by default with an opt-in flag to include them"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-103
+    finding_id: F-103-08
+    severity: medium
+    file: agent/commands/acp.review.md
+    finding: "Secrets section mapped to A05:2025 (Injection); A06/A07/A08:2025 have no rules at all"
+    description: "OWASP Top 10:2025 verified current. 6 of 7 mappings correct, but 6a Secrets & Input cites A05:2025 which is Injection, not secrets. A06 Insecure Design, A07 Authentication Failures, A08 Software or Data Integrity Failures are unmapped."
+    fix_target: "acp.review.md: correct the 6a mapping; decide and document coverage or explicit non-coverage for A06/A07/A08"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-103
+    finding_id: F-103-09
+    severity: medium
+    file: agent/scripts/acp.integrity-output.sh
+    finding: "No baseline mode, inline suppression, or per-rule thresholds — industry-standard false-positive controls absent"
+    description: "gitleaks and TruffleHog both ship baseline suppression, inline allowlist comments, and per-rule entropy thresholds. Without these, a single unavoidable false positive has no resolution path except disabling the rule."
+    fix_target: "Add baseline file support, an inline suppression comment convention, and per-rule threshold config to the shared emitter"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-103
+    finding_id: F-103-10
+    severity: medium
+    file: agent/scripts/acp.entropy-scan.sh
+    finding: "ACP already implements entropy detection (IG-17) but /acp-review SC-01 does not use it; threshold 4.5 also misses structured tokens"
+    description: "acp.entropy-scan.sh:14 sets DEFAULT_THRESHOLD 4.5. Verified it also returns no findings on ghp_/AKIA fixtures — low-entropy structured tokens need prefix patterns, not entropy. Capability is duplicated across commands with neither path effective."
+    fix_target: "Share entropy detection between /acp-integrity and /acp-review; tune threshold and add known-prefix patterns for structured tokens"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null

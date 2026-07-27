@@ -799,6 +799,26 @@ milestones:
       (audit-101 / ADR-22 gate). Do not invent speculative fixture.
 
       '
+  M83:
+    name: Deterministic Local Review Engine (v6.29.0)
+    priority: 5
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 1.5
+    tasks_completed: 0
+    tasks_total: 17
+    file: agent/milestones/milestone-83-deterministic-review-engine.md
+    notes: 'Planned 2026-07-27 from audit-102 + audit-103. Measured Phase 1 scanner at
+
+      ~8% recall / 0% precision; multi-path scope bug masked 2 HIGH findings.
+
+      BINDING: Phase 3 (rule expansion) gated on Phase 1b (lexing) + 1c (corpus).
+
+      Closes 18 carryovers F-102-01..08 + F-103-01..10. NOT blocked by M81/ADR-22.
+
+      '
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6092,6 +6112,160 @@ tasks:
     completed_date: null
     estimated_hours: 2
     notes: route-263; full version file set F-098-07; settle F-101-01..08
+  M83:
+  - id: task-280
+    name: Scanner scope fixes — multi-path, --self, .mjs/.cjs
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-280-scanner-scope-fixes.md
+    started: null
+    completed_date: null
+    estimated_hours: 3
+    notes: phase 1; F-102-01/02/03; unmasks 2 HIGH in scripts/
+  - id: task-281
+    name: Executing E2E harness for the review scanner
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-281-executing-e2e-harness.md
+    started: null
+    completed_date: null
+    estimated_hours: 4
+    notes: phase 1; F-102-08; must fail if 280 reverted
+  - id: task-282
+    name: Precision foundation — comment/string stripping + token matching
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-282-lexing-foundation.md
+    started: null
+    completed_date: null
+    estimated_hours: 6
+    notes: phase 1b; F-103-01/02; BLOCKS phase 3
+  - id: task-283
+    name: Rule pattern fixes — TS-01, TS-02, NC-01, test exclusion
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-283-rule-pattern-fixes.md
+    started: null
+    completed_date: null
+    estimated_hours: 5
+    notes: phase 1b; F-103-04/05/06/07; BLOCKS phase 3
+  - id: task-284
+    name: Fixture corpus + published precision/recall measurement
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-284-fixture-corpus-measurement.md
+    started: null
+    completed_date: null
+    estimated_hours: 4
+    notes: phase 1c; BLOCKS phase 3; target >=90/90
+  - id: task-285
+    name: shellcheck delegation for SH-03
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-285-shellcheck-delegation.md
+    started: null
+    completed_date: null
+    estimated_hours: 3
+    notes: phase 2; F-102-05; 221 findings available free
+  - id: task-286
+    name: Tier C rules — security batch
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-286-tierc-security-batch.md
+    started: null
+    completed_date: null
+    estimated_hours: 6
+    notes: phase 3; gated on 283+284; 9 rules
+  - id: task-287
+    name: Tier C rules — shell portability + ACP hygiene
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-287-tierc-shell-acp-batch.md
+    started: null
+    completed_date: null
+    estimated_hours: 4
+    notes: phase 3; gated; context-aware SH-02/SH-04
+  - id: task-288
+    name: Tier C rules — code health + TypeScript
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-288-tierc-health-ts-batch.md
+    started: null
+    completed_date: null
+    estimated_hours: 5
+    notes: phase 3; gated; 10 rules; CLI allowlist
+  - id: task-289
+    name: Tier C rules — error handling + naming
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-289-tierc-errors-naming-batch.md
+    started: null
+    completed_date: null
+    estimated_hours: 5
+    notes: phase 3; gated; 9 rules
+  - id: task-290
+    name: Secrets strategy — gitleaks delegation + entropy reuse
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-290-secrets-strategy.md
+    started: null
+    completed_date: null
+    estimated_hours: 5
+    notes: phase 3b; F-103-03/10; no hand-rolled regex growth
+  - id: task-291
+    name: ADR-23 — local analyzers, detection-as-consent, assisted install
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-291-adr23-local-analyzers.md
+    started: null
+    completed_date: null
+    estimated_hours: 3
+    notes: phase 4; gates 292/293; amends pattern doc
+  - id: task-292
+    name: acp.dupehound.sh — 3-gate helper + CH-05 wiring
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-292-dupehound-helper-ch05.md
+    started: null
+    completed_date: null
+    estimated_hours: 5
+    notes: phase 4; F-102-07; wrap not rewrite; local fixture
+  - id: task-293
+    name: Assisted installer + version-update offer hook
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-293-assisted-install-offer.md
+    started: null
+    completed_date: null
+    estimated_hours: 4
+    notes: phase 4; consent only; never downloads binaries
+  - id: task-294
+    name: OWASP Top 10:2025 mapping correction + A06/A07/A08
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-294-owasp-standards-alignment.md
+    started: null
+    completed_date: null
+    estimated_hours: 3
+    notes: phase 5; F-103-08; A05 mismap
+  - id: task-295
+    name: FP controls — baseline, inline suppression, thresholds
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-295-fp-controls-baseline-suppression.md
+    started: null
+    completed_date: null
+    estimated_hours: 4
+    notes: phase 5; F-103-09; shared emitter
+  - id: task-296
+    name: M83 closure — doc reconcile, review-002 amendment, ship v6.29.0
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-296-m83-closure.md
+    started: null
+    completed_date: null
+    estimated_hours: 4
+    notes: phase 6; F-102-04/06; settle 18 carryovers
   M82:
   - id: task-275
     name: Sync branches + run overdue ACP weeklies
@@ -6139,6 +6313,27 @@ tasks:
     estimated_hours: 1
     notes: review-002; CLI ≠ ADR-22 gate
 recent_work:
+- date: 2026-07-27
+  description: '/acp-plan M83 — Deterministic Local Review Engine. audit-102 + audit-103
+
+    measured the Phase 1 scanner at ~8% recall / 0% precision and found a multi-path
+
+    scope bug that masked 2 HIGH findings. 17 tasks, 6 phases, ~45h, closing 18
+
+    carryovers. current_milestone remains M81.
+
+    '
+  items:
+  - M83 planned (17 tasks 280-296, ~45h, target v6.29.0)
+  - 'BINDING: phase 3 rule expansion gated on 1b lexing + 1c fixture corpus'
+  - audit-102 + audit-103 published; 18 carryovers F-102-01..08 / F-103-01..10
+  - M81 F-101-* remain blocked on CodeRabbit fixture — out of M83 scope
+- date: 2026-07-27
+  description: /acp-resume session start — context reloaded, M81 still gated on missing fixture
+  items:
+  - confirmed M82 complete (F-M82-01..07 fixed per e1b45ff)
+  - confirmed M81 tasks 270-274 remain blocked on tests/fixtures/coderabbit-findings-sample.json
+  - no overdue recurring reviews (weekly review/integrity both next_due 2026-07-31)
 - date: 2026-07-24
   description: M82 carryover remediation F-M82-01..07 fixed
   items:
