@@ -81,3 +81,13 @@ acp:
       # When true AND a CodeRabbit config is detected, ACP enables CodeRabbit-aware hints.
       config_path: .coderabbit.yaml
       # Repo-relative file whose presence signals a CodeRabbit-configured repo.
+    gitleaks:
+      enabled: auto
+      # auto enables gitleaks when the local binary is present; false disables it explicitly.
+    dupehound:
+      enabled: auto
+      # auto enables CH-05 duplicate detection when dupehound is installed locally.
+      min_tokens: 40
+      # Reserved compatibility key for future dupehound filter tuning.
+      install_prompt_version: ''
+      # ACP version that last prompted for the optional dupehound install flow.

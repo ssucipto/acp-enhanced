@@ -2,7 +2,12 @@
   "cases": [
     {
       "file": "positive/eh01.ts",
-      "findings": [{ "rule": "EH-01", "line": 1 }]
+      "findings": [
+        {
+          "rule": "EH-01",
+          "line": 1
+        }
+      ]
     },
     {
       "file": "negative/eh01.ts",
@@ -10,7 +15,12 @@
     },
     {
       "file": "positive/eh02.ts",
-      "findings": [{ "rule": "EH-02", "line": 4 }]
+      "findings": [
+        {
+          "rule": "EH-02",
+          "line": 4
+        }
+      ]
     },
     {
       "file": "negative/eh02.ts",
@@ -18,7 +28,24 @@
     },
     {
       "file": "positive/sc01.ts",
-      "findings": [{ "rule": "SC-01", "line": 1 }]
+      "findings": [
+        {
+          "rule": "SC-01",
+          "line": 1
+        },
+        {
+          "rule": "SC-01",
+          "line": 2
+        },
+        {
+          "rule": "SC-01",
+          "line": 3
+        },
+        {
+          "rule": "SC-01",
+          "line": 4
+        }
+      ]
     },
     {
       "file": "negative/sc01.ts",
@@ -26,7 +53,12 @@
     },
     {
       "file": "positive/ts01.ts",
-      "findings": [{ "rule": "TS-01", "line": 1 }]
+      "findings": [
+        {
+          "rule": "TS-01",
+          "line": 1
+        }
+      ]
     },
     {
       "file": "negative/ts01.ts",
@@ -34,7 +66,12 @@
     },
     {
       "file": "positive/ts02.ts",
-      "findings": [{ "rule": "TS-02", "line": 1 }]
+      "findings": [
+        {
+          "rule": "TS-02",
+          "line": 1
+        }
+      ]
     },
     {
       "file": "negative/ts02.ts",
@@ -42,7 +79,12 @@
     },
     {
       "file": "positive/ap01.ts",
-      "findings": [{ "rule": "AP-01", "line": 2 }]
+      "findings": [
+        {
+          "rule": "AP-01",
+          "line": 2
+        }
+      ]
     },
     {
       "file": "negative/ap01.ts",
@@ -50,7 +92,12 @@
     },
     {
       "file": "positive/nc01.ts",
-      "findings": [{ "rule": "NC-01", "line": 2 }]
+      "findings": [
+        {
+          "rule": "NC-01",
+          "line": 2
+        }
+      ]
     },
     {
       "file": "negative/nc01.ts",
@@ -58,7 +105,12 @@
     },
     {
       "file": "positive/sh01.sh",
-      "findings": [{ "rule": "SH-01", "line": 1 }]
+      "findings": [
+        {
+          "rule": "SH-01",
+          "line": 1
+        }
+      ]
     },
     {
       "file": "negative/sh01.sh",
@@ -67,11 +119,240 @@
     {
       "file": "positive/sh03.sh",
       "optional_tool": "shellcheck",
-      "findings": [{ "rule": "SH-03", "line": 6 }]
+      "findings": [
+        {
+          "rule": "SH-03",
+          "line": 6
+        }
+      ]
     },
     {
       "file": "negative/sh03.sh",
       "optional_tool": "shellcheck",
+      "findings": []
+    },
+    {
+      "file": "positive/sc-batch.ts",
+      "findings": [
+        {
+          "rule": "SC-03",
+          "line": 1
+        },
+        {
+          "rule": "SC-08",
+          "line": 2
+        },
+        {
+          "rule": "SC-10",
+          "line": 3
+        },
+        {
+          "rule": "SC-13",
+          "line": 4
+        },
+        {
+          "rule": "SC-16",
+          "line": 5
+        },
+        {
+          "rule": "SC-18",
+          "line": 6
+        },
+        {
+          "rule": "AP-09",
+          "line": 7
+        }
+      ]
+    },
+    {
+      "file": "negative/config.ts",
+      "findings": []
+    },
+    {
+      "file": "positive/security-project/package.json",
+      "findings": [
+        {
+          "rule": "SC-14",
+          "line": 1
+        },
+        {
+          "rule": "SC-15",
+          "line": 1
+        }
+      ]
+    },
+    {
+      "file": "negative/security-project/package.json",
+      "findings": []
+    },
+    {
+      "file": "positive/shell-batch",
+      "target": "positive/shell-batch",
+      "findings": [
+        {
+          "file": "positive/shell-batch/sh-rules.sh",
+          "rule": "SH-04",
+          "line": 2
+        },
+        {
+          "file": "positive/shell-batch/sh-rules.sh",
+          "rule": "SH-02",
+          "line": 3
+        },
+        {
+          "file": "positive/shell-batch/commands/acp.bad.md",
+          "rule": "ACP-01",
+          "line": 1
+        },
+        {
+          "file": "positive/shell-batch/scripts/bad-name.sh",
+          "rule": "ACP-03",
+          "line": 1
+        },
+        {
+          "file": "positive/shell-batch/invalid.yaml",
+          "rule": "YM-01",
+          "line": 1
+        },
+        {
+          "file": "positive/shell-batch/bad-frontmatter.md",
+          "rule": "YM-02",
+          "line": 3
+        }
+      ]
+    },
+    {
+      "file": "negative/shell-batch",
+      "target": "negative/shell-batch",
+      "findings": []
+    },
+    {
+      "file": "positive/health-batch",
+      "target": "positive/health-batch",
+      "findings": [
+        {
+          "file": "positive/health-batch/index.ts",
+          "rule": "CH-07",
+          "line": 1
+        },
+        {
+          "file": "positive/health-batch/index.ts",
+          "rule": "CH-01",
+          "line": 2
+        },
+        {
+          "file": "positive/health-batch/index.ts",
+          "rule": "CH-03",
+          "line": 2
+        },
+        {
+          "file": "positive/health-batch/index.ts",
+          "rule": "CH-06",
+          "line": 55
+        },
+        {
+          "file": "positive/health-batch/index.ts",
+          "rule": "TS-01",
+          "line": 56
+        },
+        {
+          "file": "positive/health-batch/index.ts",
+          "rule": "TS-03",
+          "line": 56
+        },
+        {
+          "file": "positive/health-batch/index.ts",
+          "rule": "TS-04",
+          "line": 57
+        },
+        {
+          "file": "positive/health-batch/index.ts",
+          "rule": "TS-06",
+          "line": 58
+        },
+        {
+          "file": "positive/health-batch/index.ts",
+          "rule": "TS-07",
+          "line": 61
+        }
+      ]
+    },
+    {
+      "file": "negative/health-batch",
+      "target": "negative/health-batch",
+      "findings": []
+    },
+    {
+      "file": "positive/tsconfig.bad.json",
+      "findings": [
+        {
+          "rule": "TS-08",
+          "line": 1
+        },
+        {
+          "rule": "TS-13",
+          "line": 1
+        }
+      ]
+    },
+    {
+      "file": "negative/tsconfig.good.json",
+      "findings": []
+    },
+    {
+      "file": "positive/errors-batch",
+      "target": "positive/errors-batch",
+      "findings": [
+        {
+          "file": "positive/errors-batch/errors.ts",
+          "rule": "EH-03",
+          "line": 3
+        },
+        {
+          "file": "positive/errors-batch/errors.ts",
+          "rule": "EH-04",
+          "line": 7
+        },
+        {
+          "file": "positive/errors-batch/errors.ts",
+          "rule": "EH-07",
+          "line": 12
+        },
+        {
+          "file": "positive/errors-batch/errors.ts",
+          "rule": "EH-08",
+          "line": 15
+        },
+        {
+          "file": "positive/errors-batch/errors.ts",
+          "rule": "NC-06",
+          "line": 20
+        },
+        {
+          "file": "positive/errors-batch/MyModule.ts",
+          "rule": "NC-02",
+          "line": 1
+        },
+        {
+          "file": "positive/errors-batch/MyModule.ts",
+          "rule": "NC-04",
+          "line": 1
+        },
+        {
+          "file": "positive/errors-batch/HookThing.tsx",
+          "rule": "NC-09",
+          "line": 1
+        },
+        {
+          "file": "positive/errors-batch/package.json",
+          "rule": "EH-09",
+          "line": 1
+        }
+      ]
+    },
+    {
+      "file": "negative/errors-batch",
+      "target": "negative/errors-batch",
       "findings": []
     }
   ]
