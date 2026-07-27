@@ -40,6 +40,8 @@ Ops campaign (**M82**) to thoroughly review this repo **without** waiting for th
 
 **ADR-22 / M81**: This campaign does **not** satisfy `tests/fixtures/coderabbit-findings-sample.json`. CLI `--agent` JSON ≠ PR-comment export.
 
+**2026-07-27 annotation (M83)**: The Phase 1 row above was produced before audit-102/audit-103 and reflects a scanner later measured at roughly **8% recall** over only **half the intended self-review scope**. The M82 campaign record still stands, but Phase 1 should be read as a historically incomplete signal rather than a trustworthy clean-pass statement. See `audit-102`, `audit-103`, and `milestone-83-deterministic-review-engine.md`.
+
 Artifacts: [`coderabbit-local-2026-07-24/`](coderabbit-local-2026-07-24/MANIFEST.md) · Playbook: [`coderabbit-local-thorough-review.md`](../wiki/coderabbit-local-thorough-review.md)
 
 ---

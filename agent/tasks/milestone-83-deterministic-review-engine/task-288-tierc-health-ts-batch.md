@@ -2,13 +2,13 @@
 id: task-288
 milestone: M83
 title: "Tier C rules — code health + TypeScript (CH-01/03/06/07, TS-03/04/06/07/08/13)"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 5
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 3
 depends_on: [task-283, task-284]
 audit_findings: []
@@ -44,11 +44,11 @@ Both need allowlisting, and both benefit from task-283's test-file exclusion.
 
 ## Verification
 
-- [ ] E2E assertion strings containing `TODO` produce no CH-01 finding
-- [ ] CLI entry points produce no CH-06 finding; a genuine app-code `console.log` fixture does
-- [ ] TS-03/TS-04 recognise explanatory comments on the same and preceding line
-- [ ] TS-08/TS-13 emit once per project, not per file; no finding when `tsconfig.json` is absent
-- [ ] Aggregate precision ≥ 90% on the corpus
+- [x] E2E assertion strings containing `TODO` produce no CH-01 finding
+- [x] CLI entry points produce no CH-06 finding; a genuine app-code `console.log` fixture does
+- [x] TS-03/TS-04 recognise explanatory comments on the same and preceding line
+- [x] TS-08/TS-13 emit once per project, not per file; no finding when `tsconfig.json` is absent
+- [x] Aggregate precision ≥ 90% on the corpus
 
 ## User-Observable Acceptance
 

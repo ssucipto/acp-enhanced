@@ -2,23 +2,28 @@
 id: task-290
 milestone: M83
 title: "Secrets strategy — gitleaks delegation + entropy reuse (SC-01)"
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 5
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 3b
 depends_on: [task-284]
 audit_findings: [F-103-03, F-103-10]
 files_affected:
   - agent/scripts/acp.gitleaks.sh
   - agent/scripts/acp.review-scan.sh
+  - agent/scripts/acp.review-scan-ts.py
   - agent/scripts/acp.entropy-scan.sh
   - agent/configurables/acp.configurables.yaml
+  - agent/preferences/acp.default.yaml
   - agent/commands/acp.review.md
   - package.yaml
+  - tests/fixtures/review-corpus/expected.yaml
+  - tests/fixtures/review-corpus/positive/sc01.ts
+  - tests/fixtures/review-corpus/negative/sc01.ts
 ---
 
 ## Objective

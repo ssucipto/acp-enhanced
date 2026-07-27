@@ -105,6 +105,7 @@ Ask user if they want to update.
 
 **Actions**:
 - If updates available: Suggest running `@acp-version-update`
+- If updates are available and `bash agent/scripts/acp.dupehound.sh should-prompt` says `prompt`, mention the optional local dupehound install offer (suppressed when `integrations.dupehound.enabled: false`)
 - If up to date: No action needed
 - Provide clear next steps
 

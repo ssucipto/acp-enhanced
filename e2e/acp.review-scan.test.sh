@@ -56,14 +56,15 @@ B4_CRIT=$?
 assert_equals "1" "$B4_CRIT" "--ci exits 1 on SC-01 CRITICAL"
 
 # ── B5: --json is parseable ───────────────────────────────────────────────────
-print_test_header "B5 — --json emits jq-parseable array"
+print_test_header "B5 — --json emits jq-parseable object payload"
 B5_JSON="$(bash "$SCAN" --json --include-tests "$FIX/multi-a" 2>/dev/null)" || true
 if command -v jq >/dev/null 2>&1; then
-  echo "$B5_JSON" | jq -e 'type == "array" and length >= 1' >/dev/null 2>&1
+  echo "$B5_JSON" | jq -e 'type == "object" and (.findings | type == "array" and length >= 1) and (.summary | type == "object")' >/dev/null 2>&1
   assert_true "--json round-trips through jq" $?
-  B5_RULE="$(echo "$B5_JSON" | jq -r '.[0].rule')"
+  B5_RULE="$(echo "$B5_JSON" | jq -r '.findings[0].rule')"
   assert_equals "SC-01" "$B5_RULE" "--json finding has SC-01 rule"
 else
+  assert_contains "$B5_JSON" '"findings"' "--json payload includes findings key"
   assert_contains "$B5_JSON" '"rule":"SC-01"' "--json contains SC-01 (jq unavailable)"
 fi
 
@@ -111,7 +112,8 @@ print_test_header "B12 — retry substring does not suppress EH-01 (F-103-02)"
 B12_OUT="$(bash "$SCAN" --include-tests "$FIX/lexing/eh01-retry.ts" 2>&1)" || true
 assert_contains "$B12_OUT" "EH-01" "async with 'retry' string still flagged EH-01"
 B12_OK="$(bash "$SCAN" --include-tests "$FIX/lexing/eh01-has-try.ts" 2>&1)"
-assert_contains "$B12_OK" "No findings" "async with real try is clean"
+B12_EH01_COUNT="$(echo "$B12_OK" | grep -c 'EH-01' || true)"
+assert_equals "0" "$B12_EH01_COUNT" "real try/catch no longer triggers EH-01"
 
 print_test_header "B13 — line numbers point at original source"
 B13_OUT="$(bash "$SCAN" --include-tests "$FIX/lexing/line-nums.ts" 2>&1)" || true
@@ -178,5 +180,147 @@ if [[ -n "$SHELLCHECK_PATH" ]]; then
 else
   assert_true "shellcheck already absent" 0
 fi
+
+print_test_header "B23 — baseline suppresses same finding after line shifts"
+B23_DIR="$(mktemp -d)"
+B23_BASELINE="${B23_DIR}/review-baseline.json"
+cat > "${B23_DIR}/secret.ts" <<'TSEOF'
+const token = "ghp_fixture_baseline_token";
+TSEOF
+B23_WRITE="$(bash "$SCAN" --json --write-baseline "$B23_BASELINE" --include-tests "${B23_DIR}/secret.ts" 2>/dev/null)" || true
+assert_file_exists "$B23_BASELINE" "baseline file written"
+if command -v jq >/dev/null 2>&1; then
+  echo "$B23_WRITE" | jq -e '.findings | length == 1' >/dev/null 2>&1
+  assert_true "baseline write keeps active finding in JSON" $?
+  jq -e '.entries | length == 1 and .[0].rule == "SC-01"' "$B23_BASELINE" >/dev/null 2>&1
+  assert_true "baseline file records SC-01 entry" $?
+fi
+B23_SUPPRESSED="$(bash "$SCAN" --json --baseline "$B23_BASELINE" --include-tests "${B23_DIR}/secret.ts" 2>/dev/null)"
+if command -v jq >/dev/null 2>&1; then
+  echo "$B23_SUPPRESSED" | jq -e '(.findings | length) == 0 and .summary.suppressed_baseline == 1' >/dev/null 2>&1
+  assert_true "baseline suppresses matching finding" $?
+else
+  assert_contains "$B23_SUPPRESSED" '"suppressed_baseline": 1' "baseline suppression summary present"
+fi
+cat > "${B23_DIR}/secret.ts" <<'TSEOF'
+// line shift should not break the baseline
+const token = "ghp_fixture_baseline_token";
+TSEOF
+B23_SHIFTED="$(bash "$SCAN" --json --baseline "$B23_BASELINE" --include-tests "${B23_DIR}/secret.ts" 2>/dev/null)"
+if command -v jq >/dev/null 2>&1; then
+  echo "$B23_SHIFTED" | jq -e '(.findings | length) == 0 and .summary.suppressed_baseline == 1' >/dev/null 2>&1
+  assert_true "baseline survives unrelated line-number shift" $?
+else
+  assert_contains "$B23_SHIFTED" '"suppressed_baseline": 1' "shifted baseline still suppresses"
+fi
+rm -rf "$B23_DIR"
+
+print_test_header "B24 — inline suppression with reason is honored and summarized"
+B24_DIR="$(mktemp -d)"
+cat > "${B24_DIR}/suppressed.ts" <<'TSEOF'
+// acp-review-ignore: SC-01 - seeded fixture secret for suppression test
+const token = "ghp_inline_suppressed_token";
+TSEOF
+B24_OUT="$(bash "$SCAN" --include-tests "${B24_DIR}/suppressed.ts" 2>&1)"
+assert_contains "$B24_OUT" "Suppressed findings: 1" "text output reports suppression summary"
+B24_JSON="$(bash "$SCAN" --json --include-tests "${B24_DIR}/suppressed.ts" 2>/dev/null)"
+if command -v jq >/dev/null 2>&1; then
+  echo "$B24_JSON" | jq -e '(.findings | length) == 0 and .summary.suppressed_inline == 1' >/dev/null 2>&1
+  assert_true "inline suppression removes active finding in JSON" $?
+else
+  assert_contains "$B24_JSON" '"suppressed_inline": 1' "json summary reports inline suppression"
+fi
+rm -rf "$B24_DIR"
+
+print_test_header "B25 — shell comment suppression works for SH-03"
+if command -v shellcheck >/dev/null 2>&1; then
+  B25_DIR="$(mktemp -d)"
+  cat > "${B25_DIR}/suppressed.sh" <<'SHEOF'
+#!/usr/bin/env bash
+set -euo pipefail
+trap 'exit 3' ERR
+# acp-review-ignore: SH-03 - deliberate unquoted variable in test fixture
+echo $HOME
+SHEOF
+  B25_JSON="$(bash "$SCAN" --json --include-tests "${B25_DIR}/suppressed.sh" 2>/dev/null)"
+  echo "$B25_JSON" | jq -e '(.findings | length) == 0 and .summary.suppressed_inline == 1' >/dev/null 2>&1
+  assert_true "shell # suppression comment suppresses SH-03" $?
+  rm -rf "$B25_DIR"
+else
+  assert_true "shellcheck unavailable skips shell suppression test" 0
+fi
+
+print_test_header "B26 — suppression without a reason is reported LOW"
+B26_DIR="$(mktemp -d)"
+cat > "${B26_DIR}/invalid.ts" <<'TSEOF'
+const token = "ghp_inline_invalid_token"; // acp-review-ignore: SC-01
+TSEOF
+B26_JSON="$(bash "$SCAN" --json --include-tests "${B26_DIR}/invalid.ts" 2>/dev/null)" || true
+if command -v jq >/dev/null 2>&1; then
+  echo "$B26_JSON" | jq -e '
+    (.findings | length == 2) and
+    any(.findings[]; .severity == "CRITICAL" and .rule == "SC-01") and
+    any(.findings[]; .severity == "LOW" and (.message | contains("invalid acp-review-ignore"))) and
+    (.summary.suppressed_total == 0)
+  ' >/dev/null 2>&1
+  assert_true "missing suppression reason produces LOW finding and keeps original" $?
+else
+  assert_contains "$B26_JSON" '"invalid acp-review-ignore' "missing reason recorded in JSON"
+  assert_contains "$B26_JSON" '"suppressed_total": 0' "invalid suppression does not count as suppressed"
+fi
+rm -rf "$B26_DIR"
+
+print_test_header "B27 — SC-01 catches structured token prefixes"
+B27_OUT="$(bash "$SCAN" --include-tests "${PROJECT_ROOT}/tests/fixtures/review-corpus/positive/sc01.ts" 2>&1)" || true
+assert_contains "$B27_OUT" "positive/sc01.ts:1 SC-01" "ghp_ token flagged"
+assert_contains "$B27_OUT" "positive/sc01.ts:2 SC-01" "AKIA token flagged"
+assert_contains "$B27_OUT" "positive/sc01.ts:3 SC-01" "xoxb- token flagged"
+assert_contains "$B27_OUT" "positive/sc01.ts:4 SC-01" "secret assignment flagged"
+
+print_test_header "B28 — CH-05 wiring stays non-blocking via fake dupehound"
+B28_DIR="$(mktemp -d "${PROJECT_ROOT}/tmp-dupehound.XXXXXX")"
+mkdir -p "${B28_DIR}/src" "${B28_DIR}/fake-bin"
+cat > "${B28_DIR}/src/new-helper.ts" <<'TSEOF'
+export function computeTotal(items: number[]): number {
+  return items.reduce((sum, item) => sum + item, 0);
+}
+TSEOF
+cat > "${B28_DIR}/src/shared-math.ts" <<'TSEOF'
+export function computeTotal(values: number[]): number {
+  return values.reduce((sum, value) => sum + value, 0);
+}
+TSEOF
+cat > "${B28_DIR}/fake-bin/dupehound" <<'SHEOF'
+#!/usr/bin/env bash
+cat <<EOF
+{
+  "version": 2,
+  "findings": [
+    {
+      "file": "${ACP_FAKE_DUPE_FILE}",
+      "line": 12,
+      "similarity": 100,
+      "original": {
+        "file": "${ACP_FAKE_DUPE_ORIGINAL}",
+        "line": 4
+      },
+      "suggestion": "extract shared helper"
+    }
+  ]
+}
+EOF
+SHEOF
+chmod +x "${B28_DIR}/fake-bin/dupehound"
+B28_OUT="$(PATH="${B28_DIR}/fake-bin:/usr/bin:/bin:/usr/sbin:/sbin" ACP_FAKE_DUPE_FILE="${B28_DIR}/src/new-helper.ts" ACP_FAKE_DUPE_ORIGINAL="${B28_DIR}/src/shared-math.ts" ACP_DUPEHOUND_DIFF_BASE=HEAD~1 bash "$SCAN" --ci "${B28_DIR}/src/new-helper.ts" 2>&1)"
+B28_RC=$?
+assert_equals "0" "$B28_RC" "CH-05 remains non-blocking in --ci"
+assert_contains "$B28_OUT" "CH-05" "fake dupehound result maps to CH-05"
+rm -rf "$B28_DIR"
+
+print_test_header "B29 — entropy reuse catches secret-like assignment without analyzers"
+B29_OUT="$(PATH="/usr/bin:/bin:/usr/sbin:/sbin" bash "$SCAN" --include-tests "${PROJECT_ROOT}/tests/fixtures/review-scan/patterns/sc01-entropy.ts" 2>&1)" || true
+assert_contains "$B29_OUT" "SC-01" "entropy-backed SC-01 finding emitted"
+B29_HELPER="$(bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" --review-sc01 --threshold 4.2 "${PROJECT_ROOT}/tests/fixtures/review-scan/patterns/sc01-entropy.ts" 2>&1)"
+assert_contains "$B29_HELPER" "high-entropy secret-like assignment" "shared entropy helper emits SC-01 machine output"
 
 print_suite_summary

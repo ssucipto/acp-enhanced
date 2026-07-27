@@ -2,13 +2,13 @@
 id: task-287
 milestone: M83
 title: "Tier C rules — shell portability + ACP hygiene (SH-02/04, ACP-01/03, YM-01/02)"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 4
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 3
 depends_on: [task-283, task-284]
 audit_findings: []
@@ -41,12 +41,12 @@ These are the cases that distinguish a usable scanner from a noisy one.
 
 ## Verification
 
-- [ ] Guarded `sed -i` in `acp.common.sh` / `acp.yaml-parser.sh` produces **no** SH-02 finding
-- [ ] `acp.atomic-write.sh` trap-then-clear produces **no** SH-04 finding
-- [ ] A genuine unguarded `sed -i ''` fixture **is** flagged
-- [ ] A sourced library with an uncleared EXIT trap **is** flagged CRITICAL
-- [ ] YM-01/YM-02 reuse existing parse infrastructure rather than reimplementing
-- [ ] Zero false positives across the whole repo for all six rules
+- [x] Guarded `sed -i` in `acp.common.sh` / `acp.yaml-parser.sh` produces **no** SH-02 finding
+- [x] `acp.atomic-write.sh` trap-then-clear produces **no** SH-04 finding
+- [x] A genuine unguarded `sed -i ''` fixture **is** flagged
+- [x] A sourced library with an uncleared EXIT trap **is** flagged CRITICAL
+- [x] YM-01/YM-02 reuse existing parse infrastructure rather than reimplementing
+- [x] Zero false positives across the whole repo for all six rules
 
 ## User-Observable Acceptance
 
