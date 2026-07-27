@@ -803,16 +803,18 @@ milestones:
     name: Deterministic Local Review Engine (v6.29.0)
     priority: 5
     status: in_progress
-    progress: 18
+    progress: 35
     started: 2026-07-27
     completed: null
     estimated_weeks: 1.5
-    tasks_completed: 3
+    tasks_completed: 6
     tasks_total: 17
     file: agent/milestones/milestone-83-deterministic-review-engine.md
-    notes: '🚧 Phase 1 + 1b.282 done 2026-07-27 — scope E2E + lexing/EH-01 token match.
+    notes: '🚧 Phases 1b/1c/2 advanced 2026-07-27 — rule-pattern fixes, labelled corpus
 
-      Next: task-283 (rule patterns) then 284 (corpus measure). Phase 3 still gated.
+      + measurement (18 cases, 100/100), and shellcheck-backed SH-03 delegation landed.
+
+      Next: task-286 (Tier C security batch). Phase 3 unblocked by tasks 283-285.
 
       current_milestone remains M81 (fixture gate). M83 independent of M81/ADR-22.
 
@@ -6141,30 +6143,30 @@ tasks:
   - id: task-283
     name: Rule pattern fixes — TS-01, TS-02, NC-01, test exclusion
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-283-rule-pattern-fixes.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 5
-    notes: phase 1b; F-103-04/05/06/07; BLOCKS phase 3
+    notes: completed 2026-07-27; TS-01/02 + NC-01 pattern recall fixed; default fixture exclusion + --include-tests added
   - id: task-284
     name: Fixture corpus + published precision/recall measurement
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-284-fixture-corpus-measurement.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 4
-    notes: phase 1c; BLOCKS phase 3; target >=90/90
+    notes: completed 2026-07-27; review-corpus + acp.review-measure.sh landed; current local run 18 cases with 100/100 recall/precision
   - id: task-285
     name: shellcheck delegation for SH-03
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-285-shellcheck-delegation.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 3
-    notes: phase 2; F-102-05; 221 findings available free
+    notes: completed 2026-07-27; optional shellcheck delegation added with SH-01 allowlist parity and silent-absent fallback
   - id: task-286
     name: Tier C rules — security batch
     priority: 5
@@ -6213,10 +6215,10 @@ tasks:
   - id: task-291
     name: ADR-23 — local analyzers, detection-as-consent, assisted install
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-291-adr23-local-analyzers.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 3
     notes: phase 4; gates 292/293; amends pattern doc
   - id: task-292

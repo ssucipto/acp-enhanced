@@ -181,6 +181,7 @@ contents:
       description: Standards enforcement for code quality, security, and consistency — OWASP, TypeScript, API convention rules
       scripts:
         - acp.review-scan.sh
+        - acp.review-measure.sh
     
     - name: acp.integrity.md
       description: AI code integrity & trustworthiness — hidden Unicode, exfiltration, supply chain, CI injection detection
@@ -582,6 +583,10 @@ contents:
 
     - name: acp.review-scan.sh
       description: Review scan utilities for /acp-review command
+      type: internal
+
+    - name: acp.review-measure.sh
+      description: Review scan corpus precision/recall measurement
       type: internal
 
     - name: acp.taint-scan.sh
