@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.29.1] — 2026-07-28
+
+### Added (M84 hotfix — F-105-01)
+- **`review.rule_overrides` preferences** — per-rule `enabled: false` and `severity` overrides in `agent/preferences/acp.default.yaml`, loaded by `acp.review-rule-overrides.py` and applied in `acp.integrity-output.sh` for `/acp-review` and `/acp-integrity`.
+- **Legacy adoption guide** — `agent/wiki/review-legacy-adoption.md` documents the baseline → tighten workflow for existing codebases.
+
+### Fixed
+- **Scanner stdin safety** — rule-override loading no longer steals lines from nested `while read` loops (inline suppression regression).
+
+---
+
 ## [6.29.0] — 2026-07-27
 
 ### Added (M83 — Deterministic Local Review Engine)

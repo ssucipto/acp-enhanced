@@ -2916,8 +2916,34 @@ carryovers:
     finding: "task-286 SC-15 verification rationale is wrong — scripts/package-lock.json is tracked, so SC-15 passes on tracking not the framework qualifier"
     description: "Task says 'SC-15 does not fire on this repo (lockfiles are development-only here)'. git ls-files confirms scripts/package-lock.json is tracked. The expectation is correct but the stated reason would mislead the implementer."
     fix_target: "task-286: correct the SC-15 verification rationale to reference lockfile tracking"
-    status: pending
+    status: fixed
     planned_in: M83
+    fix_applied_date: 2026-07-28
+    verified_in_audit: audit-105-m83-post-impl
+    escalated_to: null
+
+  - audit_id: audit-105
+    finding_id: F-105-01
+    severity: medium
+    file: agent/scripts/acp.integrity-output.sh
+    finding: "Per-rule severity override and enable/disable config promised in task-295 / F-103-09 fix is not implemented"
+    description: "Baseline and inline acp-review-ignore shipped, but teams cannot downgrade SC-10 or disable NC-01 via preferences. task-295 Step 3 and F-103-09 fix_target mention per-rule thresholds; closure marked fixed without this surface."
+    fix_target: "Add review.rule_overrides preference map (enabled + severity) read by ig_emit_finding; document in acp.review.md and configurables"
+    status: fixed
+    planned_in: M84
+    fix_applied_date: 2026-07-28
+    verified_in_audit: e2e/acp.review-scan.test.sh#B30-B31
+    escalated_to: null
+
+  - audit_id: audit-105
+    finding_id: F-105-02
+    severity: low
+    file: agent/scripts/acp.review-scan-ts.py
+    finding: "Lexer is a char-walker, not AST/tree-sitter — semantic rules remain pattern-limited"
+    description: "Industry SAST tools use AST or tree-sitter for TS/JS. ACP's Python neutralizer handles comments/strings/templates but cannot reason about scope, types, or control flow. Acceptable for Phase 1 but caps precision on complex TS-02/NC rules."
+    fix_target: "Document limitation; consider tree-sitter or typescript compiler API only if corpus FP rate rises post-adoption"
+    status: pending
+    planned_in: backlog
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null

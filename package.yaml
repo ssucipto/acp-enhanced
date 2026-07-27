@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.29.0
+version: 6.29.1
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
@@ -598,6 +598,10 @@ contents:
 
     - name: acp.review-measure.sh
       description: Review scan corpus precision/recall measurement
+      type: internal
+
+    - name: acp.review-rule-overrides.py
+      description: Load review.rule_overrides preferences for scanner emitters
       type: internal
 
     - name: acp.taint-scan.sh

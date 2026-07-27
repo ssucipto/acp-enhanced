@@ -91,3 +91,16 @@ acp:
       # Reserved compatibility key for future dupehound filter tuning.
       install_prompt_version: ''
       # ACP version that last prompted for the optional dupehound install flow.
+
+  # ── Review scanner preferences ───────────────────────────────────────────
+  # Per-rule overrides for deterministic scanners (M84 / F-105-01).
+  # Example:
+  #   review:
+  #     rule_overrides:
+  #       NC-01:
+  #         enabled: false
+  #       CH-03:
+  #         severity: LOW
+
+  review:
+    rule_overrides: {}
