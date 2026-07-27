@@ -57,7 +57,8 @@ bash agent/scripts/acp.review-measure.sh --ci
 
 | Metric | Current corpus-backed value |
 |-------|-----------------------------|
-| Corpus cases | 18 files across 9 measured rules (`SH-03` requires `shellcheck`) |
+| Corpus cases | **30** labelled files in `tests/fixtures/review-corpus/` (positive + negative pairs per rule family; `SH-03` rows run only when `shellcheck` is installed) |
+| Rule-level TP rows | **47** on the current corpus (`acp.review-measure.sh` ALL row) |
 | Aggregate recall | 100.0% |
 | Aggregate precision | 100.0% |
 | CI floor | Fails below 90.0% recall or 90.0% precision |
@@ -72,7 +73,7 @@ These figures are intentionally reproducible from `tests/fixtures/review-corpus/
 | Appendix A (ACP self-review) | **10** | SH, YM, ACP |
 | **Total distinct rule IDs** | **64** | v1.0.0 |
 
-> Current shipped automation is **11 rules total**: 8 built-in scanner checks, optional `SH-03`, and validate-owned `YM-03` / `ACP-02`. The remaining **53 rules** still require Phase 2 reasoning.
+> **19 semantic rules** still require Phase 2 agent review. CI may run Phase 1 only; do not claim **64/64** automated enforcement.
 
 ## Rule Ownership
 
@@ -80,8 +81,8 @@ These figures are intentionally reproducible from `tests/fixtures/review-corpus/
 
 | Surface | Owns | Notes |
 |---------|------|-------|
-| `acp.review-scan.sh` | EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01; `SH-03` when `shellcheck` is installed | Deterministic Phase 1 scanner |
-| `/acp-review` agent pass | Remaining semantic review rules | Release gate; covers A06 design review and the bulk of MASVS / code-health reasoning |
+| `acp.review-scan.sh` | **42 built-in** Phase 1 rules across EH, SC, TS, AP, NC, CH, SH, YM, and ACP families; **optional `SH-03`** via `shellcheck` | Full rule-id list: `agent/wiki/coderabbit-policy-map-lite.md` § Phase 1 |
+| `/acp-review` agent pass | **19 semantic** review rules | Release gate; covers A06 design review and the bulk of MASVS / code-health reasoning |
 | `/acp-validate` | `YM-03`, `ACP-02` | ACP framework structure and parity checks; automated, but not part of the scanner |
 | `/acp-integrity` | OWASP A08:2025 integrity and provenance ownership | Tampering, hidden Unicode, exfiltration, dependency trust, and other `IG-*` checks belong to the trust surface |
 
@@ -452,7 +453,21 @@ echo $HOME
 ```
 
 - A suppression **must include a reason**. Missing reasons are reported as a `LOW` finding and do **not** suppress the original issue.
-- Text output always prints a suppression summary. `--json` includes `summary.suppressed_total`, `summary.suppressed_baseline`, and `summary.suppressed_inline`.
+- Text output always prints a suppression summary. `--json` includes `summary.suppressed_total`, `summary.suppressed_baseline`, `summary.suppressed_inline`, and `summary.suppressed_rule_override`.
+- **Per-rule overrides** — project preference `review.rule_overrides` maps rule IDs to `enabled: false` and/or `severity: LOW|MEDIUM|HIGH|CRITICAL`. Disabled rules are suppressed project-wide; severity overrides apply before baseline/inline checks. Example:
+
+```yaml
+# agent/preferences/acp.default.yaml
+acp:
+  review:
+    rule_overrides:
+      NC-01:
+        enabled: false
+      CH-03:
+        severity: LOW
+```
+
+See [review-legacy-adoption.md](../wiki/review-legacy-adoption.md) for the baseline → tighten adoption workflow.
 
 These controls are shared with `/acp-integrity` through `agent/scripts/acp.integrity-output.sh`.
 

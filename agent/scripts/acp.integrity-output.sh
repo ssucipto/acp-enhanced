@@ -18,11 +18,17 @@ IG_FINDINGS_LOW=0
 IG_SUPPRESSED_TOTAL=0
 IG_SUPPRESSED_BASELINE=0
 IG_SUPPRESSED_INLINE=0
+IG_SUPPRESSED_RULE_OVERRIDE=0
 IG_JSON_BUFFER=""
 IG_BASELINE_BUFFER=""
 IG_BASELINE_KEYS=$'\n'
 IG_INVALID_SUPPRESSION_KEYS=$'\n'
+IG_RULE_DISABLED_KEYS=$'\n'
+IG_RULE_SEVERITY_KEYS=$'\n'
 IG_BASELINE_LOADED=false
+IG_RULE_OVERRIDES_LOADED=false
+IG_PREFS_ROOT="${IG_PREFS_ROOT:-}"
+IG_RULE_OVERRIDE_LOADER="${IG_RULE_OVERRIDE_LOADER:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/acp.review-rule-overrides.py}"
 
 ig_parse_common_args() {
   while [[ $# -gt 0 ]]; do
@@ -173,6 +179,56 @@ ig_inline_suppression_state() {
   echo "none||"
 }
 
+ig_repo_root() {
+  if [[ -n "$IG_PREFS_ROOT" ]]; then
+    echo "$IG_PREFS_ROOT"
+    return 0
+  fi
+  git rev-parse --show-toplevel 2>/dev/null || pwd
+}
+
+ig_load_rule_overrides() {
+  if [[ "$IG_RULE_OVERRIDES_LOADED" == "true" ]]; then
+    return 0
+  fi
+
+  while IFS= read -r line <&3; do
+    [[ -z "$line" ]] && continue
+    case "$line" in
+      DISABLED:*)
+        IG_RULE_DISABLED_KEYS+="${line#DISABLED:}"$'\n'
+        ;;
+      SEVERITY:*)
+        IG_RULE_SEVERITY_KEYS+="${line#SEVERITY:}"$'\n'
+        ;;
+    esac
+  done 3< <(python3 "$IG_RULE_OVERRIDE_LOADER" "$(ig_repo_root)" "${IG_RULE_OVERRIDES_FILE:-}" 2>/dev/null || true)
+
+  IG_RULE_OVERRIDES_LOADED=true
+}
+
+ig_rule_is_disabled() {
+  local rule="${1:-}"
+  case "$IG_RULE_DISABLED_KEYS" in
+    *$'\n'"${rule}"$'\n'*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+ig_rule_severity_override() {
+  local rule="${1:-}" entry rule_id severity
+  while IFS= read -r entry; do
+    [[ -z "$entry" ]] && continue
+    rule_id="${entry%%|*}"
+    severity="${entry#*|}"
+    if [[ "$rule_id" == "$rule" && -n "$severity" ]]; then
+      echo "$severity"
+      return 0
+    fi
+  done < <(printf '%s' "$IG_RULE_SEVERITY_KEYS" | sed '/^$/d')
+  return 1
+}
+
 ig_rule_severity() {
   local rule="$1"
   case "$rule" in
@@ -229,6 +285,22 @@ ig_emit_finding() {
 
   if [[ -z "$severity" ]]; then
     severity="$(ig_rule_severity "$rule")"
+  fi
+
+  if [[ "$IG_RULE_OVERRIDES_LOADED" != "true" ]]; then
+    ig_load_rule_overrides
+  fi
+
+  if ig_rule_is_disabled "$rule"; then
+    IG_SUPPRESSED_TOTAL=$((IG_SUPPRESSED_TOTAL + 1))
+    IG_SUPPRESSED_RULE_OVERRIDE=$((IG_SUPPRESSED_RULE_OVERRIDE + 1))
+    return 0
+  fi
+
+  local override_severity
+  override_severity="$(ig_rule_severity_override "$rule" || true)"
+  if [[ -n "$override_severity" ]]; then
+    severity="$override_severity"
   fi
 
   ig_load_baseline
@@ -289,7 +361,8 @@ ig_print_json_payload() {
   printf '    "low": %s,\n' "$IG_FINDINGS_LOW"
   printf '    "suppressed_total": %s,\n' "$IG_SUPPRESSED_TOTAL"
   printf '    "suppressed_baseline": %s,\n' "$IG_SUPPRESSED_BASELINE"
-  printf '    "suppressed_inline": %s\n' "$IG_SUPPRESSED_INLINE"
+  printf '    "suppressed_inline": %s,\n' "$IG_SUPPRESSED_INLINE"
+  printf '    "suppressed_rule_override": %s\n' "$IG_SUPPRESSED_RULE_OVERRIDE"
   printf '  }\n'
   printf '}\n'
 }
@@ -336,7 +409,7 @@ ig_finalize_scan() {
   fi
 
   if [[ "$IG_SUPPRESSED_TOTAL" -gt 0 ]]; then
-    echo "Suppressed findings: $IG_SUPPRESSED_TOTAL ($IG_SUPPRESSED_BASELINE baseline, $IG_SUPPRESSED_INLINE inline)" >&2
+    echo "Suppressed findings: $IG_SUPPRESSED_TOTAL ($IG_SUPPRESSED_BASELINE baseline, $IG_SUPPRESSED_INLINE inline, $IG_SUPPRESSED_RULE_OVERRIDE rule override)" >&2
   fi
   exit 0
 }
