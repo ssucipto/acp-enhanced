@@ -159,6 +159,7 @@ Provide recommendations after update.
 - Suggest reviewing changes: `git diff`
 - Recommend reading CHANGELOG for details
 - Suggest running `@acp-init` to reload context
+- If `bash agent/scripts/acp.dupehound.sh should-prompt` says `prompt`, offer the optional dupehound install once for the current ACP version and stamp `integrations.dupehound.install_prompt_version` on accept or decline
 - Note any action items from update
 
 **Expected Outcome**: User knows what to do next  
