@@ -2,6 +2,21 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-07-27
+  executor: claude
+  branch: develop
+  tasks: []
+  done:
+    - audit-102-deterministic-review-gap-analysis
+    - audit-103-measured-precision-recall-and-standards
+    - m83-planned-17-tasks-6-phases
+    - audit-104-pre-impl-readiness-with-amendments
+    - f-104-01-through-07-amendments-applied
+  deferred:
+    - m83-implementation → handoff-cursor
+    - m81-270-274 → coderabbit-fixture-gate
+  key_fact: "/acp-review Phase 1 measured at ~8% recall / 0% precision on seeded fixtures; multi-path arg bug silently scanned only the last path, masking 2 HIGH findings in scripts/. EH-01 substring test 'try' not in body is disabled by retry/telemetry/entry. M83 (17 tasks) fixes correctness then precision then measures BEFORE expanding — phase 3 gated on 1b+1c. audit-104 found _index: array omission would silently drop new preference keys (no validator covers it)."
+
 - date: 2026-07-24
   executor: cursor
   branch: develop
