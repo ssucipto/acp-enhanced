@@ -323,4 +323,21 @@ assert_contains "$B29_OUT" "SC-01" "entropy-backed SC-01 finding emitted"
 B29_HELPER="$(bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" --review-sc01 --threshold 4.2 "${PROJECT_ROOT}/tests/fixtures/review-scan/patterns/sc01-entropy.ts" 2>&1)"
 assert_contains "$B29_HELPER" "high-entropy secret-like assignment" "shared entropy helper emits SC-01 machine output"
 
+print_test_header "B30 — review.rule_overrides can disable a rule project-wide"
+B30_JSON="$(IG_RULE_OVERRIDES_JSON='{"SC-01":{"enabled":false}}' bash "$SCAN" --json --include-tests "${PROJECT_ROOT}/tests/fixtures/review-corpus/positive/sc01.ts" 2>/dev/null)" || true
+if command -v jq >/dev/null 2>&1; then
+  echo "$B30_JSON" | jq -e '
+    ([.findings[] | select(.rule == "SC-01")] | length) == 0
+    and (.summary.suppressed_rule_override >= 1)
+  ' >/dev/null 2>&1
+  assert_true "disabled SC-01 override suppresses findings" $?
+else
+  assert_contains "$B30_JSON" '"suppressed_rule_override":' "rule override summary present"
+fi
+
+print_test_header "B31 — review.rule_overrides can downgrade severity"
+B31_OUT="$(IG_RULE_OVERRIDES_JSON='{"TS-01":{"severity":"LOW"}}' bash "$SCAN" --include-tests "${PROJECT_ROOT}/tests/fixtures/review-corpus/positive/ts01.ts" 2>&1)" || true
+assert_contains "$B31_OUT" "[LOW]" "TS-01 severity override applied"
+assert_contains "$B31_OUT" "TS-01" "TS-01 finding still reported at lowered severity"
+
 print_suite_summary

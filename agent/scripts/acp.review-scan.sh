@@ -28,6 +28,7 @@ SCANNED_FILES=()
 DUPEHOUND_ANNOUNCED=false
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+IG_PREFS_ROOT="${IG_PREFS_ROOT:-$PROJECT_ROOT}"
 
 emit_review_finding() {
   local file="$1"
@@ -124,6 +125,8 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+ig_load_rule_overrides
 
 if [[ "$SELF_MODE" == "true" ]]; then
   # Documented at acp.review.md — skip missing directories silently (F-102-02)
