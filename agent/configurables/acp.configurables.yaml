@@ -176,6 +176,22 @@ acp:
         default: false
         type: boolean
 
+  # ── Review scanner preferences (M84 / F-105-01) ───────────────────────────
+  # Nested map — not listed in _index; edit directly in agent/preferences/acp.default.yaml.
+
+  review:
+    rule_overrides:
+      id: 'review.rule_overrides'
+      description: |
+        Per-rule enable/disable and severity overrides for `/acp-review` and
+        `/acp-integrity` scanners. Keys are rule IDs (for example `NC-01`,
+        `CH-03`). Values may set `enabled: false` to silence a rule project-wide,
+        or `severity: LOW|MEDIUM|HIGH|CRITICAL` to downgrade/upshift without
+        baselining every occurrence. Precedence: project preferences override
+        workspace and user files. See agent/wiki/review-legacy-adoption.md.
+      default: {}
+      type: object
+
   # ── Integration preferences ───────────────────────────────────────────────
   # Optional external-tool integrations. All OFF by default — ACP is fully
   # functional without any of them. Added M78 (audit-097, ADR-21). Detection

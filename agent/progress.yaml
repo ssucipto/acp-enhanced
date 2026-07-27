@@ -1,6 +1,6 @@
 project:
   name: agent-context-protocol
-  version: 6.29.0
+  version: 6.29.1
   started: 2026-02-16
   status: active
   current_milestone: M81
