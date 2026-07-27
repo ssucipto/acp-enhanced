@@ -2,13 +2,13 @@
 id: task-294
 milestone: M83
 title: "OWASP Top 10:2025 mapping correction + A06/A07/A08 position"
-status: planned
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 3
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 5
 depends_on: []
 audit_findings: [F-103-08]

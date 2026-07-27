@@ -5,6 +5,21 @@
 - date: 2026-07-27
   executor: cursor
   branch: develop
+  tasks: [task-283, task-284, task-285, task-286, task-287, task-288, task-289, task-290, task-291, task-292, task-293, task-294, task-295, task-296]
+  done:
+    - m83-complete-17-of-17-tasks
+    - v6-29-0-shipped
+    - tier-c-rules-expansion-38-deterministic
+    - gitleaks-dupehound-optional-helpers
+    - review-corpus-100-percent-recall-precision
+    - adr-23-local-analyzer-carve-out
+  deferred:
+    - m81-270-274 → coderabbit-fixture-gate
+  key_fact: "M83 COMPLETE: /acp-review scanner from ~8% recall to measured 100% on 30-case corpus; ~38 deterministic rules; optional gitleaks/dupehound/shellcheck; baseline+inline suppression. v6.29.0 shipped. current_milestone remains M81 (fixture gate)."
+
+- date: 2026-07-27
+  executor: cursor
+  branch: develop
   tasks: [task-280, task-281, task-282]
   done:
     - m83-phase1-scanner-scope-and-executing-e2e

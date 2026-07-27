@@ -2,13 +2,13 @@
 id: task-293
 milestone: M83
 title: "Assisted installer + version-update offer hook with nag discipline"
-status: planned
+status: completed
 priority: 3
 complexity: medium
 estimated_hours: 4
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 4
 depends_on: [task-291, task-292]
 audit_findings: []
@@ -17,6 +17,8 @@ files_affected:
   - agent/commands/acp.version-update.md
   - agent/commands/acp.version-check-for-updates.md
   - agent/configurables/acp.configurables.yaml
+  - agent/preferences/acp.default.yaml
+  - agent/wiki/dupehound-integration.md
 ---
 
 ## Objective

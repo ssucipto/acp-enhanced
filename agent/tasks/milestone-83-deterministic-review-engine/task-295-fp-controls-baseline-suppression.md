@@ -2,13 +2,13 @@
 id: task-295
 milestone: M83
 title: "False-positive controls — baseline mode, inline suppression, per-rule thresholds"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 4
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 5
 depends_on: [task-284]
 audit_findings: [F-103-09]

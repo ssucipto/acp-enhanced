@@ -2,13 +2,13 @@
 id: task-296
 milestone: M83
 title: "M83 closure — doc reconcile, review-002 amendment, ship v6.29.0"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 6
 depends_on: [task-280, task-281, task-282, task-283, task-284, task-285, task-286, task-287, task-288, task-289, task-290, task-291, task-292, task-293, task-294, task-295]
 audit_findings: [F-102-04, F-102-06]

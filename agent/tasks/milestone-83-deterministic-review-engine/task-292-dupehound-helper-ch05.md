@@ -2,13 +2,13 @@
 id: task-292
 milestone: M83
 title: "acp.dupehound.sh — three-gate helper, three-valued preference, CH-05 wiring"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 5
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 4
 depends_on: [task-291, task-284]
 audit_findings: [F-102-07]
@@ -16,9 +16,11 @@ files_affected:
   - agent/scripts/acp.dupehound.sh
   - agent/scripts/acp.review-scan.sh
   - agent/configurables/acp.configurables.yaml
+  - agent/preferences/acp.default.yaml
   - tests/fixtures/dupehound-sample.json
   - agent/commands/acp.review.md
   - package.yaml
+  - agent/integrity-manifest.yaml
 ---
 
 ## Objective

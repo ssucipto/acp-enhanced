@@ -97,7 +97,8 @@ for case in cases:
         continue
 
     file_rel = case["file"]
-    target = corpus_dir / file_rel
+    target_rel = case.get("target", file_rel)
+    target = corpus_dir / target_rel
     proc = subprocess.run(
         ["bash", str(scan_script), "--json", "--include-tests", str(target)],
         capture_output=True,
@@ -109,11 +110,16 @@ for case in cases:
         raise SystemExit(proc.returncode)
 
     stdout = proc.stdout.strip()
-    actual_findings = json.loads(stdout or "[]")
+    payload = json.loads(stdout or '{"findings":[],"summary":{"active_total":0}}')
+    if isinstance(payload, dict):
+        actual_findings = payload.get("findings", [])
+    else:
+        actual_findings = payload
     expected_findings = case.get("findings", [])
 
     expected_set = {
-        (file_rel, finding["rule"], int(finding["line"])) for finding in expected_findings
+        (finding.get("file", file_rel), finding["rule"], int(finding["line"]))
+        for finding in expected_findings
     }
     actual_set = set()
     for finding in actual_findings:

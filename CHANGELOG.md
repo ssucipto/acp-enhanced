@@ -9,30 +9,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added (M83 — in progress, not shipped)
-- **Review scanner scope fixes (task-280)** — multi-path `TARGETS[]`, documented `--self`, `.mjs`/`.cjs` directory traversal; flags-after-path re-handled (F-102-01/02/03, F-104-06).
-- **Executing E2E harness (task-281)** — `e2e/acp.review-scan.test.sh` (28 assertions) + `tests/fixtures/review-scan/`; registered under `acp.review.suites[]` (F-102-08, F-104-03/04/07).
-- **Lexing foundation (task-282)** — `acp.review-scan-ts.py` strips comments/strings before line rules; EH-01 uses `\btry\b` token match (F-103-01/02).
-
-### Fixed (M83 — in progress)
-- **Scanner false positives** — TS-01 no longer fires inside comments or string literals; `"retry"` in a string no longer suppresses EH-01.
-- **Rule pattern recall (task-283)** — TS-01/02 generic and export forms; NC-01 indented declarations; default test/fixture path exclusion with `--include-tests`.
-
-### Added (M83 — in progress, continued)
-- **Measurement harness (task-284)** — `tests/fixtures/review-corpus/`, `acp.review-measure.sh`; published recall/precision table in `acp.review.md`.
-- **shellcheck SH-03 (task-285)** — optional delegation when `shellcheck` is on PATH; silent when absent.
-- **ADR-23 (task-291)** — local-analyzer carve-out, Variant B detection-as-consent, assisted-install boundary.
-
-### Notes
-- M83 progress: **3/17** tasks (Phase 1 + Phase 1b.282). Phase 3 still gated on tasks 283–284. Planned ship: **v6.29.0** (task-296).
-
 ### Added (M81 — in progress, not shipped)
 - **ADR-22** — CodeRabbit-only M81 carved out of ADR-19’s Aikido-coupled gate (task-269).
 - **Policy map lite** — `agent/wiki/coderabbit-policy-map-lite.md` (Phase 1 never deferred to CodeRabbit).
 - Wiki/config/research roadmap points to M81/ADR-22 for CodeRabbit consumers; Aikido/M76/M77 stay ADR-19-gated.
 
 ### Notes
-- Tasks 270–274 blocked until `tests/fixtures/coderabbit-findings-sample.json` (sanitized real export) exists. Planned ship: **v6.29.0**.
+- Tasks 270–274 blocked until `tests/fixtures/coderabbit-findings-sample.json` (sanitized real export) exists. Planned ship: **v6.30.0** (M81; v6.29.0 taken by M83).
+
+---
+
+## [6.29.0] — 2026-07-27
+
+### Added (M83 — Deterministic Local Review Engine)
+- **Scanner execution coverage** — `e2e/acp.review-scan.test.sh` expanded to 29 behavioral checks covering multi-path scope, `--self`, `.mjs`/`.cjs`, SH-03 delegation, baseline suppression, inline suppression, dupehound wiring, and shared entropy reuse.
+- **Measured corpus + harness** — `tests/fixtures/review-corpus/`, `tests/fixtures/review-scan/`, and `agent/scripts/acp.review-measure.sh` publish reproducible recall/precision for the shipped deterministic review surface.
+- **Optional local analyzer helpers** — `agent/scripts/acp.gitleaks.sh` and `agent/scripts/acp.dupehound.sh` implement the ADR-23 three-gate pattern for SC-01 and CH-05 without making either tool a hard dependency.
+- **M83 validation report** — `agent/reports/review-003-m83-scanner-validation.md` records the closure evidence for the scanner, fixtures, and carryover ledger.
+
+### Changed
+- **`/acp-review` documentation** — reconciled ruleset ownership, OWASP Top 10:2025 coverage, A08 ownership via `/acp-integrity`, and the shipped Phase 1/1b/1c automation counts.
+- **Reference model** — `agent/wiki/domain.yml` now reflects the shipped review scanner helpers/suites and updated behavioral coverage.
+
+### Fixed
+- **F-102-01..08 and F-103-01..10** — all 18 M83 carryovers are now fixed with regression fixtures or doc assertions.
+- **False-positive controls (F-103-09)** — `agent/scripts/acp.integrity-output.sh` now supports `--baseline`, `--write-baseline`, inline `acp-review-ignore` comments with required reasons, and suppression summaries in text/JSON output.
+- **OWASP alignment (F-103-08)** — corrected the secrets/injection mapping and documented all 10 OWASP 2025 categories, with A08 explicitly owned by `/acp-integrity`.
+- **Scanner precision/recall gaps** — M83 closes the measured comment/string lexing, EH-01 token matching, TS-01/TS-02/NC-01 recall, SC-01 prefix/entropy reuse, shellcheck SH-03, and default fixture-exclusion findings.
+
+### Notes
+- **Milestone shipped**: M83 is complete at **17/17 tasks** and released as **v6.29.0**. `current_milestone` in `agent/progress.yaml` remains **M81** because the CodeRabbit fixture gate is intentionally separate work.
 
 ---
 

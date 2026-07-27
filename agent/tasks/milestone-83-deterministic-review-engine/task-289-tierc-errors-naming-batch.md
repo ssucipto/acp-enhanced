@@ -2,13 +2,13 @@
 id: task-289
 milestone: M83
 title: "Tier C rules — error handling + naming (EH-03/04/07/08/09, NC-02/04/06/09)"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 5
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 3
 depends_on: [task-283, task-284]
 audit_findings: []
@@ -41,11 +41,11 @@ NC-04 is notable as the only rule needing **no** source parsing — it is a pure
 
 ## Verification
 
-- [ ] EH-04 not suppressed by a body containing the substring `try` (regression fixture for F-103-02)
-- [ ] EH-09 emits once per project, not per file
-- [ ] NC-04 flags `MyModule.ts` and accepts `my-module.ts` and `MyComponent.tsx`
-- [ ] NC-06 does not flag `for (let i = 0; …)`
-- [ ] Aggregate precision ≥ 90% on the corpus
+- [x] EH-04 not suppressed by a body containing the substring `try` (regression fixture for F-103-02)
+- [x] EH-09 emits once per project, not per file
+- [x] NC-04 flags `MyModule.ts` and accepts `my-module.ts` and `MyComponent.tsx`
+- [x] NC-06 does not flag `for (let i = 0; …)`
+- [x] Aggregate precision ≥ 90% on the corpus
 
 ## User-Observable Acceptance
 

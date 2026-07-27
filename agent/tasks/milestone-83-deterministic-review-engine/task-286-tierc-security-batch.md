@@ -2,13 +2,13 @@
 id: task-286
 milestone: M83
 title: "Tier C rules — security batch (SC-03/08/10/13/14/15/16/18, AP-09)"
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 6
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 3
 depends_on: [task-283, task-284]
 audit_findings: []
@@ -46,12 +46,12 @@ Then update the policy map with owners for each new rule.
 
 ## Verification
 
-- [ ] Each rule has positive + negative corpus entries; aggregate precision ≥ 90%
-- [ ] SC-14 handles no-lockfile and no-npm cases gracefully (no crash, no false finding)
-- [ ] SC-15 does not fire on this repo — **because `scripts/package-lock.json` is tracked in git** (verified), not because of the framework/protocol qualifier (F-104-05)
-- [ ] SC-10 allowlist prevents flagging the config module itself
-- [ ] `--ci` still exits 1 only on CRITICAL/HIGH
-- [ ] Policy map rows added
+- [x] Each rule has positive + negative corpus entries; aggregate precision ≥ 90%
+- [x] SC-14 handles no-lockfile and no-npm cases gracefully (no crash, no false finding)
+- [x] SC-15 does not fire on this repo — **because `scripts/package-lock.json` is tracked in git** (verified), not because of the framework/protocol qualifier (F-104-05)
+- [x] SC-10 allowlist prevents flagging the config module itself
+- [x] `--ci` still exits 1 only on CRITICAL/HIGH
+- [x] Policy map rows added
 
 ## User-Observable Acceptance
 

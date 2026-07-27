@@ -3,12 +3,12 @@
 <!-- @acp.meta.milestone
 topic: acp-review, deterministic, phase1, precision, recall, lexing, shellcheck, dupehound, gitleaks, owasp, carryovers
 description: Fix /acp-review scanner correctness and precision, measure it, then expand the deterministic ruleset and adopt optional local analyzers
-status: in_progress
+ status: completed
 updated: 2026-07-27
 @acp.meta.end -->
 
 **Planned version**: v6.29.0
-**Status**: in_progress (3/17)
+**Status**: completed (17/17)
 **Estimated effort**: ~45h (17 tasks, 6 phases)
 **Source**: audit-102 (scope + expansion), audit-103 (precision + standards), maintainer discussion 2026-07-27
 **Depends on**: nothing — explicitly **not** blocked by M81's ADR-22 CodeRabbit fixture gate
@@ -92,15 +92,15 @@ Carried from audit-103 Part 4, these are binding on implementation:
 
 ## Success criteria
 
-- [ ] Multi-path, `--self`, and `.mjs`/`.cjs` all verified by executing E2E
-- [ ] Recall ≥ 90% and precision ≥ 90% on the fixture corpus, published in `acp.review.md`
-- [ ] All 18 M83 carryovers `status: fixed` with a regression fixture each
-- [ ] Deterministic rule count ≥ 35, each with a corpus entry
-- [ ] `/acp-review` behaviour identical when dupehound and gitleaks are absent
-- [ ] ADR-23 accepted; `local.optional-external-tool.md` documents the variant
-- [ ] `npx tsx scripts/acp-validate.ts --memory` clean; full E2E suite green
-- [ ] review-002 amended to note the ~8%-recall / half-scope caveat
-- [ ] v6.29.0 shipped across the full version file set
+- [x] Multi-path, `--self`, and `.mjs`/`.cjs` all verified by executing E2E
+- [x] Recall ≥ 90% and precision ≥ 90% on the fixture corpus, published in `acp.review.md`
+- [x] All 18 M83 carryovers `status: fixed` with a regression fixture each
+- [x] Deterministic rule count ≥ 35, each with a corpus entry
+- [x] `/acp-review` behaviour identical when dupehound and gitleaks are absent
+- [x] ADR-23 accepted; `local.optional-external-tool.md` documents the variant
+- [x] `npx tsx scripts/acp-validate.ts --memory` clean; full E2E suite green
+- [x] review-002 amended to note the ~8%-recall / half-scope caveat
+- [x] v6.29.0 shipped across the full version file set
 
 ---
 
