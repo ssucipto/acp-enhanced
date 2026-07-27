@@ -3,12 +3,12 @@
 <!-- @acp.meta.milestone
 topic: acp-review, deterministic, phase1, precision, recall, lexing, shellcheck, dupehound, gitleaks, owasp, carryovers
 description: Fix /acp-review scanner correctness and precision, measure it, then expand the deterministic ruleset and adopt optional local analyzers
-status: planned
+status: in_progress
 updated: 2026-07-27
 @acp.meta.end -->
 
 **Planned version**: v6.29.0
-**Status**: planned (0/17)
+**Status**: in_progress (3/17)
 **Estimated effort**: ~45h (17 tasks, 6 phases)
 **Source**: audit-102 (scope + expansion), audit-103 (precision + standards), maintainer discussion 2026-07-27
 **Depends on**: nothing — explicitly **not** blocked by M81's ADR-22 CodeRabbit fixture gate

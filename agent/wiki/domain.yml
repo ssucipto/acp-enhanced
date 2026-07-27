@@ -387,8 +387,11 @@ test_suites:
       coverage: M57 recurring tasks scheduler — schema validation, protocol Step 4.5, hooks block, template
       test_count: 16
     - suite: acp.review.test.sh
-      coverage: /acp-review — 64 rules (54 core + 10 Appendix A), code quality + security enforcement, acp.review-scan.sh behavioral fixtures
+      coverage: /acp-review — 64 rules (54 core + 10 Appendix A), code quality + security enforcement (doc/structure assertions)
       test_count: 54
+    - suite: acp.review-scan.test.sh
+      coverage: acp.review-scan.sh behavioral fixtures — multi-path, --self, .mjs/.cjs, --ci/--json exit codes, SH-01 allowlist, lexing/EH-01 token match (M83 F-102-08 F-103-01/02)
+      test_count: 28
     - suite: acp.script-command-binding.test.sh
       coverage: Selective script installation based on command dependency declarations
       test_count: 8
