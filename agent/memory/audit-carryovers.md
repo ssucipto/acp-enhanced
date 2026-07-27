@@ -2856,3 +2856,94 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  - audit_id: audit-104
+    finding_id: F-104-01
+    severity: high
+    file: agent/configurables/acp.configurables.yaml
+    finding: "Tasks 290/292/293 add preference keys but none updates the _index: array — new keys silently omitted from generated preference files"
+    description: "_index is iterated by generate_preferences at acp.preferences.sh:223-256 to enumerate preference paths. Keys absent from it are omitted with no error, and no validator checks _index completeness. dupehound/gitleaks opt-in gates would appear wired while their preferences never materialise."
+    fix_target: "Add _index: updates to Steps of tasks 290, 292, 293; consider an _index-parity validator in acp-validate.ts"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-104
+    finding_id: F-104-02
+    severity: medium
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-296-m83-closure.md
+    finding: "task-296 files_affected omits scripts/PRD-MAIN.md and IP_REGISTER.md — both exist and are soft version requirements"
+    description: "acp.validate.md step 2c lists PRD-MAIN.md (**Version:** X.Y) and IP_REGISTER.md (**Current Version** | X.Y.Z) as soft version checks. Both files exist on disk. The v6.29.0 bump would leave them stale and emit soft warnings."
+    fix_target: "task-296: add both files to files_affected and to the Step 6 version file set"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-104
+    finding_id: F-104-03
+    severity: medium
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-281-executing-e2e-harness.md
+    finding: "task-281 says register in the command E2E coverage registry, but the registry keys on commands not scripts"
+    description: "agent/schemas/command-e2e-coverage.yaml maps acp.* command names to suites. An acp.review-scan: key would match no command doc and could fail validateCommandE2eCoverage. Correct action is appending to the existing acp.review suites array."
+    fix_target: "task-281: append e2e/acp.review-scan.test.sh to acp.review.suites[] rather than creating a new registry key"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-104
+    finding_id: F-104-04
+    severity: low
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-281-executing-e2e-harness.md
+    finding: "tests/fixtures/ does not exist but tasks 281/284/290/292 assume it"
+    description: "Addability probed clean — no gitignore rule catches tests/fixtures/, unlike the agent/reports/ bare-dir incident of 2026-07-15. M81 task-270 also claims to create the same directory, so both paths must tolerate pre-existence."
+    fix_target: "task-281: explicitly mkdir -p tests/fixtures as a first step"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-104
+    finding_id: F-104-05
+    severity: low
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-286-tierc-security-batch.md
+    finding: "task-286 SC-15 verification rationale is wrong — scripts/package-lock.json is tracked, so SC-15 passes on tracking not the framework qualifier"
+    description: "Task says 'SC-15 does not fire on this repo (lockfiles are development-only here)'. git ls-files confirms scripts/package-lock.json is tracked. The expectation is correct but the stated reason would mislead the implementer."
+    fix_target: "task-286: correct the SC-15 verification rationale to reference lockfile tracking"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-104
+    finding_id: F-104-06
+    severity: medium
+    file: agent/tasks/milestone-83-deterministic-review-engine/task-280-scanner-scope-fixes.md
+    finding: "ig_parse_common_args breaks at the first non-flag arg, so the new TARGETS array would append a trailing --ci as a scan path"
+    description: "acp.integrity-output.sh:18-28 stops flag parsing at the first positional and returns the rest in IG_REMAINING_ARGS. With task-280's array design, 'acp.review-scan.sh scripts/ --ci' appends --ci as a path. The current scalar code shares the latent bug but the array form makes silent mis-scanning likelier."
+    fix_target: "task-280: reject or re-handle flags appearing after positionals; task-281: assert the flags-after-path case"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  - audit_id: audit-104
+    finding_id: F-104-07
+    severity: low
+    file: agent/wiki/domain.yml
+    finding: "domain.yml:390 claims acp.review.test.sh covers 'acp.review-scan.sh behavioral fixtures' — that coverage never existed"
+    description: "F-102-08 established the suite asserts documentation strings only and never executes the scanner. The wiki has advertised scanner test coverage that does not exist, which plausibly contributed to the multi-path scope bug going unnoticed for three months."
+    fix_target: "task-281: correct the domain.yml coverage entry when the real behavioural suite lands"
+    status: pending
+    planned_in: M83
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
