@@ -3,6 +3,22 @@
 # DO NOT edit manually — updated by /acp-commit
 
 - date: 2026-07-27
+  executor: cursor
+  branch: develop
+  tasks: [task-280, task-281, task-282]
+  done:
+    - m83-phase1-scanner-scope-and-executing-e2e
+    - m83-phase1b-lexing-and-eh01-token-match
+    - f-102-01-02-03-08-fixed
+    - f-103-01-02-fixed
+    - f-104-03-04-06-07-fixed
+    - review-scan-fixtures-committed
+  deferred:
+    - m83-283-284 → finish-phase-1b-1c-before-phase-3
+    - m81-270-274 → coderabbit-fixture-gate
+  key_fact: "Phase 1+1b.282: TARGETS[]/--self/.mjs + executing E2E (28 asserts); lexing via acp.review-scan-ts.py (SC-01 comment-only so secrets still match); EH-01 uses \\btry\\b. Next: task-283 then 284 measure. Do not start Phase 3 until 283+284 land."
+
+- date: 2026-07-27
   executor: claude
   branch: develop
   tasks: []

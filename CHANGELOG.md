@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (M83 — in progress, not shipped)
+- **Review scanner scope fixes (task-280)** — multi-path `TARGETS[]`, documented `--self`, `.mjs`/`.cjs` directory traversal; flags-after-path re-handled (F-102-01/02/03, F-104-06).
+- **Executing E2E harness (task-281)** — `e2e/acp.review-scan.test.sh` (28 assertions) + `tests/fixtures/review-scan/`; registered under `acp.review.suites[]` (F-102-08, F-104-03/04/07).
+- **Lexing foundation (task-282)** — `acp.review-scan-ts.py` strips comments/strings before line rules; EH-01 uses `\btry\b` token match (F-103-01/02).
+
+### Fixed (M83 — in progress)
+- **Scanner false positives** — TS-01 no longer fires inside comments or string literals; `"retry"` in a string no longer suppresses EH-01.
+
+### Notes
+- M83 progress: **3/17** tasks (Phase 1 + Phase 1b.282). Phase 3 still gated on tasks 283–284. Planned ship: **v6.29.0** (task-296).
+
 ### Added (M81 — in progress, not shipped)
 - **ADR-22** — CodeRabbit-only M81 carved out of ADR-19’s Aikido-coupled gate (task-269).
 - **Policy map lite** — `agent/wiki/coderabbit-policy-map-lite.md` (Phase 1 never deferred to CodeRabbit).

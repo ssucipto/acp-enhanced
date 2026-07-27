@@ -2630,10 +2630,10 @@ carryovers:
     finding: "Multi-path invocation silently drops all but the last path — documented self-review recipe scanned only agent/scripts/"
     description: "Arg loop assigns TARGET=\"$1\" per path instead of accumulating, so `acp.review-scan.sh --ci scripts/ agent/scripts/` (acp.review.md:71) scans agent/scripts/ only. Unmasked 2 real HIGH findings in scripts/. M82 review-002 Phase 1 result understated scope."
     fix_target: "acp.review-scan.sh: accumulate paths into an array; scan every path"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B1
     escalated_to: null
 
   - audit_id: audit-102
@@ -2643,10 +2643,10 @@ carryovers:
     finding: "--self documented in acp.review.md flag table and self-review recipe but unimplemented in the scanner (exits 2)"
     description: "acp.review.md:81 and :347 define --self path resolution (scripts/, agent/scripts/, agent/commands/, e2e/). The scanner treats --self as a path and exits 2 'not found'."
     fix_target: "acp.review-scan.sh: implement --self expanding to the four documented paths, skipping missing dirs"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B2
     escalated_to: null
 
   - audit_id: audit-102
@@ -2656,10 +2656,10 @@ carryovers:
     finding: "*.mjs/*.cjs scanned in file mode but omitted from directory find traversal — silent scope gap"
     description: "scan_path case at :133 accepts mjs/cjs; the find at :141 lists only ts/tsx/js/jsx/sh, so mjs/cjs under a directory are never scanned. Verified empirically."
     fix_target: "acp.review-scan.sh: add -o -name '*.mjs' -o -name '*.cjs' to the find predicate"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B3
     escalated_to: null
 
   - audit_id: audit-102
@@ -2721,10 +2721,10 @@ carryovers:
     finding: "Review E2E asserts only command-doc content — no test executes acp.review-scan.sh, which is why F-102-01/02 survived a full review campaign"
     description: "248 lines of assert_contains against acp.review.md, package.yaml, taxonomy.yml. Zero scanner invocations, so multi-path scope loss and the missing --self flag were undetectable by CI."
     fix_target: "M83 Phase 1 T-e: E2E executing the scanner — multi-path, --self, .mjs, exit codes, allowlist branches"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh
     escalated_to: null
 
   - audit_id: audit-103
@@ -2734,10 +2734,10 @@ carryovers:
     finding: "No comment or string-literal stripping — every line-regex rule fires inside comments and string literals"
     description: "Measured 2/2 false positives on a clean fixture: a TS-01 hit on a code comment and one on a string literal. Root cause of F-103-05/06 too. Blocks safe expansion of the ruleset."
     fix_target: "acp.review-scan.sh: strip comments and string literals (or tokenize) before applying line regexes"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B10
     escalated_to: null
 
   - audit_id: audit-103
@@ -2747,10 +2747,10 @@ carryovers:
     finding: "EH-01 uses substring test 'try' not in body — any body containing retry/telemetry/entry/country silently disables the rule"
     description: "acp.review-scan.sh:102. Proven: an async function with an unhandled await and the string 'retry' in its body produces no finding. Suppression words are common in exactly the async retry/telemetry code EH-01 targets."
     fix_target: "acp.review-scan.sh:102: use word-boundary/token matching for try and .catch( instead of substring 'in'"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B12
     escalated_to: null
 
   - audit_id: audit-103
@@ -2890,10 +2890,10 @@ carryovers:
     finding: "task-281 says register in the command E2E coverage registry, but the registry keys on commands not scripts"
     description: "agent/schemas/command-e2e-coverage.yaml maps acp.* command names to suites. An acp.review-scan: key would match no command doc and could fail validateCommandE2eCoverage. Correct action is appending to the existing acp.review suites array."
     fix_target: "task-281: append e2e/acp.review-scan.test.sh to acp.review.suites[] rather than creating a new registry key"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: command-e2e-coverage.yaml#acp.review
     escalated_to: null
 
   - audit_id: audit-104
@@ -2903,10 +2903,10 @@ carryovers:
     finding: "tests/fixtures/ does not exist but tasks 281/284/290/292 assume it"
     description: "Addability probed clean — no gitignore rule catches tests/fixtures/, unlike the agent/reports/ bare-dir incident of 2026-07-15. M81 task-270 also claims to create the same directory, so both paths must tolerate pre-existence."
     fix_target: "task-281: explicitly mkdir -p tests/fixtures as a first step"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: tests/fixtures/review-scan/
     escalated_to: null
 
   - audit_id: audit-104
@@ -2929,10 +2929,10 @@ carryovers:
     finding: "ig_parse_common_args breaks at the first non-flag arg, so the new TARGETS array would append a trailing --ci as a scan path"
     description: "acp.integrity-output.sh:18-28 stops flag parsing at the first positional and returns the rest in IG_REMAINING_ARGS. With task-280's array design, 'acp.review-scan.sh scripts/ --ci' appends --ci as a path. The current scalar code shares the latent bug but the array form makes silent mis-scanning likelier."
     fix_target: "task-280: reject or re-handle flags appearing after positionals; task-281: assert the flags-after-path case"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B7
     escalated_to: null
 
   - audit_id: audit-104
@@ -2942,8 +2942,8 @@ carryovers:
     finding: "domain.yml:390 claims acp.review.test.sh covers 'acp.review-scan.sh behavioral fixtures' — that coverage never existed"
     description: "F-102-08 established the suite asserts documentation strings only and never executes the scanner. The wiki has advertised scanner test coverage that does not exist, which plausibly contributed to the multi-path scope bug going unnoticed for three months."
     fix_target: "task-281: correct the domain.yml coverage entry when the real behavioural suite lands"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: domain.yml#acp.review-scan.test.sh
     escalated_to: null
