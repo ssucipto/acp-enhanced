@@ -30,7 +30,7 @@ This task is the milestone's guardrail: every later phase depends on it to preve
 
 ## Steps
 
-1. Create `tests/fixtures/review-scan/` with committed fixture files (positive and negative per rule).
+1. **(F-104-04)** `mkdir -p tests/fixtures/review-scan/` — the `tests/fixtures/` directory does **not** exist yet. Addability is verified (no gitignore rule catches it), but M81 task-270 also claims to create `tests/fixtures/`, so tolerate pre-existence. Commit fixture files (positive and negative per rule).
 2. Create `e2e/acp.review-scan.test.sh` following the existing E2E conventions (no `set -e`; `assert_*` helpers).
 3. Assert behaviours, not docs:
    - multi-path: two dirs → findings from both
@@ -40,14 +40,16 @@ This task is the milestone's guardrail: every later phase depends on it to preve
    - `--json` emits parseable JSON (`jq` round-trip)
    - missing path exits 2
    - SH-01 allowlist: sourced libraries exempt (F-M82-05 behaviour preserved)
-4. Register the suite in `agent/wiki/domain.yml` and the command E2E coverage registry.
+4. **(F-104-03)** Register in `agent/schemas/command-e2e-coverage.yaml` by **appending to the existing `acp.review:` → `suites:` array**. The registry keys on *commands*, not scripts — creating an `acp.review-scan:` key would match no command doc and could fail `validateCommandE2eCoverage`.
+5. **(F-104-07)** Correct `agent/wiki/domain.yml:390`, which currently claims `acp.review.test.sh` covers "acp.review-scan.sh behavioral fixtures". That coverage never existed (F-102-08). Move the claim to this suite and fix `test_count`.
 5. Keep `e2e/acp.review.test.sh` for doc assertions — this suite is additive, not a replacement.
 
 ## Verification
 
 - [ ] Suite fails when task-280's fixes are reverted (proves it detects the real defects)
 - [ ] All assertions pass on the fixed scanner
-- [ ] Registered in domain.yml; `acp-validate.ts` E2E coverage check passes
+- [ ] Appended to `acp.review.suites[]` (no new registry key); `acp-validate.ts` E2E coverage check passes
+- [ ] `domain.yml:390` no longer claims fixture coverage that does not exist
 - [ ] Runs on macOS + Linux; no CRLF issues
 
 ## User-Observable Acceptance

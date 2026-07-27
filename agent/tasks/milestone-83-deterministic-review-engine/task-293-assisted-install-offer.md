@@ -45,12 +45,18 @@ The consent-prompt idiom already exists at `acp.package-install.sh:527`.
    - `read -p "Proceed? (y/N)"`; on `N` record the decline and exit 0
    - on `y` run the single package-manager command, re-check `command -v`, confirm
    - if no installer found: print the releases URL and stop — never curl a binary
-2. Add `integrations.dupehound.install_prompt_version` (default `""`) to configurables.
+2. Add `integrations.dupehound.install_prompt_version` (default `""`) to configurables **and to the `_index:` array** — see the note below (F-104-01).
 3. Offer hook in `/acp-version-update` Step 5 ("Suggest Next Actions") and in `/acp-version-check-for-updates`:
    - show only when `install_prompt_version != current ACP version`
    - stamp the current version on accept **or** decline
    - suppress entirely when `enabled: false`
 4. Document the flow in `agent/wiki/dupehound-integration.md`.
+
+
+> **(F-104-01 — HIGH, silent failure)** Any new preference key MUST also be appended to the
+> `_index:` array in `agent/configurables/acp.configurables.yaml`. That array is what
+> `generate_preferences` iterates (`acp.preferences.sh:223-256`); keys absent from it are
+> silently omitted from generated preference files, and **no validator catches this**.
 
 ## Verification
 

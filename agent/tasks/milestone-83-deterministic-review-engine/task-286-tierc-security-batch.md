@@ -48,7 +48,7 @@ Then update the policy map with owners for each new rule.
 
 - [ ] Each rule has positive + negative corpus entries; aggregate precision ≥ 90%
 - [ ] SC-14 handles no-lockfile and no-npm cases gracefully (no crash, no false finding)
-- [ ] SC-15 does not fire on this repo (lockfiles are development-only here)
+- [ ] SC-15 does not fire on this repo — **because `scripts/package-lock.json` is tracked in git** (verified), not because of the framework/protocol qualifier (F-104-05)
 - [ ] SC-10 allowlist prevents flagging the config module itself
 - [ ] `--ci` still exits 1 only on CRITICAL/HIGH
 - [ ] Policy map rows added

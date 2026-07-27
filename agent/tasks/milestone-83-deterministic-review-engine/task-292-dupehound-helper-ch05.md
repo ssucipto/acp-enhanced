@@ -46,10 +46,17 @@ Unlike M81/CodeRabbit there is **no fixture gate** — a real `--json` fixture i
 2. Add preferences to `acp.configurables.yaml` as a **string enum** (`options:` is supported — `acp.configurables.yaml:13`):
    - `integrations.dupehound.enabled` — default `auto`, options `auto|true|false`
    - `integrations.dupehound.min_tokens` — default 40
+2b. **(F-104-01)** Append `integrations.dupehound.enabled` and `integrations.dupehound.min_tokens` to the `_index:` array — see the note below.
 3. Announce first activation once: a single line naming the rule and how to disable.
 4. Wire into `acp.review-scan.sh`: when active, run `dupehound check --diff <base> . --json`, map clusters to **CH-05 / MEDIUM** via `ig_emit_finding`. Non-blocking in `--ci` by design (only CRITICAL/HIGH exit 1).
 5. Generate a real `tests/fixtures/dupehound-sample.json` locally and commit it.
 6. Document CH-05 in `acp.review.md`; register the script in `package.yaml`.
+
+
+> **(F-104-01 — HIGH, silent failure)** Any new preference key MUST also be appended to the
+> `_index:` array in `agent/configurables/acp.configurables.yaml`. That array is what
+> `generate_preferences` iterates (`acp.preferences.sh:223-256`); keys absent from it are
+> silently omitted from generated preference files, and **no validator catches this**.
 
 ## Verification
 
@@ -60,6 +67,7 @@ Unlike M81/CodeRabbit there is **no fixture gate** — a real `--json` fixture i
 - [ ] First-activation announcement appears once, not per file
 - [ ] Fixture is a genuine dupehound export, not hand-written
 - [ ] No duplicate-detection algorithm implemented anywhere in ACP
+- [ ] Both new preference keys appear in `_index:` and resolve via `get_preference` (F-104-01)
 
 ## User-Observable Acceptance
 

@@ -41,11 +41,18 @@ Industry guidance also ranks secrets as the highest-impact, lowest-FP rule class
    - `gitleaks_available()` → `command -v gitleaks`
    - `gitleaks_active()` → follows the task-292 three-valued preference convention (`auto` default)
    - absent → silent no-op
+1b. **(F-104-01)** Append every new preference key to the `_index:` array in `acp.configurables.yaml` — see the note below.
 2. When active: run `gitleaks detect --no-git --report-format json`, map results to SC-01 via `ig_emit_finding` (CRITICAL).
 3. **Always-on fallback** (no tool required): add known-prefix patterns for common structured tokens — `ghp_`, `gho_`, `ghs_`, `AKIA`, `ASIA`, `xoxb-`, `xoxp-`, `sk-`, `-----BEGIN … PRIVATE KEY-----` — plus bare `secret`/`token`/`credential` assignment forms missed today.
 4. Share the entropy helper: expose the `acp.entropy-scan.sh` calculation for reuse and document that entropy complements, and does not replace, prefix patterns.
 5. Honour task-283's test-fixture exclusion so corpus placeholders don't emit CRITICAL.
 6. Add corpus entries for all four audit-103 misses plus negative cases (hashes, UUIDs, base64 config blocks).
+
+
+> **(F-104-01 — HIGH, silent failure)** Any new preference key MUST also be appended to the
+> `_index:` array in `agent/configurables/acp.configurables.yaml`. That array is what
+> `generate_preferences` iterates (`acp.preferences.sh:223-256`); keys absent from it are
+> silently omitted from generated preference files, and **no validator catches this**.
 
 ## Verification
 
@@ -54,6 +61,7 @@ Industry guidance also ranks secrets as the highest-impact, lowest-FP rule class
 - [ ] UUIDs, git SHAs, and base64 config blocks produce no findings (entropy FP classes)
 - [ ] SC-01 corpus recall ≥ 90%, precision ≥ 90%
 - [ ] No expansion of ad-hoc regexes beyond the documented prefix table
+- [ ] Every new preference key appears in `_index:` and in a generated preference file (F-104-01)
 
 ## User-Observable Acceptance
 
