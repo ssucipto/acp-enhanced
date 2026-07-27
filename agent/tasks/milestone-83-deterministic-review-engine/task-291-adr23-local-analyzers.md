@@ -2,13 +2,13 @@
 id: task-291
 milestone: M83
 title: "ADR-23 — local deterministic analyzers, detection-as-consent, assisted install"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-07-27
-started: null
-completed: null
+started: 2026-07-27
+completed: 2026-07-27
 phase: 4
 depends_on: []
 audit_findings: []
