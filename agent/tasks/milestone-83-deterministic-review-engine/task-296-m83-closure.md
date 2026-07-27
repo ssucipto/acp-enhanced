@@ -24,6 +24,8 @@ files_affected:
   - agent/core/identity.yml
   - package.yaml
   - README.md
+  - scripts/PRD-MAIN.md
+  - IP_REGISTER.md
 ---
 
 ## Objective
@@ -45,7 +47,7 @@ Reconcile the documentation with what actually shipped, amend the M82 review rep
 3. Re-run the full local review with the fixed scanner; record the new result as review-003.
 4. Settle all 18 carryovers (F-102-01…08, F-103-01…10) to `status: fixed` with `fix_applied_date` and `verified_in_audit` — **each requires a regression fixture** (binding shortcut #4).
 5. Confirm F-101-02/03/05/06 remain `pending` under M81 — they are CodeRabbit-fixture-blocked and out of scope.
-6. Version bump to **6.29.0** across the full file set: `identity.yml`, `progress.yaml`, `package.yaml`, `AGENTS.md`/`CLAUDE.md`/`copilot-instructions.md` (hash-identical), `README.md` badge, `CHANGELOG.md`.
+6. Version bump to **6.29.0** across the full file set: `identity.yml`, `progress.yaml`, `package.yaml`, `AGENTS.md`/`CLAUDE.md`/`copilot-instructions.md` (hash-identical), `README.md` badge, `CHANGELOG.md`, plus the two **soft** version files per `acp.validate.md` step 2c — `scripts/PRD-MAIN.md` (`**Version:** X.Y`) and `IP_REGISTER.md` (`**Current Version** | X.Y.Z`). Both exist on disk (F-104-02).
 7. Run `npx tsx scripts/acp-validate.ts --memory` and the full E2E suite; both must be clean.
 8. Update `agent/wiki/domain.yml` for new scripts and E2E suites.
 
@@ -55,7 +57,7 @@ Reconcile the documentation with what actually shipped, amend the M82 review rep
 - [ ] review-002 annotated, not rewritten; review-003 published
 - [ ] All 18 M83 carryovers `fixed`, each with a regression fixture
 - [ ] F-101-* still `pending` under M81
-- [ ] Version consistent across all 8+ version-bearing files
+- [ ] Version consistent across all version-bearing files **including PRD-MAIN.md and IP_REGISTER.md** (F-104-02)
 - [ ] Instruction files SHA-256 identical
 - [ ] `acp-validate --memory` clean; full E2E green
 - [ ] Milestone doc status and progress.yaml agree (cross-layer check)
