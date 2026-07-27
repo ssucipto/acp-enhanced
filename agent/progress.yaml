@@ -8,12 +8,12 @@ project:
     \  (task-269 done / ADR-22). Tasks 270-274 blocked on findings fixture.\n  M74–M77\
     \ Aikido track remains ADR-19 gated.\n"
 active_handoff:
-  path: null
-  date: null
-  to_executor: null
-  from_executor: null
-  git_commit: null
-  status: cleared
+  path: agent/reports/handoff-cursor-m83-deterministic-review-2026-07-27.md
+  date: '2026-07-27'
+  to_executor: cursor
+  from_executor: claude
+  git_commit: 612c677aba134b5ecce3fc417a83992dd142c8a8
+  status: active
 milestones:
   M44:
     name: Feedback-Driven Improvements (v6.9.0)
