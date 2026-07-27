@@ -8,7 +8,7 @@
 **Version**: 1.0.0  
 **Created**: 2026-06-07  
 **Status**: Active  
-**Scripts**: acp.review-scan.sh, acp.review-measure.sh  
+**Scripts**: acp.review-scan.sh, acp.review-measure.sh, acp.entropy-scan.sh, acp.gitleaks.sh, acp.dupehound.sh  
 
 ---
 
@@ -38,12 +38,14 @@ For Python, Go, Rust, or other languages, the structural review framework (outpu
 
 When the project contains `agent/commands/` — i.e., an ACP-enhanced project self-reviewing — Appendix A (ACP Self-Review Rules) automatically activates. Use `--self` to scan the standard ACP Enhanced paths without relying on `src/`.
 
-> **Phase 1 Gate Policy (M70)**: Deterministic checks run via `acp.review-scan.sh` (**8 rules**: EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01). **Phase 2** agent review is **required** for release — 56 semantic rules (EH-03+, NC-02+, CH-*, MASVS, Appendix A partial) cannot be scripted. CI may run Phase 1 only; do not claim "64/64 automated."
+> **Phase 1 Gate Policy (M70/M83)**: deterministic enforcement is now split across three shipped surfaces: **42 built-in scanner rules** in `acp.review-scan.sh` (EH, SC, TS, AP, NC, CH, SH, YM, and ACP deterministic subsets), **1 optional local-analyzer rule** (`SH-03` via `shellcheck` when installed), and **2 ACP structure rules** enforced by `/acp-validate` (`YM-03`, `ACP-02`). **Phase 2** agent review remains **required** for the other **19 semantic rules**. CI may run Phase 1 only; do not claim "64/64 automated."
 
 | Phase | Rules | Executor | CI gate? |
 |-------|-------|----------|----------|
-| **Phase 1** | 8 deterministic | `acp.review-scan.sh` | Optional pre-merge |
-| **Phase 2** | 56 semantic | Agent (`/acp-review`) | Required before release |
+| **Phase 1a** | 42 built-in deterministic | `acp.review-scan.sh` | Optional pre-merge |
+| **Phase 1b** | 1 optional deterministic (`SH-03`) | `acp.review-scan.sh` + local analyzer | Optional pre-merge |
+| **Phase 1c** | 2 ACP structural (`YM-03`, `ACP-02`) | `/acp-validate` | Optional pre-merge |
+| **Phase 2** | 19 semantic | Agent (`/acp-review`) | Required before release |
 
 ## Phase 1 Measurement
 
@@ -70,7 +72,33 @@ These figures are intentionally reproducible from `tests/fixtures/review-corpus/
 | Appendix A (ACP self-review) | **10** | SH, YM, ACP |
 | **Total distinct rule IDs** | **64** | v1.0.0 |
 
-> Phase 1 deterministic checks (EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01) run via `acp.review-scan.sh`. Remaining 56 rules require agent reasoning (Phase 2).
+> Current shipped automation is **11 rules total**: 8 built-in scanner checks, optional `SH-03`, and validate-owned `YM-03` / `ACP-02`. The remaining **53 rules** still require Phase 2 reasoning.
+
+## Rule Ownership
+
+`/acp-review` is the **code-quality and application-security** surface. It intentionally does **not** own every ACP integrity or framework-structure concern.
+
+| Surface | Owns | Notes |
+|---------|------|-------|
+| `acp.review-scan.sh` | EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01; `SH-03` when `shellcheck` is installed | Deterministic Phase 1 scanner |
+| `/acp-review` agent pass | Remaining semantic review rules | Release gate; covers A06 design review and the bulk of MASVS / code-health reasoning |
+| `/acp-validate` | `YM-03`, `ACP-02` | ACP framework structure and parity checks; automated, but not part of the scanner |
+| `/acp-integrity` | OWASP A08:2025 integrity and provenance ownership | Tampering, hidden Unicode, exfiltration, dependency trust, and other `IG-*` checks belong to the trust surface |
+
+## Standards Coverage
+
+| OWASP Top 10:2025 | Status | Primary coverage | Rationale |
+|-------------------|--------|------------------|-----------|
+| A01 Broken Access Control | Covered | `SC-06`–`SC-09` | Route authz, admin guards, CORS, and SSRF checks live in review rules |
+| A02 Security Misconfiguration | Covered | `SC-10`–`SC-13` | Config validation, headers, default creds, and error leakage are review concerns |
+| A03 Supply Chain Failures | Covered | `SC-14`–`SC-15` | Dependency CVEs and lockfile discipline stay under `/acp-review` |
+| A04 Cryptographic Failures | Covered | `SC-16`–`SC-18` | Hashing, encryption at rest, and TLS posture are review rules |
+| A05 Injection | Partially covered | `SC-02`–`SC-04` | Input validation and dangerous sinks are covered here; hardcoded secrets are **not** counted as injection |
+| A06 Insecure Design | Deliberately not covered by scanner | Phase 2 agent review | Threat modeling and design flaws require semantic/design review, not deterministic scanning |
+| A07 Authentication Failures | Partially covered | `SC-23`, `SC-24`, `SC-25` | Auth handling/logging signals exist, but credential-strength/session-policy checks remain Phase 2/manual |
+| A08 Software and Data Integrity Failures | Owned by `/acp-integrity` | `IG-*` integrity rules | Trust/provenance and tamper detection are the companion command's responsibility |
+| A09 Security Logging and Alerting Failures | Covered | `SC-24`–`SC-25` | Review owns auth-event and authz-failure logging expectations |
+| A10 Mishandling of Exceptional Conditions | Covered | `EH-01`–`EH-11` | Error-handling category maps directly here |
 
 ## ACP Enhanced Self-Review Recipe
 
@@ -110,7 +138,8 @@ bash agent/scripts/acp.review-scan.sh --include-tests tests/fixtures/review-corp
 | `--carryover` | Write HIGH+ to `agent/memory/audit-carryovers.md` |
 | `--report` | Save structured YAML + prose to `agent/reports/review-NNN.md` |
 | `--fix-suggestions` | Include inline fix per finding |
-| `--baseline` | Diff against previous review |
+| `--baseline <file>` | Suppress findings already present in a baseline file (`rule + file + normalized snippet hash`) |
+| `--write-baseline <file>` | Write the current findings to a reusable baseline file |
 | `--diff` | Review only files changed since last commit (or named ref) — uses `git diff --name-only` |
 | `--owasp` | Include OWASP Top 10:2025 / MASVS v2 mapping in output |
 | `--ignore <pattern>` | Exclude file pattern |
@@ -225,19 +254,24 @@ bash agent/scripts/acp.review-scan.sh --include-tests tests/fixtures/review-corp
 ---
 
 ### Category 6 — Security Baseline
-**Standards**: OWASP Top 10:2025, OWASP MASVS v2.0, NIST SP 800-53 Rev 5
+**Standards**: OWASP Top 10:2025, OWASP ASVS, OWASP MASVS v2.0, NIST SP 800-53 Rev 5, CWE-798
 
-#### 6a — Secrets & Input (OWASP A05:2025)
+#### 6a — Secret Hygiene (CWE-798 / OWASP ASVS)
 
 | Rule ID | Rule | Severity | Scope | Phase 1 |
 |---------|------|----------|-------|---------|
 | SC-01 | No hardcoded secrets, tokens, passwords, or API keys in source files | CRITICAL | ALL | **Y** |
+| SC-05 | Sensitive data (PII, tokens, passwords) must not appear in logs | HIGH | ALL | N |
+
+#### 6b — Injection (OWASP A05:2025)
+
+| Rule ID | Rule | Severity | Scope | Phase 1 |
+|---------|------|----------|-------|---------|
 | SC-02 | All user-supplied input validated before use — `zod` schemas or equivalent | HIGH | ALL | N |
 | SC-03 | `eval()`, `new Function()`, `setTimeout(string)`, `dangerouslySetInnerHTML` without sanitisation forbidden | HIGH | WEB |
 | SC-04 | Database queries use parameterised inputs or ORMs — no string concatenation | HIGH | WEB |
-| SC-05 | Sensitive data (PII, tokens, passwords) must not appear in logs | HIGH | ALL |
 
-#### 6b — Access Control (OWASP A01:2025)
+#### 6c — Access Control (OWASP A01:2025)
 
 | Rule ID | Rule | Severity | Scope |
 |---------|------|----------|-------|
@@ -246,7 +280,7 @@ bash agent/scripts/acp.review-scan.sh --include-tests tests/fixtures/review-corp
 | SC-08 | CORS configuration must not use wildcard `*` in production | HIGH | WEB |
 | SC-09 | SSRF — outbound URL targets from user input validated against allowlist | HIGH | WEB |
 
-#### 6c — Security Misconfiguration (OWASP A02:2025)
+#### 6d — Security Misconfiguration (OWASP A02:2025)
 
 | Rule ID | Rule | Severity | Scope |
 |---------|------|----------|-------|
@@ -255,14 +289,14 @@ bash agent/scripts/acp.review-scan.sh --include-tests tests/fixtures/review-corp
 | SC-12 | Default credentials and example configs removed before production deployment | CRITICAL | ALL |
 | SC-13 | Error responses must not expose stack traces, internal paths, or DB schema | HIGH | ALL |
 
-#### 6d — Supply Chain (OWASP A03:2025)
+#### 6e — Supply Chain (OWASP A03:2025)
 
 | Rule ID | Rule | Severity | Scope |
 |---------|------|----------|-------|
 | SC-14 | No dependencies with known HIGH/CRITICAL CVEs — enforce via `npm audit --audit-level=high` | HIGH | ALL |
 | SC-15 | Lock files committed and kept in sync for reproducible builds. May be gitignored in framework/protocol projects where lockfiles are development-only.) | HIGH | ALL |
 
-#### 6e — Cryptography (OWASP A04:2025)
+#### 6f — Cryptography (OWASP A04:2025)
 
 | Rule ID | Rule | Severity | Scope |
 |---------|------|----------|-------|
@@ -270,7 +304,7 @@ bash agent/scripts/acp.review-scan.sh --include-tests tests/fixtures/review-corp
 | SC-17 | Sensitive data at rest uses platform-appropriate encryption — AES-256-GCM minimum | HIGH | ALL |
 | SC-18 | TLS 1.2+ enforced on all network communication — no HTTP fallback in production | HIGH | ALL |
 
-#### 6f — Mobile Security (OWASP MASVS v2.0)
+#### 6g — Mobile Security (OWASP MASVS v2.0)
 
 | Rule ID | MASVS Control | Rule | Severity | Scope |
 |---------|--------------|------|----------|-------|
@@ -280,7 +314,7 @@ bash agent/scripts/acp.review-scan.sh --include-tests tests/fixtures/review-corp
 | SC-22 | MASVS-CODE | Secrets/API keys not embedded in app bundle — use runtime config or secrets service | CRITICAL | MOB |
 | SC-23 | MASVS-AUTH | Biometric auth uses platform APIs (`LocalAuthentication`) — not custom | HIGH | MOB |
 
-#### 6g — Security Logging (OWASP A09:2025)
+#### 6h — Security Logging (OWASP A09:2025)
 
 | Rule ID | Rule | Severity | Scope |
 |---------|------|----------|-------|
@@ -362,7 +396,7 @@ full codebase, all rules           → Composer 2.5
 ## Steps
 
 1. **Invoke the command**: Run `/acp-review` with the desired rule set (`--rules <category>`, `--self`, or default).
-2. **Run Phase 1 scanner** (optional, recommended for CI): `bash agent/scripts/acp.review-scan.sh [--ci] [path]` — deterministic EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01 (8 rules).
+2. **Run Phase 1 scanner** (optional, recommended for CI): `bash agent/scripts/acp.review-scan.sh [--ci] [path]` — 42 built-in deterministic rules across EH, SC, TS, AP, NC, CH, SH, YM, and ACP families, plus optional `SH-03` via `shellcheck`.
 3. **Scan the codebase**: The agent examines project files against the 64-rule framework aligned to OWASP Top 10:2025 and TypeScript strict mode.
 4. **Produce findings**: Generate a structured findings report with rule IDs, severities (CRITICAL/HIGH/MEDIUM/LOW), file locations, and fix suggestions.
 5. **Prioritize fixes**: CRITICAL and HIGH findings should be addressed before commit. MEDIUM findings before PR merge. LOW findings tracked for next sprint.
@@ -391,7 +425,36 @@ Use `--include-tests` when scanning labelled corpora, intentionally bad fixtures
 
 `SH-03` is delegated to `shellcheck` when it is installed locally. The scanner runs the normal `shellcheck -f gcc -S warning` pass, then promotes quote-safety findings `SC2046`, `SC2068`, and `SC2086` from a filtered style-level pass into `SH-03` findings. Sourced-library allowlists match `SH-01` so utility libraries and `e2e/` helpers do not create known-benign noise.
 
-When `shellcheck` is absent, the scanner stays silent and `SH-03` remains a Phase 2/manual review concern.
+`SC-01` keeps a small always-on fallback for structured prefixes and obvious secret assignments, then layers optional `gitleaks` findings on top when `integrations.gitleaks.enabled` is `auto`/`true` and the local binary is present. The scanner also reuses `acp.entropy-scan.sh --review-sc01` for high-entropy secret-like assignments; entropy complements prefix patterns and does not replace them.
+
+`CH-05` is delegated to `dupehound` when `integrations.dupehound.enabled` is `auto`/`true` and the local binary is present. Findings are emitted as `CH-05 / MEDIUM`; in `--ci` they stay non-blocking because only CRITICAL/HIGH findings fail the scanner.
+
+When an optional analyzer is absent, the scanner stays silent and that rule remains a Phase 2/manual review concern.
+
+---
+
+## False-Positive Controls
+
+`/acp-review` now ships the minimum controls needed to adopt the scanner on an existing codebase without disabling whole rules:
+
+- `--baseline <file>` suppresses previously accepted findings by `rule + file + normalized snippet hash`, so unrelated line shifts do not invalidate the entry.
+- `--write-baseline <file>` writes the current findings into a reusable baseline file.
+- Inline suppression is supported on the same line or the immediately preceding line:
+
+```ts
+// acp-review-ignore: SC-01 - seeded fixture credential
+const token = "ghp_example_fixture_token";
+```
+
+```sh
+# acp-review-ignore: SH-03 - deliberate unquoted expansion in test fixture
+echo $HOME
+```
+
+- A suppression **must include a reason**. Missing reasons are reported as a `LOW` finding and do **not** suppress the original issue.
+- Text output always prints a suppression summary. `--json` includes `summary.suppressed_total`, `summary.suppressed_baseline`, and `summary.suppressed_inline`.
+
+These controls are shared with `/acp-integrity` through `agent/scripts/acp.integrity-output.sh`.
 
 ---
 
@@ -422,7 +485,7 @@ Auto-activated when `agent/commands/` is detected in the project root.
 - `/acp-validate` — Check ACP framework structure (schemas, sessions, versions). Differs from `/acp-review` which checks user project code quality.
 - `/acp-repair-tools` — Resolve carryover findings from reviews
 - `/acp-commit` — Commit session after fixing review findings
-- `/acp-integrity` — Verify code trustworthiness and provenance (companion to review — quality vs trust)
+- `/acp-integrity` — Verify code trustworthiness and provenance (companion to review — quality vs trust; owns OWASP A08:2025 integrity coverage)
 
 ---
 
@@ -434,6 +497,9 @@ Auto-activated when `agent/commands/` is detected in the project root.
 - [ ] Executor selection guide with disqualification rationale
 - [ ] Appendix A: 10 ACP self-review rules with auto-activation logic
 - [ ] `--diff` flag documented
+- [ ] `--baseline` / `--write-baseline` and inline suppression reason requirement documented
 - [ ] Language Scope section present
+- [ ] Standards Coverage table lists all 10 OWASP 2025 categories
+- [ ] Rule ownership between `/acp-review`, `/acp-validate`, and `/acp-integrity` documented
 - [ ] SC-15 lockfile qualifier present
 - [ ] Agent Directive header present

@@ -2669,10 +2669,10 @@ carryovers:
     finding: "Doc claims 56 rules 'cannot be scripted'; at least 30 are deterministic and 2 (YM-03, ACP-02) are already automated in acp-validate.ts"
     description: "Phase 1/2 table (:41,:56) understates automatable surface ~4x, discouraging automation that CodeRabbit rate limiting now makes necessary. Reclassification in audit-102 Gap Analysis."
     fix_target: "acp.review.md: correct Phase 1/Phase 2 counts and tables after M83 Phase 3 rule expansion"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review.test.sh#B12b
     escalated_to: null
 
   - audit_id: audit-102
@@ -2695,10 +2695,10 @@ carryovers:
     finding: "Rule ownership between /acp-validate and /acp-review undocumented — YM-03 and ACP-02 double-counted as review-semantic"
     description: "scripts/acp-validate.ts:1913 implements version consistency (YM-03) and :2182 command E2E coverage (ACP-02), but acp.review.md counts both among its unimplemented semantic rules."
     fix_target: "Document validate-vs-review rule ownership in acp.review.md and coderabbit-policy-map-lite.md"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review.test.sh#B12b
     escalated_to: null
 
   - audit_id: audit-102
@@ -2708,10 +2708,10 @@ carryovers:
     finding: "CH-05 duplicate-code detection has no implementation path; needs AST fingerprinting, not regex"
     description: "dupehound (MIT, Rust, tree-sitter + winnowing, offline, no rate limit) is the candidate, but is v0.1.2 with 153 total downloads — adopt via the 3-gate optional-external-tool pattern only, never as a dependency. Unlike M81/CodeRabbit there is no fixture gate: a real --json fixture can be generated locally."
     fix_target: "M83 Phase 4: ADR for local-deterministic-analyzer class + acp.dupehound.sh 3-gate helper + local fixture"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: agent/scripts/acp.dupehound.sh + tests/fixtures/dupehound-sample.json
     escalated_to: null
 
   - audit_id: audit-102
@@ -2760,10 +2760,10 @@ carryovers:
     finding: "SC-01 misses all real-world token formats — 0/4 recall on ghp_, AKIA, xoxb-, and 'const secret ='"
     description: "Pattern 1 lacks bare 'secret' with = assignment; pattern 2 requires a colon. No known-prefix patterns and no entropy. gitleaks ships ~200 rules, TruffleHog 800+. Industry guidance ranks secrets as the highest-impact lowest-FP rule; ours has the worst recall of the eight."
     fix_target: "Decide secrets strategy: delegate to gitleaks via the 3-gate optional-tool pattern, plus prefix patterns as always-on fallback. Do not grow hand-rolled regexes."
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B27
     escalated_to: null
 
   - audit_id: audit-103
@@ -2825,10 +2825,10 @@ carryovers:
     finding: "Secrets section mapped to A05:2025 (Injection); A06/A07/A08:2025 have no rules at all"
     description: "OWASP Top 10:2025 verified current. 6 of 7 mappings correct, but 6a Secrets & Input cites A05:2025 which is Injection, not secrets. A06 Insecure Design, A07 Authentication Failures, A08 Software or Data Integrity Failures are unmapped."
     fix_target: "acp.review.md: correct the 6a mapping; decide and document coverage or explicit non-coverage for A06/A07/A08"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review.test.sh#B12b
     escalated_to: null
 
   - audit_id: audit-103
@@ -2838,10 +2838,10 @@ carryovers:
     finding: "No baseline mode, inline suppression, or per-rule thresholds — industry-standard false-positive controls absent"
     description: "gitleaks and TruffleHog both ship baseline suppression, inline allowlist comments, and per-rule entropy thresholds. Without these, a single unavoidable false positive has no resolution path except disabling the rule."
     fix_target: "Add baseline file support, an inline suppression comment convention, and per-rule threshold config to the shared emitter"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: e2e/acp.review-scan.test.sh#B23-B26
     escalated_to: null
 
   - audit_id: audit-103
@@ -2851,10 +2851,10 @@ carryovers:
     finding: "ACP already implements entropy detection (IG-17) but /acp-review SC-01 does not use it; threshold 4.5 also misses structured tokens"
     description: "acp.entropy-scan.sh:14 sets DEFAULT_THRESHOLD 4.5. Verified it also returns no findings on ghp_/AKIA fixtures — low-entropy structured tokens need prefix patterns, not entropy. Capability is duplicated across commands with neither path effective."
     fix_target: "Share entropy detection between /acp-integrity and /acp-review; tune threshold and add known-prefix patterns for structured tokens"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: agent/scripts/acp.entropy-scan.sh --review-sc01
     escalated_to: null
 
   - audit_id: audit-104
@@ -2864,10 +2864,10 @@ carryovers:
     finding: "Tasks 290/292/293 add preference keys but none updates the _index: array — new keys silently omitted from generated preference files"
     description: "_index is iterated by generate_preferences at acp.preferences.sh:223-256 to enumerate preference paths. Keys absent from it are omitted with no error, and no validator checks _index completeness. dupehound/gitleaks opt-in gates would appear wired while their preferences never materialise."
     fix_target: "Add _index: updates to Steps of tasks 290, 292, 293; consider an _index-parity validator in acp-validate.ts"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: agent/configurables/acp.configurables.yaml _index + agent/preferences/acp.default.yaml
     escalated_to: null
 
   - audit_id: audit-104
@@ -2877,10 +2877,10 @@ carryovers:
     finding: "task-296 files_affected omits scripts/PRD-MAIN.md and IP_REGISTER.md — both exist and are soft version requirements"
     description: "acp.validate.md step 2c lists PRD-MAIN.md (**Version:** X.Y) and IP_REGISTER.md (**Current Version** | X.Y.Z) as soft version checks. Both files exist on disk. The v6.29.0 bump would leave them stale and emit soft warnings."
     fix_target: "task-296: add both files to files_affected and to the Step 6 version file set"
-    status: pending
+    status: fixed
     planned_in: M83
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-27
+    verified_in_audit: v6.29.0 version bump (PRD-MAIN.md + IP_REGISTER.md)
     escalated_to: null
 
   - audit_id: audit-104

@@ -39,6 +39,10 @@ acp:
     - git.auto_commit.enabled
     - integrations.coderabbit.enabled
     - integrations.coderabbit.config_path
+    - integrations.gitleaks.enabled
+    - integrations.dupehound.enabled
+    - integrations.dupehound.min_tokens
+    - integrations.dupehound.install_prompt_version
 
   # ── Plan command preferences ──────────────────────────────────────────────
 
@@ -198,6 +202,67 @@ acp:
           repository. Presence of this file is the detection signal used by
           coderabbit_available() (agent/scripts/acp.coderabbit.sh).
         default: .coderabbit.yaml
+        type: string
+
+    gitleaks:
+      enabled:
+        id: 'integrations.gitleaks.enabled'
+        description: |
+          Control optional gitleaks-assisted SC-01 secret detection.
+          `auto` (default) enables gitleaks when the local binary is present.
+          `true` requires it explicitly and emits a hint if missing.
+          `false` disables gitleaks even when installed.
+        default: auto
+        type: string
+        options:
+          - name: auto
+            description: Auto-enable gitleaks when it is installed locally.
+            value: auto
+          - name: true
+            description: Expect gitleaks to be available; hint once if missing.
+            value: true
+          - name: false
+            description: Disable gitleaks integration completely.
+            value: false
+
+    dupehound:
+      enabled:
+        id: 'integrations.dupehound.enabled'
+        description: |
+          Control optional dupehound-assisted CH-05 duplicate-code detection.
+          `auto` (default) enables it when the local binary is present.
+          `true` expects the binary and emits a hint if missing.
+          `false` disables CH-05 dupehound scans even when installed.
+        default: auto
+        type: string
+        options:
+          - name: auto
+            description: Auto-enable dupehound when it is installed locally.
+            value: auto
+          - name: true
+            description: Expect dupehound to be available; hint once if missing.
+            value: true
+          - name: false
+            description: Disable dupehound integration completely.
+            value: false
+
+      min_tokens:
+        id: 'integrations.dupehound.min_tokens'
+        description: |
+          Reserved lower bound for dupehound token span filtering. The current
+          wrapper stores the preference now so future CH-05 tuning remains
+          forward-compatible without changing the preference surface.
+        default: 40
+        type: number
+        min: 1
+        max: 500
+
+      install_prompt_version:
+        id: 'integrations.dupehound.install_prompt_version'
+        description: |
+          ACP version that last prompted for dupehound installation. Empty
+          string means no prompt has been recorded yet.
+        default: ''
         type: string
 
 

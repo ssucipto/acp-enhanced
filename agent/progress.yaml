@@ -1,12 +1,13 @@
 project:
   name: agent-context-protocol
-  version: 6.28.2
+  version: 6.29.0
   started: 2026-02-16
   status: active
   current_milestone: M81
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.28.2; M81 in progress\n\
-    \  (task-269 done / ADR-22). Tasks 270-274 blocked on findings fixture.\n  M74–M77\
-    \ Aikido track remains ADR-19 gated.\n"
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.29.0 shipped.\n\
+    \  M83 is complete; current_milestone remains M81 because tasks 270-274 stay blocked\n\
+    \  on the CodeRabbit findings fixture under ADR-22. M74–M77 Aikido track remains\n\
+    \  ADR-19 gated.\n"
 active_handoff:
   path: agent/reports/handoff-cursor-m83-deterministic-review-2026-07-27.md
   date: '2026-07-27'
@@ -802,21 +803,23 @@ milestones:
   M83:
     name: Deterministic Local Review Engine (v6.29.0)
     priority: 5
-    status: in_progress
-    progress: 35
+    status: completed
+    progress: 100
     started: 2026-07-27
-    completed: null
+    completed: 2026-07-27
     estimated_weeks: 1.5
-    tasks_completed: 6
+    tasks_completed: 17
     tasks_total: 17
     file: agent/milestones/milestone-83-deterministic-review-engine.md
-    notes: '🚧 Phases 1b/1c/2 advanced 2026-07-27 — rule-pattern fixes, labelled corpus
+    notes: 'COMPLETE 2026-07-27. All 17 M83 tasks landed: scanner scope/precision fixes,
 
-      + measurement (18 cases, 100/100), and shellcheck-backed SH-03 delegation landed.
+      measured corpus + shellcheck delegation, Tier C rule expansion, optional gitleaks
 
-      Next: task-286 (Tier C security batch). Phase 3 unblocked by tasks 283-285.
+      and dupehound helpers, OWASP 2025/rule-ownership doc reconcile, false-positive
 
-      current_milestone remains M81 (fixture gate). M83 independent of M81/ADR-22.
+      controls, and closure evidence. Carryovers F-102-01..08 + F-103-01..10 are fixed.
+
+      current_milestone remains M81 (fixture gate). M83 shipped independently as v6.29.0.
 
       '
   M82:
@@ -6170,46 +6173,46 @@ tasks:
   - id: task-286
     name: Tier C rules — security batch
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-286-tierc-security-batch.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 6
-    notes: phase 3; gated on 283+284; 9 rules
+    notes: completed 2026-07-27; SC-03/08/10/13/14/15/16/18 + AP-09 shipped with corpus + policy-map updates
   - id: task-287
     name: Tier C rules — shell portability + ACP hygiene
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-287-tierc-shell-acp-batch.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 4
-    notes: phase 3; gated; context-aware SH-02/SH-04
+    notes: completed 2026-07-27; SH-02/04 + ACP-01/03 + YM-01/02 shipped with context-aware corpus coverage
   - id: task-288
     name: Tier C rules — code health + TypeScript
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-288-tierc-health-ts-batch.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 5
-    notes: phase 3; gated; 10 rules; CLI allowlist
+    notes: completed 2026-07-27; CH-01/03/06/07 + TS-03/04/06/07/08/13 shipped with CLI/test allowlists
   - id: task-289
     name: Tier C rules — error handling + naming
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-289-tierc-errors-naming-batch.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 5
-    notes: phase 3; gated; 9 rules
+    notes: completed 2026-07-27; EH-03/04/07/08/09 + NC-02/04/06/09 shipped with corpus coverage
   - id: task-290
     name: Secrets strategy — gitleaks delegation + entropy reuse
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-290-secrets-strategy.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 5
     notes: phase 3b; F-103-03/10; no hand-rolled regex growth
   - id: task-291
@@ -6224,48 +6227,48 @@ tasks:
   - id: task-292
     name: acp.dupehound.sh — 3-gate helper + CH-05 wiring
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-292-dupehound-helper-ch05.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 5
     notes: phase 4; F-102-07; wrap not rewrite; local fixture
   - id: task-293
     name: Assisted installer + version-update offer hook
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-293-assisted-install-offer.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 4
     notes: phase 4; consent only; never downloads binaries
   - id: task-294
     name: OWASP Top 10:2025 mapping correction + A06/A07/A08
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-294-owasp-standards-alignment.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 3
-    notes: phase 5; F-103-08; A05 mismap
+    notes: completed 2026-07-27; Standards Coverage table + A08 cross-link to /acp-integrity
   - id: task-295
     name: FP controls — baseline, inline suppression, thresholds
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-295-fp-controls-baseline-suppression.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 4
-    notes: phase 5; F-103-09; shared emitter
+    notes: completed 2026-07-27; baseline + acp-review-ignore in shared emitter
   - id: task-296
     name: M83 closure — doc reconcile, review-002 amendment, ship v6.29.0
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-83-deterministic-review-engine/task-296-m83-closure.md
-    started: null
-    completed_date: null
+    started: 2026-07-27
+    completed_date: 2026-07-27
     estimated_hours: 4
-    notes: phase 6; F-102-04/06; settle 18 carryovers
+    notes: completed 2026-07-27; v6.29.0 shipped; review-003; 18 carryovers fixed
   M82:
   - id: task-275
     name: Sync branches + run overdue ACP weeklies
@@ -6313,6 +6316,12 @@ tasks:
     estimated_hours: 1
     notes: review-002; CLI ≠ ADR-22 gate
 recent_work:
+- date: 2026-07-27
+  description: M83 tasks 290-293 implemented — gitleaks fallback/entropy reuse, dupehound helper, and assisted install docs/preferences
+  items:
+  - task-290 completed; SC-01 now covers ghp_/AKIA/xoxb-/sk- prefixes plus secret assignments
+  - task-292 completed; dupehound helper, CH-05 review-scan wiring, and sample JSON fixture added
+  - task-293 completed; install subcommand, prompt-version preference, and dupehound integration docs added
 - date: 2026-07-27
   description: '/acp-plan M83 — Deterministic Local Review Engine. audit-102 + audit-103
 

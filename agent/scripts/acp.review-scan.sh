@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # acp.review-scan.sh — Deterministic Phase 1 scanner for /acp-review (audit-085 F-085-07, M70 task-225)
 #
-# Covered rules: EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01 (+ SH-03 via shellcheck when available)
-# Usage: acp.review-scan.sh [--ci] [--json] [--self] [--include-tests] [file|dir ...]
+# Covered rules: EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01
+# Optional local analyzers: SH-03 via shellcheck, SC-01 via gitleaks,
+# CH-05 via dupehound (ADR-23 / Variant B helpers).
+# Usage: acp.review-scan.sh [--ci] [--json] [--baseline file] [--write-baseline file] [--self] [--include-tests] [file|dir ...]
 # M83 task-280: accumulate all paths (F-102-01); implement --self (F-102-02);
 # include .mjs/.cjs in directory find (F-102-03); re-handle flags after positionals (F-104-06).
 
@@ -12,17 +14,76 @@ trap 'echo "Error: review-scan.sh failed at line $LINENO" >&2; exit 3' ERR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=acp.integrity-output.sh
 source "${SCRIPT_DIR}/acp.integrity-output.sh"
+# shellcheck source=acp.gitleaks.sh
+source "${SCRIPT_DIR}/acp.gitleaks.sh"
+# shellcheck source=acp.dupehound.sh
+source "${SCRIPT_DIR}/acp.dupehound.sh"
 
 TARGETS=()
 SELF_MODE=false
 INCLUDE_TESTS=false
 IG_REMAINING_ARGS=()
+REVIEW_FINDING_KEYS=$'\n'
+SCANNED_FILES=()
+DUPEHOUND_ANNOUNCED=false
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+
+emit_review_finding() {
+  local file="$1"
+  local line="${2:-0}"
+  local rule="$3"
+  local message="$4"
+  local severity="${5:-}"
+  local key="${file}:${line}:${rule}"
+  case "${REVIEW_FINDING_KEYS}" in
+    *$'\n'"${key}"$'\n'*)
+      return 0
+      ;;
+  esac
+  REVIEW_FINDING_KEYS+="${key}"$'\n'
+  ig_emit_finding "$file" "$line" "$rule" "$message" "$severity"
+}
+
+normalize_repo_path() {
+  local path="$1"
+  if [[ "$path" == "${REPO_ROOT}/"* ]]; then
+    path="${path#"${REPO_ROOT}/"}"
+  elif [[ "$path" == ./* ]]; then
+    path="${path#./}"
+  fi
+  echo "$path"
+}
+
+remember_scanned_file() {
+  local path="$1"
+  SCANNED_FILES+=("$(normalize_repo_path "$path")")
+}
+
+is_scanned_file() {
+  local path candidate
+  path="$(normalize_repo_path "$1")"
+  for candidate in "${SCANNED_FILES[@]}"; do
+    if [[ "$candidate" == "$path" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+announce_dupehound_activation() {
+  if [[ "$DUPEHOUND_ANNOUNCED" != "true" ]]; then
+    echo "[ACP] CH-05 duplicate detection active via dupehound; disable with integrations.dupehound.enabled: false." >&2
+    DUPEHOUND_ANNOUNCED=true
+  fi
+}
+
 ig_parse_common_args "$@"
 set -- "${IG_REMAINING_ARGS[@]:-}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -h|--help)
-      echo "Usage: acp.review-scan.sh [--ci] [--json] [--self] [--include-tests] [file|dir ...]"
+      echo "Usage: acp.review-scan.sh [--ci] [--json] [--baseline file] [--write-baseline file] [--self] [--include-tests] [file|dir ...]"
       exit 0
       ;;
     --self)
@@ -42,6 +103,16 @@ while [[ $# -gt 0 ]]; do
     --json)
       IG_JSON_MODE=true
       shift
+      ;;
+    --baseline)
+      [[ $# -ge 2 ]] || { echo "Error: --baseline requires a file path" >&2; exit 2; }
+      IG_BASELINE_FILE="$2"
+      shift 2
+      ;;
+    --write-baseline)
+      [[ $# -ge 2 ]] || { echo "Error: --write-baseline requires a file path" >&2; exit 2; }
+      IG_WRITE_BASELINE_FILE="$2"
+      shift 2
       ;;
     -*)
       echo "Error: unexpected flag: $1" >&2
@@ -91,8 +162,252 @@ scan_ts_js() {
 
   while IFS=$'\t' read -r line_num rule message severity || [[ -n "${line_num:-}" ]]; do
     [[ -z "${line_num:-}" ]] && continue
-    ig_emit_finding "$file" "$line_num" "$rule" "$message" "$severity"
+    emit_review_finding "$file" "$line_num" "$rule" "$message" "$severity"
   done < <(ACP_REVIEW_FILE="$file" python3 "${SCRIPT_DIR}/acp.review-scan-ts.py" 2>/dev/null || true)
+
+  while IFS=$'\t' read -r out_file line_num rule message severity || [[ -n "${out_file:-}" ]]; do
+    [[ -z "${out_file:-}" ]] && continue
+    emit_review_finding "$out_file" "$line_num" "$rule" "$message" "$severity"
+  done < <(bash "${SCRIPT_DIR}/acp.entropy-scan.sh" --review-sc01 --threshold 4.2 "$file" 2>/dev/null || true)
+}
+
+node_scan_modules_available() {
+  command -v node >/dev/null 2>&1 && [[ -d "${PROJECT_ROOT}/scripts/node_modules" ]]
+}
+
+scan_yaml_with_node() {
+  local file="$1"
+  local abs_file="$file"
+  local rule="$2"
+  local mode="$3"
+  local message="$4"
+  local output=""
+  local line_num="1"
+
+  if ! node_scan_modules_available; then
+    return 0
+  fi
+
+  if [[ "$abs_file" != /* ]]; then
+    abs_file="${PROJECT_ROOT}/${abs_file#./}"
+  fi
+
+  if output="$(cd "${PROJECT_ROOT}/scripts" && node --input-type=module - "$mode" "$abs_file" 2>&1 <<'NODE'
+import fs from "fs";
+import matter from "gray-matter";
+import yaml from "js-yaml";
+
+const mode = process.argv[2];
+const file = process.argv[3];
+const raw = fs.readFileSync(file, "utf8");
+
+if (mode === "frontmatter") {
+  if (!raw.startsWith("---\n")) {
+    process.exit(0);
+  }
+  matter(raw);
+} else {
+  yaml.load(raw);
+}
+NODE
+)"; then
+    return 0
+  fi
+
+  if [[ "$output" =~ line[[:space:]]+([0-9]+) ]]; then
+    line_num="${BASH_REMATCH[1]}"
+  fi
+  emit_review_finding "$file" "$line_num" "$rule" "$message" "$(ig_rule_severity "$rule")"
+}
+
+scan_markdown_frontmatter() {
+  local file="$1"
+  scan_yaml_with_node "$file" "YM-02" "frontmatter" "markdown frontmatter does not parse as YAML"
+}
+
+scan_yaml_file() {
+  local file="$1"
+  scan_yaml_with_node "$file" "YM-01" "yaml" "YAML file does not parse"
+}
+
+scan_shell_portability() {
+  local file="$1"
+  local has_guard=false
+  local line_num=0
+  local line=""
+
+  if rg -q 'Darwin|uname -s' "$file" && rg -q "sed -i ''" "$file" && rg -q 'sed -i( |")' "$file"; then
+    has_guard=true
+  fi
+
+  while IFS= read -r line; do
+    line_num=$((line_num + 1))
+    [[ "$line" == *"sed -i"* ]] || continue
+    [[ "$line" == *"sed -i.bak"* ]] && continue
+    if [[ "$has_guard" == "true" ]]; then
+      continue
+    fi
+    emit_review_finding "$file" "$line_num" "SH-02" "sed -i usage is not BSD/GNU guard-aware" "HIGH"
+  done < "$file"
+}
+
+scan_shell_exit_trap() {
+  local file="$1"
+  local line_num=0
+  local line=""
+  local trap_line=""
+
+  if ! is_sh_allowlisted "$file"; then
+    return 0
+  fi
+  if rg -q 'trap - EXIT' "$file"; then
+    return 0
+  fi
+
+  while IFS= read -r line; do
+    line_num=$((line_num + 1))
+    if [[ "$line" == *"trap"* && "$line" == *" EXIT"* ]]; then
+      trap_line="$line_num"
+      break
+    fi
+  done < "$file"
+
+  if [[ -n "$trap_line" ]]; then
+    emit_review_finding "$file" "$trap_line" "SH-04" "sourced library sets EXIT trap without clearing it" "CRITICAL"
+  fi
+}
+
+scan_shell_naming() {
+  local file="$1"
+  local base
+  base="$(basename "$file")"
+  case "$file" in
+    */agent/scripts/*.sh|*/scripts/*.sh)
+      if [[ ! "$base" =~ ^acp\.[A-Za-z0-9-]+\.sh$ ]]; then
+        emit_review_finding "$file" "1" "ACP-03" "script name should follow acp.{name}.sh" "LOW"
+      fi
+      ;;
+  esac
+}
+
+scan_command_directive() {
+  local file="$1"
+  case "$file" in
+    */agent/commands/*.md|*/commands/*.md)
+      if [[ "$(basename "$file")" != "command.template.md" ]] && ! rg -q 'Agent Directive' "$file"; then
+        emit_review_finding "$file" "1" "ACP-01" "command doc missing Agent Directive header" "MEDIUM"
+      fi
+      ;;
+  esac
+}
+
+scan_tsconfig_rules() {
+  local file="$1"
+  if ! command -v python3 >/dev/null 2>&1; then
+    return 0
+  fi
+  while IFS=$'\t' read -r line_num rule message severity || [[ -n "${line_num:-}" ]]; do
+    [[ -z "${line_num:-}" ]] && continue
+    emit_review_finding "$file" "$line_num" "$rule" "$message" "$severity"
+  done < <(python3 - "$file" <<'PY'
+import json
+import sys
+path = sys.argv[1]
+try:
+    with open(path, encoding="utf-8") as fh:
+        data = json.load(fh)
+except Exception:
+    raise SystemExit(0)
+opts = data.get("compilerOptions") or {}
+if not opts.get("strictNullChecks"):
+    print("1\tTS-08\tstrictNullChecks is disabled or missing\tHIGH")
+missing = []
+for key in ("noUncheckedIndexedAccess", "exactOptionalPropertyTypes"):
+    if not opts.get(key):
+        missing.append(key)
+if missing:
+    print(f"1\tTS-13\tmissing compiler options: {', '.join(missing)}\tMEDIUM")
+PY
+)
+}
+
+scan_package_security_rules() {
+  local dir="$1"
+  local package_file="${dir%/}/package.json"
+  local audit_file="${dir%/}/npm-audit.json"
+  local tracked_lockfile=""
+
+  [[ -f "$package_file" ]] || return 0
+
+  if [[ -f "$audit_file" ]] && command -v python3 >/dev/null 2>&1; then
+    while IFS=$'\t' read -r file line_num rule message severity || [[ -n "${file:-}" ]]; do
+      [[ -z "${file:-}" ]] && continue
+      emit_review_finding "$file" "$line_num" "$rule" "$message" "$severity"
+    done < <(python3 - "$audit_file" <<'PY'
+import json
+import sys
+path = sys.argv[1]
+try:
+    with open(path, encoding="utf-8") as fh:
+        data = json.load(fh)
+except Exception:
+    raise SystemExit(0)
+meta = data.get("metadata", {}).get("vulnerabilities", {})
+high = int(meta.get("high", 0) or 0)
+critical = int(meta.get("critical", 0) or 0)
+if high > 0 or critical > 0:
+    package_file = path.rsplit("/", 1)[0] + "/package.json"
+    print(f"{package_file}\t1\tSC-14\tnpm audit reports {high} high / {critical} critical vulnerabilities\tHIGH")
+PY
+)
+  elif [[ -f "${dir%/}/package-lock.json" ]] && command -v npm >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then
+    local audit_output=""
+    audit_output="$(cd "$dir" && npm audit --json 2>/dev/null || true)"
+    if [[ -n "$audit_output" ]]; then
+      while IFS=$'\t' read -r file line_num rule message severity || [[ -n "${file:-}" ]]; do
+        [[ -z "${file:-}" ]] && continue
+        emit_review_finding "$file" "$line_num" "$rule" "$message" "$severity"
+      done < <(python3 - "$package_file" "$audit_output" <<'PY'
+import json
+import sys
+path = sys.argv[1]
+raw = sys.argv[2]
+try:
+    data = json.loads(raw)
+except Exception:
+    raise SystemExit(0)
+meta = data.get("metadata", {}).get("vulnerabilities", {})
+high = int(meta.get("high", 0) or 0)
+critical = int(meta.get("critical", 0) or 0)
+if high > 0 or critical > 0:
+    print(f"{path}\t1\tSC-14\tnpm audit reports {high} high / {critical} critical vulnerabilities\tHIGH")
+PY
+)
+    fi
+  fi
+
+  for tracked_lockfile in package-lock.json npm-shrinkwrap.json yarn.lock pnpm-lock.yaml; do
+    if [[ -f "${dir%/}/${tracked_lockfile}" ]]; then
+      if git ls-files --error-unmatch "${dir#${REPO_ROOT}/}/${tracked_lockfile}" >/dev/null 2>&1 || git ls-files --error-unmatch "${dir%/}/${tracked_lockfile}" >/dev/null 2>&1; then
+        return 0
+      fi
+      return 0
+    fi
+  done
+  emit_review_finding "$package_file" "1" "SC-15" "package manager lockfile is missing" "HIGH"
+}
+
+scan_unhandled_rejection_rule() {
+  local dir="$1"
+  local package_file="${dir%/}/package.json"
+  [[ -f "$package_file" ]] || return 0
+  if ! rg -q 'express|app\.listen|res\.json|router\.|useState\(|useEffect\(' "$dir"; then
+    return 0
+  fi
+  if rg -q "process\\.on\\(['\"]unhandledRejection['\"]" "$dir"; then
+    return 0
+  fi
+  emit_review_finding "$package_file" "1" "EH-09" "project lacks a global unhandledRejection handler" "HIGH"
 }
 
 is_sh_allowlisted() {
@@ -127,7 +442,7 @@ scan_sh_shellcheck() {
       code="${BASH_REMATCH[4]}"
       case "$code" in
         SC2046|SC2068|SC2086)
-          ig_emit_finding "$file" "$line_num" "SH-03" "shellcheck ${code}: ${message}" "MEDIUM"
+          emit_review_finding "$file" "$line_num" "SH-03" "shellcheck ${code}: ${message}" "MEDIUM"
           ;;
       esac
     fi
@@ -136,19 +451,41 @@ scan_sh_shellcheck() {
 
 scan_sh() {
   local file="$1"
+  local allowlisted=false
   # Sourced function libraries deliberately omit set -euo (would leak into callers).
   # F-M82-05: allowlist + honor explicit exemption comment in first 40 lines.
   if is_sh_allowlisted "$file"; then
-    return 0
+    allowlisted=true
   fi
-  if ! head -40 "$file" | grep -q 'set -euo pipefail'; then
-    ig_emit_finding "$file" "1" "SH-01" "missing set -euo pipefail" "HIGH"
+  if [[ "$allowlisted" != "true" ]] && ! head -40 "$file" | grep -q 'set -euo pipefail'; then
+    emit_review_finding "$file" "1" "SH-01" "missing set -euo pipefail" "HIGH"
   fi
-  if shellcheck_available; then
+  if [[ "$allowlisted" != "true" ]] && shellcheck_available; then
     scan_sh_shellcheck "$file" "warning"
     # SC2086/SC2046/SC2068 are note-level quote-safety findings; promote only these.
     scan_sh_shellcheck "$file" "style"
   fi
+  scan_shell_portability "$file"
+  scan_shell_exit_trap "$file"
+  scan_shell_naming "$file"
+}
+
+scan_md() {
+  local file="$1"
+  scan_command_directive "$file"
+  scan_markdown_frontmatter "$file"
+}
+
+scan_dir_level_rules() {
+  local dir="$1"
+  local tsconfig_file=""
+
+  scan_package_security_rules "$dir"
+  scan_unhandled_rejection_rule "$dir"
+
+  while IFS= read -r tsconfig_file; do
+    scan_tsconfig_rules "$tsconfig_file"
+  done < <(find "$dir" -maxdepth 2 -type f -name 'tsconfig*.json' 2>/dev/null || true)
 }
 
 should_skip_path() {
@@ -168,22 +505,149 @@ should_skip_path() {
   return 1
 }
 
+scan_gitleaks_file() {
+  local file="$1"
+  local report_path rc=0
+  if [[ "$INCLUDE_TESTS" == "true" ]] || ([[ "$INCLUDE_TESTS" != "true" ]] && should_skip_path "$file"); then
+    return 0
+  fi
+  if ! gitleaks_active; then
+    return 0
+  fi
+  if ! command -v python3 >/dev/null 2>&1; then
+    echo "Warning: python3 required to parse gitleaks JSON; skipping $file" >&2
+    return 0
+  fi
+  report_path="$(mktemp)"
+  gitleaks dir "$file" --no-banner --report-format json --report-path "$report_path" >/dev/null 2>&1 || rc=$?
+  case "$rc" in
+    0|1) ;;
+    *)
+      rm -f "$report_path"
+      return 0
+      ;;
+  esac
+  while IFS=$'\t' read -r out_file line_num rule message severity || [[ -n "${out_file:-}" ]]; do
+    [[ -z "${out_file:-}" ]] && continue
+    emit_review_finding "${out_file:-$file}" "${line_num:-1}" "$rule" "$message" "$severity"
+  done < <(python3 - "$report_path" <<'PY'
+import json
+import sys
+
+path = sys.argv[1]
+try:
+    with open(path, encoding="utf-8") as fh:
+        data = json.load(fh)
+except Exception:
+    raise SystemExit(0)
+
+items = data.get("findings") if isinstance(data, dict) else data
+if items is None:
+    items = []
+
+for item in items:
+    if not isinstance(item, dict):
+        continue
+    file = item.get("File") or item.get("file") or item.get("Path") or ""
+    line = item.get("StartLine") or item.get("line") or item.get("Line") or 1
+    rule_id = item.get("RuleID") or item.get("rule") or "gitleaks"
+    desc = item.get("Description") or item.get("Message") or "hardcoded secret pattern"
+    print(f"{file}\t{line}\tSC-01\tgitleaks {rule_id}: {desc}\tCRITICAL")
+PY
+)
+  rm -f "$report_path"
+}
+
+scan_dupehound() {
+  local report_path
+  if [[ ${#SCANNED_FILES[@]} -eq 0 ]]; then
+    return 0
+  fi
+  if [[ "$INCLUDE_TESTS" == "true" ]]; then
+    return 0
+  fi
+  if ! dupehound_active; then
+    return 0
+  fi
+  if ! command -v python3 >/dev/null 2>&1; then
+    echo "Warning: python3 required to parse dupehound JSON; skipping CH-05" >&2
+    return 0
+  fi
+  announce_dupehound_activation
+  report_path="$(mktemp)"
+  if ! dupehound_write_json "$report_path"; then
+    rm -f "$report_path"
+    return 0
+  fi
+  while IFS=$'\t' read -r out_file line_num rule message severity || [[ -n "${out_file:-}" ]]; do
+    [[ -z "${out_file:-}" ]] && continue
+    if is_scanned_file "$out_file"; then
+      emit_review_finding "$out_file" "${line_num:-1}" "$rule" "$message" "$severity"
+    fi
+  done < <(python3 - "$report_path" <<'PY'
+import json
+import sys
+
+path = sys.argv[1]
+try:
+    with open(path, encoding="utf-8") as fh:
+        data = json.load(fh)
+except Exception:
+    raise SystemExit(0)
+
+items = data.get("findings") if isinstance(data, dict) else data
+if items is None:
+    items = []
+
+for item in items:
+    if not isinstance(item, dict):
+        continue
+    file = item.get("file") or item.get("path") or item.get("File") or ""
+    line = item.get("line") or item.get("Line") or item.get("start_line") or 1
+    similarity = item.get("similarity") or item.get("Similarity") or "?"
+    original = item.get("original") or item.get("source") or {}
+    if isinstance(original, dict):
+      origin_file = original.get("file") or original.get("path") or original.get("File") or "existing code"
+      origin_line = original.get("line") or original.get("Line") or original.get("start_line") or 1
+      origin_ref = f"{origin_file}:{origin_line}"
+    else:
+      origin_ref = str(original or "existing code")
+    suggestion = item.get("suggestion") or item.get("Suggestion") or ""
+    message = f"duplicate code cluster ({similarity}% similar) — reuse {origin_ref}"
+    if suggestion:
+      message += f"; suggestion: {suggestion}"
+    print(f"{file}\t{line}\tCH-05\t{message}\tMEDIUM")
+PY
+)
+  rm -f "$report_path"
+}
+
 scan_path() {
   local path="$1"
   if should_skip_path "$path"; then
     return 0
   fi
   if [[ -f "$path" ]]; then
+    remember_scanned_file "$path"
     case "$path" in
       *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs) scan_ts_js "$path" ;;
       *.sh) scan_sh "$path" ;;
+      *.md) scan_md "$path" ;;
+      *.yaml|*.yml) scan_yaml_file "$path" ;;
+      */package.json|package.json)
+        scan_package_security_rules "$(dirname "$path")"
+        scan_unhandled_rejection_rule "$(dirname "$path")"
+        ;;
+      */tsconfig*.json|tsconfig*.json) scan_tsconfig_rules "$path" ;;
     esac
+    scan_gitleaks_file "$path"
     return 0
   fi
   if [[ -d "$path" ]]; then
+    scan_dir_level_rules "$path"
     while IFS= read -r f; do
       scan_path "$f"
-    done < <(find "$path" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.mjs' -o -name '*.cjs' -o -name '*.sh' \) \
+    done < <(find "$path" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.mjs' -o -name '*.cjs' -o -name '*.sh' -o -name '*.md' -o -name '*.yaml' -o -name '*.yml' -o -name 'tsconfig*.json' -o -name 'package.json' \) \
       ! -path '*/node_modules/*' ! -path '*/.git/*' 2>/dev/null || true)
   fi
 }
@@ -191,4 +655,6 @@ scan_path() {
 for _t in "${TARGETS[@]}"; do
   scan_path "$_t"
 done
+
+scan_dupehound
 ig_finalize_scan "review-scan"
