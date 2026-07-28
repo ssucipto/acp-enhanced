@@ -385,4 +385,77 @@ else
   echo "  SKIP: PyYAML not available"
 fi
 
+# ── B34–B37 — CodeRabbit PR#13 regressions (F-107-01..04) ──────────────────
+# These four bugs shipped in v6.29.2 and were found downstream, not here.
+# Every case below is one the pre-fix suite could not have caught.
+
+print_test_header "B34 — scanner runs with no positional path argument (F-107-01)"
+# Regression: `set -- "${IG_REMAINING_ARGS[@]:-}"` expanded an EMPTY array to a
+# single empty-string argument, so $1="" became a scan target and the existence
+# check aborted with "Error:  not found". Every prior test passed an explicit
+# path, so a bare invocation — the most common real-world one — was untested.
+B34_DIR="$(mktemp -d)"
+printf 'const value = 1;\nexport default value;\n' > "${B34_DIR}/clean.ts"
+B34_OUT="$( (cd "$B34_DIR" && bash "$SCAN" 2>&1) )"
+B34_RC=$?
+assert_true "no-arg invocation exits 0 on a clean tree" "$B34_RC"
+assert_not_contains "$B34_OUT" "not found" "no-arg invocation does not abort with a path error"
+rm -rf "$B34_DIR"
+
+print_test_header "B35 — SC-15 fires when a lockfile exists but is untracked (F-107-02)"
+# Regression: the tracking branch was dead code (`return 0` on both paths), so
+# an untracked lockfile passed silently. Assert the NEGATIVE case.
+B35_DIR="$(mktemp -d)"
+(
+  cd "$B35_DIR" || exit 1
+  git init -q . && git config user.email t@t.t && git config user.name t
+  mkdir -p tracked untracked ignored
+  for d in tracked untracked ignored; do
+    echo '{"name":"x"}' > "$d/package.json"
+    echo '{"lockfileVersion":3}' > "$d/package-lock.json"
+  done
+  echo "ignored/package-lock.json" > .gitignore
+  git add .gitignore tracked untracked/package.json ignored/package.json && git commit -qm init
+)
+B35_UNTRACKED="$(bash "$SCAN" "${B35_DIR}/untracked" 2>/dev/null || true)"
+B35_TRACKED="$(bash "$SCAN" "${B35_DIR}/tracked" 2>/dev/null || true)"
+B35_IGNORED="$(bash "$SCAN" "${B35_DIR}/ignored" 2>/dev/null || true)"
+assert_contains "$B35_UNTRACKED" "SC-15" "untracked lockfile raises SC-15"
+assert_not_contains "$B35_TRACKED" "SC-15" "tracked lockfile does not raise SC-15"
+# acp.review.md SC-15 permits gitignored lockfiles in framework/protocol
+# projects (M55 G-001). A deliberate .gitignore entry is not a finding — and the
+# repo's own negative review-corpus fixture depends on this exemption.
+assert_not_contains "$B35_IGNORED" "SC-15" "gitignored lockfile does not raise SC-15 (M55 G-001 qualifier)"
+rm -rf "$B35_DIR"
+
+print_test_header "B36 — baseline excludes inline-suppressed findings (F-107-03)"
+# Regression: baseline capture ran BEFORE the inline-suppression check, so an
+# acp-review-ignore'd finding was written into the baseline anyway — making the
+# suppression permanent once the comment was removed.
+B36_DIR="$(mktemp -d)"
+cat > "${B36_DIR}/s.ts" <<'TSEOF'
+// acp-review-ignore: EH-02 - intentional no-op for probe teardown
+try { teardown(); } catch (e) {}
+try { other(); } catch (e) {}
+TSEOF
+( cd "$B36_DIR" && bash "$SCAN" --write-baseline bl.json . >/dev/null 2>&1 ) || true
+B36_LINES="$(python3 -c "
+import json
+d = json.load(open('${B36_DIR}/bl.json'))
+print(','.join(str(e.get('line')) for e in d['entries'] if e.get('rule') == 'EH-02'))
+" 2>/dev/null || echo ERROR)"
+assert_equals "3" "$B36_LINES" "baseline records only the un-suppressed EH-02 (line 3, not line 2)"
+rm -rf "$B36_DIR"
+
+print_test_header "B37 — JSON stays valid when a message contains '},{' (F-107-04)"
+# Regression: `sed 's/},{/},\n{/g'` split on the delimiter wherever it appeared,
+# including INSIDE a finding message, injecting a raw newline into a JSON string
+# literal. Broken on BSD sed (literal 'n') and on GNU sed (invalid JSON).
+B37_BODY='{"severity":"HIGH","file":"a.ts","line":1,"rule":"X-01","message":"bad token },{ here"},{"severity":"LOW","file":"b.ts","line":2,"rule":"X-02","message":"ok"}'
+# shellcheck source=../agent/scripts/acp.integrity-output.sh
+source "${PROJECT_ROOT}/agent/scripts/acp.integrity-output.sh"
+B37_JSON="$( { printf '{\n  "findings": [\n'; printf '%s' "$B37_BODY" | ig_format_json_array_body; printf '\n  ]\n}\n'; } )"
+python3 -c "import json,sys; d=json.load(sys.stdin); sys.exit(0 if len(d['findings'])==2 else 1)" <<< "$B37_JSON" >/dev/null 2>&1
+assert_true "formatted JSON array parses and preserves both findings" $?
+
 print_suite_summary
