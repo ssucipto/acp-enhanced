@@ -2,7 +2,7 @@
 **Version:** 2.3 (Implemented + Active Roadmap)
 **Date:** 2026-05-01 (updated 2026-06-15)
 **Author:** Project Owner
-**Status:** ✅ Core implemented — current release v6.29.0 (M83 deterministic local review engine shipped; see `agent/progress.yaml` and `CHANGELOG.md` for current milestone state)
+**Status:** ✅ Core implemented — current release **v6.29.2** (M83 deterministic review engine + M84 `review.rule_overrides`; see `agent/progress.yaml` and `CHANGELOG.md` for current milestone state)
 **Forked from:** prmichaelsen/agent-context-protocol
 
 > **Note (2026-06-15):** This PRD describes the original vision for ACP Enhanced (May 2026)
