@@ -295,7 +295,7 @@ bash agent/scripts/acp.review-scan.sh --include-tests tests/fixtures/review-corp
 | Rule ID | Rule | Severity | Scope |
 |---------|------|----------|-------|
 | SC-14 | No dependencies with known HIGH/CRITICAL CVEs — enforce via `npm audit --audit-level=high` | HIGH | ALL |
-| SC-15 | Lock files committed and kept in sync for reproducible builds. May be gitignored in framework/protocol projects where lockfiles are development-only.) | HIGH | ALL |
+| SC-15 | Lock files committed and kept in sync for reproducible builds. Phase 1 raises SC-15 when no lockfile exists, or when one exists but is **untracked and not gitignored** (an accident that breaks `npm ci`). A deliberately gitignored lockfile is exempt — framework/protocol projects where lockfiles are development-only (M55 G-001). Outside a git work tree the rule asserts nothing. | HIGH | ALL |
 
 #### 6f — Cryptography (OWASP A04:2025)
 
@@ -473,7 +473,7 @@ When an optional analyzer is absent, the scanner stays silent and that rule rema
 `/acp-review` now ships the minimum controls needed to adopt the scanner on an existing codebase without disabling whole rules:
 
 - `--baseline <file>` suppresses previously accepted findings by `rule + file + normalized snippet hash`, so unrelated line shifts do not invalidate the entry.
-- `--write-baseline <file>` writes the current findings into a reusable baseline file.
+- `--write-baseline <file>` writes the current findings into a reusable baseline file. Only findings that are still **active** are captured: a finding suppressed by a disabled `rule_override` or by an inline `acp-review-ignore` comment is **not** written to the baseline, so removing that comment later re-surfaces the issue instead of leaving it permanently hidden behind the baseline. Findings suppressed by an **existing** `--baseline` are still carried forward, so re-baselining never drops previously accepted entries.
 - Inline suppression is supported on the same line or the immediately preceding line:
 
 ```ts

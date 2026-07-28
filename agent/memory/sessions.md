@@ -3,6 +3,101 @@
 # DO NOT edit manually — updated by /acp-commit
 
 - date: 2026-07-28
+  executor: claude-opus
+  branch: develop
+  tasks: [audit-110, validate-sync-update-commit]
+  done:
+    - adr-20-hook-binding-violation-found-and-enforced
+    - three-dangling-precommit-hooks-resolved
+    - validate-step-2g-documented
+    - progress-recent-work-and-next-steps-updated
+  deferred:
+    - marker-coverage-24-percent-repo-wide → out-of-scope-m66-rescope
+  key_fact: >
+    /acp-validate passed clean, but a manual ADR-20 cross-check found 3 of 4
+    `hooks.pre_commit` task_ids in constraints.yml resolved to nothing —
+    pre-commit-integrity-phase1, ci-npm-ignore-scripts and post-milestone-sweep
+    were never added to recurring_tasks. ADR-20 explicitly says validation "can
+    enforce that every hook task_id resolves to a real recurring_task"; nothing
+    ever did, so the hooks silently fired nothing since M62. Added the 3 registry
+    entries plus validateHookTaskBindings(). Lesson: an ADR that describes an
+    enforcement mechanism is not enforcement — grep for the check before trusting
+    the decision. Also measured: @acp.meta marker coverage is 277/1171 (~24%)
+    repo-wide, not the "100% across 232 files repo-wide" sessions.md claims —
+    M66 covered entity docs only (scripts 2/51, commands 0/73, reports 0/115).
+
+- date: 2026-07-28
+  executor: claude-opus
+  branch: develop
+  tasks: [audit-108-remediation]
+  done:
+    - progress-yaml-strict-parse-gate-restored
+    - sc2046-eliminated-across-review-and-integrity-suites
+    - suppressed-write-audit-mutating-class-now-empty
+    - package-update-remove-flag-made-literal-and-symmetric
+  deferred: []
+  key_fact: >
+    loadProgressSafe() caught js-yaml's duplicate-key exception, printed a
+    WARNING, and fell back to line-based parsing — so the original 191-key
+    progress.yaml incident would recur with a green CI exit code. A resilience
+    fallback that swallows the error it was built for is not resilience, it is a
+    disabled check; the fallback now stays for other checks but a strict-parse
+    gate fails the run. Audited all 70 `2>/dev/null || true` sites in
+    agent/scripts: the mutating-write class (the A-108-07 class) is now empty —
+    the rest are read-only probes, optional copies, or idempotent chmod.
+
+- date: 2026-07-28
+  executor: claude-opus
+  branch: develop
+  tasks: [audit-108, G-107-02, G-107-07, G-107-08]
+  done:
+    - audit-108-today-work-gap-analysis-and-review
+    - all-three-audit-107-carryovers-closed
+    - memory-duplicate-key-gate-shipped-with-unit-tests
+    - four-preexisting-memory-corruptions-repaired
+    - corpus-fixtures-tracked-fresh-clone-verified
+    - package-update-sed-newline-replaced-with-awk
+  deferred:
+    - integrity-test-sc2046-findings -> pre-existing-out-of-scope
+  key_fact: >
+    Building the G-107-02 duplicate-key validator immediately exposed FOUR real
+    pre-existing memory corruptions that every prior validation had passed: a
+    lessons.md entry where the audit-070 lesson was silently shadowed by a
+    version-bump lesson that lost its `- date:` header, and three
+    audit-carryovers entries with duplicate stamp keys — one where
+    `fix_applied_date: null` overrode a real date while `status: fixed`.
+    YAML last-wins makes this class invisible: every key-presence check passes
+    and the entry count absorbs the merge. The validator must FAIL, not warn.
+    Second lesson: my first implementation of that validator was itself wrong,
+    splitting on `- date:` and false-positiving on sessions.md's legitimate
+    `- type: weekly-summary` compaction blocks — split on any list marker.
+
+- date: 2026-07-28
+  executor: claude-opus
+  branch: develop
+  tasks: [F-107-01, F-107-02, F-107-03, F-107-04]
+  done:
+    - upstream-port-of-coderabbit-pr13-findings
+    - positional-args-fix-across-8-scanners
+    - sc15-lockfile-tracking-check-repaired
+    - json-array-formatting-desed-portable-helper
+    - baseline-capture-moved-after-inline-suppression
+    - regression-tests-b34-b37-added
+  deferred:
+    - executor-default-change → rejected-upstream-see-key_fact
+  key_fact: >
+    CodeRabbit findings on a DOWNSTREAM consumer repo (PR #13) were real upstream
+    bugs in ACP's own v6.29.2 scripts — 3 of 4 ported back here; the 4th
+    (task.schema.yaml executor default deepseek-v4-flash → composer-2.5) was
+    correctly REJECTED upstream: composer-2.5 appears nowhere in
+    routing/taxonomy.yml, so that fix encodes the consumer's model policy and
+    belongs in the consumer's overrides, not in the framework default.
+    Finding #1 was materially worse upstream than reported: 6 of 8 scanners
+    aborted on a bare no-argument invocation (verified by e2e B26, which fails
+    on exactly those 6 at HEAD). 59 review-scan E2E assertions
+    passed throughout because every one passed an explicit path.
+
+- date: 2026-07-28
   executor: cursor
   branch: develop
   tasks: [audit-106, release-prep-v6.29.2]
