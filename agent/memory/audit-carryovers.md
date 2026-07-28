@@ -466,8 +466,9 @@ carryovers:
     fix_target: "Run /acp-decide to capture this project's key ADRs; reconstruct 6 from wiki/patterns/commit history. De-prioritized vs code bugs per audit-066."
     status: fixed
     fix_applied_date: 2026-06-15
-    verified_in_audit: "073"
-    verified_in_audit: "066 (reclassified)"
+    # audit-108: was two verified_in_audit keys ("073" then "066 (reclassified)");
+    # merged — last-wins meant only the reclassification was ever read.
+    verified_in_audit: "073; 066 (reclassified)"
     escalated_to: null
   - audit_id: 65
     finding_id: CRIT-065-002
@@ -712,8 +713,8 @@ carryovers:
     fix_target: "Add acp.meta-scan.sh to route-173 pipefail scope, or upgrade its header to set -euo pipefail."
     status: fixed
     fix_applied_date: 2026-06-15
-    verified_in_audit: "073"
-    verified_in_audit: audit-093
+    # audit-108: merged duplicate verified_in_audit keys ("073" then audit-093).
+    verified_in_audit: "073; audit-093"
     escalated_to: null
 
   # ── AUDIT-069 FINDINGS — M57 & M58 POST-SYNC RE-AUDIT (2026-06-15) ───────────
@@ -783,10 +784,11 @@ carryovers:
     description: "Residual of audit-068 F-068-01, now scoped to M54 only. tasks_total: 0 with active/30% is itself inconsistent."
     fix_target: "Create milestone-54-ci-cd-gitflow.md or remove the pointer; fix tasks_total vs progress."
     status: fixed
+    # audit-108: had duplicate fix_applied_date (2026-06-15 then null) and
+    # verified_in_audit ("073" then audit-093). Last-wins meant `null` shadowed
+    # the real date while status was `fixed` — self-contradictory. Real date kept.
     fix_applied_date: 2026-06-15
-    verified_in_audit: "073"
-    fix_applied_date: null
-    verified_in_audit: audit-093
+    verified_in_audit: "073; audit-093"
     escalated_to: null
   - audit_id: 69
     finding_id: F-069-10
@@ -2985,4 +2987,39 @@ carryovers:
     planned_in: M83
     fix_applied_date: 2026-07-27
     verified_in_audit: domain.yml#acp.review-scan.test.sh
+    escalated_to: null
+
+  # ── AUDIT-107 FINDINGS — F-107 REMEDIATION VERIFICATION (2026-07-28) ────────
+  - audit_id: 107
+    finding_id: G-107-02
+    severity: high
+    file: scripts/acp-validate.ts
+    finding: "acp-validate.ts does not detect duplicate keys within a sessions.md entry — a corrupted entry validated clean"
+    description: "During audit-107 a sessions.md edit deleted the prior entry's header, merging two entries into one block with duplicate done: and key_fact: keys. acp-validate.ts reported '21 entries — all valid' and exited 0. Entry count silently absorbed the merge (21 before and during corruption; 22 after repair). This is the second duplicate-key incident after the 191-key progress.yaml failure; the validator is the only guard between an agent edit and silent memory loss."
+    fix_target: "Add per-entry duplicate-key detection for all memory-layer YAML files (sessions.md, lessons.md, patterns.md, decisions.md) in acp-validate.ts. Fail on duplicates rather than last-wins."
+    status: fixed
+    fix_applied_date: 2026-07-28
+    verified_in_audit: "108"
+    escalated_to: null
+  - audit_id: 107
+    finding_id: G-107-07
+    severity: medium
+    file: tests/fixtures/review-corpus/
+    finding: "Review corpus depends on 3 untracked, gitignored lockfile fixtures — CI measures a different corpus than local runs"
+    description: "negative/security-project/package-lock.json, negative/errors-batch/package-lock.json and positive/errors-batch/package-lock.json are matched by .gitignore:31 'package-lock.json' and are not committed. On a fresh clone the SC-15 negative case has no lockfile, so 'lockfile is missing' fires as a false positive: SC-15 precision 100% -> 50%, aggregate 97.9%. This still clears the 90% CI gate, so the erosion is masked. acp.review.md:66 claims corpus figures are 'intentionally reproducible' — currently untrue in CI."
+    fix_target: "Add a !tests/fixtures/** negation to .gitignore (mirroring the existing !scripts/package-lock.json pattern) and commit the 3 fixtures. Re-run acp.review-measure.sh --ci to confirm 100%/100% on a clean checkout."
+    status: fixed
+    fix_applied_date: 2026-07-28
+    verified_in_audit: "108"
+    escalated_to: null
+  - audit_id: 107
+    finding_id: G-107-08
+    severity: low
+    file: agent/scripts/acp.package-update.sh
+    finding: "acp.package-update.sh:337 uses \\n in a sed replacement — same BSD portability class as F-107-04"
+    description: "_sed_i (agent/scripts/acp.common.sh:6) makes the -i flag portable but not the replacement text. Line 337 inserts 'experimental: true' via s/.../\\1\\n          experimental: true/. Darwin 25 BSD sed honours \\n in the replacement (verified) and GNU sed always has, so this is latent rather than broken — but it would emit a literal 'n' on older macOS, silently corrupting manifest.yaml."
+    fix_target: "Replace the \\n-in-replacement sed with a portable insert (sed 'a\\' append, awk, or a python3 helper). Audit acp.package-update.sh:340 in the same pass."
+    status: fixed
+    fix_applied_date: 2026-07-28
+    verified_in_audit: "108"
     escalated_to: null

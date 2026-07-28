@@ -19,6 +19,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.29.3] — 2026-07-28
+
+### Added (audit-108 remediation — memory integrity gates)
+- **Memory duplicate-key gate** — `findDuplicateEntryKeys()` + `validateMemoryDuplicateKeys()`
+  in `scripts/acp-validate.ts` fail the run when a `sessions.md` / `lessons.md` /
+  `patterns.md` / `audit-carryovers.md` entry contains a repeated top-level key. A merged
+  entry (one that lost its `- date:` header) previously satisfied every key-presence check
+  while YAML last-wins silently shadowed the earlier entry's values. Shipping this found
+  **four real pre-existing corruptions**, including a lesson that had been shadowed since
+  June and a carryover whose `fix_applied_date: null` overrode a real date while
+  `status: fixed`. 4 unit tests added.
+- **`progress.yaml` strict-parse gate** — `validateProgressYamlParses()` restores a hard
+  failure on duplicate mapping keys. `loadProgressSafe()` catches the parse error and falls
+  back to line-based extraction, which meant the original 191-duplicate-key incident would
+  now degrade to a console warning with a green exit code.
+
+### Fixed (audit-108)
+- `agent/memory/lessons.md` — split a merged entry that was silently shadowing the audit-070
+  "false assurance" lesson.
+- `agent/memory/audit-carryovers.md` — merged duplicate stamp keys in three entries.
+- `acp.review-scan.sh` — SC-15 no longer fires on a **gitignored** lockfile, honouring the
+  M55 G-001 framework/protocol qualifier documented in `acp.review.md`; warns once when
+  YM-01/YM-02 are skipped for missing `scripts/node_modules` instead of silently
+  understating recall.
+- `acp.package-update.sh` — `_insert_experimental_flag()` / `_remove_experimental_flag()`
+  replace sed forms that were non-idempotent and matched the package name as a regex
+  (`acp.foo` also matched `acpXfoo`).
+- `.gitignore` — `!tests/fixtures/**/package-lock.json` so review-corpus fixtures are
+  tracked and CI measures the same corpus as local runs.
+- Quoted 7 unquoted `$(...)` test assertions (`SC2046`) across the review and integrity
+  E2E suites.
+
+### Fixed (F-107 — CodeRabbit PR#13 findings ported upstream)
+- **Scanner positional arguments (F-107-01)** — all 8 integrity/review scanners restored
+  leftover paths with `set -- "${IG_REMAINING_ARGS[@]:-}"`, which expands an *empty* array
+  to a single empty-string argument. 6 of 8 scanners aborted with `Error:  not found` on a
+  bare no-argument invocation. Now guarded on `${#arr[@]} -gt 0` with a bare `set --`
+  otherwise. (`acp.review-scan.sh`, `acp.unicode-scan.sh`, `acp.entropy-scan.sh`,
+  `acp.taint-scan.sh`, `acp.pattern-scan.sh`, `acp.dependency-diff.sh`,
+  `acp.git-provenance.sh`, `acp.network-whitelist-validate.sh`)
+- **SC-15 lockfile tracking (F-107-02)** — the `git ls-files` check was dead code
+  (`return 0` on both branches), so an untracked lockfile passed silently. Now resolves the
+  repo root from the lockfile's own directory (cwd-independent) and raises SC-15 only when
+  the lockfile is untracked **and not gitignored**, preserving the M55 G-001 framework
+  exemption. Silent outside a git work tree.
+- **Portable JSON array formatting (F-107-04)** — replaced `sed 's/},{/},\n{/g'` with
+  `ig_format_json_array_body`. The pattern emitted a literal `n` on BSD sed (macOS before
+  Darwin 25) *and*, on every platform, matched `},{` occurring inside a finding message,
+  injecting a raw newline into a JSON string literal and producing invalid JSON.
+- **Baseline capture ordering (F-107-03)** — `ig_emit_finding` recorded baseline entries
+  before evaluating inline `acp-review-ignore` suppressions, so suppressed findings entered
+  `--write-baseline` output and became permanently hidden once the comment was removed.
+  Suppression is now evaluated first.
+
+### Notes (F-107)
+- The fourth CodeRabbit finding (`task.schema.yaml` executor default
+  `deepseek-v4-flash` → `composer-2.5`) was **not** applied upstream: `composer-2.5` is not
+  in `agent/routing/taxonomy.yml`. That change encodes a consumer's model policy and belongs
+  in project-level overrides, not the framework default.
+- Regression coverage added: `e2e/acp.review-scan.test.sh` B34–B37 and
+  `e2e/acp.integrity.test.sh` B26 (all 8 scanners). Verified failing at the pre-fix commit.
+
 ## [6.29.2] — 2026-07-28
 
 ### Fixed (audit-106 — M84 remediation)

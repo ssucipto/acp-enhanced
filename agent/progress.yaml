@@ -1,6 +1,6 @@
 project:
   name: agent-context-protocol
-  version: 6.29.2
+  version: 6.29.3
   started: 2026-02-16
   status: active
   current_milestone: M81
@@ -6319,6 +6319,16 @@ tasks:
     notes: review-002; CLI ≠ ADR-22 gate
 recent_work:
 - date: 2026-07-28
+  description: "F-107 CodeRabbit remediation ported upstream + audits 107-110 — memory integrity gates and 4 real corruptions repaired"
+  items:
+  - "\u2705 F-107-01..04: 8 scanners' positional-arg guard, SC-15 tracking (was dead code), portable JSON array formatting, baseline-after-suppression ordering"
+  - "\u2705 CodeRabbit finding #4 (executor default \u2192 composer-2.5) REJECTED upstream \u2014 not in taxonomy.yml; consumer policy belongs in project overrides"
+  - "\u2705 3 new acp-validate gates: memory duplicate-key, progress.yaml strict-parse, ADR-20 hook bindings \u2014 all unit-tested"
+  - "\u2705 4 pre-existing memory corruptions repaired (shadowed audit-070 lesson; 3 carryover stamp-key duplicates)"
+  - "\u2705 3 dangling ADR-20 pre_commit hooks resolved \u2014 recurring_tasks 5 \u2192 8"
+  - "\u2705 Regression tests B34-B37 + B26 (all 8 scanners); corpus fixtures tracked; 0 SC2046 across suites"
+  - "\u26a0\ufe0f M81 tasks 270-274 still blocked on real CodeRabbit fixture"
+- date: 2026-07-28
   description: "M84 audit-106 remediation + v6.29.2 release prep — all actionable carryovers closed"
   items:
   - "✅ audit-106 fixed: override preload in all emitters, B32/B33 E2E, PyYAML warning, review-doc sections"
@@ -9213,7 +9223,8 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- 'Ready for mainline: push develop → open PR develop→mainline (v6.29.2; M83+M84 shipped). Tag v6.29.2.'
+- 'Ready for mainline: push develop → open PR develop→mainline (v6.29.3; F-107 remediation
+  + audits 107-110 memory integrity gates). Tag v6.29.3.'
 - 'M81 IN PROGRESS: task-269 ✅ (ADR-22). BLOCKED 270-274 on tests/fixtures/coderabbit-findings-sample.json
   (sanitized real CodeRabbit PR export). current_milestone remains M81.'
 - 'Ops toward M81 gate artifact: sanitize CodeRabbit findings export → tests/fixtures/coderabbit-findings-sample.json'
@@ -9268,6 +9279,40 @@ recurring_tasks:
     last_findings_count: 0
     status: current
     description: Pre-commit ACP rule file scan for Unicode injection
+  - id: pre-commit-integrity-phase1
+    command: /acp-integrity --fast --ci
+    trigger: on-commit
+    executor: deepseek-v4-pro
+    last_run: null
+    next_due: null
+    last_findings_count: 0
+    status: current
+    description: 'Pre-commit integrity phase 1 — fast unicode+entropy scan. Restored
+      in M62 (audit-062 F-062-01) and bound by constraints.yml hooks.pre_commit;
+      the registry entry was never created, leaving the hook a dangling reference
+      until audit-110.'
+  - id: ci-npm-ignore-scripts
+    command: /acp-integrity --rules dependencies --ci
+    trigger: on-ci
+    executor: local-script
+    last_run: null
+    next_due: null
+    last_findings_count: 0
+    status: current
+    description: 'CI supply-chain isolation — npm install must run with
+      --ignore-scripts (enforced in .github/workflows/ci.yaml). Bound by
+      constraints.yml hooks.pre_commit per ADR-20.'
+  - id: post-milestone-sweep
+    command: /acp-validate
+    trigger: on-milestone-complete
+    executor: local-script
+    last_run: null
+    next_due: null
+    last_findings_count: 0
+    status: current
+    description: 'Post-milestone deliverables sweep via
+      agent/scripts/acp.post-milestone-sweep.sh, fired after /acp-proceed
+      --complete. Bound by constraints.yml hooks.pre_commit per ADR-20.'
   - id: monthly-dependency-audit
     command: /acp-integrity --rules dependencies
     frequency: monthly

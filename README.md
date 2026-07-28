@@ -1,6 +1,6 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.29.2-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.29.3-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
 [![Milestones](https://img.shields.io/badge/milestones-74%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-72%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
