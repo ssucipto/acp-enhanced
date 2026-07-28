@@ -46,6 +46,26 @@ emit_review_finding() {
   ig_emit_finding "$file" "$line" "$rule" "$message" "$severity"
 }
 
+review_rg_file() {
+  local pattern="$1"
+  local file="$2"
+  if command -v rg >/dev/null 2>&1; then
+    rg -q "$pattern" "$file"
+  else
+    grep -qE "$pattern" "$file"
+  fi
+}
+
+review_rg_dir() {
+  local pattern="$1"
+  local dir="$2"
+  if command -v rg >/dev/null 2>&1; then
+    rg -q "$pattern" "$dir"
+  else
+    grep -RqE "$pattern" "$dir" 2>/dev/null
+  fi
+}
+
 normalize_repo_path() {
   local path="$1"
   if [[ "$path" == "${REPO_ROOT}/"* ]]; then
@@ -237,7 +257,7 @@ scan_shell_portability() {
   local line_num=0
   local line=""
 
-  if rg -q 'Darwin|uname -s' "$file" && rg -q "sed -i ''" "$file" && rg -q 'sed -i( |")' "$file"; then
+  if review_rg_file 'Darwin|uname -s' "$file" && review_rg_file "sed -i ''" "$file" && review_rg_file 'sed -i( |")' "$file"; then
     has_guard=true
   fi
 
@@ -261,7 +281,7 @@ scan_shell_exit_trap() {
   if ! is_sh_allowlisted "$file"; then
     return 0
   fi
-  if rg -q 'trap - EXIT' "$file"; then
+  if review_rg_file 'trap - EXIT' "$file"; then
     return 0
   fi
 
@@ -295,7 +315,7 @@ scan_command_directive() {
   local file="$1"
   case "$file" in
     */agent/commands/*.md|*/commands/*.md)
-      if [[ "$(basename "$file")" != "command.template.md" ]] && ! rg -q 'Agent Directive' "$file"; then
+      if [[ "$(basename "$file")" != "command.template.md" ]] && ! review_rg_file 'Agent Directive' "$file"; then
         emit_review_finding "$file" "1" "ACP-01" "command doc missing Agent Directive header" "MEDIUM"
       fi
       ;;
@@ -402,10 +422,10 @@ scan_unhandled_rejection_rule() {
   local dir="$1"
   local package_file="${dir%/}/package.json"
   [[ -f "$package_file" ]] || return 0
-  if ! rg -q 'express|app\.listen|res\.json|router\.|useState\(|useEffect\(' "$dir"; then
+  if ! review_rg_dir 'express|app\.listen|res\.json|router\.|useState\(|useEffect\(' "$dir"; then
     return 0
   fi
-  if rg -q "process\\.on\\(['\"]unhandledRejection['\"]" "$dir"; then
+  if review_rg_dir "process\\.on\\(['\"]unhandledRejection['\"]" "$dir"; then
     return 0
   fi
   emit_review_finding "$package_file" "1" "EH-09" "project lacks a global unhandledRejection handler" "HIGH"
