@@ -405,27 +405,31 @@ rm -rf "$B34_DIR"
 print_test_header "B35 — SC-15 fires when a lockfile exists but is untracked (F-107-02)"
 # Regression: the tracking branch was dead code (`return 0` on both paths), so
 # an untracked lockfile passed silently. Assert the NEGATIVE case.
+# All three cases are covered by ONE scan of the fixture root rather than three
+# scans of its subdirectories: on Windows each scanner invocation is expensive
+# enough that three of them pushed this suite past the 180s per-test timeout.
+# Directory names are deliberately non-overlapping ("lock-tracked" is not a
+# substring of "lock-untracked") so assert_not_contains cannot match the wrong
+# case.
 B35_DIR="$(mktemp -d)"
 (
   cd "$B35_DIR" || exit 1
   git init -q . && git config user.email t@t.t && git config user.name t
-  mkdir -p tracked untracked ignored
-  for d in tracked untracked ignored; do
+  mkdir -p lock-tracked lock-untracked lock-ignored
+  for d in lock-tracked lock-untracked lock-ignored; do
     echo '{"name":"x"}' > "$d/package.json"
     echo '{"lockfileVersion":3}' > "$d/package-lock.json"
   done
-  echo "ignored/package-lock.json" > .gitignore
-  git add .gitignore tracked untracked/package.json ignored/package.json && git commit -qm init
+  echo "lock-ignored/package-lock.json" > .gitignore
+  git add .gitignore lock-tracked lock-untracked/package.json lock-ignored/package.json && git commit -qm init
 )
-B35_UNTRACKED="$(bash "$SCAN" "${B35_DIR}/untracked" 2>/dev/null || true)"
-B35_TRACKED="$(bash "$SCAN" "${B35_DIR}/tracked" 2>/dev/null || true)"
-B35_IGNORED="$(bash "$SCAN" "${B35_DIR}/ignored" 2>/dev/null || true)"
-assert_contains "$B35_UNTRACKED" "SC-15" "untracked lockfile raises SC-15"
-assert_not_contains "$B35_TRACKED" "SC-15" "tracked lockfile does not raise SC-15"
+B35_OUT="$(bash "$SCAN" "$B35_DIR" 2>/dev/null | grep "SC-15" || true)"
+assert_contains "$B35_OUT" "lock-untracked/package.json" "untracked lockfile raises SC-15"
+assert_not_contains "$B35_OUT" "lock-tracked/package.json" "tracked lockfile does not raise SC-15"
 # acp.review.md SC-15 permits gitignored lockfiles in framework/protocol
 # projects (M55 G-001). A deliberate .gitignore entry is not a finding — and the
 # repo's own negative review-corpus fixture depends on this exemption.
-assert_not_contains "$B35_IGNORED" "SC-15" "gitignored lockfile does not raise SC-15 (M55 G-001 qualifier)"
+assert_not_contains "$B35_OUT" "lock-ignored/package.json" "gitignored lockfile does not raise SC-15 (M55 G-001 qualifier)"
 rm -rf "$B35_DIR"
 
 print_test_header "B36 — baseline excludes inline-suppressed findings (F-107-03)"
