@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.28.2
+version: 6.29.2
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
@@ -181,6 +181,10 @@ contents:
       description: Standards enforcement for code quality, security, and consistency — OWASP, TypeScript, API convention rules
       scripts:
         - acp.review-scan.sh
+        - acp.review-measure.sh
+        - acp.entropy-scan.sh
+        - acp.gitleaks.sh
+        - acp.dupehound.sh
     
     - name: acp.integrity.md
       description: AI code integrity & trustworthiness — hidden Unicode, exfiltration, supply chain, CI injection detection
@@ -492,6 +496,14 @@ contents:
       description: Optional CodeRabbit detection helpers — coderabbit_available/active (M78, ADR-21)
       type: utility
 
+    - name: acp.gitleaks.sh
+      description: Optional gitleaks detection helpers for review-scan SC-01
+      type: utility
+
+    - name: acp.dupehound.sh
+      description: Optional dupehound detection helpers and assisted install for CH-05
+      type: utility
+
     # Installation Scripts
     - name: acp.install.sh
       description: ACP installation script
@@ -582,6 +594,14 @@ contents:
 
     - name: acp.review-scan.sh
       description: Review scan utilities for /acp-review command
+      type: internal
+
+    - name: acp.review-measure.sh
+      description: Review scan corpus precision/recall measurement
+      type: internal
+
+    - name: acp.review-rule-overrides.py
+      description: Load review.rule_overrides preferences for scanner emitters
       type: internal
 
     - name: acp.taint-scan.sh

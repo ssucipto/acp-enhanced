@@ -203,9 +203,10 @@ main() {
 
   # Add tags
   if [ ${#ADD_TAGS[@]} -gt 0 ]; then
-    local current_tags
-    current_tags=$(yaml_query ".projects.${PROJECT_NAME}.tags" 2>/dev/null || echo "")
     for tag in "${ADD_TAGS[@]}"; do
+      # F-M82-03: re-query tags each iteration after prior mutations
+      local current_tags
+      current_tags=$(yaml_query ".projects.${PROJECT_NAME}.tags" 2>/dev/null || echo "")
       # Check if tag already exists by searching the raw YAML file
       # (yaml_query can't reliably return array element values)
       local registry_path

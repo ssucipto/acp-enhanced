@@ -60,12 +60,14 @@ assert_contains "$(cat "${CMD_FILE}")" "acp-validate" "acp-validate cross-linked
 
 # ── Behavioral Assertions (7) ─────────────────────────────────────────────────
 
-# B1: Command doc has --diff and --self flags documented
-print_test_header "B1 — --diff and --self flags documented"
+# B1: Command doc has core scanner flags documented
+print_test_header "B1 — --diff, --self, and baseline flags documented"
 assert_contains "$(cat "${CMD_FILE}")" "\`--diff\`" "--diff flag in backticks"
 assert_contains "$(cat "${CMD_FILE}")" "git diff --name-only" "git diff reference with --diff"
 assert_contains "$(cat "${CMD_FILE}")" "\`--self\`" "--self flag in backticks"
 assert_contains "$(cat "${CMD_FILE}")" "agent/scripts/" "--self references agent/scripts/"
+assert_contains "$(cat "${CMD_FILE}")" "\`--baseline <file>\`" "--baseline flag documented"
+assert_contains "$(cat "${CMD_FILE}")" "\`--write-baseline <file>\`" "--write-baseline flag documented"
 
 # B2: Language Scope section present
 print_test_header "B2 — Language Scope section present"
@@ -202,9 +204,18 @@ cat > "${FIXTURE_DIR}/snake-case.ts" << 'TSEOF'
 const user_name = "test";
 TSEOF
 
-print_test_header "B12b — Gate Policy section in command doc"
+print_test_header "B12b — Gate Policy and standards coverage sections in command doc"
 assert_contains "$(cat "${CMD_FILE}")" "Phase 1 Gate Policy" "Phase 1 Gate Policy section present"
-assert_contains "$(cat "${CMD_FILE}")" "8 rules" "8 Phase 1 rules documented"
+assert_contains "$(cat "${CMD_FILE}")" "42 built-in deterministic" "expanded Phase 1 deterministic count documented"
+assert_contains "$(cat "${CMD_FILE}")" "Rule Ownership" "Rule ownership section present"
+assert_contains "$(cat "${CMD_FILE}")" "/acp-integrity" "A08 ownership cross-link documented"
+assert_contains "$(cat "${CMD_FILE}")" "Standards Coverage" "Standards Coverage section present"
+assert_contains "$(cat "${CMD_FILE}")" "A08 Software and Data Integrity Failures" "A08 coverage row present"
+assert_contains "$(cat "${CMD_FILE}")" "acp-review-ignore" "inline suppression convention documented"
+assert_contains "$(cat "${CMD_FILE}")" "review.rule_overrides" "per-rule override preference documented"
+assert_contains "$(cat "${CMD_FILE}")" "review-legacy-adoption.md" "legacy adoption wiki linked"
+assert_contains "$(cat "${CMD_FILE}")" "CodeRabbit Augmentation" "CodeRabbit augmentation section present"
+assert_contains "$(cat "${CMD_FILE}")" "Scanner Limitations" "scanner limitations documented"
 
 print_test_header "B17 — review-scan detects TS-02 missing return type"
 TS2_OUT=$(bash "${REVIEW_SCAN}" "${FIXTURE_DIR}/no-return-type.ts" 2>&1 || true)

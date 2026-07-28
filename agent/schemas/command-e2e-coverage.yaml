@@ -302,6 +302,7 @@ commands:
     tier: 3
     suites:
       - e2e/acp.review.test.sh
+      - e2e/acp.review-scan.test.sh
       - e2e/acp.tier3-memory-knowledge.test.sh
       - e2e/acp.command-docs.test.sh
   acp.route:
