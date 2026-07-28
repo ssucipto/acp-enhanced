@@ -18,6 +18,7 @@ import {
   validateMemoryFieldLint,
   validateCarryoverFreshness,
   validateCarryoverAuditStamps,
+  findDuplicateEntryKeys,
   validateScriptRegistration,
   validateBranchProtectionDocs,
   validateSchemaListEntries,
@@ -574,5 +575,63 @@ describe("parseGithubOwnerRepo (F-M82-02)", () => {
   it("rejects unsafe owner/repo tokens", () => {
     expect(parseGithubOwnerRepo("git@github.com:evil;rm/acp-enhanced.git")).toBeNull();
     expect(parseGithubOwnerRepo("https://github.com/../acp-enhanced")).toBeNull();
+  });
+});
+
+describe("findDuplicateEntryKeys (audit-107 G-107-02)", () => {
+  it("returns no duplicates for a well-formed session entry", () => {
+    const entry = [
+      "- date: 2026-07-28",
+      "  executor: claude",
+      "  tasks: [a, b]",
+      "  done:",
+      "    - thing-one",
+      "    - thing-two",
+      "  key_fact: \"all good\"",
+    ].join("\n");
+    expect(findDuplicateEntryKeys(entry)).toEqual([]);
+  });
+
+  it("detects the merged-entry corruption that key-presence checks miss", () => {
+    // Two entries merged because the second lost its `- date:` header. Every
+    // required key is still "present", so includes()-style checks pass while
+    // YAML last-wins silently shadows the first entry's values.
+    const merged = [
+      "- date: 2026-07-28",
+      "  executor: claude",
+      "  tasks: [a]",
+      "  done:",
+      "    - first-entry-work",
+      "  key_fact: \"first\"",
+      "  done:",
+      "    - second-entry-work",
+      "  key_fact: \"second\"",
+    ].join("\n");
+    expect(findDuplicateEntryKeys(merged).sort()).toEqual(["done", "key_fact"]);
+  });
+
+  it("does not treat nested list items or folded-scalar text as keys", () => {
+    const entry = [
+      "- date: 2026-07-28",
+      "  deferred:",
+      "    - task-a → reason: blocked",
+      "    - task-b → reason: blocked",
+      "  key_fact: >",
+      "    some prose that mentions done: and executor: inline",
+    ].join("\n");
+    expect(findDuplicateEntryKeys(entry)).toEqual([]);
+  });
+
+  it("honours the indent parameter for nested lists (audit-carryovers.md)", () => {
+    const entry = [
+      "  - audit_id: 69",
+      "    status: fixed",
+      "    fix_applied_date: 2026-06-15",
+      "    verified_in_audit: \"073\"",
+      "    fix_applied_date: null",
+    ].join("\n");
+    expect(findDuplicateEntryKeys(entry, 2)).toEqual(["fix_applied_date"]);
+    // At the wrong indent nothing matches, so the caller must pass indent.
+    expect(findDuplicateEntryKeys(entry, 0)).toEqual([]);
   });
 });
