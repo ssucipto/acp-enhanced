@@ -5,6 +5,32 @@
 - date: 2026-07-28
   executor: claude-opus
   branch: develop
+  tasks: [audit-110]
+  done:
+    - windows-timeout-root-caused-to-preference-ordering
+    - gitleaks-dupehound-availability-short-circuit-plus-memoisation
+    - windows-600s-timeout-band-aid-reverted
+  deferred:
+    - coderabbit-21s-memoisation -> A-110-04
+    - get_preference-13.8s-profile -> A-110-05
+    - unused-coderabbit-source -> A-110-06
+  key_fact: >
+    The Windows E2E timeout was never a Windows problem or a hang. Every scanner
+    invocation spent ~3s asking whether two optional analyzers were ENABLED
+    before checking whether they were INSTALLED — gitleaks_active() and
+    dupehound_active() each resolved a ~1.5s preference first, then ran a
+    microsecond `command -v`. When the tool is absent the answer is "inactive"
+    for every preference value, so the expensive call could never change it.
+    Reordering took a single-file scan 2.95s -> 0.16s (18x) and
+    acp.review.test.sh 66s -> 3s (22x); the 600s Windows timeout added hours
+    earlier was then reverted as a symptom fix. The tell was sys=1.78s of a 2.95s
+    run — high system time means process/filesystem churn, not computation.
+    Why nobody noticed: the corpus gate measures recall/precision, never time, so
+    a scanner 18x slower than necessary still scores 100%/100%.
+
+- date: 2026-07-28
+  executor: claude-opus
+  branch: develop
   tasks: [audit-110, validate-sync-update-commit]
   done:
     - adr-20-hook-binding-violation-found-and-enforced

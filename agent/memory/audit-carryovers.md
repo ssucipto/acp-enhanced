@@ -3023,3 +3023,38 @@ carryovers:
     fix_applied_date: 2026-07-28
     verified_in_audit: "108"
     escalated_to: null
+
+  # ── AUDIT-110 FINDINGS — WINDOWS TIMEOUT ROOT CAUSE (2026-07-28) ────────────
+  - audit_id: 110
+    finding_id: A-110-04
+    severity: high
+    file: agent/scripts/acp.coderabbit.sh
+    finding: "coderabbit_active() costs 21.5s — _coderabbit_enabled 13.8s + coderabbit_available 5.5s, neither memoised"
+    description: "Same defect class as A-110-01 but in a colder path. coderabbit_active cannot reorder (it must read the preference to know if opted in), so the fix is memoisation plus fixing the underlying preference cost. Not currently on the scan path — acp.review-scan.sh sources the helper but calls nothing from it — so this is latent, not active. Any future caller inherits 21.5s."
+    fix_target: "Memoise _coderabbit_enabled and the config_path lookup the way acp.gitleaks.sh/_dupehound now do; re-measure coderabbit_active."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 110
+    finding_id: A-110-05
+    severity: medium
+    file: agent/scripts/acp.preferences.sh
+    finding: "get_preference (strict) takes 13.8s vs get_preference_or 5.5s for the same key — the preference layer is the deeper root cause"
+    description: "A-110-01 was fixed by not calling the preference layer, which sidesteps rather than solves the problem. Reading a single key should be milliseconds, not seconds. The pure-bash YAML walk shows heavy sys time (process/filesystem churn). Every consumer of preferences pays this."
+    fix_target: "Profile get_preference/get_preference_or; cache the parsed preference set per process, or resolve via a single python3/node pass instead of repeated bash YAML traversal."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 110
+    finding_id: A-110-06
+    severity: low
+    file: agent/scripts/acp.review-scan.sh
+    finding: "acp.review-scan.sh sources acp.coderabbit.sh but calls no coderabbit_* function — unused import"
+    description: "Pulls a helper whose coderabbit_active() costs 21.5s into the scanner's surface for no benefit. Sourcing itself is cheap, so this is hygiene rather than a live cost, but it is one call away from becoming one."
+    fix_target: "Remove the source line from acp.review-scan.sh, or add the CH-05-style call it was presumably added for."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null

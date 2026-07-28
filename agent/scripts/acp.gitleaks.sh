@@ -13,10 +13,19 @@ _gitleaks_repo_root() {
   git rev-parse --show-toplevel 2>/dev/null || echo "."
 }
 
+# Resolving a preference costs ~1.5s (pure-bash YAML walk over the preference
+# layers), so the result is memoised for the life of the process. Every scanner
+# invocation previously paid it at least once (audit-110).
+_ACP_GITLEAKS_PREF_CACHE=""
 _gitleaks_pref() {
+  if [[ -n "$_ACP_GITLEAKS_PREF_CACHE" ]]; then
+    echo "$_ACP_GITLEAKS_PREF_CACHE"
+    return 0
+  fi
   local root
   root="$(_gitleaks_repo_root)"
-  ( cd "$root" 2>/dev/null && get_preference_or "acp" "integrations.gitleaks.enabled" "auto" ) || echo "auto"
+  _ACP_GITLEAKS_PREF_CACHE="$( ( cd "$root" 2>/dev/null && get_preference_or "acp" "integrations.gitleaks.enabled" "auto" ) || echo "auto" )"
+  echo "$_ACP_GITLEAKS_PREF_CACHE"
 }
 
 gitleaks_available() {
@@ -24,10 +33,16 @@ gitleaks_available() {
 }
 
 gitleaks_active() {
+  # Availability is a `command -v`; the preference is a ~1.5s YAML walk. When the
+  # tool is absent the answer is "inactive" for every possible preference value,
+  # so checking availability first is semantically identical and skips the cost
+  # entirely on machines without gitleaks — which is the common case, and was
+  # costing ~1.5s on every scanner invocation (audit-110).
+  gitleaks_available || return 1
   local pref
   pref="$(_gitleaks_pref)"
   [[ "$pref" == "false" ]] && return 1
-  gitleaks_available
+  return 0
 }
 
 gitleaks_hint_if_missing() {
