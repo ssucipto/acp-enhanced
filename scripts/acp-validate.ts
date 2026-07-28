@@ -893,6 +893,80 @@ function validateSessionsMemory(): boolean {
   return !hasErrors;
 }
 
+// ── Duplicate key detection in memory-layer entries (MEMORY-003, G-107-02) ────
+/**
+ * Return the top-level keys that appear more than once inside a single YAML
+ * list entry.
+ *
+ * Why this exists: an agent edit that deletes the *following* entry's `- date:`
+ * header merges two entries into one block. Every key-presence check still
+ * passes (`entry.includes("done:")` is true), the entry count silently absorbs
+ * the merge, and YAML last-wins semantics means the earlier entry's `done:` and
+ * `key_fact:` are shadowed — the session is lost with no error anywhere. This is
+ * the second duplicate-key incident in this repo after the 191-key
+ * progress.yaml failure (audit-107 G-107-02).
+ *
+ * `indent` is the column at which the list marker sits (0 for a top-level list
+ * like sessions.md, 2 for a nested list like audit-carryovers.md). Nested list
+ * items (`    - foo`) and folded-scalar continuation lines are indented deeper
+ * than their key and so never match.
+ */
+export function findDuplicateEntryKeys(entry: string, indent = 0): string[] {
+  const pad = " ".repeat(indent);
+  const keyLine = new RegExp(`^(?:${pad}- |${pad}  )([a-z_][a-z0-9_]*):`);
+  const counts = new Map<string, number>();
+  for (const line of entry.split("\n")) {
+    const m = line.match(keyLine);
+    if (m) counts.set(m[1], (counts.get(m[1]) ?? 0) + 1);
+  }
+  return [...counts.entries()].filter(([, n]) => n > 1).map(([k]) => k);
+}
+
+function validateMemoryDuplicateKeys(): boolean {
+  // Split on ANY list item at the entry indent, not on a specific first key.
+  // sessions.md legitimately mixes `- date:` entries with `- type: weekly-summary`
+  // compaction blocks; splitting only on `- date:` folds the summary blocks into
+  // the preceding entry and reports their repeated keys as false duplicates.
+  const targets = [
+    { file: "sessions.md", indent: 0 },
+    { file: "lessons.md", indent: 0 },
+    { file: "patterns.md", indent: 0 },
+    { file: "audit-carryovers.md", indent: 2 },
+  ];
+
+  let hasErrors = false;
+  let checked = 0;
+
+  for (const { file, indent } of targets) {
+    const filePath = repoPath("agent", "memory", file);
+    if (!existsSync(filePath)) continue;
+
+    const raw = readFileSync(filePath, "utf-8");
+    const pad = " ".repeat(indent);
+    const splitRe = new RegExp(`\\n(?=${pad}- [a-z_][a-z0-9_]*:)`);
+    const itemRe = new RegExp(`^${pad}- [a-z_][a-z0-9_]*:`);
+    const entries = raw.split(splitRe).filter((p) => itemRe.test(p));
+
+    for (let i = 0; i < entries.length; i++) {
+      const dupes = findDuplicateEntryKeys(entries[i], indent);
+      if (dupes.length > 0) {
+        const label = entries[i].split("\n")[0].trim().slice(0, 60);
+        console.error(
+          `❌ ${file}: Entry #${i + 1} (${label}) has duplicate keys: ${dupes.join(", ")} — ` +
+            `two entries were likely merged; the earlier values are silently shadowed`,
+        );
+        hasErrors = true;
+      }
+      checked++;
+    }
+  }
+
+  if (!hasErrors) {
+    console.log(`✅ Memory duplicate-key check: ${checked} entries, no duplicate keys`);
+  }
+  return !hasErrors;
+}
+
 // ── Version consistency (identity.yml ↔ AGENTS.md ↔ CLAUDE.md ↔ CHANGELOG) ────
 export function validateVersionConsistency(root?: string): ValidationError[] {
   const errors: ValidationError[] = [];
@@ -913,6 +987,18 @@ export function validateVersionConsistency(root?: string): ValidationError[] {
     const raw = readFileSync(agentsPath, "utf8");
     const match = raw.match(/^> v([\d.]+)/m);
     if (match) files["AGENTS.md"] = match[1];
+  }
+
+  // AGENT.md `**Version**:` field — a DIFFERENT file from AGENTS.md, and the one
+  // tests/acp.security.test.sh compares against progress.yaml. It was absent from
+  // this check, so a v6.29.3 bump that updated AGENTS.md but not AGENT.md passed
+  // acp-validate and only failed in CI (audit-111). Validator gaps that E2E catches
+  // get closed in the validator too.
+  const agentPath = path.join(base, "AGENT.md");
+  if (existsSync(agentPath)) {
+    const raw = readFileSync(agentPath, "utf8");
+    const match = raw.match(/^\*\*Version\*\*:\s*([\d.]+)/m);
+    if (match) files["AGENT.md"] = match[1];
   }
 
   // CLAUDE.md first line
@@ -969,6 +1055,86 @@ export function validateVersionConsistency(root?: string): ValidationError[] {
 // ── Cross-layer status consistency (route-186) ─────────────────
 // FAIL if a milestone doc's **Status**: disagrees with progress.yaml
 const PROGRESS_PATH = repoPath("agent", "progress.yaml");
+
+/**
+ * Fail the run when agent/progress.yaml does not parse as strict YAML.
+ *
+ * `loadProgressSafe()` below deliberately swallows a parse failure and falls
+ * back to line-based extraction so the remaining checks can still run. That
+ * resilience is useful, but on its own it means the exact failure this repo
+ * already suffered — 191 duplicate keys in progress.yaml — degrades to a
+ * console warning with a green exit code, so the file could silently rot again.
+ * js-yaml raises on a duplicated mapping key, so this gate turns that back into
+ * a hard error while leaving the fallback intact for everything else.
+ * (audit-108 recommendation 2.)
+ */
+function validateProgressYamlParses(): boolean {
+  if (!existsSync(PROGRESS_PATH)) return true;
+  const raw = readFileSync(PROGRESS_PATH, "utf-8").replace(/\r/g, "");
+  try {
+    yaml.load(raw);
+    console.log("✅ progress.yaml: parses as strict YAML (no duplicate keys)");
+    return true;
+  } catch (err) {
+    const first = (err as Error).message.split("\n")[0];
+    console.error(`❌ progress.yaml: strict YAML parse failed — ${first}`);
+    console.error(
+      "   A duplicate mapping key silently shadows the earlier value. " +
+        "Fix the duplicate; do not rely on the line-based fallback.",
+    );
+    return false;
+  }
+}
+
+/**
+ * ADR-20: `hooks.<phase>` in constraints.yml is a list of `{ task_id, description }`
+ * entries whose `task_id` MUST resolve to a `recurring_tasks[].id` in progress.yaml.
+ * The ADR explicitly says validation "can enforce that every hook task_id resolves
+ * to a real recurring_task" — but nothing did, so 3 of 4 pre_commit hooks pointed at
+ * ids that were never created (audit-110). A dangling hook silently fires nothing.
+ */
+function validateHookTaskBindings(): boolean {
+  const constraintsPath = repoPath("agent", "core", "constraints.yml");
+  if (!existsSync(constraintsPath) || !existsSync(PROGRESS_PATH)) return true;
+
+  let hooks: Record<string, Array<{ task_id?: string }>> = {};
+  let ids = new Set<string>();
+  try {
+    const constraints = yaml.load(readFileSync(constraintsPath, "utf-8")) as {
+      hooks?: Record<string, Array<{ task_id?: string }>>;
+    };
+    hooks = constraints?.hooks ?? {};
+    const progress = yaml.load(readFileSync(PROGRESS_PATH, "utf-8")) as {
+      recurring_tasks?: Array<{ id?: string }>;
+    };
+    ids = new Set((progress?.recurring_tasks ?? []).map((t) => t.id).filter(Boolean) as string[]);
+  } catch {
+    // progress.yaml strict-parse failures are reported by validateProgressYamlParses().
+    return true;
+  }
+
+  const dangling: string[] = [];
+  let total = 0;
+  for (const [phase, entries] of Object.entries(hooks)) {
+    for (const entry of entries ?? []) {
+      total++;
+      if (!entry?.task_id || !ids.has(entry.task_id)) {
+        dangling.push(`hooks.${phase} → ${entry?.task_id ?? "(no task_id)"}`);
+      }
+    }
+  }
+
+  if (dangling.length > 0) {
+    for (const d of dangling) {
+      console.error(
+        `❌ constraints.yml: ${d} does not resolve to a recurring_tasks[].id (ADR-20)`,
+      );
+    }
+    return false;
+  }
+  console.log(`✅ Hook bindings: ${total} hook(s) resolve to recurring_tasks (ADR-20)`);
+  return true;
+}
 
 function loadProgressSafe(): ProgressYaml | null {
   if (!existsSync(PROGRESS_PATH)) return null;
@@ -2257,6 +2423,9 @@ if (taskFileArgs.length === 0) {
   const instructionOk = runInstructionAndPackageChecks();
   const sizeOk = validateAgentsMdSize();
   const sessionsValid = validateSessionsMemory();
+  const memoryDupesOk = validateMemoryDuplicateKeys();
+  const progressParsesOk = validateProgressYamlParses();
+  const hookBindingsOk = validateHookTaskBindings();
   const versionOk = validateVersionConsistency().length === 0;
   const statusOk = validateStatusConsistency();
   const pointersOk = validateFilePointers();
@@ -2273,6 +2442,9 @@ if (taskFileArgs.length === 0) {
       instructionOk &&
       sizeOk &&
       sessionsValid &&
+      memoryDupesOk &&
+      progressParsesOk &&
+      hookBindingsOk &&
       versionOk &&
       statusOk &&
       pointersOk &&
