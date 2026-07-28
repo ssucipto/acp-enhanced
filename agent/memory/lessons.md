@@ -116,6 +116,12 @@
   priority: high
   source: session-key-fact
 
+# Restored 2026-07-28 (audit-108): this entry had lost its `- date:` header and
+# was merged into the audit-070 lesson above, where YAML last-wins silently
+# shadowed that lesson. Date inherited from the block it was merged into.
+- date: 2026-06-15
+  task_type: version-bump
+  scope: cross-cutting
   lesson: |
     Version bumps MUST update 8 files: AGENT.md, identity.yml, package.yaml,
     progress.yaml, CHANGELOG.md, README.md, PRD-MAIN.md, IP_REGISTER.md. No
@@ -304,4 +310,109 @@
     WHOLE file for other bare `dir/` rules sitting above a `!whitelist` line —
     they silently block it too (see patterns.md: install-script-gitignore-heredoc-sync,
     extended 2026-07-15 with the agent/.gitignore reports/ instance).
+  priority: high
+
+- date: 2026-07-28
+  task_type: bug-fix
+  mistake: >
+    Four bugs shipped in v6.29.2 framework scripts, all found downstream by
+    CodeRabbit on a consumer repo's PR (#13) rather than by ACP's own review or
+    E2E suites. (1) Eight scanners restored positional args with
+    `set -- "${IG_REMAINING_ARGS[@]:-}"`; for an EMPTY array that expands to one
+    empty-string argument, not zero, so `$1=""` reached the target loop. Six of
+    eight scanners were therefore completely broken when invoked with no path
+    argument, exiting 2 with "Error:  not found" — a total-failure bug that 59
+    passing review-scan E2E assertions never caught, because every test passed an
+    explicit path. (2) SC-15's lockfile-tracking check had `return 0` on BOTH
+    branches, making the entire `git ls-files` half dead code: an untracked
+    lockfile passed silently. (3) JSON output was assembled with
+    `sed 's/},{/},\n{/g'` — BSD sed (macOS before Darwin 25) emits a literal `n`,
+    AND on every platform the pattern also matches `},{` occurring inside a
+    finding message, injecting a raw newline into a JSON string literal and
+    producing invalid JSON. (4) `ig_emit_finding` called `ig_baseline_add_entry`
+    BEFORE the inline-suppression check, so findings silenced by an
+    `acp-review-ignore` comment still entered a `--write-baseline` baseline;
+    deleting the comment later would not re-surface them.
+  correction: >
+    Never restore positionals with `"${arr[@]:-}"` — guard on
+    `${#arr[@]} -gt 0` and use a bare `set --` otherwise. Never assemble or
+    reformat JSON with sed; parse it (python3) so delimiter sequences inside
+    string values cannot be matched. Order suppression checks BEFORE baseline
+    capture — a baseline must record only findings that are still active, or
+    suppression becomes permanent and invisible. When a rule has an early
+    `return 0` on every branch, the check above it is dead code: assert the
+    NEGATIVE case in tests (untracked lockfile MUST fire), not just the positive.
+    Above all: every scanner E2E suite must include a no-argument invocation case
+    — "runs with default target" is the single most common real-world invocation
+    and was untested for all eight scanners.
+  priority: high
+
+- date: 2026-07-28
+  task_type: memory-write
+  scope: cross-cutting
+  mistake: >
+    Duplicate YAML keys inside a memory entry are invisible to every check the
+    repo had. An edit that deletes the FOLLOWING entry's `- date:` header merges
+    two entries; `entry.includes("done:")` still passes, the entry count absorbs
+    the merge, and YAML last-wins silently shadows the earlier entry's values.
+    audit-108 shipped a detector and it immediately found FOUR pre-existing
+    corruptions that had survived every prior /acp-validate run: a lessons.md
+    entry where the audit-070 "false assurance" lesson was shadowed by a
+    version-bump lesson, and three audit-carryovers entries with duplicate stamp
+    keys — including one where `fix_applied_date: null` overrode a real date
+    while `status: fixed`. Related failure: the first version of the detector
+    itself was wrong, splitting entries on `- date:` and false-positiving on
+    sessions.md's legitimate `- type: weekly-summary` compaction blocks.
+  correction: >
+    Treat a duplicate key as a hard failure, never a warning — silent shadowing
+    is how memory actually gets lost (this is the second incident after the
+    191-key progress.yaml failure). When splitting a YAML list into entries,
+    split on ANY list marker (`^- [a-z_]+:`) rather than a known first key: a
+    file may legitimately contain more than one entry shape. After appending to
+    any memory file, verify the diff shows insertions and ZERO deletions —
+    deletions mean a neighbouring entry's header was consumed.
+  priority: high
+
+- date: 2026-07-28
+  task_type: audit-run
+  scope: tooling
+  mistake: >
+    Scanning the carryover ledger with an unanchored regex
+    (`re.search(r'status:\s*(\S+)', block)`) reported two false pending items.
+    It matched `status:pending` occurring inside a finding's PROSE — F-099-03's
+    own description reads "…remain status:pending — carryover-ledger integrity
+    failure" — rather than the entry's `status:` key. Key-anchored parsing
+    (`^    status:\s*(\S+)$` with re.M) gives the correct count: 0 pending.
+    This is the second false positive of the same class in two audits; the first
+    was the duplicate-key validator splitting sessions.md on `- date:` and
+    folding legitimate `- type: weekly-summary` blocks into the prior entry.
+  correction: >
+    When parsing structured YAML-ish memory files, always anchor on the key at
+    its exact indentation and never match bare substrings against block text —
+    these files quote other entries' field names in their own prose constantly.
+    Corollary for verification harnesses: do not wrap greps containing `${...}`
+    or `\$` in `eval`, which expands them before grep sees them and produces
+    false ❌ results. Four checks in audit-109 failed this way and had to be
+    re-verified directly.
+  priority: high
+
+- date: 2026-07-28
+  task_type: audit-run
+  scope: cross-cutting
+  mistake: >
+    ADR-20 states that `hooks.<phase>[].task_id` MUST resolve to a
+    `recurring_tasks[].id` and that "validation (acp-validate) can enforce that
+    every hook task_id resolves to a real recurring_task". Nobody ever wrote that
+    check, so 3 of 4 pre_commit hooks (pre-commit-integrity-phase1,
+    ci-npm-ignore-scripts, post-milestone-sweep) pointed at ids that were never
+    created — the hooks silently fired nothing from M62 until audit-110, while
+    /acp-validate reported a fully clean run.
+  correction: >
+    An ADR that DESCRIBES an enforcement mechanism is not enforcement. When an
+    ADR says a validator "can" or "will" check something, grep the validator for
+    the check before treating the decision as in force; if absent, implement it
+    in the same change that discovers the gap. Corollary: a clean validator run
+    proves only that the implemented checks passed — it never proves the
+    documented invariants hold. Cross-check ADR consequences against code
+    periodically.
   priority: high

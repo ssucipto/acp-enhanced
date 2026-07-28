@@ -59,6 +59,29 @@ ig_json_escape() {
   python3 -c 'import json,sys; print(json.dumps(sys.argv[1])[1:-1], end="")' "${1:-}"
 }
 
+# Split a buffer of concatenated JSON objects onto one line each, indented two
+# spaces. Replaces `sed 's/},{/},\n{/g'`, which had two defects: BSD sed (macOS
+# before Darwin 25) emits a literal `n` instead of a newline, and the pattern
+# also matched `},{` occurring *inside* a finding message, injecting a raw
+# newline into a JSON string literal and producing invalid JSON on every
+# platform. Parsing the buffer as JSON makes both impossible.
+# Reads the buffer on stdin; body must have its trailing comma already stripped.
+ig_format_json_array_body() {
+  python3 -c '
+import json, sys
+body = sys.stdin.read().strip()
+if not body:
+    sys.exit(0)
+try:
+    items = json.loads("[" + body + "]")
+except ValueError:
+    # Malformed buffer: emit verbatim rather than losing findings entirely.
+    print(body)
+    sys.exit(0)
+print(",\n".join("  " + json.dumps(i, separators=(",", ":")) for i in items))
+'
+}
+
 ig_hash_text() {
   local text="${1:-}"
   if command -v shasum >/dev/null 2>&1; then
@@ -308,10 +331,6 @@ ig_emit_finding() {
 
   ig_load_baseline
 
-  if [[ -n "$IG_WRITE_BASELINE_FILE" ]]; then
-    ig_baseline_add_entry "$file" "$line" "$rule" "$message" "$severity"
-  fi
-
   if [[ -n "$file" && "$line" != "0" ]]; then
     inline_state="$(ig_inline_suppression_state "$file" "$line" "$rule")"
     inline_kind="${inline_state%%|*}"
@@ -330,6 +349,15 @@ ig_emit_finding() {
         fi
         ;;
     esac
+  fi
+
+  # Baseline capture runs *after* the inline-suppression check above, so a
+  # finding already silenced by an `acp-review-ignore` comment never enters the
+  # baseline. Capturing first would make the suppression permanent: deleting the
+  # inline comment later would not re-surface the finding, because the baseline
+  # would by then be suppressing it independently (CodeRabbit PR#13 / F-107-03).
+  if [[ -n "$IG_WRITE_BASELINE_FILE" ]]; then
+    ig_baseline_add_entry "$file" "$line" "$rule" "$message" "$severity"
   fi
 
   if [[ -n "$IG_BASELINE_FILE" ]]; then
@@ -353,7 +381,7 @@ ig_print_json_payload() {
   printf '  "findings": [\n'
   local body="${IG_JSON_BUFFER%,}"
   if [[ -n "$body" ]]; then
-    echo "$body" | sed 's/},{/},\n{/g' | sed 's/^/  /'
+    printf '%s' "$body" | ig_format_json_array_body
   fi
   printf '\n  ],\n'
   printf '  "summary": {\n'
@@ -381,7 +409,7 @@ ig_write_baseline_file() {
     printf '  "entries": [\n'
     local body="${IG_BASELINE_BUFFER%,}"
     if [[ -n "$body" ]]; then
-      echo "$body" | sed 's/},{/},\n{/g' | sed 's/^/  /'
+      printf '%s' "$body" | ig_format_json_array_body
     fi
     printf '\n  ]\n'
     printf '}\n'
