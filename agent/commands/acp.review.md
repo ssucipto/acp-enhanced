@@ -422,6 +422,40 @@ Use `--include-tests` when scanning labelled corpora, intentionally bad fixtures
 
 ---
 
+## Scanner Limitations
+
+Phase 1 TypeScript/JavaScript rules use a **character-walker** (`acp.review-scan-ts.py`) that strips comments and string literals before regex matching. It is **not** an AST or tree-sitter analyzer (F-105-02). Implications:
+
+- Rules cannot reason about scope, types, imports, or control flow.
+- Complex signatures, nested generics, and semantic equivalents may be missed or approximated.
+- Corpus metrics (`acp.review-measure.sh`) validate the **fixture set**, not production-scale recall.
+
+Upgrade path (only if fixture FP rate rises): tree-sitter or TypeScript compiler API integration — deferred to backlog.
+
+---
+
+## CodeRabbit Augmentation (when `coderabbit_active`)
+
+When `bash agent/scripts/acp.coderabbit.sh active` returns true (preference enabled **and** config file present):
+
+| Phase | Behavior |
+|-------|----------|
+| **Phase 1** | **Never deferred** — all deterministic scanner rules still run via `acp.review-scan.sh` |
+| **Phase 2** | For policy-map rows with `owner: coderabbit` or `both`, add annotation: “also covered by CodeRabbit — verify via PR review or import” |
+| **ACP-owned Phase 2** | Always run — review remains valid standalone when CodeRabbit is inactive |
+
+Import path (M81 — requires committed fixture):
+
+```bash
+bash agent/scripts/acp.findings-import.sh --input tests/fixtures/coderabbit-findings-sample.json
+```
+
+Until M81 ships, annotate only; do not skip ACP review. Weekly `progress.yaml` recurring task stays `command: /acp-review --report --carryover` — CodeRabbit behavior lives in this doc, not a step list (F-101-02).
+
+See `agent/wiki/coderabbit-policy-map-lite.md` and `agent/wiki/coderabbit-integration.md`.
+
+---
+
 ## Optional Tool Delegation
 
 `SH-03` is delegated to `shellcheck` when it is installed locally. The scanner runs the normal `shellcheck -f gcc -S warning` pass, then promotes quote-safety findings `SC2046`, `SC2068`, and `SC2086` from a filtered style-level pass into `SH-03` findings. Sourced-library allowlists match `SH-01` so utility libraries and `e2e/` helpers do not create known-benign noise.

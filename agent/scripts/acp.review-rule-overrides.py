@@ -14,6 +14,12 @@ def load_yaml(path: str) -> dict:
     try:
         import yaml  # type: ignore
     except ImportError:
+        if path.endswith((".yaml", ".yml")):
+            print(
+                f"[ACP] warning: PyYAML required to read rule_overrides from {path}; "
+                "use IG_RULE_OVERRIDES_JSON or a .json override file",
+                file=sys.stderr,
+            )
         return {}
     with open(path, encoding="utf-8") as fh:
         data = yaml.safe_load(fh) or {}
@@ -46,7 +52,9 @@ def merge_rule(rule_id: str, cfg: dict, merged: dict) -> None:
         else:
             entry["enabled"] = str(enabled).lower() not in {"false", "0", "no", "off"}
     if cfg.get("severity"):
-        entry["severity"] = str(cfg["severity"]).upper()
+        sev = str(cfg["severity"]).upper()
+        if sev in {"CRITICAL", "HIGH", "MEDIUM", "LOW"}:
+            entry["severity"] = sev
 
 
 def main() -> int:

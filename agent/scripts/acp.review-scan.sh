@@ -126,8 +126,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-ig_load_rule_overrides
-
 if [[ "$SELF_MODE" == "true" ]]; then
   # Documented at acp.review.md — skip missing directories silently (F-102-02)
   for _self_path in scripts/ agent/scripts/ agent/commands/ e2e/; do
