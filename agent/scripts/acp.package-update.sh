@@ -14,6 +14,80 @@ SCRIPT_DIR="$(dirname "$0")"
 # Initialize colors
 init_colors
 
+# Insert `experimental: true` after the manifest entry for a package file.
+#
+# Replaces a sed expression that used `\n` in the *replacement* text. `_sed_i`
+# makes the -i flag portable but not the replacement: BSD sed before Darwin 25
+# emits a literal `n` there, silently corrupting manifest.yaml (audit-107
+# G-107-08, same class as F-107-04). awk is already this script's text tool and
+# behaves identically on macOS and Linux.
+#
+# Two behaviour fixes over the sed version:
+#  - matches the name with index() rather than a regex, so a file name containing
+#    regex metacharacters (`.`, `+`, `[`) can no longer alter the match;
+#  - idempotent — re-running no longer appends a second `experimental: true`,
+#    which would produce exactly the duplicate-key corruption class this repo
+#    keeps getting bitten by.
+# Remove the `experimental: true` line that follows a package file's manifest
+# entry (the graduation path).
+#
+# The sed form this replaces was portable — it used \n on the *match* side, not
+# the replacement — but it interpolated "$name" into a regex, so a file name
+# containing regex metacharacters matched more than intended (`acp.foo` also
+# matches `acpXfoo`). Using index() here makes the match literal and keeps this
+# path symmetric with _insert_experimental_flag (audit-108 R1).
+_remove_experimental_flag() {
+    local manifest="$1" name="$2" tmp
+    tmp="$(mktemp)" || return 1
+    if awk -v target="$name" '
+        { lines[NR] = $0 }
+        END {
+            skip = 0; done = 0
+            for (i = 1; i <= NR; i++) {
+                if (skip) { skip = 0; continue }
+                print lines[i]
+                if (done) continue
+                if (index(lines[i], "name: " target)) {
+                    if (i < NR && lines[i+1] ~ /^[ \t]*experimental: true[ \t]*$/) skip = 1
+                    done = 1
+                }
+            }
+        }
+    ' "$manifest" > "$tmp"; then
+        mv "$tmp" "$manifest"
+    else
+        rm -f "$tmp"
+        return 1
+    fi
+}
+
+_insert_experimental_flag() {
+    local manifest="$1" name="$2" tmp
+    tmp="$(mktemp)" || return 1
+    if awk -v target="$name" '
+        { lines[NR] = $0 }
+        END {
+            in_pkgs = 0; done = 0
+            for (i = 1; i <= NR; i++) {
+                print lines[i]
+                if (done) continue
+                if (index(lines[i], "packages:")) in_pkgs = 1
+                if (in_pkgs && index(lines[i], "name: " target)) {
+                    if (i == NR || lines[i+1] !~ /^[ \t]*experimental: true[ \t]*$/) {
+                        print "          experimental: true"
+                    }
+                    done = 1
+                }
+            }
+        }
+    ' "$manifest" > "$tmp"; then
+        mv "$tmp" "$manifest"
+    else
+        rm -f "$tmp"
+        return 1
+    fi
+}
+
 # Parse arguments
 PACKAGE_NAME=""
 CHECK_ONLY=false
@@ -334,10 +408,10 @@ update_package() {
             # Update experimental flag in manifest if needed
             if [ -n "$is_experimental" ]; then
                 # Still experimental, ensure flag is set
-                _sed_i "/packages:/{:a;N;/name: ${file_name}/!ba;s/\(name: ${file_name}\)/\1\n          experimental: true/;}" "$MANIFEST_FILE" 2>/dev/null || true
+                _insert_experimental_flag "$MANIFEST_FILE" "$file_name" 2>/dev/null || true
             elif check_graduation "$file_name" "$file_type" "$package_name" "$temp_dir/package.yaml"; then
                 # Graduated, remove experimental flag
-                _sed_i "/name: ${file_name}/{N;s/\n *experimental: true//;}" "$MANIFEST_FILE" 2>/dev/null || true
+                _remove_experimental_flag "$MANIFEST_FILE" "$file_name" 2>/dev/null || true
             fi
             
             echo "  ${GREEN}✓${NC} Updated $file_type/$file_name (v$new_version)"
