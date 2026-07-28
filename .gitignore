@@ -16,6 +16,8 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+# Cursor CI-run cache — local tool scratch, not project state (audit-109)
+.cursor-gh-runs.json
 *~
 
 # Generated reports (audit findings, cost reports, etc.)
@@ -30,3 +32,9 @@ reports/
 node_modules/
 package-lock.json
 !scripts/package-lock.json
+# Review-corpus fixtures are test data, not real dependency locks. Without this
+# negation they are gitignored, so a fresh clone / CI checkout lacks them and the
+# SC-15 negative case degrades into a false positive — corpus precision drops
+# from 100% to 97.9% in CI only, silently, because the gate threshold is 90%
+# (audit-107 G-107-07).
+!tests/fixtures/**/package-lock.json
