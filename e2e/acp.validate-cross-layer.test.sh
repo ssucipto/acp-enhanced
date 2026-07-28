@@ -17,11 +17,35 @@ _copy_fixture_workspace() {
   local dest="$1"
   cp -r "${PROJECT_ROOT}/agent" "${dest}/agent"
   cp -r "${PROJECT_ROOT}/scripts" "${dest}/scripts"
+  cp -r "${PROJECT_ROOT}/e2e" "${dest}/e2e"
+  if [[ -d "${PROJECT_ROOT}/.cursor" ]]; then
+    cp -r "${PROJECT_ROOT}/.cursor" "${dest}/.cursor"
+  fi
+  if [[ -d "${PROJECT_ROOT}/.claude" ]]; then
+    cp -r "${PROJECT_ROOT}/.claude" "${dest}/.claude"
+  fi
+  if [[ -d "${PROJECT_ROOT}/.opencode" ]]; then
+    cp -r "${PROJECT_ROOT}/.opencode" "${dest}/.opencode"
+  fi
+  if [[ -d "${PROJECT_ROOT}/.github/prompts" ]]; then
+    mkdir -p "${dest}/.github"
+    cp -r "${PROJECT_ROOT}/.github/prompts" "${dest}/.github/prompts"
+  fi
   if [[ -f "${PROJECT_ROOT}/package.json" ]]; then
     cp "${PROJECT_ROOT}/package.json" "${dest}/"
   fi
   if [[ -f "${PROJECT_ROOT}/package.yaml" ]]; then
     cp "${PROJECT_ROOT}/package.yaml" "${dest}/"
+  fi
+  if [[ -f "${PROJECT_ROOT}/.gitattributes" ]]; then
+    cp "${PROJECT_ROOT}/.gitattributes" "${dest}/"
+  fi
+  if [[ -f "${PROJECT_ROOT}/.gitignore" ]]; then
+    cp "${PROJECT_ROOT}/.gitignore" "${dest}/"
+  fi
+  if [[ -f "${PROJECT_ROOT}/docs/USAGE.md" ]]; then
+    mkdir -p "${dest}/docs"
+    cp "${PROJECT_ROOT}/docs/USAGE.md" "${dest}/docs/USAGE.md"
   fi
   if [[ -f "${PROJECT_ROOT}/AGENTS.md" ]]; then
     cp "${PROJECT_ROOT}/AGENTS.md" "${dest}/"
@@ -29,6 +53,23 @@ _copy_fixture_workspace() {
     mkdir -p "${dest}/.github"
     cp "${PROJECT_ROOT}/AGENTS.md" "${dest}/.github/copilot-instructions.md"
   fi
+}
+
+_init_fixture_git_repo() {
+  local dest="$1"
+  local version
+  version="$(awk '/^version:/{print $2; exit}' "${PROJECT_ROOT}/agent/core/identity.yml")"
+  (
+    cd "$dest"
+    git init -q
+    git config user.email test@example.com
+    git config user.name "ACP E2E"
+    git add -A
+    git commit -q -m "fixture"
+    if [[ -n "$version" ]]; then
+      git tag -a "v${version}" -m "fixture tag" HEAD
+    fi
+  )
 }
 
 _run_validator() {
@@ -44,6 +85,7 @@ TMPDIR=$(mktemp -d)
 trap 'rm -rf "${TMPDIR}"' EXIT
 
 _copy_fixture_workspace "${TMPDIR}"
+_init_fixture_git_repo "${TMPDIR}"
 
 # First completed milestone block (M44+), not nested task status lines
 COMPLETED_MILESTONE=$(awk '
@@ -87,11 +129,14 @@ TMPDIR2=$(mktemp -d)
 trap 'rm -rf "${TMPDIR2}" ${TMPDIR}' EXIT
 
 _copy_fixture_workspace "${TMPDIR2}"
+_init_fixture_git_repo "${TMPDIR2}"
 
 pushd "${TMPDIR2}" > /dev/null
+VALIDATE_RC2=0
 VALIDATE_OUT2=$(_run_validator "${TMPDIR2}" 2>&1) || VALIDATE_RC2=$?
 popd > /dev/null
 
+assert_equals 0 "${VALIDATE_RC2}" "Clean workspace validator exits 0"
 DESYNC_FOUND2=$(echo "${VALIDATE_OUT2}" | grep -ci "Status desync\|status.*disagree" || true)
 assert_equals "${DESYNC_FOUND2}" 0 "Clean workspace has no desync warnings"
 
@@ -100,6 +145,7 @@ TMPDIR3=$(mktemp -d)
 trap 'rm -rf "${TMPDIR2}" "${TMPDIR3}" ${TMPDIR}' EXIT
 
 _copy_fixture_workspace "${TMPDIR3}"
+_init_fixture_git_repo "${TMPDIR3}"
 
 # Insert under milestones: (appending at EOF breaks YAML and is ignored by parsers).
 # Use M99 — unused id; must stay a real milestones: child so validateFilePointers sees it.
@@ -120,7 +166,7 @@ pushd "${TMPDIR3}" > /dev/null
 VALIDATE_OUT3=$(_run_validator "${TMPDIR3}" 2>&1) || VALIDATE_RC3=$?
 popd > /dev/null
 
-DANGLING_FOUND=$(echo "${VALIDATE_OUT3}" | grep -ci "dangling\|not found\|does not exist\|missing.*file" || true)
+DANGLING_FOUND=$(echo "${VALIDATE_OUT3}" | grep -ci "Dangling pointer.*M99\|M99.*does not exist" || true)
 if [[ "${DANGLING_FOUND}" -ge 1 ]]; then
   assert_true "Validator flagged dangling file pointer for M99" 0
 else

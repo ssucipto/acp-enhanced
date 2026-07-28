@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "findings": [
+    {
+      "file": "src/new-helper.ts",
+      "line": 12,
+      "similarity": 100,
+      "original": {
+        "file": "src/shared/math.ts",
+        "line": 4
+      },
+      "suggestion": "import { computeTotal } from './shared/math';"
+    }
+  ]
+}
