@@ -100,7 +100,14 @@ announce_dupehound_activation() {
 }
 
 ig_parse_common_args "$@"
-set -- "${IG_REMAINING_ARGS[@]:-}"
+# Restore positionals only when non-empty: "${arr[@]:-}" injects a single
+# empty-string argument for an empty array, which downstream loops treat
+# as a scan target (CodeRabbit PR#13 / F-107-01).
+if [[ ${#IG_REMAINING_ARGS[@]} -gt 0 ]]; then
+  set -- "${IG_REMAINING_ARGS[@]}"
+else
+  set --
+fi
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -h|--help)
@@ -196,6 +203,18 @@ node_scan_modules_available() {
   command -v node >/dev/null 2>&1 && [[ -d "${PROJECT_ROOT}/scripts/node_modules" ]]
 }
 
+# YM-01/YM-02 need js-yaml + gray-matter from scripts/node_modules. When those
+# are absent the rules skip, which silently lowers corpus recall (95.7% instead
+# of 100%) with no indication why — a clean-looking run that is not clean.
+# Warn once so a degraded scan is never mistaken for a passing one (audit-108).
+YAML_RULES_SKIP_ANNOUNCED=false
+announce_yaml_rules_skipped() {
+  if [[ "$YAML_RULES_SKIP_ANNOUNCED" != "true" ]]; then
+    echo "[ACP] YM-01/YM-02 skipped: scripts/node_modules missing (run: cd scripts && npm install --ignore-scripts). Recall is understated." >&2
+    YAML_RULES_SKIP_ANNOUNCED=true
+  fi
+}
+
 scan_yaml_with_node() {
   local file="$1"
   local abs_file="$file"
@@ -206,6 +225,7 @@ scan_yaml_with_node() {
   local line_num="1"
 
   if ! node_scan_modules_available; then
+    announce_yaml_rules_skipped
     return 0
   fi
 
@@ -407,10 +427,38 @@ PY
     fi
   fi
 
+  # SC-15 — a lockfile must exist AND be tracked in git for `npm ci` to be
+  # reproducible. The previous implementation built two ad-hoc path variants and
+  # then returned 0 on both branches, so the tracking half was dead code: an
+  # untracked lockfile passed silently. Normalising to one repo-relative path
+  # and running git from the repo root makes the check work regardless of the
+  # caller's cwd or whether "$dir" was given as absolute or relative
+  # (CodeRabbit PR#13 / F-107-02).
+  local lock_path="" lock_dir="" lock_repo="" rel_lock=""
   for tracked_lockfile in package-lock.json npm-shrinkwrap.json yarn.lock pnpm-lock.yaml; do
-    if [[ -f "${dir%/}/${tracked_lockfile}" ]]; then
-      if git ls-files --error-unmatch "${dir#${REPO_ROOT}/}/${tracked_lockfile}" >/dev/null 2>&1 || git ls-files --error-unmatch "${dir%/}/${tracked_lockfile}" >/dev/null 2>&1; then
+    lock_path="${dir%/}/${tracked_lockfile}"
+    if [[ -f "$lock_path" ]]; then
+      lock_dir="$(cd "$(dirname "$lock_path")" && pwd)"
+      # Resolve the repo root from the lockfile's own directory rather than the
+      # script-level REPO_ROOT, which is derived from the caller's cwd and is
+      # therefore wrong whenever an absolute path outside that repo is scanned.
+      lock_repo="$(git -C "$lock_dir" rev-parse --show-toplevel 2>/dev/null || true)"
+      if [[ -z "$lock_repo" ]]; then
+        # Not inside a git work tree — tracking is unknowable, so assert nothing.
         return 0
+      fi
+      rel_lock="${lock_dir#"${lock_repo}"/}/${tracked_lockfile}"
+      [[ "$lock_dir" == "$lock_repo" ]] && rel_lock="$tracked_lockfile"
+      if ! git -C "$lock_repo" ls-files --error-unmatch "$rel_lock" >/dev/null 2>&1; then
+        # Untracked, but distinguish deliberate from accidental. acp.review.md
+        # SC-15 explicitly permits gitignored lockfiles in framework/protocol
+        # projects where they are development-only (M55 G-001), so an ignored
+        # lockfile is a documented choice, not a finding. An untracked lockfile
+        # that is NOT ignored is an accident and breaks `npm ci` reproducibility.
+        if ! git -C "$lock_repo" check-ignore -q "$rel_lock" 2>/dev/null; then
+          emit_review_finding "$package_file" "1" "SC-15" \
+            "lockfile ${tracked_lockfile} exists but is not tracked in git" "HIGH"
+        fi
       fi
       return 0
     fi
