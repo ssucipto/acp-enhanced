@@ -9241,51 +9241,51 @@ notes:
 - 'M78 PLANNED (v6.28.0, 6 tasks 255-260): optional CodeRabbit — toggle + detection
   + degradation + docs; PR-check stays gated'
 recurring_tasks:
-- id: weekly-code-review
-  command: /acp-review --report --carryover
-  frequency: weekly
-  executor: copilot
-  last_run: '2026-07-24'
-  next_due: '2026-07-31'
-  last_findings_count: 7
-  status: current
-  description: Weekly code quality review with carryover tracking
-- id: weekly-integrity-scan
-  command: /acp-integrity --self --report --carryover
-  frequency: weekly
-  executor: copilot
-  last_run: '2026-07-24'
-  next_due: '2026-07-31'
-  last_findings_count: 0
-  status: current
-  description: Weekly ACP framework integrity scan
-- id: pre-commit-rule-audit
-  command: /acp-integrity --fast --ci
-  trigger: on-commit
-  executor: deepseek-v4-pro
-  last_run: null
-  next_due: null
-  last_findings_count: 0
-  status: current
-  description: Pre-commit ACP rule file scan for Unicode injection
-- id: monthly-dependency-audit
-  command: /acp-integrity --rules dependencies
-  frequency: monthly
-  executor: deepseek-v4-pro
-  last_run: 2026-07-15
-  next_due: 2026-08-15
-  last_findings_count: 0
-  status: current
-  description: Monthly dependency and supply chain audit
-- id: quarterly-deep-scan
-  command: /acp-integrity --rules taint-flow,memory --report
-  frequency: quarterly
-  executor: claude-sonnet
-  last_run: null
-  next_due: null
-  status: blocked
-  description: 'Quarterly deep semantic integrity scan (Phase 2 — taint-flow + memory
-    via /acp-integrity v2.0). BLOCKED: awaits v2.0 quarterly-path validation in E2E.'
+  - id: weekly-code-review
+    command: /acp-review --report --carryover
+    frequency: weekly
+    executor: copilot
+    last_run: '2026-07-24'
+    next_due: '2026-07-31'
+    last_findings_count: 7
+    status: current
+    description: Weekly code quality review with carryover tracking
+  - id: weekly-integrity-scan
+    command: /acp-integrity --self --report --carryover
+    frequency: weekly
+    executor: copilot
+    last_run: '2026-07-24'
+    next_due: '2026-07-31'
+    last_findings_count: 0
+    status: current
+    description: Weekly ACP framework integrity scan
+  - id: pre-commit-rule-audit
+    command: /acp-integrity --fast --ci
+    trigger: on-commit
+    executor: deepseek-v4-pro
+    last_run: null
+    next_due: null
+    last_findings_count: 0
+    status: current
+    description: Pre-commit ACP rule file scan for Unicode injection
+  - id: monthly-dependency-audit
+    command: /acp-integrity --rules dependencies
+    frequency: monthly
+    executor: deepseek-v4-pro
+    last_run: 2026-07-15
+    next_due: 2026-08-15
+    last_findings_count: 0
+    status: current
+    description: Monthly dependency and supply chain audit
+  - id: quarterly-deep-scan
+    command: /acp-integrity --rules taint-flow,memory --report
+    frequency: quarterly
+    executor: claude-sonnet
+    last_run: null
+    next_due: null
+    status: blocked
+    description: 'Quarterly deep semantic integrity scan (Phase 2 — taint-flow + memory
+      via /acp-integrity v2.0). BLOCKED: awaits v2.0 quarterly-path validation in E2E.'
 observability:
   this_week:
     sessions: 1
