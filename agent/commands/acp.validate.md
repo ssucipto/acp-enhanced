@@ -199,12 +199,15 @@ Validate the `recurring_tasks:` block in `agent/progress.yaml`.
     ✅ pre-commit-rule-audit: valid (event trigger)
     ✅ monthly-dependency-audit: valid
     ✅ quarterly-deep-scan: valid
+    ✅ pre-commit-integrity-phase1: valid (event trigger)
+    ✅ ci-npm-ignore-scripts: valid (event trigger)
+    ✅ post-milestone-sweep: valid (event trigger)
 
   Overdue check:
     ⚠️ weekly-code-review: due 2026-06-15 (7 days from now)
     ✅ weekly-integrity-scan: due 2026-06-15 (7 days from now)
 
-  Summary: 5 tasks, 0 errors, 0 overdue, 2 upcoming
+  Summary: 8 tasks, 0 errors, 0 overdue, 2 upcoming
 ```
 
 **Expected Outcome**: Recurring tasks validated; overdue tasks surfaced  
@@ -239,6 +242,49 @@ Verify every `file:` pointer in `progress.yaml` references an existing file. Thi
 **Expected Outcome**: No dangling file pointers; no contradictory task counts
 
 > **Implementation note**: This check is enforced by `scripts/acp-validate.ts` (`validateFilePointers()`) in the no-args validation path (Step 11.6).
+
+### 2g. Validate Memory & Hook Integrity (v6.29.3+)
+
+> **This step runs in ALL modes**. All three checks are ERRORS (exit 1).
+
+Three gates that close silent-corruption paths found by audits 107–110. Each replaced a
+condition that previously passed validation while data was being lost.
+
+**Actions**:
+
+1. **Memory duplicate keys** — for every entry in `sessions.md`, `lessons.md`,
+   `patterns.md` and `audit-carryovers.md`, fail on a repeated top-level key.
+   An edit that deletes the *following* entry's list header merges two entries;
+   key-presence checks still pass and the entry count absorbs the merge, while YAML
+   last-wins silently shadows the earlier entry's values. Shipping this found four real
+   pre-existing corruptions.
+   - Entries are split on **any** list marker (`- <key>:`), never on a known first key —
+     `sessions.md` legitimately mixes `- date:` entries with `- type: weekly-summary`
+     compaction blocks.
+
+2. **`progress.yaml` strict parse** — fail when the file does not parse as strict YAML.
+   `loadProgressSafe()` deliberately falls back to line-based extraction so other checks
+   still run, but on its own that downgraded the 191-duplicate-key incident to a console
+   warning with a green exit code.
+
+3. **Hook task bindings (ADR-20)** — every `hooks.<phase>[].task_id` in
+   `agent/core/constraints.yml` MUST resolve to a `recurring_tasks[].id` in
+   `progress.yaml`. A dangling hook silently fires nothing; 3 of 4 `pre_commit` hooks
+   were dangling when this check was added.
+
+**Expected Outcome**: No duplicate memory keys; progress.yaml parses strictly; every hook
+resolves to a real recurring task
+
+```
+✅ Memory duplicate-key check: 328 entries, no duplicate keys
+✅ progress.yaml: parses as strict YAML (no duplicate keys)
+✅ Hook bindings: 4 hook(s) resolve to recurring_tasks (ADR-20)
+```
+
+> **Implementation note**: Enforced by `scripts/acp-validate.ts` —
+> `validateMemoryDuplicateKeys()` / `findDuplicateEntryKeys()`,
+> `validateProgressYamlParses()`, and `validateHookTaskBindings()`. Unit-tested in
+> `scripts/acp-validate.test.ts`.
 
 ### 3. Validate Design Documents
 
