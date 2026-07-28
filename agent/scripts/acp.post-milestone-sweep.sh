@@ -144,6 +144,9 @@ done
 
 if [ "$TOKEN_FAILS" -eq 0 ] && [ "$TOTAL_TOKENS" -le "$TOTAL_MAX" ]; then
   pass_gate "5" "$GATE_5_NAME" "${TOTAL_TOKENS}/${TOTAL_MAX} tokens (per-file ≤${PER_FILE_MAX}, ${TOKEN_DETAILS[*]})"
+elif [ "$TOTAL_TOKENS" -gt "$TOTAL_MAX" ] && [ "$TOKEN_FAILS" -eq 0 ]; then
+  # F-M82-04: report total-budget breach even when no per-file limit was hit
+  fail_gate "5" "$GATE_5_NAME" "${TOTAL_TOKENS}/${TOTAL_MAX} tokens — total budget exceeded (per-file all ≤${PER_FILE_MAX}t)"
 else
   fail_gate "5" "$GATE_5_NAME" "${TOTAL_TOKENS}/${TOTAL_MAX} tokens — ${TOKEN_FAILS} file(s) over per-file ${PER_FILE_MAX}t limit"
 fi

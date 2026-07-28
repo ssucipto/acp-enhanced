@@ -1,0 +1,51 @@
+{
+  "chunk": "scripts",
+  "status": "completed",
+  "base": "v6.27.0",
+  "resolved_tag_commit": "fe22a1323501cf95c7c55adc40b7bd2548e972c2",
+  "fallback_parent_base_commit": "e1105a4ce06545ce5dd2d9779941066fb9aced12",
+  "changed_files": [
+    "scripts/acp-validate.test.ts",
+    "scripts/acp-validate.ts",
+    "scripts/package.json"
+  ],
+  "attempt_count": 1,
+  "attempts": [
+    {
+      "command": [
+        "coderabbit",
+        "review",
+        "--dir",
+        "scripts",
+        "--base",
+        "v6.27.0",
+        "--agent"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 149.55,
+      "raw_file": "agent/reports/coderabbit-local-2026-07-24/chunk-scripts.raw.txt",
+      "meta_file": "agent/reports/coderabbit-local-2026-07-24/chunk-scripts.meta.json"
+    }
+  ],
+  "finding_count": 2,
+  "findings_by_severity": {
+    "major": 2
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "scripts/acp-validate.ts",
+      "instruction": "In @scripts/acp-validate.ts at line 1070, Update the SCHEMAS_DIR initialization in scripts/acp-validate.ts so relative ACP_SCHEMAS_DIR overrides are resolved through repoPath() from the repository root, while absolute overrides remain unchanged. Preserve the existing default repoPath(\"agent\", \"schemas\") behavior when the environment variable is unset.",
+      "suggestions": [
+        "const schemasDirOverride = process.env[\"ACP_SCHEMAS_DIR\"];\nconst SCHEMAS_DIR =\n  schemasDirOverride === undefined\n    ? repoPath(\"agent\", \"schemas\")\n    : path.isAbsolute(schemasDirOverride)\n      ? schemasDirOverride\n      : repoPath(schemasDirOverride);"
+      ]
+    },
+    {
+      "severity": "major",
+      "file": "scripts/acp-validate.ts",
+      "instruction": "In @scripts/acp-validate.ts around lines 1105 - 1113, Update resolveOriginGithubRepo and its downstream GitHub API call to avoid shell interpolation: restrict parsed origin URLs to approved GitHub hostnames and validate the owner/repository segments before use. Replace the execSync invocation at the GitHub API call site with execFileSync(\"gh\", [\"api\", endpoint], \u2026), passing arguments directly rather than through a shell.",
+      "suggestions": []
+    }
+  ],
+  "note": "Completed successfully."
+}

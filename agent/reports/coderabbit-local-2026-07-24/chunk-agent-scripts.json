@@ -1,0 +1,86 @@
+{
+  "chunk": "agent-scripts",
+  "status": "completed",
+  "base": "v6.27.0",
+  "resolved_tag_commit": "fe22a1323501cf95c7c55adc40b7bd2548e972c2",
+  "fallback_parent_base_commit": "e1105a4ce06545ce5dd2d9779941066fb9aced12",
+  "changed_files": [
+    "agent/scripts/acp.coderabbit.sh",
+    "agent/scripts/acp.manifest-hash.sh",
+    "agent/scripts/acp.package-info.sh",
+    "agent/scripts/acp.post-milestone-sweep.sh",
+    "agent/scripts/acp.project-update.sh",
+    "agent/scripts/acp.version-check-for-updates.sh",
+    "agent/scripts/acp.version-check.sh"
+  ],
+  "attempt_count": 3,
+  "attempts": [
+    {
+      "command": [
+        "coderabbit",
+        "review",
+        "--dir",
+        "agent/scripts",
+        "--agent",
+        "--base",
+        "v6.27.0"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 5.61,
+      "raw_file": "agent/reports/coderabbit-local-2026-07-24/chunk-agent-scripts.attempt1.raw.txt",
+      "meta_file": "agent/reports/coderabbit-local-2026-07-24/chunk-agent-scripts.attempt1.meta.json"
+    },
+    {
+      "command": [
+        "coderabbit",
+        "review",
+        "--dir",
+        "agent/scripts",
+        "--agent",
+        "--base",
+        "v6.27.0"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 94.64,
+      "raw_file": "agent/reports/coderabbit-local-2026-07-24/chunk-agent-scripts.attempt2.raw.txt",
+      "meta_file": "agent/reports/coderabbit-local-2026-07-24/chunk-agent-scripts.attempt2.meta.json"
+    },
+    {
+      "command": [
+        "coderabbit",
+        "review",
+        "--dir",
+        "agent/scripts",
+        "--base",
+        "v6.27.0",
+        "--agent"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 5.21,
+      "raw_file": "agent/reports/coderabbit-local-2026-07-24/chunk-agent-scripts.raw.txt",
+      "meta_file": "agent/reports/coderabbit-local-2026-07-24/chunk-agent-scripts.meta.json"
+    }
+  ],
+  "finding_count": 2,
+  "findings_by_severity": {
+    "major": 1,
+    "minor": 1
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "agent/scripts/acp.project-update.sh",
+      "instruction": "In @agent/scripts/acp.project-update.sh around lines 206 - 208, Move the current_tags assignment using yaml_query from before the ADD_TAGS loop into the loop body so it runs before processing each tag. Ensure each iteration reads the updated project registry after the previous mutation, preventing duplicate tags keys when multiple tags are added.",
+      "suggestions": [
+        "    local current_tags\n    for tag in \"${ADD_TAGS[@]}\"; do\n      current_tags=$(yaml_query \".projects.${PROJECT_NAME}.tags\" 2>/dev/null || echo \"\")"
+      ]
+    },
+    {
+      "severity": "minor",
+      "file": "agent/scripts/acp.post-milestone-sweep.sh",
+      "instruction": "In @agent/scripts/acp.post-milestone-sweep.sh around lines 145 - 148, Update the gate 5 failure branch in the TOKEN_FAILS check to explicitly report when TOTAL_TOKENS exceeds TOTAL_MAX, even if TOKEN_FAILS is zero. Preserve the existing per-file failure count and limit details, while including the total-budget violation in the fail_gate message.",
+      "suggestions": []
+    }
+  ],
+  "note": "Completed after earlier rate-limit retries."
+}

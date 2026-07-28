@@ -1,0 +1,15 @@
+{
+  "chunk": "e2e",
+  "attempt": 1,
+  "command": [
+    "coderabbit",
+    "review",
+    "--dir",
+    "e2e",
+    "--agent",
+    "--base",
+    "v6.27.0"
+  ],
+  "exit_code": 1,
+  "elapsed_seconds": 9.07
+}
