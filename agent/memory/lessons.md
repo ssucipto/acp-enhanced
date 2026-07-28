@@ -416,3 +416,30 @@
     documented invariants hold. Cross-check ADR consequences against code
     periodically.
   priority: high
+
+- date: 2026-07-28
+  task_type: bug-fix
+  scope: performance
+  mistake: >
+    Raised the Windows E2E per-test timeout from 180s to 600s to "fix" a suite
+    that kept timing out, without first asking why a 72-assertion suite needed
+    more than three minutes. It still timed out at 600s. The real cause was that
+    gitleaks_active() and dupehound_active() each resolved a ~1.5s preference
+    BEFORE the microsecond `command -v` availability check, so every scanner
+    invocation on every platform paid ~3s for two questions whose answers could
+    not change the outcome when the tools were absent. Reordering gave 18x on a
+    single scan and 22x on the suite; the timeout bump was pure symptom-masking
+    and would have permanently hidden the defect.
+  correction: >
+    Never raise a timeout before root-causing what consumes it — a timeout bump
+    deletes the only signal you have. Order guard clauses cheapest-first:
+    `command -v` before any preference/config/network lookup, and confirm the
+    expensive call cannot change the result (here, absent tool => inactive for
+    every preference value, so the reorder was provably equivalent — verified
+    across all 6 states). Diagnostic: high `sys` time relative to `user` in
+    /usr/bin/time -p means process/filesystem churn, not computation — profile
+    subprocess calls, not algorithms. Finally, correctness gates cannot see
+    performance regressions: the corpus scored 100%/100% throughout while the
+    scanner was 18x slower than necessary. Add a wall-clock assertion if speed
+    matters.
+  priority: high
