@@ -39,6 +39,10 @@ acp:
     - git.auto_commit.enabled
     - integrations.coderabbit.enabled
     - integrations.coderabbit.config_path
+    - integrations.gitleaks.enabled
+    - integrations.dupehound.enabled
+    - integrations.dupehound.min_tokens
+    - integrations.dupehound.install_prompt_version
 
   # ── Plan command preferences ──────────────────────────────────────────────
 
@@ -172,6 +176,25 @@ acp:
         default: false
         type: boolean
 
+  # ── Review scanner preferences (M84 / F-105-01) ───────────────────────────
+  # Nested map — not listed in _index; edit directly in agent/preferences/acp.default.yaml.
+
+  review:
+    rule_overrides:
+      id: 'review.rule_overrides'
+      description: |
+        Per-rule enable/disable and severity overrides for `/acp-review` and
+        `/acp-integrity` scanners. Keys are rule IDs (for example `NC-01`,
+        `CH-03`). Values may set `enabled: false` to silence a rule project-wide,
+        or `severity: LOW|MEDIUM|HIGH|CRITICAL` to downgrade/upshift without
+        baselining every occurrence. Requires PyYAML for preference-file reads
+        (CI installs it; use `IG_RULE_OVERRIDES_JSON` or `.json` override files for tests without it).
+        Emits a stderr warning when a YAML preference file exists but PyYAML is missing.
+        Precedence: project preferences override workspace and user files.
+        See agent/wiki/review-legacy-adoption.md.
+      default: {}
+      type: object
+
   # ── Integration preferences ───────────────────────────────────────────────
   # Optional external-tool integrations. All OFF by default — ACP is fully
   # functional without any of them. Added M78 (audit-097, ADR-21). Detection
@@ -198,6 +221,67 @@ acp:
           repository. Presence of this file is the detection signal used by
           coderabbit_available() (agent/scripts/acp.coderabbit.sh).
         default: .coderabbit.yaml
+        type: string
+
+    gitleaks:
+      enabled:
+        id: 'integrations.gitleaks.enabled'
+        description: |
+          Control optional gitleaks-assisted SC-01 secret detection.
+          `auto` (default) enables gitleaks when the local binary is present.
+          `true` requires it explicitly and emits a hint if missing.
+          `false` disables gitleaks even when installed.
+        default: auto
+        type: string
+        options:
+          - name: auto
+            description: Auto-enable gitleaks when it is installed locally.
+            value: auto
+          - name: true
+            description: Expect gitleaks to be available; hint once if missing.
+            value: true
+          - name: false
+            description: Disable gitleaks integration completely.
+            value: false
+
+    dupehound:
+      enabled:
+        id: 'integrations.dupehound.enabled'
+        description: |
+          Control optional dupehound-assisted CH-05 duplicate-code detection.
+          `auto` (default) enables it when the local binary is present.
+          `true` expects the binary and emits a hint if missing.
+          `false` disables CH-05 dupehound scans even when installed.
+        default: auto
+        type: string
+        options:
+          - name: auto
+            description: Auto-enable dupehound when it is installed locally.
+            value: auto
+          - name: true
+            description: Expect dupehound to be available; hint once if missing.
+            value: true
+          - name: false
+            description: Disable dupehound integration completely.
+            value: false
+
+      min_tokens:
+        id: 'integrations.dupehound.min_tokens'
+        description: |
+          Reserved lower bound for dupehound token span filtering. The current
+          wrapper stores the preference now so future CH-05 tuning remains
+          forward-compatible without changing the preference surface.
+        default: 40
+        type: number
+        min: 1
+        max: 500
+
+      install_prompt_version:
+        id: 'integrations.dupehound.install_prompt_version'
+        description: |
+          ACP version that last prompted for dupehound installation. Empty
+          string means no prompt has been recorded yet.
+        default: ''
         type: string
 
 

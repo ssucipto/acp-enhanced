@@ -212,7 +212,7 @@ commands:
       purpose: Verify AI-generated code trustworthiness and provenance — detect malicious patterns, hidden Unicode, exfiltration, supply chain risks, and CI injection surfaces across 55 rules and 6 bash scripts.
     - command: acp.review
       category: core
-      purpose: Enforce code quality, security, and consistency standards — 64 rules (54 core + 10 Appendix A) across OWASP Top 10:2025, TypeScript strictness, API conventions, and mobile MASVS v2.0; Phase 1 via acp.review-scan.sh.
+      purpose: Enforce code quality, security, and consistency standards — 64 rules (54 core + 10 Appendix A) across OWASP Top 10:2025, TypeScript strictness, API conventions, and mobile MASVS v2.0; Phase 1 combines acp.review-scan.sh, optional local analyzers, and validate-owned structural checks.
     - command: git.commit
       category: git
       purpose: Automate version detection, changelog updates, and git commits with proper semantic versioning.
@@ -221,7 +221,7 @@ commands:
       purpose: Initialize a git repository with an intelligent .gitignore based on detected project type.
 
 scripts:
-  count: 43
+  count: 51
   location: agent/scripts/
   naming: "acp.{feature}.sh"
   key_scripts:
@@ -288,9 +288,19 @@ scripts:
     - script: acp.yaml-validate.sh
       implements: Validates YAML files against ACP schema definitions, reporting typed errors and warnings with pass/fail counts.
     - script: acp.review-scan.sh
-      implements: Deterministic Phase 1 scanner for /acp-review — EH-01, EH-02, SC-01, TS-01, TS-02, AP-01, NC-01, SH-01 (8 rules) with --ci and --json modes.
+      implements: Deterministic Phase 1 scanner for /acp-review — 8 built-in rules plus optional shellcheck/gitleaks/dupehound delegation, with --ci, --json, baseline, and inline-suppression support.
     - script: acp.manifest-hash.sh
       implements: Generates and verifies SHA-256 hashes in agent/integrity-manifest.yaml for integrity gateway tamper detection.
+    - script: acp.entropy-scan.sh
+      implements: Shared entropy scanner for /acp-integrity plus SC-01 reuse in /acp-review (`--review-sc01` machine mode).
+    - script: acp.integrity-output.sh
+      implements: Shared finding emitter for integrity/review scanners with baseline files, inline suppressions, and JSON/text summaries.
+    - script: acp.review-measure.sh
+      implements: Measures review-scan recall/precision against the labelled M83 corpus and enforces CI floors.
+    - script: acp.gitleaks.sh
+      implements: Optional gitleaks detection helpers and local install hints for SC-01 secret scanning.
+    - script: acp.dupehound.sh
+      implements: Optional dupehound detection helpers, JSON mapping, and assisted install flow for CH-05 duplicate-code detection.
 
 schemas:
   count: 5
@@ -387,8 +397,11 @@ test_suites:
       coverage: M57 recurring tasks scheduler — schema validation, protocol Step 4.5, hooks block, template
       test_count: 16
     - suite: acp.review.test.sh
-      coverage: /acp-review — 64 rules (54 core + 10 Appendix A), code quality + security enforcement, acp.review-scan.sh behavioral fixtures
-      test_count: 54
+      coverage: /acp-review — 64 rules (54 core + 10 Appendix A), code quality + security enforcement doc assertions, OWASP 2025 coverage, rule-ownership/FP-control documentation, review.rule_overrides, scanner limitations, and CodeRabbit augmentation (M83/M84)
+      test_count: 71
+    - suite: acp.review-scan.test.sh
+      coverage: acp.review-scan.sh behavioral fixtures — multi-path, --self, .mjs/.cjs, --ci/--json exit codes, SH-01 allowlist, lexing/EH-01 token match, shellcheck SH-03, baseline/inline suppression, rule_overrides (B30–B33), dupehound wiring, and entropy reuse (M83/M84)
+      test_count: 59
     - suite: acp.script-command-binding.test.sh
       coverage: Selective script installation based on command dependency declarations
       test_count: 8

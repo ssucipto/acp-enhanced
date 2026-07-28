@@ -15,7 +15,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wiki/config/research roadmap points to M81/ADR-22 for CodeRabbit consumers; Aikido/M76/M77 stay ADR-19-gated.
 
 ### Notes
-- Tasks 270–274 blocked until `tests/fixtures/coderabbit-findings-sample.json` (sanitized real export) exists. Planned ship: **v6.29.0**.
+- Tasks 270–274 blocked until `tests/fixtures/coderabbit-findings-sample.json` (sanitized real export) exists. Planned ship: **v6.30.0** (M81; v6.29.0 taken by M83).
+
+---
+
+## [6.29.2] — 2026-07-28
+
+### Fixed (audit-106 — M84 remediation)
+- **Rule override preload** — `ig_parse_common_args` and `acp.manifest-hash.sh` preload overrides so all integrity emitters apply `review.rule_overrides` consistently.
+- **Severity whitelist** — invalid override severities are rejected in `acp.review-rule-overrides.py`.
+- **PyYAML soft dependency** — stderr warning when YAML preference files exist but PyYAML is missing; B33 E2E gated on `import yaml`.
+
+### Added
+- **E2E B32–B33** — `IG_RULE_OVERRIDES_FILE` JSON path and optional YAML preference override test.
+- **Review doc** — Scanner limitations and CodeRabbit augmentation sections (`acp.review.md`).
+
+### Changed
+- **Carryovers** — F-101-02/03/05/06, F-105-02, F-106-01 marked fixed (doc/spec alignment or remediation).
+
+---
+
+## [6.29.1] — 2026-07-28
+
+### Added (M84 hotfix — F-105-01)
+- **`review.rule_overrides` preferences** — per-rule `enabled: false` and `severity` overrides in `agent/preferences/acp.default.yaml`, loaded by `acp.review-rule-overrides.py` and applied in `acp.integrity-output.sh` for `/acp-review` and `/acp-integrity`.
+- **Legacy adoption guide** — `agent/wiki/review-legacy-adoption.md` documents the baseline → tighten workflow for existing codebases.
+
+### Fixed
+- **Scanner stdin safety** — rule-override loading no longer steals lines from nested `while read` loops (inline suppression regression).
+
+---
+
+## [6.29.0] — 2026-07-27
+
+### Added (M83 — Deterministic Local Review Engine)
+- **Scanner execution coverage** — `e2e/acp.review-scan.test.sh` expanded to 29 behavioral checks covering multi-path scope, `--self`, `.mjs`/`.cjs`, SH-03 delegation, baseline suppression, inline suppression, dupehound wiring, and shared entropy reuse.
+- **Measured corpus + harness** — `tests/fixtures/review-corpus/`, `tests/fixtures/review-scan/`, and `agent/scripts/acp.review-measure.sh` publish reproducible recall/precision for the shipped deterministic review surface.
+- **Optional local analyzer helpers** — `agent/scripts/acp.gitleaks.sh` and `agent/scripts/acp.dupehound.sh` implement the ADR-23 three-gate pattern for SC-01 and CH-05 without making either tool a hard dependency.
+- **M83 validation report** — `agent/reports/review-003-m83-scanner-validation.md` records the closure evidence for the scanner, fixtures, and carryover ledger.
+
+### Changed
+- **`/acp-review` documentation** — reconciled ruleset ownership, OWASP Top 10:2025 coverage, A08 ownership via `/acp-integrity`, and the shipped Phase 1/1b/1c automation counts.
+- **Reference model** — `agent/wiki/domain.yml` now reflects the shipped review scanner helpers/suites and updated behavioral coverage.
+
+### Fixed
+- **F-102-01..08 and F-103-01..10** — all 18 M83 carryovers are now fixed with regression fixtures or doc assertions.
+- **False-positive controls (F-103-09)** — `agent/scripts/acp.integrity-output.sh` now supports `--baseline`, `--write-baseline`, inline `acp-review-ignore` comments with required reasons, and suppression summaries in text/JSON output.
+- **OWASP alignment (F-103-08)** — corrected the secrets/injection mapping and documented all 10 OWASP 2025 categories, with A08 explicitly owned by `/acp-integrity`.
+- **Scanner precision/recall gaps** — M83 closes the measured comment/string lexing, EH-01 token matching, TS-01/TS-02/NC-01 recall, SC-01 prefix/entropy reuse, shellcheck SH-03, and default fixture-exclusion findings.
+
+### Notes
+- **Milestone shipped**: M83 is complete at **17/17 tasks** and released as **v6.29.0**. `current_milestone` in `agent/progress.yaml` remains **M81** because the CodeRabbit fixture gate is intentionally separate work.
 
 ---
 

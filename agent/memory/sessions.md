@@ -2,6 +2,105 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-07-28
+  executor: cursor
+  branch: develop
+  tasks: [audit-106, release-prep-v6.29.2]
+  done:
+    - validate-sync-update-release-prep
+    - prd-main-domain-progress-version-sync
+    - mainline-pr-readiness-confirmed
+  deferred:
+    - m81-implementation → coderabbit-fixture-gate
+  key_fact: "v6.29.2 ready for develop→mainline PR: M83+M84 shipped, zero pending carryovers, validate clean after tag."
+
+- date: 2026-07-28
+  executor: cursor
+  branch: develop
+  tasks: [audit-106, M84, F-105-01, F-106-01, F-105-02, F-101-02, F-101-03, F-101-05, F-101-06]
+  done:
+    - audit-106-m84-remediation-committed
+    - v6-29-2-patch
+    - rule-override-preload-all-emitters
+    - e2e-b32-b33-override-paths
+    - review-doc-scanner-limitations-coderabbit-augmentation
+    - all-actionable-carryovers-closed
+  deferred:
+    - m81-implementation → coderabbit-fixture-gate
+  key_fact: "audit-106 closed M84 shortcuts: ig_parse_common_args + manifest-hash preload overrides; B32/B33 E2E; PyYAML stderr warning; F-101 doc-level carryovers fixed. M81 script implementation still blocked on real fixture."
+
+- date: 2026-07-27
+  executor: cursor
+  branch: develop
+  tasks: [task-283, task-284, task-285, task-286, task-287, task-288, task-289, task-290, task-291, task-292, task-293, task-294, task-295, task-296]
+  done:
+    - m83-complete-17-of-17-tasks
+    - v6-29-0-shipped
+    - tier-c-rules-expansion-38-deterministic
+    - gitleaks-dupehound-optional-helpers
+    - review-corpus-100-percent-recall-precision
+    - adr-23-local-analyzer-carve-out
+  deferred:
+    - m81-270-274 → coderabbit-fixture-gate
+  key_fact: "M83 COMPLETE: /acp-review scanner from ~8% recall to measured 100% on 30-case corpus; ~38 deterministic rules; optional gitleaks/dupehound/shellcheck; baseline+inline suppression. v6.29.0 shipped. current_milestone remains M81 (fixture gate)."
+
+- date: 2026-07-27
+  executor: cursor
+  branch: develop
+  tasks: [task-280, task-281, task-282]
+  done:
+    - m83-phase1-scanner-scope-and-executing-e2e
+    - m83-phase1b-lexing-and-eh01-token-match
+    - f-102-01-02-03-08-fixed
+    - f-103-01-02-fixed
+    - f-104-03-04-06-07-fixed
+    - review-scan-fixtures-committed
+  deferred:
+    - m83-283-284 → finish-phase-1b-1c-before-phase-3
+    - m81-270-274 → coderabbit-fixture-gate
+  key_fact: "Phase 1+1b.282: TARGETS[]/--self/.mjs + executing E2E (28 asserts); lexing via acp.review-scan-ts.py (SC-01 comment-only so secrets still match); EH-01 uses \\btry\\b. Next: task-283 then 284 measure. Do not start Phase 3 until 283+284 land."
+
+- date: 2026-07-27
+  executor: claude
+  branch: develop
+  tasks: []
+  done:
+    - audit-102-deterministic-review-gap-analysis
+    - audit-103-measured-precision-recall-and-standards
+    - m83-planned-17-tasks-6-phases
+    - audit-104-pre-impl-readiness-with-amendments
+    - f-104-01-through-07-amendments-applied
+  deferred:
+    - m83-implementation → handoff-cursor
+    - m81-270-274 → coderabbit-fixture-gate
+  key_fact: "/acp-review Phase 1 measured at ~8% recall / 0% precision on seeded fixtures; multi-path arg bug silently scanned only the last path, masking 2 HIGH findings in scripts/. EH-01 substring test 'try' not in body is disabled by retry/telemetry/entry. M83 (17 tasks) fixes correctness then precision then measures BEFORE expanding — phase 3 gated on 1b+1c. audit-104 found _index: array omission would silently drop new preference keys (no validator covers it)."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
+  tasks: []
+  done:
+    - f-m82-01-through-07-remediated
+    - e2e-cross-layer-and-optionality-hardening
+    - js-yaml-4-3-0-audit-clean
+  deferred:
+    - m81-270-274 → fixture-gate
+    - coderabbit-workflows-cli-chunk → optional-rate-limit
+  key_fact: "M82 findings F-M82-01..07 fixed: SCHEMAS_DIR+gh execFileSync, project-update tags loop, sweep token message, SH-01 allowlist, js-yaml 4.3.0; e2e CLI chunk done; workflows still rate-limited."
+
+- date: 2026-07-24
+  executor: cursor
+  branch: develop
+  tasks: [task-275, task-276, task-277, task-278, task-279]
+  done:
+    - m82-local-thorough-review-campaign
+    - review-002-coderabbit-cli-chunks
+    - f-m82-01-through-07-carryovers
+  deferred:
+    - m82-e2e-workflows-cli-chunks → F-M82-06
+    - m81-270-274 → fixture-gate
+  key_fact: "M82 closed: Phase1+CodeRabbit CLI (2/4 chunks; rate-limited remainder). 7 carryovers F-M82-01..07. CLI does not satisfy ADR-22 M81 fixture. current_milestone remains M81."
+
 - date: 2026-07-24
   executor: cursor
   branch: develop

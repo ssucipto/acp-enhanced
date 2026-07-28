@@ -103,5 +103,6 @@ Aikido is **deferred for current user-base cost**, not abandoned.
 - [ADR-21](../memory/decisions.md) — optionality foundation
 - [ADR-19](../memory/decisions.md) — Aikido / M76 / M77 remain gated
 - [Policy map lite](coderabbit-policy-map-lite.md)
+- [Local thorough review playbook](coderabbit-local-thorough-review.md) (M82 — CLI chunked + ACP weeklies)
 - `agent/patterns/local.optional-external-tool.md`
 - `agent/reports/audit-097-optional-coderabbit-integration.md`, `audit-101-m81-pre-impl-readiness.md`
