@@ -74,9 +74,19 @@ fi
 
 # ── Test File Collection ─────────────────────────────────────────
 # Per-test timeout in seconds (macOS-compatible: no GNU timeout)
-# 120s accommodates slow tests under parallel CPU contention (project-workflow,
+# 180s accommodates slow tests under parallel CPU contention (project-workflow,
 # preferences-validate, sessions). Tests take longer in --parallel 4 mode.
+#
+# Windows (Git Bash) gets a larger budget: process spawning there is roughly an
+# order of magnitude slower than on Linux/macOS, and the scanner suites shell out
+# to bash + git + python3 per assertion. acp.review.test.sh already exceeded 180s
+# on windows-latest while passing comfortably elsewhere, so the limit was
+# measuring interpreter startup, not test health. Raising it on Windows only
+# keeps the tighter signal everywhere else.
 TIMEOUT_SECS=180
+case "$(uname -s)" in
+    MINGW*|MSYS*|CYGWIN*) TIMEOUT_SECS=600 ;;
+esac
 total=0
 passed=0
 failed=0
