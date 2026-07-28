@@ -175,7 +175,7 @@ assert_contains "${SH_OUT}" "SH-01" "review-scan reports SH-01 on bad-shell fixt
 
 print_test_header "B12 — review-scan --ci exits 1 on fixture violations"
 bash "${REVIEW_SCAN}" --ci "${FIXTURE_DIR}" >/dev/null 2>&1 || CI_EC=$?
-assert_true "review-scan --ci exits non-zero on violations" $([ "${CI_EC:-0}" -ne 0 ] && echo 0 || echo 1)
+assert_true "review-scan --ci exits non-zero on violations" "$([ "${CI_EC:-0}" -ne 0 ] && echo 0 || echo 1)"
 
 # Fixture 5: missing return type (TS-02)
 cat > "${FIXTURE_DIR}/no-return-type.ts" << 'TSEOF'

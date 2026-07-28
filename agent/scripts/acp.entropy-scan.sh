@@ -21,7 +21,14 @@ REVIEW_SC01_MODE=false
 
 IG_REMAINING_ARGS=()
 ig_parse_common_args "$@"
-set -- "${IG_REMAINING_ARGS[@]:-}"
+# Restore positionals only when non-empty: "${arr[@]:-}" injects a single
+# empty-string argument for an empty array, which downstream loops treat
+# as a scan target (CodeRabbit PR#13 / F-107-01).
+if [[ ${#IG_REMAINING_ARGS[@]} -gt 0 ]]; then
+  set -- "${IG_REMAINING_ARGS[@]}"
+else
+  set --
+fi
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --threshold) THRESHOLD="$2"; shift 2 ;;
