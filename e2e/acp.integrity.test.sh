@@ -61,7 +61,7 @@ for s in "${SCRIPTS[@]}"; do
     ALL_OK=false
   fi
 done
-assert_true "All 8 integrity scripts exist and pass bash -n" $([ "$ALL_OK" = true ] && echo 0 || echo 1)
+assert_true "All 8 integrity scripts exist and pass bash -n" "$([ "$ALL_OK" = true ] && echo 0 || echo 1)"
 
 print_test_header "S6 — Wrapper parity for acp-integrity"
 assert_file_exists "${PROJECT_ROOT}/.github/prompts/acp-integrity.prompt.md" "prompt wrapper exists"
@@ -116,7 +116,7 @@ for pattern in "ignore previous instructions" "bypass security" "skip this rule"
     echo "  Found: $pattern"
   fi
 done
-assert_true "AGENTS.md is clean of known AI-directive phrases" $([ "$CLEAN" = true ] && echo 0 || echo 1)
+assert_true "AGENTS.md is clean of known AI-directive phrases" "$([ "$CLEAN" = true ] && echo 0 || echo 1)"
 
 print_test_header "B5 — Manifest hash generates valid YAML"
 output=$("${PROJECT_ROOT}/agent/scripts/acp.manifest-hash.sh" --generate 2>&1 || true)
@@ -148,7 +148,7 @@ assert_contains "${entropy_out}" "EXIT:0" "Entropy scan exits 0 when findings pr
 
 print_test_header "B11 — Entropy --ci exits 1 on HIGH finding"
 bash "${PROJECT_ROOT}/agent/scripts/acp.entropy-scan.sh" --ci "${ENTROPY_FIXTURE}" >/dev/null 2>&1 || ec=$?
-assert_true "Entropy --ci exits 1 on HIGH finding" $([ "${ec:-0}" -eq 1 ] && echo 0 || echo 1)
+assert_true "Entropy --ci exits 1 on HIGH finding" "$([ "${ec:-0}" -eq 1 ] && echo 0 || echo 1)"
 
 print_test_header "B12 — Entropy clean fixture stays silent"
 ENTROPY_CLEAN="${PROJECT_ROOT}/agent/benchmarks/fixtures/integrity/entropy-clean.ts"
@@ -171,7 +171,7 @@ end_ns=$(date +%s%N 2>/dev/null || echo "0")
 if [[ "${start_ns}" != "0" && "${end_ns}" != "0" ]]; then
   elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
   echo "  Unicode scan agent/: ${elapsed_ms}ms"
-  assert_true "Unicode scan agent/ under 5000ms" $([ "${elapsed_ms}" -lt 5000 ] && echo 0 || echo 1)
+  assert_true "Unicode scan agent/ under 5000ms" "$([ "${elapsed_ms}" -lt 5000 ] && echo 0 || echo 1)"
 else
   assert_true "Unicode scan agent/ completes (timing N/A)" 0
 fi
@@ -188,7 +188,7 @@ run_fixture_matrix() {
   pos_ec=$?
   [[ "$pos_ec" -eq 0 ]] && pos_out_contains_rule=true || pos_out_contains_rule=false
   echo "$pos_out" | grep -q "${rule}" && pos_out_contains_rule=true
-  assert_true "${script} flags ${positive} (${rule})" $([ "$pos_out_contains_rule" = true ] && echo 0 || echo 1)
+  assert_true "${script} flags ${positive} (${rule})" "$([ "$pos_out_contains_rule" = true ] && echo 0 || echo 1)"
 
   neg_out=$(bash "${PROJECT_ROOT}/agent/scripts/${script}" "${INTEGRITY_FIXTURE_DIR}/${negative}" 2>&1; echo "EXIT:$?")
   assert_contains "${neg_out}" "EXIT:0" "${script} clean on ${negative}"
@@ -231,7 +231,7 @@ for scanner in acp.entropy-scan.sh acp.unicode-scan.sh acp.network-whitelist-val
     fi
   done
 done
-assert_true "False-positive baseline: 0 CRITICAL/HIGH on clean paths" $([ "$baseline_failed" = false ] && echo 0 || echo 1)
+assert_true "False-positive baseline: 0 CRITICAL/HIGH on clean paths" "$([ "$baseline_failed" = false ] && echo 0 || echo 1)"
 
 print_test_header "B21 — manifest.yaml fixture matrix file exists"
 assert_file_exists "${MANIFEST}" "integrity fixture manifest.yaml exists"
@@ -269,5 +269,28 @@ RECURRING_SCRIPT="${PROJECT_ROOT}/agent/scripts/acp.recurring-complete.sh"
 assert_file_exists "${RECURRING_SCRIPT}" "acp.recurring-complete.sh exists"
 bash -n "${RECURRING_SCRIPT}"
 assert_true "acp.recurring-complete.sh passes bash -n" $?
+
+print_test_header "B26 — every scanner runs with no positional argument (F-107-01)"
+# Regression: `set -- "${IG_REMAINING_ARGS[@]:-}"` expands an EMPTY array to one
+# empty-string argument, so $1="" became a scan target and 5 of these 8 scanners
+# aborted with "Error:  not found" on a bare invocation. Each suite's tests all
+# passed explicit paths, so the most common real-world invocation was untested.
+# Run from a scratch dir so the scanners default-target a tiny clean tree.
+B26_DIR="$(mktemp -d)"
+printf 'const value = 1;\nexport default value;\n' > "${B26_DIR}/clean.ts"
+for B26_SCANNER in \
+  acp.unicode-scan.sh \
+  acp.entropy-scan.sh \
+  acp.taint-scan.sh \
+  acp.pattern-scan.sh \
+  acp.dependency-diff.sh \
+  acp.git-provenance.sh \
+  acp.network-whitelist-validate.sh \
+  acp.review-scan.sh
+do
+  B26_OUT="$( (cd "$B26_DIR" && bash "${PROJECT_ROOT}/agent/scripts/${B26_SCANNER}" 2>&1) )" || true
+  assert_not_contains "$B26_OUT" "not found" "${B26_SCANNER} no-arg invocation does not abort on an empty path"
+done
+rm -rf "$B26_DIR"
 
 print_suite_summary
