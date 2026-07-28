@@ -340,4 +340,49 @@ B31_OUT="$(IG_RULE_OVERRIDES_JSON='{"TS-01":{"severity":"LOW"}}' bash "$SCAN" --
 assert_contains "$B31_OUT" "[LOW]" "TS-01 severity override applied"
 assert_contains "$B31_OUT" "TS-01" "TS-01 finding still reported at lowered severity"
 
+print_test_header "B32 — IG_RULE_OVERRIDES_FILE loads JSON override file"
+B32_DIR="$(mktemp -d)"
+B32_PREFS="${B32_DIR}/overrides.json"
+cat > "$B32_PREFS" <<'JSONEOF'
+{"SC-01": {"enabled": false}}
+JSONEOF
+B32_JSON="$(IG_RULE_OVERRIDES_FILE="$B32_PREFS" bash "$SCAN" --json --include-tests "${PROJECT_ROOT}/tests/fixtures/review-corpus/positive/sc01.ts" 2>/dev/null)" || true
+if command -v jq >/dev/null 2>&1; then
+  echo "$B32_JSON" | jq -e '
+    ([.findings[] | select(.rule == "SC-01")] | length) == 0
+    and (.summary.suppressed_rule_override >= 1)
+  ' >/dev/null 2>&1
+  assert_true "JSON override file disables SC-01" $?
+else
+  assert_contains "$B32_JSON" '"suppressed_rule_override":' "JSON override file summary present"
+fi
+rm -rf "$B32_DIR"
+
+if python3 -c 'import yaml' >/dev/null 2>&1; then
+  print_test_header "B33 — project YAML rule_overrides load when PyYAML is present"
+  B33_DIR="$(mktemp -d)"
+  mkdir -p "${B33_DIR}/agent/preferences"
+  cat > "${B33_DIR}/agent/preferences/acp.default.yaml" <<'YAMLEOF'
+acp:
+  review:
+    rule_overrides:
+      SC-01:
+        enabled: false
+YAMLEOF
+  B33_JSON="$(IG_PREFS_ROOT="$B33_DIR" bash "$SCAN" --json --include-tests "${PROJECT_ROOT}/tests/fixtures/review-corpus/positive/sc01.ts" 2>/dev/null)" || true
+  if command -v jq >/dev/null 2>&1; then
+    echo "$B33_JSON" | jq -e '
+      ([.findings[] | select(.rule == "SC-01")] | length) == 0
+      and (.summary.suppressed_rule_override >= 1)
+    ' >/dev/null 2>&1
+    assert_true "project YAML rule_overrides disable SC-01 when PyYAML present" $?
+  else
+    assert_contains "$B33_JSON" '"suppressed_rule_override":' "YAML preference override summary present"
+  fi
+  rm -rf "$B33_DIR"
+else
+  print_test_header "B33 — skip YAML preference override test (PyYAML not installed)"
+  echo "  SKIP: PyYAML not available"
+fi
+
 print_suite_summary

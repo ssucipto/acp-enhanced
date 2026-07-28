@@ -50,6 +50,9 @@ ig_parse_common_args() {
   done
   # Return remaining args via global (caller re-parses)
   IG_REMAINING_ARGS=("$@")
+  # Preload rule overrides once per scanner invocation (M84 / F-105-01).
+  # Must run after args are parsed but before any `while read` emit loops.
+  ig_load_rule_overrides
 }
 
 ig_json_escape() {

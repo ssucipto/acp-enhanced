@@ -52,6 +52,9 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+IG_PREFS_ROOT="${IG_PREFS_ROOT:-$PROJECT_ROOT}"
+ig_load_rule_overrides
+
 hash_file() {
   local file="$1"
   if [[ -f "$file" ]]; then

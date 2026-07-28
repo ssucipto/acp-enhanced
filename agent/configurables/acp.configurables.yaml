@@ -187,8 +187,11 @@ acp:
         `/acp-integrity` scanners. Keys are rule IDs (for example `NC-01`,
         `CH-03`). Values may set `enabled: false` to silence a rule project-wide,
         or `severity: LOW|MEDIUM|HIGH|CRITICAL` to downgrade/upshift without
-        baselining every occurrence. Precedence: project preferences override
-        workspace and user files. See agent/wiki/review-legacy-adoption.md.
+        baselining every occurrence. Requires PyYAML for preference-file reads
+        (CI installs it; use `IG_RULE_OVERRIDES_JSON` or `.json` override files for tests without it).
+        Emits a stderr warning when a YAML preference file exists but PyYAML is missing.
+        Precedence: project preferences override workspace and user files.
+        See agent/wiki/review-legacy-adoption.md.
       default: {}
       type: object
 
