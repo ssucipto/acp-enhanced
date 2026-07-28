@@ -212,6 +212,10 @@ assert_contains "$(cat "${CMD_FILE}")" "/acp-integrity" "A08 ownership cross-lin
 assert_contains "$(cat "${CMD_FILE}")" "Standards Coverage" "Standards Coverage section present"
 assert_contains "$(cat "${CMD_FILE}")" "A08 Software and Data Integrity Failures" "A08 coverage row present"
 assert_contains "$(cat "${CMD_FILE}")" "acp-review-ignore" "inline suppression convention documented"
+assert_contains "$(cat "${CMD_FILE}")" "review.rule_overrides" "per-rule override preference documented"
+assert_contains "$(cat "${CMD_FILE}")" "review-legacy-adoption.md" "legacy adoption wiki linked"
+assert_contains "$(cat "${CMD_FILE}")" "CodeRabbit Augmentation" "CodeRabbit augmentation section present"
+assert_contains "$(cat "${CMD_FILE}")" "Scanner Limitations" "scanner limitations documented"
 
 print_test_header "B17 — review-scan detects TS-02 missing return type"
 TS2_OUT=$(bash "${REVIEW_SCAN}" "${FIXTURE_DIR}/no-return-type.ts" 2>&1 || true)

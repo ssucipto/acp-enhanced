@@ -19,6 +19,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.29.2] — 2026-07-28
+
+### Fixed (audit-106 — M84 remediation)
+- **Rule override preload** — `ig_parse_common_args` and `acp.manifest-hash.sh` preload overrides so all integrity emitters apply `review.rule_overrides` consistently.
+- **Severity whitelist** — invalid override severities are rejected in `acp.review-rule-overrides.py`.
+- **PyYAML soft dependency** — stderr warning when YAML preference files exist but PyYAML is missing; B33 E2E gated on `import yaml`.
+
+### Added
+- **E2E B32–B33** — `IG_RULE_OVERRIDES_FILE` JSON path and optional YAML preference override test.
+- **Review doc** — Scanner limitations and CodeRabbit augmentation sections (`acp.review.md`).
+
+### Changed
+- **Carryovers** — F-101-02/03/05/06, F-105-02, F-106-01 marked fixed (doc/spec alignment or remediation).
+
+---
+
 ## [6.29.1] — 2026-07-28
 
 ### Added (M84 hotfix — F-105-01)

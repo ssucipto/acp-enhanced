@@ -2448,10 +2448,10 @@ carryovers:
     finding: "task-272 assumes weekly-code-review has addable steps — progress.yaml entry is a single command string"
     description: "recurring_tasks weekly-code-review command: /acp-review --report --carryover — no step array. Conditional CodeRabbit behavior must live in review doc/helper or a wrapper script referenced by command:."
     fix_target: "task-272: implement via /acp-review augmentation and/or thin wrapper script; do not invent step list"
-    status: pending
+    status: fixed
     planned_in: M81
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-28
+    verified_in_audit: agent/commands/acp.review.md#CodeRabbit-Augmentation
     escalated_to: null
 
   - audit_id: audit-101
@@ -2461,10 +2461,10 @@ carryovers:
     finding: "task-270 invents carryover fields source: coderabbit and planned_in: M81-import — not live ledger shape"
     description: "Validator maps schema description→finding; live entries use lowercase severity, finding, planned_in: M81, file, fix_target. Invented fields risk validate/ledger drift."
     fix_target: "task-270: match live carryover entry shape; put origin in finding/notes text"
-    status: pending
+    status: fixed
     planned_in: M81
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-28
+    verified_in_audit: task-270-findings-import.md
     escalated_to: null
 
   - audit_id: audit-101
@@ -2487,10 +2487,10 @@ carryovers:
     finding: "Speculative --pr/API import path without verified CodeRabbit contract or committed fixture (F-098-04 class)"
     description: "v1 must be --input file only against tests/fixtures/coderabbit-findings-sample.json from real sanitized export. Defer network/PR fetch until API verified."
     fix_target: "task-270: fixture-first; drop --pr from M81 v1; create tests/fixtures/"
-    status: pending
+    status: fixed
     planned_in: M81
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-28
+    verified_in_audit: task-270-findings-import.md
     escalated_to: null
 
   - audit_id: audit-101
@@ -2500,10 +2500,10 @@ carryovers:
     finding: "task-272 references /acp-findings-import slash command but task-270 is script-first with no command doc"
     description: "Inconsistent surface: either script-only docs everywhere or full command + 5-surface wrappers. Prefer script-only for M81."
     fix_target: "task-272: reference bash agent/scripts/acp.findings-import.sh only"
-    status: pending
+    status: fixed
     planned_in: M81
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-28
+    verified_in_audit: task-272-review-recurring-wiring.md; acp.review.md
     escalated_to: null
 
   - audit_id: audit-101
@@ -2841,7 +2841,7 @@ carryovers:
     status: fixed
     planned_in: M83
     fix_applied_date: 2026-07-27
-    verified_in_audit: e2e/acp.review-scan.test.sh#B23-B26
+    verified_in_audit: e2e/acp.review-scan.test.sh#B23-B26; M84 e2e/acp.review-scan.test.sh#B30-B32
     escalated_to: null
 
   - audit_id: audit-103
@@ -2942,10 +2942,23 @@ carryovers:
     finding: "Lexer is a char-walker, not AST/tree-sitter — semantic rules remain pattern-limited"
     description: "Industry SAST tools use AST or tree-sitter for TS/JS. ACP's Python neutralizer handles comments/strings/templates but cannot reason about scope, types, or control flow. Acceptable for Phase 1 but caps precision on complex TS-02/NC rules."
     fix_target: "Document limitation; consider tree-sitter or typescript compiler API only if corpus FP rate rises post-adoption"
-    status: pending
+    status: fixed
     planned_in: backlog
-    fix_applied_date: null
-    verified_in_audit: null
+    fix_applied_date: 2026-07-28
+    verified_in_audit: agent/commands/acp.review.md#Scanner-Limitations; acp.review-scan-ts.py
+    escalated_to: null
+
+  - audit_id: audit-106
+    finding_id: F-106-01
+    severity: low
+    file: agent/scripts/acp.review-rule-overrides.py
+    finding: "YAML preference-file rule_overrides require PyYAML; silent no-op when import fails"
+    description: "Project/workspace/user acp.default.yaml overrides are skipped without PyYAML. CI installs it; local dev may not. JSON override file (IG_RULE_OVERRIDES_FILE) and IG_RULE_OVERRIDES_JSON work without PyYAML."
+    fix_target: "Document (done in configurables); optional B33 E2E gated on import yaml"
+    status: fixed
+    planned_in: backlog
+    fix_applied_date: 2026-07-28
+    verified_in_audit: e2e/acp.review-scan.test.sh#B33; stderr warning in acp.review-rule-overrides.py
     escalated_to: null
 
   - audit_id: audit-104
