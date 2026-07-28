@@ -989,6 +989,18 @@ export function validateVersionConsistency(root?: string): ValidationError[] {
     if (match) files["AGENTS.md"] = match[1];
   }
 
+  // AGENT.md `**Version**:` field — a DIFFERENT file from AGENTS.md, and the one
+  // tests/acp.security.test.sh compares against progress.yaml. It was absent from
+  // this check, so a v6.29.3 bump that updated AGENTS.md but not AGENT.md passed
+  // acp-validate and only failed in CI (audit-111). Validator gaps that E2E catches
+  // get closed in the validator too.
+  const agentPath = path.join(base, "AGENT.md");
+  if (existsSync(agentPath)) {
+    const raw = readFileSync(agentPath, "utf8");
+    const match = raw.match(/^\*\*Version\*\*:\s*([\d.]+)/m);
+    if (match) files["AGENT.md"] = match[1];
+  }
+
   // CLAUDE.md first line
   const claudePath = path.join(base, "CLAUDE.md");
   if (existsSync(claudePath)) {
