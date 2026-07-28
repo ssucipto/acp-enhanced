@@ -5,6 +5,9 @@ Emits TSV lines: line\\trule\\tmessage\\tseverity
 Neutralises comments/strings before non-secret rules (F-103-01).
 SC-01 uses comment-only stripping so string secrets remain visible.
 EH-01 uses token-boundary \\btry\\b / \\.catch\\s*( (F-103-02).
+
+Lexer limitation (F-105-02): char-walker neutralisation only — not AST/tree-sitter.
+Cannot reason about scope, types, or control flow; see acp.review.md § Scanner limitations.
 """
 from __future__ import annotations
 
