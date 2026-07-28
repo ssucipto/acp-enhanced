@@ -77,16 +77,15 @@ fi
 # 180s accommodates slow tests under parallel CPU contention (project-workflow,
 # preferences-validate, sessions). Tests take longer in --parallel 4 mode.
 #
-# Windows (Git Bash) gets a larger budget: process spawning there is roughly an
-# order of magnitude slower than on Linux/macOS, and the scanner suites shell out
-# to bash + git + python3 per assertion. acp.review.test.sh already exceeded 180s
-# on windows-latest while passing comfortably elsewhere, so the limit was
-# measuring interpreter startup, not test health. Raising it on Windows only
-# keeps the tighter signal everywhere else.
+# The Windows-specific 600s budget added earlier in this release is gone: it was
+# treating a symptom. audit-110 found the real cause — gitleaks_active() and
+# dupehound_active() each resolved a preference (a ~1.5s pure-bash YAML walk)
+# BEFORE checking whether the tool was installed, so every scanner invocation
+# paid ~3s for two questions it did not need to ask. acp.review.test.sh went from
+# 66s to 3s once that was fixed. A uniform limit keeps the signal honest on every
+# platform; if a suite needs more than this again, that is a regression worth
+# failing on rather than accommodating.
 TIMEOUT_SECS=180
-case "$(uname -s)" in
-    MINGW*|MSYS*|CYGWIN*) TIMEOUT_SECS=600 ;;
-esac
 total=0
 passed=0
 failed=0
