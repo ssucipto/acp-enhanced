@@ -5,6 +5,18 @@
 - date: 2026-07-28
   executor: cursor
   branch: develop
+  tasks: [audit-106, release-prep-v6.29.2]
+  done:
+    - validate-sync-update-release-prep
+    - prd-main-domain-progress-version-sync
+    - mainline-pr-readiness-confirmed
+  deferred:
+    - m81-implementation → coderabbit-fixture-gate
+  key_fact: "v6.29.2 ready for develop→mainline PR: M83+M84 shipped, zero pending carryovers, validate clean after tag."
+
+- date: 2026-07-28
+  executor: cursor
+  branch: develop
   tasks: [audit-106, M84, F-105-01, F-106-01, F-105-02, F-101-02, F-101-03, F-101-05, F-101-06]
   done:
     - audit-106-m84-remediation-committed
