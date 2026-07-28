@@ -21,7 +21,7 @@
 | **Name** | ACP Enhanced — Agent Context Protocol Enhanced |
 | **Type** | Proprietary Software — AI Agent Tooling Framework |
 | **Category** | Original Authorship — Computer Software |
-| **Current Version** | 6.29.1 |
+| **Current Version** | 6.29.2 |
 | **Repository** | `https://github.com/ssucipto/acp-enhanced` (public) |
 | **License** | MIT License (portions of original ACP: © Patrick Michaelsen) |
 

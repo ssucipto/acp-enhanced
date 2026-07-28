@@ -2,6 +2,21 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-07-28
+  executor: cursor
+  branch: develop
+  tasks: [audit-106, M84, F-105-01, F-106-01, F-105-02, F-101-02, F-101-03, F-101-05, F-101-06]
+  done:
+    - audit-106-m84-remediation-committed
+    - v6-29-2-patch
+    - rule-override-preload-all-emitters
+    - e2e-b32-b33-override-paths
+    - review-doc-scanner-limitations-coderabbit-augmentation
+    - all-actionable-carryovers-closed
+  deferred:
+    - m81-implementation → coderabbit-fixture-gate
+  key_fact: "audit-106 closed M84 shortcuts: ig_parse_common_args + manifest-hash preload overrides; B32/B33 E2E; PyYAML stderr warning; F-101 doc-level carryovers fixed. M81 script implementation still blocked on real fixture."
+
 - date: 2026-07-27
   executor: cursor
   branch: develop
