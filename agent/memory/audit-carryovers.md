@@ -3042,7 +3042,8 @@ carryovers:
     file: agent/scripts/acp.preferences.sh
     finding: "get_preference (strict) takes 13.8s vs get_preference_or 5.5s for the same key — the preference layer is the deeper root cause"
     description: "A-110-01 was fixed by not calling the preference layer, which sidesteps rather than solves the problem. Reading a single key should be milliseconds, not seconds. The pure-bash YAML walk shows heavy sys time (process/filesystem churn). Every consumer of preferences pays this."
-    fix_target: "Profile get_preference/get_preference_or; cache the parsed preference set per process, or resolve via a single python3/node pass instead of repeated bash YAML traversal."
+    description_addendum: "Measured 2026-07-28: yaml_parse on a 106-line preference file = 1.37s (~13ms/line). yaml_get caches the AST via YAML_CURRENT_FILE, but acp.preferences.sh calls it inside $( ) command substitutions, and a subshell discards that state — so every layer lookup re-parses. 4 lookups cost 8.93s in-shell vs 15.59s via subshells, so caching helps ~1.75x but the ~2.2s per-call floor (parse AND query) remains. get_preference walks up to 4 layers."
+    fix_target: "Two parts: (1) stop defeating the AST cache — have acp.preferences.sh return via a global instead of $( ) per layer; (2) fix the ~2.2s floor in acp.yaml-parser.sh (yaml_parse + yaml_query), or resolve preferences in a single python3/node pass. Re-measure tests/acp.preferences-validate.test.sh, currently 159s against a 180s limit."
     status: pending
     fix_applied_date: null
     verified_in_audit: null
@@ -3054,6 +3055,17 @@ carryovers:
     finding: "acp.review-scan.sh sources acp.coderabbit.sh but calls no coderabbit_* function — unused import"
     description: "Pulls a helper whose coderabbit_active() costs 21.5s into the scanner's surface for no benefit. Sourcing itself is cheap, so this is hygiene rather than a live cost, but it is one call away from becoming one."
     fix_target: "Remove the source line from acp.review-scan.sh, or add the CH-05-style call it was presumably added for."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 110
+    finding_id: A-110-07
+    severity: medium
+    file: tests/acp.preferences-validate.test.sh
+    finding: "preferences-validate runs 159s against a 180s limit (12% margin) — inherently flaky on loaded CI runners"
+    description: "Measured locally at 159s; acp.project-workflow.test.sh at 76s. Both time out intermittently on macos-latest under parallel load — macOS oscillated pass/fail across five consecutive commits on this branch, independent of the changes in them. Root cause is A-110-05 (preference layer at ~2.2s per lookup), not the tests themselves. Not caused by audit-110's scanner fix; that fix took Windows from failing to passing for the first time."
+    fix_target: "Fix A-110-05 to bring these suites well under the limit. Do NOT raise the timeout — audit-110 showed that masks the defect."
     status: pending
     fix_applied_date: null
     verified_in_audit: null
