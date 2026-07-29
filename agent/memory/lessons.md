@@ -443,3 +443,27 @@
     scanner was 18x slower than necessary. Add a wall-clock assertion if speed
     matters.
   priority: high
+
+- date: 2026-07-28
+  task_type: audit-run
+  scope: tooling
+  mistake: >
+    Filed carryover A-110-06 claiming acp.review-scan.sh sources
+    acp.coderabbit.sh without using it. It never sourced it. `grep -l
+    acp.coderabbit.sh` matched line 485 — a CASE PATTERN inside
+    is_sh_allowlisted()'s SH-01 exclusion list. The scanner sources exactly three
+    files. This is the THIRD instance of the same class in three audits: the
+    duplicate-key validator splitting sessions.md on `- date:` and folding
+    `- type: weekly-summary` blocks into the prior entry; the carryover ledger
+    scan matching `status:pending` inside a finding's prose; and now a source
+    check matching a case pattern.
+  correction: >
+    `grep -l <filename>` answers "is this string present", never "is this file
+    used". For structural questions use a structural pattern anchored to the
+    construct — `^\s*(source|\.)\s+` for imports, `^    status:` for a YAML key
+    at its indent, `^- ` for a list item. Before filing any finding whose claim
+    is structural ("X sources Y", "X is unused", "N entries pending"), re-verify
+    with an anchored pattern and read the matched line in context. A wrong
+    finding in the carryover ledger is worse than no finding: it sends the next
+    session to fix something that was never broken.
+  priority: high
