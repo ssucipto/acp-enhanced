@@ -1,0 +1,48 @@
+---
+id: task-300
+milestone: M85
+title: "Parser equivalence — prove output is byte-identical before Phase 2"
+status: not_started
+priority: 5
+complexity: medium
+estimated_hours: 3
+created: 2026-07-28
+started: null
+completed: null
+phase: 1
+depends_on: [task-299]
+audit_findings: [A-110-05]
+files_affected:
+  - tests/acp.yaml-parser-equivalence.test.sh
+---
+
+## Objective
+
+Prove the optimised parser produces identical output to the pre-milestone parser across every YAML file in the repository, before any other subsystem is touched.
+
+## Context
+
+19 files source `acp.yaml-parser.sh`, including `acp.install.sh`, `acp.package-install.sh`, and `acp.package-publish.sh`. A silent behaviour change there is far more expensive than the performance win — a mis-parsed manifest during install is the kind of failure that surfaces in someone else's repo, weeks later.
+
+The 100 existing assertions are a good net but they test the parser's *intended* behaviour, not its *actual current* behaviour on real-world files. Equivalence testing catches the difference.
+
+## Steps
+
+1. Extract the pre-milestone parser from git (`git show <pre-M85-sha>:agent/scripts/acp.yaml-parser.sh`) into a temp path as the reference implementation.
+2. Enumerate every `.yaml`/`.yml` file tracked in the repo, plus `agent/preferences/*.yaml` and `tests/fixtures/**`.
+3. For each file, run both implementations over an identical query set (all leaf keys, several nested paths, array indices) and diff the output.
+4. Diff `yaml_parse` AST files byte-for-byte where the format is expected to be unchanged.
+5. Report any divergence as a hard failure with the file, key, and both outputs.
+6. Keep this as a committed regression test, not a one-off script — the next parser change deserves the same net.
+
+## Verification
+
+- [ ] Every tracked YAML file parsed by both implementations with zero divergence
+- [ ] Query set covers leaf scalars, nested maps, arrays, quoted strings with `:` and `#`, empty values, and comments
+- [ ] Divergences (if any) are reported with file + key + both outputs, not just a count
+- [ ] Test is committed and runs in CI
+- [ ] **Phase 2 does not start until this passes**
+
+## User-Observable Acceptance
+
+`bash tests/acp.yaml-parser-equivalence.test.sh` reports zero divergences across every YAML file in the repo.
