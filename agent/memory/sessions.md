@@ -5,6 +5,27 @@
 - date: 2026-07-28
   executor: claude-opus
   branch: develop
+  tasks: [plan-m85]
+  done:
+    - m85-planned-8-tasks-3-phases
+    - parser-fork-cost-quantified-900-forks-per-parse
+  deferred:
+    - m84-milestone-record-missing -> flagged-to-maintainer
+  key_fact: >
+    M85 planned from audit-110/111. Quantified the defect before planning:
+    parsing a 106-line file spawns ~1,428 traced subprocesses (~900 real forks —
+    tr 270, cut 264, sed 233), because get_node() does `sed -n Np` per node
+    (yaml-parser.sh:78) and get_field() pipes to cut per field (:84, 39 such
+    sites). Reading one field of one node costs two forks; 19 files source this
+    parser. Maintainer chose BOTH the bash-native parser rewrite and a python3
+    preference fast path, plus a wall-clock corpus gate. Phase 2 is gated on
+    task-300 proving byte-identical output first. Also found: M84 shipped in
+    v6.29.1/6.29.2 and is referenced in prose but has NO milestone entry in
+    progress.yaml — numbering gap, left for the maintainer to decide.
+
+- date: 2026-07-28
+  executor: claude-opus
+  branch: develop
   tasks: [audit-111]
   done:
     - readiness-verified-for-mainline-merge
