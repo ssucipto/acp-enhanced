@@ -851,7 +851,7 @@ milestones:
     completed: null
     estimated_weeks: 1
     tasks_completed: 0
-    tasks_total: 8
+    tasks_total: 9
     file: agent/milestones/milestone-85-preference-yaml-performance.md
     notes: 'Root cause behind A-110-04/05/07 and the macOS E2E flake. yaml_parse
       costs 1.37s on 106 lines (~900 forks: get_node seds per node, get_field cuts
@@ -6365,6 +6365,16 @@ tasks:
     actual_hours: null
     estimated_hours: 2
     notes: phase 1; fixture + median timings before any change
+  - id: task-305
+    name: Fix | truncation in AST encoding
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-85-preference-yaml-performance/task-305-pipe-encoding-fix.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 4
+    notes: phase 1 (audit-112 F-112-01/02); writer+reader together, BEFORE task-299
   - id: task-298
     name: Array-backed AST
     priority: 5

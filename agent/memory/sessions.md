@@ -5,6 +5,33 @@
 - date: 2026-07-28
   executor: claude-opus
   branch: develop
+  tasks: [m84-backfill, audit-112, plan-m85-amend]
+  done:
+    - m84-milestone-record-backfilled
+    - audit-112-pre-impl-m85-ready-with-3-amendments
+    - f-112-01-pipe-truncation-found-in-live-ast-writers
+    - m85-amended-task-305-added-297-299-300-revised
+  deferred: []
+  key_fact: >
+    /acp-audit --pre-impl M85 Phase 2 found a HIGH correctness bug inside the very
+    functions M85 was about to rewrite: the live AST writers
+    (acp.yaml-parser.sh:444,:484) emit records with NO escaping, so any YAML value
+    containing `|` is silently truncated — `piped: "a|b|c"` returns `"a`. 19 files
+    source this parser including acp.install.sh and acp.package-install.sh.
+    Worse, add_node() IS the only function that escapes `|` and has ZERO call
+    sites — dead code — so task-299 had told the implementer to read it as the
+    encoding authority, which would have produced false confidence. Worst of all,
+    task-300's "byte-identical output" gate would have PERMANENTLY ENSHRINED the
+    bug, because the corrected behaviour differs from the old truncated output.
+    Three amendments applied: task-305 added (fix writer+reader together, before
+    task-299), task-300 equivalence scoped modulo the pipe fix, task-297 fixture
+    must contain a pipe value so the fix shows as a diff not a claim.
+    Lesson: a pre-impl audit earns its keep on the cross-reference phase — the
+    plan's every number was right and it was still about to cement a bug.
+
+- date: 2026-07-28
+  executor: claude-opus
+  branch: develop
   tasks: [plan-m85]
   done:
     - m85-planned-8-tasks-3-phases
