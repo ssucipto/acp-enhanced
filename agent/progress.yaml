@@ -824,6 +824,24 @@ milestones:
       current_milestone remains M81 (fixture gate).
 
       '
+  M84:
+    name: Review Rule Overrides (review.rule_overrides hotfix, v6.29.1-v6.29.2)
+    priority: 4
+    status: completed
+    progress: 100
+    started: 2026-07-28
+    completed: 2026-07-28
+    estimated_weeks: 0.2
+    tasks_completed: 2
+    tasks_total: 2
+    file: agent/milestones/milestone-84-review-rule-overrides.md
+    notes: 'BACKFILLED RECORD (audit-111). M84 shipped as v6.29.1/v6.29.2 (commits
+      3b5f237 feature, 8f078e7 audit-106 remediation) but never had a milestone doc
+      or milestones: entry — referenced only in CHANGELOG and prose. Reconstructed
+      from the shipping commits. Delivered review.rule_overrides (per-rule enable/
+      disable + severity), acp.review-rule-overrides.py, legacy adoption guide, and
+      E2E B30-B33. audit-106 remediation moved override loading into
+      ig_parse_common_args so emitters could not run before the preload.'
   M85:
     name: Preference & YAML Parser Performance (v6.30.1)
     priority: 4
