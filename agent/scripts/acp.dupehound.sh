@@ -13,10 +13,17 @@ _dupehound_repo_root() {
   git rev-parse --show-toplevel 2>/dev/null || echo "."
 }
 
+# Memoised: resolving a preference is a ~1.5s pure-bash YAML walk (audit-110).
+_ACP_DUPEHOUND_PREF_CACHE=""
 _dupehound_pref() {
+  if [[ -n "$_ACP_DUPEHOUND_PREF_CACHE" ]]; then
+    echo "$_ACP_DUPEHOUND_PREF_CACHE"
+    return 0
+  fi
   local root
   root="$(_dupehound_repo_root)"
-  ( cd "$root" 2>/dev/null && get_preference_or "acp" "integrations.dupehound.enabled" "auto" ) || echo "auto"
+  _ACP_DUPEHOUND_PREF_CACHE="$( ( cd "$root" 2>/dev/null && get_preference_or "acp" "integrations.dupehound.enabled" "auto" ) || echo "auto" )"
+  echo "$_ACP_DUPEHOUND_PREF_CACHE"
 }
 
 _dupehound_prompt_version() {
@@ -42,10 +49,13 @@ dupehound_available() {
 }
 
 dupehound_active() {
+  # Availability first: when dupehound is absent the result is "inactive" for
+  # every preference value, so the ~1.5s preference walk is pure waste (audit-110).
+  dupehound_available || return 1
   local pref
   pref="$(_dupehound_pref)"
   [[ "$pref" == "false" ]] && return 1
-  dupehound_available
+  return 0
 }
 
 dupehound_hint_if_missing() {
