@@ -9,11 +9,11 @@ updated: 2026-07-28
 
 **Planned version**: v6.30.1
 **Status**: not_started
-**Progress**: 0/8 tasks
-**Estimated effort**: ~26h (8 tasks, 3 phases)
-**Source**: audit-110 (root cause), audit-111 (readiness + retraction), maintainer directive 2026-07-28
+**Progress**: 0/9 tasks
+**Estimated effort**: ~28h (9 tasks, 3 phases)
+**Source**: audit-110 (root cause), audit-111 (readiness + retraction), audit-112 (pre-impl, 3 amendments), maintainer directive 2026-07-28
 **Depends on**: nothing — independent of M81's ADR-22 CodeRabbit fixture gate
-**Closes**: A-110-04, A-110-05, A-110-07
+**Closes**: A-110-04, A-110-05, A-110-07, F-112-01, F-112-02
 
 ---
 
@@ -55,11 +55,25 @@ Make preference resolution and YAML parsing fast enough that they stop being a s
 
 | Phase | Tasks | Outcome |
 |---|---|---|
-| **1 — Bash-native parser** | 297, 298, 299, 300 | AST held in memory, fields split with parameter expansion, equivalence proven against the existing 100 assertions |
+| **1 — Bash-native parser** | 297, **305**, 298, 299, 300 | `\|` encoding fixed, AST held in memory, fields split with parameter expansion, equivalence proven against the existing 100 assertions |
 | **2 — Preference fast path** | 301, 302 | All layers resolved in one `python3` pass, with the pure-bash path retained as fallback |
 | **3 — Gate and closure** | 303, 304 | Wall-clock budget in the corpus gate; A-110-04/05/07 verified closed |
 
 Phase 2 must not start until Phase 1's equivalence task (300) passes. The parser is sourced by 19 files; a silent behaviour change there is far more expensive than the performance win.
+
+## Amendments from audit-112 (pre-implementation)
+
+Phase 2 code cross-reference found a correctness defect inside the very functions this milestone rewrites. Three amendments, all applied:
+
+| # | Finding | Amendment |
+|---|---------|-----------|
+| 1 | **F-112-01** (HIGH) — the live AST writers (`:444`, `:484`) do not escape `\|`, so `piped: "a\|b\|c"` returns `"a`. 19 files source this parser. | **New task-305** fixes writer and reader together, sequenced *before* task-299 so the encoding is settled before the splitter is rewritten. |
+| 2 | **F-112-02** (MEDIUM) — `add_node()` is the only function that escapes `\|`, and it has **zero call sites**. task-299 originally told the implementer to read it as the encoding authority. | task-299 retargeted to the live writers; dead `add_node()` resolved in task-305. |
+| 3 | **F-112-03** (HIGH) — task-300's "byte-identical output" would have permanently enshrined F-112-01, since the correct new behaviour differs from the old truncated output. | task-300 now asserts equivalence **modulo the documented `\|` fix**, with every such divergence enumerated explicitly rather than silently tolerated. |
+
+task-297's fixture must include a `\|`-containing value so the baseline captures the broken behaviour and the fix appears as a diff, not a claim.
+
+> **F-112-01 is shippable independently.** It is a data-corruption bug and depends on no performance work. If M85 slips, it should not wait.
 
 ## Deliverables
 
@@ -95,6 +109,8 @@ Phase 2 must not start until Phase 1's equivalence task (300) passes. The parser
 - [ ] Corpus gate fails when a single-file scan exceeds its wall-clock budget
 - [ ] macOS E2E green across **3 consecutive runs**
 - [ ] A-110-04, A-110-05, A-110-07 stamped fixed with verifying audit
+- [ ] `piped: "a|b|c"` round-trips intact through `yaml_parse` → `yaml_get` (F-112-01)
+- [ ] Exactly one AST-writing code path, or all paths share one encoding helper (F-112-02)
 
 ## References
 
