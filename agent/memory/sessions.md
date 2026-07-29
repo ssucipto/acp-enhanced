@@ -5,6 +5,54 @@
 - date: 2026-07-28
   executor: claude-opus
   branch: develop
+  tasks: [audit-111]
+  done:
+    - readiness-verified-for-mainline-merge
+    - a-110-06-retracted-as-false-positive
+    - a-110-04-risk-framing-corrected
+  deferred:
+    - a-110-04-05-07 -> preference-layer-work
+  key_fact: >
+    Readiness check found my own audit-110 finding A-110-06 was FALSE:
+    acp.review-scan.sh never sourced acp.coderabbit.sh — `grep -l` had matched a
+    case pattern in is_sh_allowlisted()'s SH-01 allowlist. Retracted, and
+    A-110-04's risk downgraded (coderabbit_active is unreachable from the
+    scanner). Third substring-vs-structure error in three audits. Merge decision:
+    mainline baseline is macOS+Windows RED; develop is macOS red only, so the
+    merge strictly improves CI — Windows goes red->green for the first time. The
+    remaining macOS failure is one suite (preferences-validate, 159s vs a 180s
+    limit) tracked as A-110-07, root-caused to A-110-05, and not caused by these
+    commits.
+
+- date: 2026-07-28
+  executor: claude-opus
+  branch: develop
+  tasks: [audit-110]
+  done:
+    - windows-timeout-root-caused-to-preference-ordering
+    - gitleaks-dupehound-availability-short-circuit-plus-memoisation
+    - windows-600s-timeout-band-aid-reverted
+  deferred:
+    - coderabbit-21s-memoisation -> A-110-04
+    - get_preference-13.8s-profile -> A-110-05
+    - unused-coderabbit-source -> A-110-06
+  key_fact: >
+    The Windows E2E timeout was never a Windows problem or a hang. Every scanner
+    invocation spent ~3s asking whether two optional analyzers were ENABLED
+    before checking whether they were INSTALLED — gitleaks_active() and
+    dupehound_active() each resolved a ~1.5s preference first, then ran a
+    microsecond `command -v`. When the tool is absent the answer is "inactive"
+    for every preference value, so the expensive call could never change it.
+    Reordering took a single-file scan 2.95s -> 0.16s (18x) and
+    acp.review.test.sh 66s -> 3s (22x); the 600s Windows timeout added hours
+    earlier was then reverted as a symptom fix. The tell was sys=1.78s of a 2.95s
+    run — high system time means process/filesystem churn, not computation.
+    Why nobody noticed: the corpus gate measures recall/precision, never time, so
+    a scanner 18x slower than necessary still scores 100%/100%.
+
+- date: 2026-07-28
+  executor: claude-opus
+  branch: develop
   tasks: [audit-110, validate-sync-update-commit]
   done:
     - adr-20-hook-binding-violation-found-and-enforced

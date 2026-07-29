@@ -3023,3 +3023,50 @@ carryovers:
     fix_applied_date: 2026-07-28
     verified_in_audit: "108"
     escalated_to: null
+
+  # ── AUDIT-110 FINDINGS — WINDOWS TIMEOUT ROOT CAUSE (2026-07-28) ────────────
+  - audit_id: 110
+    finding_id: A-110-04
+    severity: high
+    file: agent/scripts/acp.coderabbit.sh
+    finding: "coderabbit_active() costs 21.5s — _coderabbit_enabled 13.8s + coderabbit_available 5.5s, neither memoised"
+    description: "Same defect class as A-110-01 but in a colder path. coderabbit_active cannot reorder (it must read the preference to know if opted in), so the fix is memoisation plus fixing the underlying preference cost. Not on the scan path at all — audit-111 confirmed acp.review-scan.sh never sources acp.coderabbit.sh (the audit-110 claim that it did was a false positive, see A-110-06). Reachable only from e2e/coderabbit-optionality.test.sh and any future caller, each of which inherits 21.5s."
+    fix_target: "Memoise _coderabbit_enabled and the config_path lookup the way acp.gitleaks.sh/_dupehound now do; re-measure coderabbit_active."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 110
+    finding_id: A-110-05
+    severity: medium
+    file: agent/scripts/acp.preferences.sh
+    finding: "get_preference (strict) takes 13.8s vs get_preference_or 5.5s for the same key — the preference layer is the deeper root cause"
+    description: "A-110-01 was fixed by not calling the preference layer, which sidesteps rather than solves the problem. Reading a single key should be milliseconds, not seconds. The pure-bash YAML walk shows heavy sys time (process/filesystem churn). Every consumer of preferences pays this."
+    description_addendum: "Measured 2026-07-28: yaml_parse on a 106-line preference file = 1.37s (~13ms/line). yaml_get caches the AST via YAML_CURRENT_FILE, but acp.preferences.sh calls it inside $( ) command substitutions, and a subshell discards that state — so every layer lookup re-parses. 4 lookups cost 8.93s in-shell vs 15.59s via subshells, so caching helps ~1.75x but the ~2.2s per-call floor (parse AND query) remains. get_preference walks up to 4 layers."
+    fix_target: "Two parts: (1) stop defeating the AST cache — have acp.preferences.sh return via a global instead of $( ) per layer; (2) fix the ~2.2s floor in acp.yaml-parser.sh (yaml_parse + yaml_query), or resolve preferences in a single python3/node pass. Re-measure tests/acp.preferences-validate.test.sh, currently 159s against a 180s limit."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 110
+    finding_id: A-110-06
+    severity: low
+    file: agent/scripts/acp.review-scan.sh
+    finding: "RETRACTED — acp.review-scan.sh does NOT source acp.coderabbit.sh; the original finding was a false positive"
+    description: "audit-111 re-checked: acp.review-scan.sh sources exactly three files (acp.integrity-output.sh:16, acp.gitleaks.sh:18, acp.dupehound.sh:20). The audit-110 finding came from `grep -l acp.coderabbit.sh` matching line 485, which is a CASE PATTERN inside is_sh_allowlisted()'s SH-01 exclusion list, not a source statement. Third occurrence of the same substring-vs-structure parsing trap (cf. sessions.md weekly-summary split, carryover status:pending in prose). No defect exists; nothing to fix."
+    fix_target: "None — finding retracted. Consequence: coderabbit_active() is NOT reachable from the scanner, so A-110-04's risk is lower than originally stated."
+    status: fixed
+    fix_applied_date: 2026-07-28
+    verified_in_audit: "111"
+    escalated_to: null
+  - audit_id: 110
+    finding_id: A-110-07
+    severity: medium
+    file: tests/acp.preferences-validate.test.sh
+    finding: "preferences-validate runs 159s against a 180s limit (12% margin) — inherently flaky on loaded CI runners"
+    description: "Measured locally at 159s; acp.project-workflow.test.sh at 76s. Both time out intermittently on macos-latest under parallel load — macOS oscillated pass/fail across five consecutive commits on this branch, independent of the changes in them. Root cause is A-110-05 (preference layer at ~2.2s per lookup), not the tests themselves. Not caused by audit-110's scanner fix; that fix took Windows from failing to passing for the first time."
+    fix_target: "Fix A-110-05 to bring these suites well under the limit. Do NOT raise the timeout — audit-110 showed that masks the defect."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
