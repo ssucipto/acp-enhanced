@@ -3030,7 +3030,7 @@ carryovers:
     severity: high
     file: agent/scripts/acp.coderabbit.sh
     finding: "coderabbit_active() costs 21.5s — _coderabbit_enabled 13.8s + coderabbit_available 5.5s, neither memoised"
-    description: "Same defect class as A-110-01 but in a colder path. coderabbit_active cannot reorder (it must read the preference to know if opted in), so the fix is memoisation plus fixing the underlying preference cost. Not currently on the scan path — acp.review-scan.sh sources the helper but calls nothing from it — so this is latent, not active. Any future caller inherits 21.5s."
+    description: "Same defect class as A-110-01 but in a colder path. coderabbit_active cannot reorder (it must read the preference to know if opted in), so the fix is memoisation plus fixing the underlying preference cost. Not on the scan path at all — audit-111 confirmed acp.review-scan.sh never sources acp.coderabbit.sh (the audit-110 claim that it did was a false positive, see A-110-06). Reachable only from e2e/coderabbit-optionality.test.sh and any future caller, each of which inherits 21.5s."
     fix_target: "Memoise _coderabbit_enabled and the config_path lookup the way acp.gitleaks.sh/_dupehound now do; re-measure coderabbit_active."
     status: pending
     fix_applied_date: null
@@ -3052,12 +3052,12 @@ carryovers:
     finding_id: A-110-06
     severity: low
     file: agent/scripts/acp.review-scan.sh
-    finding: "acp.review-scan.sh sources acp.coderabbit.sh but calls no coderabbit_* function — unused import"
-    description: "Pulls a helper whose coderabbit_active() costs 21.5s into the scanner's surface for no benefit. Sourcing itself is cheap, so this is hygiene rather than a live cost, but it is one call away from becoming one."
-    fix_target: "Remove the source line from acp.review-scan.sh, or add the CH-05-style call it was presumably added for."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    finding: "RETRACTED — acp.review-scan.sh does NOT source acp.coderabbit.sh; the original finding was a false positive"
+    description: "audit-111 re-checked: acp.review-scan.sh sources exactly three files (acp.integrity-output.sh:16, acp.gitleaks.sh:18, acp.dupehound.sh:20). The audit-110 finding came from `grep -l acp.coderabbit.sh` matching line 485, which is a CASE PATTERN inside is_sh_allowlisted()'s SH-01 exclusion list, not a source statement. Third occurrence of the same substring-vs-structure parsing trap (cf. sessions.md weekly-summary split, carryover status:pending in prose). No defect exists; nothing to fix."
+    fix_target: "None — finding retracted. Consequence: coderabbit_active() is NOT reachable from the scanner, so A-110-04's risk is lower than originally stated."
+    status: fixed
+    fix_applied_date: 2026-07-28
+    verified_in_audit: "111"
     escalated_to: null
   - audit_id: 110
     finding_id: A-110-07

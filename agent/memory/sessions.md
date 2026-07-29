@@ -5,6 +5,28 @@
 - date: 2026-07-28
   executor: claude-opus
   branch: develop
+  tasks: [audit-111]
+  done:
+    - readiness-verified-for-mainline-merge
+    - a-110-06-retracted-as-false-positive
+    - a-110-04-risk-framing-corrected
+  deferred:
+    - a-110-04-05-07 -> preference-layer-work
+  key_fact: >
+    Readiness check found my own audit-110 finding A-110-06 was FALSE:
+    acp.review-scan.sh never sourced acp.coderabbit.sh — `grep -l` had matched a
+    case pattern in is_sh_allowlisted()'s SH-01 allowlist. Retracted, and
+    A-110-04's risk downgraded (coderabbit_active is unreachable from the
+    scanner). Third substring-vs-structure error in three audits. Merge decision:
+    mainline baseline is macOS+Windows RED; develop is macOS red only, so the
+    merge strictly improves CI — Windows goes red->green for the first time. The
+    remaining macOS failure is one suite (preferences-validate, 159s vs a 180s
+    limit) tracked as A-110-07, root-caused to A-110-05, and not caused by these
+    commits.
+
+- date: 2026-07-28
+  executor: claude-opus
+  branch: develop
   tasks: [audit-110]
   done:
     - windows-timeout-root-caused-to-preference-ordering
