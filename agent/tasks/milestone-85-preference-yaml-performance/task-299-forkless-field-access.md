@@ -10,8 +10,8 @@ created: 2026-07-28
 started: null
 completed: null
 phase: 1
-depends_on: [task-298]
-audit_findings: [A-110-05, F-112-01, F-112-02, F2-01]
+depends_on: [task-297]
+audit_findings: [A-110-05, F-112-01, F2-01, F2-06, F2-07]
 files_affected:
   - agent/scripts/acp.yaml-parser.sh
   - tests/acp.yaml-parser.test.sh
@@ -24,6 +24,10 @@ Remove the per-field fork **and** stop the parser truncating values that contain
 ## Context
 
 > **Merged by audit-113 (F2-01).** This task previously covered only the fork removal, with the `|` encoding split into a separate task-305. That split was circular: task-299 declared `depends_on: [task-305]`, while task-305's own steps said the reader fix was "unblocked by task-299's parameter-expansion splitter". An implementer following the DAG would have had to write a throwaway escape-aware reader that this task then replaced — the exact double-write the split was meant to prevent. The encoding and the splitter are one edit to `get_field()` and the record format, so they are one task.
+
+> **Reordered by maintainer decision (F2-07), 2026-07-30.** This task now runs *before* task-298. Fork attribution for one parse of the 89-node benchmark fixture — 1498 forks total: **`cut` 703 (47%)**, `sed` 484, `grep` 176, `wc` 88, `awk` 46. This task's parameter-expansion technique removes the `cut` forks with **zero** staleness risk, whereas task-298's array cache targets a subset of the `sed` forks and carries one. Safe high-value work goes first.
+
+> **F2-06 supersedes F-112-02.** `create_node` is **defined twice** — `:60` escapes `|`, `:473` ("Original create_node for backward compatibility") does not — and bash keeps the later definition, so the escaping version is silently shadowed. `declare -f create_node` shows zero escaping lines. There is no `add_node` in this file; F-112-02 grepped a name that never existed.
 
 **The fork cost (A-110-05).** `get_field()` (`:84`) is `get_node "$node_id" | cut -d'|' -f"$field_num"`. With task-298 removing the per-node `sed`, `cut` is the remaining per-access fork. There are 39 `cut`/`tr` pipe sites; `:95-97` repeat the pattern inline.
 
@@ -41,11 +45,15 @@ piped: "a|b|c"
 
 19 files source this parser, including `acp.install.sh`, `acp.package-install.sh`, and `acp.package-publish.sh`.
 
-**F-112-02.** `add_node()` (`:60-73`) *does* escape `|` and has **zero call sites** — dead code, and the only escaping path in the file. Do not treat it as the encoding authority. Note `cut` would not honour `\|` anyway, which is why writer and reader must change together.
+**F2-06.** The shadowed `create_node` at `:60` escapes `|`; the live one at `:473` does not. Deleting the duplicate is part of this task. Note `cut` would not honour `\|` anyway, which is why writer and reader must change together.
 
 A naive `${var%%|*}` reproduces the truncation exactly and is **not** a valid implementation here.
 
 ## Steps
+
+**Deliver in two commits** so the safe win is not held hostage to the risky one:
+> **A —** fork-free field splitting with **byte-identical behaviour** (steps 3-5). Captures the 703 `cut` forks. No encoding change, so nothing can regress.
+> **B —** the `|` encoding fix (steps 1, 2, 6). A deliberate behaviour change with its own assertions.
 
 1. Choose one encoding and document it in the file header. Escaping `|` as `\|` is the obvious candidate — first confirm the reader can distinguish `\|` from a literal backslash followed by a delimiter.
 2. Apply it at both live writers (`:444`, `:484`). They are duplicated; collapse them into one helper so a third writer cannot drift again.
