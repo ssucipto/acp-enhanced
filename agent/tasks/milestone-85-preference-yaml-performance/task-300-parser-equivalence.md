@@ -11,14 +11,14 @@ started: null
 completed: null
 phase: 1
 depends_on: [task-299]
-audit_findings: [A-110-05, F-112-03]
+audit_findings: [A-110-05, F-112-03, F2-01]
 files_affected:
   - tests/acp.yaml-parser-equivalence.test.sh
 ---
 
 ## Objective
 
-Prove the optimised parser produces identical output to the pre-milestone parser across every YAML file in the repository — **except for values containing `|`, which task-305 deliberately fixes** — before any other subsystem is touched.
+Prove the optimised parser produces identical output to the pre-milestone parser across every YAML file in the repository — **except for values containing `|`, which task-299 deliberately fixes** — before any other subsystem is touched.
 
 > **Amended by audit-112 (F-112-03).** As originally written, "byte-identical output" would have permanently enshrined the F-112-01 truncation bug: the pre-milestone parser returns `"a` for `"a|b|c"`, so an unqualified equivalence gate would have marked the *correct* new behaviour as a regression. Equivalence is therefore asserted **modulo the documented `|` fix**, which gets its own positive assertions instead.
 
@@ -34,7 +34,7 @@ The 100 existing assertions are a good net but they test the parser's *intended*
 2. Enumerate every `.yaml`/`.yml` file tracked in the repo, plus `agent/preferences/*.yaml` and `tests/fixtures/**`.
 3. For each file, run both implementations over an identical query set (all leaf keys, several nested paths, array indices) and diff the output.
 4. Diff `yaml_parse` AST files byte-for-byte where the format is expected to be unchanged.
-5. Report any divergence as a hard failure with the file, key, and both outputs — **except** where the value contains `|`, which must be asserted against the *corrected* expectation from task-305, never against the old truncated output.
+5. Report any divergence as a hard failure with the file, key, and both outputs — **except** where the value contains `|`, which must be asserted against the *corrected* expectation from task-299, never against the old truncated output.
 6. Enumerate every divergence attributable to the `|` fix explicitly in the test output, so "expected difference" is never a silent category.
 7. Keep this as a committed regression test, not a one-off script — the next parser change deserves the same net.
 

@@ -9,17 +9,17 @@ updated: 2026-07-28
 
 **Planned version**: v6.30.1
 **Status**: not_started
-**Progress**: 0/9 tasks
-**Estimated effort**: ~28h (9 tasks, 3 phases)
-**Source**: audit-110 (root cause), audit-111 (readiness + retraction), audit-112 (pre-impl, 3 amendments), maintainer directive 2026-07-28
+**Progress**: 0/8 tasks
+**Estimated effort**: ~27h (8 tasks, 3 phases)
+**Source**: audit-110 (root cause), audit-111 (readiness + retraction), audit-112 (pre-impl r1, 3 amendments), audit-113 (pre-impl r2, 4 amendments), maintainer directive 2026-07-28
 **Depends on**: nothing — independent of M81's ADR-22 CodeRabbit fixture gate
-**Closes**: A-110-04, A-110-05, A-110-07, F-112-01, F-112-02
+**Closes**: A-110-04, A-110-05, A-110-07, F-112-01, F-112-02, F2-01, F2-02
 
 ---
 
 ## Why this milestone exists
 
-audit-110 chased a `windows-latest` E2E timeout and found it was neither a Windows problem nor a hang. Every scanner invocation spent ~3 seconds resolving two preferences before checking whether the tools those preferences described were even installed. Reordering the guards gave an **18× speedup** and turned Windows green for the first time.
+audit-110 chased a `windows-latest` E2E timeout and found it was neither a Windows problem nor a hang. Every scanner invocation spent ~3 seconds resolving two preferences before checking whether the tools those preferences described were even installed. Reordering the guards gave an **~15× speedup** and turned Windows green for the first time.
 
 That fix *sidestepped* the cost rather than removing it. The cost is still there for every other consumer:
 
@@ -27,9 +27,9 @@ That fix *sidestepped* the cost rather than removing it. The cost is still there
 |---|---|
 | `yaml_parse` on a 106-line preference file | **1.37s** (~13ms/line) |
 | Subprocess spawns for that one parse | **~1,428 traced; ~900 real forks** (`tr` 270, `cut` 264, `sed` 233) |
-| One `get_preference` (walks up to 4 layers) | **~2.2s** |
-| `get_preference` strict vs `get_preference_or` | 13.8s vs 5.5s |
-| `coderabbit_active()` | **21.5s** |
+| One `get_preference` (walks up to 4 layers) | **~1.5s** (mean/5) |
+| `get_preference` vs `get_preference_or` | 1521ms vs 1545ms — *identical; the latter wraps the former* |
+| `coderabbit_active()` | **~1.44s** (one preference read; short-circuits when disabled) |
 | `tests/acp.preferences-validate.test.sh` | **159s against a 180s limit** |
 
 Two structural causes, both confirmed by reading the code:
@@ -55,7 +55,7 @@ Make preference resolution and YAML parsing fast enough that they stop being a s
 
 | Phase | Tasks | Outcome |
 |---|---|---|
-| **1 — Bash-native parser** | 297, **305**, 298, 299, 300 | `\|` encoding fixed, AST held in memory, fields split with parameter expansion, equivalence proven against the existing 100 assertions |
+| **1 — Bash-native parser** | 297, 298, 299, 300 | `\|` encoding fixed, AST held in memory, fields split with parameter expansion, equivalence proven against the existing 100 assertions |
 | **2 — Preference fast path** | 301, 302 | All layers resolved in one `python3` pass, with the pure-bash path retained as fallback |
 | **3 — Gate and closure** | 303, 304 | Wall-clock budget in the corpus gate; A-110-04/05/07 verified closed |
 
@@ -67,13 +67,28 @@ Phase 2 code cross-reference found a correctness defect inside the very function
 
 | # | Finding | Amendment |
 |---|---------|-----------|
-| 1 | **F-112-01** (HIGH) — the live AST writers (`:444`, `:484`) do not escape `\|`, so `piped: "a\|b\|c"` returns `"a`. 19 files source this parser. | **New task-305** fixes writer and reader together, sequenced *before* task-299 so the encoding is settled before the splitter is rewritten. |
-| 2 | **F-112-02** (MEDIUM) — `add_node()` is the only function that escapes `\|`, and it has **zero call sites**. task-299 originally told the implementer to read it as the encoding authority. | task-299 retargeted to the live writers; dead `add_node()` resolved in task-305. |
+| 1 | **F-112-01** (HIGH) — the live AST writers (`:444`, `:484`) do not escape `\|`, so `piped: "a\|b\|c"` returns `"a`. 19 files source this parser. | Folded into **task-299**, which now changes writer encoding and reader in one atomic edit (see audit-113 F2-01 — the original separate task-305 was circular). |
+| 2 | **F-112-02** (MEDIUM) — `add_node()` is the only function that escapes `\|`, and it has **zero call sites**. task-299 originally told the implementer to read it as the encoding authority. | task-299 retargeted to the live writers; dead `add_node()` resolved there too. |
 | 3 | **F-112-03** (HIGH) — task-300's "byte-identical output" would have permanently enshrined F-112-01, since the correct new behaviour differs from the old truncated output. | task-300 now asserts equivalence **modulo the documented `\|` fix**, with every such divergence enumerated explicitly rather than silently tolerated. |
 
 task-297's fixture must include a `\|`-containing value so the baseline captures the broken behaviour and the fix appears as a diff, not a claim.
 
 > **F-112-01 is shippable independently.** It is a data-corruption bug and depends on no performance work. If M85 slips, it should not wait.
+
+## Amendments from audit-113 (pre-implementation, round 2)
+
+Round 2 audited round 1's own amendments. Five findings, all defects in round-1 output:
+
+| # | Finding | Amendment |
+|---|---------|-----------|
+| 1 | **F2-01** (HIGH) — the new task-305 was **circular**: task-299 declared `depends_on: [task-305]` while task-305's steps required task-299's splitter. An implementer would have written the reader twice, the exact failure the split claimed to prevent. | task-305 **merged into task-299** as one atomic writer+reader change. Chain is linear again: 297 → 298 → 299 → 300 → 301 → 302 → 303 → 304. |
+| 2 | **F2-02** (HIGH) — task-301 specified a uniform 4-file lookup and named `_pref_default_file`, which **does not exist**. The 4th layer is `_pref_configurables_file` and reads `${ns}.${path}` **`.default`** — a different key shape. | task-301 rewritten with the real four-layer table and an explicit instruction to read `get_preference()` rather than infer. |
+| 3 | **F2-03** (HIGH) — several figures were single samples taken while E2E sweeps were running. `get_preference_or` "5.5s" was structurally impossible (it wraps `get_preference`); `coderabbit_active` "21.5s" was wrong by ~15×. | All figures in the table above re-measured as means over ≥5 runs and corrected. |
+| 4 | **F2-04** (MEDIUM) — A-110-04 was filed HIGH on the false 21.5s baseline. | Downgraded to medium and restated as an instance of A-110-05; success criterion baseline corrected. |
+
+**What survived scrutiny:** `yaml_parse` at 1369ms (mean/7 vs 1370ms recorded) and the ~900-fork count — the latter because a count cannot be skewed by machine load. These remain the milestone's justification.
+
+> **Rule adopted:** any performance figure entering a planning document must be a mean over ≥5 runs on an otherwise idle machine, and the function must be read before its cost is recorded.
 
 ## Deliverables
 
@@ -101,8 +116,8 @@ task-297's fixture must include a `\|`-containing value so the baseline captures
 ## Success criteria
 
 - [ ] `yaml_parse` on the 106-line preference fixture: **< 150ms** (from 1.37s)
-- [ ] Single `get_preference`: **< 100ms** (from ~2.2s)
-- [ ] `coderabbit_active()`: **< 200ms** (from 21.5s)
+- [ ] Single `get_preference`: **< 100ms** (from ~1.5s)
+- [ ] `coderabbit_active()`: **< 200ms** (from ~1.44s)
 - [ ] `tests/acp.preferences-validate.test.sh`: **< 60s** (from 159s, against an unchanged 180s limit)
 - [ ] All 100 existing parser assertions pass unchanged
 - [ ] Differential test: old and new parser produce identical output across every YAML file in the repo

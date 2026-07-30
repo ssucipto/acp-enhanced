@@ -30,7 +30,7 @@ The baseline must exist **before** the optimisation, otherwise the perf gate in 
 ## Steps
 
 1. Create `tests/fixtures/yaml-perf/` with a committed fixture that mirrors the real shape of `agent/preferences/acp.default.yaml` (~106 lines, nested maps, arrays, quoted scalars). Do **not** point the benchmark at a live repo file that will drift.
-   - **(audit-112)** Include at least one value containing a literal `|`. It is currently truncated (F-112-01), so the baseline records the broken behaviour and task-305's fix shows up as a visible diff rather than an unverifiable claim.
+   - **(audit-112)** Include at least one value containing a literal `|`. It is currently truncated (F-112-01), so the baseline records the broken behaviour and task-299's fix shows up as a visible diff rather than an unverifiable claim.
 2. Write `tests/acp.yaml-parser-perf.test.sh` measuring, over N repetitions and reporting the median:
    - `yaml_parse` on the fixture
    - `yaml_get` for a deep key (cache cold)
