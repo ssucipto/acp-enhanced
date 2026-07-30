@@ -1,0 +1,95 @@
+# Benchmark fixture for tests/acp.yaml-parser-perf.test.sh (M85 task-297).
+# Mirrors the SHAPE of agent/preferences/acp.default.yaml (~106 lines: nested maps,
+# arrays, quoted scalars) without pointing at a live file that will drift.
+#
+# Line 104 deliberately contains a literal `|` inside a value. Before M85 task-299
+# that value is silently truncated at the first pipe (F-112-01), so this fixture
+# records the broken behaviour and the fix appears as a visible diff.
+acp:
+  review:
+    enabled: true
+    min_severity: MEDIUM
+    max_findings: 500
+    fail_on:
+      - CRITICAL
+      - HIGH
+    rule_overrides:
+      SC-01:
+        enabled: true
+        severity: CRITICAL
+      TS-01:
+        enabled: true
+        severity: HIGH
+      EH-02:
+        enabled: true
+        severity: HIGH
+      NC-06:
+        enabled: false
+        severity: LOW
+    scope:
+      include_tests: false
+      include_fixtures: false
+      languages:
+        - typescript
+        - javascript
+        - shell
+        - yaml
+  integrity:
+    enabled: true
+    confidence_ceiling: MEDIUM
+    phases:
+      unicode: true
+      entropy: true
+      taint: false
+      memory: false
+    thresholds:
+      entropy_min: 4.5
+      entropy_max: 8.0
+      snippet_window: 3
+  integrations:
+    gitleaks:
+      enabled: auto
+      config_path: .gitleaks.toml
+      redact: true
+    dupehound:
+      enabled: auto
+      install_prompt_version: ""
+      min_tokens: 50
+    coderabbit:
+      enabled: false
+      config_path: .coderabbit.yaml
+      generate_on_commit: false
+    shellcheck:
+      enabled: auto
+      severity: warning
+  routing:
+    default_executor: copilot
+    cheap_executor: deepseek-v4-flash
+    escalate_on:
+      - architecture-design
+      - data-schema
+    budgets:
+      layer1_tokens: 500
+      layer2_tokens: 1000
+      layer3_tokens: 3500
+  memory:
+    max_sessions: 15
+    compact_at: 15
+    lessons_per_session: 5
+    write_at_discovery: true
+  reporting:
+    format: markdown
+    include_code_pointers: true
+    stakeholder_cadence: weekly
+    quoted_colon: "ratio 3:1 held"
+    quoted_hash: "tracked #42 open"
+    nested_quote: "he said \"fine\" once"
+    unicode_value: "café — naïve façade"
+  paths:
+    reports: agent/reports
+    memory: agent/memory
+    tasks: agent/tasks
+  pipe_value: "a|b|c"
+  trailing_empty: ""
+  numeric_zero: 0
+  bool_false: false
