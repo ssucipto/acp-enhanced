@@ -3,13 +3,13 @@
 <!-- @acp.meta.milestone
 topic: yaml-parser, preferences, performance, forks, ast, macos-flake, perf-gate
 description: Remove the ~900-fork-per-parse cost in acp.yaml-parser.sh and the multi-second preference lookup that sits on top of it, then gate the improvement so it cannot silently regress
-status: not_started
+status: in_progress
 updated: 2026-07-28
 @acp.meta.end -->
 
 **Planned version**: v6.30.1
-**Status**: not_started
-**Progress**: 0/8 tasks
+**Status**: in_progress
+**Progress**: 1/8 tasks
 **Estimated effort**: ~27h (8 tasks, 3 phases)
 **Source**: audit-110 (root cause), audit-111 (readiness + retraction), audit-112 (pre-impl r1, 3 amendments), audit-113 (pre-impl r2, 4 amendments), maintainer directive 2026-07-28
 **Depends on**: nothing — independent of M81's ADR-22 CodeRabbit fixture gate
@@ -95,7 +95,7 @@ Round 2 audited round 1's own amendments. Five findings, all defects in round-1 
 - `agent/scripts/acp.yaml-parser.sh` — array-backed AST, fork-free field access
 - `agent/scripts/acp.pref-resolve.py` — single-pass multi-layer preference resolver
 - `agent/scripts/acp.preferences.sh` — wired to the fast path, pure-bash fallback intact
-- `tests/acp.yaml-parser-perf.test.sh` — benchmark fixture and budget
+- `tests/acp.yaml-parser-perf.sh` — benchmark fixture and budget
 - `agent/scripts/acp.review-measure.sh` — wall-clock budget enforced under `--ci`
 - Memoised CodeRabbit helpers (`acp.coderabbit.sh`)
 

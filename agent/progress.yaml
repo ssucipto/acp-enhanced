@@ -3,7 +3,7 @@ project:
   version: 6.29.3
   started: 2026-02-16
   status: active
-  current_milestone: M81
+  current_milestone: M85
   description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.29.2 shipped.\n\
     \  M83 (deterministic review) and M84 (rule_overrides hotfix) complete.\n\
     \  current_milestone remains M81 — tasks 270-274 blocked on CodeRabbit fixture\n\
@@ -845,12 +845,12 @@ milestones:
   M85:
     name: Preference & YAML Parser Performance (v6.30.1)
     priority: 4
-    status: not_started
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 13
+    started: 2026-07-30
     completed: null
     estimated_weeks: 1
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 8
     file: agent/milestones/milestone-85-preference-yaml-performance.md
     notes: 'Root cause behind A-110-04/05/07 and the macOS E2E flake. yaml_parse
@@ -6358,11 +6358,11 @@ tasks:
   - id: task-297
     name: Performance baseline harness
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-85-preference-yaml-performance/task-297-perf-baseline-harness.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: 2026-07-30
+    completed_date: 2026-07-30
+    actual_hours: 2
     estimated_hours: 2
     notes: phase 1; fixture + median timings before any change
   - id: task-298
@@ -6376,7 +6376,7 @@ tasks:
     estimated_hours: 4
     notes: phase 1; removes per-node sed fork (yaml-parser.sh:78)
   - id: task-299
-    name: Fork-free field access
+    name: Escape-aware fork-free field access (writer encoding + reader)
     priority: 5
     status: not_started
     file: agent/tasks/milestone-85-preference-yaml-performance/task-299-forkless-field-access.md

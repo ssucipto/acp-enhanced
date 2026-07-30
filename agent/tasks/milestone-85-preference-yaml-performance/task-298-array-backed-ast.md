@@ -51,4 +51,4 @@ The AST file itself must stay — `yaml_set`/`yaml_delete` mutate it via `_yaml_
 
 ## User-Observable Acceptance
 
-`bash tests/acp.yaml-parser-perf.test.sh` shows a lower `yaml_parse` median than the task-297 baseline, and every existing parser test still passes.
+`bash tests/acp.yaml-parser-perf.sh` shows a lower `yaml_parse` median than the task-297 baseline, and every existing parser test still passes.
