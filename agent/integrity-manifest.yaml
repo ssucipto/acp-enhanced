@@ -402,7 +402,7 @@ files:
     sha256: "90102fba411c66d08318aad4a4b0461e01f12489c7da032237b242dea6f91e22"
     last_verified: "2026-07-30"
   - path: "agent/scripts/acp.yaml-parser.sh"
-    sha256: "a904a19c3173a43111e3a164ba55ee34adc8722198888db7a062678705e979ed"
+    sha256: "7613c35e246b74c5d290f301c6170935eacf9f903cfe10860a9d67dd2c8ed1cd"
     last_verified: "2026-07-30"
   - path: "agent/scripts/acp.yaml-validate.sh"
     sha256: "b70e2593b64d067073693564f91e6f601e50761f17d63722b87959fef8635260"

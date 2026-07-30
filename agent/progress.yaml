@@ -846,11 +846,11 @@ milestones:
     name: Preference & YAML Parser Performance (v6.30.1)
     priority: 4
     status: in_progress
-    progress: 13
+    progress: 25
     started: 2026-07-30
     completed: null
     estimated_weeks: 1
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 8
     file: agent/milestones/milestone-85-preference-yaml-performance.md
     notes: 'Root cause behind A-110-04/05/07 and the macOS E2E flake. yaml_parse
@@ -6378,11 +6378,11 @@ tasks:
   - id: task-299
     name: Escape-aware fork-free field access (writer encoding + reader)
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-85-preference-yaml-performance/task-299-forkless-field-access.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: 2026-07-30
+    completed_date: 2026-07-30
+    actual_hours: 6
     estimated_hours: 6
     notes: phase 1 (F2-07 reordered FIRST); removes 703 of 1498 forks per parse (47%) safely; two commits — A fork-free split byte-identical, B pipe encoding fix; also fixes F2-06 duplicate create_node
   - id: task-300
