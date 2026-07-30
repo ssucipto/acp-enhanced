@@ -57,25 +57,38 @@ get_next_node_id() {
     wc -l < "$AST_FILE"
 }
 
-create_node() {
-    local type="$1"
-    local key="$2"
-    local value="$3"
-    local parent_id="$4"
-    
-    key=$(echo "$key" | sed 's/|/\\|/g')
-    value=$(echo "$value" | sed 's/|/\\|/g')
-    
-    local node_id
-    node_id=$(get_next_node_id)
-    
-    echo "$node_id|$type|$key|$value|$parent_id|" >> "$AST_FILE"
-    echo "$node_id"
-}
+# NOTE (M85 task-299 / F2-06): a SECOND definition of create_node() lived here.
+# It escaped `|` as `\|`, but a later definition (further down this file, commented
+# "Original create_node for backward compatibility") overrode it — bash keeps the
+# last definition loaded — so the escaping never ran. `declare -f create_node`
+# confirmed zero escaping lines in the live function. That shadowing duplicate was
+# the actual mechanism behind F-112-01. Deleted here; the surviving definition now
+# percent-encodes instead. Do not reintroduce a second definition.
 
 get_node() {
     local node_id="$1"
     sed -n "$((node_id + 1))p" "$AST_FILE"
+}
+
+# Percent-encode / decode the record delimiter so a value containing `|` survives
+# the pipe-delimited AST format (F-112-01).
+#
+# Chosen over backslash escaping deliberately: with `\|` every splitter must
+# distinguish an escaped delimiter from a real one, and 7 sites in this file rebuild
+# a record from split fields — 7 chances to lose it silently. With percent-encoding
+# no literal `|` ever reaches the record, so splitting stays trivial and those 7
+# sites need no change.
+#
+# `%` is encoded FIRST and decoded LAST; otherwise a literal "%7C" in user data
+# would decode into a delimiter.
+_yaml_pct_encode() {   # sets _YE
+    _YE="${1//%/%25}"
+    _YE="${_YE//|/%7C}"
+}
+
+_yaml_pct_decode() {   # sets _YD
+    _YD="${1//%7C/|}"
+    _YD="${_YD//%25/%}"
 }
 
 # Split an AST record into globals without forking.
@@ -134,8 +147,8 @@ get_node_field() {
     case "$field_num" in
         1) printf '%s\n' "$_YN_ID" ;;
         2) printf '%s\n' "$_YN_TYPE" ;;
-        3) printf '%s\n' "$_YN_KEY" ;;
-        4) printf '%s\n' "$_YN_VALUE" ;;
+        3) _yaml_pct_decode "$_YN_KEY";   printf '%s\n' "$_YD" ;;
+        4) _yaml_pct_decode "$_YN_VALUE"; printf '%s\n' "$_YD" ;;
         5) printf '%s\n' "$_YN_PARENT" ;;
         6) printf '%s\n' "$_YN_CHILDREN" ;;
         *) printf '\n' ;;
@@ -494,7 +507,11 @@ create_node_and_link() {
     next_id=$(wc -l < "$AST_FILE")
     
     # Create node: id|type|key|value|parent|children
-    echo "${next_id}|${type}|${key}|${value}|${parent_id}|" >> "$AST_FILE"
+    # F-112-01: encode the delimiter out of user data before it reaches the record.
+    local _ekey _evalue
+    _yaml_pct_encode "$key";   _ekey="$_YE"
+    _yaml_pct_encode "$value"; _evalue="$_YE"
+    echo "${next_id}|${type}|${_ekey}|${_evalue}|${parent_id}|" >> "$AST_FILE"
     
     # Add this node to parent's children list
     if [ "$parent_id" != "-1" ]; then
@@ -538,7 +555,11 @@ create_node() {
     next_id=$(wc -l < "$AST_FILE")
     
     # Create node: id|type|key|value|parent|children
-    echo "${next_id}|${type}|${key}|${value}|${parent_id}|" >> "$AST_FILE"
+    # F-112-01: encode the delimiter out of user data before it reaches the record.
+    local _ekey _evalue
+    _yaml_pct_encode "$key";   _ekey="$_YE"
+    _yaml_pct_encode "$value"; _evalue="$_YE"
+    echo "${next_id}|${type}|${_ekey}|${_evalue}|${parent_id}|" >> "$AST_FILE"
     
     echo "$next_id"
 }
