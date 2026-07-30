@@ -2,6 +2,38 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-07-30
+  executor: claude-opus
+  branch: develop
+  tasks: [audit-113, plan-m85-amend-r2]
+  done:
+    - audit-113-round2-on-own-amendments
+    - task-305-merged-into-299-circular-dep-removed
+    - task-301-layer-model-corrected-configurables
+    - noise-derived-measurements-corrected-across-docs
+    - a-110-04-downgraded-to-medium
+  deferred: []
+  key_fact: >
+    Round 2 pre-impl audited round 1's OWN amendments and found 5 findings, all
+    defects in my round-1 output. (1) The task-305 I added was CIRCULAR: task-299
+    declared depends_on:[task-305] while task-305 step 3 said the reader fix was
+    "unblocked by task-299's splitter" — an implementer would have written the
+    reader twice, the exact failure the split claimed to prevent. Merged into one
+    atomic task. (2) task-301 specified a 4-layer model naming _pref_default_file,
+    which does not exist; the real 4th layer is _pref_configurables_file and reads
+    a DIFFERENT key shape (${ns}.${path}.default) — a uniform resolver would
+    return empty where bash returns a value. (3) Several figures were single
+    samples taken while E2E sweeps ran: "get_preference_or 5.5s vs strict 13.8s"
+    was structurally impossible (the former is a 5-line wrapper CALLING the
+    latter — 1521ms vs 1545ms measured), and "coderabbit_active 21.5s" was wrong
+    by 15x (actual 1439ms, one preference call since it short-circuits when
+    disabled). Those wrong numbers had propagated into the milestone doc, a
+    carryover, and two audit reports as fact. What survived: yaml_parse 1369ms
+    (mean/7 vs 1370ms recorded) and the ~900-fork count — a count cannot be
+    skewed by load. Rule adopted: any perf figure entering a planning doc must be
+    a mean over >=5 runs on an idle machine, and read the function before
+    recording its cost.
+
 - date: 2026-07-28
   executor: claude-opus
   branch: develop
