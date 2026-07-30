@@ -467,3 +467,29 @@
     finding in the carryover ledger is worse than no finding: it sends the next
     session to fix something that was never broken.
   priority: high
+
+- date: 2026-07-30
+  task_type: audit-run
+  scope: measurement
+  mistake: >
+    Recorded single-sample performance measurements as facts in planning
+    documents while full E2E sweeps were running on the same machine. Three
+    figures were wrong: "get_preference strict 13.8s vs get_preference_or 5.5s"
+    (actual 1521ms vs 1545ms — and structurally impossible, since
+    get_preference_or is a 5-line wrapper that CALLS get_preference), and
+    "coderabbit_active 21.5s" (actual 1439ms, wrong by ~15x, and its claimed
+    13.8+5.5 decomposition was invented by the noise — the function
+    short-circuits when CodeRabbit is disabled and makes ONE preference call).
+    Those numbers propagated into a milestone doc, a carryover ledger entry, and
+    two audit reports, and one of them was used to file a carryover as HIGH.
+  correction: >
+    Any performance figure that enters a planning document, carryover, or report
+    must be a mean over >=5 runs on an otherwise idle machine — never a single
+    sample, and never taken while other suites are running. Read the function
+    before recording its cost: a wrapper cannot be slower than what it wraps, and
+    that was disprovable from five lines of source. Prefer load-independent
+    metrics where they exist — the ~900-fork count survived scrutiny unchanged
+    while every timing around it drifted, because a count cannot be skewed by
+    machine load. When correcting a propagated figure, fix every document it
+    reached and annotate the original rather than silently rewriting it.
+  priority: high
