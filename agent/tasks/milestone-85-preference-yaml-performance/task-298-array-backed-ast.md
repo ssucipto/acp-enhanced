@@ -10,11 +10,15 @@ created: 2026-07-28
 started: null
 completed: null
 phase: 1
-depends_on: [task-297]
-audit_findings: [A-110-05]
+depends_on: [task-299]
+audit_findings: [A-110-05, F2-07]
 files_affected:
   - agent/scripts/acp.yaml-parser.sh
 ---
+
+> **RE-SCOPED and CONDITIONAL (F2-07, maintainer decision 2026-07-30).** This task now runs *after* task-299 and is **no longer unconditional**. Fork attribution showed `cut` accounts for 703 of 1498 forks per parse (47%) and task-299 removes those safely; this task targets a subset of the 484 `sed` forks and carries a staleness hazard — all 7 `get_node` call sites read via `node=$(get_node X)`, a subshell that discards cache writes, and `create_node_and_link` mutates a *parent* node's children from inside a subshell (`:466`), which would leave a caller's cached entry stale. 10 AST mutation sites would need synchronising, on infrastructure with 19 dependents.
+>
+> **First action: re-measure after task-299 lands.** Then decide whether the remaining benefit justifies the risk. Abandoning this task with the measurements recorded is a valid, documented outcome — not a failure.
 
 ## Objective
 
