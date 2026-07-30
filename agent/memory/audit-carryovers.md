@@ -3094,3 +3094,14 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+  - audit_id: 113
+    finding_id: F2-08
+    severity: medium
+    file: agent/scripts/acp.package-install.sh
+    finding: "acp.package-install.sh:438 references \\$DIM, which is never assigned anywhere — under set -u this aborts the install with 'DIM: unbound variable'"
+    description: "Found while running M85 task-299's dependent suites. e2e/acp.package-install-list.test.sh dies at the 'Scanning for installable files' stage. Confirmed pre-existing and unrelated to M85: identical failure with the parser at HEAD and with task-299's changes applied, and grep shows DIM is never assigned in acp.common.sh or anywhere else. init_colors() defines RED/GREEN/YELLOW/BLUE but not DIM. Out of M85 scope, recorded so it is not rediscovered."
+    fix_target: "Either add DIM to init_colors() in acp.common.sh, or replace the reference at acp.package-install.sh:438 with an already-defined colour. Then confirm e2e/acp.package-install-list.test.sh reaches a summary line — it currently produces none, which is why no suite ever reported it as a failure."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null

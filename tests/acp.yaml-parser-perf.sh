@@ -77,12 +77,16 @@ echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Correctness snapshot — F-112-01 (| truncation)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-piped="$(bash -c "source '$PARSER' >/dev/null 2>&1; yaml_get '$FIXTURE' 'acp.pipe_value'" 2>/dev/null)"
-printf '  acp.pipe_value  expected [a|b|c]  actual [%s]\n' "$piped"
+# Uses the UNQUOTED key: this parser retains surrounding quotes on quoted scalars
+# (pre-existing contract — `plain: hello` yields `hello`, `q: "x"` yields `"x"`), so
+# comparing a quoted fixture value against a bare expectation would never match and
+# would report a false negative regardless of whether F-112-01 was fixed.
+piped="$(bash -c "source '$PARSER' >/dev/null 2>&1; yaml_get '$FIXTURE' 'acp.pipe_bare'" 2>/dev/null)"
+printf '  acp.pipe_bare   expected [a|b|c]  actual [%s]\n' "$piped"
 if [[ "$piped" == "a|b|c" ]]; then
   echo "  → FIXED (task-299 landed)"
 else
-  echo "  → still truncated: baseline behaviour, F-112-01 open"
+  echo "  → STILL TRUNCATED — F-112-01 regression"
 fi
 
 echo ""
