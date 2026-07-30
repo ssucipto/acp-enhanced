@@ -3027,9 +3027,9 @@ carryovers:
   # ── AUDIT-110 FINDINGS — WINDOWS TIMEOUT ROOT CAUSE (2026-07-28) ────────────
   - audit_id: 110
     finding_id: A-110-04
-    severity: high
+    severity: medium
     file: agent/scripts/acp.coderabbit.sh
-    finding: "coderabbit_active() costs 21.5s — _coderabbit_enabled 13.8s + coderabbit_available 5.5s, neither memoised"
+    finding: "coderabbit_active() costs ~1.44s (one preference read) — an instance of A-110-05, not a distinct defect. Original 21.5s figure was a single sample under load (corrected by audit-113 F2-03/F2-04)."
     description: "Same defect class as A-110-01 but in a colder path. coderabbit_active cannot reorder (it must read the preference to know if opted in), so the fix is memoisation plus fixing the underlying preference cost. Not on the scan path at all — audit-111 confirmed acp.review-scan.sh never sources acp.coderabbit.sh (the audit-110 claim that it did was a false positive, see A-110-06). Reachable only from e2e/coderabbit-optionality.test.sh and any future caller, each of which inherits 21.5s."
     fix_target: "Memoise _coderabbit_enabled and the config_path lookup the way acp.gitleaks.sh/_dupehound now do; re-measure coderabbit_active."
     status: pending
@@ -3040,7 +3040,7 @@ carryovers:
     finding_id: A-110-05
     severity: medium
     file: agent/scripts/acp.preferences.sh
-    finding: "get_preference (strict) takes 13.8s vs get_preference_or 5.5s for the same key — the preference layer is the deeper root cause"
+    finding: "get_preference takes ~1.5s per lookup (mean/5) — the preference layer is the deeper root cause. NOTE: the original '13.8s vs 5.5s' comparison was wrong; get_preference_or is a 5-line wrapper that CALLS get_preference, so it cannot be faster (corrected by audit-113 F2-03)."
     description: "A-110-01 was fixed by not calling the preference layer, which sidesteps rather than solves the problem. Reading a single key should be milliseconds, not seconds. The pure-bash YAML walk shows heavy sys time (process/filesystem churn). Every consumer of preferences pays this."
     description_addendum: "Measured 2026-07-28: yaml_parse on a 106-line preference file = 1.37s (~13ms/line). yaml_get caches the AST via YAML_CURRENT_FILE, but acp.preferences.sh calls it inside $( ) command substitutions, and a subshell discards that state — so every layer lookup re-parses. 4 lookups cost 8.93s in-shell vs 15.59s via subshells, so caching helps ~1.75x but the ~2.2s per-call floor (parse AND query) remains. get_preference walks up to 4 layers."
     fix_target: "Two parts: (1) stop defeating the AST cache — have acp.preferences.sh return via a global instead of $( ) per layer; (2) fix the ~2.2s floor in acp.yaml-parser.sh (yaml_parse + yaml_query), or resolve preferences in a single python3/node pass. Re-measure tests/acp.preferences-validate.test.sh, currently 159s against a 180s limit."
