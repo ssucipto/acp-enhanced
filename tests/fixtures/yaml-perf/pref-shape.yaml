@@ -90,6 +90,7 @@ acp:
     memory: agent/memory
     tasks: agent/tasks
   pipe_value: "a|b|c"
+  pipe_bare: a|b|c
   trailing_empty: ""
   numeric_zero: 0
   bool_false: false
