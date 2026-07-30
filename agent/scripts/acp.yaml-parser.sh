@@ -78,10 +78,68 @@ get_node() {
     sed -n "$((node_id + 1))p" "$AST_FILE"
 }
 
+# Split an AST record into globals without forking.
+#
+# Records are "id|type|key|value|parent|children". Every field read used to cost a
+# `cut` subprocess, and `cut` was 703 of the 1498 forks in a single 89-node parse
+# (47%) — see M85 task-299 / F2-07. Parameter expansion does the same work in-process.
+#
+# Semantics are deliberately IDENTICAL to `cut -d'|' -fN`, including the behaviour on
+# a value that itself contains `|`: the field is truncated at the first pipe and later
+# fields shift. That is bug F-112-01 and it is preserved here on purpose so this change
+# is byte-identical; the fix is a separate commit with its own assertions.
+#
+# Sets: _YN_ID _YN_TYPE _YN_KEY _YN_VALUE _YN_PARENT _YN_CHILDREN
+_yaml_split_node() {
+    local _rec="$1" _rest
+    _YN_ID="${_rec%%|*}";       _rest="${_rec#*|}"
+    _YN_TYPE="${_rest%%|*}";    _rest="${_rest#*|}"
+    _YN_KEY="${_rest%%|*}";     _rest="${_rest#*|}"
+    _YN_VALUE="${_rest%%|*}";   _rest="${_rest#*|}"
+    _YN_PARENT="${_rest%%|*}";  _rest="${_rest#*|}"
+    _YN_CHILDREN="${_rest%%|*}"
+}
+
+# Trim whitespace without forking. bash 3.2 has no extglob-free greedy suffix
+# strip, so these loop — still far cheaper than `sed`, which cost one fork per call
+# and was paired with `cut` on every key:value line (M85 task-299).
+_YAML_TAB="$(printf '\t')"
+
+_yaml_rtrim() {   # sets _YT
+    _YT="$1"
+    while :; do
+        case "$_YT" in
+            *' ') _YT="${_YT% }" ;;
+            *"$_YAML_TAB") _YT="${_YT%?}" ;;
+            *) break ;;
+        esac
+    done
+}
+
+_yaml_ltrim() {   # sets _YT
+    _YT="$1"
+    while :; do
+        case "$_YT" in
+            ' '*) _YT="${_YT# }" ;;
+            "$_YAML_TAB"*) _YT="${_YT#?}" ;;
+            *) break ;;
+        esac
+    done
+}
+
 get_node_field() {
     local node_id="$1"
     local field_num="$2"
-    get_node "$node_id" | cut -d'|' -f"$field_num"
+    _yaml_split_node "$(get_node "$node_id")"
+    case "$field_num" in
+        1) printf '%s\n' "$_YN_ID" ;;
+        2) printf '%s\n' "$_YN_TYPE" ;;
+        3) printf '%s\n' "$_YN_KEY" ;;
+        4) printf '%s\n' "$_YN_VALUE" ;;
+        5) printf '%s\n' "$_YN_PARENT" ;;
+        6) printf '%s\n' "$_YN_CHILDREN" ;;
+        *) printf '\n' ;;
+    esac
 }
 
 add_child() {
@@ -92,12 +150,9 @@ add_child() {
     node=$(get_node "$parent_id")
     
     local id type key value parent children
-    id=$(echo "$node" | cut -d'|' -f1)
-    type=$(echo "$node" | cut -d'|' -f2)
-    key=$(echo "$node" | cut -d'|' -f3)
-    value=$(echo "$node" | cut -d'|' -f4)
-    parent=$(echo "$node" | cut -d'|' -f5)
-    children=$(echo "$node" | cut -d'|' -f6)
+    _yaml_split_node "$node"
+    id="$_YN_ID"; type="$_YN_TYPE"; key="$_YN_KEY"
+    value="$_YN_VALUE"; parent="$_YN_PARENT"; children="$_YN_CHILDREN"
     
     if [ -z "$children" ]; then
         children="$child_id"
@@ -117,11 +172,9 @@ update_node_type() {
     node=$(get_node "$node_id")
     
     local id type key value parent children
-    id=$(echo "$node" | cut -d'|' -f1)
-    key=$(echo "$node" | cut -d'|' -f3)
-    value=$(echo "$node" | cut -d'|' -f4)
-    parent=$(echo "$node" | cut -d'|' -f5)
-    children=$(echo "$node" | cut -d'|' -f6)
+    _yaml_split_node "$node"
+    id="$_YN_ID"; key="$_YN_KEY"; value="$_YN_VALUE"
+    parent="$_YN_PARENT"; children="$_YN_CHILDREN"
     
     local updated="$id|$new_type|$key|$value|$parent|$children"
     _yaml_sed_i "$((node_id + 1))s@.*@$updated@" "$AST_FILE"
@@ -247,8 +300,8 @@ yaml_parse() {
                 
                 # Parse first field
                 local key value
-                key=$(echo "$item_content" | cut -d':' -f1 | sed 's/[[:space:]]*$//')
-                value=$(echo "$item_content" | cut -d':' -f2- | sed 's/^[[:space:]]*//')
+                _yaml_rtrim "${item_content%%:*}"; key="$_YT"
+                _yaml_ltrim "${item_content#*:}"; value="$_YT"
                 
                 local field_node
                 field_node=$(create_node "scalar" "$key" "$value" "$obj_node")
@@ -268,8 +321,8 @@ yaml_parse() {
         elif echo "$trimmed" | grep -q ':'; then
             # Key-value pair
             local key value
-            key=$(echo "$trimmed" | cut -d':' -f1 | sed 's/[[:space:]]*$//')
-            value=$(echo "$trimmed" | cut -d':' -f2- | sed 's/^[[:space:]]*//')
+            _yaml_rtrim "${trimmed%%:*}"; key="$_YT"
+            _yaml_ltrim "${trimmed#*:}"; value="$_YT"
             
             if [ -z "$value" ]; then
                 # Key with no value - map or array follows
@@ -451,7 +504,8 @@ create_node_and_link() {
         
         # Extract parent fields
         local parent_children
-        parent_children=$(echo "$parent_line" | cut -d'|' -f6)
+        _yaml_split_node "$parent_line"
+        parent_children="$_YN_CHILDREN"
         
         # Append new child ID
         if [ -z "$parent_children" ]; then
@@ -462,7 +516,10 @@ create_node_and_link() {
         
         # Update parent node with new children list
         local parent_prefix
-        parent_prefix=$(echo "$parent_line" | cut -d'|' -f1-5)
+        # cut -f1-5 joins fields 1..5 with the delimiter; stripping the last
+        # field is the same thing for a 6-field record, and `children` is a
+        # comma-joined id list that never contains a pipe.
+        parent_prefix="${parent_line%|*}"
         _yaml_sed_i "$((parent_id + 1))s@.*@${parent_prefix}|${parent_children}@" "$AST_FILE"
     fi
     
@@ -561,11 +618,9 @@ yaml_set() {
     node=$(get_node "$current_node")
     
     local id type key value parent children
-    id=$(echo "$node" | cut -d'|' -f1)
-    type=$(echo "$node" | cut -d'|' -f2)
-    key=$(echo "$node" | cut -d'|' -f3)
-    parent=$(echo "$node" | cut -d'|' -f5)
-    children=$(echo "$node" | cut -d'|' -f6)
+    _yaml_split_node "$node"
+    id="$_YN_ID"; type="$_YN_TYPE"; key="$_YN_KEY"
+    parent="$_YN_PARENT"; children="$_YN_CHILDREN"
     
     # Check if converting to empty array
     if [ "$new_value" = "[]" ]; then
@@ -599,11 +654,9 @@ serialize_node() {
     node=$(get_node "$node_id")
     
     local type key value children parent_id
-    type=$(echo "$node" | cut -d'|' -f2)
-    key=$(echo "$node" | cut -d'|' -f3)
-    value=$(echo "$node" | cut -d'|' -f4)
-    parent_id=$(echo "$node" | cut -d'|' -f5)
-    children=$(echo "$node" | cut -d'|' -f6)
+    _yaml_split_node "$node"
+    type="$_YN_TYPE"; key="$_YN_KEY"; value="$_YN_VALUE"
+    parent_id="$_YN_PARENT"; children="$_YN_CHILDREN"
     
     # Determine parent type if not provided
     if [ -z "$parent_type" ] && [ "$parent_id" -ge 0 ]; then
@@ -651,9 +704,8 @@ serialize_node() {
                         local child_node
                         child_node=$(get_node "$child_id")
                         local child_type child_key child_value
-                        child_type=$(echo "$child_node" | cut -d'|' -f2)
-                        child_key=$(echo "$child_node" | cut -d'|' -f3)
-                        child_value=$(echo "$child_node" | cut -d'|' -f4)
+                        _yaml_split_node "$child_node"
+                        child_type="$_YN_TYPE"; child_key="$_YN_KEY"; child_value="$_YN_VALUE"
                         
                         if [ "$child_type" = "scalar" ] && [ -n "$child_key" ]; then
                             echo "$indent- $child_key: $child_value"
@@ -901,12 +953,9 @@ yaml_delete() {
     parent_node=$(get_node "$current_node")
     
     local id type key value parent children
-    id=$(echo "$parent_node" | cut -d'|' -f1)
-    type=$(echo "$parent_node" | cut -d'|' -f2)
-    key=$(echo "$parent_node" | cut -d'|' -f3)
-    value=$(echo "$parent_node" | cut -d'|' -f4)
-    parent=$(echo "$parent_node" | cut -d'|' -f5)
-    children=$(echo "$parent_node" | cut -d'|' -f6)
+    _yaml_split_node "$parent_node"
+    id="$_YN_ID"; type="$_YN_TYPE"; key="$_YN_KEY"
+    value="$_YN_VALUE"; parent="$_YN_PARENT"; children="$_YN_CHILDREN"
     
     # Remove node_to_delete from children list
     local new_children=""
