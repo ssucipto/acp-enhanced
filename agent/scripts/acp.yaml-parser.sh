@@ -208,7 +208,10 @@ get_indent_level() {
 # Remove inline comments from a YAML line (everything from # onwards).
 # Usage: strip_comments "key: value # comment"  → "key: value "
 strip_comments() {
-    echo "$1" | sed 's/#.*$//'
+    # Equivalent to sed 's/#.*$//' — including the pre-existing flaw that a `#`
+    # inside a quoted value truncates it (see F2-09). Preserved deliberately so
+    # this remains a pure fork removal.
+    printf '%s\n' "${1%%#*}"
 }
 
 # Trim leading and trailing whitespace from a string.
@@ -261,7 +264,7 @@ yaml_parse() {
         case "$line" in \#*) continue ;; esac
         
         # Strip inline comments
-        line=$(echo "$line" | sed 's/#.*$//')
+        line="${line%%#*}"
         
         # Calculate indentation
         local indent=0
@@ -277,12 +280,16 @@ yaml_parse() {
         # Handle dedent - pop stack
         while [ "$prev_indent" -ge 0 ] && [ "$indent" -le "$prev_indent" ]; do
             # Pop one level
-            parent_stack=$(echo "$parent_stack" | sed 's/,[^,]*$//')
-            indent_stack=$(echo "$indent_stack" | sed 's/,[^,]*$//')
+            # ${s%,*} strips from the LAST comma — same as sed 's/,[^,]*$//',
+            # and a no-op when there is no comma, matching sed.
+            parent_stack="${parent_stack%,*}"
+            indent_stack="${indent_stack%,*}"
             
             # Get new current parent
-            current_parent=$(echo "$parent_stack" | awk -F',' '{print $NF}')
-            prev_indent=$(echo "$indent_stack" | awk -F',' '{print $NF}')
+            # ${s##*,} is the last comma-separated field — same as awk -F, '{print $NF}',
+            # and a no-op when there is no comma, matching awk's single-field case.
+            current_parent="${parent_stack##*,}"
+            prev_indent="${indent_stack##*,}"
             
             # Handle empty stack
             [ -z "$current_parent" ] && current_parent=0
@@ -292,10 +299,11 @@ yaml_parse() {
         done
         
         # Parse line content
-        if echo "$trimmed" | grep -q '^-[[:space:]]'; then
+        # case-glob instead of `grep -q` — one fork per parsed line removed.
+        if [ "${trimmed#-[[:space:]]}" != "$trimmed" ] || [ "${trimmed#- }" != "$trimmed" ]; then
             # Array item
             local item_content
-            item_content=$(echo "$trimmed" | sed 's/^-[[:space:]]*//')
+            _yaml_ltrim "${trimmed#-}"; item_content="$_YT"
             
             # Convert last key node to array if needed
             if [ "$last_key_node" -ge 0 ]; then
@@ -305,7 +313,8 @@ yaml_parse() {
             fi
             
             # Check if inline object (has colon on same line)
-            if echo "$item_content" | grep -q ':'; then
+            case "$item_content" in *:*) _has_colon=1 ;; *) _has_colon=0 ;; esac
+            if [ "$_has_colon" -eq 1 ]; then
                 # Inline object: - name: value
                 local obj_node
                 obj_node=$(create_node "map" "" "" "$current_parent")
@@ -331,7 +340,7 @@ yaml_parse() {
                 item_node=$(create_node "scalar" "" "$item_content" "$current_parent")
                 add_child "$current_parent" "$item_node"
             fi
-        elif echo "$trimmed" | grep -q ':'; then
+        elif case "$trimmed" in *:*) true ;; *) false ;; esac; then
             # Key-value pair
             local key value
             _yaml_rtrim "${trimmed%%:*}"; key="$_YT"
