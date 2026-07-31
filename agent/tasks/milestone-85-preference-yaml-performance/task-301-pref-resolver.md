@@ -24,8 +24,23 @@ Resolve all four preference layers in one `python3` process instead of four bash
 
 `get_preference()` (`agent/scripts/acp.preferences.sh:83`) walks project → workspace → user → default, calling `yaml_get` inside `$( )` for each. Two costs compound:
 
-1. Each layer re-parses, because the AST cache lives in shell variables and `$( )` runs in a subshell that discards them. Measured: 4 lookups cost **8.93s in-shell vs 15.59s via subshells**.
-2. Even cached, each lookup has a ~2.2s floor.
+1. Each layer re-parses, because the AST cache lives in shell variables and `$( )` runs in a subshell that discards them.
+2. Each parse has a floor set by the parser architecture.
+
+> **Baselines corrected 2026-07-31, post-Phase 1.** The figures this task was written
+> against are stale — Phase 1 made the parser 3.8× faster. Current, means of 5:
+>
+> | | Now | Target |
+> |---|---|---|
+> | `get_preference` | **854 ms** | <100 ms |
+> | `get_preference_or` | **759 ms** | <100 ms |
+> | one `yaml_parse` of the real 106-line pref file | **360 ms** | — |
+>
+> Only **2 of 4 layers exist** here — `_pref_project_file` (`agent/preferences/acp.default.yaml`)
+> and `_pref_configurables_file` (`agent/configurables/acp.configurables.yaml`); workspace and
+> user are absent. So 854 ms is roughly two bash parses, and the remaining 320 forks per parse
+> are architectural (see the milestone's "measured floor"). **This is why the resolver is still
+> required:** the only way under 100 ms is to stop parsing YAML in bash on this path.
 
 Phase 1 lowers the floor; this task removes the repetition. One process reads all four files once and returns the resolved value.
 
@@ -59,7 +74,7 @@ Phase 1 lowers the floor; this task removes the repetition. One process reads al
 - [ ] Flat dotted-key fallback behaves identically
 - [ ] Missing file, missing key, and empty value each behave as the bash version does
 - [ ] Runs without PyYAML installed
-- [ ] Median runtime under 100ms
+- [ ] Median runtime under 100ms (from 854ms — measure with the same 5-run median the milestone uses)
 
 ## User-Observable Acceptance
 

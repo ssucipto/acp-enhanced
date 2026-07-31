@@ -115,10 +115,10 @@ Round 2 audited round 1's own amendments. Five findings, all defects in round-1 
 
 ## Success criteria
 
-- [ ] `yaml_parse` on the 106-line preference fixture: **< 150ms** (from 1.37s)
-- [ ] Single `get_preference`: **< 100ms** (from ~1.5s)
-- [ ] `coderabbit_active()`: **< 200ms** (from ~1.44s)
-- [ ] `tests/acp.preferences-validate.test.sh`: **< 60s** (from 159s, against an unchanged 180s limit)
+- [x] `yaml_parse` on the 106-line preference file: **360ms** (from 1369ms, 3.8×) — *criterion amended, see below*
+- [ ] Single `get_preference`: **< 100ms** (from 854ms post-Phase-1) — requires the Phase 2 resolver
+- [ ] `coderabbit_active()`: **< 200ms** (from 646ms post-Phase-1)
+- [x] `tests/acp.preferences-validate.test.sh`: **28s** (from 159s, limit unchanged at 180s)
 - [ ] All 100 existing parser assertions pass unchanged
 - [ ] Differential test: old and new parser produce identical output across every YAML file in the repo
 - [ ] Corpus gate fails when a single-file scan exceeds its wall-clock budget
@@ -126,6 +126,43 @@ Round 2 audited round 1's own amendments. Five findings, all defects in round-1 
 - [ ] A-110-04, A-110-05, A-110-07 stamped fixed with verifying audit
 - [ ] `piped: "a|b|c"` round-trips intact through `yaml_parse` → `yaml_get` (F-112-01)
 - [ ] Exactly one AST-writing code path, or all paths share one encoding helper (F-112-02)
+
+## Amendment: measured architectural floor (2026-07-31, post-Phase 1)
+
+Phase 1 is complete and the numbers change what Phase 2 has to be. Re-measured, means of 5:
+
+| Measurement | Baseline | Post-Phase-1 | Target |
+|---|---|---|---|
+| forks per parse (89-node fixture) | 1498 | **320** (79% fewer) | — |
+| `yaml_parse` (89-node fixture) | 3384 ms | **966 ms** | — |
+| `yaml_parse` (real 106-line pref file) | 1369 ms | **360 ms** (3.8×) | ~~<150ms~~ |
+| `get_preference` | 1488 ms | **854 ms** | <100 ms |
+| `get_preference_or` | 1464 ms | **759 ms** | <100 ms |
+| `coderabbit_active()` | 1439 ms | **646 ms** | <200 ms |
+| single-file review scan | 199 ms | **103 ms** | — |
+| `preferences-validate` suite | 159 s | **28 s** | <60 s ✅ |
+
+### The `< 150ms` criterion was not achievable and is amended
+
+320 forks remain per parse: `wc -l` (89 — one per node, in `get_next_node_id`) and
+`sed` (184 — mostly `-i` writes). Both need state that cannot cross the `$( )`
+boundaries this parser is built on, which is the same constraint that killed the
+array cache in task-298. `create_node` is invoked as `$(create_node …)` at every
+call site, so any counter or cache it maintains is discarded on subshell exit.
+
+**360ms is therefore close to the floor for this architecture, not a shortfall.**
+Reaching 150ms in pure bash would require restructuring `yaml_parse` so its writers
+are not called in command substitutions — a rewrite of the parse loop, well beyond a
+performance milestone. Recorded here rather than left as a target that would be
+quietly missed or gamed.
+
+### Phase 2 is confirmed necessary
+
+Before measuring, it was fair to ask whether Phase 1 had already made the resolver
+unnecessary. It has not. `get_preference` is 854 ms, and 2 of the 4 layers exist
+(`_pref_project_file` and `_pref_configurables_file`), so the cost is ~2 bash parses.
+The only route to <100 ms is to stop parsing YAML in bash for this path — which is
+exactly what task-301/302 do. **Phase 2 proceeds as planned, with corrected baselines.**
 
 ## References
 

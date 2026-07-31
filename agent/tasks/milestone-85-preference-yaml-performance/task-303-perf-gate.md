@@ -28,6 +28,7 @@ audit-110's central lesson: **correctness gates cannot see performance regressio
 ## Steps
 
 1. Add a `--perf-budget-ms` option to `acp.review-measure.sh`, defaulting to a value with clear headroom over the measured post-M85 number — not tuned to the exact figure.
+   > **Measured 2026-07-31:** a single-file review scan is **103 ms** post-Phase-1 (199 ms before, ~2950 ms before audit-110's fix). A budget around **400-500 ms** gives roughly 4-5× headroom — enough to absorb CI load and slower runners without going slack enough to hide a real regression. Do not set it just above 103 ms.
 2. Time a single-file scan of a committed corpus fixture, median of N runs to avoid a one-off outlier failing CI.
 3. Under `--ci`, fail with a message naming the budget, the observed time, and the audit that established the budget.
 4. Print the timing on every run, not only on failure, so drift is visible before it breaks.
