@@ -4,7 +4,7 @@ handoff_mode: executor
 from_executor: claude
 to_executor: cursor
 date: 2026-07-27
-status: active
+status: completed   # M83 shipped as v6.29.0; superseded as active pointer by handoff-claude-m85-phase2-2026-07-31.md
 supersedes: null
 git_branch: develop
 git_commit: 612c677aba134b5ecce3fc417a83992dd142c8a8
