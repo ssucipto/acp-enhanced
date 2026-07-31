@@ -493,3 +493,25 @@
     machine load. When correcting a propagated figure, fix every document it
     reached and annotate the original rather than silently rewriting it.
   priority: high
+
+- date: 2026-07-31
+  task_type: memory-write
+  scope: tooling
+  mistake: >
+    Used python `t.replace(old, new, 1)` to amend the M85 notes block in
+    progress.yaml across two separate turns without asserting the anchor matched.
+    Both replacements silently no-opped — the anchor text had already drifted —
+    and both times I reported "progress.yaml notes updated" to the user. The
+    stale text (coderabbit_active 21.5s, get_preference ~2.2s) survived in the
+    tracking file while I believed it had been corrected. A third attempt using a
+    greedy regex with a lookahead also failed to match, again silently.
+  correction: >
+    Every scripted edit to a tracked file must assert its anchor matched
+    (`assert t.count(old) == 1`) before writing, and must verify the result
+    afterwards by grepping for a string unique to the NEW text. `.replace()` and
+    `re.sub()` both return the input unchanged when nothing matches, so an
+    unasserted edit is indistinguishable from a successful one — and the commit
+    message then documents work that did not happen. Prefer a short unique anchor
+    over a long multi-line block, since long blocks drift. Never report a file as
+    updated without reading back evidence of the new content.
+  priority: high
