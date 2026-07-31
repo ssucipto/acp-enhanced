@@ -25,7 +25,7 @@ Route `get_preference` / `get_preference_or` through the resolver when `python3`
 
 `identity.yml` sets `no_external_deps: pure bash preferred`, so the fast path must degrade rather than hard-depend. The pattern already exists in this repo: `node_scan_modules_available()` guards the YM rules and, since audit-108, warns once when it skips so a degraded run is never mistaken for a clean one.
 
-A-110-04 is closed here: `coderabbit_active()` costs 21.5s (`_coderabbit_enabled` 13.8s + `coderabbit_available` 5.5s), neither memoised. It cannot use the availability-first reordering that fixed gitleaks/dupehound — it *must* read the preference to know whether the user opted in — so memoisation plus the faster resolver is the fix.
+A-110-04 is closed here. **Baseline corrected twice:** the original 21.5s was a single sample under load (audit-113 F2-03, actual 1439 ms), and Phase 1 has since brought it to **646 ms**. It makes one preference read — it short-circuits when CodeRabbit is disabled and never reaches `coderabbit_available` — so it is an instance of the general preference cost, not a distinct defect. It cannot use the availability-first reordering that fixed gitleaks/dupehound — it *must* read the preference to know whether the user opted in — so memoisation plus the faster resolver is the fix.
 
 ## Steps
 
@@ -39,11 +39,11 @@ A-110-04 is closed here: `coderabbit_active()` costs 21.5s (`_coderabbit_enabled
 ## Verification
 
 - [ ] `get_preference` returns identical values with the fast path enabled and disabled (forced via a stub `python3`)
-- [ ] `coderabbit_active()` under 200ms (from 21.5s)
+- [ ] `coderabbit_active()` under 200ms (from **646ms** post-Phase-1)
 - [ ] `e2e/coderabbit-optionality.test.sh` 13/13 unchanged
 - [ ] All 6 preference × availability states still correct for gitleaks and dupehound (the audit-110 matrix)
 - [ ] Fallback path exercised with `python3` shadowed out of `PATH`
-- [ ] `tests/acp.preferences-validate.test.sh` under 60s against an unchanged 180s limit
+- [x] `tests/acp.preferences-validate.test.sh` under 60s against an unchanged 180s limit — **already 28s** after Phase 1; re-confirm it does not regress
 
 ## User-Observable Acceptance
 
