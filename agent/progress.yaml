@@ -853,14 +853,23 @@ milestones:
     tasks_completed: 3
     tasks_total: 8
     file: agent/milestones/milestone-85-preference-yaml-performance.md
-    notes: 'Root cause behind A-110-04/05/07 and the macOS E2E flake. yaml_parse
-      costs 1.37s on 106 lines (~900 forks: get_node seds per node, get_field cuts
-      per field across 39 sites); one get_preference ~2.2s; coderabbit_active 21.5s;
-      preferences-validate 159s against a 180s limit. Phase 1 array-backed AST +
-      parameter-expansion field access, Phase 2 python3 single-pass preference
-      resolver with pure-bash fallback, Phase 3 wall-clock perf gate + carryover
-      closure. BINDING: do NOT raise the 180s timeout (audit-110 showed it masks
-      the defect). Phase 2 gated on task-300 equivalence passing.'
+    notes: 'PHASE 1 COMPLETE (297, 299, 298). Parser 1498 -> 320 forks per parse
+      (79% fewer); yaml_parse 3384 -> 966ms on the benchmark fixture and 1369 ->
+      360ms on the real 106-line preference file (3.8x). F-112-01 fixed; root cause
+      was F2-06 — create_node was DEFINED TWICE and bash kept the non-escaping
+      definition. preferences-validate 159s -> 28s, so A-110-07 is fixed at the
+      root rather than masked. task-298 array cache REJECTED on evidence (it
+      targeted ~19 of 635 forks, 3%, for a staleness hazard across 10 mutation
+      sites); the same safe parameter-expansion technique was applied to the
+      larger targets instead. AMENDED 2026-07-31 after re-measuring: the <150ms
+      yaml_parse criterion is NOT achievable in pure bash — the remaining 320
+      forks (wc -l per node, sed -i writes) need state that cannot cross the
+      $( ) boundaries this parser is built on, the same constraint that killed
+      the cache. 360ms is the architectural floor. PHASE 2 CONFIRMED STILL NEEDED:
+      get_preference is 854ms post-Phase-1 (only 2 of 4 layers exist, so ~2 bash
+      parses) and the only route under 100ms is to stop parsing YAML in bash on
+      that path. BINDING: do NOT raise the 180s timeout (audit-110 showed it
+      masks the defect).'
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
