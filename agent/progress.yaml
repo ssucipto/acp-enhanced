@@ -9,12 +9,12 @@ project:
     \  current_milestone remains M81 — tasks 270-274 blocked on CodeRabbit fixture\n\
     \  under ADR-22. M74–M77 Aikido track remains ADR-19 gated.\n"
 active_handoff:
-  path: agent/reports/handoff-cursor-m83-deterministic-review-2026-07-27.md
-  date: '2026-07-27'
-  to_executor: cursor
-  from_executor: claude
-  git_commit: 612c677aba134b5ecce3fc417a83992dd142c8a8
-  status: completed
+  path: agent/reports/handoff-claude-m85-phase2-2026-07-31.md
+  date: '2026-07-31'
+  to_executor: claude-opus
+  from_executor: claude-opus
+  git_commit: 9489e1c5612432f758f059caa1525811114b0f9f
+  status: active
 milestones:
   M44:
     name: Feedback-Driven Improvements (v6.9.0)
