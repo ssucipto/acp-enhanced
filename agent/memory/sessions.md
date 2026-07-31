@@ -2,6 +2,39 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-07-31
+  executor: claude-opus
+  branch: develop
+  tasks: [M85-phase1, task-297, task-299, task-298, plan-amend]
+  done:
+    - m85-phase-1-complete-3-of-8
+    - parser-1498-to-320-forks-yaml_parse-3.5x
+    - f-112-01-fixed-root-cause-f2-06-duplicate-create_node
+    - task-298-array-cache-rejected-on-evidence
+    - a-110-07-fixed-at-root-159s-to-28s
+    - phase-2-re-scoped-against-measured-numbers
+  deferred:
+    - task-300-304 -> next-session
+    - f2-08-dim-unbound -> outside-m85
+    - f2-09-hash-in-quoted-value -> outside-m85
+  key_fact: >
+    M85 Phase 1 landed: 1498 -> 320 forks per parse (79%), yaml_parse 3384 -> 966ms
+    on the fixture and 1369 -> 360ms on the real preference file. The win came
+    entirely from replacing cut/grep/awk/sed with bash parameter expansion —
+    byte-identical at every step, verified by diffing AST files across 30 tracked
+    YAML files. F-112-01 (values containing `|` truncated) is fixed; the root cause
+    was NOT what audit-112 recorded — create_node was DEFINED TWICE and bash kept
+    the non-escaping definition (F2-06). task-298's array cache was REJECTED on
+    evidence: it targeted ~19 of 635 forks (3%) for a staleness hazard across 10
+    mutation sites, so the same safe technique went to the bigger targets instead.
+    Side effect: preferences-validate 159s -> 28s, fixing A-110-07 at the root.
+    Re-measured afterwards: the <150ms yaml_parse criterion is NOT reachable in
+    pure bash (remaining wc/sed -i forks need state that cannot cross the $( )
+    boundaries create_node is invoked through), so it was amended to the measured
+    floor; and Phase 2 is CONFIRMED still needed because get_preference is 854ms.
+    Process failure worth remembering: two turns reported progress.yaml notes as
+    updated when the .replace() had silently no-opped — assert every scripted edit.
+
 - date: 2026-07-30
   executor: claude-opus
   branch: develop
