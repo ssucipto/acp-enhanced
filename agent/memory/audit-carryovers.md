@@ -3079,9 +3079,9 @@ carryovers:
     finding: "create_node is DEFINED TWICE (:60 with | escaping, :473 without); bash keeps the later one, so the escaping version is silently shadowed dead code"
     description: "Supersedes and corrects F-112-02, which claimed 'add_node() is dead code'. No function named add_node has ever existed in this file — that finding grepped a name that was never there. The real defect is a duplicate function definition: create_node at :60 escapes `|`, create_node at :473 (commented 'Original create_node for backward compatibility') does not, and bash resolves to the last definition loaded. Verified: `declare -f create_node` shows zero escaping lines. This is the true mechanism behind F-112-01."
     fix_target: "Delete one definition (keep escaping semantics), in task-299. Add a duplicate-function-definition check to the parser test suite so a third definition cannot appear."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-30
+    verified_in_audit: "M85-task-299"
     escalated_to: null
   - audit_id: 113
     finding_id: F2-07
@@ -3090,9 +3090,9 @@ carryovers:
     finding: "M85 Phase 1 orders task-298 (risky, low value) before task-299 (safe, high value) — fork attribution says the reverse"
     description: "Measured one parse of the 89-node benchmark fixture: 1498 forks total — cut 703 (47%), sed 484 (32%), grep 176, wc 88, awk 46. task-299's parameter-expansion technique replaces the 703 cut forks with ZERO staleness risk. task-298's array cache targets a subset of the 484 sed forks and carries a real staleness hazard: every get_node call site (7 of them) reads via node=$(get_node X), a subshell that discards cache writes, and create_node_and_link mutates a PARENT node's children from inside a subshell at :466, which would leave a caller's cached parent entry stale. 10 AST mutation sites would need synchronising."
     fix_target: "Reorder Phase 1 to run task-299 before task-298, then re-measure and decide whether task-298's remaining benefit justifies its staleness risk on infrastructure with 19 dependents. Requires maintainer decision — the declared DAG has task-299 depends_on task-298."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-07-30
+    verified_in_audit: "M85-task-299"
     escalated_to: null
   - audit_id: 113
     finding_id: F2-08
