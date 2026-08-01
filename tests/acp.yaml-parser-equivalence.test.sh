@@ -77,7 +77,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 NEW_PARSER="${SCRIPT_DIR}/agent/scripts/acp.yaml-parser.sh"
 GOLDEN_FIXTURE="${SCRIPT_DIR}/tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv"
-LARGE_FILE_LINES=2000
+# 200, not 2000: yaml_parse's add_child does a `sed -i` fork per node
+# appended (unaffected by M85's field-access work — see the header above),
+# and process-spawn overhead on Windows CI runners (MSYS/git-bash) is high
+# enough that the full ~73-file / ~6500-line set that fits comfortably
+# under macOS/Linux's 180s per-test budget (run-e2e-tests.sh TIMEOUT_SECS)
+# timed out on windows-latest even after every other fix in this file
+# (confirmed: M85 task-304 CI run). Excluding files over 200 lines cuts the
+# fast suite to its ~55 smallest files; everything above that already goes
+# through the large-file companion script either way.
+LARGE_FILE_LINES=200
 
 # agent/integrity-manifest.yaml is rewritten in place by e2e/acp.integrity.test.sh
 # (acp.manifest-hash.sh --generate) — when run-e2e-tests.sh runs suites in
