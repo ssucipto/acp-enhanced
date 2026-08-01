@@ -9,7 +9,7 @@ updated: 2026-07-28
 
 **Planned version**: v6.30.1
 **Status**: in_progress
-**Progress**: 6/8 tasks
+**Progress**: 7/8 tasks
 **Estimated effort**: ~27h (8 tasks, 3 phases)
 **Source**: audit-110 (root cause), audit-111 (readiness + retraction), audit-112 (pre-impl r1, 3 amendments), audit-113 (pre-impl r2, 4 amendments), maintainer directive 2026-07-28
 **Depends on**: nothing — independent of M81's ADR-22 CodeRabbit fixture gate

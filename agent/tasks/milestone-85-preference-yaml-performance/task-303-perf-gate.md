@@ -2,13 +2,13 @@
 id: task-303
 milestone: M85
 title: "Wall-clock perf gate in the corpus measurement"
-status: not_started
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-07-28
-started: null
-completed: null
+started: 2026-08-01
+completed: 2026-08-01
 phase: 3
 depends_on: [task-302]
 audit_findings: [A-110-05]
@@ -47,3 +47,30 @@ audit-110's central lesson: **correctness gates cannot see performance regressio
 ## User-Observable Acceptance
 
 `bash agent/scripts/acp.review-measure.sh --ci` prints a scan timing alongside recall/precision, and fails the build if the scanner regresses past its budget.
+
+## Resolution (2026-08-01)
+
+Added `--perf-budget-ms` (default 450, per audit-110's measured 103ms
+single-file figure — ~4.4x headroom) and `--perf-budget-reps` (5, matching
+the milestone's median-of-5 convention elsewhere). Times the first
+non-skipped corpus case (`positive/eh01.ts`) via `time.perf_counter()` in
+the existing python3 heredoc — median of 5 full `bash acp.review-scan.sh`
+subprocess invocations, printed on every run (300-360ms locally, well under
+budget; higher than the isolated 103ms figure because this times the whole
+subprocess path including bash startup and script-sourcing overhead, which
+is what the gate actually needs to catch). The recall/precision gate is
+untouched; the perf check runs before it so timing always prints even if
+recall/precision fails.
+
+Verified: `--perf-budget-ms 10` fails with exit 1 and a message naming the
+budget (10ms), the observed median, and audit-110; the real default budget
+(450ms) passes with correct headroom; a low budget without `--ci` never
+fails (local runs are informational only). `.github/workflows/ci.yaml`'s
+existing `acp.review-measure.sh --ci` step already runs the new gate
+automatically — its name was updated for clarity, no new step needed.
+Documented in `agent/commands/acp.review.md` beside the existing corpus
+recall/precision table.
+
+No dedicated test file was added: no *.test.sh convention exists for this
+script (it's CI-invoked directly, not command-doc-backed), and the
+Verification checklist above was exercised manually end-to-end instead.
