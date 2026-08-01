@@ -8,8 +8,8 @@ updated: 2026-07-28
 @acp.meta.end -->
 
 **Planned version**: v6.30.1
-**Status**: in_progress
-**Progress**: 7/8 tasks
+**Status**: completed
+**Progress**: 8/8 tasks — COMPLETE (2026-08-02)
 **Estimated effort**: ~27h (8 tasks, 3 phases)
 **Source**: audit-110 (root cause), audit-111 (readiness + retraction), audit-112 (pre-impl r1, 3 amendments), audit-113 (pre-impl r2, 4 amendments), maintainer directive 2026-07-28
 **Depends on**: nothing — independent of M81's ADR-22 CodeRabbit fixture gate
@@ -122,8 +122,8 @@ Round 2 audited round 1's own amendments. Five findings, all defects in round-1 
 - [x] All 100 existing parser assertions pass unchanged (`acp.yaml-parser.test.sh`, `yaml-array-operations.test.sh`)
 - [x] Differential test: old and new parser produce identical output across every YAML file in the repo (task-300, golden-fixture design — see its Resolution note)
 - [x] Corpus gate fails when a single-file scan exceeds its wall-clock budget (task-303, `--perf-budget-ms`)
-- [ ] macOS E2E green across **3 consecutive runs** — 1/3 confirmed so far (run 30707045524, commit 6559ae1); see task-304 Resolution
-- [ ] A-110-04, A-110-05, A-110-07 stamped fixed with verifying audit — pending the 3-run confirmation above
+- [x] macOS E2E green across **3 consecutive runs** — confirmed on all 3 platforms each time: commit `6559ae1`/run 30707045524, `def196d`/run 30707352192, `7e95a2d`/run 30707596784
+- [x] A-110-04, A-110-05, A-110-07 stamped fixed with verifying audit — see `agent/memory/audit-carryovers.md`, verified_in_audit: "M85 task-304"
 - [x] `piped: "a|b|c"` round-trips intact through `yaml_parse` → `yaml_get` (F-112-01) — verified by task-300's equivalence test (expected-divergence class)
 - [x] Exactly one AST-writing code path, or all paths share one encoding helper (F-112-02) — closed by task-299 (duplicate `create_node` removed)
 
