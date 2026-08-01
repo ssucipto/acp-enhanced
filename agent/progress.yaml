@@ -846,11 +846,11 @@ milestones:
     name: Preference & YAML Parser Performance (v6.30.1)
     priority: 4
     status: in_progress
-    progress: 38
+    progress: 50
     started: 2026-07-30
     completed: null
     estimated_weeks: 1
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 8
     file: agent/milestones/milestone-85-preference-yaml-performance.md
     notes: 'PHASE 1 COMPLETE (297, 299, 298). Parser 1498 -> 320 forks per parse
@@ -869,7 +869,22 @@ milestones:
       get_preference is 854ms post-Phase-1 (only 2 of 4 layers exist, so ~2 bash
       parses) and the only route under 100ms is to stop parsing YAML in bash on
       that path. BINDING: do NOT raise the 180s timeout (audit-110 showed it
-      masks the defect).'
+      masks the defect). TASK-300 COMPLETE 2026-08-01: equivalence proven via
+      a committed golden fixture (pre-M85 parser AST, all 74 tracked YAML
+      files), not by re-running the pre-M85 parser every CI invocation — that
+      parser did not finish dumping the whole repo in 5 minutes. DISCOVERY:
+      add_child rewrites the whole growing AST_FILE with sed -i on every
+      child append, in BOTH parsers, untouched by M85 field-access work —
+      O(n^2), and the actual reason agent/progress.yaml (7880 nodes) takes
+      ~100s to parse even with the current optimised parser. Out of scope
+      for M85 (would need restructuring add_child itself, a rewrite not a
+      tweak) but worth a future task if progress.yaml-sized files become a
+      real bottleneck. 56 divergences found across both equivalence scripts,
+      all verified attributable to F-112-01, including an unanticipated
+      case: agent/index/*.yaml files using `description: |` YAML
+      block-scalar syntax (unsupported by this parser, stored as literal
+      "|") shifted the old cuts field boundaries the same way a `|`
+      mid-string would.'
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6397,13 +6412,13 @@ tasks:
   - id: task-300
     name: Parser equivalence verification
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-85-preference-yaml-performance/task-300-parser-equivalence.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-01'
+    completed_date: '2026-08-01'
+    actual_hours: 2.5
     estimated_hours: 3
-    notes: phase 1 GATE; byte-identical output before Phase 2
+    notes: phase 1 GATE; golden-fixture regression test (pre-M85 AST captured once, not re-derived per CI run — pre-M85 parser doesn't finish the repo in 5min); 74/74 files verified, 56 divergences all attributable to F-112-01; progress.yaml covered by companion tests/acp.yaml-parser-equivalence-large.sh
   - id: task-301
     name: Single-pass preference resolver
     priority: 5
