@@ -2,6 +2,38 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-08-01
+  executor: claude-sonnet
+  branch: develop
+  tasks: [M85-phase2, task-300]
+  done:
+    - task-300-parser-equivalence-complete
+    - golden-fixture-regression-test-74-of-74-files-verified
+    - discovered-add_child-sed-i-o-n-squared-cost-outside-m85-scope
+  deferred:
+    - task-301-304 -> next-session
+  key_fact: >
+    task-300 could not be implemented as literally specified (re-run the pre-M85
+    parser against every tracked YAML file on every CI invocation) — measured
+    directly, dumping the whole repo's AST with the pre-M85 parser did not finish
+    in 5 minutes. Root cause: add_child rewrites the entire growing AST_FILE with
+    sed -i on every child appended, in BOTH the old and current parser, untouched
+    by M85's field-access optimisation — O(n^2) in node count. agent/progress.yaml
+    (9,480 lines / 7,880 nodes) alone takes ~100s to parse even with the CURRENT
+    optimised parser. Solution: captured the pre-M85 parser's AST output ONCE into
+    a committed golden fixture (tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv,
+    74 files, 964K), and the committed test now only ever runs the current (fast)
+    parser, diffing against that fixture — 73 files / 79s in the *.test.sh CI
+    suite, agent/progress.yaml covered separately by
+    tests/acp.yaml-parser-equivalence-large.sh (not *.test.sh, same
+    not-in-the-fast-suite convention as acp.yaml-parser-perf.sh). Result: 74/74
+    files verified, 56 divergences found and all individually confirmed
+    attributable to the F-112-01 `|` fix — including an unanticipated case,
+    agent/index/*.yaml files using `description: |` YAML block-scalar syntax
+    (unsupported by this parser, so the literal value IS "|"), which shifted the
+    old cut-based field boundaries the same way a `|` mid-string does. Zero
+    unexpected divergences. task-301-304 are next, unblocked.
+
 - date: 2026-07-31
   executor: claude-opus
   branch: develop

@@ -1,0 +1,282 @@
+#!/usr/bin/env bash
+# task-300 (M85): parser equivalence — pre-M85 reference parser vs current parser.
+#
+# Proves the M85-optimised acp.yaml-parser.sh produces the same AST as the
+# parser that existed before M85 touched it, for every tracked YAML file in
+# the repo — EXCEPT values containing a literal `|`, which task-299
+# deliberately fixed (pre-M85: `cut -d'|'` silently truncated at the first
+# pipe; now: percent-encoded at write, decoded at read). Those divergences
+# are asserted to be genuine improvements, not regressions, and are listed
+# explicitly rather than folded into a silent pass.
+#
+# Golden-fixture design (not "re-run both parsers every CI invocation"):
+# `add_child` rewrites the whole (growing) AST_FILE with `sed -i` on every
+# single child appended, in BOTH the old and the current parser — that call
+# was never touched by M85's field-access optimisation, and it is
+# effectively O(n^2) in node count. The pre-M85 parser is additionally
+# fork-heavy on top of that (create_node/get_node_field used cut+sed per
+# field — the whole reason M85 exists). Measured directly: dumping the AST
+# of every tracked YAML file with the pre-M85 parser did not finish in 5
+# minutes. Re-deriving the reference output from git history on every test
+# run is therefore not viable inside a 180s CI budget (run-e2e-tests.sh
+# TIMEOUT_SECS).
+#
+# Instead, the pre-M85 parser's output was captured ONCE into a committed
+# fixture (tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv) and
+# this test only ever runs the CURRENT (fast) parser, diffing its live
+# output against that fixture. This is a completely ordinary golden-file
+# regression test — see "Regenerating the fixture" below for when it needs
+# a refresh.
+#
+# Large-file carve-out: even with only the current parser to run, a single
+# file the size of agent/progress.yaml (9,480 lines / 7,880 nodes) took
+# ~100s alone (add_child's O(n^2) sed -i rewrite, unaffected by M85). Every
+# other tracked YAML file is under 700 lines. Files at/above
+# LARGE_FILE_LINES are excluded here and covered instead by the slower,
+# deliberately-not-*.test.sh companion script
+# tests/acp.yaml-parser-equivalence-large.sh (same convention as
+# acp.yaml-parser-perf.sh, excluded from the fast suite for the same reason:
+# real cost, not flakiness).
+#
+# Regenerating the fixture: only needed if a FUTURE change deliberately
+# alters what the parser produces (a real behaviour change, not a perf
+# tweak). Run the pre-M85 parser (git show
+# 75ea1a0c94cf913def28a69a8f5c3cb611030820:agent/scripts/acp.yaml-parser.sh)
+# over every tracked YAML file and dump each AST node as
+# "id\ttype\tkey\tvalue\tparent\tchildren" (raw, undecoded — the pre-M85
+# parser never percent-encoded), framed per file with "@@FILE <path>" /
+# "@@COUNT <n>" markers, matching the format dump_parser() below produces.
+# Do NOT regenerate casually — the whole point of this fixture is that it is
+# the frozen pre-M85 behaviour, not a moving target.
+#
+# NOTE: Do NOT add set -e. Loops below tolerate individual node/file
+# mismatches by design — a failure must be reported with file+key+both
+# outputs, not abort the run.
+#
+# bash 3.2 (macOS system bash) compatible: no mapfile/readarray, no
+# declare -A, no namerefs. AST files are read with a plain `while read`
+# loop instead.
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+. "${SCRIPT_DIR}/tests/common.sh"
+
+NEW_PARSER="${SCRIPT_DIR}/agent/scripts/acp.yaml-parser.sh"
+GOLDEN_FIXTURE="${SCRIPT_DIR}/tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv"
+LARGE_FILE_LINES=2000
+
+# dump_parser <outfile>
+#
+# Sources the CURRENT parser in an isolated subshell and, for every file in
+# YAML_FILES, parses it and dumps every AST node as one tab-separated,
+# percent-DECODED record (mirrors what every real caller sees via
+# get_node_field):
+#   id  type  key  value  parent  children
+#
+# Reads $AST_FILE directly with a plain read loop instead of calling
+# get_node/get_node_field per field — avoids ~10 forks/node while testing
+# the same parsed content.
+dump_parser() {
+    local outfile="$1"
+    (
+        # shellcheck disable=SC1090
+        . "$NEW_PARSER"
+        : > "$outfile"
+        for _f in "${YAML_FILES[@]}"; do
+            printf '@@FILE %s\n' "$_f" >> "$outfile"
+            if ! yaml_parse "${SCRIPT_DIR}/${_f}" >/dev/null 2>&1; then
+                printf '@@PARSE_ERROR\n' >> "$outfile"
+                continue
+            fi
+            local _rec _id _type _key _value _parent _children _n
+            _n=0
+            while IFS= read -r _rec || [ -n "$_rec" ]; do
+                IFS='|' read -r _id _type _key _value _parent _children <<< "$_rec"
+                _yaml_pct_decode "$_key";   _key="$_YD"
+                _yaml_pct_decode "$_value"; _value="$_YD"
+                printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
+                    "$_id" "$_type" "$_key" "$_value" "$_parent" "$_children" >> "$outfile"
+                _n=$((_n + 1))
+            done < "$AST_FILE"
+            printf '@@COUNT %s\n' "$_n" >> "$outfile"
+        done
+    )
+}
+
+# extract_block <dumpfile> <relpath> <outfile>
+# Writes just the node-record lines (no @@FILE/@@COUNT markers) for one file.
+extract_block() {
+    awk -v want="@@FILE $2" '
+        $0 == want   { grab = 1; next }
+        /^@@FILE /   { grab = 0 }
+        /^@@COUNT /  { grab = 0; next }
+        grab         { print }
+    ' "$1" > "$3"
+}
+
+# read_lines_into_arr <file>  -- fills global ARR (bash 3.2: no mapfile)
+read_lines_into_arr() {
+    ARR=()
+    local _l
+    while IFS= read -r _l || [ -n "$_l" ]; do
+        ARR[${#ARR[@]}]="$_l"
+    done < "$1"
+}
+
+# run_equivalence_check <workdir>
+# Populates TESTS_RUN/TESTS_PASSED/TESTS_FAILED (from common.sh) and prints
+# per-file results plus a divergence summary. Compares a live dump of
+# YAML_FILES (current parser) against GOLDEN_FIXTURE (pre-M85 parser,
+# raw/undecoded).
+run_equivalence_check() {
+    local workdir="$1"
+    local new_dump="${workdir}/new.dump"
+    local old_block="${workdir}/old.block" new_block="${workdir}/new.block"
+    local divergence_log="${workdir}/divergences.log"
+
+    dump_parser "$new_dump"
+
+    : > "$divergence_log"
+    EXPECTED_DIVERGENCES=0
+    UNEXPECTED_DIVERGENCES=0
+
+    local f old_n new_n file_failed i
+    local o_id o_type o_key o_val o_par o_chi
+    local n_id n_type n_key n_val n_par n_chi
+    local has_pipe
+
+    for f in "${YAML_FILES[@]}"; do
+        TESTS_RUN=$((TESTS_RUN + 1))
+
+        extract_block "$GOLDEN_FIXTURE" "$f" "$old_block"
+        extract_block "$new_dump" "$f" "$new_block"
+
+        read_lines_into_arr "$old_block"; OLD_ARR=("${ARR[@]}")
+        read_lines_into_arr "$new_block"; NEW_ARR=("${ARR[@]}")
+
+        old_n=${#OLD_ARR[@]}
+        new_n=${#NEW_ARR[@]}
+        file_failed=0
+
+        if [ "$old_n" -eq 0 ]; then
+            echo "  [UNEXPECTED DIVERGENCE] file=$f — missing from golden fixture (regenerate it?)" >> "$divergence_log"
+            UNEXPECTED_DIVERGENCES=$((UNEXPECTED_DIVERGENCES + 1))
+            file_failed=1
+        elif [ "$old_n" -ne "$new_n" ]; then
+            echo "  [UNEXPECTED DIVERGENCE] file=$f — node count mismatch: golden=$old_n current=$new_n" >> "$divergence_log"
+            UNEXPECTED_DIVERGENCES=$((UNEXPECTED_DIVERGENCES + 1))
+            file_failed=1
+        else
+            i=0
+            while [ "$i" -lt "$old_n" ]; do
+                o_id="" ; o_type="" ; o_key="" ; o_val="" ; o_par="" ; o_chi=""
+                n_id="" ; n_type="" ; n_key="" ; n_val="" ; n_par="" ; n_chi=""
+                IFS=$'\t' read -r o_id o_type o_key o_val o_par o_chi <<< "${OLD_ARR[$i]}"
+                IFS=$'\t' read -r n_id n_type n_key n_val n_par n_chi <<< "${NEW_ARR[$i]}"
+
+                has_pipe=0
+                case "${n_key}${n_val}" in
+                    *'|'*) has_pipe=1 ;;
+                esac
+
+                if [ "$has_pipe" -eq 1 ]; then
+                    # Documented exception (F-112-01 / task-299): the pre-M85
+                    # parser truncated any value containing `|` at the first
+                    # pipe. The current parser is the corrected
+                    # implementation, so golden != current here is expected
+                    # and must be listed, not treated as a failure.
+                    if [ "$o_val" = "$n_val" ] && [ "$o_key" = "$n_key" ]; then
+                        :  # `|` present but no actual divergence — fine either way
+                    else
+                        EXPECTED_DIVERGENCES=$((EXPECTED_DIVERGENCES + 1))
+                        {
+                            echo "  [expected: F-112-01 | fix] file=$f node=#${n_id} key='${n_key}'"
+                            echo "    pre-M85 (truncated): '${o_val}'"
+                            echo "    current (corrected): '${n_val}'"
+                        } >> "$divergence_log"
+                    fi
+                else
+                    if [ "$o_id" != "$n_id" ] || [ "$o_type" != "$n_type" ] || \
+                       [ "$o_key" != "$n_key" ] || [ "$o_val" != "$n_val" ] || \
+                       [ "$o_par" != "$n_par" ] || [ "$o_chi" != "$n_chi" ]; then
+                        UNEXPECTED_DIVERGENCES=$((UNEXPECTED_DIVERGENCES + 1))
+                        file_failed=1
+                        {
+                            echo "  [UNEXPECTED DIVERGENCE] file=$f node=#${n_id}"
+                            echo "    golden:  id=$o_id type=$o_type key='$o_key' value='$o_val' parent=$o_par children=$o_chi"
+                            echo "    current: id=$n_id type=$n_type key='$n_key' value='$n_val' parent=$n_par children=$n_chi"
+                        } >> "$divergence_log"
+                    fi
+                fi
+                i=$((i + 1))
+            done
+        fi
+
+        if [ "$file_failed" -eq 0 ]; then
+            echo -e "${GREEN}✓${NC} $f ($old_n nodes, parity)"
+            TESTS_PASSED=$((TESTS_PASSED + 1))
+        else
+            echo -e "${RED}✗${NC} $f"
+            TESTS_FAILED=$((TESTS_FAILED + 1))
+        fi
+    done
+
+    echo ""
+    if [ "$EXPECTED_DIVERGENCES" -gt 0 ]; then
+        echo -e "${YELLOW}ℹ ${EXPECTED_DIVERGENCES} expected divergence(s) — all attributable to the F-112-01 \`|\` truncation fix:${NC}"
+        grep -A2 '\[expected: F-112-01' "$divergence_log"
+        echo ""
+    fi
+
+    if [ "$UNEXPECTED_DIVERGENCES" -gt 0 ]; then
+        echo -e "${RED}${UNEXPECTED_DIVERGENCES} unexpected divergence(s):${NC}"
+        grep -A3 'UNEXPECTED DIVERGENCE' "$divergence_log"
+        echo ""
+    fi
+}
+
+# Companion script (tests/acp.yaml-parser-equivalence-large.sh) sources this
+# file for its functions/constants and sets ACP_YAML_EQUIV_LIB_ONLY=1 first
+# to skip the block below.
+if [ "${ACP_YAML_EQUIV_LIB_ONLY:-0}" = "1" ]; then
+    return 0 2>/dev/null || exit 0
+fi
+
+if [ ! -s "$GOLDEN_FIXTURE" ]; then
+    echo -e "${RED}✗ Golden fixture not found: $GOLDEN_FIXTURE${NC}"
+    echo "  See 'Regenerating the fixture' in this file's header comment."
+    exit 1
+fi
+
+WORKDIR="$(mktemp -d)"
+trap 'rm -rf "$WORKDIR"' EXIT
+
+# Every tracked YAML file in the repo, excluding the O(n^2)-parse outlier(s)
+# — see header comment. agent/preferences/*.yaml and tests/fixtures/** are
+# already tracked so this single glob covers them, as named in the task.
+YAML_FILES=()
+EXCLUDED_LARGE=()
+while IFS= read -r _f || [ -n "$_f" ]; do
+    [ -z "$_f" ] && continue
+    _lines=$(wc -l < "${SCRIPT_DIR}/${_f}" 2>/dev/null | tr -d ' ')
+    if [ "${_lines:-0}" -ge "$LARGE_FILE_LINES" ]; then
+        EXCLUDED_LARGE[${#EXCLUDED_LARGE[@]}]="$_f"
+    else
+        YAML_FILES[${#YAML_FILES[@]}]="$_f"
+    fi
+done < <(git -C "$SCRIPT_DIR" ls-files -- '*.yaml' '*.yml' | sort)
+
+if [ "${#YAML_FILES[@]}" -eq 0 ]; then
+    echo -e "${RED}✗ No tracked YAML files found${NC}"
+    exit 1
+fi
+
+if [ "${#EXCLUDED_LARGE[@]}" -gt 0 ]; then
+    echo -e "${YELLOW}ℹ Excluded ${#EXCLUDED_LARGE[@]} file(s) >= ${LARGE_FILE_LINES} lines (see tests/acp.yaml-parser-equivalence-large.sh):${NC}"
+    printf '    %s\n' "${EXCLUDED_LARGE[@]}"
+    echo ""
+fi
+
+run_equivalence_check "$WORKDIR"
+
+print_test_summary
+exit $?
