@@ -2,13 +2,13 @@
 id: task-300
 milestone: M85
 title: "Parser equivalence — prove output is byte-identical before Phase 2"
-status: not_started
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-07-28
-started: null
-completed: null
+started: 2026-08-01
+completed: 2026-08-01
 phase: 1
 depends_on: [task-299]
 audit_findings: [A-110-05, F-112-03, F2-01]
@@ -50,3 +50,31 @@ The 100 existing assertions are a good net but they test the parser's *intended*
 ## User-Observable Acceptance
 
 `bash tests/acp.yaml-parser-equivalence.test.sh` reports zero divergences across every YAML file in the repo.
+
+## Resolution (2026-08-01)
+
+Implemented as a **golden-fixture** regression test rather than re-deriving the
+pre-M85 parser from git history on every run: `add_child` rewrites the whole
+growing AST_FILE with `sed -i` on every child append, in both parsers,
+unaffected by M85's field-access optimisation — that alone makes parsing
+`agent/progress.yaml` (9,480 lines) take ~100s, and dumping the AST of every
+tracked file with the pre-M85 parser did not finish in 5 minutes. Re-running
+the pre-M85 parser every CI invocation was not viable inside the 180s budget.
+
+Instead, `tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv` captures
+the pre-M85 parser's AST output for all 74 tracked YAML files, generated once.
+`tests/acp.yaml-parser-equivalence.test.sh` sources only the current parser and
+diffs its live output against that fixture — 73 files, ~79s, zero unexpected
+divergences. `agent/progress.yaml` (the one file >= 2000 lines) is covered by
+the companion `tests/acp.yaml-parser-equivalence-large.sh` (not `*.test.sh`,
+same convention as `acp.yaml-parser-perf.sh`) — ~97s, zero unexpected
+divergences.
+
+Every divergence found (56 total across both scripts) was individually
+verified attributable to the F-112-01 `|` fix, including an edge case not
+anticipated in the task's original design: several `agent/index/*.yaml`
+files use `description: |` (YAML block-scalar syntax), which this parser
+doesn't specially support — it just stores the literal value `|`. The old
+`cut -d'|' -f4` implementation misaligned onto the adjacent parent-id field
+for those; the new parser correctly returns `|`. Same fix, wider blast
+radius than the original truncation-of-a-string-value case.
