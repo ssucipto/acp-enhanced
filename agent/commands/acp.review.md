@@ -65,6 +65,22 @@ bash agent/scripts/acp.review-measure.sh --ci
 
 These figures are intentionally reproducible from `tests/fixtures/review-corpus/expected.yaml`, not hand-maintained prose.
 
+### Wall-Clock Perf Gate (M85 task-303, audit-110)
+
+Correctness gates cannot see performance regressions: the corpus above scored
+100%/100% throughout an 18x scanner slowdown that audit-110 later traced to a
+YAML-parsing cost. `acp.review-measure.sh --ci` now also times a single-file
+scan (median of 5 runs) and fails the build if it exceeds `--perf-budget-ms`.
+
+| Metric | Value |
+|-------|-------|
+| Single-file scan (measured 2026-07-31, isolated `acp.review-scan.sh` call) | 103ms (was 199ms pre-Phase-1, ~2950ms pre-audit-110) |
+| Default budget (`--perf-budget-ms`) | **450ms** — ~4.4x headroom over the isolated figure; not tuned to sit just above it |
+| What the gate actually times | The full `acp.review-measure.sh` subprocess path (`bash` + script sourcing overhead included), typically 300-360ms locally — still comfortably under budget |
+| CI floor | Fails when the median exceeds the budget; failure message names the budget, the observed median, and audit-110 |
+
+Regenerate with `bash agent/scripts/acp.review-measure.sh --ci` — the timing line prints on every run, not only on failure, so drift is visible before it breaks a build.
+
 ## Ruleset Size
 
 | Layer | Count | Rule prefixes |
