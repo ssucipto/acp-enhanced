@@ -2,13 +2,13 @@
 id: task-304
 milestone: M85
 title: "Verify and close A-110-04, A-110-05, A-110-07"
-status: not_started
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 3
 created: 2026-07-28
-started: null
-completed: null
+started: 2026-08-01
+completed: 2026-08-02
 phase: 3
 depends_on: [task-303]
 audit_findings: [A-110-04, A-110-05, A-110-07]
@@ -68,4 +68,28 @@ a hard prerequisite for closing task-304 at all.
 Consecutive green E2E runs (all 3 platforms, not just macOS):
 1. commit `6559ae1`, run [30707045524](https://github.com/ssucipto/acp-enhanced/actions/runs/30707045524)
 2. commit `def196d`, run [30707352192](https://github.com/ssucipto/acp-enhanced/actions/runs/30707352192)
-3. *(pending — this commit)*
+3. commit `7e95a2d`, run [30707596784](https://github.com/ssucipto/acp-enhanced/actions/runs/30707596784)
+
+## Resolution (2026-08-02)
+
+All three carryovers stamped `fixed` in `agent/memory/audit-carryovers.md`
+(`verified_in_audit: "M85 task-304"` or the specific task that fixed each):
+
+- **A-110-04** (`coderabbit_active()`): fixed by task-302's memoisation.
+  Re-measured 58ms median of 5 (target <200ms).
+- **A-110-05** (`get_preference`): fixed by task-301's resolver + task-302's
+  wiring. Re-measured 45ms median of 5 (target <100ms).
+- **A-110-07** (macOS E2E flake): root cause was A-110-05, now fixed. Closed
+  on the 3-consecutive-green-runs evidence above, not a single pass — the
+  whole point of this carryover per its own `finding` text.
+
+M85 is now 8/8 tasks complete. `agent/progress.yaml`'s M85 entry, the
+milestone doc, and `current_milestone` (reverted to M81, matching the
+project description's pre-existing statement that it "remains M81" while
+M85 was worked as a parallel priority-4 item) all updated accordingly.
+
+No test timeout was raised anywhere in this milestone — the CI failures
+encountered while getting the 3 green runs were fixed at their root cause
+each time (see task-300's Resolution note and the 5 commits between
+`d959805` and `6559ae1`), consistent with A-110-07's own `fix_target`
+("Do NOT raise the timeout — audit-110 showed that masks the defect").
