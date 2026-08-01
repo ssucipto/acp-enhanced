@@ -2,13 +2,13 @@
 id: task-302
 milestone: M85
 title: "Wire get_preference to the fast path with a pure-bash fallback"
-status: not_started
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-07-28
-started: null
-completed: null
+started: 2026-08-01
+completed: 2026-08-01
 phase: 2
 depends_on: [task-301]
 audit_findings: [A-110-04, A-110-05]
@@ -48,3 +48,43 @@ A-110-04 is closed here. **Baseline corrected twice:** the original 21.5s was a 
 ## User-Observable Acceptance
 
 `tests/acp.preferences-validate.test.sh` completes in well under a minute, and `/acp-review` behaves identically whether or not `python3` is present.
+
+## Resolution (2026-08-01)
+
+`get_preference()` (agent/scripts/acp.preferences.sh) now tries the task-301
+resolver first via `_pref_fast_path_available()` (mirrors
+`node_scan_modules_available()`), falling back to the original bash walk —
+left completely intact below it — on resolver absence (exit >= 2, or
+`python3` unresolvable) or a not-found result (exit 1, translated to
+`return 1` same as the bash path). `get_preference_or` needed no changes;
+it already calls `get_preference`. A one-time stderr notice
+(`_announce_pref_fast_path_skipped`) mirrors `announce_yaml_rules_skipped`.
+
+`_coderabbit_enabled` and the `config_path` lookup in `coderabbit_available`
+are now memoised per-process, matching `_ACP_GITLEAKS_PREF_CACHE`
+(acp.gitleaks.sh). Verified there is no code path where this can observe a
+stale value: `set_preference` is called from exactly one place outside
+acp.preferences.sh itself (acp.dupehound.sh, a different namespace key,
+inside a subshell) — nothing in the codebase calls `set_preference` and
+`coderabbit_active`/`coderabbit_available` in the same process.
+
+Verification results:
+- Fast path vs. forced fallback (`python3` shadowed out of `PATH` via a
+  minimal PATH containing no python3): identical values and exit codes
+  across 7 keys including a not-found case and a map-node path.
+- `e2e/coderabbit-optionality.test.sh`: 13/13 unchanged, full suite in
+  ~0.9s (was paying ~646ms+ per `coderabbit_active` call before this task).
+- `coderabbit_active()` median ~65ms (target was <200ms, baseline 646ms).
+- `tests/acp.preferences-validate.test.sh`: 19/19, 26s (baseline ~28s, well
+  under the unchanged 60s/180s budgets).
+- `tests/acp.preferences.test.sh` (21/21) and
+  `tests/acp.preferences-preset.test.sh` (10/10): unchanged, including the
+  set_preference-then-get_preference-in-the-same-process round-trip test,
+  which passing confirms the fast-path wiring doesn't introduce staleness
+  in `get_preference` itself (it has no cache of its own — every call
+  invokes the resolver fresh; only the coderabbit *helper* layer caches).
+- gitleaks/dupehound: not independently re-tested with a dedicated matrix
+  file (none exists in the repo — audit-110's "6 preference × availability
+  states" was described in the audit report, not committed as a test file);
+  covered indirectly since both route through the now-verified
+  `get_preference`, and `gitleaks_active()` was spot-checked directly.
