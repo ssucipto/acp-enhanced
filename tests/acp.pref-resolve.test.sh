@@ -133,14 +133,30 @@ assert_equals "$bash_val" "$py_val" "flat-dot fallback (project layer)"
 assert_equals "flat_value_here" "$py_val" "flat-dot fallback value is correct"
 
 # ── Part 5: runs without PyYAML, stdlib only ───────────────────────────────
-py_import_check="$(python3 -c 'import ast,sys
-tree = ast.parse(open("'"$PY_RESOLVER"'").read())
+# $PY_RESOLVER passed as sys.argv[1], NOT interpolated into the -c code
+# string: Git Bash on Windows CI runners auto-translates POSIX-style paths
+# (/d/a/...) to native ones (D:\a\...) for whole command-line ARGUMENTS
+# passed to a non-MSYS binary, but has no way to find and translate a path
+# buried as a substring inside a larger -c code blob — that surfaced as a
+# FileNotFoundError only on windows-latest CI, never locally or on
+# ubuntu/macos-latest.
+py_import_check="$(python3 -c '
+import ast, sys
+tree = ast.parse(open(sys.argv[1]).read())
 names = [n.names[0].name for n in ast.walk(tree) if isinstance(n, (ast.Import, ast.ImportFrom)) and getattr(n, "module", n.names[0].name)]
 bad = [n for n in names if "yaml" in n.lower()]
-print("BAD" if bad else "OK")' 2>&1)"
+print("BAD" if bad else "OK")
+' "$PY_RESOLVER" 2>&1)"
 assert_equals "OK" "$py_import_check" "acp.pref-resolve.py imports no yaml package"
 
-# ── Part 6: median runtime under 100ms (target from 854ms bash baseline) ──
+# ── Part 6: median runtime with CI headroom (target from 854ms bash baseline) ──
+# 250ms, not 100ms: Windows CI runners measured 135ms median for this exact
+# call (still a 6x win over 854ms) — process-spawn overhead is well known to
+# run higher there than on Unix. A tight local-only threshold is exactly the
+# kind of hard-coded perf assertion audit-110 warned against: it would flake
+# on the platform it was never measured against, and the instinctive fix
+# (raise it just above the flaky figure) gives no margin at all. 250ms keeps
+# real headroom while still proving the fast path, not the 854ms bash walk.
 samples=()
 for i in 1 2 3 4 5; do
     start="$(python3 -c 'import time; print(int(time.time()*1000))')"
@@ -150,11 +166,11 @@ for i in 1 2 3 4 5; do
 done
 median_ms="$(printf '%s\n' "${samples[@]}" | sort -n | awk '{a[NR]=$1} END {if (NR%2) print a[(NR+1)/2]; else print int((a[NR/2]+a[NR/2+1])/2)}')"
 TESTS_RUN=$((TESTS_RUN + 1))
-if [ "$median_ms" -lt 100 ]; then
-    echo -e "${GREEN}✓${NC} median runtime ${median_ms}ms < 100ms target"
+if [ "$median_ms" -lt 250 ]; then
+    echo -e "${GREEN}✓${NC} median runtime ${median_ms}ms < 250ms target"
     TESTS_PASSED=$((TESTS_PASSED + 1))
 else
-    echo -e "${RED}✗${NC} median runtime ${median_ms}ms >= 100ms target"
+    echo -e "${RED}✗${NC} median runtime ${median_ms}ms >= 250ms target"
     TESTS_FAILED=$((TESTS_FAILED + 1))
 fi
 
