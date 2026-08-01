@@ -846,11 +846,11 @@ milestones:
     name: Preference & YAML Parser Performance (v6.30.1)
     priority: 4
     status: in_progress
-    progress: 63
+    progress: 75
     started: 2026-07-30
     completed: null
     estimated_weeks: 1
-    tasks_completed: 5
+    tasks_completed: 6
     tasks_total: 8
     file: agent/milestones/milestone-85-preference-yaml-performance.md
     notes: 'PHASE 1 COMPLETE (297, 299, 298). Parser 1498 -> 320 forks per parse
@@ -6440,13 +6440,13 @@ tasks:
   - id: task-302
     name: Wire fast path + memoise coderabbit
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-85-preference-yaml-performance/task-302-wire-fast-path.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-01'
+    completed_date: '2026-08-01'
+    actual_hours: 1.5
     estimated_hours: 3
-    notes: phase 2; closes A-110-04; pure-bash fallback retained
+    notes: phase 2; closes A-110-04; pure-bash fallback retained; coderabbit_active ~65ms (was 646ms, target <200ms); e2e/coderabbit-optionality 13/13 in 0.9s; preferences-validate 19/19 in 26s (unchanged)
   - id: task-303
     name: Wall-clock perf gate
     priority: 5
