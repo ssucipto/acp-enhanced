@@ -116,16 +116,16 @@ Round 2 audited round 1's own amendments. Five findings, all defects in round-1 
 ## Success criteria
 
 - [x] `yaml_parse` on the 106-line preference file: **360ms** (from 1369ms, 3.8×) — *criterion amended, see below*
-- [ ] Single `get_preference`: **< 100ms** (from 854ms post-Phase-1) — requires the Phase 2 resolver
-- [ ] `coderabbit_active()`: **< 200ms** (from 646ms post-Phase-1)
+- [x] Single `get_preference`: **45ms** re-measured 2026-08-01 (target <100ms; was 854ms post-Phase-1) — Phase 2 resolver (task-301/302)
+- [x] `coderabbit_active()`: **58ms** re-measured 2026-08-01 (target <200ms; was 646ms post-Phase-1)
 - [x] `tests/acp.preferences-validate.test.sh`: **28s** (from 159s, limit unchanged at 180s)
-- [ ] All 100 existing parser assertions pass unchanged
-- [ ] Differential test: old and new parser produce identical output across every YAML file in the repo
-- [ ] Corpus gate fails when a single-file scan exceeds its wall-clock budget
-- [ ] macOS E2E green across **3 consecutive runs**
-- [ ] A-110-04, A-110-05, A-110-07 stamped fixed with verifying audit
-- [ ] `piped: "a|b|c"` round-trips intact through `yaml_parse` → `yaml_get` (F-112-01)
-- [ ] Exactly one AST-writing code path, or all paths share one encoding helper (F-112-02)
+- [x] All 100 existing parser assertions pass unchanged (`acp.yaml-parser.test.sh`, `yaml-array-operations.test.sh`)
+- [x] Differential test: old and new parser produce identical output across every YAML file in the repo (task-300, golden-fixture design — see its Resolution note)
+- [x] Corpus gate fails when a single-file scan exceeds its wall-clock budget (task-303, `--perf-budget-ms`)
+- [ ] macOS E2E green across **3 consecutive runs** — 1/3 confirmed so far (run 30707045524, commit 6559ae1); see task-304 Resolution
+- [ ] A-110-04, A-110-05, A-110-07 stamped fixed with verifying audit — pending the 3-run confirmation above
+- [x] `piped: "a|b|c"` round-trips intact through `yaml_parse` → `yaml_get` (F-112-01) — verified by task-300's equivalence test (expected-divergence class)
+- [x] Exactly one AST-writing code path, or all paths share one encoding helper (F-112-02) — closed by task-299 (duplicate `create_node` removed)
 
 ## Amendment: measured architectural floor (2026-07-31, post-Phase 1)
 
@@ -141,6 +141,19 @@ Phase 1 is complete and the numbers change what Phase 2 has to be. Re-measured, 
 | `coderabbit_active()` | 1439 ms | **646 ms** | <200 ms |
 | single-file review scan | 199 ms | **103 ms** | — |
 | `preferences-validate` suite | 159 s | **28 s** | <60 s ✅ |
+
+### Phase 2 final results (2026-08-01, task-301/302, means of 5)
+
+| Measurement | Post-Phase-1 | Post-Phase-2 | Target |
+|---|---|---|---|
+| `get_preference` | 854 ms | **45 ms** (19×) | <100 ms ✅ |
+| `coderabbit_active()` | 646 ms | **58 ms** (11×) | <200 ms ✅ |
+
+Both land well inside their targets — the resolver (task-301, stdlib-only
+Python, one process for all four layers) plus wiring it into `get_preference`
+with a pure-bash fallback (task-302) fully closed the "stop parsing YAML in
+bash on this path" gap the amendment above identified as the only route
+under 100ms.
 
 ### The `< 150ms` criterion was not achievable and is amended
 
