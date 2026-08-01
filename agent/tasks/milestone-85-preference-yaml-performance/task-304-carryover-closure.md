@@ -49,3 +49,23 @@ audit-111 also retracted A-110-06 as a false positive — `acp.review-scan.sh` n
 ## User-Observable Acceptance
 
 `/acp-audit` reports zero pending carryovers from the A-110 series, and three consecutive CI runs show macOS E2E green.
+
+## Progress log (2026-08-01/02)
+
+Re-measured (step 1, means of 5, local): `get_preference` 45ms (target
+<100ms), `coderabbit_active()` 58ms (target <200ms). Both closed by
+task-301/302. Recorded in the milestone doc's "Phase 2 final results" table.
+
+Triggering the 3 consecutive E2E runs surfaced real bugs in task-300's own
+equivalence test that had nothing to do with A-110-04/05/07 directly, but
+blocked getting any green run at all — see commits 7a4df46, 5d4995f,
+96e214d, 0be4883, 6559ae1 for the fixes (wc -l padding across BSD/GNU,
+bash `read` collapsing tab-delimited empty fields, a nondeterministic file
+mutated by another e2e test, and two Windows-only issues). None of that
+was scope creep on A-110-04/05/07 — closing task-300's CI integration was
+a hard prerequisite for closing task-304 at all.
+
+Consecutive green E2E runs (all 3 platforms, not just macOS):
+1. commit `6559ae1`, run [30707045524](https://github.com/ssucipto/acp-enhanced/actions/runs/30707045524)
+2. commit `def196d`, run [30707352192](https://github.com/ssucipto/acp-enhanced/actions/runs/30707352192)
+3. *(pending — this commit)*
