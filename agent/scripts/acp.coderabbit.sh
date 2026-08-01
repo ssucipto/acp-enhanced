@@ -28,13 +28,34 @@ _coderabbit_repo_root() {
   git rev-parse --show-toplevel 2>/dev/null || echo "."
 }
 
+# _coderabbit_enabled / config_path resolution are memoised for the life of
+# the process — matches the _ACP_GITLEAKS_PREF_CACHE pattern (acp.gitleaks.sh,
+# audit-110). coderabbit_active() can't use gitleaks' availability-first
+# reordering (it must read the preference to know whether the user opted in
+# before it can check availability), so this plus the M85 fast resolver is
+# the fix for A-110-04 (was 21.5s single-sample / actually 1439ms per
+# audit-113 F2-03; Phase 1 alone already brought it to 646ms).
+#
+# Per-process only, by design (M85 task-302 step 6): a `yaml_set` that writes
+# a preference file happens in a DIFFERENT process (acp.preferences.sh set is
+# always invoked as its own script run, never sourced mid-process alongside a
+# long-lived reader), so there is no path where this cache observes a stale
+# value after a write within the same process lifetime.
+_ACP_CODERABBIT_ENABLED_CACHE=""
+_ACP_CODERABBIT_CONFIG_PATH_CACHE=""
+
 # _coderabbit_enabled — resolve the opt-in preference from the repo root.
 # Exact-string compare (F-098-03): a `false` default resolves as the non-empty
 # string "false", so a presence/has_preference check would misread it as "set".
 _coderabbit_enabled() {
+  if [[ -n "$_ACP_CODERABBIT_ENABLED_CACHE" ]]; then
+    echo "$_ACP_CODERABBIT_ENABLED_CACHE"
+    return 0
+  fi
   local root
   root="$(_coderabbit_repo_root)"
-  ( cd "$root" 2>/dev/null && get_preference "acp" "integrations.coderabbit.enabled" 2>/dev/null ) || echo false
+  _ACP_CODERABBIT_ENABLED_CACHE="$( ( cd "$root" 2>/dev/null && get_preference "acp" "integrations.coderabbit.enabled" 2>/dev/null ) || echo false )"
+  echo "$_ACP_CODERABBIT_ENABLED_CACHE"
 }
 
 # coderabbit_available — Gate 2 (feature detection).
@@ -47,8 +68,13 @@ _coderabbit_enabled() {
 coderabbit_available() {
   local config_path root target
   root="$(_coderabbit_repo_root)"
-  config_path="$( ( cd "$root" 2>/dev/null && get_preference_or "acp" "integrations.coderabbit.config_path" ".coderabbit.yaml" ) )"
-  [[ -n "$config_path" ]] || config_path=".coderabbit.yaml"
+  if [[ -n "$_ACP_CODERABBIT_CONFIG_PATH_CACHE" ]]; then
+    config_path="$_ACP_CODERABBIT_CONFIG_PATH_CACHE"
+  else
+    config_path="$( ( cd "$root" 2>/dev/null && get_preference_or "acp" "integrations.coderabbit.config_path" ".coderabbit.yaml" ) )"
+    [[ -n "$config_path" ]] || config_path=".coderabbit.yaml"
+    _ACP_CODERABBIT_CONFIG_PATH_CACHE="$config_path"
+  fi
   if [[ "$config_path" == /* ]]; then
     target="$config_path"
   else
