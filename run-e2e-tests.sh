@@ -119,7 +119,8 @@ _acp_windows_skip_suite() {
         acp.sessions.test.sh|\
         acp.bootstrap-preserve.test.sh|\
         acp.version-update-preserve.test.sh|\
-        acp.integrity.test.sh)
+        acp.integrity.test.sh|\
+        acp.yaml-parser-equivalence.test.sh)
             return 0 ;;
         *) return 1 ;;
     esac

@@ -78,13 +78,15 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 NEW_PARSER="${SCRIPT_DIR}/agent/scripts/acp.yaml-parser.sh"
 GOLDEN_FIXTURE="${SCRIPT_DIR}/tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv"
 # 200, not 2000: yaml_parse's add_child does a `sed -i` fork per node
-# appended (unaffected by M85's field-access work — see the header above),
-# and process-spawn overhead on Windows CI runners (MSYS/git-bash) is high
-# enough that the full ~73-file / ~6500-line set that fits comfortably
-# under macOS/Linux's 180s per-test budget (run-e2e-tests.sh TIMEOUT_SECS)
-# timed out on windows-latest even after every other fix in this file
-# (confirmed: M85 task-304 CI run). Excluding files over 200 lines cuts the
-# fast suite to its ~55 smallest files; everything above that already goes
+# appended (unaffected by M85's field-access work — see the header above).
+# Even at 200 (a ~25s local run), this suite still timed out at 180s on
+# windows-latest — MSYS/git-bash process-spawn overhead is high enough that
+# it's now in run-e2e-tests.sh's _acp_windows_skip_suite() list (same
+# mechanism already used for acp.yaml-parser.test.sh and
+# acp.preferences-validate.test.sh, for the same reason). The 200 threshold
+# is kept anyway for macOS/Linux CI hygiene, not to chase Windows further.
+# Excluding files over 200 lines cuts the fast suite to its ~55 smallest
+# files; everything above that already goes
 # through the large-file companion script either way.
 LARGE_FILE_LINES=200
 
