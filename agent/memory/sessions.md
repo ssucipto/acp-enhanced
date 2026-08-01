@@ -5,15 +5,17 @@
 - date: 2026-08-01
   executor: claude-sonnet
   branch: develop
-  tasks: [M85-phase2, task-300, task-301]
+  tasks: [M85-phase2, task-300, task-301, task-302]
   done:
     - task-300-parser-equivalence-complete
     - golden-fixture-regression-test-74-of-74-files-verified
     - discovered-add_child-sed-i-o-n-squared-cost-outside-m85-scope
     - task-301-pref-resolver-complete
     - acp.pref-resolve.py-stdlib-only-28-of-28-tests-pass-41ms-median
+    - task-302-wired-fast-path-with-bash-fallback
+    - coderabbit-helpers-memoised-active-646ms-to-65ms
   deferred:
-    - task-302-304 -> next-session
+    - task-303-304 -> next-session
   key_fact: >
     task-300 could not be implemented as literally specified (re-run the pre-M85
     parser against every tracked YAML file on every CI invocation) — measured
@@ -48,7 +50,20 @@
     reassigns the global SCRIPT_DIR var unconditionally when sourced — a test
     script using that same variable name for its own paths will have them
     silently overwritten; use a different variable name when sourcing it
-    alongside other path computation. task-302-304 are next, unblocked.
+    alongside other path computation.
+    task-302 also complete: get_preference now tries the task-301 resolver
+    first (_pref_fast_path_available, mirrors node_scan_modules_available),
+    falling back to the original bash walk — left fully intact — on
+    resolver absence or an unexpected exit code. Verified byte-identical
+    across 7 keys with python3 truly unresolvable (a minimal PATH excluding
+    it, not just an empty PATH — macOS ships a python3 stub in /usr/bin that
+    a naive PATH swap won't hide). _coderabbit_enabled and config_path are
+    now memoised per-process (matches _ACP_GITLEAKS_PREF_CACHE); confirmed
+    safe against yaml_set staleness because nothing in the codebase calls
+    set_preference and coderabbit_active in the same process.
+    e2e/coderabbit-optionality 13/13 in ~0.9s (was paying 646ms+ per call);
+    coderabbit_active median ~65ms (target <200ms); preferences-validate
+    19/19 in 26s, unchanged. task-303-304 are next, unblocked.
 
 - date: 2026-07-31
   executor: claude-opus

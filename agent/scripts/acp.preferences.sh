@@ -73,6 +73,29 @@ _flat_dot_get() {
     | tr -d '[:space:]'
 }
 
+# ── Fast path (M85 task-302) ────────────────────────────────────────────────
+#
+# get_preference does a bash YAML walk per layer (up to 4 `yaml_get` calls,
+# each its own `$( )` subshell that discards the AST cache — see task-301).
+# acp.pref-resolve.py resolves all four layers in one python3 process,
+# ~20x faster (measured: 854ms -> 41-46ms median). identity.yml says
+# "no_external_deps: pure bash preferred", so this must degrade rather than
+# hard-depend — mirrors node_scan_modules_available() (acp.review-scan.sh).
+_pref_fast_path_available() {
+  command -v python3 >/dev/null 2>&1 && [[ -f "${SCRIPT_DIR}/acp.pref-resolve.py" ]]
+}
+
+# Warn once per process when the fast path is unavailable, so a slow run is
+# explainable rather than silently different — mirrors
+# announce_yaml_rules_skipped() (acp.review-scan.sh, audit-108).
+_ACP_PREF_FAST_PATH_SKIP_ANNOUNCED=false
+_announce_pref_fast_path_skipped() {
+  if [[ "$_ACP_PREF_FAST_PATH_SKIP_ANNOUNCED" != "true" ]]; then
+    echo "[ACP] preference fast path skipped: python3 not found — using the bash YAML walk (slower, same result)." >&2
+    _ACP_PREF_FAST_PATH_SKIP_ANNOUNCED=true
+  fi
+}
+
 # ── Core functions ────────────────────────────────────────────────────────────
 
 # Get preference value with precedence resolution:
@@ -84,6 +107,31 @@ get_preference() {
   local namespace="$1"
   local pref_path="$2"
   local value=""
+
+  # Fast path: one python3 process resolves all four layers (task-301/302).
+  # Exit 0 = found (print value, return 0), exit 1 = not found at any level
+  # (return 1, same contract as the bash walk below). Any other exit code
+  # (usage error, unexpected crash) falls through to the bash walk instead
+  # of propagating a resolver bug as "preference not found".
+  if _pref_fast_path_available; then
+    local fast_project fast_workspace fast_user fast_configurables fast_value fast_exit
+    fast_project="$(_pref_project_file "$namespace")"
+    fast_workspace="$(_pref_workspace_file "$namespace")"
+    fast_user="$(_pref_user_file "$namespace")"
+    fast_configurables="$(_pref_configurables_file "$namespace")"
+    fast_value="$(python3 "${SCRIPT_DIR}/acp.pref-resolve.py" "$namespace" "$pref_path" \
+      "$fast_project" "$fast_workspace" "$fast_user" "$fast_configurables" 2>/dev/null)"
+    fast_exit=$?
+    if [[ $fast_exit -eq 0 ]]; then
+      echo "$fast_value"
+      return 0
+    elif [[ $fast_exit -eq 1 ]]; then
+      return 1
+    fi
+    # fast_exit >= 2: resolver usage/internal error — fall through to bash walk.
+  else
+    _announce_pref_fast_path_skipped
+  fi
 
   # Project (highest precedence)
   local project_file
