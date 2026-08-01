@@ -40,7 +40,7 @@ jobs:
       - name: Run acp-validate.ts (command structure + parity)
         run: cd scripts && npx tsx acp-validate.ts
 
-      - name: Run review corpus measurement gate (M83)
+      - name: Run review corpus measurement + perf gate (M83, M85 task-303)
         run: bash agent/scripts/acp.review-measure.sh --ci
 
       - name: Run TS unit tests (vitest — M59 dispatch + M61 validate)
