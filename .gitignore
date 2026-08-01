@@ -28,6 +28,10 @@ reports/
 *.tmp
 *.temp
 
+# Python (agent/scripts/acp.pref-resolve.py, M85 task-301)
+__pycache__/
+*.pyc
+
 # Node / npm
 node_modules/
 package-lock.json

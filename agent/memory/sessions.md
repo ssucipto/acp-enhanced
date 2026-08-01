@@ -5,13 +5,15 @@
 - date: 2026-08-01
   executor: claude-sonnet
   branch: develop
-  tasks: [M85-phase2, task-300]
+  tasks: [M85-phase2, task-300, task-301]
   done:
     - task-300-parser-equivalence-complete
     - golden-fixture-regression-test-74-of-74-files-verified
     - discovered-add_child-sed-i-o-n-squared-cost-outside-m85-scope
+    - task-301-pref-resolver-complete
+    - acp.pref-resolve.py-stdlib-only-28-of-28-tests-pass-41ms-median
   deferred:
-    - task-301-304 -> next-session
+    - task-302-304 -> next-session
   key_fact: >
     task-300 could not be implemented as literally specified (re-run the pre-M85
     parser against every tracked YAML file on every CI invocation) — measured
@@ -32,7 +34,21 @@
     agent/index/*.yaml files using `description: |` YAML block-scalar syntax
     (unsupported by this parser, so the literal value IS "|"), which shifted the
     old cut-based field boundaries the same way a `|` mid-string does. Zero
-    unexpected divergences. task-301-304 are next, unblocked.
+    unexpected divergences.
+    task-301 also complete this session: acp.pref-resolve.py is a line-for-line
+    stdlib-only reimplementation of yaml_parse/yaml_query and get_preference
+    precedence (no PyYAML — confirmed absent in this environment). 28/28 new
+    tests pass — every real preference key agrees with bash exactly (value AND
+    exit code), a synthetic 4-layer fixture proves project > workspace > user >
+    configurables precedence, the configurables `.default` suffix quirk (F2-02)
+    is verified against a sibling `description` field so a naive uniform lookup
+    would be caught, flat-dot fallback reproduced including its
+    strip-all-whitespace-not-just-edges behaviour. Median 41-46ms vs the 854ms
+    bash baseline, well under the <100ms target. Process note: acp.preferences.sh
+    reassigns the global SCRIPT_DIR var unconditionally when sourced — a test
+    script using that same variable name for its own paths will have them
+    silently overwritten; use a different variable name when sourcing it
+    alongside other path computation. task-302-304 are next, unblocked.
 
 - date: 2026-07-31
   executor: claude-opus

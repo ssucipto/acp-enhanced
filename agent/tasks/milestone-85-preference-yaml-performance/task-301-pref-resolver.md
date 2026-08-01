@@ -2,13 +2,13 @@
 id: task-301
 milestone: M85
 title: "Single-pass preference resolver (acp.pref-resolve.py)"
-status: not_started
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-07-28
-started: null
-completed: null
+started: 2026-08-01
+completed: 2026-08-01
 phase: 2
 depends_on: [task-300]
 audit_findings: [A-110-05, F2-02]
@@ -79,3 +79,32 @@ Phase 1 lowers the floor; this task removes the repetition. One process reads al
 ## User-Observable Acceptance
 
 `python3 agent/scripts/acp.pref-resolve.py acp integrations.gitleaks.enabled <layer files>` prints the same value the bash path prints, in well under a second.
+
+## Resolution (2026-08-01)
+
+Implemented `agent/scripts/acp.pref-resolve.py` — a line-for-line
+reimplementation of `yaml_parse`/`yaml_query` (acp.yaml-parser.sh) and
+`get_preference` (acp.preferences.sh) precedence, stdlib only. No structural
+divergence from the bash algorithm was introduced: same space-only indent
+counting, same naive first-`:`/first-`#` splitting, same `.default` suffix
+quirk on the configurables layer only, same `_flat_dot_get` regex/tr
+pipeline (including its "strip all whitespace, not just leading/trailing"
+behaviour).
+
+`tests/acp.pref-resolve.test.sh` (28 assertions) verifies: every real key
+under `agent/preferences/acp.default.yaml` / `agent/configurables/acp.configurables.yaml`
+agrees with bash `get_preference` exactly (value AND exit code); a
+synthetic 4-layer fixture proves precedence project > workspace > user >
+configurables; the configurables `.default` suffix is verified against a
+sibling `description` field to catch exactly the F2-02 regression this task
+was scoped around; flat-dot fallback; no `yaml` import (AST-checked, not
+just `pip list`); median runtime 41-46ms across repeated local runs (from
+854ms baseline, target was <100ms).
+
+One test-harness pitfall worth recording: `acp.preferences.sh` reassigns
+the *global* `SCRIPT_DIR` variable unconditionally when sourced — a test
+script that computes its own paths from a same-named `SCRIPT_DIR` before
+sourcing it will have those paths silently overwritten. Worked around by
+using `ROOT_DIR` in the new test file; not a bug in acp.preferences.sh
+itself (it's a leaf script, not meant to be sourced alongside others that
+also use `SCRIPT_DIR`), so left as-is rather than "fixed."
