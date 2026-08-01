@@ -5,7 +5,7 @@
 - date: 2026-08-01
   executor: claude-sonnet
   branch: develop
-  tasks: [M85-phase2, task-300, task-301, task-302]
+  tasks: [M85-phase2, task-300, task-301, task-302, task-303]
   done:
     - task-300-parser-equivalence-complete
     - golden-fixture-regression-test-74-of-74-files-verified
@@ -14,8 +14,9 @@
     - acp.pref-resolve.py-stdlib-only-28-of-28-tests-pass-41ms-median
     - task-302-wired-fast-path-with-bash-fallback
     - coderabbit-helpers-memoised-active-646ms-to-65ms
+    - task-303-wall-clock-perf-gate-450ms-budget-median-of-5
   deferred:
-    - task-303-304 -> next-session
+    - task-304 -> next-session
   key_fact: >
     task-300 could not be implemented as literally specified (re-run the pre-M85
     parser against every tracked YAML file on every CI invocation) — measured
@@ -63,7 +64,21 @@
     set_preference and coderabbit_active in the same process.
     e2e/coderabbit-optionality 13/13 in ~0.9s (was paying 646ms+ per call);
     coderabbit_active median ~65ms (target <200ms); preferences-validate
-    19/19 in 26s, unchanged. task-303-304 are next, unblocked.
+    19/19 in 26s, unchanged.
+    task-303 also complete: acp.review-measure.sh --ci now times a
+    single-file corpus scan (median of 5) and fails when it exceeds
+    --perf-budget-ms (default 450, ~4.4x headroom over audit-110's measured
+    103ms isolated figure). This directly closes the audit-110 blind spot —
+    the recall/precision corpus gate scored 100%/100% throughout an 18x
+    scanner slowdown because correctness gates can't see performance
+    regressions. Verified: fails at an artificially low budget (10ms) with a
+    message naming the budget/observed/audit-110; passes at the real budget
+    with headroom (300-360ms measured, full subprocess path incl. bash
+    startup, higher than the isolated 103ms parser figure but still well
+    under 450ms); never fails without --ci. Documented in acp.review.md
+    beside the existing corpus table; ci.yaml step renamed, no new step
+    needed (the existing --ci invocation already runs it). task-304 is
+    next, unblocked.
 
 - date: 2026-07-31
   executor: claude-opus

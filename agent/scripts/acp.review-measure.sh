@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# acp.review-measure.sh — Measure review-scan corpus recall and precision
-# Usage: bash agent/scripts/acp.review-measure.sh [--ci] [--min-recall 90] [--min-precision 90]
+# acp.review-measure.sh — Measure review-scan corpus recall and precision,
+# plus a wall-clock perf gate (M85 task-303).
+# Usage: bash agent/scripts/acp.review-measure.sh [--ci] [--min-recall 90] [--min-precision 90] [--perf-budget-ms 450]
 
 set -euo pipefail
 trap 'echo "[acp.review-measure] Error on line $LINENO" >&2; exit 1' ERR
@@ -13,13 +14,22 @@ EXPECTED_FILE="${CORPUS_DIR}/expected.yaml"
 CI_MODE=false
 MIN_RECALL=90
 MIN_PRECISION=90
+# audit-110: a single-file scan measured 103ms post-Phase-1 (199ms before that,
+# ~2950ms before audit-110's original fix). 450ms gives ~4.4x headroom over the
+# measured figure — enough to absorb CI load / slower runners without going
+# slack enough to hide a real regression. Not tuned to sit just above 103ms.
+PERF_BUDGET_MS=450
+PERF_BUDGET_REPS=5
 
 usage() {
   cat <<'EOF'
-Usage: bash agent/scripts/acp.review-measure.sh [--ci] [--min-recall 90] [--min-precision 90]
+Usage: bash agent/scripts/acp.review-measure.sh [--ci] [--min-recall 90] [--min-precision 90] [--perf-budget-ms 450]
 
 Runs acp.review-scan.sh in --json mode against the labelled review corpus and
-prints per-rule recall / precision plus aggregate totals.
+prints per-rule recall / precision plus aggregate totals. Also times a
+single-file scan (median of 5 runs) and, under --ci, fails the build if it
+exceeds --perf-budget-ms (audit-110: correctness gates can't see performance
+regressions — this closes that blind spot).
 EOF
 }
 
@@ -35,6 +45,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --min-precision)
       MIN_PRECISION="$2"
+      shift 2
+      ;;
+    --perf-budget-ms)
+      PERF_BUDGET_MS="$2"
       shift 2
       ;;
     -h|--help)
@@ -60,12 +74,16 @@ EXPECTED_FILE="${EXPECTED_FILE}" \
 CI_MODE="${CI_MODE}" \
 MIN_RECALL="${MIN_RECALL}" \
 MIN_PRECISION="${MIN_PRECISION}" \
+PERF_BUDGET_MS="${PERF_BUDGET_MS}" \
+PERF_BUDGET_REPS="${PERF_BUDGET_REPS}" \
 python3 - <<'PY'
 import json
 import os
 import shutil
+import statistics
 import subprocess
 import sys
+import time
 from collections import defaultdict
 from pathlib import Path
 
@@ -81,6 +99,8 @@ expected_file = Path(os.environ["EXPECTED_FILE"])
 ci_mode = os.environ["CI_MODE"] == "true"
 min_recall = float(os.environ["MIN_RECALL"])
 min_precision = float(os.environ["MIN_PRECISION"])
+perf_budget_ms = float(os.environ["PERF_BUDGET_MS"])
+perf_budget_reps = int(os.environ["PERF_BUDGET_REPS"])
 shellcheck_available = shutil.which("shellcheck") is not None
 
 with expected_file.open(encoding="utf-8") as fh:
@@ -89,6 +109,7 @@ with expected_file.open(encoding="utf-8") as fh:
 stats = defaultdict(lambda: {"tp": 0, "fp": 0, "fn": 0})
 rule_order = []
 skipped = []
+perf_target = None  # first non-skipped corpus file — reused for the wall-clock gate below
 
 for case in cases:
     optional_tool = case.get("optional_tool")
@@ -99,6 +120,8 @@ for case in cases:
     file_rel = case["file"]
     target_rel = case.get("target", file_rel)
     target = corpus_dir / target_rel
+    if perf_target is None:
+        perf_target = target
     proc = subprocess.run(
         ["bash", str(scan_script), "--json", "--include-tests", str(target)],
         capture_output=True,
@@ -170,6 +193,40 @@ executed_cases = len(cases) - len(skipped)
 print(f"\nExecuted cases: {executed_cases}")
 if skipped:
     print(f"Skipped optional corpus: {', '.join(skipped)}")
+
+# ── Wall-clock perf gate (M85 task-303 / audit-110) ─────────────────────────
+# audit-110's lesson: correctness gates (recall/precision above) cannot see
+# performance regressions — the corpus scored 100%/100% throughout an 18x
+# slowdown. Timed here, always, so drift is visible before it breaks;
+# gated only under --ci so a local run never fails on a noisy machine.
+print()
+if perf_target is None:
+    print("Perf gate: skipped — no corpus case available to time")
+else:
+    samples_ms = []
+    for _ in range(perf_budget_reps):
+        start = time.perf_counter()
+        subprocess.run(
+            ["bash", str(scan_script), "--json", "--include-tests", str(perf_target)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        samples_ms.append((time.perf_counter() - start) * 1000.0)
+    median_ms = statistics.median(samples_ms)
+    print(
+        f"Perf: single-file scan ({perf_target.relative_to(corpus_dir)}) "
+        f"median {median_ms:.0f}ms over {perf_budget_reps} runs "
+        f"(budget {perf_budget_ms:.0f}ms, audit-110)"
+    )
+    if ci_mode and median_ms > perf_budget_ms:
+        print(
+            f"CI gate failed: single-file scan median {median_ms:.0f}ms exceeds "
+            f"the {perf_budget_ms:.0f}ms budget (audit-110 — a scanner regression "
+            "correctness gates cannot see; see agent/commands/acp.review.md)",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
 
 if ci_mode and (agg_recall < min_recall or agg_precision < min_precision):
     print(

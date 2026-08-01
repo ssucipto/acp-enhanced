@@ -846,11 +846,11 @@ milestones:
     name: Preference & YAML Parser Performance (v6.30.1)
     priority: 4
     status: in_progress
-    progress: 75
+    progress: 88
     started: 2026-07-30
     completed: null
     estimated_weeks: 1
-    tasks_completed: 6
+    tasks_completed: 7
     tasks_total: 8
     file: agent/milestones/milestone-85-preference-yaml-performance.md
     notes: 'PHASE 1 COMPLETE (297, 299, 298). Parser 1498 -> 320 forks per parse
@@ -6450,13 +6450,13 @@ tasks:
   - id: task-303
     name: Wall-clock perf gate
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-85-preference-yaml-performance/task-303-perf-gate.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-01'
+    completed_date: '2026-08-01'
+    actual_hours: 1
     estimated_hours: 2
-    notes: phase 3; corpus gate cannot see perf regressions today
+    notes: phase 3; corpus gate cannot see perf regressions today; --perf-budget-ms 450 (4.4x headroom over 103ms baseline), median of 5, verified fails at artificially low budget and passes at real budget; documented in acp.review.md
   - id: task-304
     name: Verify and close A-110-04/05/07
     priority: 5
