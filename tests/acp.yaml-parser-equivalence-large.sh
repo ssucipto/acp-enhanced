@@ -29,6 +29,7 @@ trap 'rm -rf "$WORKDIR"' EXIT
 YAML_FILES=()
 while IFS= read -r _f || [ -n "$_f" ]; do
     [ -z "$_f" ] && continue
+    _is_nondeterministic_file "$_f" && continue
     _lines=$(wc -l < "${SCRIPT_DIR}/${_f}" 2>/dev/null | tr -d ' ')
     if [ "${_lines:-0}" -ge "$LARGE_FILE_LINES" ]; then
         YAML_FILES[${#YAML_FILES[@]}]="$_f"

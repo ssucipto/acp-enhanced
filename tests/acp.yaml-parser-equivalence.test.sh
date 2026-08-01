@@ -79,6 +79,25 @@ NEW_PARSER="${SCRIPT_DIR}/agent/scripts/acp.yaml-parser.sh"
 GOLDEN_FIXTURE="${SCRIPT_DIR}/tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv"
 LARGE_FILE_LINES=2000
 
+# agent/integrity-manifest.yaml is rewritten in place by e2e/acp.integrity.test.sh
+# (acp.manifest-hash.sh --generate) — when run-e2e-tests.sh runs suites in
+# parallel, that mutation can land between this test reading the repo's
+# current content and comparing it, producing a divergence that has nothing
+# to do with parser correctness (confirmed in CI: M85 task-304, a run where
+# the "current" side showed a completely different manifest entry at the
+# same node index than what was on disk when the golden fixture was built).
+# Content-snapshot comparison assumes a stable file; this one deliberately
+# isn't, so it's excluded rather than chased with more golden-refreshes.
+NONDETERMINISTIC_FILES=("agent/integrity-manifest.yaml")
+
+_is_nondeterministic_file() {
+    local target="$1" f
+    for f in "${NONDETERMINISTIC_FILES[@]}"; do
+        [ "$f" = "$target" ] && return 0
+    done
+    return 1
+}
+
 # dump_parser <outfile>
 #
 # Sources the CURRENT parser in an isolated subshell and, for every file in
@@ -305,6 +324,7 @@ YAML_FILES=()
 EXCLUDED_LARGE=()
 while IFS= read -r _f || [ -n "$_f" ]; do
     [ -z "$_f" ] && continue
+    _is_nondeterministic_file "$_f" && continue
     _lines=$(wc -l < "${SCRIPT_DIR}/${_f}" 2>/dev/null | tr -d ' ')
     if [ "${_lines:-0}" -ge "$LARGE_FILE_LINES" ]; then
         EXCLUDED_LARGE[${#EXCLUDED_LARGE[@]}]="$_f"
