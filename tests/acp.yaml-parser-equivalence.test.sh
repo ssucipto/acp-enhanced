@@ -137,6 +137,28 @@ read_lines_into_arr() {
     done < "$1"
 }
 
+# split_tsv6 <line>  -- sets globals _T1.._T6 from a 6-field tab-separated line.
+# Deliberately NOT `IFS=$'\t' read -r a b c d e f <<< "$line"`: bash's `read`
+# treats tab as "IFS whitespace" REGARDLESS of what IFS is set to, which means
+# it collapses consecutive tabs (i.e. adjacent empty fields) and strips
+# leading/trailing ones — exactly the shape of these records whenever key or
+# value is empty (map/array nodes). That silently shifted every field after
+# the first empty one, which produced false "UNEXPECTED DIVERGENCE" reports
+# in CI (this test's own first attempt broke on .github/dependabot.yml,
+# id=3, a map node with empty key AND empty value). Parameter expansion never
+# collapses anything, so it's used here instead — same technique
+# _yaml_split_node in acp.yaml-parser.sh uses for the pipe-delimited AST
+# format, for the same reason.
+split_tsv6() {
+    local _rec="$1" _rest
+    _T1="${_rec%%$'\t'*}";  _rest="${_rec#*$'\t'}"
+    _T2="${_rest%%$'\t'*}"; _rest="${_rest#*$'\t'}"
+    _T3="${_rest%%$'\t'*}"; _rest="${_rest#*$'\t'}"
+    _T4="${_rest%%$'\t'*}"; _rest="${_rest#*$'\t'}"
+    _T5="${_rest%%$'\t'*}"; _rest="${_rest#*$'\t'}"
+    _T6="${_rest}"
+}
+
 # run_equivalence_check <workdir>
 # Populates TESTS_RUN/TESTS_PASSED/TESTS_FAILED (from common.sh) and prints
 # per-file results plus a divergence summary. Compares a live dump of
@@ -183,10 +205,10 @@ run_equivalence_check() {
         else
             i=0
             while [ "$i" -lt "$old_n" ]; do
-                o_id="" ; o_type="" ; o_key="" ; o_val="" ; o_par="" ; o_chi=""
-                n_id="" ; n_type="" ; n_key="" ; n_val="" ; n_par="" ; n_chi=""
-                IFS=$'\t' read -r o_id o_type o_key o_val o_par o_chi <<< "${OLD_ARR[$i]}"
-                IFS=$'\t' read -r n_id n_type n_key n_val n_par n_chi <<< "${NEW_ARR[$i]}"
+                split_tsv6 "${OLD_ARR[$i]}"
+                o_id="$_T1"; o_type="$_T2"; o_key="$_T3"; o_val="$_T4"; o_par="$_T5"; o_chi="$_T6"
+                split_tsv6 "${NEW_ARR[$i]}"
+                n_id="$_T1"; n_type="$_T2"; n_key="$_T3"; n_val="$_T4"; n_par="$_T5"; n_chi="$_T6"
 
                 # id/parent/children are numeric (or comma-separated numeric
                 # lists) and never carry semantic whitespace — strip spaces
