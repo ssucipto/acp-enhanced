@@ -247,6 +247,8 @@ if [ -f "$TEMP_DIR/package.yaml" ]; then
 fi
 
 # Collect all files to install
+SKIPPED_COUNT=0
+INSTALLED_COUNT=0
 for dir in "${INSTALL_DIRS[@]}"; do
     SOURCE_DIR="$TEMP_DIR/agent/$dir"
     
@@ -390,7 +392,7 @@ for dir in "${INSTALL_DIRS[@]}"; do
     
     # Validate files
     VALID_FILES=()
-    for file in "${FILES_TO_PROCESS[@]}"; do
+    for file in "${FILES_TO_PROCESS[@]:-}"; do
         # For files/ dir, use relative path from SOURCE_DIR; otherwise basename
         if [ "$dir" = "files" ]; then
             filename="${file#$SOURCE_DIR/}"
@@ -428,9 +430,9 @@ for dir in "${INSTALL_DIRS[@]}"; do
             elif [ "$dir" = "files" ]; then
                 # Files entries have more fields (name, description, target, required, experimental)
                 # so need a wider context window (-A 6) to catch experimental: true
-                is_experimental=$(grep -A 1000 "^  ${dir}:" "$TEMP_DIR/package.yaml" 2>/dev/null | grep -A 6 "name: ${filename}" | grep "^ *experimental: true" | grep -v "^[[:space:]]*#" | head -1)
+                is_experimental=$(grep -A 1000 "^  ${dir}:" "$TEMP_DIR/package.yaml" 2>/dev/null | grep -A 6 "name: ${filename}" | grep "^ *experimental: true" | grep -v "^[[:space:]]*#" | head -1 || true)
             else
-                is_experimental=$(grep -A 1000 "^  ${dir}:" "$TEMP_DIR/package.yaml" 2>/dev/null | grep -A 2 "name: ${filename}" | grep "^ *experimental: true" | grep -v "^[[:space:]]*#" | head -1)
+                is_experimental=$(grep -A 1000 "^  ${dir}:" "$TEMP_DIR/package.yaml" 2>/dev/null | grep -A 2 "name: ${filename}" | grep "^ *experimental: true" | grep -v "^[[:space:]]*#" | head -1 || true)
             fi
         fi
 
@@ -779,7 +781,7 @@ if [ -f "$TEMP_DIR/package.yaml" ] && [ ${#INSTALLED_COMMANDS[@]} -gt 0 ]; then
             # Check experimental status
             is_experimental=""
             if [ -f "$TEMP_DIR/package.yaml" ]; then
-                is_experimental=$(grep -A 1000 "^  scripts:" "$TEMP_DIR/package.yaml" 2>/dev/null | grep -A 2 "name: ${script}" | grep "^ *experimental: true" | grep -v "^[[:space:]]*#" | head -1)
+                is_experimental=$(grep -A 1000 "^  scripts:" "$TEMP_DIR/package.yaml" 2>/dev/null | grep -A 2 "name: ${script}" | grep "^ *experimental: true" | grep -v "^[[:space:]]*#" | head -1 || true)
             fi
             _aset FILE_METADATA "scripts/$script" "$FILE_VERSION|$is_experimental"
 
