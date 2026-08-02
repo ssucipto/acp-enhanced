@@ -2,6 +2,299 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-08-02
+  executor: claude-sonnet
+  branch: develop
+  tasks: [ci-green-check]
+  done:
+    - fixed-preexisting-ci-only-flake-in-acp-project-workflow-test-sh
+  deferred: []
+  key_fact: >
+    User asked to confirm CI green before pushing develop -> mainline. The
+    F2-08 push (b53456d) still failed CI Checks — same e2e-smoke failure as
+    the PRIOR commit (fa89446), so unrelated to F2-08. Root cause:
+    acp.project-workflow.test.sh Test 4 asserts three consecutive
+    acp.project-set.sh calls produce distinct last_accessed timestamps, but
+    that field has 1-second resolution and the three switches (each just a
+    fast bash script + yaml_parse/query) can complete within the same
+    wall-clock second on a fast CI runner — passed locally 49/49 both before
+    and after the real fix because local overhead happened to exceed 1s
+    between switches, which is exactly why it's a flake and not caught
+    locally. Fixed by adding `sleep 1` before switches 2 and 3 in the test
+    (test-only change, no product code touched). Re-verified 49/49 locally.
+    Note: M85 (just completed) made yaml_parse 3-4x faster, which plausibly
+    made this pre-existing race easier to hit — worth remembering as a
+    pattern: perf work can unmask latent timing assumptions in unrelated
+    tests.
+
+- date: 2026-08-02
+  executor: claude-sonnet
+  branch: develop
+  tasks: [F2-08]
+  done:
+    - f2-08-dim-unbound-var-fixed-and-3-more-bugs-found-fixing-it
+    - e2e-acp-package-install-list-18-of-18-passing-first-ever-green-run
+  deferred: []
+  key_fact: >
+    F-113 carryover F2-08 (${DIM} unbound var, medium) looked like a one-line
+    fix but e2e/acp.package-install-list.test.sh had literally never passed —
+    each bug was masking the next one under it. Chain: (1) DIM never assigned
+    in init_colors(), (2) SKIPPED_COUNT and INSTALLED_COUNT used via += but
+    never initialized, (3) `for file in "${FILES_TO_PROCESS[@]}"` breaks under
+    bash 3.2's (macOS default /bin/bash) set -u empty-array quirk, (4) the
+    is_experimental=$(grep|grep|grep|grep -v|head) pipeline aborted the whole
+    script under set -o pipefail whenever a file had NO experimental marker —
+    the normal case — because grep legitimately exits 1 on no-match and
+    pipefail propagates the *first* non-zero exit in the pipe, not just the
+    last command's. Root cause this went undetected so long: this was the
+    ONLY e2e test file for acp.package-install.sh, so no other suite ever
+    exercised the plain (non-experimental) file path under set -u+pipefail.
+    Fixed all 4; 18/18 assertions now pass (first-ever green run for this
+    suite). F2-09 (quote-unaware comment stripping in acp.yaml-parser.sh)
+    remains open, deliberately out of scope for this fix.
+
+- date: 2026-08-02
+  executor: claude-sonnet
+  branch: develop
+  tasks: [M85-phase3, task-304]
+  done:
+    - task-304-complete-a-110-04-05-07-stamped-fixed
+    - m85-milestone-complete-8-of-8-tasks
+    - 3-consecutive-green-e2e-runs-all-3-platforms-confirmed
+    - fixed-3-real-bugs-in-task-300-own-equivalence-test
+  deferred: []
+  key_fact: >
+    M85 is complete: 8/8 tasks, A-110-04 (coderabbit_active 58ms, was 646ms),
+    A-110-05 (get_preference 45ms, was 854ms), and A-110-07 (macOS E2E flake,
+    root cause was A-110-05) all stamped fixed in audit-carryovers.md.
+    Closing task-304 required proof beyond a single green run — 3 CONSECUTIVE
+    green E2E runs across all 3 platforms (not just macOS): 6559ae1/30707045524,
+    def196d/30707352192, 7e95a2d/30707596784.
+    Getting even the FIRST green run required fixing three real, unrelated bugs
+    in task-300's own equivalence test (from the prior session) that blocked
+    every E2E run regardless of A-110 status: (1) BSD `wc -l < file` (macOS,
+    used by get_next_node_id) right-pads its count with leading spaces; GNU
+    `wc` (Linux CI) doesn't — the golden fixture baked in macOS-only padding.
+    (2) bash `read` treats tab as "IFS whitespace" REGARDLESS of custom IFS,
+    so `IFS=$'\t' read -r a b c d e f <<< "$line"` collapses consecutive tabs
+    (adjacent empty fields, which map/array AST nodes have) and silently
+    shifts every field after the first empty one — this was a LATENT bug that
+    happened to produce matching (wrong) output on both sides of the
+    comparison locally, so it never surfaced until platform differences from
+    fix (1) made the two wrong answers diverge from each other. Fixed by
+    parameter-expansion splitting instead of `read`, mirroring
+    _yaml_split_node's existing technique. (3) agent/integrity-manifest.yaml
+    is rewritten in place by e2e/acp.integrity.test.sh running in the same
+    parallel suite — a genuinely nondeterministic file, excluded rather than
+    chased. Separately, windows-latest needed its own fixes: a path embedded
+    inside a python3 -c string doesn't get Git Bash's automatic POSIX-to-
+    Windows path translation (only whole command-line arguments do), and a
+    <100ms perf assertion that was never validated against Windows CI's
+    higher process-spawn overhead (raised to 250ms) — plus, even after both
+    fixes, the equivalence suite still timed out at 180s under Windows'
+    parallel-suite contention and was added to run-e2e-tests.sh's existing
+    _acp_windows_skip_suite() list (same mechanism already used for
+    acp.yaml-parser.test.sh and acp.preferences-validate.test.sh).
+    Process lesson: a "passing" test that happens to be wrong on both sides
+    of a comparison is a real risk in differential/equivalence testing —
+    the bug here was caught only because a platform difference (macOS vs
+    Linux wc padding) broke the coincidental cancellation. Worth deliberately
+    injecting a known-bad value and confirming a differential test still
+    catches it, not just trusting a clean run.
+    current_milestone reverted to M81 (unchanged blocker: CodeRabbit fixture,
+    ADR-22) — M85 was tracked as a parallel priority-4 item throughout.
+
+- date: 2026-08-01
+  executor: claude-sonnet
+  branch: develop
+  tasks: [M85-phase2, task-300, task-301, task-302, task-303]
+  done:
+    - task-300-parser-equivalence-complete
+    - golden-fixture-regression-test-74-of-74-files-verified
+    - discovered-add_child-sed-i-o-n-squared-cost-outside-m85-scope
+    - task-301-pref-resolver-complete
+    - acp.pref-resolve.py-stdlib-only-28-of-28-tests-pass-41ms-median
+    - task-302-wired-fast-path-with-bash-fallback
+    - coderabbit-helpers-memoised-active-646ms-to-65ms
+    - task-303-wall-clock-perf-gate-450ms-budget-median-of-5
+  deferred:
+    - task-304 -> next-session
+  key_fact: >
+    task-300 could not be implemented as literally specified (re-run the pre-M85
+    parser against every tracked YAML file on every CI invocation) — measured
+    directly, dumping the whole repo's AST with the pre-M85 parser did not finish
+    in 5 minutes. Root cause: add_child rewrites the entire growing AST_FILE with
+    sed -i on every child appended, in BOTH the old and current parser, untouched
+    by M85's field-access optimisation — O(n^2) in node count. agent/progress.yaml
+    (9,480 lines / 7,880 nodes) alone takes ~100s to parse even with the CURRENT
+    optimised parser. Solution: captured the pre-M85 parser's AST output ONCE into
+    a committed golden fixture (tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv,
+    74 files, 964K), and the committed test now only ever runs the current (fast)
+    parser, diffing against that fixture — 73 files / 79s in the *.test.sh CI
+    suite, agent/progress.yaml covered separately by
+    tests/acp.yaml-parser-equivalence-large.sh (not *.test.sh, same
+    not-in-the-fast-suite convention as acp.yaml-parser-perf.sh). Result: 74/74
+    files verified, 56 divergences found and all individually confirmed
+    attributable to the F-112-01 `|` fix — including an unanticipated case,
+    agent/index/*.yaml files using `description: |` YAML block-scalar syntax
+    (unsupported by this parser, so the literal value IS "|"), which shifted the
+    old cut-based field boundaries the same way a `|` mid-string does. Zero
+    unexpected divergences.
+    task-301 also complete this session: acp.pref-resolve.py is a line-for-line
+    stdlib-only reimplementation of yaml_parse/yaml_query and get_preference
+    precedence (no PyYAML — confirmed absent in this environment). 28/28 new
+    tests pass — every real preference key agrees with bash exactly (value AND
+    exit code), a synthetic 4-layer fixture proves project > workspace > user >
+    configurables precedence, the configurables `.default` suffix quirk (F2-02)
+    is verified against a sibling `description` field so a naive uniform lookup
+    would be caught, flat-dot fallback reproduced including its
+    strip-all-whitespace-not-just-edges behaviour. Median 41-46ms vs the 854ms
+    bash baseline, well under the <100ms target. Process note: acp.preferences.sh
+    reassigns the global SCRIPT_DIR var unconditionally when sourced — a test
+    script using that same variable name for its own paths will have them
+    silently overwritten; use a different variable name when sourcing it
+    alongside other path computation.
+    task-302 also complete: get_preference now tries the task-301 resolver
+    first (_pref_fast_path_available, mirrors node_scan_modules_available),
+    falling back to the original bash walk — left fully intact — on
+    resolver absence or an unexpected exit code. Verified byte-identical
+    across 7 keys with python3 truly unresolvable (a minimal PATH excluding
+    it, not just an empty PATH — macOS ships a python3 stub in /usr/bin that
+    a naive PATH swap won't hide). _coderabbit_enabled and config_path are
+    now memoised per-process (matches _ACP_GITLEAKS_PREF_CACHE); confirmed
+    safe against yaml_set staleness because nothing in the codebase calls
+    set_preference and coderabbit_active in the same process.
+    e2e/coderabbit-optionality 13/13 in ~0.9s (was paying 646ms+ per call);
+    coderabbit_active median ~65ms (target <200ms); preferences-validate
+    19/19 in 26s, unchanged.
+    task-303 also complete: acp.review-measure.sh --ci now times a
+    single-file corpus scan (median of 5) and fails when it exceeds
+    --perf-budget-ms (default 450, ~4.4x headroom over audit-110's measured
+    103ms isolated figure). This directly closes the audit-110 blind spot —
+    the recall/precision corpus gate scored 100%/100% throughout an 18x
+    scanner slowdown because correctness gates can't see performance
+    regressions. Verified: fails at an artificially low budget (10ms) with a
+    message naming the budget/observed/audit-110; passes at the real budget
+    with headroom (300-360ms measured, full subprocess path incl. bash
+    startup, higher than the isolated 103ms parser figure but still well
+    under 450ms); never fails without --ci. Documented in acp.review.md
+    beside the existing corpus table; ci.yaml step renamed, no new step
+    needed (the existing --ci invocation already runs it). task-304 is
+    next, unblocked.
+
+- date: 2026-07-31
+  executor: claude-opus
+  branch: develop
+  tasks: [M85-phase1, task-297, task-299, task-298, plan-amend]
+  done:
+    - m85-phase-1-complete-3-of-8
+    - parser-1498-to-320-forks-yaml_parse-3.5x
+    - f-112-01-fixed-root-cause-f2-06-duplicate-create_node
+    - task-298-array-cache-rejected-on-evidence
+    - a-110-07-fixed-at-root-159s-to-28s
+    - phase-2-re-scoped-against-measured-numbers
+  deferred:
+    - task-300-304 -> next-session
+    - f2-08-dim-unbound -> outside-m85
+    - f2-09-hash-in-quoted-value -> outside-m85
+  key_fact: >
+    M85 Phase 1 landed: 1498 -> 320 forks per parse (79%), yaml_parse 3384 -> 966ms
+    on the fixture and 1369 -> 360ms on the real preference file. The win came
+    entirely from replacing cut/grep/awk/sed with bash parameter expansion —
+    byte-identical at every step, verified by diffing AST files across 30 tracked
+    YAML files. F-112-01 (values containing `|` truncated) is fixed; the root cause
+    was NOT what audit-112 recorded — create_node was DEFINED TWICE and bash kept
+    the non-escaping definition (F2-06). task-298's array cache was REJECTED on
+    evidence: it targeted ~19 of 635 forks (3%) for a staleness hazard across 10
+    mutation sites, so the same safe technique went to the bigger targets instead.
+    Side effect: preferences-validate 159s -> 28s, fixing A-110-07 at the root.
+    Re-measured afterwards: the <150ms yaml_parse criterion is NOT reachable in
+    pure bash (remaining wc/sed -i forks need state that cannot cross the $( )
+    boundaries create_node is invoked through), so it was amended to the measured
+    floor; and Phase 2 is CONFIRMED still needed because get_preference is 854ms.
+    Process failure worth remembering: two turns reported progress.yaml notes as
+    updated when the .replace() had silently no-opped — assert every scripted edit.
+
+- date: 2026-07-30
+  executor: claude-opus
+  branch: develop
+  tasks: [audit-113, plan-m85-amend-r2]
+  done:
+    - audit-113-round2-on-own-amendments
+    - task-305-merged-into-299-circular-dep-removed
+    - task-301-layer-model-corrected-configurables
+    - noise-derived-measurements-corrected-across-docs
+    - a-110-04-downgraded-to-medium
+  deferred: []
+  key_fact: >
+    Round 2 pre-impl audited round 1's OWN amendments and found 5 findings, all
+    defects in my round-1 output. (1) The task-305 I added was CIRCULAR: task-299
+    declared depends_on:[task-305] while task-305 step 3 said the reader fix was
+    "unblocked by task-299's splitter" — an implementer would have written the
+    reader twice, the exact failure the split claimed to prevent. Merged into one
+    atomic task. (2) task-301 specified a 4-layer model naming _pref_default_file,
+    which does not exist; the real 4th layer is _pref_configurables_file and reads
+    a DIFFERENT key shape (${ns}.${path}.default) — a uniform resolver would
+    return empty where bash returns a value. (3) Several figures were single
+    samples taken while E2E sweeps ran: "get_preference_or 5.5s vs strict 13.8s"
+    was structurally impossible (the former is a 5-line wrapper CALLING the
+    latter — 1521ms vs 1545ms measured), and "coderabbit_active 21.5s" was wrong
+    by 15x (actual 1439ms, one preference call since it short-circuits when
+    disabled). Those wrong numbers had propagated into the milestone doc, a
+    carryover, and two audit reports as fact. What survived: yaml_parse 1369ms
+    (mean/7 vs 1370ms recorded) and the ~900-fork count — a count cannot be
+    skewed by load. Rule adopted: any perf figure entering a planning doc must be
+    a mean over >=5 runs on an idle machine, and read the function before
+    recording its cost.
+
+- date: 2026-07-28
+  executor: claude-opus
+  branch: develop
+  tasks: [m84-backfill, audit-112, plan-m85-amend]
+  done:
+    - m84-milestone-record-backfilled
+    - audit-112-pre-impl-m85-ready-with-3-amendments
+    - f-112-01-pipe-truncation-found-in-live-ast-writers
+    - m85-amended-task-305-added-297-299-300-revised
+  deferred: []
+  key_fact: >
+    /acp-audit --pre-impl M85 Phase 2 found a HIGH correctness bug inside the very
+    functions M85 was about to rewrite: the live AST writers
+    (acp.yaml-parser.sh:444,:484) emit records with NO escaping, so any YAML value
+    containing `|` is silently truncated — `piped: "a|b|c"` returns `"a`. 19 files
+    source this parser including acp.install.sh and acp.package-install.sh.
+    Worse, add_node() IS the only function that escapes `|` and has ZERO call
+    sites — dead code — so task-299 had told the implementer to read it as the
+    encoding authority, which would have produced false confidence. Worst of all,
+    task-300's "byte-identical output" gate would have PERMANENTLY ENSHRINED the
+    bug, because the corrected behaviour differs from the old truncated output.
+    Three amendments applied: task-305 added (fix writer+reader together, before
+    task-299), task-300 equivalence scoped modulo the pipe fix, task-297 fixture
+    must contain a pipe value so the fix shows as a diff not a claim.
+    Lesson: a pre-impl audit earns its keep on the cross-reference phase — the
+    plan's every number was right and it was still about to cement a bug.
+
+- date: 2026-07-28
+  executor: claude-opus
+  branch: develop
+  tasks: [plan-m85]
+  done:
+    - m85-planned-8-tasks-3-phases
+    - parser-fork-cost-quantified-900-forks-per-parse
+  deferred:
+    - m84-milestone-record-missing -> flagged-to-maintainer
+  key_fact: >
+    M85 planned from audit-110/111. Quantified the defect before planning:
+    parsing a 106-line file spawns ~1,428 traced subprocesses (~900 real forks —
+    tr 270, cut 264, sed 233), because get_node() does `sed -n Np` per node
+    (yaml-parser.sh:78) and get_field() pipes to cut per field (:84, 39 such
+    sites). Reading one field of one node costs two forks; 19 files source this
+    parser. Maintainer chose BOTH the bash-native parser rewrite and a python3
+    preference fast path, plus a wall-clock corpus gate. Phase 2 is gated on
+    task-300 proving byte-identical output first. Also found: M84 shipped in
+    v6.29.1/6.29.2 and is referenced in prose but has NO milestone entry in
+    progress.yaml — numbering gap, left for the maintainer to decide.
+
 - date: 2026-07-28
   executor: claude-opus
   branch: develop
