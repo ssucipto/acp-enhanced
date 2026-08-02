@@ -5,6 +5,31 @@
 - date: 2026-08-02
   executor: claude-sonnet
   branch: develop
+  tasks: [ci-green-check]
+  done:
+    - fixed-preexisting-ci-only-flake-in-acp-project-workflow-test-sh
+  deferred: []
+  key_fact: >
+    User asked to confirm CI green before pushing develop -> mainline. The
+    F2-08 push (b53456d) still failed CI Checks — same e2e-smoke failure as
+    the PRIOR commit (fa89446), so unrelated to F2-08. Root cause:
+    acp.project-workflow.test.sh Test 4 asserts three consecutive
+    acp.project-set.sh calls produce distinct last_accessed timestamps, but
+    that field has 1-second resolution and the three switches (each just a
+    fast bash script + yaml_parse/query) can complete within the same
+    wall-clock second on a fast CI runner — passed locally 49/49 both before
+    and after the real fix because local overhead happened to exceed 1s
+    between switches, which is exactly why it's a flake and not caught
+    locally. Fixed by adding `sleep 1` before switches 2 and 3 in the test
+    (test-only change, no product code touched). Re-verified 49/49 locally.
+    Note: M85 (just completed) made yaml_parse 3-4x faster, which plausibly
+    made this pre-existing race easier to hit — worth remembering as a
+    pattern: perf work can unmask latent timing assumptions in unrelated
+    tests.
+
+- date: 2026-08-02
+  executor: claude-sonnet
+  branch: develop
   tasks: [F2-08]
   done:
     - f2-08-dim-unbound-var-fixed-and-3-more-bugs-found-fixing-it
