@@ -19,6 +19,7 @@ init_colors() {
         YELLOW=$(tput setaf 3)
         BLUE=$(tput setaf 4)
         BOLD=$(tput bold)
+        DIM=$(tput dim)
         NC=$(tput sgr0)
     else
         RED=''
@@ -26,6 +27,7 @@ init_colors() {
         YELLOW=''
         BLUE=''
         BOLD=''
+        DIM=''
         NC=''
     fi
 }

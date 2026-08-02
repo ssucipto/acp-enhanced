@@ -5,16 +5,18 @@ project:
   status: active
   current_milestone: M81
   description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.29.2 shipped.\n\
-    \  M83 (deterministic review) and M84 (rule_overrides hotfix) complete.\n\
-    \  current_milestone remains M81 — tasks 270-274 blocked on CodeRabbit fixture\n\
-    \  under ADR-22. M74–M77 Aikido track remains ADR-19 gated.\n"
+    \  M83 (deterministic review), M84 (rule_overrides hotfix), and M85 (preference\n\
+    \  & YAML parser performance) complete. current_milestone remains M81 — tasks\n\
+    \  270-274 blocked on CodeRabbit fixture under ADR-22. M74–M77 Aikido track\n\
+    \  remains ADR-19 gated.\n"
 active_handoff:
-  path: agent/reports/handoff-cursor-m83-deterministic-review-2026-07-27.md
-  date: '2026-07-27'
-  to_executor: cursor
-  from_executor: claude
-  git_commit: 612c677aba134b5ecce3fc417a83992dd142c8a8
+  path: agent/reports/handoff-claude-m85-phase2-2026-07-31.md
+  date: '2026-07-31'
+  to_executor: claude-opus
+  from_executor: claude-opus
+  git_commit: 9489e1c5612432f758f059caa1525811114b0f9f
   status: completed
+  completed_date: '2026-08-02'
 milestones:
   M44:
     name: Feedback-Driven Improvements (v6.9.0)
@@ -824,6 +826,75 @@ milestones:
       current_milestone remains M81 (fixture gate).
 
       '
+  M84:
+    name: Review Rule Overrides (review.rule_overrides hotfix, v6.29.1-v6.29.2)
+    priority: 4
+    status: completed
+    progress: 100
+    started: 2026-07-28
+    completed: 2026-07-28
+    estimated_weeks: 0.2
+    tasks_completed: 2
+    tasks_total: 2
+    file: agent/milestones/milestone-84-review-rule-overrides.md
+    notes: 'BACKFILLED RECORD (audit-111). M84 shipped as v6.29.1/v6.29.2 (commits
+      3b5f237 feature, 8f078e7 audit-106 remediation) but never had a milestone doc
+      or milestones: entry — referenced only in CHANGELOG and prose. Reconstructed
+      from the shipping commits. Delivered review.rule_overrides (per-rule enable/
+      disable + severity), acp.review-rule-overrides.py, legacy adoption guide, and
+      E2E B30-B33. audit-106 remediation moved override loading into
+      ig_parse_common_args so emitters could not run before the preload.'
+  M85:
+    name: Preference & YAML Parser Performance (v6.30.1)
+    priority: 4
+    status: completed
+    progress: 100
+    started: 2026-07-30
+    completed: '2026-08-02'
+    estimated_weeks: 1
+    tasks_completed: 8
+    tasks_total: 8
+    file: agent/milestones/milestone-85-preference-yaml-performance.md
+    notes: 'PHASE 1 COMPLETE (297, 299, 298). Parser 1498 -> 320 forks per parse
+      (79% fewer); yaml_parse 3384 -> 966ms on the benchmark fixture and 1369 ->
+      360ms on the real 106-line preference file (3.8x). F-112-01 fixed; root cause
+      was F2-06 — create_node was DEFINED TWICE and bash kept the non-escaping
+      definition. preferences-validate 159s -> 28s, so A-110-07 is fixed at the
+      root rather than masked. task-298 array cache REJECTED on evidence (it
+      targeted ~19 of 635 forks, 3%, for a staleness hazard across 10 mutation
+      sites); the same safe parameter-expansion technique was applied to the
+      larger targets instead. AMENDED 2026-07-31 after re-measuring: the <150ms
+      yaml_parse criterion is NOT achievable in pure bash — the remaining 320
+      forks (wc -l per node, sed -i writes) need state that cannot cross the
+      $( ) boundaries this parser is built on, the same constraint that killed
+      the cache. 360ms is the architectural floor. PHASE 2 CONFIRMED STILL NEEDED:
+      get_preference is 854ms post-Phase-1 (only 2 of 4 layers exist, so ~2 bash
+      parses) and the only route under 100ms is to stop parsing YAML in bash on
+      that path. BINDING: do NOT raise the 180s timeout (audit-110 showed it
+      masks the defect). TASK-300 COMPLETE 2026-08-01: equivalence proven via
+      a committed golden fixture (pre-M85 parser AST, all 74 tracked YAML
+      files), not by re-running the pre-M85 parser every CI invocation — that
+      parser did not finish dumping the whole repo in 5 minutes. DISCOVERY:
+      add_child rewrites the whole growing AST_FILE with sed -i on every
+      child append, in BOTH parsers, untouched by M85 field-access work —
+      O(n^2), and the actual reason agent/progress.yaml (7880 nodes) takes
+      ~100s to parse even with the current optimised parser. Out of scope
+      for M85 (would need restructuring add_child itself, a rewrite not a
+      tweak) but worth a future task if progress.yaml-sized files become a
+      real bottleneck. 56 divergences found across both equivalence scripts,
+      all verified attributable to F-112-01, including an unanticipated
+      case: agent/index/*.yaml files using `description: |` YAML
+      block-scalar syntax (unsupported by this parser, stored as literal
+      "|") shifted the old cuts field boundaries the same way a `|`
+      mid-string would. TASK-301 COMPLETE 2026-08-01: acp.pref-resolve.py,
+      a line-for-line stdlib-only reimplementation of yaml_parse/yaml_query
+      and get_preference precedence (no PyYAML). 28/28 tests pass: every
+      real preference key agrees with bash exactly (value + exit code), a
+      synthetic 4-layer fixture proves project > workspace > user >
+      configurables precedence, the configurables .default suffix (F2-02)
+      is verified against a sibling description field, flat-dot fallback
+      reproduced including its all-whitespace-stripped quirk. Median 41-46ms
+      vs 854ms bash baseline, well under the <100ms target.'
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6317,6 +6388,87 @@ tasks:
     completed_date: 2026-07-24
     estimated_hours: 1
     notes: review-002; CLI ≠ ADR-22 gate
+  M85:
+  - id: task-297
+    name: Performance baseline harness
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-85-preference-yaml-performance/task-297-perf-baseline-harness.md
+    started: 2026-07-30
+    completed_date: 2026-07-30
+    actual_hours: 2
+    estimated_hours: 2
+    notes: phase 1; fixture + median timings before any change
+  - id: task-298
+    name: Array-backed AST
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-85-preference-yaml-performance/task-298-array-backed-ast.md
+    started: 2026-07-30
+    completed_date: 2026-07-30
+    actual_hours: 3
+    estimated_hours: 4
+    notes: phase 1 (F2-07 re-scoped CONDITIONAL, runs after 299); re-measure first, then decide if the array cache's benefit justifies its staleness risk
+  - id: task-299
+    name: Escape-aware fork-free field access (writer encoding + reader)
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-85-preference-yaml-performance/task-299-forkless-field-access.md
+    started: 2026-07-30
+    completed_date: 2026-07-30
+    actual_hours: 6
+    estimated_hours: 6
+    notes: phase 1 (F2-07 reordered FIRST); removes 703 of 1498 forks per parse (47%) safely; two commits — A fork-free split byte-identical, B pipe encoding fix; also fixes F2-06 duplicate create_node
+  - id: task-300
+    name: Parser equivalence verification
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-85-preference-yaml-performance/task-300-parser-equivalence.md
+    started: '2026-08-01'
+    completed_date: '2026-08-01'
+    actual_hours: 2.5
+    estimated_hours: 3
+    notes: phase 1 GATE; golden-fixture regression test (pre-M85 AST captured once, not re-derived per CI run — pre-M85 parser doesn't finish the repo in 5min); 74/74 files verified, 56 divergences all attributable to F-112-01; progress.yaml covered by companion tests/acp.yaml-parser-equivalence-large.sh
+  - id: task-301
+    name: Single-pass preference resolver
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-85-preference-yaml-performance/task-301-pref-resolver.md
+    started: '2026-08-01'
+    completed_date: '2026-08-01'
+    actual_hours: 2
+    estimated_hours: 4
+    notes: phase 2; acp.pref-resolve.py, stdlib only, no PyYAML; 28/28 tests pass incl. real-key parity, 4-layer precedence fixture, .default suffix (F2-02), flat-dot fallback; median 41-46ms vs 854ms bash baseline (<100ms target)
+  - id: task-302
+    name: Wire fast path + memoise coderabbit
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-85-preference-yaml-performance/task-302-wire-fast-path.md
+    started: '2026-08-01'
+    completed_date: '2026-08-01'
+    actual_hours: 1.5
+    estimated_hours: 3
+    notes: phase 2; closes A-110-04; pure-bash fallback retained; coderabbit_active ~65ms (was 646ms, target <200ms); e2e/coderabbit-optionality 13/13 in 0.9s; preferences-validate 19/19 in 26s (unchanged)
+  - id: task-303
+    name: Wall-clock perf gate
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-85-preference-yaml-performance/task-303-perf-gate.md
+    started: '2026-08-01'
+    completed_date: '2026-08-01'
+    actual_hours: 1
+    estimated_hours: 2
+    notes: phase 3; corpus gate cannot see perf regressions today; --perf-budget-ms 450 (4.4x headroom over 103ms baseline), median of 5, verified fails at artificially low budget and passes at real budget; documented in acp.review.md
+  - id: task-304
+    name: Verify and close A-110-04/05/07
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-85-preference-yaml-performance/task-304-carryover-closure.md
+    started: '2026-08-01'
+    completed_date: '2026-08-02'
+    actual_hours: 4
+    estimated_hours: 3
+    notes: phase 3; A-110-04/05/07 stamped fixed; 3 consecutive green E2E runs on all 3 platforms (6559ae1/30707045524, def196d/30707352192, 7e95a2d/30707596784); get_preference 45ms, coderabbit_active 58ms; also fixed 3 real bugs in task-300's own equivalence test blocking every E2E run (wc padding, bash read/IFS field collapse, nondeterministic integrity-manifest.yaml file)
 recent_work:
 - date: 2026-07-28
   description: "F-107 CodeRabbit remediation ported upstream + audits 107-110 — memory integrity gates and 4 real corruptions repaired"
@@ -9223,6 +9375,10 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
+- 'M85 PLANNED (8 tasks, ~24h, v6.30.1): preference + YAML parser performance.
+  Root cause of A-110-04/05/07 and the macOS E2E flake. Start at task-297
+  (baseline harness) — the perf gate must be built against a pre-change baseline.
+  BINDING: do NOT raise the 180s test timeout (audit-110).'
 - 'Ready for mainline: push develop → open PR develop→mainline (v6.29.3; F-107 remediation
   + audits 107-110 memory integrity gates). Tag v6.29.3.'
 - 'M81 IN PROGRESS: task-269 ✅ (ADR-22). BLOCKED 270-274 on tests/fixtures/coderabbit-findings-sample.json

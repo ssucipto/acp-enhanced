@@ -844,6 +844,34 @@ cleanup_test_files
 # ============================================================================
 # Summary
 # ============================================================================
+# ── F-112-01 / F2-06: delimiter survives the pipe-delimited AST record ─────────
+# Before M85 task-299 any value containing `|` was silently truncated at the first
+# pipe: records are "id|type|key|value|parent|children" and nothing escaped user
+# data on the way in. The escaping that DID exist sat in a second, shadowed
+# definition of create_node() that bash never used (F2-06).
+print_test_header "PIPE — values containing the record delimiter round-trip"
+PIPE_DIR="$(mktemp -d)"
+cat > "${PIPE_DIR}/p.yaml" <<'PYEOF'
+bare: a|b|c
+mixed: x|y%z
+pct: 100%
+pct_seq: a%7Cb
+plain: nopipe
+PYEOF
+assert_equals "a|b|c"  "$(yaml_get "${PIPE_DIR}/p.yaml" bare)"  "bare pipes round-trip"
+assert_equals "x|y%z"  "$(yaml_get "${PIPE_DIR}/p.yaml" mixed)" "pipe and percent together round-trip"
+assert_equals "100%"   "$(yaml_get "${PIPE_DIR}/p.yaml" pct)"   "literal percent round-trips"
+# A literal "%7C" in source must NOT decode into a delimiter — this is why the
+# encoder escapes `%` first and the decoder unescapes it last.
+assert_equals "a%7Cb"  "$(yaml_get "${PIPE_DIR}/p.yaml" pct_seq)" "literal %7C is not read as an encoded pipe"
+assert_equals "nopipe" "$(yaml_get "${PIPE_DIR}/p.yaml" plain)" "unaffected value unchanged"
+rm -rf "${PIPE_DIR}"
+
+print_test_header "F2-06 — create_node is defined exactly once"
+CN_DEFS="$(grep -c '^create_node()' "${SCRIPT_DIR}/agent/scripts/acp.yaml-parser.sh" 2>/dev/null || echo 0)"
+assert_equals "1" "$CN_DEFS" "exactly one create_node definition (no shadowing duplicate)"
+
+
 echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "${BOLD}  Test Results${NC}"
 echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
