@@ -3104,10 +3104,11 @@ carryovers:
     finding: "acp.package-install.sh:438 references \\$DIM, which is never assigned anywhere — under set -u this aborts the install with 'DIM: unbound variable'"
     description: "Found while running M85 task-299's dependent suites. e2e/acp.package-install-list.test.sh dies at the 'Scanning for installable files' stage. Confirmed pre-existing and unrelated to M85: identical failure with the parser at HEAD and with task-299's changes applied, and grep shows DIM is never assigned in acp.common.sh or anywhere else. init_colors() defines RED/GREEN/YELLOW/BLUE but not DIM. Out of M85 scope, recorded so it is not rediscovered."
     fix_target: "Either add DIM to init_colors() in acp.common.sh, or replace the reference at acp.package-install.sh:438 with an already-defined colour. Then confirm e2e/acp.package-install-list.test.sh reaches a summary line — it currently produces none, which is why no suite ever reported it as a failure."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-02
+    verified_in_audit: "18/18 e2e/acp.package-install-list.test.sh assertions pass"
     escalated_to: null
+    fix_note: "Added DIM=$(tput dim) to init_colors() (acp.common.sh:21/28). Getting the suite to actually run (not just past DIM) surfaced 3 more pre-existing set -u/pipefail bugs, all fixed in the same pass: SKIPPED_COUNT and INSTALLED_COUNT were used via += but never initialized (unbound variable); the FILES_TO_PROCESS for-loop broke under bash 3.2's set -u empty-array quirk (fixed with ${FILES_TO_PROCESS[@]:-}, matching the existing convention elsewhere in this file); and the is_experimental=$(grep|grep|grep|grep-v|head) pipeline aborted the whole script under pipefail whenever a file had NO experimental marker (the normal case) because an inner grep legitimately returns 1 on no-match — fixed with || true on all 3 occurrences (lines ~432, ~434, ~783). This is why the suite had never produced a single passing run: each bug masked the next one behind it."
   - audit_id: 113
     finding_id: F2-09
     severity: low
