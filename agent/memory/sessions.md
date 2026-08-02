@@ -5,6 +5,32 @@
 - date: 2026-08-02
   executor: claude-sonnet
   branch: develop
+  tasks: [F2-08]
+  done:
+    - f2-08-dim-unbound-var-fixed-and-3-more-bugs-found-fixing-it
+    - e2e-acp-package-install-list-18-of-18-passing-first-ever-green-run
+  deferred: []
+  key_fact: >
+    F-113 carryover F2-08 (${DIM} unbound var, medium) looked like a one-line
+    fix but e2e/acp.package-install-list.test.sh had literally never passed —
+    each bug was masking the next one under it. Chain: (1) DIM never assigned
+    in init_colors(), (2) SKIPPED_COUNT and INSTALLED_COUNT used via += but
+    never initialized, (3) `for file in "${FILES_TO_PROCESS[@]}"` breaks under
+    bash 3.2's (macOS default /bin/bash) set -u empty-array quirk, (4) the
+    is_experimental=$(grep|grep|grep|grep -v|head) pipeline aborted the whole
+    script under set -o pipefail whenever a file had NO experimental marker —
+    the normal case — because grep legitimately exits 1 on no-match and
+    pipefail propagates the *first* non-zero exit in the pipe, not just the
+    last command's. Root cause this went undetected so long: this was the
+    ONLY e2e test file for acp.package-install.sh, so no other suite ever
+    exercised the plain (non-experimental) file path under set -u+pipefail.
+    Fixed all 4; 18/18 assertions now pass (first-ever green run for this
+    suite). F2-09 (quote-unaware comment stripping in acp.yaml-parser.sh)
+    remains open, deliberately out of scope for this fix.
+
+- date: 2026-08-02
+  executor: claude-sonnet
+  branch: develop
   tasks: [M85-phase3, task-304]
   done:
     - task-304-complete-a-110-04-05-07-stamped-fixed
