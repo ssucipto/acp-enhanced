@@ -254,14 +254,16 @@ test_context_switching_workflow() {
   
   # Test 2: Switch to project-b
   echo "Test 2: Switch to project-b..."
+  sleep 1  # last_accessed has 1-second resolution; guarantee a distinct timestamp from project-a
   bash "${PROJECT_ROOT}/agent/scripts/acp.project-set.sh" project-b >/dev/null 2>&1
-  
+
   yaml_parse "${TEST_DIR}/.acp/projects.yaml"
   current=$(yaml_query ".current_project")
   assert_equals "project-b" "$current" "Should be on project-b"
-  
+
   # Test 3: Switch to project-c
   echo "Test 3: Switch to project-c..."
+  sleep 1  # guarantee a distinct timestamp from project-b
   bash "${PROJECT_ROOT}/agent/scripts/acp.project-set.sh" project-c >/dev/null 2>&1
   
   yaml_parse "${TEST_DIR}/.acp/projects.yaml"
