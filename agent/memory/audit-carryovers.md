@@ -3027,27 +3027,29 @@ carryovers:
   # ── AUDIT-110 FINDINGS — WINDOWS TIMEOUT ROOT CAUSE (2026-07-28) ────────────
   - audit_id: 110
     finding_id: A-110-04
-    severity: high
+    severity: medium
     file: agent/scripts/acp.coderabbit.sh
-    finding: "coderabbit_active() costs 21.5s — _coderabbit_enabled 13.8s + coderabbit_available 5.5s, neither memoised"
+    finding: "coderabbit_active() costs ~1.44s (one preference read) — an instance of A-110-05, not a distinct defect. Original 21.5s figure was a single sample under load (corrected by audit-113 F2-03/F2-04)."
     description: "Same defect class as A-110-01 but in a colder path. coderabbit_active cannot reorder (it must read the preference to know if opted in), so the fix is memoisation plus fixing the underlying preference cost. Not on the scan path at all — audit-111 confirmed acp.review-scan.sh never sources acp.coderabbit.sh (the audit-110 claim that it did was a false positive, see A-110-06). Reachable only from e2e/coderabbit-optionality.test.sh and any future caller, each of which inherits 21.5s."
     fix_target: "Memoise _coderabbit_enabled and the config_path lookup the way acp.gitleaks.sh/_dupehound now do; re-measure coderabbit_active."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-01
+    verified_in_audit: "M85 task-302/task-304"
     escalated_to: null
+    notes: "Memoised in acp.coderabbit.sh (task-302), matching _ACP_GITLEAKS_PREF_CACHE. Re-measured 2026-08-01: coderabbit_active() 58ms median of 5, well under the <200ms target (was 646ms post-Phase-1)."
   - audit_id: 110
     finding_id: A-110-05
     severity: medium
     file: agent/scripts/acp.preferences.sh
-    finding: "get_preference (strict) takes 13.8s vs get_preference_or 5.5s for the same key — the preference layer is the deeper root cause"
+    finding: "get_preference takes ~1.5s per lookup (mean/5) — the preference layer is the deeper root cause. NOTE: the original '13.8s vs 5.5s' comparison was wrong; get_preference_or is a 5-line wrapper that CALLS get_preference, so it cannot be faster (corrected by audit-113 F2-03)."
     description: "A-110-01 was fixed by not calling the preference layer, which sidesteps rather than solves the problem. Reading a single key should be milliseconds, not seconds. The pure-bash YAML walk shows heavy sys time (process/filesystem churn). Every consumer of preferences pays this."
     description_addendum: "Measured 2026-07-28: yaml_parse on a 106-line preference file = 1.37s (~13ms/line). yaml_get caches the AST via YAML_CURRENT_FILE, but acp.preferences.sh calls it inside $( ) command substitutions, and a subshell discards that state — so every layer lookup re-parses. 4 lookups cost 8.93s in-shell vs 15.59s via subshells, so caching helps ~1.75x but the ~2.2s per-call floor (parse AND query) remains. get_preference walks up to 4 layers."
     fix_target: "Two parts: (1) stop defeating the AST cache — have acp.preferences.sh return via a global instead of $( ) per layer; (2) fix the ~2.2s floor in acp.yaml-parser.sh (yaml_parse + yaml_query), or resolve preferences in a single python3/node pass. Re-measure tests/acp.preferences-validate.test.sh, currently 159s against a 180s limit."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-01
+    verified_in_audit: "M85 task-301/task-302/task-304"
     escalated_to: null
+    notes: "Resolved via task-301 (acp.pref-resolve.py, single stdlib-only python3 process for all four layers) wired into get_preference with a pure-bash fallback (task-302). Re-measured 2026-08-01: get_preference 45ms median of 5, well under the <100ms target (was 854ms post-Phase-1, ~1.5s original)."
   - audit_id: 110
     finding_id: A-110-06
     severity: low
@@ -3066,6 +3068,54 @@ carryovers:
     finding: "preferences-validate runs 159s against a 180s limit (12% margin) — inherently flaky on loaded CI runners"
     description: "Measured locally at 159s; acp.project-workflow.test.sh at 76s. Both time out intermittently on macos-latest under parallel load — macOS oscillated pass/fail across five consecutive commits on this branch, independent of the changes in them. Root cause is A-110-05 (preference layer at ~2.2s per lookup), not the tests themselves. Not caused by audit-110's scanner fix; that fix took Windows from failing to passing for the first time."
     fix_target: "Fix A-110-05 to bring these suites well under the limit. Do NOT raise the timeout — audit-110 showed that masks the defect."
+    status: fixed
+    fix_applied_date: 2026-08-01
+    verified_in_audit: "M85 task-304"
+    notes: "Root cause (A-110-05) fixed 2026-08-01. Closure required proof beyond one green run — three CONSECUTIVE green E2E runs on all 3 platforms (not just macOS) confirmed: commit 6559ae1/run 30707045524, commit def196d/run 30707352192, commit 7e95a2d/run 30707596784. Getting there also required fixing unrelated bugs surfaced in task-300's own equivalence test (see that task's Resolution note) — none of which were timeout-tuning; the 180s limit was never touched, per this finding's own fix_target."
+    escalated_to: null
+
+  # ── M85 IMPLEMENTATION FINDINGS — task-298 halt (2026-07-30) ────────────────
+  - audit_id: 113
+    finding_id: F2-06
+    severity: high
+    file: agent/scripts/acp.yaml-parser.sh
+    finding: "create_node is DEFINED TWICE (:60 with | escaping, :473 without); bash keeps the later one, so the escaping version is silently shadowed dead code"
+    description: "Supersedes and corrects F-112-02, which claimed 'add_node() is dead code'. No function named add_node has ever existed in this file — that finding grepped a name that was never there. The real defect is a duplicate function definition: create_node at :60 escapes `|`, create_node at :473 (commented 'Original create_node for backward compatibility') does not, and bash resolves to the last definition loaded. Verified: `declare -f create_node` shows zero escaping lines. This is the true mechanism behind F-112-01."
+    fix_target: "Delete one definition (keep escaping semantics), in task-299. Add a duplicate-function-definition check to the parser test suite so a third definition cannot appear."
+    status: fixed
+    fix_applied_date: 2026-07-30
+    verified_in_audit: "M85-task-299"
+    escalated_to: null
+  - audit_id: 113
+    finding_id: F2-07
+    severity: medium
+    file: agent/tasks/milestone-85-preference-yaml-performance/task-298-array-backed-ast.md
+    finding: "M85 Phase 1 orders task-298 (risky, low value) before task-299 (safe, high value) — fork attribution says the reverse"
+    description: "Measured one parse of the 89-node benchmark fixture: 1498 forks total — cut 703 (47%), sed 484 (32%), grep 176, wc 88, awk 46. task-299's parameter-expansion technique replaces the 703 cut forks with ZERO staleness risk. task-298's array cache targets a subset of the 484 sed forks and carries a real staleness hazard: every get_node call site (7 of them) reads via node=$(get_node X), a subshell that discards cache writes, and create_node_and_link mutates a PARENT node's children from inside a subshell at :466, which would leave a caller's cached parent entry stale. 10 AST mutation sites would need synchronising."
+    fix_target: "Reorder Phase 1 to run task-299 before task-298, then re-measure and decide whether task-298's remaining benefit justifies its staleness risk on infrastructure with 19 dependents. Requires maintainer decision — the declared DAG has task-299 depends_on task-298."
+    status: fixed
+    fix_applied_date: 2026-07-30
+    verified_in_audit: "M85-task-299"
+    escalated_to: null
+  - audit_id: 113
+    finding_id: F2-08
+    severity: medium
+    file: agent/scripts/acp.package-install.sh
+    finding: "acp.package-install.sh:438 references \\$DIM, which is never assigned anywhere — under set -u this aborts the install with 'DIM: unbound variable'"
+    description: "Found while running M85 task-299's dependent suites. e2e/acp.package-install-list.test.sh dies at the 'Scanning for installable files' stage. Confirmed pre-existing and unrelated to M85: identical failure with the parser at HEAD and with task-299's changes applied, and grep shows DIM is never assigned in acp.common.sh or anywhere else. init_colors() defines RED/GREEN/YELLOW/BLUE but not DIM. Out of M85 scope, recorded so it is not rediscovered."
+    fix_target: "Either add DIM to init_colors() in acp.common.sh, or replace the reference at acp.package-install.sh:438 with an already-defined colour. Then confirm e2e/acp.package-install-list.test.sh reaches a summary line — it currently produces none, which is why no suite ever reported it as a failure."
+    status: fixed
+    fix_applied_date: 2026-08-02
+    verified_in_audit: "18/18 e2e/acp.package-install-list.test.sh assertions pass"
+    escalated_to: null
+    fix_note: "Added DIM=$(tput dim) to init_colors() (acp.common.sh:21/28). Getting the suite to actually run (not just past DIM) surfaced 3 more pre-existing set -u/pipefail bugs, all fixed in the same pass: SKIPPED_COUNT and INSTALLED_COUNT were used via += but never initialized (unbound variable); the FILES_TO_PROCESS for-loop broke under bash 3.2's set -u empty-array quirk (fixed with ${FILES_TO_PROCESS[@]:-}, matching the existing convention elsewhere in this file); and the is_experimental=$(grep|grep|grep|grep-v|head) pipeline aborted the whole script under pipefail whenever a file had NO experimental marker (the normal case) because an inner grep legitimately returns 1 on no-match — fixed with || true on all 3 occurrences (lines ~432, ~434, ~783). This is why the suite had never produced a single passing run: each bug masked the next one behind it."
+  - audit_id: 113
+    finding_id: F2-09
+    severity: low
+    file: agent/scripts/acp.yaml-parser.sh
+    finding: "A `#` inside a quoted YAML value truncates it — comment stripping is unaware of quoting"
+    description: "Pre-existing, found while converting the comment-strip sed to parameter expansion in M85 task-298. `quoted_hash: \"tracked #42 open\"` yields `\"tracked ` from yaml_get. The old `sed 's/#.*$//'` and the new `${line%%#*}` behave identically, so task-298 preserved it deliberately rather than silently changing behaviour mid-performance-work. Same class as F-112-01 (delimiter unaware of user data) but in the comment stripper."
+    fix_target: "Make comment stripping quote-aware: only treat `#` as a comment when it is outside a quoted scalar and preceded by whitespace or line start. Needs its own task with equivalence assertions, like task-299 had."
     status: pending
     fix_applied_date: null
     verified_in_audit: null
