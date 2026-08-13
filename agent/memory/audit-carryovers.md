@@ -3120,3 +3120,70 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+  # ── AUDIT-114 FINDINGS — consumer-project FEEDBACK UPSTREAM PORT (2026-08-14) ─────────
+  - audit_id: 114
+    finding_id: F-114-02
+    severity: high
+    file: agent/commands/acp.ci.md
+    finding: "ACP Enhanced has no /acp-ci — routing.yml ci-check is a dangling stub; consumer-project ships a working local CI parity command"
+    description: "feedback-009 / port guide. Four verify commands exist but none predicts GitHub Actions. Port abstract orchestrator + preference schema; do not copy consumer-project Expo/Firebase step bodies."
+    fix_target: "Ship abstract /acp-ci + configurables/ci.yml schema + E2E; wire routing.yml ci-check / git-push suggestions"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M86 planned"
+  - audit_id: 114
+    finding_id: F-114-03
+    severity: high
+    file: agent/commands/acp.pr.md
+    finding: "/acp-pr missing upstream; consumer-project v1.2.0 correctly delegates gates to /acp-ci"
+    description: "feedback-001b. Must not reintroduce duplicated gate logic. Port after or with abstract /acp-ci."
+    fix_target: "Ship /acp-pr + acp.pr.sh that calls acp.ci.sh --fast/--full; wrappers + E2E"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M86 planned"
+  - audit_id: 114
+    finding_id: F-114-04
+    severity: high
+    file: agent/scripts/acp.upgrade-guard.sh
+    finding: "No upstream-delta.yml / upgrade-guard — forks silently lose single-line enhancements on /acp-version-update"
+    description: "consumer-project regression concern. Register + sentinel assertion makes loss visible; prefer-upstream-when-superseded policy."
+    fix_target: "Adopt upstream-delta.yml template + acp.upgrade-guard.sh; hook after version-update/package-update"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M86 planned"
+  - audit_id: 114
+    finding_id: F-114-05
+    severity: high
+    file: agent/core/constraints.yml
+    finding: "set +e does not suppress ERR trap — not documented in bash_rules (missing in AE and consumer-project trees)"
+    description: "feedback-009 §2.1. Copying CI snippets into trapped ACP scripts aborts before status capture."
+    fix_target: "Add bash_rule set_plus_e_does_not_suppress_err_trap; document if-context status capture pattern"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M86 planned"
+  - audit_id: 114
+    finding_id: F-114-06
+    severity: high
+    file: agent/patterns
+    finding: "No core contract for SKIP tri-state / fail-closed on zero executed units / assert-output-not-exit-code"
+    description: "feedback-009 §2.2/2.5/2.6 and feedback-008 proxy-guard class. False greens worse than no check."
+    fix_target: "Document reporting contracts; enforce in /acp-ci and other external-tool wrappers; optional executed_steps in command-e2e-coverage.yaml"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M86 planned"
+  - audit_id: 114
+    finding_id: F-114-09
+    severity: medium
+    file: agent/scripts/acp.review-scan.sh
+    finding: "consumer-project review-scan.sh diverged from AE M83 (+75/-7) with feedback-008 precision fixes"
+    description: "acp.review.md identical; scanner script is not. Blind overwrite would lose either M83 or consumer-project fixes."
+    fix_target: "Diff-merge using agent/reports/consumer-project-port-inbox-2026-08-14/acp.review-scan.sh.consumer-project-vs-ae.diff; re-run review E2E corpus"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M86 planned"

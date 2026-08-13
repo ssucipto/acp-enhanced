@@ -2,6 +2,48 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+- date: 2026-08-14
+  executor: cursor-composer
+  branch: develop
+  tasks: [acp-plan-M86, audit-114]
+  done:
+    - planned-m86-consumer-project-field-feedback-port-17-tasks
+    - wrote-design-and-adr-24-25-26
+    - milestone-86-with-bindings-and-anti-shortcuts
+    - progress-yaml-m86-planned-current-milestone-stays-m81
+    - audited-consumer-project-feedback-ingested-inbox-staged
+  deferred:
+    - implement-from-task-305 → /acp-proceed
+    - m81-coderabbit-fixture → ops
+  key_fact: >
+    M86 plans the real consumer-project deltas only (ADR-24/25/26): measure CI before
+    tiering, abstract /acp-ci, /acp-pr must delegate gates, upgrade-guard for
+    fork regression visibility, review-scan diff-merge — never re-port
+    SHA-identical commands or paste Expo CI bodies. Pre-impl audit (307) gates
+    coding. Target v6.31.0; current_milestone remains M81.
+
+- date: 2026-08-14
+  executor: cursor-composer
+  branch: develop
+  tasks: [audit-114]
+  done:
+    - audited-consumer-project-agent-feedback-001-through-009-plus-port-guide
+    - verified-implementations-against-ae-tree-sha-identical-vs-missing
+    - ingested-new-feedback-into-agent-feedback
+    - staged-portable-snapshots-in-consumer-project-port-inbox
+    - wrote-audit-114-and-f-114-carryovers
+    - listed-acp-plan-preparation-for-m86
+  deferred:
+    - implement-acp-ci-pr-upgrade-guard → M86-/acp-plan
+    - merge-review-scan-consumer-project-delta → M86
+  key_fact: >
+    consumer-project port guide's "six unreported commands" are a manifest-count false
+    positive — integrity/review/carryover-query/rule-file-audit/session-sync/
+    pattern-sync docs are byte-identical in ACP Enhanced. Real gaps: /acp-ci,
+    /acp-pr (with CI gate delegation), upgrade-delta+guard (regression answer),
+    and feedback-009 false-green bash/CI contracts. Do not blind-copy Expo CI
+    bodies. Visualizer feedback-003/004 stay out of this repo.
+
 - date: 2026-08-02
   executor: claude-sonnet
   branch: develop
