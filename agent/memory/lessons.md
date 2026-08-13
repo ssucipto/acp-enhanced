@@ -4,6 +4,13 @@
 #
 # Optional fields added in v6.8.0:
 
+- date: 2026-08-14
+  task_type: audit-run
+  mistake: "FIFOZ upstream-port-guide treated acp-core manifest command-file count (67 vs 75) as proof six commands were missing upstream — integrity/review/sync/etc. were already byte-identical in ACP Enhanced."
+  correction: "When auditing fork→upstream ports, compare the working trees (existence + SHA/Version), not package manifest inventory alone. Manifest deltas include local-only packages and can invent false 'unreported' ports. Correct portable gaps were /acp-ci, /acp-pr, upgrade-guard, and cross-cutting false-green rules."
+  priority: high
+  trigger: fifoz-port-audit
+
 - date: 2026-07-24
   task_type: audit-run
   mistake: "M81 plan used 'Supersedes (partially) ADR-19' and speculative --pr/API import + invented carryover fields before a real findings fixture existed — would reopen a DO-NOT-re-open ADR and repeat F-098-04 speculative-vendor shortcuts."
