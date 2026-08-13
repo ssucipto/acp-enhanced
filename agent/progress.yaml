@@ -4,11 +4,10 @@ project:
   started: 2026-02-16
   status: active
   current_milestone: M81
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.29.2 shipped.\n\
-    \  M83 (deterministic review), M84 (rule_overrides hotfix), and M85 (preference\n\
-    \  & YAML parser performance) complete. current_milestone remains M81 — tasks\n\
-    \  270-274 blocked on CodeRabbit fixture under ADR-22. M74–M77 Aikido track\n\
-    \  remains ADR-19 gated.\n"
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.30.1 on mainline\n\
+    \  (M85). M86 PLANNED (FIFOZ field-feedback port → v6.31.0). current_milestone\n\
+    \  remains M81 — tasks 270-274 blocked on CodeRabbit fixture (ADR-22). Open:\n\
+    \  F2-09; F-114-* (M86). Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/reports/handoff-claude-m85-phase2-2026-07-31.md
   date: '2026-07-31'
@@ -895,6 +894,25 @@ milestones:
       is verified against a sibling description field, flat-dot fallback
       reproduced including its all-whitespace-stripped quirk. Median 41-46ms
       vs 854ms bash baseline, well under the <100ms target.'
+  M86:
+    name: FIFOZ Field-Feedback Port (v6.31.0)
+    priority: 5
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 2
+    tasks_completed: 0
+    tasks_total: 17
+    file: agent/milestones/milestone-86-fifoz-field-feedback-port.md
+    design: agent/design/local.fifoz-field-feedback-port.md
+    notes: >
+      PLANNED 2026-08-14 from audit-114 (source of truth). Ports verified FIFOZ
+      deltas only: abstract /acp-ci, /acp-pr with CI delegation, upgrade-delta+guard,
+      FG-1..7 false-green contracts, review-scan diff-merge. BINDINGS: ADR-24/25/26;
+      do NOT re-port SHA-identical commands; do NOT copy Expo CI bodies; measure
+      before tiering; dry-run is not verification; current_milestone stays M81
+      (parallel track). Closes F-114-02..09. Inbox: agent/reports/fifoz-port-inbox-2026-08-14/.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6469,7 +6487,194 @@ tasks:
     actual_hours: 4
     estimated_hours: 3
     notes: phase 3; A-110-04/05/07 stamped fixed; 3 consecutive green E2E runs on all 3 platforms (6559ae1/30707045524, def196d/30707352192, 7e95a2d/30707596784); get_preference 45ms, coderabbit_active 58ms; also fixed 3 real bugs in task-300's own equivalence test blocking every E2E run (wc padding, bash read/IFS field collapse, nondeterministic integrity-manifest.yaml file)
+  M86:
+  - id: task-305
+    name: AE CI job graph + wall-clock baseline
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-305-ci-job-graph-baseline.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 0; measure before tiering (feedback-009)
+  - id: task-306
+    name: False-green contracts in constraints + pattern
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-306-false-green-contracts.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 0; FG-1..7 including set +e vs ERR trap
+  - id: task-307
+    name: Pre-impl audit --pre-impl M86
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-307-pre-impl-audit.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 4
+    notes: phase 0 GATE; blocks coding 308+ until READY
+  - id: task-308
+    name: CI configurables schema + step plugin interface
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-308-ci-schema-plugin-interface.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 4
+    notes: phase 1; ADR-24 abstract interface
+  - id: task-309
+    name: /acp-ci orchestrator + AE step bodies
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-309-acp-ci-orchestrator.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 8
+    notes: phase 1; no FIFOZ Expo bodies
+  - id: task-310
+    name: Wire routing.yml + discoverability
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-310-routing-discoverability-wire.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 1; closes dangling ci-check stub
+  - id: task-311
+    name: E2E /acp-ci real execution + fail-closed
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-311-e2e-acp-ci.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 5
+    notes: phase 1 GATE; dry-run alone insufficient
+  - id: task-312
+    name: /acp-pr with CI gate delegation
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-312-acp-pr-delegation.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 5
+    notes: phase 1b; ADR-24 no duplicate gates
+  - id: task-313
+    name: E2E /acp-pr + wrappers all surfaces
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-313-e2e-acp-pr-wrappers.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 1b
+  - id: task-314
+    name: upstream-delta + upgrade-guard + version-update hook
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-314-upgrade-guard.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 5
+    notes: phase 2; ADR-25 FIFOZ regression answer
+  - id: task-315
+    name: E2E upgrade-guard + fork upgrade docs
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-315-e2e-upgrade-guard-docs.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 2
+  - id: task-316
+    name: Diff-merge review-scan FIFOZ ↔ M83
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-316-review-scan-diff-merge.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 6
+    notes: phase 3; no blind overwrite
+  - id: task-317
+    name: feedback-008 rule-verification discipline
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-317-feedback-008-discipline.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 3
+  - id: task-318
+    name: feedback-002 residual matrix closeout
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-318-feedback-002-residual-matrix.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 4; evidence required per item
+  - id: task-319
+    name: Package/wrappers/coverage/integrity-manifest
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-319-package-wrappers-manifest.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 4
+    notes: phase 4; crosscut full set prep
+  - id: task-320
+    name: Consumer upgrade dry-run + FIFOZ notification
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-320-consumer-upgrade-fifoz-note.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 4; corrects six-unreported false positive
+  - id: task-321
+    name: v6.31.0 closure + F-114 carryover stamps
+    priority: 5
+    status: planned
+    file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-321-v6310-closure.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 4
+    notes: phase 4; stamp only with evidence; keep current_milestone M81 unless directed
 recent_work:
+- date: 2026-08-14
+  description: "/acp-plan M86 — FIFOZ field-feedback port from audit-114 (no shortcuts)"
+  items:
+  - "✅ Design local.fifoz-field-feedback-port.md + ADR-24/25/26"
+  - "✅ Milestone-86 + 17 tasks (305-321, ~69h) with bindings and anti-shortcut list"
+  - "✅ progress.yaml M86 planned; current_milestone remains M81 (parallel)"
+  - "✅ Feedback ingest + fifoz-port-inbox already staged from audit-114"
+  - "Next: task-305 baseline → 306 contracts → 307 pre-impl audit (blocks coding)"
+- date: 2026-08-14
+  description: "/acp-resume — context reloaded after 12-day gap; M85 already shipped; M81 still fixture-gated"
+  items:
+  - "✓ ACP v6.29.3 identity; develop synced with origin/develop; v6.30.1 already on mainline (PR #9)"
+  - "✓ M85 complete (8/8); F2-08 fixed; F2-09 still pending (quote-unaware YAML # strip)"
+  - "⚠️ M81 tasks 270-274 blocked — tests/fixtures/coderabbit-findings-sample.json still missing"
+  - "⏰ weekly-code-review + weekly-integrity-scan overdue since 2026-07-31"
+  - "Halted /acp-proceed on ADR-22 fixture gate (do not invent speculative fixture)"
 - date: 2026-07-28
   description: "F-107 CodeRabbit remediation ported upstream + audits 107-110 — memory integrity gates and 4 real corruptions repaired"
   items:
@@ -9375,17 +9580,17 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- 'M85 PLANNED (8 tasks, ~24h, v6.30.1): preference + YAML parser performance.
-  Root cause of A-110-04/05/07 and the macOS E2E flake. Start at task-297
-  (baseline harness) — the perf gate must be built against a pre-change baseline.
-  BINDING: do NOT raise the 180s test timeout (audit-110).'
-- 'Ready for mainline: push develop → open PR develop→mainline (v6.29.3; F-107 remediation
-  + audits 107-110 memory integrity gates). Tag v6.29.3.'
-- 'M81 IN PROGRESS: task-269 ✅ (ADR-22). BLOCKED 270-274 on tests/fixtures/coderabbit-findings-sample.json
-  (sanitized real CodeRabbit PR export). current_milestone remains M81.'
-- 'Ops toward M81 gate artifact: sanitize CodeRabbit findings export → tests/fixtures/coderabbit-findings-sample.json'
-- 'M82 COMPLETE: carryovers F-M82-01..07 fixed. e2e retry finished.'
-- 'GATED (ADR-19 carve-out via ADR-22/M81 for CodeRabbit only): Aikido + M76/M77 stay plan-only'
+- 'M86 PLANNED (17 tasks, ~69h, v6.31.0): FIFOZ field-feedback port from audit-114.
+  Start at task-305 (CI job graph + wall-clock baseline) → 306 → 307 pre-impl
+  audit GATE. BINDINGS: ADR-24/25/26; no Expo body paste; no re-port of identical
+  cmds; /acp-pr must delegate to /acp-ci; dry-run ≠ verification.'
+- 'M81 IN PROGRESS (current_milestone): task-269 ✅. BLOCKED 270-274 on
+  tests/fixtures/coderabbit-findings-sample.json. M86 is parallel — do not invent
+  speculative CodeRabbit fixture.'
+- 'Unblocked side work: F2-09 (low) — quote-aware `#` strip in yaml-parser (own task).'
+- 'Overdue weeklies: /acp-review and /acp-integrity (next_due 2026-07-31).'
+- 'Shipped: M85 → v6.30.1 on mainline (PR #9). M82–M84 complete.'
+- 'GATED (ADR-19): Aikido + M76/M77 stay plan-only'
 current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2

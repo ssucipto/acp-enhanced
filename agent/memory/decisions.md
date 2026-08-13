@@ -204,3 +204,30 @@
 **Decision:** Option 3. Three decisions are in force. **First:** `dupehound`, `gitleaks`, and `shellcheck` are treated as **local deterministic analyzers outside the ADR-19 gate** when ACP uses them only as local analyzers; they are offline-verifiable and do not reopen or supersede ADR-19/21/22. **Second:** the optional external-tool pattern now has a **Variant B: detection-as-consent** for tools that pass an explicit eligibility test: the tool must be **offline, read-only on the workspace, and have no network egress in the ACP code path**. Variant B must still honor a mandatory explicit-`false` escape hatch (`integrations.<tool>.enabled: false` disables the tool even when detected). Tools that do not pass all three conditions stay on Variant A (strict opt-in authoritative). **Third:** ACP may offer assisted installation for these tools only with explicit user consent and only through trusted package managers already expected on the host (`brew` or `cargo` for this ADR’s scope). ACP must never download third-party binaries directly, never curl-pipe installers, and never install Rust/toolchains as part of the offer. If `cargo` is absent, ACP may describe the prerequisite but must not bootstrap it.
 **Consequences:** M83 may proceed with local-analyzer tasks (`shellcheck`, `gitleaks`, `dupehound`) without claiming a carve-out from ADR-19, provided their ACP integration stays local, read-only, and output-verifiable. `agent/patterns/local.optional-external-tool.md` must document both Variant A and Variant B, including the eligibility test and the explicit-`false` override. Future cloud or vendor-backed integrations remain governed by ADR-19/21/22; this ADR does not loosen CodeRabbit or Aikido gating, does not authorize speculative API/import design, and does not permit direct binary download or language-toolchain installation.
 **DO NOT re-open** unless one of these analyzers requires network egress or workspace mutation in normal ACP use, or ACP adopts a new install mechanism that is neither a trusted package manager nor covered by an explicit successor ADR.
+
+## ADR-24 | 2026-08-14 | Local CI parity uses an abstract orchestrator; `/acp-pr` must delegate gates to `/acp-ci`
+
+**Status:** Accepted  
+**Context:** audit-114 / feedback-009. ACP ships verify-sounding commands that do not predict GitHub Actions. FIFOZ built `/acp-ci` and `/acp-pr` v1.2.0. Copying FIFOZ’s Expo/Firebase step bodies into core would couple the framework to one stack. Duplicating gates inside `/acp-pr` recreated their PR #35 failure (lint+Jest green, no tsc budget).  
+**Options considered:** (1) Ship FIFOZ scripts verbatim. Rejected — stack lock-in. (2) Ship `/acp-pr` with its own gate list. Rejected — dual maintenance / false green. (3) Abstract orchestrator + project step bodies; PR always calls CI. Accepted.  
+**Decision:** Option 3. Core `/acp-ci` owns tiers, preflight, `--doctor`, tri-state results, zero-executed fail-closed, output-contract assertions, and a config-driven step registry. Projects (including ACP Enhanced itself) supply step implementations. `/acp-pr` implements **no** gate logic — default `acp.ci.sh --fast`, `--strict-local` → `--full`.  
+**Consequences:** M86 tasks must measure AE CI jobs before tiering; FIFOZ inbox `acp.ci.sh` is a reference, not a paste source. Routing stubs `ci-check` / `git-pr` must bind to these commands.  
+**DO NOT re-open** unless a consumer proves a gate that cannot be expressed as a step plugin without framework-owned stack knowledge.
+
+## ADR-25 | 2026-08-14 | Upgrade-collision register (`upstream-delta.yml`) is first-class for forks
+
+**Status:** Accepted  
+**Context:** FIFOZ regression concern + audit-080 overwrite history. Single-line edits inside upstream-owned files vanish silently on `/acp-version-update`. FIFOZ’s `upstream-delta.yml` + `acp.upgrade-guard.sh` make loss visible without freezing forks against improvement.  
+**Options considered:** (1) Tell forks to “be careful”. Rejected — silent loss. (2) Never overwrite any core file. Rejected — breaks updates. (3) Register + sentinel guard + prefer-upstream-when-superseded policy. Accepted.  
+**Decision:** Option 3. Ship template + guard; hook after version-update/package-update. A missing sentinel fails the guard. When upstream ships equal/better capability, compare, prefer upstream, delete the entry.  
+**Consequences:** Complements safer overwrite work; does not replace it. FIFOZ can retire collision entries once AE ships `/acp-ci`/`/acp-pr`.  
+**DO NOT re-open** unless a better machine-checkable merge model (e.g. 3-way markers) supersedes sentinels via a new ADR.
+
+## ADR-26 | 2026-08-14 | Do not re-port commands that are already byte-identical upstream
+
+**Status:** Accepted  
+**Context:** FIFOZ port guide §1 listed six “unreported” commands missing from upstream. audit-114 SHA-compared trees: integrity, review (doc), carryover-query, rule-file-audit, session-sync, pattern-sync (plus design-spec, stakeholder-report, receive, handoff) are identical. The false positive came from `manifest.yaml` command-file counts, not tree comparison.  
+**Options considered:** (1) Treat the guide as a task backlog. Rejected — wasted work / merge risk. (2) Ignore FIFOZ feedback entirely. Rejected — real gaps exist. (3) Port only verified deltas; notify FIFOZ inventory is stale. Accepted.  
+**Decision:** Option 3. M86 backlog is `/acp-ci`, `/acp-pr`, upgrade-guard, false-green contracts, review-scan **diff-merge**, and release hygiene — never a re-copy of identical command docs.  
+**Consequences:** Corrects FIFOZ `local_only` register; lessons.md records manifest-vs-tree check.  
+**DO NOT re-open** unless a future SHA diff shows intentional FIFOZ divergence in those command docs that AE should absorb.
