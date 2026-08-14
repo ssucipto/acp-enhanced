@@ -5,6 +5,13 @@
 
 - date: 2026-08-14
   executor: cursor-composer
+  tasks: [audit-116, review-004, F-116-01, F-116-02, F-116-03, F-116-04, F-116-05, F-116-06, F-116-07]
+  done: [m86-post-ship-audit, m86-review-004, shellcheck-sc1125-fix, e2e-matrix-skip-network, docs-domain-drift, v6.31.1]
+  deferred: [F2-09 → backlog, D-002-01-08 → post-M86, weekly-integrity → admin, M81-fixture → M81]
+  key_fact: "M86 --full shellcheck was self-breaking on SC1125 (em-dash in disable comment); e2e-matrix must use --skip-network like GH Actions."
+
+- date: 2026-08-14
+  executor: cursor-composer
   tasks: [task-305, task-306, task-308, task-309, task-310, task-311, task-312, task-313, task-314, task-315, task-316, task-317, task-318, task-319, task-320, task-321]
   done: [m86-ci-baseline, fg-contracts, acp-ci, acp-pr, upgrade-guard, review-scan-merge, v6.31.0-ship]
   deferred: [feedback-002-D-002-01-08 → post-M86, M81-coderabbit-fixture → M81, F2-09 → backlog]

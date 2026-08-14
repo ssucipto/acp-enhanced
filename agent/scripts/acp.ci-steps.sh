@@ -67,7 +67,7 @@ _ci_step_shellcheck() {
     -name '*.sh' 2>/dev/null | sort)"
   count="$(printf '%s\n' "${scripts}" | sed '/^$/d' | wc -l | tr -d ' ')"
   echo "Found ${count} shell scripts"
-  # shellcheck disable=SC2086 — xargs needs word-split paths from newline list
+  # shellcheck disable=SC2086 # xargs needs word-split paths from newline list
   echo "${scripts}" | xargs shellcheck --shell=bash --severity=error
   echo "shellcheck passed (no errors)"
 }
@@ -93,8 +93,9 @@ _ci_step_npm_audit() {
 
 _ci_step_e2e_matrix() {
   # Local stand-in for e2e-tests.yaml matrix (single OS). Full OS matrix is CI-only.
+  # Match GH e2e-tests.yaml + e2e-smoke: --skip-network (zero network side effects).
   if [[ -f "${REPO_ROOT}/run-e2e-tests.sh" ]]; then
-    bash "${REPO_ROOT}/run-e2e-tests.sh"
+    bash "${REPO_ROOT}/run-e2e-tests.sh" --skip-network
   else
     echo "[acp.ci-steps] run-e2e-tests.sh not found" >&2
     return 1

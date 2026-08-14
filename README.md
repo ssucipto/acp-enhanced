@@ -124,7 +124,7 @@ ACP Enhanced registers **70 slash commands** across two tools — available afte
 |---|---|---|
 | VS Code Copilot | `/acp-*` — autocomplete in Copilot Chat | `.github/prompts/*.prompt.md` |
 | opencode | `/acp-*` — autocomplete in opencode TUI | `.opencode/commands/*.md` |
-| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (70 commands) |
+| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (72 acp.* commands) |
 
 ```text
 /acp-init          /acp-proceed       /acp-plan          /acp-status
@@ -135,7 +135,7 @@ ACP Enhanced registers **70 slash commands** across two tools — available afte
 
 > VS Code Copilot requires agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.  
 > opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.  
-> **Note**: All 70 commands are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.  
+> **Note**: All 72 `acp.*` commands (plus 2 `git.*`) are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`, `/acp-ci`, `/acp-pr`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.  
 > **Cross-agent handoff**: See [`agent/wiki/cross-agent-handoff.md`](agent/wiki/cross-agent-handoff.md) for executor vs cross-repo modes, `/acp-receive`, and git drift checks.  
 > **CodeRabbit (optional)**: See [`agent/wiki/coderabbit-integration.md`](agent/wiki/coderabbit-integration.md) — off by default; ACP is fully functional without it. PR-check integration is gated (ADR-19).
 
@@ -1117,7 +1117,7 @@ project-root/
 │   │   ├── rules.md                # Routing rules + conventions
 │   │   ├── ledger.md               # Cost + token tracking
 │   │   └── tasks/                  # Generated route files
-│   ├── commands/                   # 72 command docs (70 acp.* + 2 git.*)
+│   ├── commands/                   # 74 command docs (72 acp.* + 2 git.*)
 │   ├── scripts/                    # 36 shell scripts + TypeScript tools
 │   ├── design/                     # Design documents
 │   ├── milestones/                 # Milestone definitions
