@@ -30,6 +30,7 @@ TIER="fast"
 DRY_RUN=false
 DOCTOR=false
 ONLY=""
+ONLY_SET=false
 
 RESULTS=""   # "id=STATUS" pairs
 FAILED_STEP=""
@@ -71,6 +72,7 @@ while [[ $# -gt 0 ]]; do
         exit 2
       fi
       ONLY="${2}"
+      ONLY_SET=true
       shift 2
       ;;
     --dry-run) DRY_RUN=true; shift ;;
@@ -203,7 +205,7 @@ _is_known_step() {
 
 # ── Step selection ───────────────────────────────────────────────────────
 SELECTED=""
-if [[ -n "${ONLY}" ]]; then
+if [[ "${ONLY_SET}" == "true" ]]; then
   SELECTED="$(echo "${ONLY}" | tr ',' ' ')"
   UNKNOWN=""
   for s in ${SELECTED}; do
