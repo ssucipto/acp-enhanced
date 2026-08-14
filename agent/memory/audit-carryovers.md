@@ -3187,3 +3187,58 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: "M86 planned"
+  - audit_id: 114
+    finding_id: F-114-07
+    severity: high
+    file: agent/patterns/local.false-green-contracts.md
+    finding: "No core contract to assert output invariants (not exit-code proxies) — feedback-008/009 class"
+    description: "audit-114 F-114-07 was in the report but missing from the carryover ledger until audit-115. Wrapped tools whose CI contract is 'output contains X' must assert X."
+    fix_target: "FG contracts in task-306; enforce in /acp-ci and review-scan merge (316/317)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M86 planned"
+  - audit_id: 114
+    finding_id: F-114-08
+    severity: medium
+    file: agent/core/routing.yml
+    finding: "routing.yml git-push/git-pr still point at dangling ci-check stub with no command"
+    description: "audit-114 F-114-08 missing from ledger until audit-115. Same class as feedback-001 git-pr stub."
+    fix_target: "task-310 wire acp-ci / acp-pr suggestions"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M86 planned"
+  - audit_id: 115
+    finding_id: F-114-11
+    severity: medium
+    file: agent/scripts/acp.version-update.sh
+    finding: "Version-update overwrite remains a fork hazard; upgrade-guard complements but must HARD-fail"
+    description: "audit-114 F-114-11 + audit-115 P-UG-1. Script now has --diff/--preserve flags (post-080) but no upgrade-guard hook."
+    fix_target: "task-314 HARD-fail hook when upstream-delta.yml present"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M86 planned"
+  - audit_id: 115
+    finding_id: F3-01
+    severity: high
+    file: agent/tasks/milestone-86-consumer-project-field-feedback-port/task-309-acp-ci-orchestrator.md
+    finding: "Pre-impl: step bodies path was scripts/acp-ci-steps.sh — wrong convention"
+    description: "Amended to agent/scripts/acp.ci-steps.sh (P-PATH-1)."
+    fix_target: "Plan amended 2026-08-14"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "115"
+    escalated_to: null
+  - audit_id: 115
+    finding_id: F3-05
+    severity: high
+    file: agent/tasks/milestone-86-consumer-project-field-feedback-port/task-321-v6310-closure.md
+    finding: "Pre-impl: closure DAG omitted 316/317 — milestone could ship without scanner merge"
+    description: "Amended 319 depends_on +316; 321 depends_on +316 +317."
+    fix_target: "Plan amended 2026-08-14"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "115"
+    escalated_to: null

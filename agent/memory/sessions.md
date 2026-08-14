@@ -5,6 +5,26 @@
 - date: 2026-08-14
   executor: cursor-composer
   branch: develop
+  tasks: [audit-115, acp-plan-M86-amend, task-307]
+  done:
+    - audit-115-m86-pre-impl-blocked-then-ready
+    - amended-f3-01-through-f3-10-into-tasks-milestone-design
+    - locked-p-ug-1-hard-fail-p-ci-1-p-path-1-p-val-1
+    - added-missing-carryovers-f-114-07-08-11
+    - task-307-complete-m86-in-progress
+  deferred:
+    - task-305-ci-baseline → /acp-proceed
+    - task-306-fg-contracts → after-305
+  key_fact: >
+    audit-115 found the M86 plan would still allow fail-open shortcuts and a
+    wrong scripts/ path, and could close without the review-scan merge. Amendments
+    lock HARD upgrade-guard, agent/scripts/acp.ci-steps.sh, executed_steps
+    validator work, and DAG edges 314←310, 319←316, 321←316+317. Coding starts
+    at task-305, not 308.
+
+- date: 2026-08-14
+  executor: cursor-composer
+  branch: develop
   tasks: [acp-plan-M86, audit-114]
   done:
     - planned-m86-consumer-project-field-feedback-port-17-tasks
