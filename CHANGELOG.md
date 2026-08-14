@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added (M86 — in progress, not shipped)
+- **review-scan consumer-project↔M83 merge (task-316)** — feedback-008 precision (rg/grep parity, real YM deps probe, SH-04 lexical trap, TS-08 `strict` imply, vendored skips); merge notes in `agent/reports/m86-review-scan-merge-notes.md`.
 - **Upgrade-guard E2E + fork docs (task-315)** — checklist + HARD-fail coverage.
 - **Upgrade-guard (task-314)** — `upstream-delta.yml` + template + `acp.upgrade-guard.sh`; version-update HARD fail on missing sentinel (P-UG-1 / ADR-25).
 - **Wrappers + E2E /acp-pr (task-313)** — cursor/claude/opencode/prompts + fail-closed suite.

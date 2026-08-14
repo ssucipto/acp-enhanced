@@ -3183,10 +3183,11 @@ carryovers:
     finding: "consumer-project review-scan.sh diverged from AE M83 (+75/-7) with feedback-008 precision fixes"
     description: "acp.review.md identical; scanner script is not. Blind overwrite would lose either M83 or consumer-project fixes."
     fix_target: "Diff-merge using agent/reports/consumer-project-port-inbox-2026-08-14/acp.review-scan.sh.consumer-project-vs-ae.diff; re-run review E2E corpus"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: "M86 planned"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "task-316; e2e 66/66; review-measure --ci 47/47 @ 100%; merge notes m86-review-scan-merge-notes.md"
+    escalated_to: "M86 task-316"
+    fix_note: "Hunk-classified merge: take consumer-project precision (8) + hybrid portability-check skip (1); kept AE M83 SC-15/flag-parse/corpus/rule_overrides."
   - audit_id: 114
     finding_id: F-114-07
     severity: high
