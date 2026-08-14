@@ -1,6 +1,6 @@
 project:
   name: agent-context-protocol
-  version: 6.29.3
+  version: 6.31.0
   started: 2026-02-16
   status: active
   current_milestone: M81
@@ -6650,11 +6650,11 @@ tasks:
   - id: task-321
     name: v6.31.0 closure + F-114 carryover stamps
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-321-v6310-closure.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started:  2026-08-14
+    completed_date:  2026-08-14
+    actual_hours:  2
     estimated_hours: 4
     notes: phase 4; depends 316-320; stamp 02-09+11 with evidence; keep current_milestone M81
 recent_work:
@@ -9594,13 +9594,12 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- 'M86 IN PROGRESS (14/17): 305-318 done. Next task-319 package/wrappers/manifest;
-  then 320 consumer note; 321 v6.31.0 closure (no bump in this session).'
-- 'M81 (current_milestone): still fixture-gated. Parallel to M86.'
-- 'Unblocked side work: F2-09 (low) quote-aware YAML # strip.'
-- 'Overdue weeklies: /acp-review and /acp-integrity (next_due 2026-07-31).'
-- 'Shipped: M85 → v6.30.1 on mainline. Target M86 → v6.31.0.'
-- 'GATED (ADR-19): Aikido + M76/M77 stay plan-only'
+- "M86 COMPLETE — shipped v6.31.0 (/acp-ci, /acp-pr, upgrade-guard). current_milestone remains M81."
+- "M81: still blocked on tests/fixtures/coderabbit-findings-sample.json (ADR-22) — do not invent."
+- "Deferred from M86: feedback-002 D-002-01…08 (see m86-feedback-002-matrix.md)."
+- "Overdue weeklies: /acp-review, /acp-integrity (since 2026-07-31)."
+- "Pending carryover F2-09 (YAML # inside quotes) — out of M86."
+- "GATED (ADR-19): Aikido + M76/M77 stay plan-only"
 current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2

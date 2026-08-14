@@ -2,13 +2,13 @@
 id: task-321
 milestone: M86
 title: "v6.31.0 closure — CHANGELOG, versions, carryover stamps"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 4
 depends_on: task-316, task-317, task-318, task-319, task-320
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -56,13 +56,13 @@ crosscut anti-pattern: never update only one version surface. M85 required multi
 
 ## Verification
 
-- [ ] All version pins 6.31.0 consistent per acp-validate
-- [ ] CHANGELOG has 6.31.0 section
-- [ ] F-114-02,03,04,05,06,07,08,09,11 fixed with evidence (or explicitly deferred with reason)
-- [ ] Milestone doc Progress 17/17
-- [ ] current_milestone policy documented in notes
-- [ ] upgrade-guard passes on final delta file
-- [ ] tasks 305–320 all completed in progress.yaml
+- [x] All version pins 6.31.0 consistent per acp-validate
+- [x] CHANGELOG has 6.31.0 section
+- [x] F-114-02,03,04,05,06,07,08,09,11 fixed with evidence (or explicitly deferred with reason)
+- [x] Milestone doc Progress 17/17
+- [x] current_milestone policy documented in notes
+- [x] upgrade-guard passes on final delta file
+- [x] tasks 305–320 all completed in progress.yaml
 
 ## User-Observable Acceptance
 

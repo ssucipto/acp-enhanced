@@ -3,13 +3,13 @@
 <!-- @acp.meta.milestone
 topic: fifoz, feedback, acp-ci, acp-pr, upgrade-guard, false-green, review-scan, v6.31.0
 description: Port verified FIFOZ field feedback into ACP Enhanced — abstract CI/PR, upgrade-guard, false-green contracts, review-scan merge — without re-shipping identical commands
-status: planned
+status: completed
 updated: 2026-08-14
 @acp.meta.end -->
 
 **Planned version**: v6.31.0  
-**Status**: in_progress  
-**Progress**: 1/17 tasks (task-307 pre-impl audit complete; 305–306 still required before coding 308+)  
+**Status**: completed  
+**Progress**: 17/17 tasks — shipped as v6.31.0  
 **Estimated effort**: ~69h (17 tasks, 5 phases)  
 **Source**: audit-114 (source of truth), feedback-001b/008/009, upstream-port-guide-2026-08-14, fifoz-port-inbox-2026-08-14  
 **Depends on**: nothing — **independent of M81** ADR-22 CodeRabbit fixture gate  
