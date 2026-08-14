@@ -6499,13 +6499,13 @@ tasks:
   - id: task-306
     name: False-green contracts in constraints + pattern
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-306-false-green-contracts.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: 2026-08-14
+    completed_date: 2026-08-14
+    actual_hours: 1
     estimated_hours: 3
-    notes: phase 0; FG-1..7 including set +e vs ERR trap
+    notes: phase 0; FG-1..7 in constraints + pattern + skills/scripts.md; no command scripts
   - id: task-307
     name: Pre-impl audit --pre-impl M86
     priority: 5
