@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.32.4] — 2026-08-14
+
+### Fixed
+- **CI flake** — `validateProtocolDirAddability` live-repo test timeout raised to 60s (walks `agent/reports` + per-file `git ls-files`).
+
+### Changed
+- **consumer-project upgrade note** — expand `m86-consumer-project-upgrade-note.md` for **6.29.3 → 6.32.3/6.32.4** anti-regression path (keep Expo CI bodies / consumer-project-local / feedback tracking).
+
+---
+
 ## [6.32.3] — 2026-08-14
 
 ### Fixed

@@ -496,10 +496,11 @@ describe("validatePackageYamlVersion (M72)", () => {
 });
 
 describe("validateProtocolDirAddability (M72)", () => {
+  // Live repo walks agent/reports + git ls-files per file — can exceed 5s default.
   it("returns array without throwing on live repo", () => {
     const errors = validateProtocolDirAddability(getRepoRoot());
     expect(Array.isArray(errors)).toBe(true);
-  });
+  }, 60_000);
 });
 
 describe("validateCarryoverAuditStamps (M73)", () => {

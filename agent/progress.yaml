@@ -1,10 +1,10 @@
 project:
   name: agent-context-protocol
-  version: 6.32.3
+  version: 6.32.4
   started: 2026-02-16
   status: active
   current_milestone: M81
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.3 on develop\n\
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.4 on develop\n\
     \  (M81 CodeRabbit integration + audit-117 remediations; M86 CI/PR/upgrade-guard at 6.31.x).\n\
     \  F2-09 fixed. Aikido track ADR-19 gated.\n"
 active_handoff:
