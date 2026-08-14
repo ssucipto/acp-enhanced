@@ -897,12 +897,16 @@ milestones:
   M86:
     name: consumer-project Field-Feedback Port (v6.31.0)
     priority: 5
-    status: in_progress
-    progress: 82
+    status: completed
+    progress: 100
     started: 2026-08-14
-    completed: null
+    completed: 2026-08-14
     estimated_weeks: 2
-    tasks_completed: 14
+    tasks_completed: 17
+    total_tasks: 17
+    notes: >
+      Shipped v6.31.0. /acp-ci, /acp-pr, upgrade-guard, FG contracts, review-scan merge.
+      current_milestone remains M81 (CodeRabbit fixture gate).
     tasks_total: 17
     file: agent/milestones/milestone-86-consumer-project-field-feedback-port.md
     design: agent/design/local.consumer-project-field-feedback-port.md
