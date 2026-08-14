@@ -523,6 +523,19 @@ These controls are shared with `/acp-integrity` through `agent/scripts/acp.integ
 
 ---
 
+## Rule Authoring Checklist (Phase 1)
+
+When adding or changing a deterministic rule in `acp.review-scan.sh`, follow
+[`agent/patterns/local.rule-verification-discipline.md`](../patterns/local.rule-verification-discipline.md):
+
+1. Write the **invariant** in one sentence (not a correlate).
+2. Implement a probe that asserts that invariant (e.g. resolve modules — do not treat `scripts/node_modules/` existence as “YAML rules can run”).
+3. Ship a **true-positive fixture** and a **false-positive fixture** (comments/strings/vendored trees).
+4. Setup failures must **skip or fail-closed in `--ci`**, never emit the rule as a finding.
+5. Document the rule ID in this file’s tables and keep `review_rg_dir` / `find` excludes aligned.
+
+---
+
 ## Appendix A — ACP Self-Review Rules
 
 Auto-activated when `agent/commands/` is detected in the project root.

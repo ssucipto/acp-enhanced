@@ -5,6 +5,13 @@
 # Optional fields added in v6.8.0:
 
 - date: 2026-08-14
+  task_type: bash-script-refactor
+  mistake: "Guards certified correlates (node_modules dir exists, status-string agreement, finding_id-only ledger grep) instead of the invariants they were named for — fabricating findings or retracting real carryovers."
+  correction: "Assert the invariant, not a proxy. For review-scan: resolve packages for real, match lexical commands not comments, cover all ledger schemas on absence claims. Pattern: agent/patterns/local.rule-verification-discipline.md. New rules require a true-positive fixture."
+  priority: high
+  trigger: feedback-008
+
+- date: 2026-08-14
   task_type: audit-run
   mistake: "FIFOZ upstream-port-guide treated acp-core manifest command-file count (67 vs 75) as proof six commands were missing upstream — integrity/review/sync/etc. were already byte-identical in ACP Enhanced."
   correction: "When auditing fork→upstream ports, compare the working trees (existence + SHA/Version), not package manifest inventory alone. Manifest deltas include local-only packages and can invent false 'unreported' ports. Correct portable gaps were /acp-ci, /acp-pr, upgrade-guard, and cross-cutting false-green rules."
