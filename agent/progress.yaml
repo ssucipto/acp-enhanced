@@ -6609,13 +6609,13 @@ tasks:
   - id: task-317
     name: feedback-008 rule-verification discipline
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-consumer-project-field-feedback-port/task-317-feedback-008-discipline.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: 2026-08-14
+    completed_date: 2026-08-14
+    actual_hours: 2
     estimated_hours: 3
-    notes: phase 3; required before 321
+    notes: "phase 3; pattern + lesson + review.md checklist"
   - id: task-318
     name: feedback-002 residual matrix closeout
     priority: 5
