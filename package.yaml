@@ -262,6 +262,21 @@ contents:
       description: Validate ACP structure
       scripts: []
 
+    - name: acp.ci.md
+      description: Local CI parity predictor (tiers static/fast/full)
+      scripts:
+        - acp.ci.sh
+        - acp.ci-steps.sh
+        - acp.common.sh
+
+    - name: acp.pr.md
+      description: Feature PR prep with gates delegated to /acp-ci
+      scripts:
+        - acp.pr.sh
+        - acp.ci.sh
+        - acp.common.sh
+        - acp.yaml-parser.sh
+
     - name: acp.commit.md
       description: End-of-session memory commit and route stamping
       scripts: []
@@ -598,6 +613,22 @@ contents:
 
     - name: acp.review-measure.sh
       description: Review scan corpus precision/recall measurement
+      type: internal
+
+    - name: acp.ci.sh
+      description: Local CI parity orchestrator for /acp-ci
+      type: internal
+
+    - name: acp.ci-steps.sh
+      description: AE CI step bodies sourced by acp.ci.sh (P-PATH-1)
+      type: internal
+
+    - name: acp.pr.sh
+      description: PR prep with gates delegated to acp.ci.sh
+      type: internal
+
+    - name: acp.upgrade-guard.sh
+      description: Assert upstream-delta sentinels survived version-update (P-UG-1)
       type: internal
 
     - name: acp.review-rule-overrides.py
