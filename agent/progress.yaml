@@ -1,11 +1,11 @@
 project:
   name: agent-context-protocol
-  version: 6.32.0
+  version: 6.32.1
   started: 2026-02-16
   status: active
   current_milestone: M81
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.0 on develop\n\
-    \  (M81 CodeRabbit integration shipped; M86 CI/PR/upgrade-guard at 6.31.x).\n\
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.1 on develop\n\
+    \  (M81 CodeRabbit integration + audit-117 remediations; M86 CI/PR/upgrade-guard at 6.31.x).\n\
     \  Open: F2-09. Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/reports/handoff-claude-m85-phase2-2026-07-31.md
@@ -6190,7 +6190,7 @@ tasks:
     estimated_hours: 3
     notes: route-262; cases A-D; depends 270,272
   - id: task-274
-    name: M81 closure — ship v6.29.0
+    name: M81 closure — ship v6.32.0
     priority: 5
     status: completed
     file: agent/tasks/milestone-81-coderabbit-integration-layer/task-274-m81-closure.md
@@ -9587,8 +9587,8 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M81 COMPLETE — shipped v6.32.0 (CodeRabbit findings-import + template + review wiring)."
-- "M86 COMPLETE — v6.31.0/6.31.1 (/acp-ci, /acp-pr, upgrade-guard + post-ship fixes)."
+- "M81 COMPLETE — v6.32.0 + v6.32.1 post-ship (audit-117 / review-005)."
+- "M86 COMPLETE — v6.31.0/6.31.1 (/acp-ci, /acp-pr, upgrade-guard)."
 - "Pending carryover F2-09 (YAML # inside quotes)."
 - "Deferred: feedback-002 D-002-01…08; weekly /acp-integrity overdue."
 - "GATED (ADR-19): Aikido + M76/M77 stay plan-only"

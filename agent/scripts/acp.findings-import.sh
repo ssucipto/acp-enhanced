@@ -89,7 +89,10 @@ carryovers:
 HDR
 fi
 
-# Parse + emit YAML blocks via Python (JSON + escaping). Exit codes: 0 ok, 1 fail.
+# Parse + emit YAML blocks via Python (JSON + escaping).
+# FG-1: capture status in if-context — never let set -e + trap ERR turn a clean
+# parser failure into a bare "Error on line N" without the Python message.
+set +e
 IMPORT_OUT="$(
   INPUT_PATH="${INPUT}" CARRYOVERS_PATH="${CARRYOVERS}" DRY_RUN="${DRY_RUN}" python3 - <<'PY'
 import hashlib, json, os, re, sys
@@ -124,7 +127,6 @@ def load_findings(path: Path):
     # NDJSON: lines with type=finding
     lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
     if lines and all(ln.startswith("{") for ln in lines) and any('"type"' in ln for ln in lines):
-        # Prefer NDJSON only when every non-empty line is an object AND no top-level array wrapper
         try:
             first = json.loads(lines[0])
             if first.get("type") in ("finding", "status", "review_context", "complete", "heartbeat"):
@@ -140,17 +142,27 @@ def load_findings(path: Path):
                     return out
         except json.JSONDecodeError:
             pass
-    data = json.loads(text)
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"[acp.findings-import] ERROR: invalid JSON in {path}: {exc}") from None
     if isinstance(data, dict) and "findings" in data:
         return list(data["findings"] or [])
     if isinstance(data, list):
         return data
-    raise SystemExit(f"Unrecognized findings shape in {path}")
+    raise SystemExit(f"[acp.findings-import] ERROR: unrecognized findings shape in {path}")
 
 existing = carry.read_text(encoding="utf-8") if carry.exists() else ""
 existing_ids = set(re.findall(r"finding_id:\s*(\S+)", existing))
 
-findings = load_findings(inp)
+try:
+    findings = load_findings(inp)
+except SystemExit as exc:
+    print(exc, file=sys.stderr)
+    sys.exit(1)
+except OSError as exc:
+    print(f"[acp.findings-import] ERROR: cannot read {inp}: {exc}", file=sys.stderr)
+    sys.exit(1)
 added = 0
 skipped = 0
 blocks = []
@@ -221,5 +233,10 @@ carry.write_text(text.rstrip() + "\n" + appendix, encoding="utf-8")
 print(f"[acp.findings-import] added={added} skipped_dup={skipped} → {carry}")
 PY
 )"
-
+py_rc=$?
+set -euo pipefail
+if [[ "${py_rc}" -ne 0 ]]; then
+  [[ -n "${IMPORT_OUT}" ]] && echo "${IMPORT_OUT}"
+  exit "${py_rc}"
+fi
 echo "${IMPORT_OUT}"

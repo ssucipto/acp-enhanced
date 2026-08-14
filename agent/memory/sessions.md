@@ -5,6 +5,13 @@
 
 - date: 2026-08-14
   executor: cursor-composer
+  tasks: [audit-117, review-005, F-117-01, F-117-02, F-117-03, F-117-04, F-117-05]
+  done: [m81-post-ship-audit, findings-import-json-errors, e2e-efg, v6.32.1]
+  deferred: [F2-09 → backlog, weekly-integrity → admin]
+  key_fact: "findings-import must catch JSONDecodeError; never let set -e ERR trap hide the parser message."
+
+- date: 2026-08-14
+  executor: cursor-composer
   tasks: [task-270, task-271, task-272, task-273, task-274]
   done: [coderabbit-fixture, findings-import, coderabbit-template, review-wiring, coderabbit-e2e, v6.32.0-m81]
   deferred: [F2-09 → backlog, D-002-01-08 → polish, weekly-integrity → admin]
