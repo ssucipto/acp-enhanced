@@ -2,13 +2,13 @@
 id: task-307
 milestone: M86
 title: "Pre-implementation audit --pre-impl for M86"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 0
 depends_on: [task-305, task-306]
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -24,9 +24,14 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: D4
 depends_on: task-305, task-306
-status: draft
+status: completed
 updated: 2026-08-14
 @acp.meta.end -->
+
+## Drift Remediation / Audit Result
+
+**Report**: `agent/reports/audit-115-m86-pre-impl-readiness.md`  
+**Verdict**: READY (after plan amendments). Initial BLOCKED on F3-01…F3-08.
 
 ## Objective
 
@@ -64,3 +69,10 @@ M85 taught that pre-impl audits catch circular deps and wrong field names. User 
 
 ### Notes
 Source of truth: audit-114. Inbox reference only: `agent/reports/fifoz-port-inbox-2026-08-14/`. No shortcuts.
+
+
+## Completion Evidence (2026-08-14)
+
+- [x] audit-115 published with Phase 1–4 tables
+- [x] F3 findings amended into tasks/milestone/design/progress/carryovers
+- [x] Coding gate: start at task-305; 308+ still after 305–306

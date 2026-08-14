@@ -16,6 +16,8 @@ audit_findings: ['F-114-06', 'F-114-07']
 files_affected:
   - e2e/acp.ci.test.sh
   - agent/schemas/command-e2e-coverage.yaml
+  - scripts/acp-validate.test.ts
+  - scripts/acp-validate.ts
 ---
 
 <!-- @acp.meta.task
@@ -25,7 +27,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: FG-3, FG-4, FG-5, FG-6
 depends_on: task-309
-status: draft
+status: planned
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -47,14 +49,20 @@ feedback-009 §2.5–2.7: FIFOZ claimed verified after dry-run; empty `--only` P
    - --static executes ≥1 real cheap gate and asserts expected success markers
    - If a step uses output_contains, fail the step when output lacks it even if exit 0 (fixture or injectable stub)
    - SKIP path: missing optional tool → SKIP row, banner not claiming full parity
-3. Register in `command-e2e-coverage.yaml` with `executed_steps:` listing really run ids.
-4. Run the suite on macOS bash 3.2; note Linux CI expectation.
+3. **REQUIRED (F3-03 / P-VAL-1)**: extend `agent/schemas/command-e2e-coverage.yaml` to allow optional `executed_steps: [id, ...]` on command rows. Update `scripts/acp-validate.ts` → `validateCommandE2eCoverage` to:
+   - accept the field
+   - for `acp.ci`, `acp.pr`, and `acp.upgrade-guard` (when present): **require** non-empty `executed_steps`
+   - add/extend unit tests in `scripts/acp-validate.test.ts`
+4. Register `acp.ci` with suites + non-empty `executed_steps` listing really executed static step ids (not dry-run-only).
+5. Run the suite on macOS bash 3.2; note Linux CI expectation.
 
 ## Verification
 
 - [ ] e2e/acp.ci.test.sh passes locally
 - [ ] Coverage yaml lists executed_steps including a non-dry-run step
 - [ ] Unknown id and zero-executed cases covered
+- [ ] validateCommandE2eCoverage accepts executed_steps; acp.ci row required non-empty
+- [ ] acp-validate.test.ts covers the new field
 
 ## User-Observable Acceptance
 

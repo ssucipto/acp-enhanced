@@ -32,7 +32,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: D2
 depends_on: task-312
-status: draft
+status: planned
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -47,8 +47,12 @@ FIFOZ validator caught missing .github/prompts wrapper. AE must ship all four su
 ## Steps
 
 1. Adapt inbox e2e/acp.pr.test.sh — assert delegation strings, dry-run, branch safety messaging.
-2. Create wrappers for acp-ci and acp-pr on: .cursor/commands, .claude/commands, .opencode/commands, .github/prompts (match existing wrapper style).
-3. Ensure package.yaml / command coverage will be finalized in 319 but wrappers exist now.
+2. **REQUIRED**: create wrappers for acp-ci and acp-pr on all four surfaces, mirroring `.cursor/commands/acp-status.md` style:
+   - `.cursor/commands/acp-{ci,pr}.md`
+   - `.claude/commands/acp-{ci,pr}.md`
+   - `.opencode/commands/acp-{ci,pr}.md` (directory is `commands`, plural)
+   - `.github/prompts/acp-{ci,pr}.prompt.md`
+3. package.yaml / coverage finalized in 319 — wrappers MUST exist after this task.
 4. Run e2e.
 
 ## Verification

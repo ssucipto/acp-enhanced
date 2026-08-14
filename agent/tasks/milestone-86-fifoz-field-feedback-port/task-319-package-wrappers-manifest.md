@@ -10,7 +10,7 @@ created: 2026-08-14
 started: null
 completed:
 phase: 4
-depends_on: [task-311, task-313, task-315]
+depends_on: task-311, task-313, task-315, task-316
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
 audit_findings: ['F-114-02', 'F-114-03']
 files_affected:
@@ -29,7 +29,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: D1, D2
 depends_on: task-311, task-313, task-315
-status: draft
+status: planned
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -43,13 +43,15 @@ crosscut skill: never update only one of AGENT/README/CHANGELOG/package. CHANGEL
 
 ## Steps
 
-1. Add acp.ci / acp.pr / upgrade-guard to package.yaml commands/scripts.
-2. Update domain.yml command taxonomy sections.
-3. Ensure command-e2e-coverage rows exist with executed_steps.
-4. Regenerate integrity-manifest.yaml.
-5. Add AGENT.md + README command table rows for /acp-ci and /acp-pr.
+1. **REQUIRED exact package.yaml entries** (file-shaped, matching existing style):
+   - `contents.commands`: `acp.ci.md`, `acp.pr.md`
+   - `contents.scripts`: `acp.ci.sh`, `acp.pr.sh`, `acp.upgrade-guard.sh`, `acp.ci-steps.sh`
+2. Update domain.yml command taxonomy sections for ci/pr/upgrade-guard.
+3. Ensure coverage rows exist; `executed_steps` non-empty for acp.ci / acp.pr / acp.upgrade-guard (P-VAL-1).
+4. **REQUIRED**: regenerate integrity-manifest.yaml **after** task-316 merge (this task depends on 316).
+5. Add AGENT.md + README command table rows for `/acp-ci` and `/acp-pr`.
 6. Run `npx tsx scripts/acp-validate.ts` and fix parity gaps.
-7. Confirm all wrappers from 313 still present.
+7. Confirm all eight wrappers from 313 still present.
 
 ## Verification
 

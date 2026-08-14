@@ -68,6 +68,16 @@ Do not re-ship: integrity, review (doc), carryover-query, rule-file-audit, sessi
 
 Task-305 captures wall-clock for every AE CI gate **before** assigning static/fast/full. Assumed cost is forbidden (feedback-009 §2.3).
 
+### D6 — audit-115 locked policies (pre-impl amendments)
+
+| ID | Policy |
+|----|--------|
+| P-UG-1 | `upstream-delta.yml` present → version-update runs upgrade-guard and **HARD fails** on missing sentinel |
+| P-CI-1 | `agent/configurables/ci.yml` is runtime CI matrix — **not** registered in `acp.configurables.yaml` |
+| P-CI-2 | integrity-manifest regenerated in task-309 **and** again in 319 after 316 |
+| P-VAL-1 | `executed_steps` required for `acp.ci` / `acp.pr` / `acp.upgrade-guard` coverage rows; extend validator |
+| P-PATH-1 | Step bodies live at `agent/scripts/acp.ci-steps.sh` — never top-level `scripts/acp-ci-steps.sh` |
+
 ## AE CI job graph (planning baseline — task-305 re-measures)
 
 From `.github/workflows/` (job-level, not “one job = CI”):

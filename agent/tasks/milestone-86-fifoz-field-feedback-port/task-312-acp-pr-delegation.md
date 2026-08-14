@@ -25,7 +25,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: D2
 depends_on: task-311
-status: draft
+status: planned
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -46,8 +46,9 @@ Inbox pr.md v1.2.0 is the shape. Remove FIFOZ CodeRabbit/m50 specifics or make t
    - **Grep the script: no duplicated tsc/lint/test gate implementations**
    - Metadata derivation (--auto) from commits since base
    - Optional gh pr create; dry-run mode
-3. If CodeRabbit helpers exist in AE, optional path-filter check; else SKIP with hint.
+3. CodeRabbit path-filter check: if `acp.coderabbit.sh` / coderabbit preferences exist, run the check; if not configured, emit **SKIP** (not silent pass) with install/config hint.
 4. Document that `/acp-ci --fast` beforehand is feedback; this step is enforcement.
+5. **FORBIDDEN**: any duplicated tsc/lint/test/shellcheck gate implementation inside `acp.pr.sh`.
 
 ## Verification
 

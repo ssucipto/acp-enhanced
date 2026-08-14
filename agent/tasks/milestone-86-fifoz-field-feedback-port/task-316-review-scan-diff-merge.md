@@ -25,7 +25,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: FG-5
 depends_on: task-307
-status: draft
+status: planned
 updated: 2026-08-14
 @acp.meta.end -->
 

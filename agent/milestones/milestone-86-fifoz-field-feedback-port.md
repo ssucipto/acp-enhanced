@@ -8,8 +8,8 @@ updated: 2026-08-14
 @acp.meta.end -->
 
 **Planned version**: v6.31.0  
-**Status**: planned  
-**Progress**: 0/17 tasks  
+**Status**: in_progress  
+**Progress**: 1/17 tasks (task-307 pre-impl audit complete; 305–306 still required before coding 308+)  
 **Estimated effort**: ~69h (17 tasks, 5 phases)  
 **Source**: audit-114 (source of truth), feedback-001b/008/009, upstream-port-guide-2026-08-14, fifoz-port-inbox-2026-08-14  
 **Depends on**: nothing — **independent of M81** ADR-22 CodeRabbit fixture gate  
@@ -40,7 +40,7 @@ Make ACP Enhanced predict its own CI locally, open PRs only after those gates, p
 | **3 — Scanner merge** | 316, 317 | review-scan diff-merge + feedback-008 discipline |
 | **4 — Closure** | 318, 319, 320, 321 | feedback-002 matrix; package/wrappers; consumer dry-run; v6.31.0 |
 
-**Hard gates**: Phase 1 coding (308+) must not start until task-307 pre-impl audit is READY. Task-312 must not start until task-311 proves `/acp-ci` fail-closed behaviors. Task-321 must not stamp carryovers without user-observable proof.
+**Hard gates**: Phase 1 coding (308+) must not start until task-307 pre-impl audit is READY (**audit-115 READY** after amendments) **and** tasks 305–306 are complete. Task-312 must not start until task-311 proves `/acp-ci` fail-closed behaviors. Task-321 must not stamp carryovers without user-observable proof. Task-319 depends on 316 (integrity-manifest after scanner merge). Task-314 depends on 310 (sentinel population). Upgrade-guard HARD-fails version-update (P-UG-1).
 
 ## Binding rules (do not violate)
 
@@ -69,18 +69,25 @@ Make ACP Enhanced predict its own CI locally, open PRs only after those gates, p
 - Closing F-114-* without observable verification  
 - Skipping consumer upgrade dry-run / FIFOZ notification  
 - Raising timeouts to hide gate cost  
+- Soft-fail upgrade-guard (P-UG-1 = **HARD fail**)  
+- Step bodies in top-level `scripts/` (must be `agent/scripts/acp.ci-steps.sh`)  
+- Closing v6.31.0 without scanner merge (316/317)  
+- Fail-open task wording (“if required”, “defer”, “optional”) — removed in audit-115  
+- Registering `ci.yml` as an `acp.configurables.yaml` preference (P-CI-1)  
 
 ## Deliverables
 
-- `agent/commands/acp.ci.md`, `agent/scripts/acp.ci.sh`  
+- `agent/commands/acp.ci.md`, `agent/scripts/acp.ci.sh`, `agent/scripts/acp.ci-steps.sh`  
 - `agent/commands/acp.pr.md`, `agent/scripts/acp.pr.sh`  
-- `agent/configurables/ci.yml` (+ schema/preferences as needed)  
-- `agent/upstream-delta.template.yml` (or documented empty starter) + `agent/scripts/acp.upgrade-guard.sh`  
+- `agent/configurables/ci.yml` + `agent/schemas/ci.config.schema.yaml` (runtime matrix — not preference registry)  
+- `agent/upstream-delta.template.yml`, `agent/upstream-delta.yml`, `agent/scripts/acp.upgrade-guard.sh`  
 - `e2e/acp.ci.test.sh`, `e2e/acp.pr.test.sh`, `e2e/acp.upgrade-guard.test.sh`  
-- Patterns for FG contracts + optional `docs/` consumer upgrade checklist  
+- `executed_steps` support in `command-e2e-coverage.yaml` + `acp-validate.ts`  
+- Patterns for FG contracts + `docs/acp-fork-upgrade-checklist.md`  
 - Merged `agent/scripts/acp.review-scan.sh`  
 - Wrappers on all four surfaces; package/coverage/domain/manifest updates  
 - v6.31.0 CHANGELOG + version pins  
+- audit-115 pre-impl report  
 
 ## Explicit non-goals
 
@@ -91,11 +98,12 @@ Make ACP Enhanced predict its own CI locally, open PRs only after those gates, p
 
 ## Success criteria
 
+- [x] Pre-impl audit-115 READY (after amendments)  
 - [ ] All 17 tasks completed with Step 3.5 deliverable audits  
 - [ ] `/acp-ci --static` and `--doctor` work on this repo  
 - [ ] `/acp-pr --dry-run` shows CI delegation  
-- [ ] Upgrade-guard self-test passes  
-- [ ] F-114-02…09 stamped fixed with evidence  
+- [ ] Upgrade-guard self-test passes; version-update HARD-fails on missing sentinel  
+- [ ] F-114-02,03,04,05,06,07,08,09,11 stamped fixed with evidence  
 - [ ] FIFOZ upgrade note drafted (identical cmds already upstream)  
 - [ ] `npx tsx scripts/acp-validate.ts` clean; relevant E2E green  
 
@@ -105,20 +113,20 @@ Make ACP Enhanced predict its own CI locally, open PRs only after those gates, p
 |----|------|-------|------|---------|
 | 305 | AE CI job graph + wall-clock baseline | 0 | 3h | — |
 | 306 | False-green contracts in constraints + pattern | 0 | 3h | — |
-| 307 | Pre-impl audit `--pre-impl` M86 | 0 | 4h | 305, 306 |
+| 307 | Pre-impl audit `--pre-impl` M86 | 0 | 4h | 305, 306 — **DONE (audit-115)** |
 | 308 | CI configurables schema + step plugin interface | 1 | 4h | 307 |
-| 309 | `/acp-ci` command + abstract orchestrator + AE bodies | 1 | 8h | 308 |
+| 309 | `/acp-ci` + `agent/scripts/acp.ci-steps.sh` + AE bodies | 1 | 8h | 308 |
 | 310 | Wire routing.yml + discoverability surfaces | 1 | 3h | 309 |
-| 311 | E2E `/acp-ci` (real execution + fail-closed) | 1 | 5h | 309 |
+| 311 | E2E `/acp-ci` + `executed_steps` validator | 1 | 5h | 309 |
 | 312 | `/acp-pr` with CI gate delegation | 1b | 5h | 311 |
-| 313 | E2E `/acp-pr` + command wrappers | 1b | 3h | 312 |
-| 314 | upstream-delta + upgrade-guard + version-update hook | 2 | 5h | 307 |
+| 313 | E2E `/acp-pr` + wrappers all surfaces | 1b | 3h | 312 |
+| 314 | upstream-delta + upgrade-guard + HARD version-update hook | 2 | 5h | 307, **310** |
 | 315 | E2E upgrade-guard + fork upgrade docs | 2 | 3h | 314 |
 | 316 | Diff-merge `acp.review-scan.sh` FIFOZ↔M83 | 3 | 6h | 307 |
 | 317 | feedback-008 rule-verification discipline | 3 | 3h | 316 |
 | 318 | feedback-002 residual matrix closeout | 4 | 3h | 307 |
-| 319 | Package/wrappers/coverage/integrity-manifest | 4 | 4h | 311, 313, 315 |
+| 319 | Package/wrappers/coverage/integrity-manifest | 4 | 4h | 311, 313, 315, **316** |
 | 320 | Consumer upgrade dry-run + FIFOZ notification | 4 | 3h | 314, 319 |
-| 321 | v6.31.0 closure + carryover stamps | 4 | 4h | 318, 319, 320 |
+| 321 | v6.31.0 closure + carryover stamps | 4 | 4h | **316, 317**, 318, 319, 320 |
 
 **Total**: ~69h · **estimated_weeks**: 2

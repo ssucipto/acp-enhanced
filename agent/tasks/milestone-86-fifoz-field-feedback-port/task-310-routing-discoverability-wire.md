@@ -27,7 +27,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: D1
 depends_on: task-309
-status: draft
+status: planned
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -42,11 +42,11 @@ FIFOZ patched routing, common.sh help, proceed, commit. AE must wire the same **
 ## Steps
 
 1. Update `routing.yml` command_suggestions: `git-push` / `git-pr` / new `ci-check` / `acp-ci` / `acp-pr` relationships (real command names).
-2. Add `/acp-ci` to `display_available_commands` in `acp.common.sh` if that function lists core commands.
-3. Add proceed Step guidance: when task touched code, run `/acp-ci --static` before marking complete (wording precise; do not make proceed hang on full E2E by default).
-4. Add optional `--ci` note to commit command doc if appropriate (or defer if conflicts — document decision).
-5. List every touched upstream-owned file + proposed sentinel for task-314 register.
-6. Do not skip wrappers — wrappers are task-313/319.
+2. **REQUIRED**: add `/acp-ci` and `/acp-pr` lines to `display_available_commands()` in `acp.common.sh` (function at ~line 1472).
+3. **REQUIRED**: add proceed Step guidance: when task touched product/framework code, run `/acp-ci --static` before marking complete. Do **not** require `--full` / matrix E2E in proceed by default.
+4. **REQUIRED**: add a Related/Usage note in `acp.commit.md` that `/acp-ci --static` should be green before pushing (no new CLI flag required in M86 — documentation only).
+5. **REQUIRED**: write sentinel draft list (path + greppable string) for every upstream-owned file touched — consumed by task-314 Phase B.
+6. Wrappers remain task-313 (must not be skipped there).
 
 ## Verification
 

@@ -16,7 +16,6 @@ audit_findings: ['F-114-02']
 files_affected:
   - agent/configurables/ci.yml
   - agent/schemas/ci.config.schema.yaml
-  - agent/configurables/acp.configurables.yaml
 ---
 
 <!-- @acp.meta.task
@@ -26,7 +25,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: D1
 depends_on: task-307
-status: draft
+status: planned
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -46,9 +45,10 @@ ADR-24: orchestrator must not know Expo. Schema must support tiers static/fast/f
    - `steps.<id>: { description, command, ci_job, cost_rank, ci_rank, tools[], output_contains[]?, allow_skip? }`
    - drift assertion hooks where a numeric budget must match CI prose (pattern: config-with-assert, not parse-CI-prose)
 3. Add schema file under `agent/schemas/` validating the structure.
-4. Register configurables path in `acp.configurables.yaml` if required by preferences system.
-5. Preference keys (document in schema/comments): `integrations.ci.tiers.*` resolution order.
+4. **BINDING (audit-115 F3-02 / P-CI-1)**: `agent/configurables/ci.yml` is a **runtime CI step matrix**, NOT a preference registered in `acp.configurables.yaml`. Do **not** add preference keys for M86. Document this ownership in `ci.yml` header comments.
+5. Schema comments may mention a *future* optional preference mirror (`integrations.ci.tiers.*`) as out-of-scope for M86.
 6. Do not implement `acp.ci.sh` beyond a stub comment pointing here.
+7. Every step id in tier lists MUST be defined under `steps:` — no dangling references.
 
 ## Verification
 
@@ -56,6 +56,8 @@ ADR-24: orchestrator must not know Expo. Schema must support tiers static/fast/f
 - [ ] Every AE PR-blocking job from task-305 maps to ≥1 step id OR out-of-scope note in comments
 - [ ] Schema validates sample ci.yml
 - [ ] Tier lists reference only defined step ids
+- [ ] Header comment states ci.yml is runtime config, not acp.configurables preference registry
+- [ ] `acp.configurables.yaml` was **not** modified
 
 ## User-Observable Acceptance
 

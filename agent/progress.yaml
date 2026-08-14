@@ -897,22 +897,20 @@ milestones:
   M86:
     name: FIFOZ Field-Feedback Port (v6.31.0)
     priority: 5
-    status: planned
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 6
+    started: 2026-08-14
     completed: null
     estimated_weeks: 2
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 17
     file: agent/milestones/milestone-86-fifoz-field-feedback-port.md
     design: agent/design/local.fifoz-field-feedback-port.md
     notes: >
-      PLANNED 2026-08-14 from audit-114 (source of truth). Ports verified FIFOZ
-      deltas only: abstract /acp-ci, /acp-pr with CI delegation, upgrade-delta+guard,
-      FG-1..7 false-green contracts, review-scan diff-merge. BINDINGS: ADR-24/25/26;
-      do NOT re-port SHA-identical commands; do NOT copy Expo CI bodies; measure
-      before tiering; dry-run is not verification; current_milestone stays M81
-      (parallel track). Closes F-114-02..09. Inbox: agent/reports/fifoz-port-inbox-2026-08-14/.
+      IN PROGRESS 2026-08-14. audit-115 pre-impl READY after amendments (F3-01..08).
+      task-307 complete. BINDINGS: ADR-24/25/26 + P-UG-1 HARD upgrade-guard,
+      P-CI-1 ci.yml runtime-only, P-PATH-1 agent/scripts/acp.ci-steps.sh,
+      319/321 depend on 316/317. Next: task-305 baseline (do not skip to 308).
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6511,13 +6509,13 @@ tasks:
   - id: task-307
     name: Pre-impl audit --pre-impl M86
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-307-pre-impl-audit.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: 2026-08-14
+    completed_date: 2026-08-14
+    actual_hours: 2
     estimated_hours: 4
-    notes: phase 0 GATE; blocks coding 308+ until READY
+    notes: phase 0 GATE; audit-115 READY after F3 amendments; coding still after 305-306
   - id: task-308
     name: CI configurables schema + step plugin interface
     priority: 5
@@ -6527,7 +6525,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 4
-    notes: phase 1; ADR-24 abstract interface
+    notes: phase 1; ADR-24 abstract interface; P-CI-1 runtime ci.yml only
   - id: task-309
     name: /acp-ci orchestrator + AE step bodies
     priority: 5
@@ -6537,7 +6535,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 8
-    notes: phase 1; no FIFOZ Expo bodies
+    notes: phase 1; agent/scripts/acp.ci-steps.sh (F3-01); regen integrity-manifest
   - id: task-310
     name: Wire routing.yml + discoverability
     priority: 5
@@ -6547,7 +6545,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 3
-    notes: phase 1; closes dangling ci-check stub
+    notes: phase 1; closes dangling ci-check stub; sentinel draft for 314
   - id: task-311
     name: E2E /acp-ci real execution + fail-closed
     priority: 5
@@ -6557,7 +6555,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 5
-    notes: phase 1 GATE; dry-run alone insufficient
+    notes: phase 1 GATE; executed_steps validator extension (F3-03)
   - id: task-312
     name: /acp-pr with CI gate delegation
     priority: 5
@@ -6587,7 +6585,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 5
-    notes: phase 2; ADR-25 FIFOZ regression answer
+    notes: phase 2; depends 307+310; P-UG-1 HARD fail
   - id: task-315
     name: E2E upgrade-guard + fork upgrade docs
     priority: 5
@@ -6607,7 +6605,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 6
-    notes: phase 3; no blind overwrite
+    notes: phase 3; no blind overwrite; required before 319/321
   - id: task-317
     name: feedback-008 rule-verification discipline
     priority: 5
@@ -6617,7 +6615,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 3
-    notes: phase 3
+    notes: phase 3; required before 321
   - id: task-318
     name: feedback-002 residual matrix closeout
     priority: 5
@@ -6637,7 +6635,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 4
-    notes: phase 4; crosscut full set prep
+    notes: phase 4; depends 311,313,315,316; exact package.yaml file names
   - id: task-320
     name: Consumer upgrade dry-run + FIFOZ notification
     priority: 5
@@ -6657,8 +6655,16 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 4
-    notes: phase 4; stamp only with evidence; keep current_milestone M81 unless directed
+    notes: phase 4; depends 316-320; stamp 02-09+11 with evidence; keep current_milestone M81
 recent_work:
+- date: 2026-08-14
+  description: "/acp-audit --pre-impl M86 (audit-115) + /acp-plan amendments — READY"
+  items:
+  - "✅ audit-115: 10 findings; BLOCKED then amended to READY"
+  - "✅ F3-01 path → agent/scripts/acp.ci-steps.sh; F3-05/06 DAG edges; F3-07 fail-open removed"
+  - "✅ P-UG-1 HARD upgrade-guard; P-CI-1 ci.yml runtime-only; executed_steps validator required"
+  - "✅ Carryovers F-114-07/08/11 added; task-307 complete; M86 in_progress 1/17"
+  - "Next: /acp-proceed task-305 (measure before coding)"
 - date: 2026-08-14
   description: "/acp-plan M86 — FIFOZ field-feedback port from audit-114 (no shortcuts)"
   items:
@@ -9580,16 +9586,13 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- 'M86 PLANNED (17 tasks, ~69h, v6.31.0): FIFOZ field-feedback port from audit-114.
-  Start at task-305 (CI job graph + wall-clock baseline) → 306 → 307 pre-impl
-  audit GATE. BINDINGS: ADR-24/25/26; no Expo body paste; no re-port of identical
-  cmds; /acp-pr must delegate to /acp-ci; dry-run ≠ verification.'
-- 'M81 IN PROGRESS (current_milestone): task-269 ✅. BLOCKED 270-274 on
-  tests/fixtures/coderabbit-findings-sample.json. M86 is parallel — do not invent
-  speculative CodeRabbit fixture.'
-- 'Unblocked side work: F2-09 (low) — quote-aware `#` strip in yaml-parser (own task).'
+- 'M86 IN PROGRESS (1/17): audit-115 READY. Next /acp-proceed task-305 (CI
+  wall-clock baseline) then 306, then coding 308+. Do NOT skip to 308.
+  Amended DAG: 314←310; 319←316; 321←316+317; P-UG-1 HARD upgrade-guard.'
+- 'M81 (current_milestone): still fixture-gated. Parallel to M86.'
+- 'Unblocked side work: F2-09 (low) quote-aware YAML # strip.'
 - 'Overdue weeklies: /acp-review and /acp-integrity (next_due 2026-07-31).'
-- 'Shipped: M85 → v6.30.1 on mainline (PR #9). M82–M84 complete.'
+- 'Shipped: M85 → v6.30.1 on mainline. Target M86 → v6.31.0.'
 - 'GATED (ADR-19): Aikido + M76/M77 stay plan-only'
 current_blockers: []
 notes:

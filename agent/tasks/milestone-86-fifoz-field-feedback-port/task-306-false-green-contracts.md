@@ -15,6 +15,7 @@ audit_findings: ['F-114-05', 'F-114-06', 'F-114-07']
 files_affected:
   - agent/core/constraints.yml
   - agent/patterns/local.false-green-contracts.md
+  - agent/skills/scripts.md
 ---
 
 <!-- @acp.meta.task
@@ -24,7 +25,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: FG-1, FG-2, FG-3, FG-4, FG-5, FG-6, FG-7
 
-status: draft
+status: planned
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -44,8 +45,9 @@ feedback-009 found `set +e` does not suppress ERR traps; empty `--only` plans PA
    - `assert_output_contract_not_exit_code_alone` (when contract is output)
    - `probe_dependencies_in_execution_context` (bash -c, not agent shell functions)
 2. Create `agent/patterns/local.false-green-contracts.md` documenting FG-1…FG-7 with bad/good examples from feedback-009.
-3. Cross-link from `agent/skills/scripts.md` if present (one paragraph) OR from pattern only — do not bloat AGENTS.md.
+3. **REQUIRED**: add one paragraph to `agent/skills/scripts.md` pointing at the new pattern and the `set +e`/ERR-trap rule (file exists — do not skip).
 4. Do not implement `/acp-ci` here — contracts only.
+5. Do not use optional phrasing — every FG rule must appear in constraints.yml by name.
 
 ## Verification
 
