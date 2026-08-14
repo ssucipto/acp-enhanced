@@ -2,13 +2,13 @@
 id: task-315
 milestone: M86
 title: "E2E upgrade-guard + fork upgrade documentation"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 2
 depends_on: [task-314]
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -46,9 +46,9 @@ FIFOZ fear is regression on upgrade. Docs must say: run guard → review collisi
 
 ## Verification
 
-- [ ] e2e passes
-- [ ] Checklist includes prefer-upstream-when-superseded
-- [ ] Checklist includes /acp-ci after upgrade
+- [x] e2e passes
+- [x] Checklist includes prefer-upstream-when-superseded
+- [x] Checklist includes /acp-ci after upgrade
 
 ## User-Observable Acceptance
 
