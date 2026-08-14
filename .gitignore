@@ -31,6 +31,8 @@ reports/
 # Python (agent/scripts/acp.pref-resolve.py, M85 task-301)
 __pycache__/
 *.pyc
+# Local measurement venv (M86 task-305) — not packaged
+.venv-m86/
 
 # Node / npm
 node_modules/
