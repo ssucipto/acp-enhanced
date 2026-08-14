@@ -6599,13 +6599,13 @@ tasks:
   - id: task-316
     name: Diff-merge review-scan FIFOZ ↔ M83
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-316-review-scan-diff-merge.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: 2026-08-14
+    completed_date: 2026-08-14
+    actual_hours: 4
     estimated_hours: 6
-    notes: phase 3; no blind overwrite; required before 319/321
+    notes: "phase 3; 8 take-FIFOZ + 1 hybrid; E2E 66/66; measure 100%"
   - id: task-317
     name: feedback-008 rule-verification discipline
     priority: 5

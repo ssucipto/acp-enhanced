@@ -59,10 +59,25 @@ review_rg_file() {
 review_rg_dir() {
   local pattern="$1"
   local dir="$2"
+  # Both branches MUST exclude the same trees (feedback-008 / audit-309 F-03).
+  # rg honours .gitignore by default while `grep -R` does not, so without
+  # explicit excludes the two branches disagree — and rg is frequently absent
+  # from a non-interactive PATH, meaning local and CI silently ran different
+  # rules (EH-09 false positives from scripts/node_modules; false negatives
+  # when a handler only exists under an ignored tree).
   if command -v rg >/dev/null 2>&1; then
-    rg -q "$pattern" "$dir"
+    rg -q \
+      --hidden --no-ignore \
+      --glob '!**/node_modules/**' --glob '!**/.git/**' \
+      --glob '!**/.venv/**' --glob '!**/venv/**' \
+      --glob '!**/site-packages/**' --glob '!**/Pods/**' \
+      "$pattern" "$dir"
   else
-    grep -RqE "$pattern" "$dir" 2>/dev/null
+    grep -RqE \
+      --exclude-dir=node_modules --exclude-dir=.git \
+      --exclude-dir=.venv --exclude-dir=venv \
+      --exclude-dir=site-packages --exclude-dir=Pods \
+      "$pattern" "$dir" 2>/dev/null
   fi
 }
 
@@ -199,8 +214,27 @@ scan_ts_js() {
   done < <(bash "${SCRIPT_DIR}/acp.entropy-scan.sh" --review-sc01 --threshold 4.2 "$file" 2>/dev/null || true)
 }
 
+# Cached because this spawns node; called once per scanned markdown/YAML file.
+NODE_YAML_MODULES_STATE=""
 node_scan_modules_available() {
-  command -v node >/dev/null 2>&1 && [[ -d "${PROJECT_ROOT}/scripts/node_modules" ]]
+  if [[ -n "$NODE_YAML_MODULES_STATE" ]]; then
+    [[ "$NODE_YAML_MODULES_STATE" == "yes" ]]
+    return
+  fi
+  NODE_YAML_MODULES_STATE="no"
+  command -v node >/dev/null 2>&1 || return 1
+  [[ -d "${PROJECT_ROOT}/scripts/node_modules" ]] || return 1
+  # A present node_modules/ does NOT mean the required packages resolve
+  # (feedback-008 / audit-310). Directory existence is a proxy; resolve the
+  # packages for real before trusting YM-01/YM-02 (FG-3 / rule-verification
+  # discipline). Probe runs in scripts/ so PATH/resolution matches execution.
+  if (cd "${PROJECT_ROOT}/scripts" && node --input-type=module -e \
+        'Promise.all([import("gray-matter"),import("js-yaml")]).then(()=>process.exit(0)).catch(()=>process.exit(1))') \
+        >/dev/null 2>&1; then
+    NODE_YAML_MODULES_STATE="yes"
+    return 0
+  fi
+  return 1
 }
 
 # YM-01/YM-02 need js-yaml + gray-matter from scripts/node_modules. When those
@@ -210,7 +244,7 @@ node_scan_modules_available() {
 YAML_RULES_SKIP_ANNOUNCED=false
 announce_yaml_rules_skipped() {
   if [[ "$YAML_RULES_SKIP_ANNOUNCED" != "true" ]]; then
-    echo "[ACP] YM-01/YM-02 skipped: scripts/node_modules missing (run: cd scripts && npm install --ignore-scripts). Recall is understated." >&2
+    echo "[ACP] YM-01/YM-02 skipped: js-yaml and/or gray-matter not resolvable from scripts/node_modules (run: cd scripts && npm install --ignore-scripts). Recall is understated — these rules did NOT run." >&2
     YAML_RULES_SKIP_ANNOUNCED=true
   fi
 }
@@ -226,6 +260,10 @@ scan_yaml_with_node() {
 
   if ! node_scan_modules_available; then
     announce_yaml_rules_skipped
+    if [[ "$IG_CI_MODE" == "true" ]]; then
+      echo "Error: YM-01/YM-02 require scripts/node_modules (gray-matter, js-yaml) in CI mode." >&2
+      exit 1
+    fi
     return 0
   fi
 
@@ -273,6 +311,11 @@ scan_yaml_file() {
 
 scan_shell_portability() {
   local file="$1"
+  # portability-check.sh (if present) holds sed -i detector regexes, not usage
+  # (FIFOZ task-885 / M71). Skip to avoid SH-02 false positives on the detector.
+  if [[ "$(basename "$file")" == "portability-check.sh" ]]; then
+    return 0
+  fi
   local has_guard=false
   local line_num=0
   local line=""
@@ -305,9 +348,18 @@ scan_shell_exit_trap() {
     return 0
   fi
 
+  # Match an actual `trap ... EXIT` COMMAND, not any line mentioning both words.
+  # The old substring test matched comments (feedback-008 / audit-310): comments
+  # explaining why a sourced library deliberately does NOT set an EXIT trap were
+  # reported as CRITICAL "sets EXIT trap".
   while IFS= read -r line; do
     line_num=$((line_num + 1))
-    if [[ "$line" == *"trap"* && "$line" == *" EXIT"* ]]; then
+    # Strip leading whitespace, then skip comment lines outright.
+    local stripped="${line#"${line%%[![:space:]]*}"}"
+    [[ "$stripped" == "#"* ]] && continue
+    # Require `trap` as a command at the start of the statement, and EXIT as a
+    # signal argument — `trap 'cleanup' EXIT`, `trap cleanup EXIT INT`, etc.
+    if [[ "$stripped" =~ (^|[\;\&\|][[:space:]]*)trap[[:space:]]+[^\#]*[[:space:]]EXIT([[:space:]]|$|\;) ]]; then
       trap_line="$line_num"
       break
     fi
@@ -360,7 +412,10 @@ try:
 except Exception:
     raise SystemExit(0)
 opts = data.get("compilerOptions") or {}
-if not opts.get("strictNullChecks"):
+strict_nc = opts.get("strictNullChecks")
+strict = opts.get("strict")
+# strict: true implies strictNullChecks (TypeScript handbook); feedback-008
+if strict_nc is False or (strict_nc is not True and strict is not True):
     print("1\tTS-08\tstrictNullChecks is disabled or missing\tHIGH")
 missing = []
 for key in ("noUncheckedIndexedAccess", "exactOptionalPropertyTypes"):
@@ -563,6 +618,12 @@ should_skip_path() {
     node_modules/*|*/node_modules/*|.git/*|*/.git/*)
       return 0
       ;;
+    # Vendored third-party trees (feedback-008 / audit-309 F-05). Without these
+    # a scoped scan can descend into .venv / site-packages and report noise that
+    # drifts with every pip upgrade and cannot be fixed in this repo.
+    .venv/*|*/.venv/*|venv/*|*/venv/*|*/site-packages/*|Pods/*|*/Pods/*)
+      return 0
+      ;;
   esac
   if [[ "$INCLUDE_TESTS" != "true" ]]; then
     case "$path" in
@@ -717,7 +778,8 @@ scan_path() {
     while IFS= read -r f; do
       scan_path "$f"
     done < <(find "$path" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.mjs' -o -name '*.cjs' -o -name '*.sh' -o -name '*.md' -o -name '*.yaml' -o -name '*.yml' -o -name 'tsconfig*.json' -o -name 'package.json' \) \
-      ! -path '*/node_modules/*' ! -path '*/.git/*' 2>/dev/null || true)
+      ! -path '*/node_modules/*' ! -path '*/.git/*' \
+      ! -path '*/.venv/*' ! -path '*/venv/*' ! -path '*/site-packages/*' ! -path '*/Pods/*' 2>/dev/null || true)
   fi
 }
 
