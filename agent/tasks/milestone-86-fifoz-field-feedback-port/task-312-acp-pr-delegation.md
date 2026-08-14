@@ -2,13 +2,13 @@
 id: task-312
 milestone: M86
 title: "/acp-pr command with CI gate delegation"
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 5
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 1b
 depends_on: [task-311]
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -25,7 +25,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: D2
 depends_on: task-311
-status: planned
+status: completed
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -52,9 +52,9 @@ Inbox pr.md v1.2.0 is the shape. Remove FIFOZ CodeRabbit/m50 specifics or make t
 
 ## Verification
 
-- [ ] `rg -n "tsc|jest|eslint" agent/scripts/acp.pr.sh` shows no gate implementations (or only string mentions in help)
-- [ ] Script calls `acp.ci.sh`
-- [ ] --dry-run prints plan without network
+- [x] `rg -n "tsc|jest|eslint" agent/scripts/acp.pr.sh` shows no gate implementations (or only string mentions in help)
+- [x] Script calls `acp.ci.sh`
+- [x] --dry-run prints plan without network
 
 ## User-Observable Acceptance
 
@@ -68,3 +68,4 @@ Inbox pr.md v1.2.0 is the shape. Remove FIFOZ CodeRabbit/m50 specifics or make t
 
 ### Notes
 Source of truth: audit-114. Inbox reference only: `agent/reports/fifoz-port-inbox-2026-08-14/`. No shortcuts.
+Landed from `agent/reports/m86-drafts/acp.pr.*.draft`. CodeRabbit SKIP when `.coderabbit.yaml` / configurables absent (script may still exist as detection library).
