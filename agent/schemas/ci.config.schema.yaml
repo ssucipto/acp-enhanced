@@ -1,0 +1,98 @@
+# ci.config.schema.yaml — schema for agent/configurables/ci.yml (M86)
+#
+# Destination: agent/schemas/ci.config.schema.yaml
+# Validates the RUNTIME CI step matrix (P-CI-1). This is NOT a preference schema.
+#
+# Future optional preference mirror (integrations.ci.tiers.*) is OUT OF SCOPE for M86.
+# Do not require preference keys here.
+
+schema_version: "1.0.0"
+description: >
+  Schema for agent/configurables/ci.yml — portable CI step registry consumed by
+  acp.ci.sh. Orchestrator must not hard-code product stacks (ADR-24).
+
+required:
+  - tiers
+  - steps
+
+properties:
+  workflow:
+    type: string
+    description: "Relative path to the primary GitHub Actions workflow this matrix predicts"
+    required: false
+
+  node_ci_version:
+    type: string
+    description: "Node major/minor CI pins (warn-only local drift)"
+    required: false
+
+  tiers:
+    type: object
+    description: "Named tier → ordered list of step ids"
+    required: true
+    properties:
+      static:
+        type: array
+        item_type: string
+        description: "Cheapest PR-blocking static gates"
+      fast:
+        type: array
+        item_type: string
+        description: "Default local gate set before /acp-pr"
+      full:
+        type: array
+        item_type: string
+        description: "Closest local parity to PR-blocking + soft supply-chain"
+
+  steps:
+    type: object
+    description: "Map of step_id → step definition. Every tier list entry MUST exist here."
+    required: true
+    additionalProperties:
+      type: object
+      required:
+        - description
+        - command
+        - ci_job
+        - cost_rank
+        - ci_rank
+      properties:
+        description:
+          type: string
+        command:
+          type: string
+          description: >
+            Logical body id resolved by agent/scripts/acp.ci-steps.sh (P-PATH-1).
+            Must not point at top-level scripts/acp-ci-steps.sh.
+        ci_job:
+          type: string
+          description: "GitHub Actions job name this step contributes to (validate|shellcheck|e2e-smoke|supply-chain|e2e|…)"
+        cost_rank:
+          type: integer
+          description: "Execution order key (lower first). Reconcile with task-305 medians."
+        ci_rank:
+          type: integer
+          description: "Summary print order (CI job narrative)."
+        tools:
+          type: array
+          item_type: string
+          required: false
+          description: "Tools that must exist (bash -c 'command -v …') unless allow_skip"
+        output_contains:
+          type: array
+          item_type: string
+          required: false
+          description: "Substrings that must appear in captured stdout/stderr (FG-3/FG-5)"
+        allow_skip:
+          type: boolean
+          required: false
+          description: "If true, missing tools → SKIP (tri-state), not FAIL. Soft CI jobs (continue-on-error)."
+        hard_fail_if_missing:
+          type: boolean
+          required: false
+          description: "If true (default when allow_skip false), missing tool fails preflight."
+
+# Cross-field rules (enforced by acp.ci.sh / validate, not only schema):
+# 1. Every id in tiers.* MUST be a key under steps.
+# 2. steps.*.command MUST have a matching runner in acp.ci-steps.sh.
+# 3. No Expo/Firebase/payslip/m50 product keys in this file for ACP Enhanced.
