@@ -1,0 +1,62 @@
+{
+  "format": "coderabbit-cli-agent-findings-v1",
+  "description": "Sanitized real CodeRabbit findings sample for ACP Enhanced M81 gate (ADR-22). Primary rows from AE local `coderabbit review --agent` NDJSON (agent/reports/coderabbit-local-2026-07-24). Secondary rows from consumer-project consumer inventory (agent/reports/coderabbit/m56-partial-findings.json) normalized to the same agent finding shape. No secrets/PII. Instructions truncated.",
+  "severity_note": "CodeRabbit CLI uses critical|major|minor|trivial. Importers MUST map to ACP carryover severities critical|high|medium|low (major\u2192high, minor\u2192medium, trivial\u2192low).",
+  "findings": [
+    {
+      "type": "finding",
+      "severity": "major",
+      "fileName": "agent/scripts/acp.project-update.sh",
+      "codegenInstructions": "Verify each finding against current code. Fix only still-valid issues, skip the rest with a brief reason, keep changes minimal, and validate. In @agent/scripts/acp.project-update.sh around lines 206 - 208, Move the curr\u2026",
+      "suggestions": [
+        "    local current_tags\n    for tag in \"${ADD_TAGS[@]}\"; do\n      current_tags=$(yaml_query \".projects.${PROJECT_NAME}.tags\" 2>/dev/null || echo \"\")"
+      ],
+      "_provenance": "ae-local-agent:chunk-agent-scripts.attempt2.raw.txt"
+    },
+    {
+      "type": "finding",
+      "severity": "minor",
+      "fileName": "agent/scripts/acp.post-milestone-sweep.sh",
+      "codegenInstructions": "Verify each finding against current code. Fix only still-valid issues, skip the rest with a brief reason, keep changes minimal, and validate. In @agent/scripts/acp.post-milestone-sweep.sh around lines 145 - 148, Update \u2026",
+      "suggestions": [],
+      "_provenance": "ae-local-agent:chunk-agent-scripts.attempt2.raw.txt"
+    },
+    {
+      "type": "finding",
+      "severity": "major",
+      "fileName": "scripts/acp-validate.ts",
+      "codegenInstructions": "Verify each finding against current code. Fix only still-valid issues, skip the rest with a brief reason, keep changes minimal, and validate. In @scripts/acp-validate.ts at line 1070, Update the SCHEMAS_DIR initializati\u2026",
+      "suggestions": [
+        "const schemasDirOverride = process.env[\"ACP_SCHEMAS_DIR\"];\nconst SCHEMAS_DIR =\n  schemasDirOverride === undefined\n    ? repoPath(\"agent\", \"schemas\")\n    : path.isAbsolute(schemasDirOverride)\n      ? schemasDirOverride\n      : repoPath(schemasDirOverride);"
+      ],
+      "_provenance": "ae-local-agent:chunk-scripts.raw.txt"
+    },
+    {
+      "type": "finding",
+      "severity": "critical",
+      "fileName": "frontend/utils/stringFieldValidation.ts",
+      "line": 10,
+      "codegenInstructions": "In @frontend/utils/stringFieldValidation.ts at line 10, Remove the duplicate maxLengthForInputKind export \u2014 keep only one definition.",
+      "suggestions": [],
+      "_provenance": "consumer-project-m56-partial-findings-inventory"
+    },
+    {
+      "type": "finding",
+      "severity": "major",
+      "fileName": "frontend/hooks/useDashboardEngagement.ts",
+      "line": 93,
+      "codegenInstructions": "In @frontend/hooks/useDashboardEngagement.ts at line 93, Clear or exclude the core-ready celebration after dismissal.",
+      "suggestions": [],
+      "_provenance": "consumer-project-m56-partial-findings-inventory"
+    },
+    {
+      "type": "finding",
+      "severity": "minor",
+      "fileName": "frontend/hooks/useTabRoute.ts",
+      "line": 7,
+      "codegenInstructions": "In @frontend/hooks/useTabRoute.ts at line 7, Restrict this to the actual tab-root segment.",
+      "suggestions": [],
+      "_provenance": "consumer-project-m56-partial-findings-inventory"
+    }
+  ]
+}
