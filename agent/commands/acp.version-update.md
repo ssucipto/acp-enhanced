@@ -175,6 +175,7 @@ Provide recommendations after update.
 - [ ] Tier A data files untouched (`progress.yaml`, `memory/*`, third-party commands)
 - [ ] Manifest `acp-core` block merged (other packages retained)
 - [ ] No errors encountered
+- [ ] When `agent/upstream-delta.yml` exists, upgrade-guard ran and **HARD-failed** on missing sentinel (P-UG-1; never soft-warn-only). Complements overwrite-safety (audit-080); does not claim it is fully solved.
 
 ---
 

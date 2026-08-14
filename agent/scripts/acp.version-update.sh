@@ -299,8 +299,33 @@ fi
 
 if [ "$ACP_DIFF_ONLY" = true ]; then
     echo "${GREEN}Dry-run complete — no files modified.${NC}"
+    if [ -f "agent/upstream-delta.yml" ]; then
+      echo "${YELLOW}Note:${NC} upstream-delta.yml present — upgrade-guard skipped in --diff mode (FG-6)"
+    fi
     exit 0
 fi
+
+# ── M86 P-UG-1: upgrade-guard HARD fail (before success banner) ──────────
+_UG="agent/scripts/acp.upgrade-guard.sh"
+_DELTA="agent/upstream-delta.yml"
+if [ -f "${_DELTA}" ]; then
+  echo "Running upgrade-guard (P-UG-1)…"
+  if [ ! -f "${_UG}" ]; then
+    echo "${RED}ERROR:${NC} ${_DELTA} exists but ${_UG} is missing" >&2
+    exit 1
+  fi
+  # FG-1: if-context — never set +e under trap ERR
+  if bash "${_UG}"; then
+    :
+  else
+    _ug_rc=$?
+    echo "${RED}ERROR:${NC} upgrade-guard HARD fail (exit ${_ug_rc})." >&2
+    echo "  Restore the missing sentinel, or delete the entry after preferring upstream." >&2
+    echo "  Remediation: bash agent/scripts/acp.upgrade-guard.sh --list" >&2
+    exit "${_ug_rc}"
+  fi
+fi
+# ── end P-UG-1 ───────────────────────────────────────────────────────────
 
 echo "${GREEN}Update complete!${NC}"
 echo ""

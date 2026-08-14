@@ -2,13 +2,13 @@
 id: task-314
 milestone: M86
 title: "upstream-delta register + upgrade-guard + version-update hook"
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 5
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 2
 depends_on: task-307, task-310
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -58,12 +58,12 @@ ADR-25. Inbox upstream-delta.yml and upgrade-guard.sh are portable. AE ships a *
 
 ## Verification
 
-- [ ] Removing a sentinel makes guard exit non-zero
-- [ ] Restoring sentinel makes guard exit 0
-- [ ] version-update invokes guard and HARD-fails on miss when delta exists
-- [ ] version-update doc states HARD-fail policy
-- [ ] Collisions include every file from task-310 sentinel draft
-- [ ] No FIFOZ product paths in delta file
+- [x] Removing a sentinel makes guard exit non-zero
+- [x] Restoring sentinel makes guard exit 0
+- [x] version-update invokes guard and HARD-fails on miss when delta exists
+- [x] version-update doc states HARD-fail policy
+- [x] Collisions include every file from task-310 sentinel draft
+- [x] No FIFOZ product paths in delta file
 
 ## User-Observable Acceptance
 
