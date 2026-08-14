@@ -2,13 +2,13 @@
 id: task-318
 milestone: M86
 title: "feedback-002 residual matrix closeout"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 4
 depends_on: [task-307]
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -24,7 +24,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: D4
 depends_on: task-307
-status: planned
+status: completed
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -45,9 +45,9 @@ audit-114 status for feedback-002 was partial across M44–M85. Closure requires
 
 ## Verification
 
-- [ ] Matrix covers every numbered recommendation in feedback-002
-- [ ] Every "done" has evidence
-- [ ] Open items have deferred target
+- [x] Matrix covers every numbered recommendation in feedback-002
+- [x] Every "done" has evidence
+- [x] Open items have deferred target
 
 ## User-Observable Acceptance
 
