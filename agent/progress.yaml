@@ -898,19 +898,19 @@ milestones:
     name: consumer-project Field-Feedback Port (v6.31.0)
     priority: 5
     status: in_progress
-    progress: 6
+    progress: 35
     started: 2026-08-14
     completed: null
     estimated_weeks: 2
-    tasks_completed: 1
+    tasks_completed: 6
     tasks_total: 17
     file: agent/milestones/milestone-86-consumer-project-field-feedback-port.md
     design: agent/design/local.consumer-project-field-feedback-port.md
     notes: >
-      IN PROGRESS 2026-08-14. audit-115 pre-impl READY after amendments (F3-01..08).
-      task-307 complete. BINDINGS: ADR-24/25/26 + P-UG-1 HARD upgrade-guard,
+      IN PROGRESS 2026-08-14. audit-115 READY. Completed 305-310.
+      BINDINGS: ADR-24/25/26 + P-UG-1 HARD upgrade-guard,
       P-CI-1 ci.yml runtime-only, P-PATH-1 agent/scripts/acp.ci-steps.sh,
-      319/321 depend on 316/317. Next: task-305 baseline (do not skip to 308).
+      319/321 depend on 316/317. Next: task-312 /acp-pr (311 E2E can follow).
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6539,13 +6539,13 @@ tasks:
   - id: task-310
     name: Wire routing.yml + discoverability
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-consumer-project-field-feedback-port/task-310-routing-discoverability-wire.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: 2026-08-14
+    completed_date: 2026-08-14
+    actual_hours: 2
     estimated_hours: 3
-    notes: phase 1; closes dangling ci-check stub; sentinel draft for 314
+    notes: phase 1; ci-check→acp-ci/acp-pr; display_available_commands; proceed/commit --static guidance; sentinels in m86-drafts/task-310-sentinels.md
   - id: task-311
     name: E2E /acp-ci real execution + fail-closed
     priority: 5
@@ -9586,9 +9586,9 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- 'M86 IN PROGRESS (1/17): audit-115 READY. Next /acp-proceed task-305 (CI
-  wall-clock baseline) then 306, then coding 308+. Do NOT skip to 308.
-  Amended DAG: 314←310; 319←316; 321←316+317; P-UG-1 HARD upgrade-guard.'
+- 'M86 IN PROGRESS (6/17): 305-310 done. Next task-312 /acp-pr (gates→acp.ci.sh);
+  311/313/315 E2E can follow. Amended DAG: 314←310; 319←316; 321←316+317;
+  P-UG-1 HARD upgrade-guard.'
 - 'M81 (current_milestone): still fixture-gated. Parallel to M86.'
 - 'Unblocked side work: F2-09 (low) quote-aware YAML # strip.'
 - 'Overdue weeklies: /acp-review and /acp-integrity (next_due 2026-07-31).'

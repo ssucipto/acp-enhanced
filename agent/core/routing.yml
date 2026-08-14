@@ -114,13 +114,30 @@ command_suggestions:
 
   git-push:
     - acp-commit: "Write session memory before pushing"
-    - ci-check: "Verify CI passes on develop before pushing"
+    - acp-ci: "Run /acp-ci --fast (or --static) before pushing develop"
     - acp-status: "Check overall project state after push"
 
   git-pr:
-    - ci-check: "Verify CI passes before creating PR to mainline"
+    - acp-ci: "Run /acp-ci --fast before opening PR; --full for local CI parity"
+    - acp-pr: "Create PR after local gates pass (/acp-pr delegates to /acp-ci)"
     - acp-stakeholder-report: "Generate summary for PR description"
     - acp-commit: "Ensure session is committed before PR"
+
+  acp-ci:
+    - acp-pr: "Open PR after /acp-ci is green"
+    - acp-validate: "Doc/schema validate when static gates fail"
+    - acp-commit: "Commit fixes before re-running /acp-ci"
+
+  acp-pr:
+    - acp-ci: "Local gates run via /acp-ci (no duplicate gate logic)"
+    - acp-status: "Confirm branch/PR readiness"
+    - acp-commit: "Session memory before PR"
+
+  # Alias discoverability: historical stub name → real commands (M86 / F-114-08)
+  ci-check:
+    - acp-ci: "Canonical local CI predictor (/acp-ci-check is an alias)"
+    - acp-pr: "Open PR after gates are green"
+    - acp-review: "Rule scan before pushing"
 
   acp-stakeholder-report:
     - acp-report: "Full archive when stakeholders need detail"
