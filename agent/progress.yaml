@@ -898,19 +898,20 @@ milestones:
     name: FIFOZ Field-Feedback Port (v6.31.0)
     priority: 5
     status: in_progress
-    progress: 65
+    progress: 82
     started: 2026-08-14
     completed: null
     estimated_weeks: 2
-    tasks_completed: 11
+    tasks_completed: 14
     tasks_total: 17
     file: agent/milestones/milestone-86-fifoz-field-feedback-port.md
     design: agent/design/local.fifoz-field-feedback-port.md
     notes: >
-      IN PROGRESS 2026-08-14. audit-115 READY. Completed 305-315.
+      IN PROGRESS 2026-08-14. audit-115 READY. Completed 305-318.
       BINDINGS: ADR-24/25/26 + P-UG-1 HARD upgrade-guard,
       P-CI-1 ci.yml runtime-only, P-PATH-1 agent/scripts/acp.ci-steps.sh,
-      319/321 depend on 316/317. Next: task-316 review-scan diff-merge.
+      review-scan merged (316) + discipline pattern (317) + feedback-002 matrix (318).
+      Next: task-319 package/wrappers/manifest.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6619,13 +6620,13 @@ tasks:
   - id: task-318
     name: feedback-002 residual matrix closeout
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-318-feedback-002-residual-matrix.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: 2026-08-14
+    completed_date: 2026-08-14
+    actual_hours: 2
     estimated_hours: 3
-    notes: phase 4; evidence required per item
+    notes: "phase 4; P0 closed; 8 deferred D-002-* + visualizer OOS"
   - id: task-319
     name: Package/wrappers/coverage/integrity-manifest
     priority: 5
@@ -6657,6 +6658,13 @@ tasks:
     estimated_hours: 4
     notes: phase 4; depends 316-320; stamp 02-09+11 with evidence; keep current_milestone M81
 recent_work:
+- date: 2026-08-14
+  description: "M86 tasks 316–318 — review-scan merge, discipline pattern, feedback-002 matrix"
+  items:
+  - "✅ task-316: FIFOZ↔M83 review-scan hunk merge; E2E 66/66; measure 100%; F-114-09 fixed"
+  - "✅ task-317: local.rule-verification-discipline.md + lesson + acp.review.md checklist"
+  - "✅ task-318: m86-feedback-002-matrix.md — P0 closed; deferred D-002-01…08"
+  - "Next: task-319 package/wrappers/coverage/integrity-manifest"
 - date: 2026-08-14
   description: "/acp-audit --pre-impl M86 (audit-115) + /acp-plan amendments — READY"
   items:
@@ -9586,8 +9594,8 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- 'M86 IN PROGRESS (11/17): 305-315 done. Next task-316 review-scan diff-merge.
-  Amended DAG: 319←316; 321←316+317; P-UG-1 HARD upgrade-guard shipped.'
+- 'M86 IN PROGRESS (14/17): 305-318 done. Next task-319 package/wrappers/manifest;
+  then 320 consumer note; 321 v6.31.0 closure (no bump in this session).'
 - 'M81 (current_milestone): still fixture-gated. Parallel to M86.'
 - 'Unblocked side work: F2-09 (low) quote-aware YAML # strip.'
 - 'Overdue weeklies: /acp-review and /acp-integrity (next_due 2026-07-31).'

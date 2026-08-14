@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added (M86 — in progress, not shipped)
+- **feedback-002 residual matrix (task-318)** — evidence-backed closeout in `agent/reports/m86-feedback-002-matrix.md` (P0 done; deferred D-002-01…08).
 - **Rule-verification discipline (task-317)** — `agent/patterns/local.rule-verification-discipline.md` (proxy≠invariant); lesson + Phase 1 rule-authoring checklist in `acp.review.md`.
 - **review-scan FIFOZ↔M83 merge (task-316)** — feedback-008 precision (rg/grep parity, real YM deps probe, SH-04 lexical trap, TS-08 `strict` imply, vendored skips); merge notes in `agent/reports/m86-review-scan-merge-notes.md`.
 - **Upgrade-guard E2E + fork docs (task-315)** — checklist + HARD-fail coverage.
