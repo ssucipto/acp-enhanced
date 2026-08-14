@@ -51,19 +51,24 @@ This command supports both CLI-style subcommands and natural language arguments.
 - If a description is given instead of path (e.g., "the testing pattern"), search the codebase for matching files
 - Default to `list` if no subcommand detected
 
-### init — Bootstrap Index (v6.9.1+)
+### init — Bootstrap Index (v6.9.1+ / D-002-06)
 
 **Purpose**: Auto-discover project patterns, commands, and designs and generate a
 `local.main.yaml` index file.
 
+**Hard bootstrap gate**: If `agent/index/local.main.yaml` is missing **or** has zero
+entries, `/acp-init` (Step 2.8 keys) and `/acp-index` (default list) MUST recommend
+`/acp-index init` before other index work — do not silently treat an empty index as OK.
+
 **Arguments**: `--dry-run` to preview without writing.
 
 **Actions**:
-1. Scan `agent/patterns/` for `local.*.md` files → index entries with `kind: pattern`
-2. Scan `agent/commands/` for `local.*.md` files → index entries with `kind: command`
-3. Scan `agent/design/` for `local.*.md` files → index entries with `kind: design`
-4. Write `agent/index/local.main.yaml` with discovered entries
+1. Scan `agent/patterns/` for `local.*.md` **and** `*.md` pattern docs → index entries with `kind: pattern`
+2. Scan `agent/commands/` for `acp.*.md` / `local.*.md` → index entries with `kind: command` (cap to high-traffic commands if >40)
+3. Scan `agent/design/` for design docs → index entries with `kind: design`
+4. Write `agent/index/local.main.yaml` with discovered entries (atomic write)
 5. Output: `Index bootstrapped: N patterns, M commands, K designs`
+6. If still empty after scan, fail closed with: `Index init found nothing — check agent/{patterns,commands,design}/`
 
 ---
 

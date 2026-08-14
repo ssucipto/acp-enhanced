@@ -723,6 +723,72 @@ function validateTaskFile(taskFilePath: string): string[] {
   return errors;
 }
 
+/** D-002-08: every depends_on edge must resolve to an existing task/route id. */
+export function validateDependsOnEdges(root?: string): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const base = root ?? getRepoRoot();
+  const roots = [
+    path.join(base, "agent", "tasks"),
+    path.join(base, "agent", "routing", "tasks"),
+  ];
+
+  type Entry = { file: string; id: string; deps: string[] };
+  const entries: Entry[] = [];
+  const ids = new Set<string>();
+
+  const parseDeps = (raw: string): string[] => {
+    const cleaned = raw.split("#")[0].trim();
+    if (!cleaned || cleaned === "[]" || cleaned === "null" || cleaned === "~") return [];
+    if (cleaned.startsWith("[")) {
+      return (cleaned.match(/(?:task|route)-[\w.-]+/g) ?? []);
+    }
+    return cleaned
+      .split(",")
+      .map((s) => s.trim().replace(/^['"]|['"]$/g, ""))
+      .filter(Boolean);
+  };
+
+  for (const dir of roots) {
+    if (!existsSync(dir)) continue;
+    const walk = (d: string) => {
+      for (const ent of readdirSync(d, { withFileTypes: true })) {
+        const full = path.join(d, ent.name);
+        if (ent.isDirectory()) walk(full);
+        else if (ent.name.endsWith(".md")) {
+          const raw = readFileSync(full, "utf8");
+          if (!raw.startsWith("---")) continue;
+          const end = raw.indexOf("\n---", 3);
+          if (end < 0) continue;
+          const fm = raw.slice(3, end);
+          const idMatch = fm.match(/^id:\s*['"]?([^\s'"#]+)/m);
+          const id = (idMatch?.[1] ?? path.basename(ent.name, ".md")).trim();
+          ids.add(id);
+          ids.add(path.basename(ent.name, ".md"));
+          const depMatch = fm.match(/^depends_on:\s*(.*)$/m);
+          const deps = depMatch ? parseDeps(depMatch[1]) : [];
+          entries.push({ file: path.relative(base, full), id, deps });
+        }
+      }
+    };
+    walk(dir);
+  }
+
+  for (const e of entries) {
+    for (const dep of e.deps) {
+      if (!ids.has(dep)) {
+        errors.push({
+          file: e.file,
+          line: 1,
+          message: `depends_on target "${dep}" not found (from ${e.id})`,
+          severity: "warning",
+        });
+      }
+    }
+  }
+
+  return errors;
+}
+
 // ── Staleness checks (ROUTING-003) ───────────────────────────
 function checkStaleness(): boolean {
   const TAXONOMY_PATH_LOCAL = repoPath("agent", "routing", "taxonomy.yml");
@@ -2083,6 +2149,7 @@ function runConsistencyScan(): boolean {
     ["git tags", validateGitTagsExist],
     ["gitignore conflicts", validateGitignoreConflicts],
     ["gitattributes coverage", validateGitattributesCoverage],
+    ["depends_on edges", validateDependsOnEdges],
   ];
 
   for (const [name, fn] of checks) {

@@ -9,7 +9,8 @@
 **Last Updated**: 2026-06-03  
 **Status**: Active  
 **Scripts**: None  
-**Requires**: agent-context-protocol-visualizer repository cloned locally
+**Requires**: agent-context-protocol-visualizer repository cloned locally  
+**Minimum visualizer version**: `0.3.0` (D-002-05 — Progress Visualizer; older clones may miss dual-store session/pattern views)
 
 ---
 
@@ -23,6 +24,9 @@
 
 Launches the TanStack Start development server for `agent-context-protocol-visualizer`
 and opens the browser dashboard pointed at the current project's `progress.yaml`.
+
+If the cloned visualizer reports a version older than **0.3.0**, warn and recommend
+updating before relying on session/pattern dual-store panels.
 
 ---
 

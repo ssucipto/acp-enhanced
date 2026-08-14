@@ -11,7 +11,7 @@ files_affected: [tests/acp.security.test.sh, tests/acp.accountability.test.sh]
 tokens_est: 3000
 created: 2026-06-03
 completed: 2026-06-03
-depends_on: [route-062]
+depends_on: []  # route-062 retired — cleared for D-002-08
 ---
 
 # Security + Accountability Tests

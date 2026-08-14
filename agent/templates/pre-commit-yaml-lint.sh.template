@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# Optional pre-commit hook template — YAML lint for ACP memory files (D-002-02)
+#
+# Install (from repo root):
+#   cp agent/templates/pre-commit-yaml-lint.sh.template .git/hooks/pre-commit-yaml-lint
+#   chmod +x .git/hooks/pre-commit-yaml-lint
+#   # Then call from .git/hooks/pre-commit, or symlink as pre-commit if unused.
+#
+# Checks staged/changed YAML used by agents: progress.yaml + memory registries.
+# Uses python3 + PyYAML when available; otherwise falls back to acp-validate --memory
+# when npx/tsx is available.
+
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$REPO_ROOT"
+
+TARGETS=(
+  agent/progress.yaml
+  agent/memory/sessions.md
+  agent/memory/patterns.md
+  agent/memory/lessons.md
+  agent/memory/audit-carryovers.md
+)
+
+changed=()
+for f in "${TARGETS[@]}"; do
+  if git diff --cached --name-only --diff-filter=ACM 2>/dev/null | grep -qx "$f"; then
+    changed+=("$f")
+  elif git diff --name-only --diff-filter=ACM 2>/dev/null | grep -qx "$f"; then
+    changed+=("$f")
+  fi
+done
+
+if [[ ${#changed[@]} -eq 0 ]]; then
+  exit 0
+fi
+
+fail=0
+for f in "${changed[@]}"; do
+  case "$f" in
+    *.yaml|*.yml)
+      if command -v python3 >/dev/null 2>&1; then
+        if ! python3 -c "import sys,yaml; yaml.safe_load(open(sys.argv[1]))" "$f" 2>/dev/null; then
+          echo "[pre-commit-yaml-lint] FAIL: $f is not valid YAML" >&2
+          fail=1
+        fi
+      fi
+      ;;
+  esac
+done
+
+if [[ $fail -ne 0 ]]; then
+  exit 1
+fi
+
+# Broader memory lint when validate tooling is present
+if [[ -f scripts/acp-validate.ts ]] && command -v npx >/dev/null 2>&1; then
+  npx --yes tsx scripts/acp-validate.ts --memory >/dev/null || {
+    echo "[pre-commit-yaml-lint] FAIL: acp-validate --memory" >&2
+    exit 1
+  }
+fi
+
+echo "[pre-commit-yaml-lint] OK (${#changed[@]} file(s))"
+exit 0
