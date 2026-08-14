@@ -32,7 +32,7 @@ The framework layer solves a specific problem: as your project grows, the AI age
 | `agent/routing/` | Task taxonomy, routing rules, cost ledger, task files |
 | `agent/memory/` | Session log, lessons learned, patterns, architectural decisions |
 | `agent/wiki/` | Reference docs loaded section-by-section (never all at once) |
-| `agent/commands/` | 71 self-documenting slash commands (`/acp-init`, `/acp-review`, `/acp-integrity`, `/acp-audit`, etc.) |
+| `agent/commands/` | 72 self-documenting slash commands (`/acp-init`, `/acp-ci`, `/acp-pr`, `/acp-review`, `/acp-integrity`, `/acp-audit`, etc.) |
 | `agent/scripts/` | 36 bash scripts + TypeScript tooling for dispatch and validation |
 
 > 🖥️ **Companion Tool**: [**ACP Enhanced Visualizer**](https://github.com/ssucipto/ACPEnhanced-Visual) (v1.5.0) — a full-featured local web dashboard that brings your `agent/progress.yaml` to life. Monitors milestones, tasks, sessions, ADRs, lessons, patterns, packages, and audit reports — all from a single interactive UI. **Multi-project tab support, GitHub remote read, and zero-config `npx acp-visualizer` CLI.** [See full feature list below →](#visualize-your-project)
@@ -851,6 +851,8 @@ This will:
 - **`/acp-status`** - Display project status
 - **`/acp-sync`** - Sync documentation with code
 - **`/acp-validate`** - Validate ACP structure
+- **`/acp-ci`** - Local CI parity (`--fast` default; `--full` for multi-minute CI equivalence)
+- **`/acp-pr`** - Feature PR prep (gates via `/acp-ci` only)
 - **`/acp-audit`** - Audit task completion status, bugs, and improvement opportunities
 - **`/acp-review`** - Standards-based code quality and security review (64 rules)
 - **`/acp-integrity`** - AI code integrity scan — Unicode, entropy, supply chain (55 rules v1.0)
