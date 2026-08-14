@@ -5,6 +5,24 @@
 - date: 2026-08-14
   executor: cursor-composer
   branch: develop
+  tasks: [task-316, task-317, task-318]
+  done:
+    - task-316-review-scan-fifoz-m83-hunk-merge
+    - task-317-rule-verification-discipline-pattern
+    - task-318-feedback-002-residual-matrix
+    - f-114-09-carryover-fixed
+  deferred:
+    - D-002-01..08-feedback-002-polish → post-M86
+    - task-319-package-wrappers-manifest → /acp-proceed
+    - weekly-review-integrity-overdue → admin
+  key_fact: >
+    feedback-008 precision merged into AE M83 review-scan without blind overwrite
+    (8 take-FIFOZ + 1 hybrid); proxy≠invariant captured as pattern; feedback-002
+    P0 closed with 8 explicit deferred IDs for FIFOZ response.
+
+- date: 2026-08-14
+  executor: cursor-composer
+  branch: develop
   tasks: [audit-115, acp-plan-M86-amend, task-307]
   done:
     - audit-115-m86-pre-impl-blocked-then-ready
