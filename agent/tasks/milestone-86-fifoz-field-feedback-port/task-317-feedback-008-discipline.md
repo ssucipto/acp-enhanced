@@ -2,13 +2,13 @@
 id: task-317
 milestone: M86
 title: "feedback-008 rule-verification discipline pattern"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 3
 depends_on: [task-316]
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -25,7 +25,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: FG-5
 depends_on: task-316
-status: planned
+status: completed
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -46,9 +46,9 @@ feedback-008 critical finding: guards verified directory existence / status-stri
 
 ## Verification
 
-- [ ] Pattern exists with ≥3 examples
-- [ ] Lesson logged
-- [ ] Checklist requires a true-positive fixture for new rules
+- [x] Pattern exists with ≥3 examples
+- [x] Lesson logged
+- [x] Checklist requires a true-positive fixture for new rules
 
 ## User-Observable Acceptance
 
