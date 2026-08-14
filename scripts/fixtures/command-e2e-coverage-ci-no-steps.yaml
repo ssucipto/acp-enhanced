@@ -1,0 +1,5 @@
+commands:
+  acp.ci:
+    tier: 2
+    suites:
+      - e2e/acp.ci.test.sh

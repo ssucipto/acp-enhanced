@@ -3128,10 +3128,10 @@ carryovers:
     finding: "ACP Enhanced has no /acp-ci — routing.yml ci-check is a dangling stub; consumer-project ships a working local CI parity command"
     description: "feedback-009 / port guide. Four verify commands exist but none predicts GitHub Actions. Port abstract orchestrator + preference schema; do not copy consumer-project Expo/Firebase step bodies."
     fix_target: "Ship abstract /acp-ci + configurables/ci.yml schema + E2E; wire routing.yml ci-check / git-push suggestions"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: "M86 planned"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: task-309/311; acp.ci.sh --doctor; e2e/acp.ci.test.sh
+    escalated_to: M86
   - audit_id: 114
     finding_id: F-114-03
     severity: high
@@ -3139,10 +3139,10 @@ carryovers:
     finding: "/acp-pr missing upstream; consumer-project v1.2.0 correctly delegates gates to /acp-ci"
     description: "feedback-001b. Must not reintroduce duplicated gate logic. Port after or with abstract /acp-ci."
     fix_target: "Ship /acp-pr + acp.pr.sh that calls acp.ci.sh --fast/--full; wrappers + E2E"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: "M86 planned"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: task-312/313; acp.pr.sh delegates to acp.ci.sh; e2e/acp.pr.test.sh
+    escalated_to: M86
   - audit_id: 114
     finding_id: F-114-04
     severity: high
@@ -3150,10 +3150,10 @@ carryovers:
     finding: "No upstream-delta.yml / upgrade-guard — forks silently lose single-line enhancements on /acp-version-update"
     description: "consumer-project regression concern. Register + sentinel assertion makes loss visible; prefer-upstream-when-superseded policy."
     fix_target: "Adopt upstream-delta.yml template + acp.upgrade-guard.sh; hook after version-update/package-update"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: "M86 planned"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: task-314/315; upstream-delta.yml + upgrade-guard HARD fail; e2e/acp.upgrade-guard.test.sh
+    escalated_to: M86
   - audit_id: 114
     finding_id: F-114-05
     severity: high
@@ -3161,10 +3161,10 @@ carryovers:
     finding: "set +e does not suppress ERR trap — not documented in bash_rules (missing in AE and consumer-project trees)"
     description: "feedback-009 §2.1. Copying CI snippets into trapped ACP scripts aborts before status capture."
     fix_target: "Add bash_rule set_plus_e_does_not_suppress_err_trap; document if-context status capture pattern"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: "M86 planned"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: task-306; constraints.yml set_plus_e_does_not_suppress_err_trap
+    escalated_to: M86
   - audit_id: 114
     finding_id: F-114-06
     severity: high
@@ -3172,10 +3172,10 @@ carryovers:
     finding: "No core contract for SKIP tri-state / fail-closed on zero executed units / assert-output-not-exit-code"
     description: "feedback-009 §2.2/2.5/2.6 and feedback-008 proxy-guard class. False greens worse than no check."
     fix_target: "Document reporting contracts; enforce in /acp-ci and other external-tool wrappers; optional executed_steps in command-e2e-coverage.yaml"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: "M86 planned"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: task-306/311; local.false-green-contracts.md + e2e fail-closed
+    escalated_to: M86
   - audit_id: 114
     finding_id: F-114-09
     severity: medium
@@ -3195,10 +3195,10 @@ carryovers:
     finding: "No core contract to assert output invariants (not exit-code proxies) — feedback-008/009 class"
     description: "audit-114 F-114-07 was in the report but missing from the carryover ledger until audit-115. Wrapped tools whose CI contract is 'output contains X' must assert X."
     fix_target: "FG contracts in task-306; enforce in /acp-ci and review-scan merge (316/317)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: "M86 planned"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: task-306/317; FG-5 output asserts + rule-verification-discipline pattern
+    escalated_to: M86
   - audit_id: 114
     finding_id: F-114-08
     severity: medium
@@ -3206,10 +3206,10 @@ carryovers:
     finding: "routing.yml git-push/git-pr still point at dangling ci-check stub with no command"
     description: "audit-114 F-114-08 missing from ledger until audit-115. Same class as feedback-001 git-pr stub."
     fix_target: "task-310 wire acp-ci / acp-pr suggestions"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: "M86 planned"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: task-310; routing.yml acp-ci/acp-pr; common.sh help
+    escalated_to: M86
   - audit_id: 115
     finding_id: F-114-11
     severity: medium
@@ -3217,10 +3217,10 @@ carryovers:
     finding: "Version-update overwrite remains a fork hazard; upgrade-guard complements but must HARD-fail"
     description: "audit-114 F-114-11 + audit-115 P-UG-1. Script now has --diff/--preserve flags (post-080) but no upgrade-guard hook."
     fix_target: "task-314 HARD-fail hook when upstream-delta.yml present"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: "M86 planned"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: task-314; version-update P-UG-1 HARD fail hook
+    escalated_to: M86
   - audit_id: 115
     finding_id: F3-01
     severity: high

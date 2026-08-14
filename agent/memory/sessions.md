@@ -2,6 +2,14 @@
 # Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
 # DO NOT edit manually — updated by /acp-commit
 
+
+- date: 2026-08-14
+  executor: cursor-composer
+  tasks: [task-305, task-306, task-308, task-309, task-310, task-311, task-312, task-313, task-314, task-315, task-316, task-317, task-318, task-319, task-320, task-321]
+  done: [m86-ci-baseline, fg-contracts, acp-ci, acp-pr, upgrade-guard, review-scan-merge, v6.31.0-ship]
+  deferred: [feedback-002-D-002-01-08 → post-M86, M81-coderabbit-fixture → M81, F2-09 → backlog]
+  key_fact: "Default /acp-ci is --fast (excludes multi-minute e2e); upgrade-guard HARD-fails version-update when upstream-delta.yml present."
+
 - date: 2026-08-14
   executor: cursor-composer
   branch: develop
