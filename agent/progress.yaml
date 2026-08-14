@@ -898,19 +898,19 @@ milestones:
     name: FIFOZ Field-Feedback Port (v6.31.0)
     priority: 5
     status: in_progress
-    progress: 35
+    progress: 47
     started: 2026-08-14
     completed: null
     estimated_weeks: 2
-    tasks_completed: 6
+    tasks_completed: 8
     tasks_total: 17
     file: agent/milestones/milestone-86-fifoz-field-feedback-port.md
     design: agent/design/local.fifoz-field-feedback-port.md
     notes: >
-      IN PROGRESS 2026-08-14. audit-115 READY. Completed 305-310.
+      IN PROGRESS 2026-08-14. audit-115 READY. Completed 305-312.
       BINDINGS: ADR-24/25/26 + P-UG-1 HARD upgrade-guard,
       P-CI-1 ci.yml runtime-only, P-PATH-1 agent/scripts/acp.ci-steps.sh,
-      319/321 depend on 316/317. Next: task-312 /acp-pr (311 E2E can follow).
+      319/321 depend on 316/317. Next: task-314 upgrade-guard (313 E2E/wrappers follow).
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6559,13 +6559,13 @@ tasks:
   - id: task-312
     name: /acp-pr with CI gate delegation
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-312-acp-pr-delegation.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: 2026-08-14
+    completed_date: 2026-08-14
+    actual_hours: 2
     estimated_hours: 5
-    notes: phase 1b; ADR-24 no duplicate gates
+    notes: phase 1b; ADR-24; gates only via acp.ci.sh; CodeRabbit SKIP unconfigured; dry-run prints delegating to
   - id: task-313
     name: E2E /acp-pr + wrappers all surfaces
     priority: 5
@@ -9586,8 +9586,8 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- 'M86 IN PROGRESS (6/17): 305-310 done. Next task-312 /acp-pr (gates→acp.ci.sh);
-  311/313/315 E2E can follow. Amended DAG: 314←310; 319←316; 321←316+317;
+- 'M86 IN PROGRESS (8/17): 305-312 done. Next task-314 upgrade-guard;
+  313 E2E/wrappers + 315 follow. Amended DAG: 314←310; 319←316; 321←316+317;
   P-UG-1 HARD upgrade-guard.'
 - 'M81 (current_milestone): still fixture-gated. Parallel to M86.'
 - 'Unblocked side work: F2-09 (low) quote-aware YAML # strip.'
