@@ -2,13 +2,13 @@
 id: task-308
 milestone: M86
 title: "CI configurables schema + step plugin interface"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 1
 depends_on: [task-307]
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -52,12 +52,12 @@ ADR-24: orchestrator must not know Expo. Schema must support tiers static/fast/f
 
 ## Verification
 
-- [ ] ci.yml has no Expo/Firebase/payslip/m50 keys
-- [ ] Every AE PR-blocking job from task-305 maps to ≥1 step id OR out-of-scope note in comments
-- [ ] Schema validates sample ci.yml
-- [ ] Tier lists reference only defined step ids
-- [ ] Header comment states ci.yml is runtime config, not acp.configurables preference registry
-- [ ] `acp.configurables.yaml` was **not** modified
+- [x] ci.yml has no Expo/Firebase/payslip/m50 keys
+- [x] Every AE PR-blocking job from task-305 maps to ≥1 step id OR out-of-scope note in comments
+- [x] Schema validates sample ci.yml
+- [x] Tier lists reference only defined step ids
+- [x] Header comment states ci.yml is runtime config, not acp.configurables preference registry
+- [x] `acp.configurables.yaml` was **not** modified
 
 ## User-Observable Acceptance
 
