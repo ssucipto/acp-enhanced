@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added (M86 — in progress, not shipped)
 - **Upgrade-guard E2E + fork docs (task-315)** — checklist + HARD-fail coverage.
-- **Upgrade-guard (task-314)** — `upstream-delta.yml` + HARD fail from version-update (P-UG-1).
+- **Upgrade-guard (task-314)** — `upstream-delta.yml` + template + `acp.upgrade-guard.sh`; version-update HARD fail on missing sentinel (P-UG-1 / ADR-25).
 - **Wrappers + E2E /acp-pr (task-313)** — cursor/claude/opencode/prompts + fail-closed suite.
 - **/acp-pr (task-312)** — feature PR prep; gates only via `acp.ci.sh` (ADR-24); CodeRabbit SKIP when unconfigured.
 - **E2E /acp-ci (task-311)** — fail-closed suite + `executed_steps` coverage validator (P-VAL-1).
