@@ -1,0 +1,148 @@
+# agent/configurables/ci.yml — ACP Enhanced CI step matrix (M86)
+#
+# OWNERSHIP (P-CI-1 / audit-115 F3-02):
+#   This file is a RUNTIME CI step matrix consumed by agent/scripts/acp.ci.sh.
+#   It is NOT a preference registry. Do NOT register keys here in
+#   agent/configurables/acp.configurables.yaml.
+#
+# FUTURE (out of scope for M86): optional preference mirror such as
+#   integrations.ci.tiers.* — schema comments only; do not implement now.
+#
+# SOURCE OF TRUTH for job names: .github/workflows/ci.yaml + e2e-tests.yaml
+# Tier / cost_rank reconciled with agent/reports/m86-ci-job-baseline.md (task-305).
+#
+# Do NOT add Expo / Firebase / payslip / m50 / consumer-project product keys.
+# Do NOT add dynamic content (dates, task IDs) to step ids or sentinels.
+
+workflow: .github/workflows/ci.yaml
+node_ci_version: "20"
+
+# ── Tiers ────────────────────────────────────────────────────────────────
+# static: cheapest syntax/unit gates (T0)
+# fast: default /acp-ci plan (T0+T1) — excludes shellcheck (~40s) and full e2e (~4.5m+)
+# full: CI-equivalent including T2 heavies — EXPECT multi-minute wall-clock
+# DEFERRED post-M86: optional e2e-lite filtered suite between integrity-* and e2e-smoke
+#   (see agent/reports/m86-ci-job-baseline.md → Deferred)
+tiers:
+  static:
+    - ci-validate
+    - npm-test
+    - validate-ts
+  fast:
+    - ci-validate
+    - npm-test
+    - validate-ts
+    - review-measure
+    - integrity-v2-e2e
+    - integrity-e2e
+  full:
+    - ci-validate
+    - npm-audit
+    - npm-test
+    - validate-ts
+    - review-measure
+    - integrity-v2-e2e
+    - integrity-e2e
+    - shellcheck
+    - e2e-smoke
+    - e2e-matrix
+
+# Out-of-scope jobs (documented, not step ids):
+#   benchmark.yaml / job benchmark — workflow_dispatch only; Anthropic API required.
+#   trufflehog GitHub Action step — Action-hosted; not a local /acp-ci body.
+
+# ── Steps ────────────────────────────────────────────────────────────────
+# cost_rank: lower runs earlier (time-to-first-failure). From task-305 medians.
+# command: logical body id resolved by agent/scripts/acp.ci-steps.sh (P-PATH-1)
+
+steps:
+  ci-validate:
+    description: "YAML syntax + command docs (scripts/ci-validate.sh)"
+    command: ci-validate
+    ci_job: validate
+    cost_rank: 10
+    ci_rank: 40
+    tools: [bash, python3]
+    output_contains: []
+
+  npm-audit:
+    description: "npm audit --audit-level=high (CI continue-on-error → allow_skip)"
+    command: npm-audit
+    ci_job: supply-chain
+    cost_rank: 20
+    ci_rank: 90
+    tools: [npm]
+    allow_skip: true
+    output_contains: []
+
+  integrity-v2-e2e:
+    description: "Integrity Phase 2 E2E (e2e/acp.integrity-v2.test.sh)"
+    command: integrity-v2-e2e
+    ci_job: e2e-smoke
+    cost_rank: 30
+    ci_rank: 70
+    tools: [bash]
+    output_contains: []
+
+  npm-test:
+    description: "TypeScript unit tests (vitest in scripts/)"
+    command: npm-test
+    ci_job: validate
+    cost_rank: 40
+    ci_rank: 30
+    tools: [node, npm]
+    output_contains: []
+
+  validate-ts:
+    description: "Run scripts/acp-validate.ts (command structure + parity)"
+    command: validate-ts
+    ci_job: validate
+    cost_rank: 50
+    ci_rank: 10
+    tools: [node, npm, npx]
+    output_contains: []
+
+  review-measure:
+    description: "Review corpus measurement + perf gate (M83/M85)"
+    command: review-measure
+    ci_job: validate
+    cost_rank: 60
+    ci_rank: 20
+    tools: [bash]
+    output_contains: []
+
+  integrity-e2e:
+    description: "Integrity gateway E2E (e2e/acp.integrity.test.sh)"
+    command: integrity-e2e
+    ci_job: e2e-smoke
+    cost_rank: 70
+    ci_rank: 60
+    tools: [bash]
+    output_contains: []
+
+  shellcheck:
+    description: "shellcheck --severity=error on agent/scripts scripts e2e tests"
+    command: shellcheck
+    ci_job: shellcheck
+    cost_rank: 80
+    ci_rank: 50
+    tools: [shellcheck]
+    output_contains: []
+
+  e2e-smoke:
+    description: "run-e2e-tests.sh --skip-network (CI e2e-smoke job body)"
+    command: e2e-smoke
+    ci_job: e2e-smoke
+    cost_rank: 90
+    ci_rank: 80
+    tools: [bash]
+    output_contains: []
+
+  e2e-matrix:
+    description: "Local stand-in for e2e-tests.yaml matrix (same command; OS matrix is CI-only)"
+    command: e2e-matrix
+    ci_job: e2e
+    cost_rank: 100
+    ci_rank: 100
+    tools: [bash]
+    output_contains: []

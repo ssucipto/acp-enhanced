@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added (M86 — in progress, not shipped)
+- **CI runtime matrix (task-308)** — `agent/configurables/ci.yml` + schema; not a preference registry; default tier excludes T2.
 - **CI job baseline (task-305)** — wall-clock medians + tiers; default `/acp-ci` excludes T2 (shellcheck, full e2e-smoke); contended e2e N=5 discarded.
 - **False-green contracts (task-306)** — FG-1…FG-7 in `constraints.yml`, `agent/patterns/local.false-green-contracts.md`, and `skills/scripts.md` (`set +e` ≠ suppress ERR trap).
 
