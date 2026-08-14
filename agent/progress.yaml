@@ -6529,13 +6529,13 @@ tasks:
   - id: task-309
     name: /acp-ci orchestrator + AE step bodies
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-309-acp-ci-orchestrator.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: 2026-08-14
+    completed_date: 2026-08-14
+    actual_hours: 3
     estimated_hours: 8
-    notes: phase 1; agent/scripts/acp.ci-steps.sh (F3-01); regen integrity-manifest
+    notes: phase 1; FG contracts; P-PATH-1 bodies; integrity-manifest regenerated
   - id: task-310
     name: Wire routing.yml + discoverability
     priority: 5
