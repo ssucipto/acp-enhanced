@@ -2,13 +2,13 @@
 id: task-319
 milestone: M86
 title: "Package.yaml, domain, coverage, integrity-manifest, AGENT entries"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 4
 depends_on: task-311, task-313, task-315, task-316
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -55,10 +55,10 @@ crosscut skill: never update only one of AGENT/README/CHANGELOG/package. CHANGEL
 
 ## Verification
 
-- [ ] acp-validate.ts exits 0
-- [ ] package.yaml lists new scripts
-- [ ] AGENT.md documents both commands
-- [ ] integrity-manifest includes new scripts
+- [x] acp-validate.ts exits 0
+- [x] package.yaml lists new scripts
+- [x] AGENT.md documents both commands
+- [x] integrity-manifest includes new scripts
 
 ## User-Observable Acceptance
 

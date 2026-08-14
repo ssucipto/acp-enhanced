@@ -1064,6 +1064,8 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`/acp-update`](agent/commands/acp.update.md)** - Update ACP Enhanced to latest version via script (alias for version-update)
 - **[`/acp-sync`](agent/commands/acp.sync.md)** - Sync spec↔task↔code cross-references; flag unclaimed requirements and stale markers
 - **[`/acp-validate`](agent/commands/acp.validate.md)** - Validate ACP file health and index consistency
+- **[`/acp-ci`](agent/commands/acp.ci.md)** - Local CI parity predictor (`--fast` default; `--full` ≈ multi-minute CI)
+- **[`/acp-pr`](agent/commands/acp.pr.md)** - Feature PR prep; gates delegated only to `/acp-ci`
 
 **Git Namespace** *(separate from `acp.*`)*
 - **[`@git.commit`](agent/commands/git.commit.md)** - Version-aware commit with CHANGELOG validation and progress.yaml update
