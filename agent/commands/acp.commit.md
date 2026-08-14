@@ -293,6 +293,7 @@ entries are now orphaned. Clean them up:
 - [`/acp-status`](acp.status.md) — Verify session entry was written correctly
 - [`/acp-review`](acp.review.md) — Run code quality & security review before committing (pre-commit hook)
 - [`/acp-validate`](acp.validate.md) — Schema validation before commit (`--validate` flag)
+- [`/acp-ci`](acp.ci.md) — Local CI parity; prefer `/acp-ci --static` green before pushing (M86)
 - [`/acp-cost-report`](acp.cost-report.md) — Review cost and token usage trends
 
 ---

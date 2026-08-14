@@ -2,13 +2,13 @@
 id: task-310
 milestone: M86
 title: "Wire routing.yml ci-check + discoverability surfaces"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 1
 depends_on: [task-309]
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -27,7 +27,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: D1
 depends_on: task-309
-status: planned
+status: completed
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -50,9 +50,9 @@ FIFOZ patched routing, common.sh help, proceed, commit. AE must wire the same **
 
 ## Verification
 
-- [ ] `rg ci-check agent/core/routing.yml` shows bindings to acp-ci (not dangling)
-- [ ] Help/discoverability mentions `/acp-ci`
-- [ ] Sentinel draft list committed in task notes or report snippet
+- [x] `rg ci-check agent/core/routing.yml` shows bindings to acp-ci (not dangling)
+- [x] Help/discoverability mentions `/acp-ci`
+- [x] Sentinel draft list committed in task notes or report snippet (`agent/reports/m86-drafts/task-310-sentinels.md`)
 
 ## User-Observable Acceptance
 

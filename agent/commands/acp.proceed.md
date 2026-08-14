@@ -244,6 +244,7 @@ Display the following informational header, then continue immediately:
   Related:
     /acp-init      Load full project context first
     /acp-status    Check which task is current
+    /acp-ci        Run /acp-ci --static after product/framework code changes
     @git.commit    Git commit (used per-task in autonomous)
 ```
 
@@ -395,6 +396,8 @@ Design Context: No design document found for this task.
 ### 3.5. Verify All Deliverables Exist (Post-Completion Audit)
 
 **Before marking a task complete, you MUST verify every expected deliverable. Sub-agents always say they are done. The orchestrator must mechanically verify that they actually are.**
+
+**CI gate (M86):** If the task touched product or framework code (scripts, commands, schemas, workflows, packages), run `bash agent/scripts/acp.ci.sh --static` (or `/acp-ci --static`) and require green **before** marking complete. Do **not** require `--full` / matrix E2E in proceed by default — that is opt-in local CI parity.
 
 This step is NON-NEGOTIABLE. Run it whether you implemented the task yourself (Single-Task Mode) or a sub-agent reported completion (Autonomous/Parallel Mode). In either case, trust nothing: re-read the task doc and check every claim against reality.
 
@@ -1228,6 +1231,7 @@ Estimated: 3 hours
 
 - [`/acp-init`](acp.init.md) - Use before proceeding to ensure full context loaded
 - [`/acp-status`](acp.status.md) - Use to check which task is current before proceeding
+- [`/acp-ci`](acp.ci.md) - Run `/acp-ci --static` before marking product/framework tasks complete
 - [`/acp-update`](acp.update.md) - Use to manually update progress if needed
 - [`/acp-sync`](acp.sync.md) - Use after completing tasks to sync documentation
 - [`@git.commit`](git.commit.md) - Git commit subroutine (used per-task in autonomous mode)
