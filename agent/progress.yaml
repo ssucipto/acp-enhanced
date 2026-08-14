@@ -6569,31 +6569,31 @@ tasks:
   - id: task-313
     name: E2E /acp-pr + wrappers all surfaces
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-313-e2e-acp-pr-wrappers.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started:  2026-08-14
+    completed_date:  2026-08-14
+    actual_hours:  2
     estimated_hours: 3
     notes: phase 1b
   - id: task-314
     name: upstream-delta + upgrade-guard + version-update hook
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-314-upgrade-guard.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started:  2026-08-14
+    completed_date:  2026-08-14
+    actual_hours:  2
     estimated_hours: 5
     notes: phase 2; depends 307+310; P-UG-1 HARD fail
   - id: task-315
     name: E2E upgrade-guard + fork upgrade docs
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-315-e2e-upgrade-guard-docs.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started:  2026-08-14
+    completed_date:  2026-08-14
+    actual_hours:  2
     estimated_hours: 3
     notes: phase 2
   - id: task-316
