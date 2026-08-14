@@ -78,20 +78,22 @@ Task-305 captures wall-clock for every AE CI gate **before** assigning static/fa
 | P-VAL-1 | `executed_steps` required for `acp.ci` / `acp.pr` / `acp.upgrade-guard` coverage rows; extend validator |
 | P-PATH-1 | Step bodies live at `agent/scripts/acp.ci-steps.sh` — never top-level `scripts/acp-ci-steps.sh` |
 
-## AE CI job graph (planning baseline — task-305 re-measures)
+## AE CI job graph (measured — task-305 complete)
 
-From `.github/workflows/` (job-level, not “one job = CI”):
+From `.github/workflows/` + `agent/reports/m86-ci-job-baseline.md`:
 
-| Workflow | Job | PR-blocking? | Candidate tier (provisional) |
-|----------|-----|--------------|------------------------------|
-| `ci.yaml` | `validate` | yes | static / fast (split steps after measure) |
-| `ci.yaml` | `shellcheck` | yes | static |
-| `ci.yaml` | `e2e-smoke` | yes | fast |
+| Workflow | Job | PR-blocking? | Tier (measured) |
+|----------|-----|--------------|-----------------|
+| `ci.yaml` | `validate` | yes | static / fast (split steps) |
+| `ci.yaml` | `shellcheck` | yes | **full** only (~40s T2) |
+| `ci.yaml` | `e2e-smoke` integrity parts | yes | fast |
+| `ci.yaml` | `e2e-smoke` full suite | yes | **full** only (~4.5+ min T2) |
 | `ci.yaml` | `supply-chain` | soft (`continue-on-error` on npm audit) | full / warn |
 | `e2e-tests.yaml` | `e2e` (matrix OS) | yes on PR | full |
-| `benchmark.yaml` | `benchmark` | no (`workflow_dispatch`) | out-of-scope or `--release` only |
+| `benchmark.yaml` | `benchmark` | no (`workflow_dispatch`) | out-of-scope |
 
-**Binding**: task-305 must assign every job a tier **or** a written out-of-scope rationale. Read every `if:` (none today on ci.yaml jobs — still verify after edits).
+**UX binding:** `/acp-ci` default = `fast` (T0+T1). `--full` is opt-in multi-minute.  
+**Deferred post-M86:** optional filtered `e2e-lite` between integrity and full e2e-smoke.
 
 ## False-green contracts (non-negotiable)
 

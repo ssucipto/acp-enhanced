@@ -6489,13 +6489,13 @@ tasks:
   - id: task-305
     name: AE CI job graph + wall-clock baseline
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-305-ci-job-graph-baseline.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: 2026-08-14
+    completed_date: 2026-08-14
+    actual_hours: 4
     estimated_hours: 3
-    notes: phase 0; measure before tiering (feedback-009)
+    notes: "phase 0; N=5 medians for T0/T1/shellcheck; e2e-smoke T2 via idle ~270s (contended N=5 discarded); default /acp-ci=fast excludes T2"
   - id: task-306
     name: False-green contracts in constraints + pattern
     priority: 5

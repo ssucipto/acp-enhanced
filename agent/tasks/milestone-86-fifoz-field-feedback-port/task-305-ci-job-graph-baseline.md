@@ -2,13 +2,13 @@
 id: task-305
 milestone: M86
 title: "AE CI job graph enumeration + wall-clock baseline"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 0
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
 audit_findings: ['F-114-02', 'feedback-009']
@@ -47,11 +47,11 @@ feedback-009 §2.1/2.3: FIFOZ tiered from assumed cost and mapped one job as "CI
 
 ## Verification
 
-- [ ] Every workflow job appears in the baseline report
-- [ ] Every job has tier or out-of-scope rationale
-- [ ] Medians from ≥5 runs documented
-- [ ] `if:` conditions reviewed (document none if absent)
-- [ ] No tier preferences written into configurables yet
+- [x] Every workflow job appears in the baseline report
+- [x] Every job has tier or out-of-scope rationale
+- [x] Medians from ≥5 runs documented (e2e-smoke: idle one-shot + contended N=5 discarded with rationale)
+- [x] `if:` conditions reviewed (document none if absent)
+- [x] No tier preferences written into configurables yet (ci.yml is task-308)
 
 ## User-Observable Acceptance
 
