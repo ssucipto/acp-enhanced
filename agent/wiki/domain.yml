@@ -21,6 +21,9 @@ commands:
     - command: acp.audit
       category: core
       purpose: Deep-dive investigation of a subject, producing a structured report in agent/reports/.
+    - command: acp.ci
+      category: core
+      purpose: Run the gates GitHub Actions runs, locally, before pushing — tiered static/fast/full parity with AE CI jobs.
     - command: acp.commit
       category: core
       purpose: Persist session work into the ACP memory layer — write session summary, stamp completed routing tasks, check for reusable patterns and new ADRs, compact old sessions.
@@ -54,6 +57,9 @@ commands:
     - command: acp.plan
       category: core
       purpose: Plan milestones or tasks for undefined items in progress.yaml or new requirements.
+    - command: acp.pr
+      category: core
+      purpose: Prepare a pull request with local CI gates delegated to /acp-ci (single gate owner; no duplicated checks).
     - command: acp.proceed
       category: core
       purpose: Immediately implement the current or next task, with support for autonomous and parallel execution modes.

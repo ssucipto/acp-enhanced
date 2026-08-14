@@ -1,13 +1,13 @@
 project:
   name: agent-context-protocol
-  version: 6.31.0
+  version: 6.31.1
   started: 2026-02-16
   status: active
   current_milestone: M81
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.30.1 on mainline\n\
-    \  (M85). M86 PLANNED (FIFOZ field-feedback port → v6.31.0). current_milestone\n\
-    \  remains M81 — tasks 270-274 blocked on CodeRabbit fixture (ADR-22). Open:\n\
-    \  F2-09; F-114-* (M86). Aikido track ADR-19 gated.\n"
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.31.1 on develop\n\
+    \  (M86 FIFOZ field-feedback port + audit-116 post-ship fixes).\n\
+    \  current_milestone remains M81 — tasks 270-274 blocked on CodeRabbit fixture\n\
+    \  (ADR-22). Open: F2-09. Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/reports/handoff-claude-m85-phase2-2026-07-31.md
   date: '2026-07-31'
@@ -9592,10 +9592,9 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M86 COMPLETE — shipped v6.31.0 (/acp-ci, /acp-pr, upgrade-guard). current_milestone remains M81."
+- "M86 COMPLETE — shipped v6.31.0; post-ship audit-116 remediations shipped as v6.31.1."
 - "M81: still blocked on tests/fixtures/coderabbit-findings-sample.json (ADR-22) — do not invent."
 - "Deferred from M86: feedback-002 D-002-01…08 (see m86-feedback-002-matrix.md)."
-- "Overdue weeklies: /acp-review, /acp-integrity (since 2026-07-31)."
 - "Pending carryover F2-09 (YAML # inside quotes) — out of M86."
 - "GATED (ADR-19): Aikido + M76/M77 stay plan-only"
 current_blockers: []
@@ -9603,7 +9602,7 @@ notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2
   docs sync)'
 - 74 milestones shipped — M74 policy/integration roadmap in research reports (2026-07-15)
-- 72 command docs (70 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
+- 74 command docs (72 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
   cursor, claude)
 - 9 skills; 51 bash scripts; review E2E 59/59 (scan) + 71/71 (doc); full suite green at v6.29.2
 - 96+ audit reports (audit-094/095/096 M72/M73 closure)
@@ -9624,8 +9623,8 @@ recurring_tasks:
     command: /acp-review --report --carryover
     frequency: weekly
     executor: copilot
-    last_run: '2026-07-24'
-    next_due: '2026-07-31'
+    last_run: '2026-08-14'
+    next_due: '2026-08-21'
     last_findings_count: 7
     status: current
     description: Weekly code quality review with carryover tracking
