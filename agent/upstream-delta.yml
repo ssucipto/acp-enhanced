@@ -1,0 +1,74 @@
+# ACP Enhanced — upgrade-collision register (M86 / ADR-25)
+#
+# PURPOSE
+#   /acp-version-update overwrites files owned by the upstream ACP package.
+#   Every entry below is a file this fork (or a consumer fork) has modified that
+#   upstream also ships. After any ACP version update, run:
+#
+#       bash agent/scripts/acp.upgrade-guard.sh
+#
+#   Missing sentinel → HARD fail (P-UG-1). Prefer upstream when equal/better,
+#   then DELETE the entry.
+#
+# Sentinels are matched with grep -F. Avoid fancy quotes that break -F matching.
+# Do NOT add dynamic content (dates, task IDs) inside sentinel strings.
+
+acp_core_version: 6.29.3
+upstream: https://github.com/prmichaelsen/agent-context-protocol
+last_reviewed: 2026-08-14
+
+collisions:
+
+  - path: agent/core/routing.yml
+    change: >
+      command_suggestions git-push/git-pr point at /acp-ci and /acp-pr
+      instead of dangling ci-check stubs.
+    sentinel: 'acp-ci: "Run /acp-ci --fast (or --static) before pushing develop"'
+    upstream_ref: F-114-08 / feedback-009
+    supersede_when: upstream ships /acp-ci and wires ci-check itself
+
+  - path: agent/scripts/acp.common.sh
+    change: "display_available_commands() gained /acp-ci and /acp-pr help lines."
+    sentinel: "/acp-ci${NC}"
+    upstream_ref: F-114-08
+    risk: >
+      HIGH — core script, single-line edit, trivially reverted by an upgrade.
+    supersede_when: upstream ships /acp-ci discoverability
+
+  - path: agent/commands/acp.proceed.md
+    change: >
+      Guidance to run /acp-ci --static when the task touched product/framework code
+      before marking complete.
+    sentinel: "bash agent/scripts/acp.ci.sh --static"
+    upstream_ref: feedback-009
+    supersede_when: upstream adds an equivalent gate
+
+  - path: agent/commands/acp.commit.md
+    change: "Related note that /acp-ci --static should be green before pushing."
+    sentinel: '[`/acp-ci`](acp.ci.md)'
+    supersede_when: upstream adds an equivalent note
+
+  - path: agent/core/constraints.yml
+    change: "bash_rules FG-1…FG-7 false-green contracts (M86)."
+    sentinel: "set_plus_e_does_not_suppress_err_trap"
+    upstream_ref: F-114-05
+    supersede_when: upstream adopts FG contracts
+
+local_only:
+  commands:
+    - agent/commands/acp.ci.md
+    - agent/commands/acp.pr.md
+  scripts:
+    - agent/scripts/acp.ci.sh
+    - agent/scripts/acp.ci-steps.sh
+    - agent/scripts/acp.pr.sh
+    - agent/scripts/acp.upgrade-guard.sh
+  config:
+    - agent/configurables/ci.yml
+    - agent/upstream-delta.yml
+  schemas:
+    - agent/schemas/ci.config.schema.yaml
+  tests:
+    - e2e/acp.ci.test.sh
+    - e2e/acp.pr.test.sh
+    - e2e/acp.upgrade-guard.test.sh
