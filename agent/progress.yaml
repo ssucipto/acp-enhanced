@@ -1,10 +1,10 @@
 project:
   name: agent-context-protocol
-  version: 6.32.1
+  version: 6.32.2
   started: 2026-02-16
   status: active
   current_milestone: M81
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.1 on develop\n\
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.2 on develop\n\
     \  (M81 CodeRabbit integration + audit-117 remediations; M86 CI/PR/upgrade-guard at 6.31.x).\n\
     \  Open: F2-09. Aikido track ADR-19 gated.\n"
 active_handoff:
@@ -6652,6 +6652,14 @@ tasks:
     notes: phase 4; depends 316-320; stamp 02-09+11 with evidence; keep current_milestone M81
 recent_work:
 - date: 2026-08-14
+  description: "/acp-validate (clean) + /acp-sync README/AGENT for M81+M86; post-ship v6.32.1 already on develop"
+  items:
+  - "✅ acp-validate: 0 errors (parity 74×5, schemas, tags v6.32.1, status consistency)"
+  - "✅ M81 COMPLETE — findings-import + template + E2E A–G; audits 117 / review-005"
+  - "✅ M86 COMPLETE — /acp-ci, /acp-pr, upgrade-guard (v6.31.0/6.31.1)"
+  - "✅ README sync: 72 commands, 56 scripts, 81 milestones badge; CR + CI/PR notes"
+  - "Open: F2-09; weekly /acp-integrity overdue; D-002-01…08 deferred"
+- date: 2026-08-14
   description: "M86 tasks 316–318 — review-scan merge, discipline pattern, feedback-002 matrix"
   items:
   - "✅ task-316: FIFOZ↔M83 review-scan hunk merge; E2E 66/66; measure 100%; F-114-09 fixed"
@@ -9587,20 +9595,19 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M81 COMPLETE — v6.32.0 + v6.32.1 post-ship (audit-117 / review-005)."
-- "M86 COMPLETE — v6.31.0/6.31.1 (/acp-ci, /acp-pr, upgrade-guard)."
+- "Docs synced to v6.32.2 (README/AGENT/progress). Push develop when ready."
 - "Pending carryover F2-09 (YAML # inside quotes)."
-- "Deferred: feedback-002 D-002-01…08; weekly /acp-integrity overdue."
+- "Deferred: feedback-002 D-002-01…08; weekly /acp-integrity overdue since 2026-07-31."
 - "GATED (ADR-19): Aikido + M76/M77 stay plan-only"
 current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2
   docs sync)'
-- 74 milestones shipped — M74 policy/integration roadmap in research reports (2026-07-15)
+- 81 milestones shipped (incl. M81 CodeRabbit + M86 CI/PR); M74 policy/integration roadmap in research reports
 - 74 command docs (72 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
   cursor, claude)
-- 9 skills; 51 bash scripts; review E2E 59/59 (scan) + 71/71 (doc); full suite green at v6.29.2
-- 96+ audit reports (audit-094/095/096 M72/M73 closure)
+- 9 skills; 56 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.32.2
+- 117+ audit reports (thru audit-117 M81 post-ship; audit-116 M86 post-ship)
 - M73 COMPLETE v6.27.1 — carryover integrity, D4 ERROR, sweep 6/6, audit-095 independent
   closure
 - M67 COMPLETE v6.23.0 — cross-agent handoff + /acp-receive
@@ -9611,8 +9618,7 @@ notes:
   findings'
 - 'ADR-21 (2026-07-23): M78 CodeRabbit optionality foundation carved out of ADR-19
   gate (non-gated) — audit-097'
-- 'M78 PLANNED (v6.28.0, 6 tasks 255-260): optional CodeRabbit — toggle + detection
-  + degradation + docs; PR-check stays gated'
+- 'M78/M81 COMPLETE: CodeRabbit optionality + findings-import (ADR-21/22); Aikido still ADR-19 gated'
 recurring_tasks:
   - id: weekly-code-review
     command: /acp-review --report --carryover

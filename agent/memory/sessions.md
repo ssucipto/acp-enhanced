@@ -5,6 +5,14 @@
 
 - date: 2026-08-14
   executor: cursor-composer
+  branch: develop
+  tasks: [acp-validate, acp-sync, acp-update, acp-commit]
+  done: [validate-clean, readme-agent-sync-m81-m86, progress-recent-work, session-commit]
+  deferred: [F2-09 → backlog, weekly-integrity → admin, D-002-01-08 → polish]
+  key_fact: "README still advertised 70 commands / 36 scripts after M81+M86 — sync counts (72 cmds, 56 scripts, 81 milestones) with shipped features."
+
+- date: 2026-08-14
+  executor: cursor-composer
   tasks: [audit-117, review-005, F-117-01, F-117-02, F-117-03, F-117-04, F-117-05]
   done: [m81-post-ship-audit, findings-import-json-errors, e2e-efg, v6.32.1]
   deferred: [F2-09 → backlog, weekly-integrity → admin]

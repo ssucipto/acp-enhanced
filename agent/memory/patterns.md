@@ -207,3 +207,14 @@
     Extended rule: whenever auditing for this bug class, grep the WHOLE gitignore file
     for every bare `dir/` line and check whether ANY whitelist (`!...`) rule sits below
     it anywhere in the file (root or nested) — not just the directory being actively fixed.
+
+- name: post-ship README count sync
+  date: 2026-08-14
+  task_type: documentation
+  when: After shipping a milestone that adds commands/scripts (or closing a multi-milestone burst)
+  do: |
+    In the same /acp-sync pass: update README badges (milestones shipped),
+    Available Commands / Scripts counts, slash-command list, and AGENT.md
+    script index — not only CHANGELOG. Validate parity count (agent/commands)
+    vs human-facing "slash commands" (exclude wrappers) deliberately.
+  avoid: Shipping feature release then leaving README at prior milestone counts for days
