@@ -7,6 +7,9 @@
 #   B  enabled=true,  no config  → hint; import no-op
 #   C  enabled=true,  config + fixture → import writes CR-* finding_id
 #   D  enabled=false, config present → import no-op (opt-in wins)
+#   E  dry-run does not write
+#   F  NDJSON agent finding accepted
+#   G  invalid JSON fails cleanly (no traceback)
 #
 # NOTE: Do NOT add `set -e` — assert_* return 1 on failure and must not abort.
 
@@ -53,7 +56,7 @@ print_test_header "A — enabled=false, no config → import exit 0, no writes"
 write_pref false
 rm -f "$FIX/.coderabbit.yaml"
 BEFORE="$(count_cr_ids)"
-OUT_A="$( cd "$FIX" && bash "$IMP" --input "$FIXTURE" 2>&1 )"; RC_A=$?
+( cd "$FIX" && bash "$IMP" --input "$FIXTURE" >/dev/null 2>&1 ); RC_A=$?
 AFTER="$(count_cr_ids)"
 assert_true "A import exit 0" $RC_A
 assert_equals "$BEFORE" "$AFTER" "A no CR finding_ids written"
@@ -64,7 +67,7 @@ print_test_header "B — enabled=true, no config → hint; import no-op"
 write_pref true
 rm -f "$FIX/.coderabbit.yaml"
 BEFORE="$(count_cr_ids)"
-OUT_B="$( cd "$FIX" && bash "$IMP" --input "$FIXTURE" 2>&1 )"; RC_B=$?
+( cd "$FIX" && bash "$IMP" --input "$FIXTURE" >/dev/null 2>&1 ); RC_B=$?
 AFTER="$(count_cr_ids)"
 assert_true "B import exit 0" $RC_B
 assert_equals "$BEFORE" "$AFTER" "B no writes when inactive"
@@ -87,6 +90,7 @@ assert_contains "$OUT_C" "added=" "C reports added count"
 LEDGER_C="$(cat "$FIX/agent/memory/audit-carryovers.md")"
 assert_contains "$LEDGER_C" "audit_id: coderabbit-import" "C live audit_id"
 assert_contains "$LEDGER_C" "planned_in: M81" "C planned_in M81 (not M81-import)"
+assert_contains "$LEDGER_C" "severity: high" "C maps major→high"
 # Idempotent re-run
 OUT_C2="$( cd "$FIX" && bash "$IMP" --input "$FIXTURE" 2>&1 )"; RC_C2=$?
 AFTER2="$(count_cr_ids | tr -d '[:space:]')"
@@ -96,17 +100,48 @@ assert_contains "$OUT_C2" "skipped_dup\|nothing to add" "C re-run reports skip o
 
 # ── D — disabled + config present ────────────────────────────────────────────
 print_test_header "D — enabled=false + config → import no-op (opt-in wins)"
-# Reset ledger for D
 cat > "$FIX/agent/memory/audit-carryovers.md" <<'EOF'
 # Audit Carryover Tracking
 carryovers:
 EOF
 write_pref false
 touch "$FIX/.coderabbit.yaml"
-OUT_D="$( cd "$FIX" && bash "$IMP" --input "$FIXTURE" 2>&1 )"; RC_D=$?
+( cd "$FIX" && bash "$IMP" --input "$FIXTURE" >/dev/null 2>&1 ); RC_D=$?
 AFTER_D="$(count_cr_ids | tr -d '[:space:]')"
 assert_true "D import exit 0" $RC_D
 assert_equals "0" "$AFTER_D" "D no writes despite config"
+
+# ── E — dry-run does not write ───────────────────────────────────────────────
+print_test_header "E — dry-run prints plan but does not write"
+write_pref true
+cp "${PROJECT_ROOT}/agent/templates/coderabbit.yaml.template" "$FIX/.coderabbit.yaml"
+cat > "$FIX/agent/memory/audit-carryovers.md" <<'EOF'
+# Audit Carryover Tracking
+carryovers:
+EOF
+OUT_E="$( cd "$FIX" && bash "$IMP" --dry-run --input "$FIXTURE" 2>&1 )"; RC_E=$?
+AFTER_E="$(count_cr_ids | tr -d '[:space:]')"
+assert_true "E dry-run exit 0" $RC_E
+assert_equals "0" "$AFTER_E" "E dry-run writes zero CR ids"
+assert_contains "$OUT_E" "dry-run" "E mentions dry-run"
+
+# ── F — NDJSON single finding ────────────────────────────────────────────────
+print_test_header "F — NDJSON agent finding accepted"
+printf '%s\n' '{"type":"finding","severity":"minor","fileName":"demo.sh","codegenInstructions":"ndjson sample finding text","suggestions":[]}' \
+  > "$FIX/one.ndjson"
+OUT_F="$( cd "$FIX" && bash "$IMP" --dry-run --input "$FIX/one.ndjson" 2>&1 )"; RC_F=$?
+assert_true "F NDJSON dry-run exit 0" $RC_F
+assert_contains "$OUT_F" "would add 1" "F would add one finding"
+assert_contains "$OUT_F" "severity: medium" "F maps minor→medium"
+
+# ── G — invalid JSON fails cleanly ───────────────────────────────────────────
+print_test_header "G — invalid JSON → non-zero, no traceback noise"
+echo 'not-json{' > "$FIX/bad.json"
+OUT_G="$( cd "$FIX" && bash "$IMP" --input "$FIX/bad.json" 2>&1 )"; RC_G=$?
+assert_false "G invalid JSON exits non-zero" $RC_G
+assert_contains "$OUT_G" "invalid JSON" "G reports invalid JSON"
+if echo "$OUT_G" | grep -q 'Traceback'; then TB_RC=1; else TB_RC=0; fi
+assert_true "G no Python Traceback" $TB_RC
 
 # ── Help rejects --pr ────────────────────────────────────────────────────────
 print_test_header "Help / --pr deferred"
