@@ -3322,3 +3322,59 @@ carryovers:
     fix_applied_date: 2026-08-14
     verified_in_audit: "116"
     escalated_to: null
+  # ── AUDIT-117 / REVIEW-005 — M81 POST-SHIP (2026-08-14) ───────────────────
+  - audit_id: 117
+    finding_id: F-117-01
+    severity: high
+    file: agent/scripts/acp.findings-import.sh
+    finding: "Invalid JSON produced Python traceback + bare ERR line"
+    description: "review R-005-01"
+    fix_target: "Catch JSONDecodeError; if-context status capture"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "117"
+    escalated_to: null
+  - audit_id: 117
+    finding_id: F-117-02
+    severity: medium
+    file: e2e/coderabbit-integration.test.sh
+    finding: "SC2034 unused OUT_A/OUT_B/OUT_D"
+    description: "review R-005-02"
+    fix_target: "Discard unused captures"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "117"
+    escalated_to: null
+  - audit_id: 117
+    finding_id: F-117-03
+    severity: medium
+    file: e2e/coderabbit-integration.test.sh
+    finding: "Missing E2E for dry-run / NDJSON / invalid JSON"
+    description: "review R-005-03"
+    fix_target: "Add cases E–G"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "117"
+    escalated_to: null
+  - audit_id: 117
+    finding_id: F-117-04
+    severity: low
+    file: agent/tasks/milestone-81-coderabbit-integration-layer/task-274-m81-closure.md
+    finding: "Stale v6.29.0 closure prose after v6.32.0 ship"
+    description: "review R-005-04"
+    fix_target: "Sync to v6.32.x"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "117"
+    escalated_to: null
+  - audit_id: 117
+    finding_id: F-117-05
+    severity: low
+    file: e2e/coderabbit-integration.test.sh
+    finding: "Case C did not assert major→high severity map"
+    description: "review R-005-05"
+    fix_target: "Assert severity: high in ledger"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "117"
+    escalated_to: null
