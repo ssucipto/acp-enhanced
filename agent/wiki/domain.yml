@@ -239,6 +239,10 @@ scripts:
   entries:
     - script: acp.common.sh
       implements: Shared utility library providing portable sed wrapper, tput-based color initialization, and common helper functions sourced by all ACP scripts.
+    - script: acp.coderabbit.sh
+      implements: Optional CodeRabbit detection helpers (available/active/hint) — M78 optionality foundation.
+    - script: acp.findings-import.sh
+      implements: Imports CodeRabbit findings JSON/NDJSON into audit-carryovers when coderabbit_active (M81; --input only).
     - script: acp.install.sh
       implements: Sets up the ACP directory structure and copies template files into a target project, bootstrapping a new ACP installation.
     - script: acp.meta-scan.sh

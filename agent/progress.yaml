@@ -1,13 +1,12 @@
 project:
   name: agent-context-protocol
-  version: 6.31.1
+  version: 6.32.0
   started: 2026-02-16
   status: active
   current_milestone: M81
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.31.1 on develop\n\
-    \  (M86 consumer-project field-feedback port + audit-116 post-ship fixes).\n\
-    \  current_milestone remains M81 — tasks 270-274 blocked on CodeRabbit fixture\n\
-    \  (ADR-22). Open: F2-09. Aikido track ADR-19 gated.\n"
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.0 on develop\n\
+    \  (M81 CodeRabbit integration shipped; M86 CI/PR/upgrade-guard at 6.31.x).\n\
+    \  Open: F2-09. Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/reports/handoff-claude-m85-phase2-2026-07-31.md
   date: '2026-07-31'
@@ -784,22 +783,18 @@ milestones:
 
       '
   M81:
-    name: CodeRabbit Integration Layer — CodeRabbit-only (v6.29.0)
+    name: CodeRabbit Integration Layer — CodeRabbit-only (v6.32.0)
     priority: 4
-    status: in_progress
-    progress: 17
+    status: completed
+    progress: 100
     started: 2026-07-24
-    completed: null
+    completed: 2026-08-14
     estimated_weeks: 0.5
-    tasks_completed: 1
+    tasks_completed: 6
     tasks_total: 6
     file: agent/milestones/milestone-81-coderabbit-integration-layer.md
-    notes: '🚧 M81 in progress — task-269 ✅ (ADR-22 carve-out, policy map, docs).
-
-      BLOCKED 270-274: missing tests/fixtures/coderabbit-findings-sample.json
-
-      (audit-101 / ADR-22 gate). Do not invent speculative fixture.
-
+    notes: 'COMPLETE 2026-08-14 — shipped v6.32.0. Fixture + findings-import + template
+      + review wiring + E2E A–D. ADR-22 carve-out. Weekly review command unchanged (F-101-02).
       '
   M83:
     name: Deterministic Local Review Engine (v6.29.0)
@@ -6159,48 +6154,48 @@ tasks:
   - id: task-270
     name: acp.findings-import.sh — CodeRabbit findings → carryovers
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-81-coderabbit-integration-layer/task-270-findings-import.md
-    started: null
-    completed_date: null
+    started: '2026-08-14'
+    completed_date: '2026-08-14'
     estimated_hours: 6
     notes: route-259; F-101-03/05 — fixture --input only; live carryover shape; no
       --pr
   - id: task-271
     name: .coderabbit.yaml starter template + documentation
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-81-coderabbit-integration-layer/task-271-coderabbit-yaml-starter.md
-    started: null
-    completed_date: null
+    started: '2026-08-14'
+    completed_date: '2026-08-14'
     estimated_hours: 2
     notes: route-260; template only; depends 269
   - id: task-272
     name: Wire /acp-review + weekly-code-review for coderabbit_active
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-81-coderabbit-integration-layer/task-272-review-recurring-wiring.md
-    started: null
-    completed_date: null
+    started: '2026-08-14'
+    completed_date: '2026-08-14'
     estimated_hours: 4
     notes: route-261; F-101-02/06/07 — review doc + optional wrapper; script path
       only
   - id: task-273
     name: E2E integration + optionality regression tests
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-81-coderabbit-integration-layer/task-273-e2e-integration.md
-    started: null
-    completed_date: null
+    started: '2026-08-14'
+    completed_date: '2026-08-14'
     estimated_hours: 3
     notes: route-262; cases A-D; depends 270,272
   - id: task-274
     name: M81 closure — ship v6.29.0
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-81-coderabbit-integration-layer/task-274-m81-closure.md
-    started: null
-    completed_date: null
+    started: '2026-08-14'
+    completed_date: '2026-08-14'
     estimated_hours: 2
     notes: route-263; full version file set F-098-07; settle F-101-01..08
   M83:
@@ -9592,10 +9587,10 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M86 COMPLETE — shipped v6.31.0; post-ship audit-116 remediations shipped as v6.31.1."
-- "M81: still blocked on tests/fixtures/coderabbit-findings-sample.json (ADR-22) — do not invent."
-- "Deferred from M86: feedback-002 D-002-01…08 (see m86-feedback-002-matrix.md)."
-- "Pending carryover F2-09 (YAML # inside quotes) — out of M86."
+- "M81 COMPLETE — shipped v6.32.0 (CodeRabbit findings-import + template + review wiring)."
+- "M86 COMPLETE — v6.31.0/6.31.1 (/acp-ci, /acp-pr, upgrade-guard + post-ship fixes)."
+- "Pending carryover F2-09 (YAML # inside quotes)."
+- "Deferred: feedback-002 D-002-01…08; weekly /acp-integrity overdue."
 - "GATED (ADR-19): Aikido + M76/M77 stay plan-only"
 current_blockers: []
 notes:
