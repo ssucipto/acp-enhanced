@@ -29,6 +29,13 @@ commands:
     suites:
       - e2e/acp.tier3-memory-knowledge.test.sh
       - e2e/acp.command-docs.test.sh
+  acp.ci:
+    tier: 2
+    suites:
+      - e2e/acp.ci.test.sh
+      - e2e/acp.command-docs.test.sh
+    executed_steps:
+      - npm-test
   acp.clarification-address:
     tier: 3
     suites:

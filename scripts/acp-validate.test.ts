@@ -345,6 +345,17 @@ describe("validateCommandE2eCoverage", () => {
     });
     expect(errors.filter((e) => e.severity === "error")).toHaveLength(0);
   });
+
+  it("requires executed_steps for acp.ci (P-VAL-1)", () => {
+    const file = path.join(repoRoot, "scripts/fixtures/command-e2e-coverage-ci-no-steps.yaml");
+    const yaml = `commands:\n  acp.ci:\n    tier: 2\n    suites:\n      - e2e/acp.ci.test.sh\n`;
+    writeFileSync(file, yaml);
+    const errors = validateCommandE2eCoverage(file, {
+      repoRoot,
+      commandsDir: path.join(repoRoot, "agent/commands"),
+    });
+    expect(errors.some((e) => e.message.includes("executed_steps"))).toBe(true);
+  });
 });
 
 describe("validateMemoryFieldLint (M70)", () => {
