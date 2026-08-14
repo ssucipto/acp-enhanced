@@ -1,14 +1,14 @@
 ---
 id: task-274
 milestone: M81
-title: "M81 closure — ship v6.29.0"
-status: planned
+title: "M81 closure — ship v6.32.0"
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-07-24
-started: null
-completed: null
+started: 2026-08-14
+completed: 2026-08-14
 route: route-263
 depends_on: [task-269, task-270, task-271, task-272, task-273]
 design_reference: [milestone-81](../../milestones/milestone-81-coderabbit-integration-layer.md)

@@ -457,16 +457,16 @@ When `bash agent/scripts/acp.coderabbit.sh active` returns true (preference enab
 | Phase | Behavior |
 |-------|----------|
 | **Phase 1** | **Never deferred** — all deterministic scanner rules still run via `acp.review-scan.sh` |
-| **Phase 2** | For policy-map rows with `owner: coderabbit` or `both`, add annotation: “also covered by CodeRabbit — verify via PR review or import” |
+| **Phase 2** | For policy-map rows with `owner: coderabbit` or `both`, add annotation: “also covered by CodeRabbit — verify via PR review or `bash agent/scripts/acp.findings-import.sh --input …`” |
 | **ACP-owned Phase 2** | Always run — review remains valid standalone when CodeRabbit is inactive |
 
-Import path (M81 — requires committed fixture):
+Import path (M81 — fixture committed at `tests/fixtures/coderabbit-findings-sample.json`):
 
 ```bash
 bash agent/scripts/acp.findings-import.sh --input tests/fixtures/coderabbit-findings-sample.json
 ```
 
-Until M81 ships, annotate only; do not skip ACP review. Weekly `progress.yaml` recurring task stays `command: /acp-review --report --carryover` — CodeRabbit behavior lives in this doc, not a step list (F-101-02).
+Phase 1 deterministic rules are **never** deferred to CodeRabbit (F-101-07). Weekly `progress.yaml` recurring task stays `command: /acp-review --report --carryover` — CodeRabbit behavior lives in this doc, not a step list (F-101-02). Do **not** invent `/acp-findings-import` (F-101-06).
 
 See `agent/wiki/coderabbit-policy-map-lite.md` and `agent/wiki/coderabbit-integration.md`.
 

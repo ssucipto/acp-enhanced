@@ -1,0 +1,41 @@
+# CodeRabbit starter config for ACP Enhanced projects
+# Copy to repo root as `.coderabbit.yaml`, then:
+#   /acp-preferences-set acp integrations.coderabbit.enabled true
+#
+# Docs: https://docs.coderabbit.ai/reference/configuration
+# ACP guide: agent/wiki/coderabbit-integration.md
+#
+# Manual copy only — auto-generation of this file from patterns/lessons is deferred
+# (no generate_on_commit preference in M81).
+
+language: en-US
+
+reviews:
+  profile: chill
+  high_level_summary: true
+  poem: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+      - develop
+      - mainline
+  path_filters:
+    # ACP protocol tree is usually out of product-review scope; adjust per repo.
+    - "!agent/memory/**"
+    - "!agent/reports/**"
+    - "!**/*.lock"
+  path_instructions:
+    - path: "CHANGELOG.md"
+      instructions: |
+        Root CHANGELOG.md is the product/framework release changelog. Do not ask
+        to relocate it under agent/.
+    - path: "README.md"
+      instructions: |
+        Root README.md is the public landing page. ACP "content lives in agent/"
+        applies to protocol/memory, not README.
+    - path: "agent/commands/**"
+      instructions: |
+        ACP command docs are agent directives. Prefer clarity and deterministic
+        steps over stylistic rewrites.

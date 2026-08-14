@@ -2,13 +2,13 @@
 id: task-271
 milestone: M81
 title: ".coderabbit.yaml starter template + documentation"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-07-24
-started: null
-completed: null
+started: 2026-08-14
+completed: 2026-08-14
 route: route-260
 depends_on: [task-269]
 design_reference: [agent/wiki/coderabbit-integration.md](../../wiki/coderabbit-integration.md)

@@ -2,13 +2,13 @@
 id: task-270
 milestone: M81
 title: "acp.findings-import.sh — CodeRabbit findings → carryovers"
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 6
 created: 2026-07-24
-started: null
-completed: null
+started: 2026-08-14
+completed: 2026-08-14
 route: route-259
 depends_on: [task-269]
 design_reference: [agent/patterns/local.optional-external-tool.md](../../patterns/local.optional-external-tool.md)

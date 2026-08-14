@@ -2,13 +2,13 @@
 id: task-273
 milestone: M81
 title: "E2E integration + optionality regression tests"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-07-24
-started: null
-completed: null
+started: 2026-08-14
+completed: 2026-08-14
 route: route-262
 depends_on: [task-270, task-272]
 design_reference: [task-258](../milestone-78-coderabbit-optionality-foundation/task-258-e2e-degradation.md)

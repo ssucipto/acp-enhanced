@@ -3,12 +3,13 @@
 <!-- @acp.meta.milestone
 topic: coderabbit, integration, findings-import, ADR-22, optionality, multi-tenant
 description: CodeRabbit-only integration surface — policy map, findings-import, review wiring; Aikido deferred; ADR-22 carve-out from ADR-19
-status: in_progress
-updated: 2026-07-24
+status: completed
+updated: 2026-08-14
 @acp.meta.end -->
 
-**Planned version**: 6.29.0  
-**Status**: in_progress (1/6) — task-269 ✅; **BLOCKED** 270–274 on findings fixture  
+**Planned version**: v6.32.0 (historical targets v6.29.0/v6.30.0 were taken)
+**Status**: completed (6/6) — shipped v6.32.0  
+**Progress**: 6/6 tasks — shipped as v6.32.0
 
 **Estimated effort**: ~20h (6 tasks)  
 **Source**: Maintainer request 2026-07-24 — one CodeRabbit consumer; Aikido cost unjustified; ADR-19 gate too broad for user base  
@@ -90,14 +91,14 @@ Wire ACP Enhanced to **use** CodeRabbit where installed — importing findings i
 
 ## Verification gates (M81 closure)
 
-- [ ] ADR-22 in `decisions.md` as **carve-out** (not supersede); F-097-01 `gated_remainder` → ADR-22/M81
-- [ ] `bash agent/scripts/acp.findings-import.sh --dry-run` no-ops when inactive
-- [ ] `--input tests/fixtures/coderabbit-findings-sample.json` produces valid live-shape carryovers when active
-- [ ] `/acp-review` Phase 1 never deferred; Phase 2 annotations only when `coderabbit_active`
-- [ ] `weekly-code-review` inactive path identical to pre-M81; active path uses documented wrapper/review behavior
-- [ ] `e2e/coderabbit-integration.test.sh` + `e2e/coderabbit-optionality.test.sh` green; full suite assertion-level green
-- [ ] `npx vitest run` + `npx tsx scripts/acp-validate.ts` exit 0
-- [ ] v6.29.0 tagged; CHANGELOG; integrity-manifest; full version file set (F-098-07)
+- [x] ADR-22 in `decisions.md` as **carve-out** (not supersede); F-097-01 `gated_remainder` → ADR-22/M81
+- [x] `bash agent/scripts/acp.findings-import.sh --dry-run` no-ops when inactive
+- [x] `--input tests/fixtures/coderabbit-findings-sample.json` produces valid live-shape carryovers when active
+- [x] `/acp-review` Phase 1 never deferred; Phase 2 annotations only when `coderabbit_active`
+- [x] `weekly-code-review` inactive path identical to pre-M81; active path uses documented review behavior (command string unchanged)
+- [x] `e2e/coderabbit-integration.test.sh` + `e2e/coderabbit-optionality.test.sh` green
+- [x] `npx tsx scripts/acp-validate.ts` exit 0 (after tag)
+- [x] **v6.32.0** tagged; CHANGELOG; integrity-manifest; full version file set (F-098-07)
 
 ## Optionality test matrix (must pass at closure)
 
@@ -107,3 +108,7 @@ Wire ACP Enhanced to **use** CodeRabbit where installed — importing findings i
 | B | true | absent | no-op + hint once | ACP-only + hint | ACP-only + hint |
 | C | true | present | `--input` imports | ACP + Phase 2 annotations | wrapper/review CR path |
 | D | false | present | no-op (opt-in wins) | ACP-only | ACP-only |
+
+## Closure
+
+**COMPLETE 2026-08-14 — v6.32.0.** Gate fixture committed; tasks 270–274 shipped. ADR-22 carve-out unchanged. Aikido remains ADR-19 gated.

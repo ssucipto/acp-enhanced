@@ -2,13 +2,13 @@
 id: task-272
 milestone: M81
 title: "Wire /acp-review + weekly-code-review for coderabbit_active"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 4
 created: 2026-07-24
-started: null
-completed: null
+started: 2026-08-14
+completed: 2026-08-14
 route: route-261
 depends_on: [task-269, task-270, task-271]
 design_reference: [agent/commands/acp.review.md](../../commands/acp.review.md), [ADR-21](../../memory/decisions.md)
@@ -58,3 +58,7 @@ Augment `/acp-review` (and optionally the weekly recurring entry) with CodeRabbi
 ## User-Observable Acceptance
 
 CodeRabbit repos get review annotations + import pointer; everyone else sees no change.
+
+## Implementation notes
+
+**Choice recorded:** Preferred path — keep `weekly-code-review` command string unchanged; CodeRabbit behavior lives in `acp.review.md` (F-101-02).
