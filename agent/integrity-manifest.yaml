@@ -393,7 +393,7 @@ files:
     sha256: "2989f981d376ec1fa3875a0da5a634762691f0c91ba6c85633c0ef0d5ac8062a"
     last_verified: "2026-08-14"
   - path: "agent/scripts/acp.review-scan.sh"
-    sha256: "bd3fd5c40e6cc53856ed5682bc831450a8ca727575e5e2affaff36cf6717b136"
+    sha256: "9c8acb0017a558c107731c98acfed3083923842bf12d315d1d8e92bea57a1255"
     last_verified: "2026-08-14"
   - path: "agent/scripts/acp.sessions.sh"
     sha256: "0b84d134c3e42f3cd42ff607a6dbdcfec8a478f143948a17631c39fed30b6a0e"

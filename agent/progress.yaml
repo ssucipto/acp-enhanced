@@ -6630,21 +6630,21 @@ tasks:
   - id: task-319
     name: Package/wrappers/coverage/integrity-manifest
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-319-package-wrappers-manifest.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started:  2026-08-14
+    completed_date:  2026-08-14
+    actual_hours:  2
     estimated_hours: 4
     notes: phase 4; depends 311,313,315,316; exact package.yaml file names
   - id: task-320
     name: Consumer upgrade dry-run + FIFOZ notification
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-86-fifoz-field-feedback-port/task-320-consumer-upgrade-fifoz-note.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started:  2026-08-14
+    completed_date:  2026-08-14
+    actual_hours:  2
     estimated_hours: 3
     notes: phase 4; corrects six-unreported false positive
   - id: task-321

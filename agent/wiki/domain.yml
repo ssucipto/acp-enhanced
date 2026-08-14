@@ -3,11 +3,11 @@
 # last_verified: 2026-06-15 (acp-sync — README/PRD aligned to v6.12.1)
 
 commands:
-  count: 70  # 70 acp.* commands (M67 +acp.receive); plus 2 git.* + 1 command.template.md
+  count: 72  # 72 acp.* commands (M86 +acp.ci +acp.pr); plus 2 git.* + 1 command.template.md
   location: agent/commands/
   naming: "acp.{command-name}.md — dot notation, acp namespace for core; git.{command}.md for git namespace"
   categories:
-    core: [acp.audit, acp.carryover-query, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.integrity, acp.memory-sync, acp.plan, acp.proceed, acp.receive, acp.repair-tools, acp.report, acp.resume, acp.review, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
+    core: [acp.audit, acp.carryover-query, acp.ci, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.integrity, acp.memory-sync, acp.plan, acp.pr, acp.proceed, acp.receive, acp.repair-tools, acp.report, acp.resume, acp.review, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
     artifact: [acp.artifact-glossary, acp.artifact-reference, acp.artifact-research]
     clarification: [acp.clarification-address, acp.clarification-capture, acp.clarification-create]
     design: [acp.command-create, acp.design-create, acp.design-reference, acp.pattern-create]
