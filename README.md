@@ -1,8 +1,8 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.32.1-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.32.2-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
-[![Milestones](https://img.shields.io/badge/milestones-74%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
+[![Milestones](https://img.shields.io/badge/milestones-81%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-72%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Visualizer](https://img.shields.io/badge/visualizer-v1.5.0-6e47ff)](https://github.com/ssucipto/ACPEnhanced-Visual)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -33,7 +33,7 @@ The framework layer solves a specific problem: as your project grows, the AI age
 | `agent/memory/` | Session log, lessons learned, patterns, architectural decisions |
 | `agent/wiki/` | Reference docs loaded section-by-section (never all at once) |
 | `agent/commands/` | 72 self-documenting slash commands (`/acp-init`, `/acp-ci`, `/acp-pr`, `/acp-review`, `/acp-integrity`, `/acp-audit`, etc.) |
-| `agent/scripts/` | 36 bash scripts + TypeScript tooling for dispatch and validation |
+| `agent/scripts/` | 56 bash scripts + TypeScript tooling for dispatch and validation |
 
 > 🖥️ **Companion Tool**: [**ACP Enhanced Visualizer**](https://github.com/ssucipto/ACPEnhanced-Visual) (v1.5.0) — a full-featured local web dashboard that brings your `agent/progress.yaml` to life. Monitors milestones, tasks, sessions, ADRs, lessons, patterns, packages, and audit reports — all from a single interactive UI. **Multi-project tab support, GitHub remote read, and zero-config `npx acp-visualizer` CLI.** [See full feature list below →](#visualize-your-project)
 
@@ -118,7 +118,7 @@ This catches the most common AI coding mistake: letting the agent commit directl
 
 ## Slash Commands
 
-ACP Enhanced registers **70 slash commands** across two tools — available after bootstrapping:
+ACP Enhanced registers **72 slash commands** across two tools — available after bootstrapping:
 
 | Tool | How to invoke | Source files |
 |---|---|---|
@@ -129,6 +129,7 @@ ACP Enhanced registers **70 slash commands** across two tools — available afte
 ```text
 /acp-init          /acp-proceed       /acp-plan          /acp-status
 /acp-resume        /acp-report        /acp-audit         /acp-handoff       /acp-receive
+/acp-ci            /acp-pr            /acp-review        /acp-integrity
 /acp-package-*     /acp-project-*     /acp-preferences-* /acp-clarification-*
 /acp-design-*      /acp-artifact-*    /git-commit        /git-init
 ```
@@ -137,7 +138,8 @@ ACP Enhanced registers **70 slash commands** across two tools — available afte
 > opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.  
 > **Note**: All 72 `acp.*` commands (plus 2 `git.*`) are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`, `/acp-ci`, `/acp-pr`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.  
 > **Cross-agent handoff**: See [`agent/wiki/cross-agent-handoff.md`](agent/wiki/cross-agent-handoff.md) for executor vs cross-repo modes, `/acp-receive`, and git drift checks.  
-> **CodeRabbit (optional)**: See [`agent/wiki/coderabbit-integration.md`](agent/wiki/coderabbit-integration.md) — off by default; ACP is fully functional without it. PR-check integration is gated (ADR-19).
+> **CodeRabbit (optional)**: See [`agent/wiki/coderabbit-integration.md`](agent/wiki/coderabbit-integration.md) — off by default; ACP is fully functional without it. **M81 (ADR-22)** ships findings-import (`bash agent/scripts/acp.findings-import.sh --input …`) + starter `.coderabbit.yaml` template. Aikido / M76 / M77 remain gated (ADR-19).  
+> **Local CI / PR (M86)**: `/acp-ci` predicts GitHub Actions locally; `/acp-pr` opens PRs only after those gates. Fork upgrades: `agent/upstream-delta.yml` + upgrade-guard HARD-fail on version-update.
 
 ---
 
@@ -853,6 +855,7 @@ This will:
 - **`/acp-validate`** - Validate ACP structure
 - **`/acp-ci`** - Local CI parity (`--fast` default; `--full` for multi-minute CI equivalence)
 - **`/acp-pr`** - Feature PR prep (gates via `/acp-ci` only)
+- **`acp.findings-import.sh`** - Import CodeRabbit findings JSON → carryovers when `coderabbit_active` (script; no slash command)
 - **`/acp-audit`** - Audit task completion status, bugs, and improvement opportunities
 - **`/acp-review`** - Standards-based code quality and security review (64 rules)
 - **`/acp-integrity`** - AI code integrity scan — Unicode, entropy, supply chain (55 rules v1.0)

@@ -1,7 +1,7 @@
 # Agent Context Protocol Enhanced (ACP Enhanced)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.32.1
+**Version**: 6.32.2
 **Fork of**: [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol)
 **Maintained by**: [ssucipto/acp-enhanced](https://github.com/ssucipto/acp-enhanced)
 **Created**: 2026-02-11
@@ -1066,6 +1066,8 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`/acp-validate`](agent/commands/acp.validate.md)** - Validate ACP file health and index consistency
 - **[`/acp-ci`](agent/commands/acp.ci.md)** - Local CI parity predictor (`--fast` default; `--full` ≈ multi-minute CI)
 - **[`/acp-pr`](agent/commands/acp.pr.md)** - Feature PR prep; gates delegated only to `/acp-ci`
+- **[`acp.findings-import.sh`](agent/scripts/acp.findings-import.sh)** - Import CodeRabbit findings → carryovers when active (M81; `--input` only)
+- **[`acp.upgrade-guard.sh`](agent/scripts/acp.upgrade-guard.sh)** - HARD-fail version-update when `upstream-delta.yml` present (M86 / P-UG-1)
 
 **Git Namespace** *(separate from `acp.*`)*
 - **[`@git.commit`](agent/commands/git.commit.md)** - Version-aware commit with CHANGELOG validation and progress.yaml update
