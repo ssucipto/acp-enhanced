@@ -2,13 +2,13 @@
 id: task-313
 milestone: M86
 title: "E2E /acp-pr + wrappers on all surfaces"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 1b
 depends_on: [task-312]
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -57,9 +57,9 @@ FIFOZ validator caught missing .github/prompts wrapper. AE must ship all four su
 
 ## Verification
 
-- [ ] All eight wrapper files exist
-- [ ] e2e/acp.pr.test.sh passes
-- [ ] Wrappers point at agent/commands sources
+- [x] All eight wrapper files exist
+- [x] e2e/acp.pr.test.sh passes
+- [x] Wrappers point at agent/commands sources
 
 ## User-Observable Acceptance
 
