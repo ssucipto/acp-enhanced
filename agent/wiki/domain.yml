@@ -1,6 +1,6 @@
 # Domain Entity Model — ACP Protocol project
 # Load ONE section at a time — never load the entire file
-# last_verified: 2026-06-15 (acp-sync — README/PRD aligned to v6.12.1)
+# last_verified: 2026-08-14 (acp-sync — README/progress aligned to v6.32.1; M81+M86 shipped)
 
 commands:
   count: 72  # 72 acp.* commands (M86 +acp.ci +acp.pr); plus 2 git.* + 1 command.template.md

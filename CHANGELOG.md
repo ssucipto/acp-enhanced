@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.32.2] — 2026-08-14
+
+### Fixed
+- **Docs currency after M81+M86** — README / AGENT / progress / domain.yml aligned to shipped state (72 slash commands, 56 scripts, 81 milestones; findings-import + `/acp-ci` / `/acp-pr` / upgrade-guard surfaced).
+
+### Changed
+- Session + pattern: post-ship README count sync discipline.
+
+---
+
 ## [6.32.1] — 2026-08-14
 
 ### Fixed (audit-117 / review-005 — M81 post-ship)
