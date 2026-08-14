@@ -94,7 +94,7 @@ coderabbit_active() {
 # stderr hint. Silent in every other state (disabled, or enabled+available).
 coderabbit_hint_if_missing() {
   if [[ "$(_coderabbit_enabled)" == "true" ]] && ! coderabbit_available; then
-    echo "[ACP] CodeRabbit is enabled but no config was detected — add a .coderabbit.yaml or set integrations.coderabbit.enabled false." >&2
+    echo "[ACP] CodeRabbit is enabled but no config was detected — copy agent/templates/coderabbit.yaml.template to .coderabbit.yaml (or set integrations.coderabbit.config_path), or set integrations.coderabbit.enabled false." >&2
   fi
 }
 
