@@ -898,19 +898,19 @@ milestones:
     name: consumer-project Field-Feedback Port (v6.31.0)
     priority: 5
     status: in_progress
-    progress: 47
+    progress: 65
     started: 2026-08-14
     completed: null
     estimated_weeks: 2
-    tasks_completed: 8
+    tasks_completed: 11
     tasks_total: 17
     file: agent/milestones/milestone-86-consumer-project-field-feedback-port.md
     design: agent/design/local.consumer-project-field-feedback-port.md
     notes: >
-      IN PROGRESS 2026-08-14. audit-115 READY. Completed 305-312.
+      IN PROGRESS 2026-08-14. audit-115 READY. Completed 305-315.
       BINDINGS: ADR-24/25/26 + P-UG-1 HARD upgrade-guard,
       P-CI-1 ci.yml runtime-only, P-PATH-1 agent/scripts/acp.ci-steps.sh,
-      319/321 depend on 316/317. Next: task-314 upgrade-guard (313 E2E/wrappers follow).
+      319/321 depend on 316/317. Next: task-316 review-scan diff-merge.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -9586,9 +9586,8 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- 'M86 IN PROGRESS (8/17): 305-312 done. Next task-314 upgrade-guard;
-  313 E2E/wrappers + 315 follow. Amended DAG: 314←310; 319←316; 321←316+317;
-  P-UG-1 HARD upgrade-guard.'
+- 'M86 IN PROGRESS (11/17): 305-315 done. Next task-316 review-scan diff-merge.
+  Amended DAG: 319←316; 321←316+317; P-UG-1 HARD upgrade-guard shipped.'
 - 'M81 (current_milestone): still fixture-gated. Parallel to M86.'
 - 'Unblocked side work: F2-09 (low) quote-aware YAML # strip.'
 - 'Overdue weeklies: /acp-review and /acp-integrity (next_due 2026-07-31).'
