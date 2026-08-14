@@ -2,13 +2,13 @@
 id: task-306
 milestone: M86
 title: "False-green contracts in constraints.yml + pattern"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 0
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
 audit_findings: ['F-114-05', 'F-114-06', 'F-114-07']
@@ -51,9 +51,10 @@ feedback-009 found `set +e` does not suppress ERR traps; empty `--only` plans PA
 
 ## Verification
 
-- [ ] constraints.yml contains the four new bash_rules (or equivalent named FG rules)
-- [ ] Pattern file exists with FG-1…FG-7 and examples
-- [ ] No command scripts changed in this task
+- [x] constraints.yml contains the four new bash_rules (or equivalent named FG rules)
+- [x] Pattern file exists with FG-1…FG-7 and examples
+- [x] No command scripts changed in this task
+- [x] skills/scripts.md points at pattern + set +e / ERR-trap rule
 
 ## User-Observable Acceptance
 

@@ -68,6 +68,13 @@ bash_rules:
   - use_local_in_functions: true
   - cross_platform_sed: "sed -i '' on macOS, sed -i on Linux — detect with uname"
   - cross_platform_date: "date +%N unavailable on macOS — use $RANDOM or python fallback"
+  # M86 FG contracts (pattern: agent/patterns/local.false-green-contracts.md)
+  - set_plus_e_does_not_suppress_err_trap: "Under trap ERR, never use set +e to capture status — use if cmd; then rc=0; else rc=$?; fi (FG-1)"
+  - never_report_success_with_zero_units_executed: "Empty --only plans, zero matched gates, or all-SKIP runs must not PASS (FG-2, FG-5)"
+  - assert_output_contract_not_exit_code_alone: "When the contract is printed output/report/JSON, assert that output — exit 0 alone is insufficient (FG-3)"
+  - probe_dependencies_in_execution_context: "Probe helpers via bash -c / script context, not the agent interactive shell (FG-4)"
+  - dry_run_is_not_verification: "Dry-run/plan-only must not satisfy verified acceptance (FG-6)"
+  - fail_closed_on_unknown_or_empty_selection: "Unknown names and empty filtered selections fail closed (FG-7)"
 
 command_doc_rules:
   - every_command_needs_directive_header: "🤖 Agent Directive block at top"
