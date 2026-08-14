@@ -5,6 +5,13 @@
 
 - date: 2026-08-14
   executor: cursor-composer
+  tasks: [task-270, task-271, task-272, task-273, task-274]
+  done: [coderabbit-fixture, findings-import, coderabbit-template, review-wiring, coderabbit-e2e, v6.32.0-m81]
+  deferred: [F2-09 → backlog, D-002-01-08 → polish, weekly-integrity → admin]
+  key_fact: "M81 gate fixture mixes AE coderabbit --agent NDJSON with FIFOZ inventory; import is --input only (no --pr)."
+
+- date: 2026-08-14
+  executor: cursor-composer
   tasks: [audit-116, review-004, F-116-01, F-116-02, F-116-03, F-116-04, F-116-05, F-116-06, F-116-07]
   done: [m86-post-ship-audit, m86-review-004, shellcheck-sc1125-fix, e2e-matrix-skip-network, docs-domain-drift, v6.31.1]
   deferred: [F2-09 → backlog, D-002-01-08 → post-M86, weekly-integrity → admin, M81-fixture → M81]
