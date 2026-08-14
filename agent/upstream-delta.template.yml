@@ -1,0 +1,36 @@
+# ACP Enhanced — upstream-delta TEMPLATE for consumer forks (M86 / ADR-25)
+#
+# PURPOSE
+#   /acp-version-update overwrites files owned by the upstream ACP package.
+#   Copy this file to agent/upstream-delta.yml and register every upstream-owned
+#   file your fork customizes. After any ACP version update:
+#
+#       bash agent/scripts/acp.upgrade-guard.sh
+#
+#   Missing sentinel → HARD fail (P-UG-1). Prefer upstream when equal/better,
+#   then DELETE the entry (prefer-upstream-when-superseded).
+#
+# Sentinels are matched with grep -F. Avoid fancy quotes that break -F matching.
+# Do NOT add dynamic content (dates, task IDs) inside sentinel strings.
+#
+# Schema (each collisions entry):
+#   - path: relative path from repo root
+#     change: human description of the local enhancement
+#     sentinel: greppable fixed string that must remain in path
+#     upstream_ref: optional audit/feedback id
+#     supersede_when: when it is safe to delete this entry
+#     risk: optional severity note
+
+acp_core_version: 0.0.0
+upstream: https://github.com/prmichaelsen/agent-context-protocol
+last_reviewed: 2026-08-14
+
+collisions: []
+
+# Optional inventory of fork-only files (not checked by the guard).
+local_only:
+  commands: []
+  scripts: []
+  config: []
+  schemas: []
+  tests: []
