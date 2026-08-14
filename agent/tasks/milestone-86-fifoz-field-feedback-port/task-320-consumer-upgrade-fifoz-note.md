@@ -2,13 +2,13 @@
 id: task-320
 milestone: M86
 title: "Consumer upgrade dry-run + FIFOZ notification"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 4
 depends_on: [task-314, task-319]
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -49,10 +49,10 @@ User asked how to ensure updates improve FIFOZ without losing functions. This ta
 
 ## Verification
 
-- [ ] Upgrade note corrects false positive
-- [ ] Lists supersede candidates
-- [ ] Links fork checklist
-- [ ] Dry-run results recorded
+- [x] Upgrade note corrects false positive
+- [x] Lists supersede candidates
+- [x] Links fork checklist
+- [x] Dry-run results recorded
 
 ## User-Observable Acceptance
 
