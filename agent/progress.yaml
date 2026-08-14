@@ -903,19 +903,13 @@ milestones:
     completed: 2026-08-14
     estimated_weeks: 2
     tasks_completed: 17
-    total_tasks: 17
-    notes: >
-      Shipped v6.31.0. /acp-ci, /acp-pr, upgrade-guard, FG contracts, review-scan merge.
-      current_milestone remains M81 (CodeRabbit fixture gate).
     tasks_total: 17
     file: agent/milestones/milestone-86-fifoz-field-feedback-port.md
     design: agent/design/local.fifoz-field-feedback-port.md
     notes: >
-      IN PROGRESS 2026-08-14. audit-115 READY. Completed 305-318.
-      BINDINGS: ADR-24/25/26 + P-UG-1 HARD upgrade-guard,
-      P-CI-1 ci.yml runtime-only, P-PATH-1 agent/scripts/acp.ci-steps.sh,
-      review-scan merged (316) + discipline pattern (317) + feedback-002 matrix (318).
-      Next: task-319 package/wrappers/manifest.
+      COMPLETE 2026-08-14 — shipped v6.31.0. /acp-ci, /acp-pr, upgrade-guard,
+      FG contracts, review-scan FIFOZ↔M83 merge. BINDINGS: ADR-24/25/26 + P-UG-1,
+      P-CI-1, P-PATH-1. current_milestone remains M81 (CodeRabbit fixture gate).
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
