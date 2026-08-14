@@ -31,7 +31,7 @@ files_affected:
 
 ## Objective
 
-Close M81: verification, **v6.29.0**, CHANGELOG, carryover settlement (F-101-01..08 → fixed), tag.
+Close M81: verification, **v6.32.0**, CHANGELOG, carryover settlement (F-101-01..08 → fixed), tag.
 
 ## Steps
 
@@ -40,11 +40,11 @@ Close M81: verification, **v6.29.0**, CHANGELOG, carryover settlement (F-101-01.
    - `npx vitest run` exit 0
    - `bash run-e2e-tests.sh --skip-network` — document **assertion-level** pass/fail counts (audit-099)
    - Both coderabbit E2E suites
-2. Bump 6.28.2 → 6.29.0 on **full** set (F-098-07): identity.yml, package.yaml, AGENTS.md, CLAUDE.md, copilot-instructions (via AGENTS sync), AGENT.md, README badge, CHANGELOG, progress.yaml `project.version`
+2. Bump to 6.32.0 (historical 6.29.0 taken by M83) on **full** set (F-098-07): identity.yml, package.yaml, AGENTS.md, CLAUDE.md, copilot-instructions (via AGENTS sync), AGENT.md, README badge, CHANGELOG, progress.yaml `project.version`
 3. Regenerate `agent/integrity-manifest.yaml`
 4. Mark F-101-01..08 `status: fixed`, `fix_applied_date`, `verified_in_audit: audit-101` or m81-closure
 5. Mark M81 + tasks completed; refresh next_steps (Aikido still deferred)
-6. Tag `v6.29.0`; `/acp-commit`
+6. Tag `v6.32.0`; `/acp-commit`
 
 ## Verification
 
@@ -55,4 +55,4 @@ Close M81: verification, **v6.29.0**, CHANGELOG, carryover settlement (F-101-01.
 
 ## User-Observable Acceptance
 
-v6.29.0 ships optional CodeRabbit integration; default install unchanged.
+v6.32.0 ships optional CodeRabbit integration; default install unchanged.

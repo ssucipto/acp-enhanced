@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.32.1] — 2026-08-14
+
+### Fixed (audit-117 / review-005 — M81 post-ship)
+- **findings-import** — invalid JSON now fails with a one-line ERROR (no Python traceback / bare ERR line).
+- **E2E** — cases E–G (dry-run, NDJSON, bad JSON); assert major→high; clear SC2034 unused captures.
+- Stale v6.29.0 closure prose synced to v6.32.x.
+
+---
+
 ## [6.32.0] — 2026-08-14
 
 ### Added (M81 — CodeRabbit integration layer, ADR-22)

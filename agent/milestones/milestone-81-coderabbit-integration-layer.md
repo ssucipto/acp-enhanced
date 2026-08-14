@@ -70,7 +70,7 @@ Wire ACP Enhanced to **use** CodeRabbit where installed — importing findings i
 | **1** | route-260 | task-271 | `.coderabbit.yaml` starter + wiki bootstrap | 2h | After 269 |
 | **2** | route-261 | task-272 | Wire `/acp-review` + weekly wrapper | 4h | F-101-02/06/07 |
 | **2** | route-262 | task-273 | E2E integration + optionality | 3h | Cases A–D |
-| **3** | route-263 | task-274 | Closure — ship v6.29.0 | 2h | Full version file list |
+| **3** | route-263 | task-274 | Closure — ship v6.32.0 | 2h | Full version file list |
 
 **Routes**: create at `/acp-dispatch` time (F-098-06 pattern) — not pre-created.
 
