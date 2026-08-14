@@ -205,13 +205,89 @@ get_indent_level() {
     echo "$count"
 }
 
-# Remove inline comments from a YAML line (everything from # onwards).
+# Remove inline comments from a YAML line (quote-aware — F2-09).
 # Usage: strip_comments "key: value # comment"  → "key: value "
+#        strip_comments 'quoted_hash: "tracked #42 open"'  → full line preserved
+# A `#` is a comment only when outside quotes AND at line start or after whitespace.
 strip_comments() {
-    # Equivalent to sed 's/#.*$//' — including the pre-existing flaw that a `#`
-    # inside a quoted value truncates it (see F2-09). Preserved deliberately so
-    # this remains a pure fork removal.
-    printf '%s\n' "${1%%#*}"
+    local line="$1"
+
+    # Fast paths — keep yaml_parse hot loop under the unit perf budget.
+    case "$line" in
+        *'#'*) ;;
+        *) printf '%s\n' "$line"; return ;;
+    esac
+    case "$line" in
+        *\"*|*"'"*) ;;
+        *)
+            # Unquoted: strip from first whitespace-# (or leading #).
+            local _sc="$line"
+            if [[ "$_sc" =~ ^(.*[[:space:]])# ]]; then
+                printf '%s\n' "${BASH_REMATCH[1]}"
+            elif [[ "$_sc" == \#* ]]; then
+                printf '%s\n' ""
+            else
+                # bare # without prior whitespace (e.g. URL fragment) — keep
+                printf '%s\n' "$line"
+            fi
+            return
+            ;;
+    esac
+
+    local i=0
+    local len=${#line}
+    local out=""
+    local quote=""
+    local c prev
+
+    while [ "$i" -lt "$len" ]; do
+        c="${line:i:1}"
+        if [ -n "$quote" ]; then
+            out="${out}${c}"
+            if [ "$quote" = '"' ]; then
+                if [ "$c" = '\' ]; then
+                    i=$((i + 1))
+                    if [ "$i" -lt "$len" ]; then
+                        out="${out}${line:i:1}"
+                    fi
+                elif [ "$c" = '"' ]; then
+                    quote=""
+                fi
+            else
+                # single-quoted: '' is an escaped quote
+                if [ "$c" = "'" ]; then
+                    if [ "$((i + 1))" -lt "$len" ] && [ "${line:i+1:1}" = "'" ]; then
+                        i=$((i + 1))
+                        out="${out}'"
+                    else
+                        quote=""
+                    fi
+                fi
+            fi
+        else
+            case "$c" in
+                '"'|"'")
+                    quote="$c"
+                    out="${out}${c}"
+                    ;;
+                '#')
+                    if [ -z "$out" ]; then
+                        break
+                    fi
+                    prev="${out: -1}"
+                    if [[ "$prev" =~ [[:space:]] ]]; then
+                        break
+                    fi
+                    out="${out}${c}"
+                    ;;
+                *)
+                    out="${out}${c}"
+                    ;;
+            esac
+        fi
+        i=$((i + 1))
+    done
+    printf '%s\n' "$out"
 }
 
 # Trim leading and trailing whitespace from a string.
@@ -263,8 +339,8 @@ yaml_parse() {
         # Skip comment lines
         case "$line" in \#*) continue ;; esac
         
-        # Strip inline comments
-        line="${line%%#*}"
+        # Strip inline comments (quote-aware — F2-09)
+        line=$(strip_comments "$line")
         
         # Calculate indentation
         local indent=0

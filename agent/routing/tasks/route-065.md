@@ -11,7 +11,7 @@ files_affected: [tests/acp.bootstrap-flags.test.sh, tests/acp.observability.test
 tokens_est: 3000
 created: 2026-06-03
 completed: 2026-06-03
-depends_on: [route-060]
+depends_on: []  # route-060 retired — cleared for D-002-08
 ---
 
 # Bootstrap + Observability Tests

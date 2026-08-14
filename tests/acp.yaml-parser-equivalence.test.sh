@@ -256,6 +256,20 @@ run_equivalence_check() {
                     *'|'*) has_pipe=1 ;;
                 esac
 
+                # F2-09: pre-M85 (and pre-fix) truncated at `#` inside quotes.
+                # When current keeps a longer value that still starts with golden,
+                # and current contains `#`, treat as expected divergence.
+                has_hash_fix=0
+                if [ "$has_pipe" -eq 0 ] && [ "$o_val" != "$n_val" ]; then
+                    case "$n_val" in
+                        *'#'*)
+                            case "$n_val" in
+                                "$o_val"*) has_hash_fix=1 ;;
+                            esac
+                            ;;
+                    esac
+                fi
+
                 if [ "$has_pipe" -eq 1 ]; then
                     # Documented exception (F-112-01 / task-299): the pre-M85
                     # parser truncated any value containing `|` at the first
@@ -272,6 +286,13 @@ run_equivalence_check() {
                             echo "    current (corrected): '${n_val}'"
                         } >> "$divergence_log"
                     fi
+                elif [ "$has_hash_fix" -eq 1 ]; then
+                    EXPECTED_DIVERGENCES=$((EXPECTED_DIVERGENCES + 1))
+                    {
+                        echo "  [expected: F2-09 # fix] file=$f node=#${n_id} key='${n_key}'"
+                        echo "    pre-fix (truncated): '${o_val}'"
+                        echo "    current (corrected): '${n_val}'"
+                    } >> "$divergence_log"
                 else
                     if [ "$o_id" != "$n_id" ] || [ "$o_type" != "$n_type" ] || \
                        [ "$o_key" != "$n_key" ] || [ "$o_val" != "$n_val" ] || \
@@ -300,8 +321,8 @@ run_equivalence_check() {
 
     echo ""
     if [ "$EXPECTED_DIVERGENCES" -gt 0 ]; then
-        echo -e "${YELLOW}ℹ ${EXPECTED_DIVERGENCES} expected divergence(s) — all attributable to the F-112-01 \`|\` truncation fix:${NC}"
-        grep -A2 '\[expected: F-112-01' "$divergence_log"
+        echo -e "${YELLOW}ℹ ${EXPECTED_DIVERGENCES} expected divergence(s) — F-112-01 \`|\` and/or F2-09 \`#\` quote fixes:${NC}"
+        grep -A2 '\[expected: F' "$divergence_log" || true
         echo ""
     fi
 

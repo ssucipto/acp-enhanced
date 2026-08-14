@@ -11,7 +11,7 @@ files_affected: [tests/acp.light-mode.test.sh]
 tokens_est: 4000
 created: 2026-06-03
 completed: 2026-06-03
-depends_on: [route-060]
+depends_on: []  # route-060 retired — cleared for D-002-08
 ---
 
 # Light-mode Protocol Tests
