@@ -2,13 +2,13 @@
 id: task-316
 milestone: M86
 title: "Diff-merge acp.review-scan.sh FIFOZ ↔ AE M83"
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 6
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 3
 depends_on: [task-307]
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -25,7 +25,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: FG-5
 depends_on: task-307
-status: planned
+status: completed
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -48,10 +48,10 @@ Diff is in `agent/reports/fifoz-port-inbox-2026-08-14/acp.review-scan.sh.fifoz-v
 
 ## Verification
 
-- [ ] Merge notes list every hunk decision
-- [ ] review-scan E2E green
-- [ ] measure --ci green
-- [ ] File is not identical to either pre-merge AE or FIFOZ blindly
+- [x] Merge notes list every hunk decision
+- [x] review-scan E2E green
+- [x] measure --ci green
+- [x] File is not identical to either pre-merge AE or FIFOZ blindly
 
 ## User-Observable Acceptance
 
