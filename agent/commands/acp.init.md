@@ -89,6 +89,20 @@ Display the following informational header, then continue immediately:
     /acp-version-check-for-updates   Part of init process
 ```
 
+### 0.5. Top commands for this phase (D-002-01)
+
+After the header, print a short phase-aware shortlist (max 5) so operators are not lost in 70+ commands. Pick from `agent/core/routing.yml → command_suggestions` and `agent/progress.yaml`:
+
+| Project phase (from progress) | Suggest these first |
+|-------------------------------|---------------------|
+| New / unknown milestone | `/acp-status`, `/acp-plan`, `/acp-proceed`, `/acp-validate`, `/acp-commit` |
+| Active coding task | `/acp-proceed`, `/acp-status`, `/acp-validate`, `/acp-commit`, `/git-commit` |
+| Pre-push / release | `/acp-ci`, `/acp-pr`, `/acp-validate`, `/acp-integrity --fast`, `/acp-commit` |
+| Audit / review week | `/acp-review`, `/acp-integrity --self`, `/acp-audit`, `/acp-carryover-query`, `/acp-commit` |
+| Empty index (`agent/index/` missing) | Also mention `/acp-index init` (D-002-06) |
+
+Output one line: `Top for this phase: /acp-… · /acp-… · …`
+
 ### 1. Check for ACP Updates
 
 **Skip item**: `checks` | **Skipped by**: `--quick`  

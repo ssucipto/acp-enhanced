@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.32.3] — 2026-08-14
+
+### Fixed
+- **F2-09** — quote-aware YAML `#` stripping in `acp.yaml-parser.sh` (keeps `#` inside quoted scalars).
+- **depends_on** — `validateDependsOnEdges` + clear stale route-060/062 references (D-002-08).
+
+### Added
+- **D-002 polish** — init top-5 (01), YAML lint hook template (02), commit feedback/memory-sync hints (03/07), visualizer min version (05), index hard bootstrap gate (06).
+- **integrity-002** — weekly `--self --report --carryover` self-scan; integrity-manifest regenerated.
+
+### Notes
+- ADR-19: Aikido / M76 / M77 remain plan-only.
+
+---
+
 ## [6.32.2] — 2026-08-14
 
 ### Fixed
