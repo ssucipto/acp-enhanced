@@ -9,23 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added (M86 — in progress, not shipped)
-- **FIFOZ upgrade note (task-320)** — corrects six-unreported claim; documents v6.31.0 port + guard dry-run.
-- **Package registration (task-319)** — package.yaml/domain/AGENT/README + coverage + integrity-manifest for `/acp-ci`/`/acp-pr`.
-- **feedback-002 residual matrix (task-318)** — evidence-backed closeout in `agent/reports/m86-feedback-002-matrix.md` (P0 done; deferred D-002-01…08).
-- **Rule-verification discipline (task-317)** — `agent/patterns/local.rule-verification-discipline.md` (proxy≠invariant); lesson + Phase 1 rule-authoring checklist in `acp.review.md`.
-- **review-scan FIFOZ↔M83 merge (task-316)** — feedback-008 precision (rg/grep parity, real YM deps probe, SH-04 lexical trap, TS-08 `strict` imply, vendored skips); merge notes in `agent/reports/m86-review-scan-merge-notes.md`.
-- **Upgrade-guard E2E + fork docs (task-315)** — checklist + HARD-fail coverage.
-- **Upgrade-guard (task-314)** — `upstream-delta.yml` + template + `acp.upgrade-guard.sh`; version-update HARD fail on missing sentinel (P-UG-1 / ADR-25).
-- **Wrappers + E2E /acp-pr (task-313)** — cursor/claude/opencode/prompts + fail-closed suite.
-- **/acp-pr (task-312)** — feature PR prep; gates only via `acp.ci.sh` (ADR-24); CodeRabbit SKIP when unconfigured.
-- **E2E /acp-ci (task-311)** — fail-closed suite + `executed_steps` coverage validator (P-VAL-1).
-- **Discoverability (task-310)** — routing.yml `ci-check`→`/acp-ci`/`/acp-pr`; common.sh help; proceed/commit `--static` guidance; sentinels for upgrade-guard.
-- **/acp-ci (task-309)** — orchestrator + `acp.ci-steps.sh`; default `--fast`; FG fail-closed; integrity-manifest regen.
-- **CI runtime matrix (task-308)** — `agent/configurables/ci.yml` + schema; not a preference registry; default tier excludes T2.
-- **CI job baseline (task-305)** — wall-clock medians + tiers; default `/acp-ci` excludes T2 (shellcheck, full e2e-smoke); contended e2e N=5 discarded.
-- **False-green contracts (task-306)** — FG-1…FG-7 in `constraints.yml`, `agent/patterns/local.false-green-contracts.md`, and `skills/scripts.md` (`set +e` ≠ suppress ERR trap).
-
 ### Added (M81 — in progress, not shipped)
 - **ADR-22** — CodeRabbit-only M81 carved out of ADR-19’s Aikido-coupled gate (task-269).
 - **Policy map lite** — `agent/wiki/coderabbit-policy-map-lite.md` (Phase 1 never deferred to CodeRabbit).
@@ -33,6 +16,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Notes
 - Tasks 270–274 blocked until `tests/fixtures/coderabbit-findings-sample.json` (sanitized real export) exists. Planned ship: **v6.30.0** (M81; v6.29.0 taken by M83).
+
+---
+
+## [6.31.0] — 2026-08-14
+
+### Added (M86 — FIFOZ field-feedback port)
+- **/acp-ci** — local CI parity predictor (`agent/configurables/ci.yml` runtime matrix; default `--fast`; `--full` ≈ multi-minute CI).
+- **/acp-pr** — feature PR prep; gates delegated **only** to `/acp-ci` (ADR-24).
+- **Upgrade-guard** — `agent/upstream-delta.yml` + `acp.upgrade-guard.sh`; version-update **HARD fails** on missing sentinel (P-UG-1 / ADR-25).
+- **False-green contracts (FG-1…FG-7)** — constraints + pattern + skills; empty/`--only` fail-closed; assert output not exit code alone.
+- **Fork upgrade checklist** — `docs/acp-fork-upgrade-checklist.md` + FIFOZ upgrade note correcting the six-unreported false positive (ADR-26).
+- **Rule-verification discipline pattern** — proxy ≠ invariant (feedback-008).
+
+### Changed
+- **review-scan** — diff-merge FIFOZ feedback-008 precision into AE M83 (no blind overwrite); see `m86-review-scan-merge-notes.md`.
+- **routing / discoverability** — `ci-check` stubs → `/acp-ci` / `/acp-pr`; proceed/commit guidance for `--static`.
+
+### Fixed
+- False-green classes from feedback-009 (`set +e` under ERR trap, zero-executed PASS, dry-run as verification).
 
 ---
 
