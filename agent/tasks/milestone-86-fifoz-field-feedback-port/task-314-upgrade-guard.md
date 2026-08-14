@@ -28,7 +28,7 @@ milestone: M86
 design: agent/design/local.fifoz-field-feedback-port.md
 incorporates: D3
 depends_on: task-307
-status: planned
+status: completed
 updated: 2026-08-14
 @acp.meta.end -->
 
@@ -73,9 +73,11 @@ ADR-25. Inbox upstream-delta.yml and upgrade-guard.sh are portable. AE ships a *
 
 ### Files Created / Modified
 - `agent/upstream-delta.template.yml`
+- `agent/upstream-delta.yml`
 - `agent/scripts/acp.upgrade-guard.sh`
 - `agent/scripts/acp.version-update.sh`
 - `agent/commands/acp.version-update.md`
 
 ### Notes
 Source of truth: audit-114. Inbox reference only: `agent/reports/fifoz-port-inbox-2026-08-14/`. No shortcuts.
+Sentinels aligned with `agent/reports/m86-drafts/task-310-sentinels.md` / live wires from task-310.

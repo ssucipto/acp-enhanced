@@ -127,6 +127,17 @@ Execute tier-aware update (v6.24.0+).
 
 **Expected Outcome**: Update script completes; project-owned files preserved by default.
 
+### 2b. Upgrade-guard HARD fail (P-UG-1)
+
+When `agent/upstream-delta.yml` exists, `acp.version-update.sh` runs `bash agent/scripts/acp.upgrade-guard.sh` **before** printing the success banner.
+
+- Missing sentinel → **non-zero exit** (HARD fail). Never soft-warn-only.
+- Remediation: restore the sentinel string, or delete the collision entry after preferring upstream (ADR-25).
+- Skipped under `--diff` (FG-6: dry-run is not verification).
+- Complements overwrite-safety from audit-080/M68 — does **not** claim that work is fully solved.
+
+**Expected Outcome**: Local fork enhancements recorded in upstream-delta remain visible after the update.
+
 ### 3. Review Changes
 
 Show what was updated.
