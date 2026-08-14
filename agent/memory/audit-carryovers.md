@@ -3243,3 +3243,82 @@ carryovers:
     fix_applied_date: 2026-08-14
     verified_in_audit: "115"
     escalated_to: null
+
+  # ── AUDIT-116 / REVIEW-004 — M86 POST-SHIP (2026-08-14) ───────────────────
+  - audit_id: 116
+    finding_id: F-116-01
+    severity: high
+    file: agent/scripts/acp.ci-steps.sh
+    finding: "Malformed shellcheck disable directive (em-dash) → SC1125; --full shellcheck fails"
+    description: "review R-004-01. Em-dash after disable=SC2086 invalidates the directive."
+    fix_target: "Use # shellcheck disable=SC2086 # rationale"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "116"
+    escalated_to: null
+  - audit_id: 116
+    finding_id: F-116-02
+    severity: medium
+    file: agent/scripts/acp.ci-steps.sh
+    finding: "e2e-matrix omitted --skip-network contrary to GH Actions and command contract"
+    description: "review R-004-02. e2e-smoke and e2e-tests.yaml use --skip-network."
+    fix_target: "Pass --skip-network; update ci.yml description"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "116"
+    escalated_to: null
+  - audit_id: 116
+    finding_id: F-116-03
+    severity: low
+    file: README.md
+    finding: "README still said 70 commands after M86 shipped 72 acp.*"
+    description: "review R-004-03"
+    fix_target: "Update install table + note + tree line"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "116"
+    escalated_to: null
+  - audit_id: 116
+    finding_id: F-116-04
+    severity: low
+    file: agent/progress.yaml
+    finding: "notes still counted 70 acp.* command docs"
+    description: "review R-004-04"
+    fix_target: "74 command docs (72 acp + 2 git)"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "116"
+    escalated_to: null
+  - audit_id: 116
+    finding_id: F-116-05
+    severity: low
+    file: agent/progress.yaml
+    finding: "project.description still said M86 PLANNED / F-114 open"
+    description: "review R-004-05"
+    fix_target: "Refresh description for v6.31.0 ship state"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "116"
+    escalated_to: null
+  - audit_id: 116
+    finding_id: F-116-06
+    severity: low
+    file: agent/wiki/domain.yml
+    finding: "acp.ci / acp.pr in categories but missing purpose entries"
+    description: "review R-004-06"
+    fix_target: "Add purpose entries"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "116"
+    escalated_to: null
+  - audit_id: 116
+    finding_id: F-116-07
+    severity: low
+    file: agent/commands/acp.ci.md
+    finding: "ACP_CI_CONFIG / ACP_CI_STEPS_LIB undocumented"
+    description: "review R-004-07"
+    fix_target: "Document env overrides in command doc"
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "116"
+    escalated_to: null

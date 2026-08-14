@@ -139,7 +139,7 @@ steps:
     output_contains: []
 
   e2e-matrix:
-    description: "Local stand-in for e2e-tests.yaml matrix (same command; OS matrix is CI-only)"
+    description: "Local stand-in for e2e-tests.yaml matrix (run-e2e-tests.sh --skip-network; OS matrix is CI-only)"
     command: e2e-matrix
     ci_job: e2e
     cost_rank: 100

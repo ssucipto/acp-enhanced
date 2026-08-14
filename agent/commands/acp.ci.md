@@ -72,6 +72,12 @@ AE CI is **multiple jobs**, not one:
 Config: `agent/configurables/ci.yml` (runtime matrix — **not** a preference; P-CI-1).  
 Bodies: `agent/scripts/acp.ci-steps.sh` (P-PATH-1).
 
+**Env overrides** (tests / advanced):
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `ACP_CI_CONFIG` | `agent/configurables/ci.yml` | Alternate runtime matrix path |
+| `ACP_CI_STEPS_LIB` | `agent/scripts/acp.ci-steps.sh` | Alternate step-bodies library (must still expose `ci_run_step`) |
+
 ---
 
 ## Prerequisites
