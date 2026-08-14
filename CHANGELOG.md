@@ -19,6 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.31.1] — 2026-08-14
+
+### Fixed (audit-116 / review-004 — M86 post-ship)
+- **shellcheck SC1125** in `acp.ci-steps.sh` — malformed `# shellcheck disable` (em-dash) broke `/acp-ci --full` shellcheck.
+- **e2e-matrix** now uses `--skip-network` (aligned with GH Actions + e2e-smoke + zero-network contract).
+- README / progress / domain registration drift for 72 `acp.*` commands; document `ACP_CI_CONFIG` / `ACP_CI_STEPS_LIB`.
+
+---
+
 ## [6.31.0] — 2026-08-14
 
 ### Added (M86 — FIFOZ field-feedback port)
