@@ -387,7 +387,7 @@ files:
     sha256: "8993b220126b622f71b39fd32820ae0b40e954ab6b6a053f75e1427f314e5bb8"
     last_verified: "2026-08-14"
   - path: "agent/scripts/acp.review-measure.sh"
-    sha256: "4396df3dacb524fc4821b5eaa6a5c057dfb632b968c8b63d92843cd018e9ad69"
+    sha256: "ca6902cc43c3ca27820e90e490c3ebf738336ce007528caf7e870255a102d9f1"
     last_verified: "2026-08-14"
   - path: "agent/scripts/acp.review-rule-overrides.py"
     sha256: "1d14e1561537f3f9c94ca53486fc1e516a2e6fd502655611e5c7617a4b8a3ade"
