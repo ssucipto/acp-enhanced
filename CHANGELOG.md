@@ -10,9 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added (M86 — in progress, not shipped)
+- **/acp-pr (task-312)** — feature PR prep; gates only via `acp.ci.sh` (ADR-24); CodeRabbit SKIP when unconfigured.
 - **E2E /acp-ci (task-311)** — fail-closed suite + `executed_steps` coverage validator (P-VAL-1).
-- **Discoverability (task-310)** — routing.yml `acp-ci`/`acp-pr`; common.sh help; proceed/commit notes; sentinels for upgrade-guard.
-- **Routing discoverability (task-310)** — `ci-check` → `/acp-ci`/`/acp-pr`; `display_available_commands`; proceed/commit `/acp-ci --static` guidance; sentinel draft for upgrade-guard.
+- **Discoverability (task-310)** — routing.yml `ci-check`→`/acp-ci`/`/acp-pr`; common.sh help; proceed/commit `--static` guidance; sentinels for upgrade-guard.
 - **/acp-ci (task-309)** — orchestrator + `acp.ci-steps.sh`; default `--fast`; FG fail-closed; integrity-manifest regen.
 - **CI runtime matrix (task-308)** — `agent/configurables/ci.yml` + schema; not a preference registry; default tier excludes T2.
 - **CI job baseline (task-305)** — wall-clock medians + tiers; default `/acp-ci` excludes T2 (shellcheck, full e2e-smoke); contended e2e N=5 discarded.
