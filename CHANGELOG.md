@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (M86 — in progress, not shipped)
+- **False-green contracts (task-306)** — FG-1…FG-7 in `constraints.yml`, `agent/patterns/local.false-green-contracts.md`, and `skills/scripts.md` (`set +e` ≠ suppress ERR trap).
+
 ### Added (M81 — in progress, not shipped)
 - **ADR-22** — CodeRabbit-only M81 carved out of ADR-19’s Aikido-coupled gate (task-269).
 - **Policy map lite** — `agent/wiki/coderabbit-policy-map-lite.md` (Phase 1 never deferred to CodeRabbit).
