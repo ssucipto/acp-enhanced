@@ -263,6 +263,11 @@ entries are now orphaned. Clean them up:
 > are shown only when sync was not skipped (`--no-sync` was not passed). When `--no-sync`
 > is active, show: `sync: skipped (--no-sync)`.
 
+**Post-confirm hints (D-002-03 / D-002-07)**:
+- Mention `/acp-feedback` when the session touched user/consumer-project feedback or review notes — keeps discoverability alive outside the command palette.
+- If Step 6 compacted (`compacted: y`) **or** `sessions.md` entry count is ≥ 15, prompt:
+  `💡 Session registry is large — run /acp-memory-sync to promote durable lessons/patterns.`
+
 ---
 
 ## Verification

@@ -6,6 +6,14 @@
 - date: 2026-08-14
   executor: cursor-composer
   branch: develop
+  tasks: [F2-09, integrity-002, D-002-01, D-002-02, D-002-03, D-002-04, D-002-05, D-002-06, D-002-07, D-002-08]
+  done: [f2-09-quote-aware-hash-strip, integrity-002-self-scan, d002-polish-closed, adr19-stay-gated]
+  deferred: [ig17-scanner-allowlist → polish, develop-push → ops]
+  key_fact: "F2-09 strip_comments must keep # inside quotes; fast-path unquoted lines or yaml_parse query perf trips the 100ms unit budget."
+
+- date: 2026-08-14
+  executor: cursor-composer
+  branch: develop
   tasks: [acp-validate, acp-sync, acp-update, acp-commit]
   done: [validate-clean, readme-agent-sync-m81-m86, progress-recent-work, session-commit]
   deferred: [F2-09 → backlog, weekly-integrity → admin, D-002-01-08 → polish]

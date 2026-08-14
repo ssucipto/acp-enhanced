@@ -3116,10 +3116,11 @@ carryovers:
     finding: "A `#` inside a quoted YAML value truncates it — comment stripping is unaware of quoting"
     description: "Pre-existing, found while converting the comment-strip sed to parameter expansion in M85 task-298. `quoted_hash: \"tracked #42 open\"` yields `\"tracked ` from yaml_get. The old `sed 's/#.*$//'` and the new `${line%%#*}` behave identically, so task-298 preserved it deliberately rather than silently changing behaviour mid-performance-work. Same class as F-112-01 (delimiter unaware of user data) but in the comment stripper."
     fix_target: "Make comment stripping quote-aware: only treat `#` as a comment when it is outside a quoted scalar and preceded by whitespace or line start. Needs its own task with equivalence assertions, like task-299 had."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-14
+    verified_in_audit: "strip_comments quote-aware; yaml_get quoted_hash round-trip; tests/acp.yaml-parser.test.sh F2-09 asserts"
     escalated_to: null
+    fix_note: "Quote-aware strip_comments (double/single + fast paths); yaml_parse uses strip_comments; equivalence marks F2-09 expected divergences."
   # ── AUDIT-114 FINDINGS — consumer-project FEEDBACK UPSTREAM PORT (2026-08-14) ─────────
   - audit_id: 114
     finding_id: F-114-02

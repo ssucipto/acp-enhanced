@@ -411,6 +411,16 @@ assert_equals "key: value " "$result" "Util: strip_comments removes comment"
 result=$(strip_comments "key: value")
 assert_equals "key: value" "$result" "Util: strip_comments preserves line without comment"
 
+# F2-09: # inside double-quoted scalars must not truncate
+result=$(strip_comments 'quoted_hash: "tracked #42 open"')
+assert_equals 'quoted_hash: "tracked #42 open"' "$result" "Util: strip_comments preserves # inside double quotes"
+
+result=$(strip_comments "note: 'hash #tag kept'")
+assert_equals "note: 'hash #tag kept'" "$result" "Util: strip_comments preserves # inside single quotes"
+
+result=$(strip_comments 'url: https://example.com/path#frag  # trailing')
+assert_equals 'url: https://example.com/path#frag  ' "$result" "Util: strip_comments keeps unquoted # without prior whitespace; strips spaced comment"
+
 # Test trim
 result=$(trim "  value  ")
 assert_equals "value" "$result" "Util: trim removes whitespace"

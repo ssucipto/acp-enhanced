@@ -1,12 +1,12 @@
 project:
   name: agent-context-protocol
-  version: 6.32.2
+  version: 6.32.3
   started: 2026-02-16
   status: active
   current_milestone: M81
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.2 on develop\n\
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.3 on develop\n\
     \  (M81 CodeRabbit integration + audit-117 remediations; M86 CI/PR/upgrade-guard at 6.31.x).\n\
-    \  Open: F2-09. Aikido track ADR-19 gated.\n"
+    \  F2-09 fixed. Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/reports/handoff-claude-m85-phase2-2026-07-31.md
   date: '2026-07-31'
@@ -6652,6 +6652,14 @@ tasks:
     notes: phase 4; depends 316-320; stamp 02-09+11 with evidence; keep current_milestone M81
 recent_work:
 - date: 2026-08-14
+  description: "Backlog clear: F2-09 + integrity-002 + D-002-01…08; ready to push develop"
+  items:
+  - "✅ F2-09: quote-aware YAML # strip in acp.yaml-parser.sh (+ tests / equivalence)"
+  - "✅ /acp-integrity --self --report --carryover → integrity-002; manifest regenerated; weekly stamp"
+  - "✅ D-002-01…08 closed (init top-5, yaml-lint template, commit hints, validate depends_on, index gate, visualizer pin)"
+  - "✅ ADR-19: Aikido + M76/M77 remain plan-only (no unlock)"
+  - "Next: push develop (+ tags v6.31–v6.32.x); then PR to mainline after merging mainline tip"
+- date: 2026-08-14
   description: "/acp-validate (clean) + /acp-sync README/AGENT for M81+M86; post-ship v6.32.1 already on develop"
   items:
   - "✅ acp-validate: 0 errors (parity 74×5, schemas, tags v6.32.1, status consistency)"
@@ -9595,10 +9603,9 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "Docs synced to v6.32.2 (README/AGENT/progress). Push develop when ready."
-- "Pending carryover F2-09 (YAML # inside quotes)."
-- "Deferred: feedback-002 D-002-01…08; weekly /acp-integrity overdue since 2026-07-31."
-- "GATED (ADR-19): Aikido + M76/M77 stay plan-only"
+- "Push develop (+ annotated tags v6.31.0–v6.32.2). Then merge origin/mainline into develop and open PR → mainline."
+- "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
+- "Optional: IG-17 allowlist for agent/scripts scanners (integrity FP noise)."
 current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2
@@ -9633,8 +9640,8 @@ recurring_tasks:
     command: /acp-integrity --self --report --carryover
     frequency: weekly
     executor: copilot
-    last_run: '2026-07-24'
-    next_due: '2026-07-31'
+    last_run: '2026-08-14'
+    next_due: '2026-08-21'
     last_findings_count: 0
     status: current
     description: Weekly ACP framework integrity scan
