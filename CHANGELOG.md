@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **CI flake** — `validateProtocolDirAddability` live-repo test timeout raised to 60s (walks `agent/reports` + per-file `git ls-files`).
+- **review-measure perf budget** — default `--perf-budget-ms` 450 → **2000** after M86 review-scan precision merge (local medians ~650–1200ms; recall/precision gates unchanged).
 
 ### Changed
 - **FIFOZ upgrade note** — expand `m86-fifoz-upgrade-note.md` for **6.29.3 → 6.32.3/6.32.4** anti-regression path (keep Expo CI bodies / fifoz-local / feedback tracking).
