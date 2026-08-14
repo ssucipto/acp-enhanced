@@ -2,13 +2,13 @@
 id: task-309
 milestone: M86
 title: "/acp-ci command + abstract orchestrator + AE step bodies"
-status: planned
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 8
 created: 2026-08-14
-started: null
-completed:
+started: 2026-08-14
+completed: 2026-08-14
 phase: 1
 depends_on: [task-308]
 design_reference: [agent/design/local.fifoz-field-feedback-port.md](../../design/local.fifoz-field-feedback-port.md)
@@ -56,11 +56,11 @@ Inbox `acp.ci.md`/`acp.ci.sh` are references. Port the **directive shape** and o
 
 ## Verification
 
-- [ ] `bash agent/scripts/acp.ci.sh --doctor` exits 0, runs no gates
-- [ ] `bash agent/scripts/acp.ci.sh --only nonexistent` exits non-zero
-- [ ] Empty plan cannot PASS (test in 311; smoke here)
-- [ ] No FIFOZ product paths in scripts
-- [ ] Command doc has Agent Directive + Verification + User-observable section per template norms
+- [x] `bash agent/scripts/acp.ci.sh --doctor` exits 0, runs no gates
+- [x] `bash agent/scripts/acp.ci.sh --only nonexistent` exits non-zero
+- [x] Empty plan cannot PASS (test in 311; smoke here)
+- [x] No FIFOZ product paths in scripts
+- [x] Command doc has Agent Directive + Verification + User-observable section per template norms
 
 ## User-Observable Acceptance
 
