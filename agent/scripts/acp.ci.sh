@@ -23,8 +23,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 cd "${REPO_ROOT}"
 
-CI_CONFIG="${REPO_ROOT}/agent/configurables/ci.yml"
-STEPS_LIB="${SCRIPT_DIR}/acp.ci-steps.sh"
+CI_CONFIG="${ACP_CI_CONFIG:-${REPO_ROOT}/agent/configurables/ci.yml}"
+STEPS_LIB="${ACP_CI_STEPS_LIB:-${SCRIPT_DIR}/acp.ci-steps.sh}"
 
 TIER="fast"
 DRY_RUN=false

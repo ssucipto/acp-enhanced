@@ -2261,7 +2261,12 @@ export function validateCommandE2eCoverage(
     return errors;
   }
 
-  let doc: { commands?: Record<string, { suites?: string[]; tier?: number }> };
+  let doc: {
+    commands?: Record<
+      string,
+      { suites?: string[]; tier?: number; executed_steps?: string[] }
+    >;
+  };
   try {
     doc = yaml.load(readFileSync(coverageFile, "utf8")) as typeof doc;
   } catch {
@@ -2316,6 +2321,20 @@ export function validateCommandE2eCoverage(
           file: suitePath,
           line: 0,
           message: `missing E2E suite for ${cmd}: ${suite}`,
+          severity: "error",
+        });
+      }
+    }
+
+    // M86 P-VAL-1: gate commands must declare non-empty executed_steps
+    const requireExecuted = new Set(["acp.ci", "acp.pr", "acp.upgrade-guard"]);
+    if (requireExecuted.has(cmd)) {
+      const steps = entry.executed_steps ?? [];
+      if (steps.length === 0) {
+        errors.push({
+          file: coverageFile,
+          line: 0,
+          message: `${cmd} requires non-empty executed_steps (P-VAL-1 / M86)`,
           severity: "error",
         });
       }
