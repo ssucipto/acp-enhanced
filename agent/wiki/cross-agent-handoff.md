@@ -2,7 +2,7 @@
 
 > **Status:** Shipped — ACP v6.23.0 (M67)  
 > **Design:** `agent/design/cross-agent-handoff-protocol.md`  
-> **Audit:** `agent/reports/audit-077-cross-agent-handoff-feedback-007.md`  
+> **Audit:** F-077 / audit-077 (local `agent/reports/` — gitignored after ADR-27)  
 > **Field evidence:** consumer-project audit-245 + M51 exemplar (external reference project)
 
 ---
@@ -92,7 +92,7 @@ These files live in the consumer-project repo and demonstrate production pattern
 - Claude → Cursor: `handoff-cursor-composer25-m51-2026-07-13.md`
 - Cursor → Claude audit: `handoff-claude-m47-m48-plan-audit-2026-07-12.md`
 
-Path: `Project/consumer-project/consumer-project/agent/reports/`
+Path: local `agent/reports/` in the consumer repo (gitignored on this public ACP clone after ADR-27)
 
 ---
 

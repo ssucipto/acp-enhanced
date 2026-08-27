@@ -6,6 +6,22 @@
 - date: 2026-08-27
   executor: cursor-grok
   branch: develop
+  tasks: [task-330]
+  done: [audit-121-m87-impl-gaps, f-121-cookbook-no-local, f-121-wiki-redact, f-121-integrity-hashes]
+  deferred:
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-121-03-daily-history-dirty → task-331
+    - F-118-01-history-rewrite → task-331
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    audit-121 fixed on tip except F-121-03. Canonical rewrite clone is /tmp/acp-rewrite
+    (--no-local). Readiness wording is not force-push consent. Type exactly
+    `force-push develop mainline tags: yes`. Forks and GitHub caches may retain objects (F-119-09).
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
   tasks: [task-328, task-329, task-330]
   done: [tip-keepers-only, private-pack-script, local-filter-repo]
   deferred:

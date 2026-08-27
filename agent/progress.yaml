@@ -921,7 +921,7 @@ milestones:
       PLANNED 2026-08-27 — ADR-27. Backup-first (audit-120): 333 rsync, 334 local
       mirror, 323 gpg archive before any other task. Public remotes: keepers-only.
       Force-push phrase `force-push develop mainline tags: yes`. Cookbook CB-0a..CB-6.
-      F-R006-01..03 out of scope. current_milestone remains M81 until /acp-proceed.
+      F-R006-01..03 out of scope. current_milestone is M87. HALT at task-330 force-push.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4

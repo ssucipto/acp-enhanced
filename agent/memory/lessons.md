@@ -5,6 +5,13 @@
 # Optional fields added in v6.8.0:
 
 - date: 2026-08-27
+  task_type: audit-run
+  mistake: "M87 CB-4 used git clone of a local mirror without --no-local, hardcoded git@github.com origin, skipped D10 hashes, and left a consumer FS path plus dual rewrite clones."
+  correction: "Clone rewrite with --no-local. Restore origin from daily git remote get-url. Canonical push clone is /tmp/acp-rewrite only. Restamp integrity-manifest after any tracked script edit. Do not treat readiness wording as force-push consent."
+  priority: high
+  trigger: audit-121
+
+- date: 2026-08-27
   task_type: milestone-planning
   mistake: "After audit-119, M87 still allowed 322/324 to start with no worktree backup, and CB-4 mirrored GitHub instead of this clone (missing untracked audits). CB-1 required age which is not installed."
   correction: "Start with 333 rsync + 334 local --mirror from $(pwd) + 323 gpg. Never treat origin as the only backup. Probe age||gpg before encrypt."

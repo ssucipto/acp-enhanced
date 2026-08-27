@@ -440,7 +440,7 @@ When promoting to framework distribution:
 
 - **Cadence**: Same day each week (e.g. Friday EOD) builds stakeholder trust
 - **Honesty**: Amber is preferable to false Green when human gates exist
-- **consumer-project exemplar**: `agent/reports/stakeholder-report-2026-06-06.md` (v1.1.0 conformant)
+- **consumer-project exemplar**: local gitignored `agent/reports/stakeholder-report-*.md` (v1.1.0 conformant; ADR-27 keepers-only on public remotes)
 - **Audit**: audit-071 (v1.0.0 → v1.1.0)
 
 ---
