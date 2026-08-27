@@ -6,6 +6,20 @@
 - date: 2026-08-27
   executor: cursor-grok
   branch: develop
+  tasks: [audit-120, acp-plan, task-333, task-334]
+  done: [m87-pre-impl-round2, backup-first-tasks]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    audit-120 READY after amend. First proceed is task-333 (rsync worktree),
+    then 334 (local git mirror from pwd, not GitHub), then 323 (gpg). Do not
+    start 322 until those restores pass. This machine has gpg not age.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-119, acp-plan, M87]
   done: [m87-pre-impl-audit, m87-plan-amend-cookbook]
   deferred:
