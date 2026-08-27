@@ -812,6 +812,20 @@ agent/feedback/**
 agent/reports/**
 !agent/reports/.gitkeep
 !agent/reports/README.md
+
+# ADR-28 — instance milestone/task/session bodies local; templates + keepers tracked
+agent/milestones/**
+!agent/milestones/.gitkeep
+!agent/milestones/README.md
+!agent/milestones/*.template.md
+agent/tasks/**
+!agent/tasks/.gitkeep
+!agent/tasks/README.md
+!agent/tasks/*.template.md
+agent/sessions/**
+!agent/sessions/.gitkeep
+!agent/sessions/README.md
+docs/acp-enhanced-dev-team-feedback-consolidated.md
 EOF
 
 echo "${GREEN}✓${NC} Created .gitignore"

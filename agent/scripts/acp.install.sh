@@ -177,6 +177,19 @@ reports/**
 feedback/**
 !feedback/.gitkeep
 !feedback/README.md
+
+# ADR-28 — instance milestone/task/session bodies local; templates + keepers tracked
+milestones/**
+!milestones/.gitkeep
+!milestones/README.md
+!milestones/*.template.md
+tasks/**
+!tasks/.gitkeep
+!tasks/README.md
+!tasks/*.template.md
+sessions/**
+!sessions/.gitkeep
+!sessions/README.md
 EOF
 
 echo "${GREEN}✓${NC} Directory structure created"

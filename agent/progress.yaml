@@ -927,17 +927,17 @@ milestones:
     name: Instance-docs privacy purge (v6.34.0)
     priority: 5
     status: in_progress
-    progress: 46
+    progress: 54
     started: 2026-08-27
     completed: null
     estimated_weeks: 2
-    tasks_completed: 6
+    tasks_completed: 7
     tasks_total: 13
     file: agent/milestones/milestone-88-instance-docs-privacy-purge.md
     design: agent/design/local.instance-docs-privacy-purge.md
     notes: >
-      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 6/13. Next 341
-      install/private-pack.
+      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 7/13. Next 342 redact
+      leftovers then 343 git rm --cached.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6878,12 +6878,13 @@ tasks:
   - id: task-341
     name: Pattern, install gitignores, and private-pack dirs
     priority: 4
-    status: planned
+    status: completed
     file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-341-pattern-install-private-pack.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T15:32:00Z'
+    completed_date: '2026-08-27T15:34:00Z'
+    actual_hours: 0.1
     estimated_hours: 2
-    notes: phase 2; restamp private-pack hash; do not pack docs/
+    notes: 'PACK_REL_DIRS +3 agent dirs; never docs/; integrity restamped; E2E 12/12'
   - id: task-342
     name: Redact leftovers in remaining tracked files
     priority: 5
@@ -6939,6 +6940,12 @@ tasks:
     estimated_hours: 3
     notes: phase 4; F-R006 stays pending; no second force-push
 recent_work:
+- date: 2026-08-27
+  description: "task-341 install gitignore + private-pack dirs"
+  items:
+  - "✅ PACK_REL_DIRS adds milestones/tasks/sessions; never docs/"
+  - "✅ E2E dummy milestone packed; USAGE.md absent from archive; hashes restamped"
+  - "Do not pack agent/routing/tasks"
 - date: 2026-08-27
   description: "task-340 commands/E2E/wiki dual-store"
   items:
@@ -9965,7 +9972,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "/acp-proceed task-341 (install gitignore + private-pack) then 342 redact."
+- "/acp-proceed task-342 (redact leftovers) then 343 git rm --cached. Do not reclone after 343 until 347."
 - "Force-push only after exact phrase: force-push instance-docs develop mainline tags: yes (not the M87 phrase). Stamp history-clean only after 346. Rehearse 344 before 345."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
