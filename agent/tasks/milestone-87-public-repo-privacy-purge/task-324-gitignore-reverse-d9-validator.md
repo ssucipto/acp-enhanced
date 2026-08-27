@@ -10,7 +10,7 @@ created: 2026-08-27
 started: null
 completed: null
 phase: 2
-depends_on: [task-322]
+depends_on: [task-322, task-323]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
 audit_findings: ['F-118-04', 'F-118-05', 'F-119-03', 'F-119-04']
 files_affected:
@@ -27,7 +27,7 @@ description: Ignore reports and feedback like drafts; validator must not ERROR o
 milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D2, D5
-depends_on: task-322
+depends_on: task-322, task-323
 status: planned
 updated: 2026-08-27
 @acp.meta.end -->

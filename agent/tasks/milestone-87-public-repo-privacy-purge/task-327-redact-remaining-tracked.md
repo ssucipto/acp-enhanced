@@ -10,7 +10,7 @@ created: 2026-08-27
 started: null
 completed: null
 phase: 3
-depends_on: [task-322]
+depends_on: [task-322, task-323]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
 audit_findings: ['F-118-03', 'F-118-06', 'F-118-07', 'F-119-08']
 files_affected:
@@ -26,7 +26,7 @@ description: Strip leftover pointers and contradictory Class A guidance from fil
 milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D6, D7
-depends_on: task-322
+depends_on: task-322, task-323
 status: planned
 updated: 2026-08-27
 @acp.meta.end -->

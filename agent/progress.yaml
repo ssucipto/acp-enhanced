@@ -914,14 +914,13 @@ milestones:
     completed: null
     estimated_weeks: 2
     tasks_completed: 0
-    tasks_total: 11
+    tasks_total: 13
     file: agent/milestones/milestone-87-public-repo-privacy-purge.md
     design: agent/design/local.public-repo-privacy-purge.md
     notes: >
-      PLANNED 2026-08-27 — ADR-27. Public remotes: zero reports/feedback bodies
-      (keepers only). Local writers + encrypted pack. History rewrite required
-      before F-118-01..03 stamps. Force-push gated on exact phrase
-      `force-push develop mainline tags: yes`. Cookbook CB-1..CB-6.
+      PLANNED 2026-08-27 — ADR-27. Backup-first (audit-120): 333 rsync, 334 local
+      mirror, 323 gpg archive before any other task. Public remotes: keepers-only.
+      Force-push phrase `force-push develop mainline tags: yes`. Cookbook CB-0a..CB-6.
       F-R006-01..03 out of scope. current_milestone remains M81 until /acp-proceed.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
@@ -6669,6 +6668,24 @@ tasks:
     estimated_hours: 4
     notes: phase 4; depends 316-320; stamp 02-09+11 with evidence; keep current_milestone M81
   M87:
+  - id: task-333
+    name: "GATE FIRST: local worktree rsync (including untracked)"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-333-local-worktree-rsync.md
+    started: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: phase 0 START; CB-0a; restore before any other M87 task
+  - id: task-334
+    name: "GATE FIRST: local git mirror + bundle from this clone"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-334-local-git-mirror-bundle.md
+    started: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: phase 0; CB-0b; mirror $(pwd) not GitHub
   - id: task-322
     name: Lock ADR-27 + citation map of tracked reports/feedback
     priority: 5
@@ -6677,7 +6694,7 @@ tasks:
     started: null
     actual_hours: null
     estimated_hours: 2
-    notes: phase 0; citation map must include install.sh (not bootstrap)
+    notes: phase 1; BLOCKED on 323+333+334 restore
   - id: task-323
     name: "GATE: local encrypted archive of reports + feedback"
     priority: 5
@@ -6686,7 +6703,7 @@ tasks:
     started: null
     actual_hours: null
     estimated_hours: 3
-    notes: phase 1 GATE; CB-1 restore dry-run before 328/330
+    notes: phase 0 GATE; CB-1 gpg if no age; after 333+334
   - id: task-324
     name: Gitignore reports/feedback and reverse D9 validator
     priority: 5
@@ -6769,6 +6786,12 @@ tasks:
     estimated_hours: 3
     notes: phase 4; stamp only after 331; F-R006 stay pending
 recent_work:
+- date: 2026-08-27
+  description: "/acp-audit --pre-impl round 2 (audit-120) — backup-first tasks 333+334"
+  items:
+  - "✅ GATE: 333 worktree rsync then 334 local git mirror then 323 gpg — before 322"
+  - "✅ CB-0a/0b; do not mirror from GitHub as the only backup; age missing → gpg"
+  - "Do not commit audit-118/119/120"
 - date: 2026-08-27
   description: "/acp-audit --pre-impl M87 (audit-119) + plan amendments CB-1..CB-6"
   items:
@@ -9741,7 +9764,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M87 READY (audit-119): /acp-proceed task-322 then 323 CB-1 GATE. Never git rm without --cached."
+- "M87 READY (audit-120): /acp-proceed task-333 (worktree rsync) then 334 (local git mirror) then 323 (gpg archive). Do not start 322 until all three restore."
 - "Force-push only after exact phrase: force-push develop mainline tags: yes. Stamp F-118-01..03 only after 331 tag proof."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."

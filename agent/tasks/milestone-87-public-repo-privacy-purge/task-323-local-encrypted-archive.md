@@ -9,63 +9,57 @@ estimated_hours: 3
 created: 2026-08-27
 started: null
 completed: null
-phase: 1
-depends_on: [task-322]
+phase: 0
+depends_on: [task-333, task-334]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
-audit_findings: ['F-118-01', 'F-118-02', 'F-118-03', 'F-119-01']
-files_affected:
-  - agent/.gitignore
+audit_findings: ['F-118-01', 'F-118-02', 'F-118-03', 'F-119-01', 'F-120-04']
+files_affected: []
 ---
 
 <!-- @acp.meta.task
-topic: m87, backup, archive, age, gate
+topic: m87, backup, archive, gpg, gate
 description: Encrypted local archive of reports and feedback with a restore dry-run before any git rm or filter-repo.
 milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D3
-depends_on: task-322
+depends_on: task-333, task-334
 status: planned
 updated: 2026-08-27
 @acp.meta.end -->
 
 ## Objective
 
-Create a restore-tested encrypted archive of `agent/reports/` and `agent/feedback/` **before** any destructive git. **Hard GATE** for 328 and 330.
+Create a restore-tested encrypted archive of `agent/reports/` and `agent/feedback/` **after** 333+334. **Hard GATE** for 322, 324, 328, and 330.
 
 ## Context
 
-`git rm` without `--cached` and `filter-repo` destroy GitHub’s copy. The archive must never be committed. Use design **CB-1** exactly — do not change flags.
+333 copied the worktree; 334 copied git objects. This encrypts report/feedback **content** for off-machine transport. **CB-1**: use `gpg --symmetric` when `age` is missing (this Mac has gpg only). Do not start 322 until restore dry-run passes.
 
 ## Steps
 
-1. Record inventory (numbers only):
-
-```bash
-git ls-files agent/reports | wc -l
-git ls-files agent/feedback | wc -l
-```
-
-2. Execute **CB-1** archive from repo root (`age -p` passphrase is **not** written to any file in the repo).
-3. Execute **CB-1** restore dry-run. Confirm `test -d` both dirs; compare `find | wc -l` to step 1 (untracked local reports may increase the restore count).
-4. Paste command transcripts (redact passphrase) into this task’s notes.
-5. **GATE**: 328 and 330 must not start until restore dry-run passed.
+1. Confirm 333 and 334 restore tests passed.
+2. `command -v age || command -v gpg` — if neither, **stop** and install one.
+3. Execute **CB-1** (trap removes plaintext tar). Record output path.
+4. Execute CB-1 restore dry-run (`test -d` both trees; compare counts to `git ls-files`).
+5. **GATE** for 322.
 
 ## Verification
 
-- [ ] Ciphertext exists under `${HOME}/acp-enhanced-private/` (or equivalent **outside** the clone)
+- [ ] Ciphertext exists under `${HOME}/acp-enhanced-private/` (`.gpg` or `.age`)
 - [ ] Restore dry-run listed both trees
-- [ ] `git status` does not show the `.age` file as staged
+- [ ] `git status` does not show the archive as staged
 - [ ] Passphrase is not in any tracked file
+- [ ] Plaintext tar is gone from `/tmp`
 
 ## User-Observable Acceptance
 
-Operator can restore reports/feedback into `/tmp/acp-restore-test` without GitHub.
+Operator can decrypt into `/tmp/acp-restore-test` without GitHub.
 
 ## Expected Output
 
 ### Files Created / Modified
-- Local `.age` archive (untracked, off-repo)
+- Local encrypted archive (untracked, off-repo)
 - This task file (restore notes)
 
 ### Notes
-Do not `git add -f` the archive. Full **git mirror** backup is CB-4 / task-330, not this task.
+Do not `git add -f` the archive. Git object parachute is 334; 330 takes a second local mirror before rewrite.

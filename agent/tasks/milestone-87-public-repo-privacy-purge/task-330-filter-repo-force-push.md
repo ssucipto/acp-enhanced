@@ -10,7 +10,7 @@ created: 2026-08-27
 started: null
 completed: null
 phase: 4
-depends_on: [task-323, task-328]
+depends_on: [task-323, task-328, task-334]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
 audit_findings: ['F-118-01', 'F-118-02', 'F-118-03', 'F-119-02', 'F-119-09', 'F-119-10']
 files_affected:
@@ -24,7 +24,7 @@ description: Rewrite all refs including tags; force-push develop, mainline, and 
 milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D4
-depends_on: task-323, task-328
+depends_on: task-323, task-328, task-334
 status: planned
 updated: 2026-08-27
 @acp.meta.end -->
@@ -39,8 +39,8 @@ Remove `agent/reports/` and `agent/feedback/` **blobs from git history** on `dev
 
 ## Steps
 
-1. Confirm 323 CB-1 still restores. Run **CB-4** mirror backup (`git clone --mirror` into `${HOME}/acp-enhanced-private/`).
-2. Follow **CB-4** throwaway clone + `git filter-repo --invert-paths --path agent/reports/ --path agent/feedback/` (no extra paths).
+1. Confirm 323 CB-1 still restores. Take a **second** local mirror with **CB-4** (`git clone --mirror "$(pwd)"` — **not** GitHub).
+2. Follow **CB-4** throwaway clone from that local mirror + `git filter-repo --invert-paths --path agent/reports/ --path agent/feedback/` (no extra paths).
 3. `git remote add origin` as in CB-4. Re-add keepers; commit `chore: restore reports/feedback keepers after filter-repo`.
 4. On the throwaway clone: `git log --all --full-history --oneline -- agent/reports/` must not list body files.
 5. **STOP.** Print residual-risk sentence: forks and GitHub caches may retain objects until they refetch. Ask for the exact phrase. Do **not** treat `/acp-proceed` as consent.

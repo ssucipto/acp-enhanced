@@ -9,8 +9,8 @@ estimated_hours: 2
 created: 2026-08-27
 started: null
 completed: null
-phase: 0
-depends_on: []
+phase: 1
+depends_on: [task-323, task-333, task-334]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
 audit_findings: ['F-118-04', 'F-119-05']
 files_affected:
@@ -25,6 +25,7 @@ description: Confirm ADR-27 and cookbook; inventory every command/E2E/wiki that 
 milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D1, D6
+depends_on: task-323, task-333, task-334
 status: planned
 updated: 2026-08-27
 @acp.meta.end -->
@@ -35,7 +36,7 @@ Produce a **path-only** citation map so 324–327 cannot miss a live reference. 
 
 ## Context
 
-ADR-27 and the design already exist. Do **not** skip this task. Audit-119 listed extra files beyond the first `files_affected` lists.
+ADR-27 and the design already exist. **Do not start this task until 333, 334, and 323 restore tests pass.** First `/acp-proceed` is **333**, not this file.
 
 ## Steps
 
