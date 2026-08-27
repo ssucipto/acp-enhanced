@@ -77,13 +77,15 @@ ACP Enhanced separates files into two categories:
 
 ### Instance Data (local only)
 - `agent/milestones/`, `agent/routing/tasks/` — project work items
-- `agent/memory/`, `agent/reports/` — session and audit records
+- `agent/memory/` — session records (tracked protocol memory)
+- `agent/reports/` — local audit bodies (gitignored; finding IDs live in carryovers/CHANGELOG)
 - `agent/feedback/`, `agent/clarifications/` — project communication
 
 ### Framework Development Mode
 When developing ACP Enhanced itself, run `/acp-init --track-instance-data` to
 acknowledge that you're working on the framework, not using it as an end-user
-project. Instance data files should be force-added to git for traceability.
+project. Milestones, routing tasks, and memory stay tracked. Report and feedback
+bodies stay local (ADR-27) — do not `git add -f` them to public remotes.
 
 ## Audit-First Workflow (v6.9.1+)
 
@@ -104,8 +106,8 @@ the primary planning and review mechanism:
 
 ### Benefits
 - Pre-impl audits prevent bugs that would require full rework
-- Audit reports serve as durable knowledge artifacts (findable via `agent/reports/`)
-- Carryover tracking prevents findings from being lost between sessions
+- Audit reports are written locally under `agent/reports/` (ADR-27; not public-git evidence)
+- Carryover tracking prevents findings from being lost between sessions (IDs in `agent/memory/audit-carryovers.md` and CHANGELOG)
 - Production data (FIFOZ): 64 audits prevented CI/CD bugs in pre-impl mode
 
 ## Cross-Agent Handoff (v6.23.0+)

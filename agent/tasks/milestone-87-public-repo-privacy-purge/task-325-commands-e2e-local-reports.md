@@ -2,13 +2,13 @@
 id: task-325
 milestone: M87
 title: "Commands, E2E, and wiki: reports stay local"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-27
-started: null
-completed: null
+started: 2026-08-27
+completed: 2026-08-27
 phase: 2
 depends_on: [task-324]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -57,10 +57,10 @@ Citation map from 322. Known leftovers (audit-119): `acp.design-spec.md` exempla
 
 ## Verification
 
-- [ ] No command doc says reports are version-controlled evidence
-- [ ] `acp.ci.sh --help` does not point at a report file
-- [ ] Wiki bullets match ADR-27
-- [ ] Affected E2E green
+- [x] No command doc says reports are version-controlled evidence
+- [x] `acp.ci.sh --help` does not point at a report file
+- [x] Wiki bullets match ADR-27
+- [x] Affected E2E green
 
 ## User-Observable Acceptance
 

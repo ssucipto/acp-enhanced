@@ -33,7 +33,7 @@
 | `--doctor` | | Probe dependencies, print the matrix, run no gates |
 | `-h`, `--help` | | Help |
 
-**Cost guidance** (see `agent/reports/m86-ci-job-baseline.md`): default `/acp-ci` stays interactive; `--full` matches multi-minute CI e2e-smoke.
+**Cost guidance**: default `/acp-ci` stays interactive; `--full` matches multi-minute CI e2e-smoke.
 
 **Step ids** (from `agent/configurables/ci.yml`):  
 `validate-ts` `review-measure` `npm-test` `ci-validate` `shellcheck` `integrity-e2e` `integrity-v2-e2e` `e2e-smoke` `npm-audit` `e2e-matrix`
