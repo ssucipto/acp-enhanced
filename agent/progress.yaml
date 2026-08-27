@@ -909,11 +909,11 @@ milestones:
     name: Public-repo privacy purge (v6.33.0)
     priority: 5
     status: in_progress
-    progress: 23
+    progress: 31
     started: 2026-08-27
     completed: null
     estimated_weeks: 2
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 13
     file: agent/milestones/milestone-87-public-repo-privacy-purge.md
     design: agent/design/local.public-repo-privacy-purge.md
@@ -6691,12 +6691,13 @@ tasks:
   - id: task-322
     name: Lock ADR-27 + citation map of tracked reports/feedback
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-322-adr27-citation-map.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T12:34:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.3
     estimated_hours: 2
-    notes: phase 1; BLOCKED on 323+333+334 restore
+    notes: 'citation map recorded; F-R006 not on map; 324-327 file list locked'
   - id: task-323
     name: "GATE: local encrypted archive of reports + feedback"
     priority: 5
