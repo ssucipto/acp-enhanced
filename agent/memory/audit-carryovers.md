@@ -3585,3 +3585,104 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-121 — M87 IMPLEMENTATION GAPS (2026-08-27) ──────────────────────
+  - audit_id: 121
+    finding_id: F-121-01
+    severity: high
+    file: agent/design/local.public-repo-privacy-purge.md
+    finding: "CB-4 clone omitted --no-local and hardcoded git@github.com origin"
+    description: "Default path clone hardlinks objects; filter-repo aborts. Origin must copy daily remote get-url (named SSH hosts)."
+    fix_target: "CB-4 --no-local + DAILY origin; CB-5 clone from DAILY origin; CB-6 never-list"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-02
+    severity: high
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-330-filter-repo-force-push.md
+    finding: "Two rewritten clones with different tip SHAs"
+    description: "Canonical push clone is /tmp/acp-rewrite. rewrite-ready must not be force-pushed."
+    fix_target: "task-330 notes declare canonical clone"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-03
+    severity: high
+    file: .
+    finding: "Daily worktree history still contains report/feedback blobs"
+    description: "Expected until operator force-push + re-clone. Do not push this clone. Stamp fixed in task-331."
+    fix_target: "task-331 after force-push develop mainline tags: yes"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-04
+    severity: medium
+    file: agent/integrity-manifest.yaml
+    finding: "SHA drift for acp.install.sh, acp.package-create.sh, acp.ci.sh"
+    description: "D10 skipped after script edits. Hashes and last_verified restamped 2026-08-27."
+    fix_target: "integrity-manifest.yaml three script entries"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-05
+    severity: medium
+    file: agent/wiki/cross-agent-handoff.md
+    finding: "Wiki cited consumer filesystem path Project/Rygan/FIFOZ/agent/reports/"
+    description: "Redacted to generic local agent/reports/. FIFOZ name retained (F-118-06)."
+    fix_target: "cross-agent-handoff.md exemplars path line"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-06
+    severity: medium
+    file: agent/wiki/domain.yml
+    finding: "related_audit/related_feedback pointed at report and feedback bodies"
+    description: "Retargeted to finding IDs + ADR-27 local gitignored note."
+    fix_target: "domain.yml related_audit and related_feedback fields"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-07
+    severity: low
+    file: agent/wiki/coderabbit-integration.md
+    finding: "Docs named tracked agent/reports/audit-*.md paths that vanish on fresh clone"
+    description: "Coderabbit wiki and stakeholder-report exemplar retargeted to local gitignored writers."
+    fix_target: "coderabbit-integration.md + acp.stakeholder-report.md notes"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-08
+    severity: low
+    file: agent/progress.yaml
+    finding: "M87 notes still said current_milestone remains M81 until /acp-proceed"
+    description: "Notes now say current_milestone is M87; HALT at task-330."
+    fix_target: "progress.yaml M87 notes"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-09
+    severity: low
+    file: agent/milestones/milestone-87-public-repo-privacy-purge.md
+    finding: "@acp.meta status planned vs body in_progress"
+    description: "Meta status set to in_progress."
+    fix_target: "milestone-87 @acp.meta status"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
