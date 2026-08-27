@@ -53,6 +53,14 @@ _copy_fixture_workspace() {
     mkdir -p "${dest}/.github"
     cp "${PROJECT_ROOT}/AGENTS.md" "${dest}/.github/copilot-instructions.md"
   fi
+  # ADR-27: local report/feedback bodies stay gitignored. Copying them into
+  # the fixture makes Windows git-add + validate exceed the 180s E2E timeout.
+  if [[ -d "${dest}/agent/reports" ]]; then
+    find "${dest}/agent/reports" -type f ! -name '.gitkeep' ! -name 'README.md' -delete
+  fi
+  if [[ -d "${dest}/agent/feedback" ]]; then
+    find "${dest}/agent/feedback" -type f ! -name '.gitkeep' ! -name 'README.md' -delete
+  fi
 }
 
 _init_fixture_git_repo() {
