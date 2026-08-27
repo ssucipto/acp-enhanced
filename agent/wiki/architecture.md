@@ -36,8 +36,8 @@ ACP Enhanced maintains a **two-tier storage model** for patterns and sessions:
 
 ### Document Directories (consumption layer)
 - `agent/patterns/{name}.md` — Individual pattern documents
-- `agent/sessions/{date}-{slug}.md` — Individual session documents
-- **Auto-synced** from registries by `/acp-commit` steps 2b/3b (v6.9+)
+- `agent/sessions/{date}-{slug}.md` — Individual session documents (**local-only on the public AE origin**, ADR-28). The compact registry `agent/memory/sessions.md` remains tracked. A public clone may have an empty sessions page in the visualizer; that is expected.
+- **Auto-synced** from registries by `/acp-commit` steps 2b/3b (v6.9+) onto disk; do not `git add` session bodies on AE origin
 - Consumed by `/acp-init`, `/acp-plan`, `/acp-proceed`, and the visualizer
 - Human-readable markdown, one file per entry
 

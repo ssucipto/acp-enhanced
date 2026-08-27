@@ -355,7 +355,7 @@ Closed two feedback loops: internal dogfooding pain points (5) and external Wind
 #### M47 — Memory Integrity Release (v6.9.0, June 2026)
 Addressed feedback from consumer-project production usage (64 audits, 14 milestones, 36 patterns). Core deliverable: dual-store architecture with commit-integrated auto-sync.
 
-- **Commit auto-sync** — `/acp-commit` steps 2b/3b/6b auto-generate `agent/sessions/*.md` and `agent/patterns/*.md` from registries on every commit. Idempotent, `--no-sync` opt-out.
+- **Commit auto-sync** — `/acp-commit` steps 2b/3b/6b auto-generate `agent/sessions/*.md` and `agent/patterns/*.md` from registries on every commit (local files). On this public ACP Enhanced origin, session **bodies** are gitignored (ADR-28); the compact registry `agent/memory/sessions.md` stays tracked. Idempotent, `--no-sync` opt-out.
 - **Repair tools** — `/acp-pattern-sync` and `/acp-session-sync` for manual reconciliation with `--dry-run` and `--all`.
 - **Memory YAML validation** — `/acp-validate --memory` YAML-lints registries with line numbers.
 - **Version update guard** — `--diff`, `--preserve-project-core`, `--force` flags.

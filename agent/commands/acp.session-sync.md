@@ -91,6 +91,8 @@ For each session in scope:
    {generated_content} | bash agent/scripts/acp.atomic-write.sh "agent/sessions/{date}-{slug}.md"
    ```
 
+Do **not** `git add -f` session bodies on this public origin (ADR-28). Repair tools write locally. The compact registry `agent/memory/sessions.md` remains tracked.
+
 ```markdown
 # Session: {date}
 

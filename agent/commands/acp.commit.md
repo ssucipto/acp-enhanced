@@ -152,6 +152,10 @@ the corresponding markdown document in `agent/sessions/`:
    content, skip it. If the registry entry has changed since the last sync,
    update the file to match. Track this by comparing the file's content hash
    against the registry entry's content.
+6. **Do not `git add` instance session documents** on this public ACP Enhanced
+   origin (ADR-28). The registry `agent/memory/sessions.md` stays tracked.
+   `agent/sessions/{date}-{slug}.md` is local (gitignored). `--no-sync` still
+   skips this step.
 
 ### 3. Check for Reusable Patterns
 
@@ -273,7 +277,7 @@ entries are now orphaned. Clean them up:
 ## Verification
 
 - [ ] sessions.md has a new entry at top with today's date
-- [ ] `agent/sessions/{date}-{slug}.md` exists and matches registry entry (unless `--no-sync`)
+- [ ] `agent/sessions/{date}-{slug}.md` exists on disk and matches registry entry (unless `--no-sync`). Do **not** `git add` it on AE origin (ADR-28).
 - [ ] Re-running commit without registry changes does not rewrite session documents (idempotent)
 - [ ] `--no-sync` skips step 2b and shows `sync: skipped` in confirmation
 - [ ] All route files from `tasks_completed:` list are stamped with `completed:` date
