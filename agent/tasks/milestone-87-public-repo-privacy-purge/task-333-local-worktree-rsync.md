@@ -2,13 +2,13 @@
 id: task-333
 milestone: M87
 title: "GATE FIRST: local worktree rsync (including untracked reports)"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-08-27
-started: null
-completed: null
+started: 2026-08-27
+completed: 2026-08-27
 phase: 0
 depends_on: []
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -45,13 +45,20 @@ GitHub and `git clone --mirror git@github.com:...` do **not** contain untracked 
 
 ## Verification
 
-- [ ] `LAST_STAMP.txt` exists
-- [ ] Copy HEAD equals live HEAD
-- [ ] Untracked audit-119 exists in the copy
-- [ ] Copy is not under the project path
-- [ ] `git status` does not stage anything in `${HOME}/acp-enhanced-private`
+- [x] `LAST_STAMP.txt` exists
+- [x] Copy HEAD equals live HEAD
+- [x] Untracked audit-119 exists in the copy
+- [x] Copy is not under the project path
+- [x] `git status` does not stage anything in `${HOME}/acp-enhanced-private`
 
-## User-Observable Acceptance
+## Restore notes (2026-08-27)
+
+- STAMP: `20260827T202952`
+- DEST: `$HOME/acp-enhanced-private/worktree-20260827T202952`
+- HEAD: `4e734925cfa1045c07f84d25e7d75220534ae3d8`
+- Also copied audit-120.
+
+### Notes
 
 Operator can `ls` a second directory under `$HOME/acp-enhanced-private/worktree-*` that contains the same reports as this machine, including files git does not track.
 
