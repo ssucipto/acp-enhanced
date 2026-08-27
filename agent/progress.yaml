@@ -927,17 +927,17 @@ milestones:
     name: Instance-docs privacy purge (v6.34.0)
     priority: 5
     status: in_progress
-    progress: 31
+    progress: 38
     started: 2026-08-27
     completed: null
     estimated_weeks: 2
-    tasks_completed: 4
+    tasks_completed: 5
     tasks_total: 13
     file: agent/milestones/milestone-88-instance-docs-privacy-purge.md
     design: agent/design/local.instance-docs-privacy-purge.md
     notes: >
-      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 4/13. GATE restore OK.
-      Citation map local. Next 339 gitignore+validator.
+      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 5/13. Gitignore+validator
+      landed. Next 340 commands/E2E.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6858,12 +6858,13 @@ tasks:
   - id: task-339
     name: Gitignore instance docs and fix validators (one commit)
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-339-gitignore-validator.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T15:22:00Z'
+    completed_date: '2026-08-27T15:26:00Z'
+    actual_hours: 0.4
     estimated_hours: 3
-    notes: phase 2; CB-2; skip gitignored missing file pointers; probe memory only
+    notes: 'CB-2 keepers not ignored; file-pointers skip --no-index; probeDirs memory only'
   - id: task-340
     name: "Commands, E2E, wiki: instance docs stay local"
     priority: 5
@@ -6937,6 +6938,12 @@ tasks:
     estimated_hours: 3
     notes: phase 4; F-R006 stays pending; no second force-push
 recent_work:
+- date: 2026-08-27
+  description: "task-339 gitignore + validator (one commit)"
+  items:
+  - "✅ CB-2: instance bodies ignored; templates, USAGE.md, routing/tasks, memory/sessions.md not ignored"
+  - "✅ validateFilePointers skips git check-ignore --no-index; probeDirs memory only"
+  - "Created missing keepers README/.gitkeep so 343 git add does not fail"
 - date: 2026-08-27
   description: "task-338 KEEP/PURGE citation map (gitignored reports/)"
   items:
@@ -9951,7 +9958,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "/acp-proceed task-339 (gitignore + validator one commit) then 340 commands/E2E."
+- "/acp-proceed task-340 (commands/E2E/wiki) then 341 install/private-pack."
 - "Force-push only after exact phrase: force-push instance-docs develop mainline tags: yes (not the M87 phrase). Stamp history-clean only after 346. Rehearse 344 before 345."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
