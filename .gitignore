@@ -44,3 +44,6 @@ package-lock.json
 # from 100% to 97.9% in CI only, silently, because the gate threshold is 90%
 # (audit-107 G-107-07).
 !tests/fixtures/**/package-lock.json
+
+# ADR-28 — field-feedback notes local
+docs/acp-enhanced-dev-team-feedback-consolidated.md
