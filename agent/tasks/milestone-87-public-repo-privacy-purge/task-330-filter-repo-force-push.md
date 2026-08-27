@@ -2,12 +2,12 @@
 id: task-330
 milestone: M87
 title: "filter-repo SOP + operator-confirmed force-push (branches + tags)"
-status: planned
+status: in_progress
 priority: 5
 complexity: high
 estimated_hours: 4
 created: 2026-08-27
-started: null
+started: 2026-08-27
 completed: null
 phase: 4
 depends_on: [task-323, task-328, task-334]
@@ -49,9 +49,9 @@ Remove `agent/reports/` and `agent/feedback/` **blobs from git history** on `dev
 
 ## Verification
 
-- [ ] Mirror backup exists off-GitHub
-- [ ] Throwaway clone history has no report/feedback bodies
-- [ ] Keepers exist on rewritten tip
+- [x] Mirror backup exists off-GitHub
+- [x] Throwaway clone history has no report/feedback bodies
+- [x] Keepers exist on rewritten tip
 - [ ] Confirmation phrase recorded in session notes (not a secret)
 - [ ] Origin branches **and** tags updated, **or** awaiting confirm
 
@@ -66,3 +66,14 @@ Remove `agent/reports/` and `agent/feedback/` **blobs from git history** on `dev
 
 ### Notes
 Never run filter-repo in the daily worktree. Never put credentials in the SOP.
+
+Local rewrite 2026-08-27 (NOT pushed):
+- Pre-rewrite mirror: `$HOME/acp-enhanced-private/acp-enhanced-pre-rewrite-20260827T205344.git`
+- Throwaway: `/tmp/acp-rewrite` (clone with `--no-local` — local clones otherwise refuse filter-repo)
+- Persisted copy: `$HOME/acp-enhanced-private/acp-rewrite-ready`
+- `git filter-repo --invert-paths --path agent/reports/ --path agent/feedback/`
+- History body count: 0 (then keepers-only commits on develop `58660cd` and mainline `d83cddc`)
+- `v6.32.4` tree: 0 report files (was 171)
+- Awaiting exact phrase: `force-push develop mainline tags: yes`
+- Residual (F-119-09): forks and GitHub caches may retain old objects until they refetch.
+
