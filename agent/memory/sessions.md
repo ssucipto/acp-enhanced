@@ -6,6 +6,22 @@
 - date: 2026-08-27
   executor: cursor-grok
   branch: develop
+  tasks: [audit-119, acp-plan, M87]
+  done: [m87-pre-impl-audit, m87-plan-amend-cookbook]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    audit-119 READY after amend. Use design cookbook CB-1..CB-6. git rm must
+    be --cached. filter-repo on a throwaway clone; force-push phrase is
+    `force-push develop mainline tags: yes`. Do not commit audit-119.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
   tasks: [acp-plan, M87, task-322, ADR-27]
   done: [m87-privacy-purge-plan]
   deferred:
@@ -32,10 +48,8 @@
     - F-118-04-d9-1-private-class → /acp-decide
     - F-R006-01-js-yaml-cve → review-006
   key_fact: >
-    Do not gitignore all agent/reports. Split Class A (ACP protocol audits, stay
-    on develop/mainline) from Class B (consumer specs, port inboxes, vendor raw
-    dumps — local agent/private/ + encrypted pack). develop==mainline already
-    contains Class B; HEAD delete does not rewrite history.
+    Superseded by ADR-27: do not keep Class A protocol audits in git on this
+    public repo. Reports/feedback bodies are local-only; history rewrite required.
 
 - date: 2026-08-27
   executor: cursor-grok

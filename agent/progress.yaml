@@ -908,7 +908,7 @@ milestones:
   M87:
     name: Public-repo privacy purge (v6.33.0)
     priority: 5
-    status: planned
+    status: not_started
     progress: 0
     started: null
     completed: null
@@ -920,7 +920,8 @@ milestones:
     notes: >
       PLANNED 2026-08-27 — ADR-27. Public remotes: zero reports/feedback bodies
       (keepers only). Local writers + encrypted pack. History rewrite required
-      before F-118-01..03 stamps. Force-push gated on explicit operator confirm.
+      before F-118-01..03 stamps. Force-push gated on exact phrase
+      `force-push develop mainline tags: yes`. Cookbook CB-1..CB-6.
       F-R006-01..03 out of scope. current_milestone remains M81 until /acp-proceed.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
@@ -6671,103 +6672,109 @@ tasks:
   - id: task-322
     name: Lock ADR-27 + citation map of tracked reports/feedback
     priority: 5
-    status: pending
+    status: not_started
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-322-adr27-citation-map.md
     started: null
     actual_hours: null
     estimated_hours: 2
-    notes: phase 0; ADR-27 already drafted in /acp-plan; citation map for 324-326
+    notes: phase 0; citation map must include install.sh (not bootstrap)
   - id: task-323
     name: "GATE: local encrypted archive of reports + feedback"
     priority: 5
-    status: pending
+    status: not_started
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-323-local-encrypted-archive.md
     started: null
     actual_hours: null
     estimated_hours: 3
-    notes: phase 1 GATE; restore dry-run before 328/330; archive never committed
+    notes: phase 1 GATE; CB-1 restore dry-run before 328/330
   - id: task-324
     name: Gitignore reports/feedback and reverse D9 validator
     priority: 5
-    status: pending
+    status: not_started
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-324-gitignore-reverse-d9-validator.md
     started: null
     actual_hours: null
     estimated_hours: 3
-    notes: phase 2; validateProtocolDirAddability like drafts
+    notes: phase 2; CB-2 ** glob; same commit as validator
   - id: task-325
     name: "Commands, E2E, and wiki: reports stay local"
     priority: 5
-    status: pending
+    status: not_started
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-325-commands-e2e-local-reports.md
     started: null
     actual_hours: null
     estimated_hours: 3
-    notes: phase 2; depends 324; writers stay, tracking goes
+    notes: phase 2; design-spec + ci.sh leftovers
   - id: task-326
     name: Pattern, project-create, and install gitignores
     priority: 4
-    status: pending
+    status: not_started
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-326-pattern-project-create-gitignore.md
     started: null
     actual_hours: null
     estimated_hours: 2
-    notes: phase 2; F-118-05; attribution one-liner F-118-06
+    notes: phase 2; acp.install.sh + package-create.sh not bootstrap
   - id: task-327
     name: Redact remaining tracked files ($HOME, consumer internals)
     priority: 5
-    status: pending
+    status: not_started
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-327-redact-remaining-tracked.md
     started: null
     actual_hours: null
     estimated_hours: 3
-    notes: phase 3; keep IG-37 email; do not stamp F-118
+    notes: phase 3; sessions Class A leftover; active_handoff.path
   - id: task-328
-    name: git rm report/feedback bodies; keep .gitkeep + README
+    name: git rm --cached report/feedback bodies; keepers
     priority: 5
-    status: pending
+    status: not_started
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-328-git-rm-tree-keepers.md
     started: null
     actual_hours: null
     estimated_hours: 2
-    notes: phase 3; GATE 323; tip only; history still dirty until 330
+    notes: phase 3; CB-3; depends 323,324,325,327
   - id: task-329
     name: acp.private-pack.sh for machine transport
     priority: 4
-    status: pending
+    status: not_started
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-329-private-pack-script.md
     started: null
     actual_hours: null
     estimated_hours: 3
-    notes: phase 4; age/gpg; never push archive
+    notes: phase 4; depends 323+324; never push archive
   - id: task-330
-    name: filter-repo SOP + operator-confirmed force-push
+    name: filter-repo SOP + force-push develop mainline tags
     priority: 5
-    status: pending
+    status: not_started
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-330-filter-repo-force-push.md
     started: null
     actual_hours: null
     estimated_hours: 4
-    notes: phase 4; STOP for explicit force-push yes on develop AND mainline
+    notes: phase 4; phrase `force-push develop mainline tags: yes`
   - id: task-331
-    name: "Fresh-clone proof: no report/feedback bodies in history"
+    name: "Fresh-clone proof: history + tags keepers-only"
     priority: 5
-    status: pending
+    status: not_started
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-331-fresh-clone-verification.md
     started: null
     actual_hours: null
     estimated_hours: 2
     notes: phase 4; stamp gate for F-118-01..03
   - id: task-332
-    name: "Closure: validate, stamp F-118, CHANGELOG v6.33.0"
+    name: "Closure: validate, stamp F-118/F-119, CHANGELOG v6.33.0"
     priority: 5
-    status: pending
+    status: not_started
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-332-v6330-closure.md
     started: null
     actual_hours: null
     estimated_hours: 3
     notes: phase 4; stamp only after 331; F-R006 stay pending
 recent_work:
+- date: 2026-08-27
+  description: "/acp-audit --pre-impl M87 (audit-119) + plan amendments CB-1..CB-6"
+  items:
+  - "✅ READY after amend: git rm --cached, filter-repo+tags SOP, gitignore **"
+  - "✅ Tasks 322–332 rewritten to cite cookbook; progress.yaml status not_started"
+  - "Do not commit audit-119; F-R006-01..03 still separate"
 - date: 2026-08-27
   description: "/acp-plan M87 public-repo privacy purge (ADR-27); reports/feedback off remotes including history"
   items:
@@ -9734,8 +9741,8 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M87 privacy purge: /acp-proceed task-322 (citation map) then 323 encrypted archive GATE before any git rm or filter-repo."
-- "Do not force-push develop/mainline until task-330 explicit operator confirm. Do not stamp F-118-01..03 until task-331 fresh clone."
+- "M87 READY (audit-119): /acp-proceed task-322 then 323 CB-1 GATE. Never git rm without --cached."
+- "Force-push only after exact phrase: force-push develop mainline tags: yes. Stamp F-118-01..03 only after 331 tag proof."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 - "Optional: IG-17 allowlist for agent/scripts scanners (integrity FP noise)."

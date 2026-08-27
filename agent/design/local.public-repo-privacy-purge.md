@@ -72,3 +72,158 @@ M72 **D9** required those directories to be tracked. That is unsafe for a public
 ## Success
 
 A stranger cloning `origin/mainline` cannot read historical or current audit/feedback bodies. The operator can restore them on another machine from the private pack.
+
+---
+
+## Operator cookbook (copy-paste — do not improvise)
+
+Canonical commands for M87. Tasks cite **CB-N**. Check syntax by reading this block immediately before running. Do **not** substitute `git add -f`, `git rm` (without `--cached`), `git push --force-with-lease` after a rewrite, or `git clone --depth=1` for history proof.
+
+### CB-1 — Content archive (task-323)
+
+Run from the **repo root**. Write the ciphertext **outside** the clone. `age -p` prompts for a passphrase; do not put it in git.
+
+```bash
+BACKUP_DIR="${HOME}/acp-enhanced-private"
+mkdir -p "${BACKUP_DIR}"
+STAMP="$(date +%Y%m%d)"
+TAR="/tmp/acp-rf-${STAMP}.tar.gz"
+tar -C "$(pwd)" -czf "${TAR}" agent/reports agent/feedback
+age -p -o "${BACKUP_DIR}/acp-reports-feedback-${STAMP}.tar.gz.age" "${TAR}"
+rm -f "${TAR}"
+```
+
+Restore dry-run (must pass before 328/330):
+
+```bash
+STAMP="$(date +%Y%m%d)"   # use the stamp you actually wrote
+RESTORE="/tmp/acp-restore-test"
+rm -rf "${RESTORE}"
+mkdir -p "${RESTORE}"
+age -d -o "/tmp/acp-rf-restored.tar.gz" "${HOME}/acp-enhanced-private/acp-reports-feedback-${STAMP}.tar.gz.age"
+tar -C "${RESTORE}" -xzf "/tmp/acp-rf-restored.tar.gz"
+test -d "${RESTORE}/agent/reports"
+test -d "${RESTORE}/agent/feedback"
+find "${RESTORE}/agent/reports" | wc -l
+find "${RESTORE}/agent/feedback" | wc -l
+rm -f "/tmp/acp-rf-restored.tar.gz"
+```
+
+Expected counts (as of 2026-08-27 tip): **171** tracked report files + **37** tracked feedback files, plus any untracked local reports. Compare `git ls-files agent/reports | wc -l` **before** 328.
+
+### CB-2 — Gitignore keepers (task-324)
+
+`agent/.gitignore` is relative to `agent/`. Copy the **drafts** pattern (`**`, not `*`). Nested files are **not** ignored by `reports/*`.
+
+Append (keep existing clarifications/drafts/preferences blocks):
+
+```gitignore
+# ADR-27 — report/feedback bodies local; keepers tracked
+reports/**
+!reports/.gitkeep
+!reports/README.md
+feedback/**
+!feedback/.gitkeep
+!feedback/README.md
+```
+
+Root `.gitignore` must keep **both** of these (the first would otherwise ignore `agent/reports/` entirely):
+
+```gitignore
+reports/
+!agent/reports/
+```
+
+Syntax check **before** commit (dummy must be ignored; keepers must not):
+
+```bash
+touch agent/reports/audit-dummy.md agent/feedback/feedback-dummy.md
+git check-ignore -v agent/reports/audit-dummy.md
+git check-ignore -v agent/feedback/feedback-dummy.md
+git check-ignore -v agent/reports/.gitkeep; echo "gitkeep_exit=$?"
+# gitkeep: check-ignore exit 1 = not ignored (required)
+rm -f agent/reports/audit-dummy.md agent/feedback/feedback-dummy.md
+```
+
+**Same commit** as validator changes: `validateProtocolDirAddability` probeDirs must drop `agent/reports` and `agent/feedback` (keep `agent/memory`, `agent/tasks`); delete the D9 walk loop for those two dirs; `validateGitignoreConflicts` trackedPaths must not include `agent/reports/` (use `agent/reports/.gitkeep` if a keeper check is needed).
+
+### CB-3 — Tip purge without deleting the working copy (task-328)
+
+**Wrong:** `git rm -r agent/reports` — deletes 171 files from disk.  
+**Right:** `--cached` only, after CB-1 restore proof:
+
+```bash
+git rm --cached -r agent/reports agent/feedback
+# working tree files remain; 324 makes them ignored
+printf '%s\n' '# Local ACP reports (ADR-27). Bodies are gitignored.' > agent/reports/README.md
+printf '%s\n' '# Local ACP feedback (ADR-27). Bodies are gitignored.' > agent/feedback/README.md
+touch agent/reports/.gitkeep agent/feedback/.gitkeep
+git add agent/reports/.gitkeep agent/reports/README.md agent/feedback/.gitkeep agent/feedback/README.md
+git status --short | grep -E 'reports/|feedback/' | grep -v gitkeep | grep -v README || true
+```
+
+Do **not** `git add -f` any `audit-*.md`. Confirm local files still exist: `test -d agent/reports && ls agent/reports | head`.
+
+### CB-4 — History rewrite (task-330)
+
+**Never run `git filter-repo` in the daily worktree.** `filter-repo` strips the `origin` remote. Tags at `v6.32.4` still contain **171** report files until rewritten and force-pushed.
+
+`develop` and `mainline` **diverged** after the M87 plan commit (`develop` ahead of `origin/mainline`). Rewrite a clone that has **both** branches, then force-push both **and** tags.
+
+Mirror backup (outside GitHub):
+
+```bash
+git clone --mirror git@github.com:ssucipto/acp-enhanced.git "${HOME}/acp-enhanced-private/acp-enhanced-pre-rewrite.git"
+```
+
+Throwaway rewrite clone:
+
+```bash
+git clone git@github.com:ssucipto/acp-enhanced.git /tmp/acp-rewrite
+cd /tmp/acp-rewrite
+git fetch origin mainline
+git branch mainline origin/mainline
+# install once: brew install git-filter-repo
+git filter-repo --invert-paths --path agent/reports/ --path agent/feedback/
+# origin was removed; re-add
+git remote add origin git@github.com:ssucipto/acp-enhanced.git
+```
+
+`--invert-paths` removes those directories from **every** commit, including keepers from 328. Re-add keepers on the rewritten tip, commit, then **STOP**.
+
+Operator must type exactly: `force-push develop mainline tags: yes`
+
+Then (not `--force-with-lease` — lease fails after rewrite):
+
+```bash
+git push --force origin develop
+git push --force origin mainline
+git push --force origin --tags
+```
+
+### CB-5 — Fresh-clone proof (task-331)
+
+Full clone, **not** `--depth=1`:
+
+```bash
+git clone git@github.com:ssucipto/acp-enhanced.git /tmp/acp-fresh
+cd /tmp/acp-fresh
+git ls-files agent/reports agent/feedback
+git log --all --full-history --oneline -- agent/reports/ agent/feedback/
+git fetch origin mainline
+git checkout mainline
+git ls-files agent/reports agent/feedback
+git log --all --full-history --oneline -- agent/reports/ agent/feedback/
+```
+
+Pass: keepers only in `ls-files`; log has no historical body paths (or only `.gitkeep`/`README.md`). Repeat for a tag that previously leaked (e.g. `git checkout v6.32.4` **after** tag rewrite) — must not restore 171 files.
+
+### CB-6 — Never
+
+- `git add -f agent/reports/` or `git add -f agent/feedback/`
+- `git rm` without `--cached` on those dirs
+- `git push --force` without the exact confirmation phrase
+- `git push --force-with-lease` after `filter-repo`
+- Stamp F-118-01..03 after local `git rm` only
+- Commit `agent/reports/audit-*.md` (including this milestone’s pre-impl report)
+- Paste vendor org IDs, `$HOME` paths, or consumer spec bodies into remaining tracked files
