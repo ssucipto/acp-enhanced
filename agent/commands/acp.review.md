@@ -153,7 +153,7 @@ bash agent/scripts/acp.review-scan.sh --include-tests tests/fixtures/review-corp
 | `--scope <web\|mobile\|all>` | Platform scoping (default: `all`) |
 | `--ci` | Compact output, exit 1 on CRITICAL/HIGH findings |
 | `--carryover` | Write HIGH+ to `agent/memory/audit-carryovers.md` |
-| `--report` | Save structured YAML + prose to `agent/reports/review-NNN.md` |
+| `--report` | Save structured YAML + prose to `agent/reports/review-NNN.md` (local only; ADR-27 — do not commit) |
 | `--fix-suggestions` | Include inline fix per finding |
 | `--baseline <file>` | Suppress findings already present in a baseline file (`rule + file + normalized snippet hash`) |
 | `--write-baseline <file>` | Write the current findings to a reusable baseline file |

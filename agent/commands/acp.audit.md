@@ -13,7 +13,7 @@
 
 ---
 
-**Purpose**: Deep-dive investigation of a subject, producing a structured report in `agent/reports/`  
+**Purpose**: Deep-dive investigation of a subject, producing a structured report in `agent/reports/` (local only; **do not commit** — ADR-27)  
 **Category**: Workflow  
 **Frequency**: As Needed  
 
@@ -399,7 +399,7 @@ Code pointers: 15
 
 ### File Access
 - **Reads**: Any file in the project (scoped by subject relevance)
-- **Writes**: `agent/reports/audit-{N}-{subject-slug}.md` only
+- **Writes**: `agent/reports/audit-{N}-{subject-slug}.md` only (gitignored; do not `git add`)
 - **Executes**: `git log` for history analysis
 
 ### Network Access
