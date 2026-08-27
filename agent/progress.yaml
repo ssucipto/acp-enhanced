@@ -8,7 +8,7 @@ project:
     \  (M81 CodeRabbit integration + audit-117 remediations; M86 CI/PR/upgrade-guard at 6.31.x).\n\
     \  F2-09 fixed. Aikido track ADR-19 gated.\n"
 active_handoff:
-  path: agent/reports/handoff-claude-m85-phase2-2026-07-31.md
+  path: agent/milestones/milestone-85-preference-yaml-performance.md
   date: '2026-07-31'
   to_executor: claude-opus
   from_executor: claude-opus
@@ -909,11 +909,11 @@ milestones:
     name: Public-repo privacy purge (v6.33.0)
     priority: 5
     status: in_progress
-    progress: 38
+    progress: 62
     started: 2026-08-27
     completed: null
     estimated_weeks: 2
-    tasks_completed: 5
+    tasks_completed: 8
     tasks_total: 13
     file: agent/milestones/milestone-87-public-repo-privacy-purge.md
     design: agent/design/local.public-repo-privacy-purge.md
@@ -6721,30 +6721,33 @@ tasks:
   - id: task-325
     name: "Commands, E2E, and wiki: reports stay local"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-325-commands-e2e-local-reports.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T12:42:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.4
     estimated_hours: 3
-    notes: phase 2; design-spec + ci.sh leftovers
+    notes: 'commands/E2E/wiki ADR-27 local reports; ci.sh --help has no report path'
   - id: task-326
     name: Pattern, project-create, and install gitignores
     priority: 4
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-326-pattern-project-create-gitignore.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T12:42:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.3
     estimated_hours: 2
-    notes: phase 2; acp.install.sh + package-create.sh not bootstrap
+    notes: 'CB-2 heredocs in install.sh + package-create.sh; pattern no AE force-add'
   - id: task-327
     name: Redact remaining tracked files ($HOME, consumer internals)
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-327-redact-remaining-tracked.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T12:42:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.2
     estimated_hours: 3
-    notes: phase 3; sessions Class A leftover; active_handoff.path
+    notes: 'active_handoff retargeted to M85 milestone; Class A key_fact already ADR-27'
   - id: task-328
     name: git rm --cached report/feedback bodies; keepers
     priority: 5
