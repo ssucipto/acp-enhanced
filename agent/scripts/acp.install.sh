@@ -164,12 +164,19 @@ cat > "$TARGET_DIR/agent/.gitignore" << 'EOF'
 # Agent Context Protocol - Local Files
 # These files are generated locally and should not be committed
 
-# Reports and feedback are tracked (D9) — audit evidence + carryover citations
 clarifications/
 drafts/**
 !drafts/.gitkeep
 !drafts/draft.template.md
 preferences/
+
+# ADR-27 — report/feedback bodies local; keepers tracked
+reports/**
+!reports/.gitkeep
+!reports/README.md
+feedback/**
+!feedback/.gitkeep
+!feedback/README.md
 EOF
 
 echo "${GREEN}✓${NC} Directory structure created"
