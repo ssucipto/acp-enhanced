@@ -909,11 +909,11 @@ milestones:
     name: Public-repo privacy purge (v6.33.0)
     priority: 5
     status: in_progress
-    progress: 31
+    progress: 38
     started: 2026-08-27
     completed: null
     estimated_weeks: 2
-    tasks_completed: 4
+    tasks_completed: 5
     tasks_total: 13
     file: agent/milestones/milestone-87-public-repo-privacy-purge.md
     design: agent/design/local.public-repo-privacy-purge.md
@@ -6711,12 +6711,13 @@ tasks:
   - id: task-324
     name: Gitignore reports/feedback and reverse D9 validator
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-324-gitignore-reverse-d9-validator.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T12:38:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.4
     estimated_hours: 3
-    notes: phase 2; CB-2 ** glob; same commit as validator
+    notes: 'CB-2 ** glob; D9 walk removed; validate green with local audits'
   - id: task-325
     name: "Commands, E2E, and wiki: reports stay local"
     priority: 5
@@ -6770,7 +6771,7 @@ tasks:
     started: null
     actual_hours: null
     estimated_hours: 4
-    notes: phase 4; phrase `force-push develop mainline tags: yes`
+    notes: 'phase 4; confirmation phrase required (see task-330)'
   - id: task-331
     name: "Fresh-clone proof: history + tags keepers-only"
     priority: 5

@@ -2,13 +2,13 @@
 id: task-324
 milestone: M87
 title: "Gitignore reports/feedback and reverse D9 validator"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-27
-started: null
-completed: null
+started: 2026-08-27
+completed: 2026-08-27
 phase: 2
 depends_on: [task-322, task-323]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -54,11 +54,11 @@ Live code: `probeDirs` at `scripts/acp-validate.ts:541` includes reports/feedbac
 
 ## Verification
 
-- [ ] `git check-ignore` exit 0 on `agent/reports/audit-dummy.md`
-- [ ] `git check-ignore` exit 1 on `agent/reports/.gitkeep`
-- [ ] Nested path `agent/reports/a/b.md` is ignored (`**` not `*`)
-- [ ] `npx tsx scripts/acp-validate.ts` green with local audits present
-- [ ] Gitignore + validator + test + validate.md in **one** commit
+- [x] `git check-ignore` exit 0 on `agent/reports/audit-dummy.md`
+- [x] `git check-ignore` exit 1 on `agent/reports/.gitkeep`
+- [x] Nested path `agent/reports/a/b.md` is ignored (`**` not `*`)
+- [x] `npx tsx scripts/acp-validate.ts` green with local audits present
+- [x] Gitignore + validator + test + validate.md in **one** commit
 
 ## User-Observable Acceptance
 

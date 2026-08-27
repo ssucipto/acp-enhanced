@@ -10,7 +10,7 @@ tasks: task-322..task-334
 
 **Planned version**: v6.33.0  
 **Status**: in_progress  
-**Progress**: 4/13 tasks (phase 0 backups + 322 citation map)  
+**Progress**: 5/13 tasks (phase 0 backups + 322 + 324 gitignore/validator)  
 **Estimated effort**: ~34h (13 tasks)  
 **Source**: audit-118; audit-119; audit-120 backup-first  
 **Design**: [local.public-repo-privacy-purge.md](../design/local.public-repo-privacy-purge.md)  
