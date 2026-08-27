@@ -3539,3 +3539,49 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-120 — M87 PRE-IMPL ROUND 2 BACKUP-FIRST (2026-08-27) ─────────────
+  - audit_id: 120
+    finding_id: F-120-01
+    severity: high
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-322-adr27-citation-map.md
+    finding: "M87 could start at 322/324/327 with no local backup restore"
+    description: "Plan amended: 333 rsync → 334 local mirror → 323 encrypt; 322 blocked on all three."
+    fix_target: "Honor DAG; first proceed is 333"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 120
+    finding_id: F-120-02
+    severity: high
+    file: agent/design/local.public-repo-privacy-purge.md
+    finding: "git clone --mirror from GitHub misses unpushed develop and untracked reports"
+    description: "CB-0b/CB-4 now mirror from this clone. task-334 + second mirror at 330."
+    fix_target: "task-334 CB-0b; task-330 CB-4 local path"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 120
+    finding_id: F-120-03
+    severity: high
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-333-local-worktree-rsync.md
+    finding: "No worktree copy; untracked audit reports exist only on this disk"
+    description: "task-333 CB-0a rsync including untracked agent/reports."
+    fix_target: "task-333 restore dry-run"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 120
+    finding_id: F-120-04
+    severity: medium
+    file: agent/design/local.public-repo-privacy-purge.md
+    finding: "CB-1 required age; this machine has gpg only"
+    description: "CB-1 now gpg --symmetric fallback; probe before pack."
+    fix_target: "task-323 CB-1"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null

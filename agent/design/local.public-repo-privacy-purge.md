@@ -18,7 +18,7 @@ decisions: D1..D8
 
 ## Problem
 
-ACP Enhanced’s public `develop` and `mainline` (same tip) currently track **171 report files** and **37 feedback files**. audit-118 found:
+ACP Enhanced’s public remotes currently track **171 report files** and **37 feedback files** (`origin/mainline` at `b0334bb`; `develop` is **ahead** with M87 plan commits). audit-118 found:
 
 - Vendor account identifiers in CodeRabbit raw dumps
 - A full consumer application design spec
@@ -32,7 +32,7 @@ M72 **D9** required those directories to be tracked. That is unsafe for a public
 
 **D2: Local writers stay.** `/acp-audit`, `/acp-report`, `/acp-review --report`, `/acp-integrity --report` still write under those dirs. Gitignore them (same class as drafts/clarifications).
 
-**D3: Backup before destroy.** Encrypted local archive (or unpushed `git bundle`) of current `reports/` + `feedback/` **before** `git rm` or `filter-repo`. No rewrite without a restore test.
+**D3: Backup before start.** Before any other M87 task: (0a) rsync the whole worktree (including untracked reports), (0b) local `git clone --mirror` from **this** clone (not GitHub), (1) encrypted reports/feedback archive. Restore-test all three. A second local mirror is taken again immediately before `filter-repo`. No rewrite without those restores.
 
 **D4: History rewrite is the security control.** `git filter-repo` (or `git filter-branch` equivalent) drops `agent/reports/**` and `agent/feedback/**` (except `.gitkeep`/README if re-added on the tip). Then force-push **both** `develop` and `mainline` only after the operator confirms.
 
@@ -52,21 +52,23 @@ M72 **D9** required those directories to be tracked. That is unsafe for a public
 
 ## Implementation order
 
-1. ADR-27 + this design (no secrets in the ADR).
-2. Local archive + restore dry-run.
+1. **Local backups GATE (333 → 334 → 323)** — worktree rsync, local git mirror, encrypted content. Restore tests required.
+2. Citation map (322) — only after backups restore.
 3. Gitignore + validator + E2E/command docs + pattern/install.
-4. Redact `$HOME` / consumer internals in files that **remain** tracked.
-5. `git rm` current tree (keep keepers).
-6. `filter-repo` + operator-confirmed force-push.
-7. Fresh-clone proof: `git log --all -- agent/reports` has no bodies.
-8. Stamp F-118-* after the clone proof — not after local `git rm`.
+4. Redact leftovers in files that **remain** tracked.
+5. `git rm --cached` current tree (keep keepers).
+6. Second local mirror + `filter-repo` + operator-confirmed force-push (branches **and** tags).
+7. Fresh-clone + tag proof.
+8. Stamp F-118-* after that proof — not after local `git rm`.
 
 ## Anti-shortcuts
 
 - Do not mark F-118-01..03 fixed after HEAD delete only.
 - Do not commit new `audit-*.md` to origin during M87.
 - Do not put FIFOZ/ChoreHive product internals into M87 docs.
-- Do not skip the backup restore test.
+- Do not skip the backup restore tests (333, 334, **and** 323).
+- Do not start 322/324 until those three restores pass.
+- Do not `git clone --mirror` from GitHub as the **only** backup (misses untracked + unpushed).
 - Review-006 (js-yaml, bootstrap, dispatch) is **out of scope**.
 
 ## Success
@@ -77,30 +79,81 @@ A stranger cloning `origin/mainline` cannot read historical or current audit/fee
 
 ## Operator cookbook (copy-paste — do not improvise)
 
-Canonical commands for M87. Tasks cite **CB-N**. Check syntax by reading this block immediately before running. Do **not** substitute `git add -f`, `git rm` (without `--cached`), `git push --force-with-lease` after a rewrite, or `git clone --depth=1` for history proof.
+Canonical commands for M87. Tasks cite **CB-N**. Check syntax by reading this block immediately before running. Do **not** substitute `git add -f`, `git rm` (without `--cached`), `git push --force-with-lease` after a rewrite, `git clone --depth=1` for history proof, or `git clone --mirror git@github.com:...` as the **only** backup.
 
-### CB-1 — Content archive (task-323)
+`STAMP`: `date +%Y%m%dT%H%M%S` (not day-only). Destination: `${HOME}/acp-enhanced-private/` — **never** inside the clone.
 
-Run from the **repo root**. Write the ciphertext **outside** the clone. `age -p` prompts for a passphrase; do not put it in git.
+### CB-0a — Worktree rsync (task-333) — FIRST
+
+Captures **untracked** reports (audit-118/119) and `.git`. Run from repo root.
+
+```bash
+command -v rsync
+BACKUP_DIR="${HOME}/acp-enhanced-private"
+mkdir -p "${BACKUP_DIR}"
+STAMP="$(date +%Y%m%dT%H%M%S)"
+echo "${STAMP}" > "${BACKUP_DIR}/LAST_STAMP.txt"
+DEST="${BACKUP_DIR}/worktree-${STAMP}"
+rsync -a "$(pwd)/" "${DEST}/"
+test -d "${DEST}/agent/reports"
+test -f "${DEST}/agent/core/identity.yml"
+test "$(git rev-parse HEAD)" = "$(git -C "${DEST}" rev-parse HEAD)"
+test -f agent/reports/audit-119-m87-pre-impl-readiness.md && test -f "${DEST}/agent/reports/audit-119-m87-pre-impl-readiness.md"
+printf '%s\n' "worktree backup OK ${DEST}"
+```
+
+Restore dry-run (do **not** rsync back onto the live clone):
+
+```bash
+STAMP="$(cat "${HOME}/acp-enhanced-private/LAST_STAMP.txt")"
+DEST="${HOME}/acp-enhanced-private/worktree-${STAMP}"
+test -d "${DEST}/agent/reports"
+git -C "${DEST}" rev-parse HEAD
+```
+
+### CB-0b — Local git mirror (task-334) — from this clone, not GitHub
 
 ```bash
 BACKUP_DIR="${HOME}/acp-enhanced-private"
-mkdir -p "${BACKUP_DIR}"
-STAMP="$(date +%Y%m%d)"
-TAR="/tmp/acp-rf-${STAMP}.tar.gz"
-tar -C "$(pwd)" -czf "${TAR}" agent/reports agent/feedback
-age -p -o "${BACKUP_DIR}/acp-reports-feedback-${STAMP}.tar.gz.age" "${TAR}"
-rm -f "${TAR}"
+STAMP="$(cat "${BACKUP_DIR}/LAST_STAMP.txt")"
+MIRROR="${BACKUP_DIR}/acp-enhanced-${STAMP}.git"
+git clone --mirror "$(pwd)" "${MIRROR}"
+git --git-dir="${MIRROR}" rev-parse develop
+git --git-dir="${MIRROR}" bundle create "${BACKUP_DIR}/acp-enhanced-${STAMP}.bundle" --all
+rm -rf /tmp/acp-from-mirror
+git clone "${MIRROR}" /tmp/acp-from-mirror
+test "$(git -C /tmp/acp-from-mirror rev-parse HEAD)" = "$(git rev-parse HEAD)"
 ```
 
-Restore dry-run (must pass before 328/330):
+### CB-1 — Encrypted reports + feedback (task-323)
+
+After CB-0a/0b restore tests. Prefer `age` if present; **if `age` is missing, use gpg** (this Mac has gpg only). Trap removes the plaintext tar.
 
 ```bash
-STAMP="$(date +%Y%m%d)"   # use the stamp you actually wrote
+BACKUP_DIR="${HOME}/acp-enhanced-private"
+STAMP="$(date +%Y%m%dT%H%M%S)"
+TAR="/tmp/acp-rf-${STAMP}.tar.gz"
+tar -C "$(pwd)" -czf "${TAR}" agent/reports agent/feedback
+cleanup() { rm -f "${TAR}"; }
+trap cleanup EXIT
+if command -v age >/dev/null 2>&1; then
+  age -p -o "${BACKUP_DIR}/acp-reports-feedback-${STAMP}.tar.gz.age" "${TAR}"
+  echo "encrypted: ${BACKUP_DIR}/acp-reports-feedback-${STAMP}.tar.gz.age"
+else
+  command -v gpg
+  gpg --symmetric --cipher-algo AES256 -o "${BACKUP_DIR}/acp-reports-feedback-${STAMP}.tar.gz.gpg" "${TAR}"
+  echo "encrypted: ${BACKUP_DIR}/acp-reports-feedback-${STAMP}.tar.gz.gpg"
+fi
+```
+
+Restore dry-run (gpg; use `age -d` if the file is `.age`):
+
+```bash
+# set STAMP to the pack filename stamp
 RESTORE="/tmp/acp-restore-test"
 rm -rf "${RESTORE}"
 mkdir -p "${RESTORE}"
-age -d -o "/tmp/acp-rf-restored.tar.gz" "${HOME}/acp-enhanced-private/acp-reports-feedback-${STAMP}.tar.gz.age"
+gpg --decrypt -o "/tmp/acp-rf-restored.tar.gz" "${HOME}/acp-enhanced-private/acp-reports-feedback-${STAMP}.tar.gz.gpg"
 tar -C "${RESTORE}" -xzf "/tmp/acp-rf-restored.tar.gz"
 test -d "${RESTORE}/agent/reports"
 test -d "${RESTORE}/agent/feedback"
@@ -109,7 +162,7 @@ find "${RESTORE}/agent/feedback" | wc -l
 rm -f "/tmp/acp-rf-restored.tar.gz"
 ```
 
-Expected counts (as of 2026-08-27 tip): **171** tracked report files + **37** tracked feedback files, plus any untracked local reports. Compare `git ls-files agent/reports | wc -l` **before** 328.
+Expected: **171** tracked report files + **37** tracked feedback files, plus untracked local reports. Compare `git ls-files agent/reports | wc -l` **before** 328.
 
 ### CB-2 — Gitignore keepers (task-324)
 
@@ -150,7 +203,7 @@ rm -f agent/reports/audit-dummy.md agent/feedback/feedback-dummy.md
 ### CB-3 — Tip purge without deleting the working copy (task-328)
 
 **Wrong:** `git rm -r agent/reports` — deletes 171 files from disk.  
-**Right:** `--cached` only, after CB-1 restore proof:
+**Right:** `--cached` only, after **333, 334, and 323** restore proofs:
 
 ```bash
 git rm --cached -r agent/reports agent/feedback
@@ -170,22 +223,22 @@ Do **not** `git add -f` any `audit-*.md`. Confirm local files still exist: `test
 
 `develop` and `mainline` **diverged** after the M87 plan commit (`develop` ahead of `origin/mainline`). Rewrite a clone that has **both** branches, then force-push both **and** tags.
 
-Mirror backup (outside GitHub):
+Mirror backup immediately before rewrite — **from this clone**, not GitHub (GitHub lacks unpushed `develop` and untracked files):
 
 ```bash
-git clone --mirror git@github.com:ssucipto/acp-enhanced.git "${HOME}/acp-enhanced-private/acp-enhanced-pre-rewrite.git"
+STAMP="$(date +%Y%m%dT%H%M%S)"
+git clone --mirror "$(pwd)" "${HOME}/acp-enhanced-private/acp-enhanced-pre-rewrite-${STAMP}.git"
 ```
 
-Throwaway rewrite clone:
+Throwaway rewrite clone from that **local** mirror:
 
 ```bash
-git clone git@github.com:ssucipto/acp-enhanced.git /tmp/acp-rewrite
+MIRROR="${HOME}/acp-enhanced-private/acp-enhanced-pre-rewrite-${STAMP}.git"
+git clone "${MIRROR}" /tmp/acp-rewrite
 cd /tmp/acp-rewrite
-git fetch origin mainline
-git branch mainline origin/mainline
+git branch -a
 # install once: brew install git-filter-repo
 git filter-repo --invert-paths --path agent/reports/ --path agent/feedback/
-# origin was removed; re-add
 git remote add origin git@github.com:ssucipto/acp-enhanced.git
 ```
 
@@ -220,8 +273,10 @@ Pass: keepers only in `ls-files`; log has no historical body paths (or only `.gi
 
 ### CB-6 — Never
 
+- Start 322/324/327 before 333+334+323 restore tests pass
 - `git add -f agent/reports/` or `git add -f agent/feedback/`
 - `git rm` without `--cached` on those dirs
+- `git clone --mirror git@github.com:...` as the **only** backup
 - `git push --force` without the exact confirmation phrase
 - `git push --force-with-lease` after `filter-repo`
 - Stamp F-118-01..03 after local `git rm` only
