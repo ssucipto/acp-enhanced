@@ -2,13 +2,13 @@
 id: task-328
 milestone: M87
 title: "git rm --cached report/feedback bodies; keep .gitkeep + README"
-status: planned
+status: completed
 priority: 5
 complexity: low
 estimated_hours: 2
 created: 2026-08-27
-started: null
-completed: null
+started: 2026-08-27
+completed: 2026-08-27
 phase: 3
 depends_on: [task-323, task-324, task-325, task-327]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -48,10 +48,10 @@ Remove tracked bodies from the **index** using **CB-3**. Leave files on disk (ig
 
 ## Verification
 
-- [ ] `git ls-files agent/reports agent/feedback` = keepers only
-- [ ] Working tree still has report files (`ls agent/reports | wc -l` > 2)
-- [ ] F-118-01..03 still `pending`
-- [ ] No `git add -f` of audit bodies
+- [x] `git ls-files agent/reports agent/feedback` = keepers only
+- [x] Working tree still has report files (`ls agent/reports | wc -l` > 2)
+- [x] F-118-01..03 still `pending`
+- [x] No `git add -f` of audit bodies
 
 ## User-Observable Acceptance
 
