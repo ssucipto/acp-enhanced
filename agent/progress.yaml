@@ -1,11 +1,11 @@
 project:
   name: agent-context-protocol
-  version: 6.32.4
+  version: 6.33.0
   started: 2026-02-16
   status: active
   current_milestone: M87
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.4 on develop\n\
-    \  (M81 CodeRabbit integration + audit-117 remediations; M86 CI/PR/upgrade-guard at 6.31.x).\n\
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.33.0 on develop\n\
+    \  (M87 public remotes keepers-only for reports/feedback including history).\n\
     \  F2-09 fixed. Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/milestones/milestone-85-preference-yaml-performance.md
@@ -908,12 +908,12 @@ milestones:
   M87:
     name: Public-repo privacy purge (v6.33.0)
     priority: 5
-    status: in_progress
-    progress: 92
+    status: completed
+    progress: 100
     started: 2026-08-27
-    completed: null
+    completed: 2026-08-27
     estimated_weeks: 2
-    tasks_completed: 12
+    tasks_completed: 13
     tasks_total: 13
     file: agent/milestones/milestone-87-public-repo-privacy-purge.md
     design: agent/design/local.public-repo-privacy-purge.md
@@ -921,8 +921,8 @@ milestones:
       PLANNED 2026-08-27 — ADR-27. Backup-first (audit-120): 333 rsync, 334 local
       mirror, 323 gpg archive before any other task. Public remotes: keepers-only.
       Force-push phrase `force-push develop mainline tags: yes`. Cookbook CB-0a..CB-6.
-      F-R006-01..03 out of scope. current_milestone is M87. Origin rewritten
-      2026-08-27; re-clone daily worktree then task-332 v6.33.0.
+      F-R006-01..03 out of scope. current_milestone is M87. COMPLETE 2026-08-27
+      v6.33.0; remotes keepers-only including tags. Re-clone daily done.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6792,12 +6792,13 @@ tasks:
   - id: task-332
     name: "Closure: validate, stamp F-118/F-119, CHANGELOG v6.33.0"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-332-v6330-closure.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T13:25:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 1
     estimated_hours: 3
-    notes: phase 4; stamp only after 331; F-R006 stay pending
+    notes: 'v6.33.0; F-118-01..06 and F-119/F-120 stamped; F-R006 pending; daily re-cloned'
 recent_work:
 - date: 2026-08-27
   description: "/acp-audit --pre-impl round 2 (audit-120) — backup-first tasks 333+334"
