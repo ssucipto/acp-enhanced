@@ -2,13 +2,13 @@
 id: task-323
 milestone: M87
 title: "GATE: local encrypted archive of reports + feedback"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-27
-started: null
-completed: null
+started: 2026-08-27
+completed: 2026-08-27
 phase: 0
 depends_on: [task-333, task-334]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -45,11 +45,11 @@ Create a restore-tested encrypted archive of `agent/reports/` and `agent/feedbac
 
 ## Verification
 
-- [ ] Ciphertext exists under `${HOME}/acp-enhanced-private/` (`.gpg` or `.age`)
-- [ ] Restore dry-run listed both trees
-- [ ] `git status` does not show the archive as staged
-- [ ] Passphrase is not in any tracked file
-- [ ] Plaintext tar is gone from `/tmp`
+- [x] Ciphertext exists under `${HOME}/acp-enhanced-private/` (`.gpg` or `.age`)
+- [x] Restore dry-run listed both trees
+- [x] `git status` does not show the archive as staged
+- [x] Passphrase is not in any tracked file
+- [x] Plaintext tar is gone from `/tmp`
 
 ## User-Observable Acceptance
 
@@ -63,3 +63,12 @@ Operator can decrypt into `/tmp/acp-restore-test` without GitHub.
 
 ### Notes
 Do not `git add -f` the archive. Git object parachute is 334; 330 takes a second local mirror before rewrite.
+
+Restore 2026-08-27:
+- Tool: `gpg` (age missing). `--symmetric --cipher-algo AES256` with `--batch --pinentry-mode loopback`.
+- Ciphertext: `$HOME/acp-enhanced-private/acp-reports-feedback-20260827T203242.tar.gz.gpg` (648K)
+- Passphrase file: `$HOME/acp-enhanced-private/.gpg-passphrase` (chmod 600, **not in git**)
+- `git ls-files` before 328: reports **171**, feedback **37**
+- Restore `/tmp/acp-restore-test`: both trees present (`find` reports 180 including dirs, feedback 38)
+- Plaintext tar removed from `/tmp`
+
