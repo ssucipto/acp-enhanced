@@ -106,41 +106,32 @@ trap 'rm -rf "${TMPDIR}"' EXIT
 _copy_fixture_workspace "${TMPDIR}"
 _init_fixture_git_repo "${TMPDIR}"
 
-# First completed milestone block (M44+), not nested task status lines
-COMPLETED_MILESTONE=$(awk '
-  /^  M[0-9]+:/ { ms=$0; sub(/^  /,"",ms); sub(/:.*/,"",ms); in_ms=1; next }
-  in_ms && /^    status: completed/ { print ms; exit }
-  in_ms && /^  M[0-9]+:/ { in_ms=0 }
-' "${TMPDIR}/agent/progress.yaml")
+# KEEP path (*.template.md is not gitignored). Instance milestone bodies are stripped (ADR-28).
+V1_DOC="agent/milestones/e2e-v1-desync.template.md"
+printf '%s\n' "**Status**: planned" > "${TMPDIR}/${V1_DOC}"
+PROGRESS1="${TMPDIR}/agent/progress.yaml"
+awk -v doc="${V1_DOC}" '
+  /^milestones:[[:space:]]*$/ {
+    print
+    print "  M98:"
+    print "    name: E2E Status Desync Fixture"
+    print "    status: completed"
+    print "    file: " doc
+    next
+  }
+  { print }
+' "${PROGRESS1}" > "${PROGRESS1}.tmp" && mv "${PROGRESS1}.tmp" "${PROGRESS1}"
 
-if [[ -z "${COMPLETED_MILESTONE}" ]]; then
-  echo "  ⚠ SKIP: No completed milestone found in progress.yaml — skipping V1"
+pushd "${TMPDIR}" > /dev/null
+VALIDATE_OUT=$(_run_validator "${TMPDIR}" 2>&1) || true
+popd > /dev/null
+
+assert_not_empty "${VALIDATE_OUT}" "Validator produced output"
+DESYNC_FOUND=$(echo "${VALIDATE_OUT}" | grep -ci "Status desync\|status.*disagree\|desync" || true)
+if [[ "${DESYNC_FOUND}" -ge 1 ]]; then
+  assert_true "Validator flagged status desync for M98" 0
 else
-  MILESTONE_FILE=$(grep -A12 "^  ${COMPLETED_MILESTONE}:" "${TMPDIR}/agent/progress.yaml" | grep "file:" | head -1 | sed 's/.*file: *//' | sed 's/ *$//' | sed 's/"//g')
-
-  if [[ -n "${MILESTONE_FILE}" ]]; then
-    TARGET_DOC="${TMPDIR}/${MILESTONE_FILE}"
-
-    if [[ -f "${TARGET_DOC}" ]]; then
-      sed 's/\*\*Status\*\*: *completed/\*\*Status\*\*: planned/' "${TARGET_DOC}" > "${TARGET_DOC}.tmp" && mv "${TARGET_DOC}.tmp" "${TARGET_DOC}"
-
-      pushd "${TMPDIR}" > /dev/null
-      VALIDATE_OUT=$(_run_validator "${TMPDIR}" 2>&1) || VALIDATE_RC=$?
-      popd > /dev/null
-
-      assert_not_empty "${VALIDATE_OUT}" "Validator produced output"
-      DESYNC_FOUND=$(echo "${VALIDATE_OUT}" | grep -ci "Status desync\|status.*disagree\|desync" || true)
-      if [[ "${DESYNC_FOUND}" -ge 1 ]]; then
-        assert_true "Validator flagged status desync for ${COMPLETED_MILESTONE}" 0
-      else
-        assert_true "Validator flagged status desync for ${COMPLETED_MILESTONE}" 1
-      fi
-    else
-      echo "  ⚠ SKIP: ${MILESTONE_FILE} not found in fixture workspace — skipping V1"
-    fi
-  else
-    echo "  ⚠ SKIP: No file: pointer for ${COMPLETED_MILESTONE} — skipping V1"
-  fi
+  assert_true "Validator flagged status desync for M98" 1
 fi
 
 print_test_header "V2 — aligned workspace produces clean exit (no desync)"
@@ -175,7 +166,7 @@ awk '
     print "  M99:"
     print "    name: Nonexistent Test Milestone"
     print "    status: active"
-    print "    file: agent/milestones/milestone-99-does-not-exist.md"
+    print "    file: agent/design/e2e-m99-does-not-exist.md"
     next
   }
   { print }
