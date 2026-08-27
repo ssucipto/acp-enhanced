@@ -22,6 +22,30 @@ export function resolveProgressPointerPath(pointerPath: string): string {
   return path.isAbsolute(pointerPath) ? pointerPath : repoPath(pointerPath);
 }
 
+/** True when gitignore would ignore relPath even if it is missing from disk/index (CI clone). */
+export function isGitIgnoredNoIndex(relPath: string, root?: string): boolean {
+  const cwd = root ?? getRepoRoot();
+  try {
+    execFileSync("git", ["check-ignore", "-q", "--no-index", "--", relPath], {
+      cwd,
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+    return true;
+  } catch (err: unknown) {
+    const status = (err as { status?: number }).status;
+    if (status === 1) return false;
+    return false;
+  }
+}
+
+/** Dangling progress.yaml file: pointer is an error unless the path is gitignored (ADR-28). */
+export function shouldReportDanglingProgressPointer(relPath: string, root?: string): boolean {
+  const cwd = root ?? getRepoRoot();
+  const resolved = path.isAbsolute(relPath) ? relPath : path.join(cwd, relPath);
+  if (existsSync(resolved)) return false;
+  return !isGitIgnoredNoIndex(relPath, cwd);
+}
+
 // ── Shared types ─────────────────────────────────────────────
 export interface ValidationError {
   file: string;
@@ -538,8 +562,8 @@ export function validateScriptRegistration(root?: string): ValidationError[] {
 export function validateProtocolDirAddability(root?: string): ValidationError[] {
   const errors: ValidationError[] = [];
   const base = root ?? getRepoRoot();
-  // ADR-27: reports/feedback are local (ignored). Probe only dirs that must stay addable.
-  const probeDirs = ["agent/memory", "agent/tasks"];
+  // ADR-27/28: reports/feedback/instance tasks are local (ignored). Probe memory only.
+  const probeDirs = ["agent/memory"];
 
   for (const dir of probeDirs) {
     const probe = path.join(base, dir, "__acp_addability_probe__.md");
@@ -560,7 +584,7 @@ export function validateProtocolDirAddability(root?: string): ValidationError[] 
   }
 
   if (errors.length === 0) {
-    console.log("✅ Protocol dirs: addability probe passed (memory/tasks)");
+    console.log("✅ Protocol dirs: addability probe passed (memory)");
   }
   return errors;
 }
@@ -2042,7 +2066,14 @@ export function validateGitTagsExist(): ValidationError[] {
 export function validateGitignoreConflicts(): ValidationError[] {
   const errors: ValidationError[] = [];
   // Check known tracked paths that have had .gitignore conflicts
-  const trackedPaths = ["agent/reports/.gitkeep", "scripts/package-lock.json"];
+  const trackedPaths = [
+    "agent/reports/.gitkeep",
+    "scripts/package-lock.json",
+    "agent/milestones/.gitkeep",
+    "agent/tasks/.gitkeep",
+    "agent/sessions/.gitkeep",
+    "docs/USAGE.md",
+  ];
 
   for (const tp of trackedPaths) {
     try {
@@ -2163,6 +2194,7 @@ function validateFilePointers(): boolean {
       seen.add(docFile);
       const resolvedDocFile = resolveProgressPointerPath(docFile);
       if (!existsSync(resolvedDocFile)) {
+        if (isGitIgnoredNoIndex(docFile)) continue;
         console.error(`❌ Dangling pointer: M${mid.replace(/^M/, "")} file: "${docFile}" does not exist`);
         allOk = false;
       }
@@ -2177,7 +2209,7 @@ function validateFilePointers(): boolean {
   }
 
   if (allOk) {
-    console.log(`✅ File pointers: all progress.yaml file: references exist`);
+    console.log(`✅ File pointers: all progress.yaml file: references exist or are gitignored`);
   }
   return allOk;
 }

@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Validator ADR-28** — instance milestone/task/session bodies and one field-feedback file are gitignored. `validateFilePointers` skips missing paths that `git check-ignore --no-index` matches. Addability probe is `agent/memory` only.
+
 ---
 
 ## [6.33.0] — 2026-08-27

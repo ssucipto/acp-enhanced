@@ -32,6 +32,8 @@ import {
   getRepoRoot,
   parseGithubOwnerRepo,
   resolveProgressPointerPath,
+  isGitIgnoredNoIndex,
+  shouldReportDanglingProgressPointer,
 } from "./acp-validate.ts";
 import type { ValidationError } from "./acp-validate.ts";
 
@@ -496,7 +498,7 @@ describe("validatePackageYamlVersion (M72)", () => {
   });
 });
 
-describe("validateProtocolDirAddability (M72 / ADR-27)", () => {
+describe("validateProtocolDirAddability (M72 / ADR-27 / ADR-28)", () => {
   it("returns array without throwing on live repo", () => {
     const errors = validateProtocolDirAddability(getRepoRoot());
     expect(Array.isArray(errors)).toBe(true);
@@ -531,6 +533,53 @@ describe("validateProtocolDirAddability (M72 / ADR-27)", () => {
     });
     const errors = validateProtocolDirAddability(root).filter((e) => e.severity === "error");
     expect(errors).toHaveLength(0);
+  });
+
+  it("zero errors when agent/tasks/** is ignored (ADR-28)", () => {
+    const root = path.join(testDir, "adr28-tasks");
+    mkdirSync(path.join(root, "agent", "memory"), { recursive: true });
+    mkdirSync(path.join(root, "agent", "tasks"), { recursive: true });
+    writeFileSync(
+      path.join(root, "agent", ".gitignore"),
+      ["tasks/**", "!tasks/.gitkeep", "!tasks/README.md", "!tasks/*.template.md", ""].join("\n"),
+      "utf-8"
+    );
+    writeFileSync(path.join(root, "agent", "memory", "sessions.md"), "", "utf-8");
+    writeFileSync(path.join(root, "agent", "tasks", ".gitkeep"), "", "utf-8");
+    writeFileSync(path.join(root, "agent", "tasks", "instance.md"), "local\n", "utf-8");
+    execSync("git init", { cwd: root, stdio: "pipe" });
+    execSync("git add agent/.gitignore agent/memory/sessions.md agent/tasks/.gitkeep", {
+      cwd: root,
+      stdio: "pipe",
+    });
+    const errors = validateProtocolDirAddability(root).filter((e) => e.severity === "error");
+    expect(errors).toHaveLength(0);
+  });
+});
+
+describe("progress pointer gitignore skip (ADR-28)", () => {
+  it("skips a missing gitignored instance path and still errors on missing USAGE.md", () => {
+    const root = path.join(testDir, "adr28-pointers");
+    mkdirSync(path.join(root, "agent", "milestones"), { recursive: true });
+    mkdirSync(path.join(root, "docs"), { recursive: true });
+    writeFileSync(
+      path.join(root, "agent", ".gitignore"),
+      [
+        "milestones/**",
+        "!milestones/.gitkeep",
+        "!milestones/README.md",
+        "!milestones/*.template.md",
+        "",
+      ].join("\n"),
+      "utf-8"
+    );
+    writeFileSync(path.join(root, "agent", "milestones", ".gitkeep"), "", "utf-8");
+    execSync("git init", { cwd: root, stdio: "pipe" });
+    execSync("git add agent/.gitignore agent/milestones/.gitkeep", { cwd: root, stdio: "pipe" });
+    expect(isGitIgnoredNoIndex("agent/milestones/milestone-dummy.md", root)).toBe(true);
+    expect(shouldReportDanglingProgressPointer("agent/milestones/milestone-dummy.md", root)).toBe(false);
+    expect(isGitIgnoredNoIndex("docs/USAGE.md", root)).toBe(false);
+    expect(shouldReportDanglingProgressPointer("docs/USAGE.md", root)).toBe(true);
   });
 });
 
