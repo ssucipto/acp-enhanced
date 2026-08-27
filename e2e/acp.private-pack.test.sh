@@ -8,7 +8,7 @@ source "${PROJECT_ROOT}/tests/common.sh"
 
 PACK="${PROJECT_ROOT}/agent/scripts/acp.private-pack.sh"
 
-print_suite_header "/acp-private-pack — E2E Tests (M87)"
+print_suite_header "/acp-private-pack — E2E Tests (M87/M88)"
 
 if [[ "${OS:-}" == "Windows_NT" ]] || [[ "$(uname -s 2>/dev/null || true)" == MINGW* ]]; then
   print_test_header "S0 — skip on Windows (gpg/age fixture)"
@@ -33,9 +33,12 @@ print_test_header "S2 — pack/unpack fixture counts"
 FIXTURE="$(mktemp -d /tmp/acp-pack-fix.XXXXXX)"
 DEST="$(mktemp -d /tmp/acp-pack-dest.XXXXXX)"
 OUT="/tmp/acp-pack-out-$$.tar.gz.gpg"
-mkdir -p "${FIXTURE}/agent/reports" "${FIXTURE}/agent/feedback"
+mkdir -p "${FIXTURE}/agent/reports" "${FIXTURE}/agent/feedback" \
+  "${FIXTURE}/agent/milestones" "${FIXTURE}/docs"
 printf 'r1\n' > "${FIXTURE}/agent/reports/a.md"
 printf 'f1\n' > "${FIXTURE}/agent/feedback/b.md"
+printf 'ms1\n' > "${FIXTURE}/agent/milestones/milestone-dummy.md"
+printf 'keep-me\n' > "${FIXTURE}/docs/USAGE.md"
 export ACP_PRIVATE_PACK_ROOT="${FIXTURE}"
 export ACP_PACK_PASSPHRASE="e2e-m87-pack-pass-not-a-secret"
 bash "${PACK}" pack --output "${OUT}"
@@ -49,6 +52,10 @@ test -d "${DEST}/agent/reports"
 assert_true "unpacked reports dir" $?
 test -d "${DEST}/agent/feedback"
 assert_true "unpacked feedback dir" $?
+test -f "${DEST}/agent/milestones/milestone-dummy.md"
+assert_true "unpacked dummy ignored milestone" $?
+test ! -f "${DEST}/docs/USAGE.md"
+assert_true "USAGE.md not packed (never pack docs/)" $?
 R_LIVE="$(find "${FIXTURE}/agent/reports" | wc -l | tr -d ' ')"
 R_OUT="$(find "${DEST}/agent/reports" | wc -l | tr -d ' ')"
 assert_equals "${R_LIVE}" "${R_OUT}" "reports find counts match"
