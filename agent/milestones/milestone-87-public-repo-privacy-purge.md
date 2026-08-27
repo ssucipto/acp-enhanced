@@ -3,14 +3,14 @@
 <!-- @acp.meta.milestone
 topic: privacy, reports, feedback, git-filter-repo, public-repo, ADR-27
 description: Remove reports/feedback/audit bodies from public remotes including history; local backups first then pack
-status: in_progress
+status: completed
 updated: 2026-08-27
 tasks: task-322..task-334
 @acp.meta.end -->
 
 **Planned version**: v6.33.0  
-**Status**: in_progress  
-**Progress**: 12/13 tasks — origin rewritten; re-clone daily then task-332  
+**Status**: completed  
+**Progress**: 13/13 tasks — v6.33.0; origin keepers-only including tags  
 **Estimated effort**: ~34h (13 tasks)  
 **Source**: audit-118; audit-119; audit-120 backup-first  
 **Design**: [local.public-repo-privacy-purge.md](../design/local.public-repo-privacy-purge.md)  

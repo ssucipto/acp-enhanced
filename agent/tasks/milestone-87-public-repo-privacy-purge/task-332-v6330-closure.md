@@ -2,13 +2,13 @@
 id: task-332
 milestone: M87
 title: "Closure: validate, stamp F-118, CHANGELOG v6.33.0"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-27
-started: null
-completed: null
+started: 2026-08-27
+completed: 2026-08-27
 phase: 4
 depends_on: [task-325, task-326, task-329, task-331]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -31,7 +31,7 @@ milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D1, D6
 depends_on: task-325, task-326, task-329, task-331
-status: planned
+status: completed
 updated: 2026-08-27
 @acp.meta.end -->
 
@@ -55,13 +55,13 @@ Never bump only one version file. Never stamp without evidence. F-118-08 email s
 
 ## Verification
 
-- [ ] All version pins 6.33.0
-- [ ] CHANGELOG has 6.33.0
-- [ ] F-118-01..06 fixed with 331 evidence
-- [ ] F-118-08 still keep
-- [ ] F-R006-* still pending
-- [ ] Milestone 11/11
-- [ ] `git status` does not stage `agent/reports/audit-*.md`
+- [x] All version pins 6.33.0
+- [x] CHANGELOG has 6.33.0
+- [x] F-118-01..06 fixed with 331 evidence
+- [x] F-118-08 still keep
+- [x] F-R006-* still pending
+- [x] Milestone 13/13
+- [x] `git status` does not stage `agent/reports/audit-*.md`
 
 ## User-Observable Acceptance
 
