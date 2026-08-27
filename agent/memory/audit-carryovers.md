@@ -3421,11 +3421,11 @@ carryovers:
     severity: high
     file: agent/reports/coderabbit-local-2026-07-24/chunk-e2e.attempt1.raw.txt
     finding: "CodeRabbit CLI raw dumps on develop/mainline contain org billing UUID and isProUser"
-    description: "Three tracked *.raw.txt files include a CodeRabbit billing URL with orgId. Violates M82 scrub-before-commit. Already on origin/mainline. HEAD delete is not enough — F-118-01 stays pending until fresh-clone history proof (M87 task-331)."
+    description: "Rewritten off origin; task-331 fresh clone + v6.32.4 tag proof 2026-08-27. Do not paste orgId into new files."
     fix_target: "Backup, then untrack + filter-repo path; never paste the orgId into new files"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
     escalated_to: null
   - audit_id: 118
     finding_id: F-118-02
@@ -3434,9 +3434,9 @@ carryovers:
     finding: "Full FIFOZ application design spec tracked in ACP Enhanced feedback/"
     description: "Consumer product architecture (screens, stores, Firestore, billing entitlements) is not ACP protocol evidence. Protects the feedback provider only if this file is not redistributed."
     fix_target: "Untrack + history rewrite (M87); do not paste spec body into AE files; pack locally"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
     escalated_to: null
   - audit_id: 118
     finding_id: F-118-03
@@ -3445,9 +3445,9 @@ carryovers:
     finding: "FIFOZ port inbox + audit-114 leak absolute $HOME paths and consumer CI snapshots"
     description: "README and diff headers name /Users/…/Project/Rygan/FIFOZ. ci.yml is FIFOZ Expo/RevenueCat CI. Portable ideas already shipped as AE /acp-ci and /acp-pr."
     fix_target: "Untrack inbox dir + history rewrite (M87); redact $HOME in remaining tracked files (task-327)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
     escalated_to: null
   - audit_id: 118
     finding_id: F-118-04
@@ -3456,9 +3456,9 @@ carryovers:
     finding: "D9 tracks all reports/feedback with no privacy class for consumer/field artifacts"
     description: "Maintainer overrode Class A/B split (ADR-27): public remotes must not contain any reports/feedback bodies. D9 tracking is superseded for this public repo. Do not reopen D9 as a tracking requirement."
     fix_target: "ADR-27 + reverse D9 validator; gitignore reports/feedback; history rewrite before stamp"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
     escalated_to: null
   - audit_id: 118
     finding_id: F-118-05
@@ -3467,9 +3467,9 @@ carryovers:
     finding: "Pattern still says reports/ and feedback/ are gitignored; AE D9 tracks them"
     description: "Pattern still says reports/feedback are gitignored while D9 tracks them; after ADR-27 the pattern's ignore rule is correct again and the validator/install comments must match."
     fix_target: "Update pattern + acp.project-create.md + install gitignores: reports/feedback local-only (ADR-27)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
     escalated_to: null
   - audit_id: 118
     finding_id: F-118-06
@@ -3478,9 +3478,9 @@ carryovers:
     finding: "Named consumer orgs/repos in tracked feedback without a documented consent/attribution policy"
     description: "FIFOZ, ChoreHive, TikrFlow, Rygan appear in feedback, README, CHANGELOG. Names may be OK if consented; pair with F-118-02/03 so internals are not published alongside names."
     fix_target: "Document attribution policy (names OK vs internals not); confirm consent or generalize remaining field reports"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
     escalated_to: null
 
   # ── AUDIT-119 — M87 PRE-IMPL READINESS (2026-08-27) ────────────────────────
@@ -3491,9 +3491,9 @@ carryovers:
     finding: "git rm without --cached deletes working-tree report/feedback files"
     description: "Plan amended to CB-3. Implement exactly git rm --cached -r. Restore from age archive if mistyped."
     fix_target: "task-328 CB-3; verified when 328 complete"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
     escalated_to: null
   - audit_id: 119
     finding_id: F-119-02
@@ -3502,9 +3502,9 @@ carryovers:
     finding: "filter-repo SOP omitted origin drop, tag leak (v6.32.4 still has 171 reports), diverged branches"
     description: "Plan amended to CB-4. Force-push phrase includes tags. Do not use --force-with-lease after rewrite."
     fix_target: "task-330 CB-4; verified in task-331 tag checkout"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
     escalated_to: null
   - audit_id: 119
     finding_id: F-119-03
@@ -3513,9 +3513,9 @@ carryovers:
     finding: "reports/* does not ignore nested files; package-create uses *.md"
     description: "Plan amended to CB-2 ** + keeper exceptions. task-326 retargeted to acp.install.sh + package-create.sh."
     fix_target: "task-324 CB-2 + task-326 package-create globs"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
     escalated_to: null
   - audit_id: 119
     finding_id: F-119-04
@@ -3524,9 +3524,9 @@ carryovers:
     finding: "328 could land before 325; gitignore+validator must be one commit"
     description: "328 now depends 325; 324 same-commit requirement written."
     fix_target: "Honor DAG in /acp-proceed"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
     escalated_to: null
   - audit_id: 119
     finding_id: F-119-08
@@ -3535,9 +3535,9 @@ carryovers:
     finding: "Class A-in-git session key_fact would mislead the next agent; pattern documents git add -f"
     description: "sessions.md audit-118 key_fact rewritten in plan-amend; pattern git add -f remains task-326."
     fix_target: "task-326 pattern; task-327 leftover sweep"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
     escalated_to: null
 
   # ── AUDIT-120 — M87 PRE-IMPL ROUND 2 BACKUP-FIRST (2026-08-27) ─────────────
@@ -3548,9 +3548,9 @@ carryovers:
     finding: "M87 could start at 322/324/327 with no local backup restore"
     description: "Plan amended: 333 rsync → 334 local mirror → 323 encrypt; 322 blocked on all three."
     fix_target: "Honor DAG; first proceed is 333"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "120"
     escalated_to: null
   - audit_id: 120
     finding_id: F-120-02
@@ -3559,9 +3559,9 @@ carryovers:
     finding: "git clone --mirror from GitHub misses unpushed develop and untracked reports"
     description: "CB-0b/CB-4 now mirror from this clone. task-334 + second mirror at 330."
     fix_target: "task-334 CB-0b; task-330 CB-4 local path"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "120"
     escalated_to: null
   - audit_id: 120
     finding_id: F-120-03
@@ -3570,9 +3570,9 @@ carryovers:
     finding: "No worktree copy; untracked audit reports exist only on this disk"
     description: "task-333 CB-0a rsync including untracked agent/reports."
     fix_target: "task-333 restore dry-run"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "120"
     escalated_to: null
   - audit_id: 120
     finding_id: F-120-04
@@ -3581,9 +3581,9 @@ carryovers:
     finding: "CB-1 required age; this machine has gpg only"
     description: "CB-1 now gpg --symmetric fallback; probe before pack."
     fix_target: "task-323 CB-1"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "120"
     escalated_to: null
 
   # ── AUDIT-121 — M87 IMPLEMENTATION GAPS (2026-08-27) ──────────────────────
@@ -3614,11 +3614,11 @@ carryovers:
     severity: high
     file: .
     finding: "Daily worktree history still contains report/feedback blobs"
-    description: "Origin is clean (fresh clone 0 bodies). This Cursor worktree is still unre-written until the operator re-clones from origin."
-    fix_target: "Re-clone daily worktree from origin; then mark fixed"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    description: "Daily .git replaced from origin/develop 344b84a 2026-08-27; rev-list report bodies=0. Local reports restored from Phase 0 worktree backup."
+    fix_target: "Keep working only on this re-cloned develop"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "121"
     escalated_to: null
   - audit_id: 121
     finding_id: F-121-04
