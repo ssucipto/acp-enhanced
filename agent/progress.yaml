@@ -927,17 +927,17 @@ milestones:
     name: Instance-docs privacy purge (v6.34.0)
     priority: 5
     status: in_progress
-    progress: 8
+    progress: 15
     started: 2026-08-27
     completed: null
     estimated_weeks: 2
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 13
     file: agent/milestones/milestone-88-instance-docs-privacy-purge.md
     design: agent/design/local.instance-docs-privacy-purge.md
     notes: >
-      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 1/13. GATE 335 CB-0a
-      restore OK STAMP 20260827T231053.
+      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 2/13. GATE 335+336
+      STAMP 20260827T231053. Next 337 encrypted archive.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6828,12 +6828,13 @@ tasks:
   - id: task-336
     name: "GATE FIRST: local git mirror + bundle from this clone"
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-336-local-git-mirror-bundle.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T15:12:00Z'
+    completed_date: '2026-08-27T15:13:00Z'
+    actual_hours: 0.1
     estimated_hours: 2
-    notes: phase 0; CB-0b from $(pwd) not GitHub; depends 335
+    notes: 'CB-0b HEAD 8762b0c; mirror from $(pwd); bundle 11M'
   - id: task-337
     name: "GATE: encrypted archive of four trees plus reports/feedback"
     priority: 5
@@ -6934,6 +6935,12 @@ tasks:
     estimated_hours: 3
     notes: phase 4; F-R006 stays pending; no second force-push
 recent_work:
+- date: 2026-08-27
+  description: "task-336 GATE CB-0b local git mirror + bundle"
+  items:
+  - "✅ Mirror from $(pwd) HEAD 8762b0c; clone-from-mirror HEAD match"
+  - "✅ Bundle 11M at ${HOME}/acp-enhanced-private/acp-enhanced-m88-20260827T231053.bundle"
+  - "345 takes a second mirror immediately before filter-repo"
 - date: 2026-08-27
   description: "task-335 GATE CB-0a worktree rsync restore OK"
   items:
@@ -9930,7 +9937,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "/acp-proceed task-336 (local git mirror) then 337 (encrypted four-tree archive). Do not start 338 until 336 and 337 restore."
+- "/acp-proceed task-337 (encrypted four-tree archive). Do not start 338 until 337 restore."
 - "Force-push only after exact phrase: force-push instance-docs develop mainline tags: yes (not the M87 phrase). Stamp history-clean only after 346. Rehearse 344 before 345."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
