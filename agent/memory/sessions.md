@@ -6,6 +6,22 @@
 - date: 2026-08-27
   executor: cursor-grok
   branch: develop
+  tasks: [task-335, task-336, task-337, task-338, task-339, task-340, task-341, task-342, task-343, task-344]
+  done: [gate-backups, citation-map, gitignore-validator, dual-store-e2e, private-pack-dirs, tip-untrack, ci-rehearsal]
+  deferred:
+    - filter-repo-force-push → task-345-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    GATE STAMP 20260827T231053. Tip is keepers-only (git rm --cached). CI rehearsal
+    validate green. Halt until exact phrase force-push instance-docs develop
+    mainline tags: yes. Do not reclone daily until 347. Do not reuse the M87 phrase.
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
   tasks: [task-332]
   done: [daily-reclone, v6330-bump, f-118-stamps]
   deferred:
