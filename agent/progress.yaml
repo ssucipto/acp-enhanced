@@ -927,17 +927,17 @@ milestones:
     name: Instance-docs privacy purge (v6.34.0)
     priority: 5
     status: in_progress
-    progress: 62
+    progress: 69
     started: 2026-08-27
     completed: null
     estimated_weeks: 2
-    tasks_completed: 8
+    tasks_completed: 9
     tasks_total: 13
     file: agent/milestones/milestone-88-instance-docs-privacy-purge.md
     design: agent/design/local.instance-docs-privacy-purge.md
     notes: >
-      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 8/13. Next 343 git rm
-      --cached. Do not reclone until 347.
+      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 9/13. Tip keepers-only.
+      Do not reclone until 347. Next 344 CI rehearsal then halt at 345.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6898,12 +6898,13 @@ tasks:
   - id: task-343
     name: git rm --cached instance bodies; keep templates and public docs
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-343-git-rm-cached-keepers.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T15:37:00Z'
+    completed_date: '2026-08-27T15:38:00Z'
+    actual_hours: 0.1
     estimated_hours: 2
-    notes: phase 3; CB-3 --cached only; never invert docs/
+    notes: 'git rm --cached only; keepers+templates+USAGE tracked; no reclone until 347'
   - id: task-344
     name: "CI-clone rehearsal: validate the index without instance bodies"
     priority: 5
@@ -6941,6 +6942,12 @@ tasks:
     estimated_hours: 3
     notes: phase 4; F-R006 stays pending; no second force-push
 recent_work:
+- date: 2026-08-27
+  description: "task-343 git rm --cached instance bodies; keepers remain"
+  items:
+  - "✅ Index: templates + keepers + four public docs; routing/tasks still 241"
+  - "✅ Bodies still on disk; no git add -f; history still dirty until 345"
+  - "F-122-04: do not reclone daily worktree until 347"
 - date: 2026-08-27
   description: "task-342 redact leftovers in remaining tracked files"
   items:
@@ -9979,7 +9986,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "/acp-proceed task-343 (git rm --cached keepers). Do not reclone the daily worktree until 347."
+- "/acp-proceed task-344 (CI-clone rehearsal). Do not reclone the daily worktree until 347. Halt before 345 until the M88 force-push phrase."
 - "Force-push only after exact phrase: force-push instance-docs develop mainline tags: yes (not the M87 phrase). Stamp history-clean only after 346. Rehearse 344 before 345."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
