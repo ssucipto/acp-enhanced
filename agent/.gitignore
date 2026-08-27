@@ -1,10 +1,19 @@
 # Agent Context Protocol - Local Files
 # These files are generated locally and should not be committed
 
-# Local-only protocol dirs (D9 — reports/ and feedback/ are tracked)
+# Local-only protocol dirs (clarifications/drafts/preferences)
 clarifications/
 drafts/**
 !drafts/.gitkeep
 !drafts/draft.template.md
 preferences/
+
+# ADR-27 — report/feedback bodies local; keepers tracked
+reports/**
+!reports/.gitkeep
+!reports/README.md
+feedback/**
+!feedback/.gitkeep
+!feedback/README.md
+
 
