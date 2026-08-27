@@ -927,17 +927,17 @@ milestones:
     name: Instance-docs privacy purge (v6.34.0)
     priority: 5
     status: in_progress
-    progress: 54
+    progress: 62
     started: 2026-08-27
     completed: null
     estimated_weeks: 2
-    tasks_completed: 7
+    tasks_completed: 8
     tasks_total: 13
     file: agent/milestones/milestone-88-instance-docs-privacy-purge.md
     design: agent/design/local.instance-docs-privacy-purge.md
     notes: >
-      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 7/13. Next 342 redact
-      leftovers then 343 git rm --cached.
+      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 8/13. Next 343 git rm
+      --cached. Do not reclone until 347.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6703,7 +6703,7 @@ tasks:
     completed_date: '2026-08-27'
     actual_hours: 0.2
     estimated_hours: 2
-    notes: 'CB-0b restore-tested; mirror $HOME/acp-enhanced-private/acp-enhanced-20260827T202952.git HEAD 1488312'
+    notes: 'CB-0b restore-tested; mirror ${HOME}/acp-enhanced-private/acp-enhanced-20260827T202952.git HEAD 1488312'
   - id: task-322
     name: Lock ADR-27 + citation map of tracked reports/feedback
     priority: 5
@@ -6723,7 +6723,7 @@ tasks:
     completed_date: '2026-08-27'
     actual_hours: 0.2
     estimated_hours: 3
-    notes: 'CB-1 gpg AES256 restore-tested; archive $HOME/acp-enhanced-private/acp-reports-feedback-20260827T203242.tar.gz.gpg; 171+37 tracked'
+    notes: 'CB-1 gpg AES256 restore-tested; archive ${HOME}/acp-enhanced-private/acp-reports-feedback-20260827T203242.tar.gz.gpg; 171+37 tracked'
   - id: task-324
     name: Gitignore reports/feedback and reverse D9 validator
     priority: 5
@@ -6888,12 +6888,13 @@ tasks:
   - id: task-342
     name: Redact leftovers in remaining tracked files
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-342-redact-remaining-tracked.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T15:35:00Z'
+    completed_date: '2026-08-27T15:36:00Z'
+    actual_hours: 0.1
     estimated_hours: 3
-    notes: phase 3; keep identity email; no spec bodies
+    notes: 'no passphrase-file in tracked grep; handoff is design; ${HOME} cookbook form'
   - id: task-343
     name: git rm --cached instance bodies; keep templates and public docs
     priority: 5
@@ -6940,6 +6941,12 @@ tasks:
     estimated_hours: 3
     notes: phase 4; F-R006 stays pending; no second force-push
 recent_work:
+- date: 2026-08-27
+  description: "task-342 redact leftovers in remaining tracked files"
+  items:
+  - "✅ No passphrase-file path in tracked grep; active_handoff is design (F-122-02)"
+  - "✅ Cookbook placeholders ${HOME}/acp-enhanced-private/ only"
+  - "identity.yml team email kept"
 - date: 2026-08-27
   description: "task-341 install gitignore + private-pack dirs"
   items:
@@ -9972,7 +9979,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "/acp-proceed task-342 (redact leftovers) then 343 git rm --cached. Do not reclone after 343 until 347."
+- "/acp-proceed task-343 (git rm --cached keepers). Do not reclone the daily worktree until 347."
 - "Force-push only after exact phrase: force-push instance-docs develop mainline tags: yes (not the M87 phrase). Stamp history-clean only after 346. Rehearse 344 before 345."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
