@@ -2,13 +2,13 @@
 id: task-331
 milestone: M87
 title: "Fresh-clone proof: no report/feedback bodies in history or tags"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 2
 created: 2026-08-27
-started: null
-completed: null
+started: 2026-08-27
+completed: 2026-08-27
 phase: 4
 depends_on: [task-330]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -23,7 +23,7 @@ milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D4
 depends_on: task-330
-status: planned
+status: completed
 updated: 2026-08-27
 @acp.meta.end -->
 
@@ -44,11 +44,11 @@ Local `filter-repo` can look clean while origin or tags still leak. F-118-01..03
 
 ## Verification
 
-- [ ] Fresh clone tip = keepers only on develop and mainline
-- [ ] History log has no body paths
-- [ ] Former leak tag is keepers-only
-- [ ] Pack restore works outside the public clone
-- [ ] Evidence for 332 stamps
+- [x] Fresh clone tip = keepers only on develop and mainline
+- [x] History log has no body paths
+- [x] Former leak tag is keepers-only
+- [x] Pack restore works outside the public clone
+- [x] Evidence for 332 stamps
 
 ## User-Observable Acceptance
 
@@ -61,3 +61,12 @@ A stranger cloning the public repo, including by tag, cannot recover audit-118 C
 
 ### Notes
 GitHub CDN/forks may lag; document that forks must re-clone.
+
+Proof 2026-08-27 (full clone to `$HOME/acp-enhanced-private/acp-fresh-proof`, **not** the daily worktree):
+- `origin/develop` `4a7cef3` — keepers only (`ls-files` = 4 files)
+- `origin/mainline` `d83cddc` — keepers only
+- `git rev-list --objects --all` report/feedback bodies = **0**
+- `v6.32.4` → commit `b9b7502` (tag object `19dfc7c`); `ls-files agent/reports` = **0** (was 171)
+- Pack restore: CB-1 / task-323 gpg archive already restore-tested before rewrite; archive path unchanged off-repo
+- Residual F-119-09: forks and GitHub caches may retain old objects until they refetch
+- Do **not** stamp F-118 in this task — task-332 stamps after CHANGELOG/validate

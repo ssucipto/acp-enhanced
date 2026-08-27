@@ -10,7 +10,7 @@ tasks: task-322..task-334
 
 **Planned version**: v6.33.0  
 **Status**: in_progress  
-**Progress**: 10/13 tasks — **HALT** at task-330 force-push gate  
+**Progress**: 12/13 tasks — origin rewritten; re-clone daily then task-332  
 **Estimated effort**: ~34h (13 tasks)  
 **Source**: audit-118; audit-119; audit-120 backup-first  
 **Design**: [local.public-repo-privacy-purge.md](../design/local.public-repo-privacy-purge.md)  

@@ -2,13 +2,13 @@
 id: task-330
 milestone: M87
 title: "filter-repo SOP + operator-confirmed force-push (branches + tags)"
-status: in_progress
+status: completed
 priority: 5
 complexity: high
 estimated_hours: 4
 created: 2026-08-27
 started: 2026-08-27
-completed: null
+completed: 2026-08-27
 phase: 4
 depends_on: [task-323, task-328, task-334]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -25,7 +25,7 @@ milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D4
 depends_on: task-323, task-328, task-334
-status: planned
+status: completed
 updated: 2026-08-27
 @acp.meta.end -->
 
@@ -52,8 +52,8 @@ Remove `agent/reports/` and `agent/feedback/` **blobs from git history** on `dev
 - [x] Mirror backup exists off-GitHub
 - [x] Throwaway clone history has no report/feedback bodies
 - [x] Keepers exist on rewritten tip
-- [ ] Confirmation phrase recorded in session notes (not a secret)
-- [ ] Origin branches **and** tags updated, **or** awaiting confirm
+- [x] Confirmation phrase recorded in session notes (not a secret)
+- [x] Origin branches **and** tags updated, **or** awaiting confirm
 
 ## User-Observable Acceptance
 
@@ -67,7 +67,7 @@ Remove `agent/reports/` and `agent/feedback/` **blobs from git history** on `dev
 ### Notes
 Never run filter-repo in the daily worktree. Never put credentials in the SOP.
 
-Local rewrite 2026-08-27 (NOT pushed):
+Local rewrite 2026-08-27 (**pushed** after exact phrase):
 - Pre-rewrite mirror: `$HOME/acp-enhanced-private/acp-enhanced-pre-rewrite-20260827T205344.git`
 - **Canonical force-push clone:** `/tmp/acp-rewrite` (must be `git clone --no-local` of the local mirror — default local clones hardlink and filter-repo aborts)
 - Do **not** force-push `$HOME/acp-enhanced-private/acp-rewrite-ready` (same tree historically, different tip SHA — discard or refresh from canonical after each tip commit)
@@ -75,6 +75,11 @@ Local rewrite 2026-08-27 (NOT pushed):
 - History body count: 0; keepers restored; origin URL copied from daily (`git remote get-url origin`), not hardcoded `git@github.com`
 - `v6.32.4` tree on rewrite clone: 0 report files (was 171)
 - Daily worktree history is still dirty until re-clone after push (F-121-03)
-- Awaiting exact phrase: `force-push develop mainline tags: yes`
+- Phrase received 2026-08-27: `force-push develop mainline tags: yes`
+- Origin force-updated from `/tmp/acp-rewrite`:
+  - `develop` `b0334bb` → `4a7cef3`
+  - `mainline` `b0334bb` → `d83cddc`
+  - 27 tags rewritten (incl. `v6.32.4` `2947da7` → `19dfc7c`)
 - Residual (F-119-09): forks and GitHub caches may retain old objects until they refetch.
+- **Re-clone the daily worktree from origin.** Do not keep working on the unre-written local `develop`.
 
