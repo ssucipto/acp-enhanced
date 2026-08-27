@@ -905,6 +905,23 @@ milestones:
       COMPLETE 2026-08-14 — shipped v6.31.0. /acp-ci, /acp-pr, upgrade-guard,
       FG contracts, review-scan FIFOZ↔M83 merge. BINDINGS: ADR-24/25/26 + P-UG-1,
       P-CI-1, P-PATH-1. current_milestone remains M81 (CodeRabbit fixture gate).
+  M87:
+    name: Public-repo privacy purge (v6.33.0)
+    priority: 5
+    status: planned
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 2
+    tasks_completed: 0
+    tasks_total: 11
+    file: agent/milestones/milestone-87-public-repo-privacy-purge.md
+    design: agent/design/local.public-repo-privacy-purge.md
+    notes: >
+      PLANNED 2026-08-27 — ADR-27. Public remotes: zero reports/feedback bodies
+      (keepers only). Local writers + encrypted pack. History rewrite required
+      before F-118-01..03 stamps. Force-push gated on explicit operator confirm.
+      F-R006-01..03 out of scope. current_milestone remains M81 until /acp-proceed.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6650,7 +6667,121 @@ tasks:
     actual_hours:  2
     estimated_hours: 4
     notes: phase 4; depends 316-320; stamp 02-09+11 with evidence; keep current_milestone M81
+  M87:
+  - id: task-322
+    name: Lock ADR-27 + citation map of tracked reports/feedback
+    priority: 5
+    status: pending
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-322-adr27-citation-map.md
+    started: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: phase 0; ADR-27 already drafted in /acp-plan; citation map for 324-326
+  - id: task-323
+    name: "GATE: local encrypted archive of reports + feedback"
+    priority: 5
+    status: pending
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-323-local-encrypted-archive.md
+    started: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 1 GATE; restore dry-run before 328/330; archive never committed
+  - id: task-324
+    name: Gitignore reports/feedback and reverse D9 validator
+    priority: 5
+    status: pending
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-324-gitignore-reverse-d9-validator.md
+    started: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 2; validateProtocolDirAddability like drafts
+  - id: task-325
+    name: "Commands, E2E, and wiki: reports stay local"
+    priority: 5
+    status: pending
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-325-commands-e2e-local-reports.md
+    started: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 2; depends 324; writers stay, tracking goes
+  - id: task-326
+    name: Pattern, project-create, and install gitignores
+    priority: 4
+    status: pending
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-326-pattern-project-create-gitignore.md
+    started: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: phase 2; F-118-05; attribution one-liner F-118-06
+  - id: task-327
+    name: Redact remaining tracked files ($HOME, consumer internals)
+    priority: 5
+    status: pending
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-327-redact-remaining-tracked.md
+    started: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 3; keep IG-37 email; do not stamp F-118
+  - id: task-328
+    name: git rm report/feedback bodies; keep .gitkeep + README
+    priority: 5
+    status: pending
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-328-git-rm-tree-keepers.md
+    started: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: phase 3; GATE 323; tip only; history still dirty until 330
+  - id: task-329
+    name: acp.private-pack.sh for machine transport
+    priority: 4
+    status: pending
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-329-private-pack-script.md
+    started: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 4; age/gpg; never push archive
+  - id: task-330
+    name: filter-repo SOP + operator-confirmed force-push
+    priority: 5
+    status: pending
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-330-filter-repo-force-push.md
+    started: null
+    actual_hours: null
+    estimated_hours: 4
+    notes: phase 4; STOP for explicit force-push yes on develop AND mainline
+  - id: task-331
+    name: "Fresh-clone proof: no report/feedback bodies in history"
+    priority: 5
+    status: pending
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-331-fresh-clone-verification.md
+    started: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: phase 4; stamp gate for F-118-01..03
+  - id: task-332
+    name: "Closure: validate, stamp F-118, CHANGELOG v6.33.0"
+    priority: 5
+    status: pending
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-332-v6330-closure.md
+    started: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: phase 4; stamp only after 331; F-R006 stay pending
 recent_work:
+- date: 2026-08-27
+  description: "/acp-plan M87 public-repo privacy purge (ADR-27); reports/feedback off remotes including history"
+  items:
+  - "✅ ADR-27: public remotes keepers-only under agent/reports and agent/feedback"
+  - "✅ Design + milestone-87 + tasks 322–332 (~28h); history rewrite gated on backup + operator force-push confirm"
+  - "Deferred: F-R006-01..03 (js-yaml / bootstrap / dispatch) — separate from M87"
+- date: 2026-08-27
+  description: "/acp-resume after 13-day gap — overdue weekly/monthly scans completed"
+  items:
+  - "✓ Gap check: last sessions.md 2026-08-14; HEAD b0334bb v6.32.4; develop==mainline (push/PR next_steps were stale)"
+  - "✅ monthly-dependency-audit: IG-27–32 clean"
+  - "✅ weekly-integrity-scan → integrity-003; TRUSTWORTHY; 0 new carryovers (IG-17/24/33/34 = known FPs)"
+  - "✅ weekly-code-review → review-006; 3 HIGH carryovers F-R006-01..03 (js-yaml CVE, bootstrap SH-01, dispatch any)"
+  - "Deferred: IG-17 allowlist polish; ADR-19 Aikido gated; F-R006-01..03 remediations"
 - date: 2026-08-14
   description: "Backlog clear: F2-09 + integrity-002 + D-002-01…08; ready to push develop"
   items:
@@ -9603,7 +9734,9 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "Push develop (+ annotated tags v6.31.0–v6.32.2). Then merge origin/mainline into develop and open PR → mainline."
+- "M87 privacy purge: /acp-proceed task-322 (citation map) then 323 encrypted archive GATE before any git rm or filter-repo."
+- "Do not force-push develop/mainline until task-330 explicit operator confirm. Do not stamp F-118-01..03 until task-331 fresh clone."
+- "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 - "Optional: IG-17 allowlist for agent/scripts scanners (integrity FP noise)."
 current_blockers: []
@@ -9631,17 +9764,17 @@ recurring_tasks:
     command: /acp-review --report --carryover
     frequency: weekly
     executor: copilot
-    last_run: '2026-08-14'
-    next_due: '2026-08-21'
-    last_findings_count: 7
+    last_run: '2026-08-27'
+    next_due: '2026-09-03'
+    last_findings_count: 3
     status: current
     description: Weekly code quality review with carryover tracking
   - id: weekly-integrity-scan
     command: /acp-integrity --self --report --carryover
     frequency: weekly
     executor: copilot
-    last_run: '2026-08-14'
-    next_due: '2026-08-21'
+    last_run: '2026-08-27'
+    next_due: '2026-09-03'
     last_findings_count: 0
     status: current
     description: Weekly ACP framework integrity scan
@@ -9692,8 +9825,8 @@ recurring_tasks:
     command: /acp-integrity --rules dependencies
     frequency: monthly
     executor: deepseek-v4-pro
-    last_run: 2026-07-15
-    next_due: 2026-08-15
+    last_run: 2026-08-27
+    next_due: 2026-09-26
     last_findings_count: 0
     status: current
     description: Monthly dependency and supply chain audit

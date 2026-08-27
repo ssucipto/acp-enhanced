@@ -3379,3 +3379,106 @@ carryovers:
     fix_applied_date: 2026-08-14
     verified_in_audit: "117"
     escalated_to: null
+
+  # ── REVIEW-006 — WEEKLY SELF-REVIEW (2026-08-27) ───────────────────────────
+  - audit_id: review-006
+    finding_id: F-R006-01
+    severity: high
+    file: scripts/package.json
+    finding: "js-yaml 4.x (and nested 3.x via gray-matter) vulnerable to GHSA-5p4m-2wfm-xmqj !!omap quadratic CPU"
+    description: "npm audit --omit=dev reports 1 high (js-yaml). Patched versions are 4.3.1 and 3.15.1. Dev tree also has nanoid <3.3.18 (vitest)."
+    fix_target: "Bump js-yaml to 4.3.1; npm overrides for nested 3.x → 3.15.1; npm audit fix; re-run npm audit in scripts/"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: review-006
+    finding_id: F-R006-02
+    severity: high
+    file: scripts/acp-bootstrap.sh
+    finding: "Bootstrap entry point missing set -euo pipefail + trap ERR (has set -e and set -o pipefail only)"
+    description: "SH-01 HIGH. Scanner greps the exact euo string. Curl-pipe installer must keep nounset-safe argument parsing."
+    fix_target: "Add set -euo pipefail and trap ERR; verify --help / --yes still work under nounset"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: review-006
+    finding_id: F-R006-03
+    severity: high
+    file: scripts/acp-dispatch.ts
+    finding: "any types in buildContext/appendLedger; updateRoutingYml missing explicit return type"
+    description: "TS-01 HIGH at lines 117/131/177; TS-02 HIGH at line 191. Remaining dispatch tech debt after CR-003 typed validate.ts."
+    fix_target: "Replace Record<string, any> with a TaskMeta interface; drop as any on yaml.load; annotate updateRoutingYml(): void"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-118 — PUBLIC-REPO PRIVACY / FIELD ARTIFACTS (2026-08-27) ────────
+  - audit_id: 118
+    finding_id: F-118-01
+    severity: high
+    file: agent/reports/coderabbit-local-2026-07-24/chunk-e2e.attempt1.raw.txt
+    finding: "CodeRabbit CLI raw dumps on develop/mainline contain org billing UUID and isProUser"
+    description: "Three tracked *.raw.txt files include a CodeRabbit billing URL with orgId. Violates M82 scrub-before-commit. Already on origin/mainline. HEAD delete is not enough — F-118-01 stays pending until fresh-clone history proof (M87 task-331)."
+    fix_target: "Backup, then untrack + filter-repo path; never paste the orgId into new files"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 118
+    finding_id: F-118-02
+    severity: high
+    file: agent/feedback/design-spec-app-interfaces-m15-spine-v2.1.md
+    finding: "Full FIFOZ application design spec tracked in ACP Enhanced feedback/"
+    description: "Consumer product architecture (screens, stores, Firestore, billing entitlements) is not ACP protocol evidence. Protects the feedback provider only if this file is not redistributed."
+    fix_target: "Untrack + history rewrite (M87); do not paste spec body into AE files; pack locally"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 118
+    finding_id: F-118-03
+    severity: high
+    file: agent/reports/fifoz-port-inbox-2026-08-14/README.md
+    finding: "FIFOZ port inbox + audit-114 leak absolute $HOME paths and consumer CI snapshots"
+    description: "README and diff headers name /Users/…/Project/Rygan/FIFOZ. ci.yml is FIFOZ Expo/RevenueCat CI. Portable ideas already shipped as AE /acp-ci and /acp-pr."
+    fix_target: "Untrack inbox dir + history rewrite (M87); redact $HOME in remaining tracked files (task-327)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 118
+    finding_id: F-118-04
+    severity: medium
+    file: agent/design/m72-validation-truth-drift-hardening.md
+    finding: "D9 tracks all reports/feedback with no privacy class for consumer/field artifacts"
+    description: "Maintainer overrode Class A/B split (ADR-27): public remotes must not contain any reports/feedback bodies. D9 tracking is superseded for this public repo. Do not reopen D9 as a tracking requirement."
+    fix_target: "ADR-27 + reverse D9 validator; gitignore reports/feedback; history rewrite before stamp"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 118
+    finding_id: F-118-05
+    severity: medium
+    file: agent/patterns/local.tracked-untracked-directories.md
+    finding: "Pattern still says reports/ and feedback/ are gitignored; AE D9 tracks them"
+    description: "Pattern still says reports/feedback are gitignored while D9 tracks them; after ADR-27 the pattern's ignore rule is correct again and the validator/install comments must match."
+    fix_target: "Update pattern + acp.project-create.md + install gitignores: reports/feedback local-only (ADR-27)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 118
+    finding_id: F-118-06
+    severity: medium
+    file: agent/feedback/feedback-007-cross-agent-handoff-protocol-fifoz-2026-07-25.md
+    finding: "Named consumer orgs/repos in tracked feedback without a documented consent/attribution policy"
+    description: "FIFOZ, ChoreHive, TikrFlow, Rygan appear in feedback, README, CHANGELOG. Names may be OK if consented; pair with F-118-02/03 so internals are not published alongside names."
+    fix_target: "Document attribution policy (names OK vs internals not); confirm consent or generalize remaining field reports"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
