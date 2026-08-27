@@ -2,13 +2,13 @@
 id: task-329
 milestone: M87
 title: "acp.private-pack.sh for machine transport"
-status: planned
+status: completed
 priority: 4
 complexity: medium
 estimated_hours: 3
 created: 2026-08-27
-started: null
-completed: null
+started: 2026-08-27
+completed: 2026-08-27
 phase: 4
 depends_on: [task-323, task-324]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -49,10 +49,10 @@ Ship `agent/scripts/acp.private-pack.sh` (pack + unpack) so the operator can mov
 
 ## Verification
 
-- [ ] Script traps ERR; `uname` sed/date safe
-- [ ] Default output is outside the clone
-- [ ] Unpack `--dry-run` does not write
-- [ ] E2E does not upload the archive
+- [x] Script traps ERR; `uname` sed/date safe
+- [x] Default output is outside the clone
+- [x] Unpack `--dry-run` does not write
+- [x] E2E does not upload the archive
 
 ## User-Observable Acceptance
 
