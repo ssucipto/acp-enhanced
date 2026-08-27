@@ -6,6 +6,13 @@
 
 - date: 2026-08-27
   task_type: milestone-planning
+  mistake: "After audit-119, M87 still allowed 322/324 to start with no worktree backup, and CB-4 mirrored GitHub instead of this clone (missing untracked audits). CB-1 required age which is not installed."
+  correction: "Start with 333 rsync + 334 local --mirror from $(pwd) + 323 gpg. Never treat origin as the only backup. Probe age||gpg before encrypt."
+  priority: high
+  trigger: audit-120
+
+- date: 2026-08-27
+  task_type: milestone-planning
   mistake: "M87 first plan said git rm of reports/feedback without --cached, used reports/* (misses nested files), omitted tag rewrite, and pointed install gitignore at bootstrap.sh."
   correction: "Use design cookbook CB-1..CB-6. git rm --cached only. Gitignore ** with keeper exceptions. filter-repo on a throwaway clone; force-push develop, mainline, and tags only after the exact phrase. Install gitignore lives in acp.install.sh."
   priority: high
