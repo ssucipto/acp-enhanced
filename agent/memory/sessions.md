@@ -6,6 +6,23 @@
 - date: 2026-08-27
   executor: cursor-grok
   branch: develop
+  tasks: [task-333, task-334, task-323, task-322]
+  done: [m87-phase-0-backups, citation-map]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Phase 0 restore-tested: worktree-20260827T202952, local git mirror HEAD
+    1488312 then 6e47fd9, gpg archive acp-reports-feedback-20260827T203242.
+    Passphrase is off-repo chmod 600. --yes is not force-push consent.
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-120, acp-plan, task-333, task-334]
   done: [m87-pre-impl-round2, backup-first-tasks]
   deferred:
