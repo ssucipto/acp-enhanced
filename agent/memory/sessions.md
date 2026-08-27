@@ -6,6 +6,21 @@
 - date: 2026-08-27
   executor: cursor-grok
   branch: develop
+  tasks: [task-328, task-329, task-330]
+  done: [tip-keepers-only, private-pack-script, local-filter-repo]
+  deferred:
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-118-01-history-rewrite → task-331
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    Local filter-repo succeeded on a throwaway clone; origin was NOT force-pushed.
+    /acp-proceed --yes is not consent. Type exactly `force-push develop mainline
+    tags: yes` to publish. Forks and GitHub caches may retain objects (F-119-09).
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
   tasks: [task-333, task-334, task-323, task-322]
   done: [m87-phase-0-backups, citation-map]
   deferred:
