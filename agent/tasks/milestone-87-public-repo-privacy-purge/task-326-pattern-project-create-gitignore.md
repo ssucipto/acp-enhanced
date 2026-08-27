@@ -2,13 +2,13 @@
 id: task-326
 milestone: M87
 title: "Pattern, project-create, and install gitignores"
-status: planned
+status: completed
 priority: 4
 complexity: low
 estimated_hours: 2
 created: 2026-08-27
-started: null
-completed: null
+started: 2026-08-27
+completed: 2026-08-27
 phase: 2
 depends_on: [task-324]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -50,10 +50,10 @@ audit-119: `scripts/acp-bootstrap.sh` only `mkdir`s `agent/reports` — it does 
 
 ## Verification
 
-- [ ] `rg 'D9: reports' agent/commands agent/scripts agent/patterns` is empty
-- [ ] Install heredoc contains `reports/**` and `!reports/.gitkeep`
-- [ ] Package-create gitignore does not use `agent/reports/*.md` as the only ignore
-- [ ] Pattern does not instruct AE maintainers to `git add -f` reports
+- [x] `rg 'D9: reports' agent/commands agent/scripts agent/patterns` is empty
+- [x] Install heredoc contains `reports/**` and `!reports/.gitkeep`
+- [x] Package-create gitignore does not use `agent/reports/*.md` as the only ignore
+- [x] Pattern does not instruct AE maintainers to `git add -f` reports
 
 ## User-Observable Acceptance
 

@@ -285,11 +285,17 @@ out/
 Thumbs.db
 desktop.ini
 
-# ACP local files (not committed — D9: reports/ and feedback/ are tracked)
+# ACP local files (not committed — ADR-27: report/feedback bodies local)
 agent/clarifications/
 agent/drafts/**
 !agent/drafts/.gitkeep
 !agent/drafts/draft.template.md
+agent/reports/**
+!agent/reports/.gitkeep
+!agent/reports/README.md
+agent/feedback/**
+!agent/feedback/.gitkeep
+!agent/feedback/README.md
 
 # Logs
 *.log

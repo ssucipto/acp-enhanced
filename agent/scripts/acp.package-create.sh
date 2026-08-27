@@ -802,12 +802,16 @@ venv/
 dist/
 build/
 
-# ACP local files (local by default, tracking optional)
-# These directories exist with .gitkeep files, but content is gitignored
+# ACP local files (local by default; ADR-27 — report/feedback bodies stay local)
+# Keepers (.gitkeep, README.md) may be tracked
 agent/clarifications/*.md
 !agent/clarifications/*.template.md
-agent/feedback/*.md
-agent/reports/*.md
+agent/feedback/**
+!agent/feedback/.gitkeep
+!agent/feedback/README.md
+agent/reports/**
+!agent/reports/.gitkeep
+!agent/reports/README.md
 EOF
 
 echo "${GREEN}✓${NC} Created .gitignore"
