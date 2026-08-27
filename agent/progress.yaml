@@ -3,7 +3,7 @@ project:
   version: 6.32.4
   started: 2026-02-16
   status: active
-  current_milestone: M81
+  current_milestone: M87
   description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.4 on develop\n\
     \  (M81 CodeRabbit integration + audit-117 remediations; M86 CI/PR/upgrade-guard at 6.31.x).\n\
     \  F2-09 fixed. Aikido track ADR-19 gated.\n"
@@ -908,12 +908,12 @@ milestones:
   M87:
     name: Public-repo privacy purge (v6.33.0)
     priority: 5
-    status: not_started
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 8
+    started: 2026-08-27
     completed: null
     estimated_weeks: 2
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 13
     file: agent/milestones/milestone-87-public-repo-privacy-purge.md
     design: agent/design/local.public-repo-privacy-purge.md
@@ -6671,12 +6671,13 @@ tasks:
   - id: task-333
     name: "GATE FIRST: local worktree rsync (including untracked)"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-333-local-worktree-rsync.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T12:28:00Z'
+    completed_date: '2026-08-27T12:30:00Z'
+    actual_hours: 0.1
     estimated_hours: 2
-    notes: phase 0 START; CB-0a; restore before any other M87 task
+    notes: phase 0 START; CB-0a restore OK STAMP 20260827T202952
   - id: task-334
     name: "GATE FIRST: local git mirror + bundle from this clone"
     priority: 5
