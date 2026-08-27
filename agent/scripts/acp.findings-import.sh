@@ -230,7 +230,7 @@ if not re.search(r"(?m)^carryovers:\s*$", text) and "carryovers:" not in text:
 appendix = "\n  # ── CODERABBIT IMPORT (acp.findings-import.sh) ──\n" + "".join(blocks)
 # Append before EOF
 carry.write_text(text.rstrip() + "\n" + appendix, encoding="utf-8")
-print(f"[acp.findings-import] added={added} skipped_dup={skipped} → {carry}")
+print(f"[acp.findings-import] added={added} skipped_dup={skipped} -> {carry}")
 PY
 )"
 py_rc=$?
