@@ -2,13 +2,13 @@
 id: task-327
 milestone: M87
 title: "Redact remaining tracked files ($HOME, consumer internals)"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 3
 created: 2026-08-27
-started: null
-completed: null
+started: 2026-08-27
+completed: 2026-08-27
 phase: 3
 depends_on: [task-322, task-323]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -56,10 +56,10 @@ Redact any hits without pasting the original secret into the commit message.
 
 ## Verification
 
-- [ ] No Class A-in-git instruction in the latest sessions key_fact
-- [ ] `active_handoff.path` does not name a missing audit/handoff body on a fresh clone
-- [ ] identity.yml email unchanged
-- [ ] F-118-01..03 still `pending`
+- [x] No Class A-in-git instruction in the latest sessions key_fact
+- [x] `active_handoff.path` does not name a missing audit/handoff body on a fresh clone
+- [x] identity.yml email unchanged
+- [x] F-118-01..03 still `pending`
 
 ## User-Observable Acceptance
 
@@ -72,3 +72,10 @@ A new agent loading last-3 sessions does not follow the rejected Class A split.
 
 ### Notes
 History rewrite of report blobs is 330, not a `--replace-text` of this tip.
+
+2026-08-27:
+- audit-118 sessions `key_fact` already superseded by ADR-27 (do not keep Class A in git).
+- `active_handoff.path` retargeted to `agent/milestones/milestone-85-preference-yaml-performance.md` (completed handoff; no report body).
+- `git grep` hits for orgId/isProUser are carryover ledger prose, not secret values.
+- identity.yml team email left unchanged (F-118-08).
+
