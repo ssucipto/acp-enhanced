@@ -9,8 +9,8 @@ tasks: task-322..task-334
 @acp.meta.end -->
 
 **Planned version**: v6.33.0  
-**Status**: planned  
-**Progress**: 0/13 tasks  
+**Status**: in_progress  
+**Progress**: 4/13 tasks (phase 0 backups + 322 citation map)  
 **Estimated effort**: ~34h (13 tasks)  
 **Source**: audit-118; audit-119; audit-120 backup-first  
 **Design**: [local.public-repo-privacy-purge.md](../design/local.public-repo-privacy-purge.md)  
@@ -67,7 +67,7 @@ A stranger cloning origin (including tags) cannot read audit/feedback bodies. Th
 
 ## Success criteria
 
-- [ ] Three local backups restore (worktree, git mirror, encrypted content)
+- [x] Three local backups restore (worktree, git mirror, encrypted content)
 - [ ] Origin tip + rewritten tags = keepers only
 - [ ] `/acp-audit` writes a local ignored file
 - [ ] Validate green with ignored reports
