@@ -909,11 +909,11 @@ milestones:
     name: Public-repo privacy purge (v6.33.0)
     priority: 5
     status: in_progress
-    progress: 77
+    progress: 92
     started: 2026-08-27
     completed: null
     estimated_weeks: 2
-    tasks_completed: 10
+    tasks_completed: 12
     tasks_total: 13
     file: agent/milestones/milestone-87-public-repo-privacy-purge.md
     design: agent/design/local.public-repo-privacy-purge.md
@@ -921,7 +921,8 @@ milestones:
       PLANNED 2026-08-27 — ADR-27. Backup-first (audit-120): 333 rsync, 334 local
       mirror, 323 gpg archive before any other task. Public remotes: keepers-only.
       Force-push phrase `force-push develop mainline tags: yes`. Cookbook CB-0a..CB-6.
-      F-R006-01..03 out of scope. current_milestone is M87. HALT at task-330 force-push.
+      F-R006-01..03 out of scope. current_milestone is M87. Origin rewritten
+      2026-08-27; re-clone daily worktree then task-332 v6.33.0.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6771,21 +6772,23 @@ tasks:
   - id: task-330
     name: filter-repo SOP + force-push develop mainline tags
     priority: 5
-    status: in_progress
+    status: completed
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-330-filter-repo-force-push.md
     started: '2026-08-27T13:00:00Z'
-    actual_hours: null
+    completed_date: '2026-08-27'
+    actual_hours: 2
     estimated_hours: 4
-    notes: 'local rewrite in progress; force-push gated on exact phrase'
+    notes: 'phrase confirmed; origin develop 4a7cef3 mainline d83cddc tags rewritten'
   - id: task-331
     name: "Fresh-clone proof: history + tags keepers-only"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-331-fresh-clone-verification.md
-    started: null
-    actual_hours: null
+    started: '2026-08-27T13:20:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.4
     estimated_hours: 2
-    notes: phase 4; stamp gate for F-118-01..03
+    notes: 'fresh clone 0 bodies; v6.32.4 reports=0; F-118 stamps wait for 332'
   - id: task-332
     name: "Closure: validate, stamp F-118/F-119, CHANGELOG v6.33.0"
     priority: 5
