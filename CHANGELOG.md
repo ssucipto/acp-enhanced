@@ -11,6 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.33.0] — 2026-08-27
+
+### Removed
+- **Public remotes** — `agent/reports/` and `agent/feedback/` bodies are gone from `develop`, `mainline`, and tags (history rewrite). Clones keep `.gitkeep` + short README only (ADR-27).
+
+### Added
+- **`acp.private-pack.sh`** — encrypt/decrypt local ACP dirs (`reports`, `feedback`, and other gitignored agent dirs) for moving between machines without GitHub.
+
+### Changed
+- **Validator D9** — no longer requires tracking report/feedback bodies; gitignore is `reports/**` / `feedback/**` with keeper exceptions. `/acp-audit` and `/acp-report` still write locally; do not commit those files.
+
+### Notes
+- Forks and GitHub caches may retain old objects until they refetch.
+- `identity.yml` team email unchanged (F-118-08).
+
+---
+
 ## [6.32.4] — 2026-08-14
 
 ### Fixed
