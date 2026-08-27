@@ -2,13 +2,13 @@
 id: task-334
 milestone: M87
 title: "GATE FIRST: local git mirror + bundle (from this clone)"
-status: planned
+status: completed
 priority: 5
 complexity: medium
 estimated_hours: 2
 created: 2026-08-27
-started: null
-completed: null
+started: 2026-08-27
+completed: 2026-08-27
 phase: 0
 depends_on: [task-333]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
@@ -45,10 +45,10 @@ Snapshot **all local git refs and objects** with `git clone --mirror "$(pwd)"` p
 
 ## Verification
 
-- [ ] Mirror dir exists under `${HOME}/acp-enhanced-private/`
-- [ ] Bundle file exists
-- [ ] `/tmp/acp-from-mirror` HEAD == live HEAD
-- [ ] Mirror was created from `$(pwd)`, not GitHub
+- [x] Mirror dir exists under `${HOME}/acp-enhanced-private/`
+- [x] Bundle file exists
+- [x] `/tmp/acp-from-mirror` HEAD == live HEAD
+- [x] Mirror was created from `$(pwd)`, not GitHub
 
 ## User-Observable Acceptance
 
@@ -62,3 +62,12 @@ Snapshot **all local git refs and objects** with `git clone --mirror "$(pwd)"` p
 
 ### Notes
 Task-330 takes a **second** local mirror immediately before filter-repo (history will have moved after 328).
+
+Restore 2026-08-27:
+- STAMP: `20260827T202952`
+- Mirror: `$HOME/acp-enhanced-private/acp-enhanced-20260827T202952.git`
+- Bundle: `$HOME/acp-enhanced-private/acp-enhanced-20260827T202952.bundle` (5.3M)
+- Source: `git clone --mirror "$(pwd)"` (this clone, not GitHub)
+- develop in mirror: `1488312d551d81e7faa7013ff2bd4cb025b9ae2b`
+- LIVE HEAD == restore `/tmp/acp-from-mirror` HEAD (match)
+
