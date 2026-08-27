@@ -61,6 +61,17 @@ _copy_fixture_workspace() {
   if [[ -d "${dest}/agent/feedback" ]]; then
     find "${dest}/agent/feedback" -type f ! -name '.gitkeep' ! -name 'README.md' -delete
   fi
+  # ADR-28: instance milestone/task/session bodies stay local. Copying them
+  # into the fixture makes Windows git-add + validate exceed the E2E timeout.
+  if [[ -d "${dest}/agent/milestones" ]]; then
+    find "${dest}/agent/milestones" -type f ! -name '.gitkeep' ! -name 'README.md' ! -name '*.template.md' -delete
+  fi
+  if [[ -d "${dest}/agent/tasks" ]]; then
+    find "${dest}/agent/tasks" -type f ! -name '.gitkeep' ! -name 'README.md' ! -name '*.template.md' -delete
+  fi
+  if [[ -d "${dest}/agent/sessions" ]]; then
+    find "${dest}/agent/sessions" -type f ! -name '.gitkeep' ! -name 'README.md' -delete
+  fi
 }
 
 _init_fixture_git_repo() {

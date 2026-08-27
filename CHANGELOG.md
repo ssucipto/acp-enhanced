@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Validator ADR-28** — instance milestone/task/session bodies and one field-feedback file are gitignored. `validateFilePointers` skips missing paths that `git check-ignore --no-index` matches. Addability probe is `agent/memory` only.
+- **E2E fixture** — cross-layer copy strips instance milestone/task/session bodies; still copies `docs/USAGE.md`.
+- **`acp.private-pack.sh`** — also packs `agent/milestones`, `agent/tasks`, `agent/sessions`. Never packs `docs/`.
 
 ---
 
