@@ -6,6 +6,21 @@
 - date: 2026-08-27
   executor: cursor-grok
   branch: develop
+  tasks: [task-330, task-331]
+  done: [force-push-origin-rewrite, fresh-clone-history-proof]
+  deferred:
+    - reclone-daily-worktree → operator
+    - F-118-01-stamp → task-332
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    Operator confirmed `force-push develop mainline tags: yes`. Origin develop
+    4a7cef3, mainline d83cddc, v6.32.4 reports=0 on a new clone. Forks and GitHub
+    caches may retain objects (F-119-09). Re-clone the daily worktree before 332.
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
   tasks: [task-330]
   done: [audit-121-m87-impl-gaps, f-121-cookbook-no-local, f-121-wiki-redact, f-121-integrity-hashes]
   deferred:

@@ -3614,8 +3614,8 @@ carryovers:
     severity: high
     file: .
     finding: "Daily worktree history still contains report/feedback blobs"
-    description: "Expected until operator force-push + re-clone. Do not push this clone. Stamp fixed in task-331."
-    fix_target: "task-331 after force-push develop mainline tags: yes"
+    description: "Origin is clean (fresh clone 0 bodies). This Cursor worktree is still unre-written until the operator re-clones from origin."
+    fix_target: "Re-clone daily worktree from origin; then mark fixed"
     status: pending
     fix_applied_date: null
     verified_in_audit: null
