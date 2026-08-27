@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from "vitest";
 import { writeFileSync, mkdtempSync, rmSync, mkdirSync } from "fs";
+import { execSync } from "child_process";
 import { fileURLToPath } from "url";
 import { tmpdir } from "os";
 import path from "path";
@@ -495,12 +496,42 @@ describe("validatePackageYamlVersion (M72)", () => {
   });
 });
 
-describe("validateProtocolDirAddability (M72)", () => {
-  // Live repo walks agent/reports + git ls-files per file — can exceed 5s default.
+describe("validateProtocolDirAddability (M72 / ADR-27)", () => {
   it("returns array without throwing on live repo", () => {
     const errors = validateProtocolDirAddability(getRepoRoot());
     expect(Array.isArray(errors)).toBe(true);
   }, 60_000);
+
+  it("zero D9 errors when reports/foo.md is ignored and .gitkeep is tracked", () => {
+    const root = path.join(testDir, "adr27-reports");
+    mkdirSync(path.join(root, "agent", "reports"), { recursive: true });
+    mkdirSync(path.join(root, "agent", "memory"), { recursive: true });
+    mkdirSync(path.join(root, "agent", "tasks"), { recursive: true });
+    writeFileSync(
+      path.join(root, "agent", ".gitignore"),
+      [
+        "reports/**",
+        "!reports/.gitkeep",
+        "!reports/README.md",
+        "feedback/**",
+        "!feedback/.gitkeep",
+        "!feedback/README.md",
+        "",
+      ].join("\n"),
+      "utf-8"
+    );
+    writeFileSync(path.join(root, "agent", "reports", ".gitkeep"), "", "utf-8");
+    writeFileSync(path.join(root, "agent", "reports", "foo.md"), "local-only\n", "utf-8");
+    writeFileSync(path.join(root, "agent", "memory", "sessions.md"), "", "utf-8");
+    writeFileSync(path.join(root, "agent", "tasks", ".gitkeep"), "", "utf-8");
+    execSync("git init", { cwd: root, stdio: "pipe" });
+    execSync("git add agent/.gitignore agent/reports/.gitkeep agent/memory/sessions.md agent/tasks/.gitkeep", {
+      cwd: root,
+      stdio: "pipe",
+    });
+    const errors = validateProtocolDirAddability(root).filter((e) => e.severity === "error");
+    expect(errors).toHaveLength(0);
+  });
 });
 
 describe("validateCarryoverAuditStamps (M73)", () => {

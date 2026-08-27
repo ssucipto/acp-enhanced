@@ -538,7 +538,8 @@ export function validateScriptRegistration(root?: string): ValidationError[] {
 export function validateProtocolDirAddability(root?: string): ValidationError[] {
   const errors: ValidationError[] = [];
   const base = root ?? getRepoRoot();
-  const probeDirs = ["agent/reports", "agent/feedback", "agent/memory", "agent/tasks"];
+  // ADR-27: reports/feedback are local (ignored). Probe only dirs that must stay addable.
+  const probeDirs = ["agent/memory", "agent/tasks"];
 
   for (const dir of probeDirs) {
     const probe = path.join(base, dir, "__acp_addability_probe__.md");
@@ -558,46 +559,8 @@ export function validateProtocolDirAddability(root?: string): ValidationError[] 
     }
   }
 
-  for (const dir of ["agent/reports", "agent/feedback"]) {
-    const absDir = path.join(base, dir);
-    if (!existsSync(absDir)) continue;
-    const walk = (sub: string) => {
-      for (const entry of readdirSync(sub, { withFileTypes: true })) {
-        const full = path.join(sub, entry.name);
-        if (entry.isDirectory()) walk(full);
-        else {
-          if (entry.name.startsWith(".") || entry.name === ".DS_Store") continue;
-          const rel = path.relative(base, full).replace(/\\/g, "/");
-          try {
-            const tracked = execSync(`git ls-files --error-unmatch "${rel}"`, {
-              cwd: base,
-              encoding: "utf8",
-              stdio: ["pipe", "pipe", "pipe"],
-            });
-            if (!tracked.trim()) {
-              errors.push({
-                file: rel,
-                line: 0,
-                message: `Untracked evidence file in ${dir}/ (D9)`,
-                severity: "error",
-              });
-            }
-          } catch {
-            errors.push({
-              file: rel,
-              line: 0,
-              message: `Untracked evidence file in ${dir}/ (D9)`,
-              severity: "error",
-            });
-          }
-        }
-      }
-    };
-    walk(absDir);
-  }
-
   if (errors.length === 0) {
-    console.log("✅ Protocol dirs: addability probe passed; evidence files tracked");
+    console.log("✅ Protocol dirs: addability probe passed (memory/tasks)");
   }
   return errors;
 }
@@ -2079,7 +2042,7 @@ export function validateGitTagsExist(): ValidationError[] {
 export function validateGitignoreConflicts(): ValidationError[] {
   const errors: ValidationError[] = [];
   // Check known tracked paths that have had .gitignore conflicts
-  const trackedPaths = ["agent/reports/", "scripts/package-lock.json"];
+  const trackedPaths = ["agent/reports/.gitkeep", "scripts/package-lock.json"];
 
   for (const tp of trackedPaths) {
     try {
