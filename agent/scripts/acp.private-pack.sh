@@ -29,6 +29,9 @@ PACK_REL_DIRS=(
   agent/drafts
   agent/preferences
   agent/private
+  agent/milestones
+  agent/tasks
+  agent/sessions
 )
 
 usage() {

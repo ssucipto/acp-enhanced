@@ -18,7 +18,7 @@ updated: 2026-06-15
 
 This pattern establishes a convention for agent directories that should exist in the repository structure but whose contents are primarily local artifacts. These directories use `.gitkeep` files to track the directory itself while `.gitignore` excludes the contents by default.
 
-**Use Case**: Directories like `reports/`, `preferences/`, `feedback/`, `drafts/`, and `clarifications/` contain files that are typically local. On **this public ACP Enhanced repo**, report and feedback **bodies** stay gitignored (ADR-27). Finding IDs live in `agent/memory/audit-carryovers.md` and CHANGELOG. Consumer forks may optionally track reports; AE `origin` must not.
+**Use Case**: Directories like `reports/`, `preferences/`, `feedback/`, `drafts/`, and `clarifications/` contain files that are typically local. On **this public ACP Enhanced repo**, report and feedback **bodies** stay gitignored (ADR-27). Instance milestone/task/session **bodies** stay gitignored (ADR-28); templates and keepers stay tracked. Finding IDs live in `agent/memory/audit-carryovers.md` and CHANGELOG. Do not `git add -f` instance bodies. Never invert `agent/routing/tasks/`. Consumer forks may optionally track reports; AE `origin` must not.
 
 Attribution (F-118-06): consumer **names** may appear in CHANGELOG/README if already public; consumer **internals** never go in git.  
 
@@ -84,9 +84,22 @@ reports/**
 feedback/**
 !feedback/.gitkeep
 !feedback/README.md
+
+# ADR-28 — instance milestone/task/session bodies local; templates + keepers tracked
+milestones/**
+!milestones/.gitkeep
+!milestones/README.md
+!milestones/*.template.md
+tasks/**
+!tasks/.gitkeep
+!tasks/README.md
+!tasks/*.template.md
+sessions/**
+!sessions/.gitkeep
+!sessions/README.md
 ```
 
-**Note**: Use `reports/**` (not `reports/*`) so nested files are ignored. Keepers (`.gitkeep`, `README.md`) stay tracked.
+**Note**: Use `reports/**` (not `reports/*`) so nested files are ignored. Keepers (`.gitkeep`, `README.md`) stay tracked. Do not ignore parent dirs without re-including templates.
 
 ### .gitkeep Files
 
