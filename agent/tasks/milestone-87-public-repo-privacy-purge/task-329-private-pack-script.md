@@ -10,11 +10,12 @@ created: 2026-08-27
 started: null
 completed: null
 phase: 4
-depends_on: [task-323]
+depends_on: [task-323, task-324]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
-audit_findings: ['F-118-04']
+audit_findings: ['F-118-04', 'F-119-06']
 files_affected:
   - agent/scripts/acp.private-pack.sh
+  - e2e/acp.private-pack.test.sh
   - package.yaml
   - AGENT.md
 ---
@@ -25,45 +26,44 @@ description: Script to pack gitignored reports/feedback/drafts/clarifications/pr
 milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D8
-depends_on: task-323
+depends_on: task-323, task-324
 status: planned
 updated: 2026-08-27
 @acp.meta.end -->
 
 ## Objective
 
-Ship `agent/scripts/acp.private-pack.sh` (pack + unpack) so the operator can move local ACP dirs between machines **without** GitHub.
+Ship `agent/scripts/acp.private-pack.sh` (pack + unpack) so the operator can move local ACP dirs between machines **without** GitHub. Align flags with **CB-1** (`age -p`, tar of named dirs, output path outside the repo).
 
 ## Context
 
-323 proved the backup idea. This task makes it repeatable: pack `reports`, `feedback`, `clarifications`, `drafts`, `preferences`, and `agent/private/` if present. Never write the archive inside a tracked path. macOS+Linux; no `date +%N`; trap errors (no bare `set -e`).
+323 proved backup by hand. This task makes it repeatable. Dirs: `reports`, `feedback`, `clarifications`, `drafts`, `preferences`, `agent/private/` if present. macOS+Linux; no `date +%N`; `set -euo pipefail` + `trap ERR`. Never pack into a tracked path.
 
 ## Steps
 
-1. Implement pack: tar the gitignored dirs, encrypt (`age` preferred; document gpg fallback), write to a caller-supplied path **outside** the repo by default.
-2. Implement unpack: decrypt + extract into `agent/` with a dry-run flag.
-3. Refuse to pack if output path is inside `.git/` or would be `git add`-able.
-4. E2E: fixture dirs, pack, unpack to temp, compare counts. Do not pack real vendor dumps in CI.
-5. Register in `package.yaml`, AGENT.md scripts table, CHANGELOG at **ship** (task-332), not in this task unless shipping early.
-6. Cross-cut: if adding a command wrapper, update AGENT/README/package together at 332.
+1. CLI: `acp.private-pack.sh pack --output PATH` and `unpack --input PATH --dest DIR [--dry-run]`. Refuse if `--output` is inside `.git/` or `git check-ignore` would not ignore it **and** it is under the repo.
+2. Pack implementation: same tar+age shape as CB-1; passphrase via `age -p` (interactive) or `AGE_PASSPHRASE` env — never argv.
+3. E2E: fixture dirs under `/tmp`, pack, unpack, `diff` counts. Do not pack real vendor dumps in CI.
+4. Register script in `package.yaml` + AGENT.md scripts table (CHANGELOG at 332).
+5. Cross-cut: if a command wrapper is added, update all five surfaces at 332.
 
 ## Verification
 
-- [ ] Script traps ERR; macOS-safe
-- [ ] Pack file is gitignored / outside repo
-- [ ] Unpack restores fixture tree
+- [ ] Script traps ERR; `uname` sed/date safe
+- [ ] Default output is outside the clone
+- [ ] Unpack `--dry-run` does not write
 - [ ] E2E does not upload the archive
 
 ## User-Observable Acceptance
 
-Operator runs the script, copies one encrypted file to another machine, unpacks, and `/acp-audit` history is back locally.
+Operator runs the script, copies one `.age` file, unpacks on another machine.
 
 ## Expected Output
 
 ### Files Created / Modified
 - `agent/scripts/acp.private-pack.sh`
 - E2E test
-- package.yaml / AGENT.md (or defer listing to 332)
+- package.yaml / AGENT.md
 
 ### Notes
 The pack is not a substitute for filter-repo.

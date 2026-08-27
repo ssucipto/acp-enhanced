@@ -12,11 +12,13 @@ completed: null
 phase: 2
 depends_on: [task-322]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
-audit_findings: ['F-118-04', 'F-118-05']
+audit_findings: ['F-118-04', 'F-118-05', 'F-119-03', 'F-119-04']
 files_affected:
   - agent/.gitignore
   - .gitignore
   - scripts/acp-validate.ts
+  - scripts/acp-validate.test.ts
+  - agent/commands/acp.validate.md
 ---
 
 <!-- @acp.meta.task
@@ -32,26 +34,31 @@ updated: 2026-08-27
 
 ## Objective
 
-Make local-only reports/feedback **legal** in ACP: gitignore them, and reverse `validateProtocolDirAddability` so ignored/untracked files there are not errors.
+Make local-only reports/feedback **legal** in one commit: gitignore (**CB-2**) + reverse D9 in `validateProtocolDirAddability` + stop `validateGitignoreConflicts` from requiring the reports **tree** to be un-ignored.
 
 ## Context
 
-M72 D9 made untracked files in `agent/reports/` and `agent/feedback/` an ERROR, and also ERRORed if gitignore rejected new files. ADR-27 supersedes that for this public repo. Treat those dirs like `drafts/` / `clarifications/`. Keep `.gitkeep` (and a short README) tracked.
+Live code: `probeDirs` at `scripts/acp-validate.ts:541` includes reports/feedback; walk at `:561-596` ERRORs untracked files; `trackedPaths` at `:2082` includes `agent/reports/`. Gitignore `*` would **not** ignore nested `coderabbit-local-*/chunk-*.raw.txt`.
 
 ## Steps
 
-1. Update `agent/.gitignore` (and root `.gitignore` exceptions if needed) so new files under `agent/reports/` and `agent/feedback/` are ignored except `.gitkeep` and `README.md`.
-2. Change `validateProtocolDirAddability` in `scripts/acp-validate.ts`: reports/feedback must **not** require addability; untracked files on disk there must **not** ERROR.
-3. Keep memory/tasks/design tracked (do not widen ignore).
-4. Run `acp-validate` (or the validate wrapper) and confirm it is green with local audit files present but ignored.
-5. Do not `git rm` the tree yet (that is 328). Do not commit ignored report bodies.
+1. Apply **CB-2** to `agent/.gitignore` (replace the D9 “are tracked” comment). Keep root `reports/` and `!agent/reports/`.
+2. **Same commit**, edit `validateProtocolDirAddability`:
+   - `probeDirs` = `["agent/memory", "agent/tasks"]` only.
+   - Delete the `for (const dir of ["agent/reports", "agent/feedback"])` walk.
+   - Success log must not say “evidence files tracked” for those dirs.
+3. `validateGitignoreConflicts`: remove `"agent/reports/"` from `trackedPaths` (optional: check `"agent/reports/.gitkeep"` is **not** ignored).
+4. Update `acp.validate.md` M72 table row (protocol dir addability) to match ADR-27.
+5. Extend `scripts/acp-validate.test.ts` so a temp dir with ignored `agent/reports/foo.md` plus tracked `.gitkeep` yields **zero** D9 errors (not only “returns array”).
+6. Run **CB-2** syntax check (`git check-ignore -v`). Then validate. Do **not** `git rm` (328). Do not commit report bodies.
 
 ## Verification
 
-- [ ] New `agent/reports/audit-dummy.md` is ignored
-- [ ] Validator green with ignored reports present
-- [ ] `.gitkeep` still tracked
-- [ ] No D9 “untracked evidence = ERROR” for reports/feedback
+- [ ] `git check-ignore` exit 0 on `agent/reports/audit-dummy.md`
+- [ ] `git check-ignore` exit 1 on `agent/reports/.gitkeep`
+- [ ] Nested path `agent/reports/a/b.md` is ignored (`**` not `*`)
+- [ ] `npx tsx scripts/acp-validate.ts` green with local audits present
+- [ ] Gitignore + validator + test + validate.md in **one** commit
 
 ## User-Observable Acceptance
 
@@ -60,9 +67,9 @@ M72 D9 made untracked files in `agent/reports/` and `agent/feedback/` an ERROR, 
 ## Expected Output
 
 ### Files Created / Modified
-- `agent/.gitignore`
-- `.gitignore` (if exceptions need flipping)
-- `scripts/acp-validate.ts`
+- `agent/.gitignore`, `.gitignore` if needed
+- `scripts/acp-validate.ts`, `scripts/acp-validate.test.ts`
+- `agent/commands/acp.validate.md`
 
 ### Notes
-Keepers stay: `.gitkeep` + short README only.
+Install-script gitignore is task-326. Tree purge is 328.

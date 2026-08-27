@@ -12,16 +12,17 @@ completed: null
 phase: 2
 depends_on: [task-324]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
-audit_findings: ['F-118-05']
+audit_findings: ['F-118-05', 'F-118-06', 'F-119-03', 'F-119-08']
 files_affected:
   - agent/patterns/local.tracked-untracked-directories.md
   - agent/commands/acp.project-create.md
-  - scripts/acp-bootstrap.sh
+  - agent/scripts/acp.install.sh
+  - agent/scripts/acp.package-create.sh
 ---
 
 <!-- @acp.meta.task
 topic: m87, pattern, project-create, gitignore-heredoc
-description: Align tracked-untracked pattern and new-project gitignore templates with ADR-27 (reports/feedback local).
+description: Align pattern and new-project gitignore templates with ADR-27. Live gitignore writer is acp.install.sh, not bootstrap.
 milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D2, D5
@@ -32,36 +33,36 @@ updated: 2026-08-27
 
 ## Objective
 
-New installs and agents following the pattern must gitignore `agent/reports/` and `agent/feedback/` (keepers excepted), matching ADR-27 — not D9 tracking.
+New installs and the tracked-untracked pattern must gitignore report/feedback **bodies** (`**` + keepers), matching **CB-2**. This public AE repo must **not** document `git add -f` for reports.
 
 ## Context
 
-F-118-05: the pattern already said those dirs were gitignored while AE tracked them. After 324, the pattern is right again; project-create and bootstrap heredocs must not re-introduce D9 “track evidence” comments.
+audit-119: `scripts/acp-bootstrap.sh` only `mkdir`s `agent/reports` — it does **not** write `agent/.gitignore`. The heredoc is `agent/scripts/acp.install.sh:162-173` (still D9). `acp.package-create.sh:807-811` uses `agent/reports/*.md` / `agent/feedback/*.md`, which **misses nested files**.
 
 ## Steps
 
-1. Update `agent/patterns/local.tracked-untracked-directories.md`: reports/feedback = local like drafts; cite ADR-27; D9 tracking does not apply to this public protocol repo.
-2. Update `acp.project-create.md` gitignore comments and any heredoc.
-3. Update bootstrap / install scripts that emit `agent/.gitignore`.
-4. Attribution policy one-liner (F-118-06): consumer **names** may appear in CHANGELOG/README if consented; consumer **internals** never go in git. Point to ADR-27.
-5. Do not copy field-report bodies into the pattern.
+1. Pattern: reports/feedback = local like drafts; cite ADR-27. Remove “force-add to share reports” as the default for **this** public protocol repo. Optional tracking may remain as a consumer-fork note, not AE `origin`.
+2. `acp.project-create.md`: replace “D9: reports/ and feedback/ are tracked” with CB-2-equivalent patterns (`**`, keepers).
+3. `acp.install.sh` heredoc: same CB-2 block as `agent/.gitignore`.
+4. `acp.package-create.sh` generated `.gitignore`: `agent/reports/**` and `agent/feedback/**` with `!` keepers — not `*.md`.
+5. Attribution one-liner (F-118-06): consumer **names** may appear in CHANGELOG/README if already public; consumer **internals** never go in git.
+6. Bootstrap: no gitignore change required unless a later grep shows a heredoc (322 map).
 
 ## Verification
 
-- [ ] Pattern matches validator + gitignore
-- [ ] New-project gitignore ignores reports/feedback
-- [ ] No “D9 — reports are tracked” comments left in install templates
+- [ ] `rg 'D9: reports' agent/commands agent/scripts agent/patterns` is empty
+- [ ] Install heredoc contains `reports/**` and `!reports/.gitkeep`
+- [ ] Package-create gitignore does not use `agent/reports/*.md` as the only ignore
+- [ ] Pattern does not instruct AE maintainers to `git add -f` reports
 
 ## User-Observable Acceptance
 
-A project created from AE templates does not commit audit reports by default.
+A project installed from AE templates does not commit audit reports by default.
 
 ## Expected Output
 
 ### Files Created / Modified
-- `agent/patterns/local.tracked-untracked-directories.md`
-- `agent/commands/acp.project-create.md`
-- Bootstrap/install gitignore emitters
+- files_affected list above
 
 ### Notes
 F-118-06 is policy text, not a dump of feedback files.

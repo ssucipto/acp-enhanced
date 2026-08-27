@@ -6,6 +6,13 @@
 
 - date: 2026-08-27
   task_type: milestone-planning
+  mistake: "M87 first plan said git rm of reports/feedback without --cached, used reports/* (misses nested files), omitted tag rewrite, and pointed install gitignore at bootstrap.sh."
+  correction: "Use design cookbook CB-1..CB-6. git rm --cached only. Gitignore ** with keeper exceptions. filter-repo on a throwaway clone; force-push develop, mainline, and tags only after the exact phrase. Install gitignore lives in acp.install.sh."
+  priority: high
+  trigger: audit-119
+
+- date: 2026-08-27
+  task_type: milestone-planning
   mistake: "audit-118 recommended keeping Class A protocol audits tracked on develop/mainline; that still publishes session internals on a public clone and is hard to police."
   correction: "ADR-27: this public repo must contain zero agent/reports and agent/feedback bodies (keepers only). Local writers stay. Encrypted pack for machine moves. History rewrite + operator-confirmed force-push of develop and mainline is required before calling F-118-01..03 fixed. Do not follow the Class A/B git split."
   priority: high

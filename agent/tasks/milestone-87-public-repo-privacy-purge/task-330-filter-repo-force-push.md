@@ -1,7 +1,7 @@
 ---
 id: task-330
 milestone: M87
-title: "filter-repo SOP + operator-confirmed force-push"
+title: "filter-repo SOP + operator-confirmed force-push (branches + tags)"
 status: planned
 priority: 5
 complexity: high
@@ -12,15 +12,15 @@ completed: null
 phase: 4
 depends_on: [task-323, task-328]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
-audit_findings: ['F-118-01', 'F-118-02', 'F-118-03']
+audit_findings: ['F-118-01', 'F-118-02', 'F-118-03', 'F-119-02', 'F-119-09', 'F-119-10']
 files_affected:
   - agent/reports/
   - agent/feedback/
 ---
 
 <!-- @acp.meta.task
-topic: m87, git-filter-repo, force-push, history
-description: Rewrite develop and mainline history to drop report/feedback bodies; force-push only after explicit operator confirmation.
+topic: m87, git-filter-repo, force-push, tags, history
+description: Rewrite all refs including tags; force-push develop, mainline, and tags only after exact operator phrase.
 milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D4
@@ -31,39 +31,38 @@ updated: 2026-08-27
 
 ## Objective
 
-Remove `agent/reports/**` and `agent/feedback/**` **blobs from git history** on `develop` and `mainline`, then force-push **only** when the operator types an explicit confirmation (not implied by `/acp-proceed`).
+Remove `agent/reports/` and `agent/feedback/` **blobs from git history** on `develop`, `mainline`, **and tags**, then force-push only when the operator types exactly `force-push develop mainline tags: yes`.
 
 ## Context
 
-Public GitHub still serves old blobs after 328. Secure removal is a history rewrite. User rules: never force-push unless explicitly requested. This task **stops and asks** before `git push --force`.
+`v6.32.4` still has 171 report files. `develop` is ahead of `origin/mainline` (M87 plan). `git filter-repo` **deletes `origin`**. `--invert-paths` also drops keepers from HEAD (F-119-10) — re-add via CB-3 keepers after rewrite. Forks and Actions caches are **residual** (F-119-09); say so in the commit/session notes.
 
 ## Steps
 
-1. Confirm 323 archive restore still works. Take a full `git clone --mirror` backup **off-remote** (unpushed).
-2. Write a short SOP in this task’s notes: install `git-filter-repo`; path drop for reports/feedback except keepers; expire reflog; `git gc`.
-3. Run the rewrite on a **throwaway clone** first. Verify `git log --all --full-history -- agent/reports/` has no bodies.
-4. Apply on the working clone only after throwaway proof.
-5. **STOP.** Print: both `develop` and `mainline` must be force-pushed; GitHub cache/forks retain copies until they refetch; collaborators must re-clone. Ask the operator to reply with an explicit force-push yes for **both** branches.
-6. If yes: force-push `develop` and `mainline` (and tags only if they contain the blobs — prefer leaving tags until verified). If no: leave rewritten local commits unpushed; do not mark this task complete.
-7. Do not stamp F-118-* until 331 clone proof against **origin**.
+1. Confirm 323 CB-1 still restores. Run **CB-4** mirror backup (`git clone --mirror` into `${HOME}/acp-enhanced-private/`).
+2. Follow **CB-4** throwaway clone + `git filter-repo --invert-paths --path agent/reports/ --path agent/feedback/` (no extra paths).
+3. `git remote add origin` as in CB-4. Re-add keepers; commit `chore: restore reports/feedback keepers after filter-repo`.
+4. On the throwaway clone: `git log --all --full-history --oneline -- agent/reports/` must not list body files.
+5. **STOP.** Print residual-risk sentence: forks and GitHub caches may retain objects until they refetch. Ask for the exact phrase. Do **not** treat `/acp-proceed` as consent.
+6. If phrase matches: `git push --force origin develop`, `git push --force origin mainline`, `git push --force origin --tags`. **Not** `--force-with-lease`.
+7. If no: leave local rewrite unpushed; task stays in_progress. Do not stamp F-118-*.
 
 ## Verification
 
-- [ ] Mirror backup exists off-remote
-- [ ] Throwaway clone rewrite verified
-- [ ] Operator explicit force-push confirmation recorded in session notes (not a secret)
-- [ ] Both branches updated on origin **or** task remains in_progress with reason “awaiting confirm”
+- [ ] Mirror backup exists off-GitHub
+- [ ] Throwaway clone history has no report/feedback bodies
+- [ ] Keepers exist on rewritten tip
+- [ ] Confirmation phrase recorded in session notes (not a secret)
+- [ ] Origin branches **and** tags updated, **or** awaiting confirm
 
 ## User-Observable Acceptance
 
-After confirmation, `git clone` from origin and `git log --all -- agent/feedback` shows no design-spec blob.
+`git checkout v6.32.4` on a new clone after tag push does **not** restore 171 reports.
 
 ## Expected Output
 
 ### Files Created / Modified
-- Local SOP notes on this task
-- Git history (rewritten)
-- Remotes (only after confirm)
+- Rewritten git history; remotes only after confirm
 
 ### Notes
-Never automate force-push. Never put credentials in the SOP.
+Never run filter-repo in the daily worktree. Never put credentials in the SOP.

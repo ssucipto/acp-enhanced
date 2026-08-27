@@ -3482,3 +3482,60 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-119 — M87 PRE-IMPL READINESS (2026-08-27) ────────────────────────
+  - audit_id: 119
+    finding_id: F-119-01
+    severity: high
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-328-git-rm-tree-keepers.md
+    finding: "git rm without --cached deletes working-tree report/feedback files"
+    description: "Plan amended to CB-3. Implement exactly git rm --cached -r. Restore from age archive if mistyped."
+    fix_target: "task-328 CB-3; verified when 328 complete"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 119
+    finding_id: F-119-02
+    severity: high
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-330-filter-repo-force-push.md
+    finding: "filter-repo SOP omitted origin drop, tag leak (v6.32.4 still has 171 reports), diverged branches"
+    description: "Plan amended to CB-4. Force-push phrase includes tags. Do not use --force-with-lease after rewrite."
+    fix_target: "task-330 CB-4; verified in task-331 tag checkout"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 119
+    finding_id: F-119-03
+    severity: high
+    file: agent/.gitignore
+    finding: "reports/* does not ignore nested files; package-create uses *.md"
+    description: "Plan amended to CB-2 ** + keeper exceptions. task-326 retargeted to acp.install.sh + package-create.sh."
+    fix_target: "task-324 CB-2 + task-326 package-create globs"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 119
+    finding_id: F-119-04
+    severity: medium
+    file: agent/milestones/milestone-87-public-repo-privacy-purge.md
+    finding: "328 could land before 325; gitignore+validator must be one commit"
+    description: "328 now depends 325; 324 same-commit requirement written."
+    fix_target: "Honor DAG in /acp-proceed"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 119
+    finding_id: F-119-08
+    severity: medium
+    file: agent/memory/sessions.md
+    finding: "Class A-in-git session key_fact would mislead the next agent; pattern documents git add -f"
+    description: "sessions.md audit-118 key_fact rewritten in plan-amend; pattern git add -f remains task-326."
+    fix_target: "task-326 pattern; task-327 leftover sweep"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null

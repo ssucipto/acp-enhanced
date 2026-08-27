@@ -12,7 +12,7 @@ completed: null
 phase: 0
 depends_on: []
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
-audit_findings: ['F-118-04']
+audit_findings: ['F-118-04', 'F-119-05']
 files_affected:
   - agent/memory/decisions.md
   - agent/design/local.public-repo-privacy-purge.md
@@ -21,7 +21,7 @@ files_affected:
 
 <!-- @acp.meta.task
 topic: m87, adr-27, privacy, citation-map
-description: Confirm ADR-27 and design have no leaked internals; inventory every command/E2E/wiki that assumes tracked reports.
+description: Confirm ADR-27 and cookbook; inventory every command/E2E/wiki that assumes tracked reports.
 milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D1, D6
@@ -31,36 +31,41 @@ updated: 2026-08-27
 
 ## Objective
 
-Lock policy (ADR-27) and produce a citation map so later tasks do not miss a command, validator, or E2E that still requires tracked `agent/reports/` or `agent/feedback/` bodies.
+Produce a **path-only** citation map so 324–327 cannot miss a live reference. Confirm the design cookbook (CB-1…CB-6) has no secrets.
 
 ## Context
 
-Planning already wrote ADR-27 and the design. This task is the **implementation start**: verify those files contain no consumer internals or vendor IDs, then list every live reference that tasks 324–326 must change.
+ADR-27 and the design already exist. Do **not** skip this task. Audit-119 listed extra files beyond the first `files_affected` lists.
 
 ## Steps
 
-1. Re-read ADR-27 and `local.public-repo-privacy-purge.md`. Confirm they do **not** paste consumer spec bodies, `$HOME` paths, or vendor account identifiers.
-2. Grep the repo for `agent/reports`, `agent/feedback`, `validateProtocolDirAddability`, and D9 tracking language. Record hits in the task notes (paths only, no leaked file contents).
-3. Split hits into: (a) writers that must stay local, (b) validators/E2E that must stop requiring tracked files, (c) install/pattern/docs, (d) remaining tracked files that still contain `$HOME` or consumer internals (feeds task-327).
-4. Confirm review-006 (js-yaml / bootstrap / dispatch) is **not** on this map.
-5. Do not `git add` any `agent/reports/` or `agent/feedback/` bodies.
+1. Re-read ADR-27 and design cookbook. Confirm no consumer spec bodies, no `$HOME` usernames, no vendor account identifiers.
+2. Run (record **paths only** in this task’s notes):
+
+```bash
+rg -l 'agent/reports|agent/feedback|validateProtocolDirAddability|Untracked evidence' \
+  agent/commands agent/scripts scripts e2e tests agent/wiki agent/patterns \
+  agent/core .github docs AGENT.md README.md package.yaml
+```
+
+3. Classify each hit: (a) local writer — keep, (b) validator/E2E — 324/325, (c) install/pattern — 326, (d) leftover pointer in remaining tracked files — 327.
+4. Confirm F-R006-* is **not** on the map.
+5. Do not `git add` any `agent/reports/` or `agent/feedback/` bodies (CB-6).
 
 ## Verification
 
-- [ ] ADR-27 present; D9 tracking superseded for this public repo
-- [ ] Citation map lists commands, `scripts/acp-validate.ts`, E2E, wiki, pattern, project-create
+- [ ] Cookbook CB-1…CB-6 present in design
+- [ ] Citation map includes at least: `acp.install.sh`, `acp.package-create.sh`, `acp.design-spec.md`, `acp.validate.md`, `acp.ci.sh`, `architecture.md`, `acp-validate.test.ts`
 - [ ] No new secrets in planning docs
-- [ ] F-R006-* explicitly out of scope
 
 ## User-Observable Acceptance
 
-A developer starting 324 can open this task’s notes and see every file that still assumes tracked reports.
+Task notes list every file 324–327 must touch.
 
 ## Expected Output
 
 ### Files Created / Modified
-- This task file (notes with citation map)
-- ADR-27 / design only if a leak or contradiction is found
+- This task file (citation map notes)
 
 ### Notes
-Do not reopen the Class A/B git split. Force-push is not this task.
+Source: audit-119. Cookbook is canonical; do not invent flags.

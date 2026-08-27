@@ -12,7 +12,7 @@ completed: null
 phase: 1
 depends_on: [task-322]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
-audit_findings: ['F-118-01', 'F-118-02', 'F-118-03']
+audit_findings: ['F-118-01', 'F-118-02', 'F-118-03', 'F-119-01']
 files_affected:
   - agent/.gitignore
 ---
@@ -30,37 +30,42 @@ updated: 2026-08-27
 
 ## Objective
 
-Create a restore-tested encrypted archive of current `agent/reports/` and `agent/feedback/` **before** any destructive git. This is a **hard GATE** for 328 and 330.
+Create a restore-tested encrypted archive of `agent/reports/` and `agent/feedback/` **before** any destructive git. **Hard GATE** for 328 and 330.
 
 ## Context
 
-History rewrite and `git rm` destroy the only copy on GitHub. The operator must be able to restore on this machine and on a second directory. The archive must **never** be committed or pushed.
+`git rm` without `--cached` and `filter-repo` destroy GitHub’s copy. The archive must never be committed. Use design **CB-1** exactly — do not change flags.
 
 ## Steps
 
-1. Inventory tracked + untracked files under `agent/reports/` and `agent/feedback/` (counts only in git notes).
-2. Write an archive **outside the repo** (or under a gitignored path that is also listed in `.gitignore` if inside the tree — prefer `$HOME` backup dir, not the clone).
-3. Encrypt with `age` or gpg. Record algorithm + archive filename **without** putting the passphrase in git.
-4. Restore dry-run into a throwaway directory. Confirm file counts and that a sample audit and the design-spec filename exist.
-5. Document restore steps in this task’s notes (commands, not secrets).
-6. **GATE**: 328 and 330 must not start until this checkbox is true.
+1. Record inventory (numbers only):
+
+```bash
+git ls-files agent/reports | wc -l
+git ls-files agent/feedback | wc -l
+```
+
+2. Execute **CB-1** archive from repo root (`age -p` passphrase is **not** written to any file in the repo).
+3. Execute **CB-1** restore dry-run. Confirm `test -d` both dirs; compare `find | wc -l` to step 1 (untracked local reports may increase the restore count).
+4. Paste command transcripts (redact passphrase) into this task’s notes.
+5. **GATE**: 328 and 330 must not start until restore dry-run passed.
 
 ## Verification
 
-- [ ] Encrypted archive exists off-remote
-- [ ] Restore dry-run matched inventory counts
-- [ ] Archive is not in `git status` as a staged file
+- [ ] Ciphertext exists under `${HOME}/acp-enhanced-private/` (or equivalent **outside** the clone)
+- [ ] Restore dry-run listed both trees
+- [ ] `git status` does not show the `.age` file as staged
 - [ ] Passphrase is not in any tracked file
 
 ## User-Observable Acceptance
 
-Operator can restore reports/feedback into an empty folder from the archive without GitHub.
+Operator can restore reports/feedback into `/tmp/acp-restore-test` without GitHub.
 
 ## Expected Output
 
 ### Files Created / Modified
-- Local archive (untracked, off-repo preferred)
+- Local `.age` archive (untracked, off-repo)
 - This task file (restore notes)
 
 ### Notes
-Do not use `git add -f` on the archive. Do not force-push in this task.
+Do not `git add -f` the archive. Full **git mirror** backup is CB-4 / task-330, not this task.

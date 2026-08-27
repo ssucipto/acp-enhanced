@@ -12,16 +12,24 @@ completed: null
 phase: 2
 depends_on: [task-324]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
-audit_findings: ['F-118-04']
+audit_findings: ['F-118-04', 'F-119-05']
 files_affected:
   - agent/commands/acp.audit.md
+  - agent/commands/acp.report.md
+  - agent/commands/acp.review.md
+  - agent/commands/acp.integrity.md
+  - agent/commands/acp.design-spec.md
+  - agent/commands/acp.install.md
+  - agent/commands/acp.clarification-address.md
+  - agent/scripts/acp.ci.sh
   - e2e/acp.audit.test.sh
+  - e2e/acp.tier3-memory-knowledge.test.sh
   - agent/wiki/architecture.md
 ---
 
 <!-- @acp.meta.task
 topic: m87, e2e, commands, local-reports
-description: Stop requiring historical tracked audits; writers still create local files; tests use fixtures or gitignored temp reports.
+description: Stop requiring historical tracked audits; writers still create local files; tests must not git-add reports.
 milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D2
@@ -32,27 +40,27 @@ updated: 2026-08-27
 
 ## Objective
 
-Update command docs, E2E, and the relevant wiki section so `/acp-audit` / `/acp-report` still **write** under `agent/reports/`, but tests and docs never require those bodies to be git-tracked.
+Update command docs, E2E, wiki, and leftover **code comments** so writers still write under `agent/reports/`, but nothing requires those bodies to be git-tracked.
 
 ## Context
 
-Citation map from 322. Many E2E suites assert tracked audit files or count files under `agent/reports/`. After 324, those files are ignored. Tests must use committed fixtures elsewhere, or write into the ignored dir and assert `git check-ignore`.
+Citation map from 322. Known leftovers (audit-119): `acp.design-spec.md` exemplar paths into feedback/reports; `acp.ci.sh:46` cites `agent/reports/m86-ci-job-baseline.md`; `architecture.md:80,107` treats audits as durable git artifacts. `e2e/acp.audit.test.sh` only asserts the **directory** exists — keep that; add `git check-ignore` if a test creates a report.
 
 ## Steps
 
-1. From the 322 map, edit `acp.audit.md`, `acp.report.md`, review/integrity `--report` docs: “local only; do not commit”.
-2. Fix `e2e/acp.audit.test.sh` and any other suite that `git add`s reports or requires a tracked historical `audit-N.md`.
-3. Update golden TSV / coverage lists if they list report paths as tracked protocol files.
-4. Wiki: one section of `architecture.md` (or domain.yml equivalent) — D9 tracking is superseded; do not load the whole wiki.
-5. Run the affected E2E files locally; do not weaken assertions into no-ops.
-6. Do not paste consumer internals into docs.
+1. Command docs (`acp.audit`, `acp.report`, review/integrity `--report`, `acp.design-spec`): “write locally; do not commit; ADR-27.” Replace FIFOZ exemplar **paths** with a generic `agent/reports/design-spec-{subject}-v{N}.md` (do not paste spec body).
+2. `acp.install.md` “preserving reports” language: preserve **on disk**, not as tracked evidence.
+3. `acp.ci.sh` usage text: remove the reports-path citation; keep tier descriptions in-line.
+4. `architecture.md` (those two bullets only — do not load the whole wiki): audits are local; ledger IDs live in carryovers/CHANGELOG.
+5. E2E: no `git add` of reports; if a test writes a report, assert `git check-ignore`.
+6. Run affected E2E. Do not weaken to no-ops (FG-3).
 
 ## Verification
 
-- [ ] Audit E2E green without tracked historical audits
-- [ ] Command docs say reports are gitignored
-- [ ] No test `git add -f` on reports
-- [ ] Validate still green
+- [ ] No command doc says reports are version-controlled evidence
+- [ ] `acp.ci.sh --help` does not point at a report file
+- [ ] Wiki bullets match ADR-27
+- [ ] Affected E2E green
 
 ## User-Observable Acceptance
 
@@ -61,9 +69,7 @@ CI can clone a reports-empty tree and still pass audit E2E.
 ## Expected Output
 
 ### Files Created / Modified
-- Command docs listed in 322 map
-- `e2e/*.test.sh` as needed
-- One wiki section
+- files_affected list above
 
 ### Notes
-Writers stay. Tracking goes.
+`acp.validate.md` is task-324. Pattern/install heredocs are 326.

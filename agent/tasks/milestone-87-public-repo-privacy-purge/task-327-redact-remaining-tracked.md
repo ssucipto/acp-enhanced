@@ -12,16 +12,17 @@ completed: null
 phase: 3
 depends_on: [task-322]
 design_reference: [agent/design/local.public-repo-privacy-purge.md](../../design/local.public-repo-privacy-purge.md)
-audit_findings: ['F-118-03', 'F-118-06', 'F-118-07']
+audit_findings: ['F-118-03', 'F-118-06', 'F-118-07', 'F-119-08']
 files_affected:
   - agent/memory/sessions.md
-  - CHANGELOG.md
   - agent/progress.yaml
+  - agent/commands/acp.design-spec.md
+  - CHANGELOG.md
 ---
 
 <!-- @acp.meta.task
-topic: m87, redact, home-path, consumer-internals
-description: Strip absolute home paths and consumer product internals from files that remain tracked after the reports purge.
+topic: m87, redact, home-path, leftovers
+description: Strip leftover pointers and contradictory Class A guidance from files that remain tracked after the reports purge.
 milestone: M87
 design: agent/design/local.public-repo-privacy-purge.md
 incorporates: D6, D7
@@ -32,35 +33,42 @@ updated: 2026-08-27
 
 ## Objective
 
-After reports/feedback leave git, remaining tracked files must not still contain `$HOME` paths or consumer product internals. Keep IG-37 email in `identity.yml`. Keep consented consumer **names** in CHANGELOG if already public; drop internals.
+After reports/feedback leave git, remaining tracked files must not still **point at** leaked bodies or tell agents to keep Class A audits in git. Keep IG-37 email in `identity.yml`.
 
 ## Context
 
-audit-118 listed `$HOME` in audit-114 and measure logs (those files leave with the tree). Also scan sessions, progress `active_handoff.path`, consolidated feedback docs, and wiki snippets that quote inbox paths.
+`git grep '/Users/'` on develop tip outside reports/feedback is already clean except this milestone’s grep instructions. Leftovers are **policy/path** not home directories: `sessions.md` still has the audit-118 Class A key_fact; `progress.yaml` `active_handoff.path` points at a handoff report that will vanish from clones; `acp.design-spec.md` names the consumer spec filename (325 may already retarget — verify).
 
 ## Steps
 
-1. Grep tracked files (exclude `agent/reports` and `agent/feedback` bodies you are about to delete) for `/Users/`, `FIFOZ` product-spec dumps, vendor `orgId`, `isProUser`.
-2. Redact or generalize hits. Replace `active_handoff.path` if it points at a report that will not exist on clone (completed handoff: keep status, drop or generalize path).
-3. Do **not** paste the original secret/path into the replacement commit message or this task file.
-4. Keep `agent/core/identity.yml` team email (F-118-08 / IG-37).
-5. Do not stamp F-118-* here — history still has the blobs until 331.
+1. Run:
+
+```bash
+git grep -n '/Users/\|orgId\|isProUser' -- ':!agent/reports' ':!agent/feedback'
+```
+
+Redact any hits without pasting the original secret into the commit message.
+
+2. `sessions.md`: rewrite the 2026-08-27 audit-118 `key_fact` to “superseded by ADR-27; do not keep Class A in git” (one sentence). Do not delete the historical entry.
+3. `active_handoff.path`: completed handoff — set path to empty string **or** a keeper README path; keep `status: completed`. Schema requires `path` string — use `agent/reports/README.md` after 328 keepers exist, or `agent/milestones/milestone-85-preference-yaml-performance.md` as a non-secret pointer. Prefer README keeper once 328 landed; if 327 runs first, use a tracked milestone path temporarily and fix in 328.
+4. Keep `agent/core/identity.yml` team email (F-118-08).
+5. Do not stamp F-118-* (history still dirty until 331).
 
 ## Verification
 
-- [ ] `git grep` on tracked files has no `/Users/<operator>`
-- [ ] No vendor billing UUID in tracked files
+- [ ] No Class A-in-git instruction in the latest sessions key_fact
+- [ ] `active_handoff.path` does not name a missing audit/handoff body on a fresh clone
 - [ ] identity.yml email unchanged
-- [ ] progress.yaml handoff path does not require a public report body
+- [ ] F-118-01..03 still `pending`
 
 ## User-Observable Acceptance
 
-A GitHub file search on the tip after 328 does not show operator home directories.
+A new agent loading last-3 sessions does not follow the rejected Class A split.
 
 ## Expected Output
 
 ### Files Created / Modified
-- Remaining tracked docs from the grep (sessions, CHANGELOG excerpts, progress.yaml, any consolidated feedback doc)
+- files_affected plus any grep hits
 
 ### Notes
-This is tip hygiene. History rewrite is 330.
+History rewrite of report blobs is 330, not a `--replace-text` of this tip.
