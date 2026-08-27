@@ -4,6 +4,20 @@
 #
 # Optional fields added in v6.8.0:
 
+- date: 2026-08-27
+  task_type: milestone-planning
+  mistake: "audit-118 recommended keeping Class A protocol audits tracked on develop/mainline; that still publishes session internals on a public clone and is hard to police."
+  correction: "ADR-27: this public repo must contain zero agent/reports and agent/feedback bodies (keepers only). Local writers stay. Encrypted pack for machine moves. History rewrite + operator-confirmed force-push of develop and mainline is required before calling F-118-01..03 fixed. Do not follow the Class A/B git split."
+  priority: high
+  trigger: acp-plan-m87
+
+- date: 2026-08-27
+  task_type: audit-run
+  mistake: "D9 'track all reports/feedback' plus M86 port-inbox practice published consumer product specs, $HOME paths, and CodeRabbit org billing JSON onto develop and mainline."
+  correction: "Superseded by ADR-27 for this public repo: do not keep Class A audits in git either. Gitignore reports/feedback; ledger finding IDs in audit-carryovers.md + CHANGELOG. Scrub vendor raw JSON before any git add (M82)."
+  priority: high
+  trigger: audit-118
+
 - date: 2026-08-14
   task_type: bash-script-refactor
   mistake: "Guards certified correlates (node_modules dir exists, status-string agreement, finding_id-only ledger grep) instead of the invariants they were named for — fabricating findings or retracting real carryovers."

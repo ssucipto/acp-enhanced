@@ -231,3 +231,12 @@
 **Decision:** Option 3. M86 backlog is `/acp-ci`, `/acp-pr`, upgrade-guard, false-green contracts, review-scan **diff-merge**, and release hygiene — never a re-copy of identical command docs.  
 **Consequences:** Corrects consumer-project `local_only` register; lessons.md records manifest-vs-tree check.  
 **DO NOT re-open** unless a future SHA diff shows intentional consumer-project divergence in those command docs that AE should absorb.
+
+## ADR-27 | 2026-08-27 | Public remotes must not contain reports, feedback, or audit bodies
+
+**Status:** Accepted  
+**Context:** audit-118 found consumer product specs, `$HOME` paths, and vendor account JSON in `agent/reports/` and `agent/feedback/` on both `develop` and `mainline`. M72 D9 tracked those directories as “closure evidence.” The maintainer overrode the audit-118 “keep Class A in git” recommendation: **this GitHub repo is public**, and reports/audit/feedback folders must leave the remote, including history. A HEAD-only `git rm` is not secure removal.  
+**Options considered:** (1) Keep protocol audits in git, drop only field artifacts (audit-118 Class A/B). Rejected by maintainer — still publishes session internals and is hard to police. (2) Gitignore going forward but leave history. Rejected — clones and GitHub still have old blobs. (3) Local-only reports/feedback + encrypted pack for machine moves + `git filter-repo` then force-push `develop` and `mainline`. Accepted.  
+**Decision:** Option 3. Public `develop`/`mainline` contain only `.gitkeep` (+ short README) under `agent/reports/` and `agent/feedback/`. `/acp-audit` and `/acp-report` still **write locally**. Finding IDs stay in `agent/memory/audit-carryovers.md` and CHANGELOG. D9 “untracked evidence = ERROR” is **superseded** for this public repo. History rewrite is mandatory before calling the leak closed. Force-push is an explicit ops step, never automatic.  
+**Consequences:** Validators, E2E, install gitignores, and the tracked-untracked pattern must match. Operators keep a local archive before rewrite. Review-006 code findings (js-yaml, bootstrap, dispatch) are a **separate** track.  
+**DO NOT re-open** unless the repository is made private **and** a new ADR restores tracked evidence dirs; or a legally required public archive format is defined.

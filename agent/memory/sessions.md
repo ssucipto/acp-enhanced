@@ -3,6 +3,61 @@
 # DO NOT edit manually — updated by /acp-commit
 
 
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [acp-plan, M87, task-322, ADR-27]
+  done: [m87-privacy-purge-plan]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Maintainer overrode audit-118 Class A-in-git. ADR-27: public remotes contain
+    zero agent/reports and agent/feedback bodies (keepers only). Secure removal
+    is filter-repo plus operator-confirmed force-push of develop and mainline.
+    HEAD git rm is not enough. Do not stamp F-118-01..03 until fresh-clone proof.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-118]
+  done: [audit-118-public-repo-privacy]
+  deferred:
+    - F-118-01-redact-coderabbit-raw → audit-118
+    - F-118-02-untrack-consumer-project-design-spec → audit-118
+    - F-118-03-untrack-port-inbox → audit-118
+    - F-118-04-d9-1-private-class → /acp-decide
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    Do not gitignore all agent/reports. Split Class A (ACP protocol audits, stay
+    on develop/mainline) from Class B (consumer specs, port inboxes, vendor raw
+    dumps — local agent/private/ + encrypted pack). develop==mainline already
+    contains Class B; HEAD delete does not rewrite history.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [acp-resume, weekly-code-review, weekly-integrity-scan, monthly-dependency-audit]
+  done:
+    - resumed-after-13-day-gap
+    - stale-push-next-step-cleared
+    - integrity-003-self-scan
+    - review-006-weekly-self
+    - monthly-dependency-audit-clean
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+    - ig17-scanner-allowlist → polish
+    - adr-19-aikido → gated
+  key_fact: >
+    After M81/M86 ship, develop==mainline at v6.32.4 with no coding task in_progress.
+    Overdue recurring scans are the next work. js-yaml GHSA-5p4m-2wfm-xmqj is SC-14
+    (review), not IG-27–32 (monthly dependency-diff).
+
 - date: 2026-08-14
   executor: cursor-composer
   branch: develop
