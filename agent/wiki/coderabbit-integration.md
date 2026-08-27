@@ -132,4 +132,4 @@ Aikido is **deferred for current user-base cost**, not abandoned.
 - [Policy map lite](coderabbit-policy-map-lite.md)
 - [Local thorough review playbook](coderabbit-local-thorough-review.md) (M82 — CLI chunked + ACP weeklies)
 - `agent/patterns/local.optional-external-tool.md`
-- `agent/reports/audit-097-optional-coderabbit-integration.md`, `audit-101-m81-pre-impl-readiness.md`
+- Finding IDs F-097 / F-101 (full audit bodies live in local gitignored `agent/reports/` after ADR-27)
