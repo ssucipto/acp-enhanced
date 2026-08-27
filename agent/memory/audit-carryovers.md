@@ -3415,6 +3415,96 @@ carryovers:
     verified_in_audit: null
     escalated_to: null
 
+  # ── AUDIT-122 — M88 PRE-IMPL READINESS (2026-08-27) ────────────────────────
+  - audit_id: 122
+    finding_id: F-122-01
+    severity: critical
+    file: agent/design/local.instance-docs-privacy-purge.md
+    finding: "CB-1 is a stub (test -f OUT with no tar/gpg); task-337 cannot execute"
+    description: "M87 CB-1 had full tar+gpg+restore. M88 CB-1 commented private-pack-after-341 then tested a missing file."
+    fix_target: "Write copy-paste tar of reports,feedback,milestones,tasks,sessions + the one docs file; gpg AES256; restore-test. Task-337 cites CB-1 only."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-02
+    severity: high
+    file: agent/progress.yaml
+    finding: "active_handoff.path points at milestone-85 which 343/filter-repo remove; validateActiveHandoff ERRORs if missing"
+    description: "scripts/acp-validate.ts:2196 existsSync on handoff path regardless of completed status."
+    fix_target: "Retarget path to agent/design/local.instance-docs-privacy-purge.md (stays tracked)"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-03
+    severity: high
+    file: agent/progress.yaml
+    finding: "current_milestone still M87; /acp-proceed without task id scans completed M87"
+    description: "acp.proceed.md A1 uses current_milestone. next_steps[0] must not contain M88 after switch (validateNextStepsFreshness)."
+    fix_target: "Set current_milestone M88; rewrite next_steps[0] to start at task-335 without the substring M88"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-04
+    severity: high
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-343-git-rm-cached-keepers.md
+    finding: "git rm --cached -r agent/tasks untracks remaining 344-347 task docs"
+    description: "Files remain on disk if --cached. Reclone from GitHub after 343 loses 344-347 unless 335 backup restore."
+    fix_target: "343 SOP: do not reclone daily until 347; restore task docs from worktree-m88 DEST"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-05
+    severity: high
+    file: agent/design/local.instance-docs-privacy-purge.md
+    finding: "CB-3b checkout-index omits scripts/node_modules; rehearsal validate cannot run"
+    description: "node_modules is gitignored. Copy from daily or npm ci --ignore-scripts in rehearsal/scripts."
+    fix_target: "CB-3b copy node_modules; 344 asserts validate ran in rehearsal tree"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-06
+    severity: high
+    file: scripts/acp-validate.ts
+    finding: "File-pointer skip must use git check-ignore --no-index so CI clones skip gitignored missing paths"
+    description: "existsSync fails on CI after 343. Default check-ignore is index-sensitive."
+    fix_target: "task-339: skip dangling if git check-ignore -q --no-index path; probeDirs memory only"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-07
+    severity: medium
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-347-v6340-closure.md
+    finding: "Closure omits yaml-parser golden, AGENTS.md/CLAUDE.md/copilot-instructions, annotated v6.34.0 tag"
+    description: "validateGitTagsExist errors when identity version has no tag. Golden broke e2e-smoke after v6.33.0 bump."
+    fix_target: "347: refresh golden TSV; sync instruction files; git tag -a v6.34.0; regular push tag"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-11
+    severity: medium
+    file: agent/scripts/acp.private-pack.sh
+    finding: "PACK_REL_DIRS cannot pack the single docs purge-target file; never pack docs/"
+    description: "337 tar must list the file. 341 adds agent/milestones|tasks|sessions dirs only."
+    fix_target: "CB-1 tar includes docs/acp-enhanced-dev-team-feedback-consolidated.md; 341 forbids docs/ dir"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
   # ── AUDIT-118 — PUBLIC-REPO PRIVACY / FIELD ARTIFACTS (2026-08-27) ────────
   - audit_id: 118
     finding_id: F-118-01

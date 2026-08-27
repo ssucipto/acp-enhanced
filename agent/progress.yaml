@@ -3,12 +3,12 @@ project:
   version: 6.33.0
   started: 2026-02-16
   status: active
-  current_milestone: M87
+  current_milestone: M88
   description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.33.0 on develop\n\
     \  (M87 public remotes keepers-only for reports/feedback including history).\n\
     \  F2-09 fixed. Aikido track ADR-19 gated.\n"
 active_handoff:
-  path: agent/milestones/milestone-85-preference-yaml-performance.md
+  path: agent/design/local.instance-docs-privacy-purge.md
   date: '2026-07-31'
   to_executor: claude-opus
   from_executor: claude-opus
@@ -6938,6 +6938,12 @@ tasks:
     notes: phase 4; F-R006 stays pending; no second force-push
 recent_work:
 - date: 2026-08-27
+  description: "/acp-audit --pre-impl M88 (audit-122) + plan amend — READY for task-335"
+  items:
+  - "✅ CB-1 is tar+gpg+restore (not a stub); CB-3b copies scripts/node_modules"
+  - "✅ current_milestone M88; next_steps[0] is task-335 without M88 substring; handoff path retargeted to design"
+  - "Do not commit audit-122; F-R006-01..03 still separate"
+- date: 2026-08-27
   description: "/acp-plan M88 instance-docs privacy purge (ADR-28 Option C)"
   items:
   - "✅ ADR-28: KEEP public docs + templates; PURGE instance milestone/task/session bodies + one field-feedback file including history"
@@ -9921,7 +9927,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M88 READY: /acp-proceed task-335 (worktree rsync) then 336 (local git mirror) then 337 (encrypted four-tree archive). Do not start 338 until all three restore."
+- "/acp-proceed task-335 (worktree rsync) then 336 (local git mirror) then 337 (encrypted four-tree archive). Do not start 338 until all three restore."
 - "Force-push only after exact phrase: force-push instance-docs develop mainline tags: yes (not the M87 phrase). Stamp history-clean only after 346. Rehearse 344 before 345."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."

@@ -187,26 +187,62 @@ git clone --mirror "$(pwd)" "${MIRROR}"
 git --git-dir="${MIRROR}" rev-parse HEAD
 test "$(git rev-parse HEAD)" = "$(git --git-dir="${MIRROR}" rev-parse HEAD)"
 git --git-dir="${MIRROR}" bundle create "${BACKUP_DIR}/acp-enhanced-m88-${STAMP}.bundle" --all
+rm -rf /tmp/acp-m88-from-mirror
+git clone "${MIRROR}" /tmp/acp-m88-from-mirror
+test "$(git -C /tmp/acp-m88-from-mirror rev-parse HEAD)" = "$(git rev-parse HEAD)"
 printf '%s\n' "mirror OK ${MIRROR}"
 ```
 
 ### CB-1 — Encrypted archive of the four trees (task-337)
 
-Pack **instance** paths that must survive a machine move. Include existing gitignored reports/feedback so one archive restores local privacy dirs. Never put the archive inside the clone. Never pass passphrase on argv.
+Self-contained. Do **not** call `acp.private-pack.sh` here (341 has not run). Never pack all of `docs/`. Never put ciphertext in the clone. Never pass passphrase on argv. Trap removes the plaintext tar.
 
 ```bash
 BACKUP_DIR="${HOME}/acp-enhanced-private"
 STAMP="$(cat "${BACKUP_DIR}/M88_LAST_STAMP.txt")"
+TAR="/tmp/acp-m88-${STAMP}.tar.gz"
 OUT="${BACKUP_DIR}/acp-m88-instance-${STAMP}.tar.gz.gpg"
-# Use acp.private-pack.sh once 341 extends PACK_REL_DIRS; until then tar the four trees + reports/feedback.
-# After 341:
-#   bash agent/scripts/acp.private-pack.sh pack --output "${OUT}"
-test -f "${OUT}"
-# Restore-test to a temp dir (not the live clone). Confirm USAGE.md was NOT the only docs file packed;
-# the purge target file must be in the archive; USAGE.md must still exist in the live clone.
+tar -C "$(pwd)" -czf "${TAR}" \
+  agent/reports \
+  agent/feedback \
+  agent/milestones \
+  agent/tasks \
+  agent/sessions \
+  docs/acp-enhanced-dev-team-feedback-consolidated.md
+cleanup_m88_tar() { rm -f "${TAR}"; }
+trap cleanup_m88_tar EXIT
+if command -v age >/dev/null 2>&1; then
+  age -p -o "${BACKUP_DIR}/acp-m88-instance-${STAMP}.tar.gz.age" "${TAR}"
+  echo "encrypted: ${BACKUP_DIR}/acp-m88-instance-${STAMP}.tar.gz.age"
+else
+  command -v gpg
+  gpg --symmetric --cipher-algo AES256 -o "${OUT}" "${TAR}"
+  echo "encrypted: ${OUT}"
+fi
 test -f docs/USAGE.md
-printf '%s\n' "archive OK ${OUT}"
 ```
+
+Restore dry-run (gpg; use `age -d` if the file is `.age`). Do **not** unpack onto the live clone.
+
+```bash
+STAMP="$(cat "${HOME}/acp-enhanced-private/M88_LAST_STAMP.txt")"
+RESTORE="/tmp/acp-m88-restore-test"
+rm -rf "${RESTORE}"
+mkdir -p "${RESTORE}"
+gpg --decrypt -o "/tmp/acp-m88-restored.tar.gz" "${HOME}/acp-enhanced-private/acp-m88-instance-${STAMP}.tar.gz.gpg"
+tar -C "${RESTORE}" -xzf "/tmp/acp-m88-restored.tar.gz"
+test -f "${RESTORE}/docs/acp-enhanced-dev-team-feedback-consolidated.md"
+test -d "${RESTORE}/agent/milestones"
+test -d "${RESTORE}/agent/tasks"
+test -d "${RESTORE}/agent/sessions"
+test -d "${RESTORE}/agent/reports"
+test -f docs/USAGE.md
+test ! -f "${RESTORE}/docs/USAGE.md"
+rm -f "/tmp/acp-m88-restored.tar.gz"
+printf '%s\n' "archive restore OK ${RESTORE}"
+```
+
+`test ! -f "${RESTORE}/docs/USAGE.md"` proves we did not pack the whole `docs/` tree (F-122-11).
 
 ### CB-2 — Gitignore (task-339) — syntax before commit
 
@@ -261,7 +297,7 @@ rm -f agent/sessions/2026-01-01-dummy.md
 
 Required: dummies ignored (exit 0); templates, USAGE.md, routing tasks, `memory/sessions.md`, `sessions.template.yaml` **not** ignored (exit 1).
 
-**Same commit** as validator: `validateFilePointers` skips missing paths that `git check-ignore -q` matches; `validateProtocolDirAddability` probeDirs = `["agent/memory"]` only.
+**Same commit** as validator: `validateFilePointers` skips missing paths when `git check-ignore -q --no-index` matches (F-122-06). `validateProtocolDirAddability` probeDirs = `["agent/memory"]` only.
 
 ### CB-3 — Tip purge without deleting the working copy (task-343)
 
@@ -285,11 +321,14 @@ test -f docs/acp-enhanced-dev-team-feedback-consolidated.md
 
 Do **not** `git add -f` instance bodies. Confirm local files still exist on disk.
 
+After this commit, task-344.md is gitignored. **Do not reclone the daily worktree until 347.** If those files vanish, copy them back from `${HOME}/acp-enhanced-private/worktree-m88-${STAMP}/` (F-122-04).
+
 ### CB-3b — CI-clone rehearsal (task-344) — before filter-repo
 
-Export the **index** (what CI checks out at this tip), not the dirty worktree:
+Export the **index** (what CI checks out at this tip), not the dirty worktree. `checkout-index` does **not** include `scripts/node_modules` (gitignored). Copy it from the daily clone or `npm ci --ignore-scripts` (F-122-05).
 
 ```bash
+DAILY="$(pwd)"
 REHEARSE="/tmp/acp-m88-rehearse"
 rm -rf "${REHEARSE}"
 mkdir -p "${REHEARSE}"
@@ -299,13 +338,17 @@ test -f "${REHEARSE}/agent/milestones/milestone-1-{title}.template.md"
 test -f "${REHEARSE}/agent/tasks/task-1-{title}.template.md"
 test ! -f "${REHEARSE}/docs/acp-enhanced-dev-team-feedback-consolidated.md"
 test ! -f "${REHEARSE}/agent/milestones/milestone-87-public-repo-privacy-purge.md"
-# instance session bodies must be absent from the index export
 find "${REHEARSE}/agent/sessions" -type f ! -name '.gitkeep' ! -name 'README.md' | wc -l
-cd "${REHEARSE}"
-# run validate from this tree (install scripts deps as CI does)
+if [[ -d "${DAILY}/scripts/node_modules" ]]; then
+  cp -R "${DAILY}/scripts/node_modules" "${REHEARSE}/scripts/"
+else
+  (cd "${REHEARSE}/scripts" && npm ci --ignore-scripts)
+fi
+test -d "${REHEARSE}/scripts/node_modules"
+(cd "${REHEARSE}" && npx tsx scripts/acp-validate.ts)
 ```
 
-Pass: validate green; USAGE.md + both templates exist; instance body count 0. Fail: skipping this because “local validate already passed” (local tree still has bodies).
+Pass: validate ran in the rehearsal tree **and** KEEP files exist **and** PURGE files are absent. Fail: skipping because local validate was already green.
 
 ### CB-4 — History rewrite (task-345)
 
@@ -385,3 +428,7 @@ Pass: `ls-files` is keepers + templates only; history has no instance body paths
 - Reuse `force-push develop mainline tags: yes` (M87 phrase — insufficient for M88)
 - Treat F-R006-* as in-scope
 - Mark history-clean after 343 only
+- Run 337 by calling `acp.private-pack.sh` (not written yet) or `test -f` a missing archive
+- Pack all of `docs/`
+- Reclone the daily worktree after 343 and before 347
+- Skip copying `scripts/node_modules` into the 344 rehearsal tree
