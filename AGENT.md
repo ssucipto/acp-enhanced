@@ -1068,6 +1068,7 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`/acp-pr`](agent/commands/acp.pr.md)** - Feature PR prep; gates delegated only to `/acp-ci`
 - **[`acp.findings-import.sh`](agent/scripts/acp.findings-import.sh)** - Import CodeRabbit findings → carryovers when active (M81; `--input` only)
 - **[`acp.upgrade-guard.sh`](agent/scripts/acp.upgrade-guard.sh)** - HARD-fail version-update when `upstream-delta.yml` present (M86 / P-UG-1)
+- **[`acp.private-pack.sh`](agent/scripts/acp.private-pack.sh)** - Pack/unpack gitignored ACP dirs for another machine (M87 / ADR-27)
 
 **Git Namespace** *(separate from `acp.*`)*
 - **[`@git.commit`](agent/commands/git.commit.md)** - Version-aware commit with CHANGELOG validation and progress.yaml update

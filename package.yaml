@@ -631,6 +631,10 @@ contents:
       description: PR prep with gates delegated to acp.ci.sh
       type: internal
 
+    - name: acp.private-pack.sh
+      description: Pack/unpack gitignored ACP dirs for machine transport (ADR-27)
+      type: utility
+
     - name: acp.upgrade-guard.sh
       description: Assert upstream-delta sentinels survived version-update (P-UG-1)
       type: internal
