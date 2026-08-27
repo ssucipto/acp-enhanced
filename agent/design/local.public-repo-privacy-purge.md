@@ -230,17 +230,21 @@ STAMP="$(date +%Y%m%dT%H%M%S)"
 git clone --mirror "$(pwd)" "${HOME}/acp-enhanced-private/acp-enhanced-pre-rewrite-${STAMP}.git"
 ```
 
-Throwaway rewrite clone from that **local** mirror:
+Throwaway rewrite clone from that **local** mirror. **Must use `--no-local`**: a default `git clone` of a path/file mirror hardlinks objects, and `filter-repo` then aborts with “not a fresh clone”. Do not `--force` that abort.
 
 ```bash
 MIRROR="${HOME}/acp-enhanced-private/acp-enhanced-pre-rewrite-${STAMP}.git"
-git clone "${MIRROR}" /tmp/acp-rewrite
+DAILY="$(pwd)"   # this repo’s worktree — the clone you did not rewrite
+git clone --no-local "${MIRROR}" /tmp/acp-rewrite
 cd /tmp/acp-rewrite
 git branch -a
 # install once: brew install git-filter-repo
 git filter-repo --invert-paths --path agent/reports/ --path agent/feedback/
-git remote add origin git@github.com:ssucipto/acp-enhanced.git
+# filter-repo strips remotes. Copy THIS machine’s origin (may be a named SSH host, not git@github.com).
+git remote add origin "$(git -C "${DAILY}" remote get-url origin)"
 ```
+
+**Canonical push clone:** `/tmp/acp-rewrite` only. If a second copy exists (e.g. `acp-rewrite-ready`), trees can match while tip SHAs differ — force-push from **one** clone after replaying any later daily commits onto it.
 
 `--invert-paths` removes those directories from **every** commit, including keepers from 328. Re-add keepers on the rewritten tip, commit, then **STOP**.
 
@@ -259,7 +263,8 @@ git push --force origin --tags
 Full clone, **not** `--depth=1`:
 
 ```bash
-git clone git@github.com:ssucipto/acp-enhanced.git /tmp/acp-fresh
+DAILY="$(pwd)"   # daily worktree, after force-push + re-clone
+git clone "$(git -C "${DAILY}" remote get-url origin)" /tmp/acp-fresh
 cd /tmp/acp-fresh
 git ls-files agent/reports agent/feedback
 git log --all --full-history --oneline -- agent/reports/ agent/feedback/
@@ -277,6 +282,8 @@ Pass: keepers only in `ls-files`; log has no historical body paths (or only `.gi
 - `git add -f agent/reports/` or `git add -f agent/feedback/`
 - `git rm` without `--cached` on those dirs
 - `git clone --mirror git@github.com:...` as the **only** backup
+- `git clone "${MIRROR}"` **without** `--no-local` before `filter-repo` (hardlink abort)
+- Force-push from the daily unre-written worktree, or from a second rewrite clone with a different tip SHA
 - `git push --force` without the exact confirmation phrase
 - `git push --force-with-lease` after `filter-repo`
 - Stamp F-118-01..03 after local `git rm` only

@@ -41,7 +41,7 @@ Remove `agent/reports/` and `agent/feedback/` **blobs from git history** on `dev
 
 1. Confirm 323 CB-1 still restores. Take a **second** local mirror with **CB-4** (`git clone --mirror "$(pwd)"` — **not** GitHub).
 2. Follow **CB-4** throwaway clone from that local mirror + `git filter-repo --invert-paths --path agent/reports/ --path agent/feedback/` (no extra paths).
-3. `git remote add origin` as in CB-4. Re-add keepers; commit `chore: restore reports/feedback keepers after filter-repo`.
+3. `git remote add origin "$(git -C "${DAILY}" remote get-url origin)"` as in CB-4 (named SSH hosts allowed). Re-add keepers; commit `chore: restore reports/feedback keepers after filter-repo`.
 4. On the throwaway clone: `git log --all --full-history --oneline -- agent/reports/` must not list body files.
 5. **STOP.** Print residual-risk sentence: forks and GitHub caches may retain objects until they refetch. Ask for the exact phrase. Do **not** treat `/acp-proceed` as consent.
 6. If phrase matches: `git push --force origin develop`, `git push --force origin mainline`, `git push --force origin --tags`. **Not** `--force-with-lease`.
@@ -69,11 +69,12 @@ Never run filter-repo in the daily worktree. Never put credentials in the SOP.
 
 Local rewrite 2026-08-27 (NOT pushed):
 - Pre-rewrite mirror: `$HOME/acp-enhanced-private/acp-enhanced-pre-rewrite-20260827T205344.git`
-- Throwaway: `/tmp/acp-rewrite` (clone with `--no-local` — local clones otherwise refuse filter-repo)
-- Persisted copy: `$HOME/acp-enhanced-private/acp-rewrite-ready`
+- **Canonical force-push clone:** `/tmp/acp-rewrite` (must be `git clone --no-local` of the local mirror — default local clones hardlink and filter-repo aborts)
+- Do **not** force-push `$HOME/acp-enhanced-private/acp-rewrite-ready` (same tree historically, different tip SHA — discard or refresh from canonical after each tip commit)
 - `git filter-repo --invert-paths --path agent/reports/ --path agent/feedback/`
-- History body count: 0 (then keepers-only commits on develop `58660cd` and mainline `d83cddc`)
-- `v6.32.4` tree: 0 report files (was 171)
+- History body count: 0; keepers restored; origin URL copied from daily (`git remote get-url origin`), not hardcoded `git@github.com`
+- `v6.32.4` tree on rewrite clone: 0 report files (was 171)
+- Daily worktree history is still dirty until re-clone after push (F-121-03)
 - Awaiting exact phrase: `force-push develop mainline tags: yes`
 - Residual (F-119-09): forks and GitHub caches may retain old objects until they refetch.
 
