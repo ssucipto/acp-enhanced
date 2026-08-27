@@ -6771,12 +6771,12 @@ tasks:
   - id: task-330
     name: filter-repo SOP + force-push develop mainline tags
     priority: 5
-    status: not_started
+    status: in_progress
     file: agent/tasks/milestone-87-public-repo-privacy-purge/task-330-filter-repo-force-push.md
-    started: null
+    started: '2026-08-27T13:00:00Z'
     actual_hours: null
     estimated_hours: 4
-    notes: 'phase 4; confirmation phrase required (see task-330)'
+    notes: 'local rewrite in progress; force-push gated on exact phrase'
   - id: task-331
     name: "Fresh-clone proof: history + tags keepers-only"
     priority: 5
