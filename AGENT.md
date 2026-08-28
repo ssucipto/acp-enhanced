@@ -1,7 +1,7 @@
 # Agent Context Protocol Enhanced (ACP Enhanced)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.35.2
+**Version**: 6.36.0
 **Fork of**: [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol)
 **Maintained by**: [ssucipto/acp-enhanced](https://github.com/ssucipto/acp-enhanced)
 **Created**: 2026-02-11
@@ -1067,6 +1067,7 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`/acp-validate`](agent/commands/acp.validate.md)** - Validate ACP file health and index consistency
 - **[`/acp-ci`](agent/commands/acp.ci.md)** - Local CI parity predictor (`--fast` default; `--full` ≈ multi-minute CI)
 - **[`/acp-pr`](agent/commands/acp.pr.md)** - Feature PR prep; gates delegated only to `/acp-ci`
+- **[`/acp-smoke`](agent/commands/acp.smoke.md)** - Optional device preflight; unconfigured exits 2 (not a CI step)
 - **[`acp.findings-import.sh`](agent/scripts/acp.findings-import.sh)** - Import CodeRabbit findings → carryovers when active (M81; `--input` only)
 - **[`acp.upgrade-guard.sh`](agent/scripts/acp.upgrade-guard.sh)** - HARD-fail version-update when `upstream-delta.yml` present (M86 / P-UG-1)
 - **[`acp.private-pack.sh`](agent/scripts/acp.private-pack.sh)** - Pack/unpack gitignored ACP dirs for another machine (M87 / ADR-27)

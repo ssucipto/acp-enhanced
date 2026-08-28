@@ -6,6 +6,21 @@
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop
+  tasks: [task-354, task-355, task-356, task-357, task-358]
+  done: [m90-wave-b-v6360]
+  deferred:
+    - M91-exec-host → task-359
+    - F-126-03-host-flag → task-360
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.36.0: /acp-smoke is optional and fail-closed (exit 2 unconfigured).
+    e2e-smoke is the /acp-ci --full step, not this command. No --host.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
   tasks: [review-007]
   done: [m89-review-007-patch-v6352]
   deferred:

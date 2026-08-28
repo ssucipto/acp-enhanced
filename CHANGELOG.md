@@ -9,11 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [6.36.0] — 2026-08-28
+
 ### Added
-- **`/acp-smoke`** — optional device-preflight dispatcher. Missing `smoke.yml` or empty `runner:` exits **2** (`not configured`), never PASS. Config is `agent/configurables/smoke.yml` (P-CI-1), not preferences. Not a CI step (`e2e-smoke` remains `/acp-ci --full` only). No `--host`.
+- **`/acp-smoke`** — optional device-preflight dispatcher. Missing `smoke.yml` or empty `runner:` exits **2** (`not configured`), never PASS. Config is `agent/configurables/smoke.yml` (P-CI-1), not preferences. Not a CI step (`e2e-smoke` remains `/acp-ci --full` only). `--host` is **not** in this version.
 
 ### Changed
-- **`/acp-ci` / `/acp-pr` / routing** — glossary: `e2e-smoke` is the full-tier CI E2E job; `/acp-smoke` is optional device preflight. `/acp-pr` may mention smoke; `acp.pr.sh` does not call it.
+- **Glossary** — `e2e-smoke` is the `/acp-ci --full` AE CI E2E job; `/acp-smoke` is optional device preflight. Never `--only smoke`. `/acp-pr` may mention smoke; `acp.pr.sh` does not call it.
+- **Command count** — 72 → 73 `acp.*` commands (75 docs with 2 `git.*`).
+
+### Notes
+- No exec-host, no Windows OpenSSH, no Maestro pin in core E2E.
+- F-R006-01..03 remain pending (out of scope).
+- F-126-03 partial: stub shipped; `--host` waits for M91.
 
 ---
 
