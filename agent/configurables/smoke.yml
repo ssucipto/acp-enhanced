@@ -1,0 +1,10 @@
+# agent/configurables/smoke.yml — optional device-preflight runner (M90)
+#
+# OWNERSHIP (P-CI-1 / D16):
+#   Runtime path to a *project* smoke runner. Not a preference.
+#   Do NOT register keys here in agent/configurables/acp.configurables.yaml.
+#
+# Missing file OR empty runner → /acp-smoke exits 2 (never PASS / never SKIP-as-green).
+# Do not add --host here (M91). Do not name a ci.yml step `smoke` (e2e-smoke ≠ /acp-smoke).
+
+runner: ""
