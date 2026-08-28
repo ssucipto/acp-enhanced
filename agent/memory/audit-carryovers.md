@@ -3901,3 +3901,128 @@ carryovers:
     fix_applied_date: "2026-08-27"
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-125 — FIFOZ + SAFE-IQ FIELD FEEDBACK GAPS (2026-08-28) ──────────
+  - audit_id: 125
+    finding_id: F-125-01
+    severity: high
+    file: agent/commands/acp.review.md
+    finding: "No /acp-review --pr-diff (Phase 2.5) — CR-style pass on git diff then stop"
+    description: "Safe-IQ feedback-001/002. Weekly Phase 2 and Phase 1 regex are not a per-PR semantic review."
+    fix_target: "Add --pr-diff [--base] writing blocking vs deferred report; not Phase 1; not /acp-audit"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 125
+    finding_id: F-125-02
+    severity: high
+    file: agent/wiki/coderabbit-integration.md
+    finding: "CR wiki lacks rate-limit=skip, green check≠HEAD, commit_id not a gate, finding buckets A/B"
+    description: "ADR-21 is present; field operators still treat GitHub CR / commit_id as merge gates."
+    fix_target: "Wiki + acp.review.md CodeRabbit section: buckets, onion stop, consumer local.wiki overlay stub"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 125
+    finding_id: F-125-03
+    severity: medium
+    file: agent/commands/acp.audit.md
+    finding: "Purpose does not say audit is not a PR review / not a CodeRabbit replacement"
+    description: "Safe-IQ 001 §3.1.3 still missing on 6.34.0"
+    fix_target: "One line in Purpose or Related"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 125
+    finding_id: F-125-04
+    severity: medium
+    file: agent/scripts/acp.cursor-commands-sync.sh
+    finding: "Cursor sync skips local.*.md; version-update docs do not name local.* command/wiki survival"
+    description: "Copy loop already skips local commands; consumers still hand-write wrappers"
+    fix_target: "Document local.* Tier A; optionally emit local-* Cursor wrappers; wiki/local.* overlay note"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 125
+    finding_id: F-125-05
+    severity: medium
+    file: agent/commands
+    finding: "No optional /acp-smoke device preflight (distinct from /acp-ci)"
+    description: "FIFOZ feedback-010. Must not reuse CI step id smoke; must not block /acp-pr"
+    fix_target: "Stack-agnostic command delegating to project runner; E2E --help/--doctor only"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 125
+    finding_id: F-125-06
+    severity: high
+    file: agent/scripts
+    finding: "No ACP_EXEC_HOST / OpenSSH exec-host contract for heavy device work"
+    description: "FIFOZ 011+012. Later wave; include 012 Win32-OpenSSH rules; do not port Expo gradle"
+    fix_target: "Portable env + generic ssh/bundle scripts; E2E boots no device"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 125
+    finding_id: F-125-07
+    severity: low
+    file: agent/commands/acp.pr.md
+    finding: "No integrations.pr.local_gates[] or integrations.coderabbit.exclude_globs[]"
+    description: "FIFOZ feedback-001 acp-pr leftover after M86 command ship"
+    fix_target: "Optional preference schema + wiki note consumers may path-filter agent/**"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M91"
+
+  # ── AUDIT-126 — FIELD FEEDBACK SECOND ROUND (2026-08-28) ─────────────────
+  - audit_id: 126
+    finding_id: F-126-01
+    severity: high
+    file: agent/commands/acp.review.md
+    finding: "--diff already means file-list Phase 1; --pr-diff must be a distinct flag"
+    description: "e2e/acp.review.test.sh B1 asserts --diff + git diff --name-only. Aliasing would regress."
+    fix_target: "M89 task-350/351 keep --diff row and B1; add --pr-diff separately"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 126
+    finding_id: F-126-02
+    severity: high
+    file: e2e/acp.review.test.sh
+    finding: "--pr-diff is an agent pass; E2E must not add an LLM harness"
+    description: "Docs and flag assertions only"
+    fix_target: "M89 task-351"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 126
+    finding_id: F-126-03
+    severity: high
+    file: agent/commands
+    finding: "FIFOZ smoke 1.1.0 already couples Maestro plus exec-host; AE v1 must not"
+    description: "Wave B stub; --host waits for M91"
+    fix_target: "M90 D9 then M91 D10"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M90"
+  - audit_id: 126
+    finding_id: F-126-06
+    severity: high
+    file: agent/scripts
+    finding: "Unconfigured /acp-smoke must exit 2, never SKIP-as-PASS"
+    description: "FG-2 for device command"
+    fix_target: "M90 task-355/357"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M90"

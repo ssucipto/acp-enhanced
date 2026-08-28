@@ -6,6 +6,43 @@
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop
+  tasks: [audit-126, plan-m89-m91]
+  done: [audit-126-second-round, plan-waves-a-b-c]
+  deferred:
+    - F-125-01-pr-diff → M89
+    - F-125-05-acp-smoke → M90
+    - F-125-06-exec-host → M91
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    --pr-diff must not collide with existing --diff. Do not copy FIFOZ smoke
+    1.1.0 into AE v1. M89–M91 planned (6.35–6.37); proceed starts at task-348.
+    current_milestone stays M88 until proceed.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-125]
+  done: [audit-125-fifoz-safeiq-feedback]
+  deferred:
+    - F-125-01-pr-diff → plan
+    - F-125-02-cr-buckets → plan
+    - F-125-05-acp-smoke → later-wave
+    - F-125-06-exec-host → later-wave
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    Safe-IQ 001+002 still fully open on 6.34.0 (--pr-diff, CR buckets, audit≠CR).
+    FIFOZ 2026-08-14 command wave is shipped; remaining value is smoke + exec-host.
+    Do not port Expo/Maestro/AimZero tests or visualizer bugs.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-124]
   done: [audit-124-post-ship, changelog-mainline-accuracy, wiki-adr28, badge-88]
   deferred:
