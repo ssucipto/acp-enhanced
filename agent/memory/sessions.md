@@ -6,6 +6,22 @@
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop
+  tasks: [audit-124]
+  done: [audit-124-post-ship, changelog-mainline-accuracy, wiki-adr28, badge-88]
+  deferred:
+    - merge-develop-to-mainline → maintainer
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    M88 rewrite is sound on develop and tags. GitHub default clone is still
+    mainline at 6.32.4. Completeness is a regular PR, not another force-push.
+    F-R006 and fork caches stay separate.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
   tasks: [task-347]
   done: [v6340-bump, golden-tsv, annotated-tag]
   deferred:

@@ -6949,6 +6949,12 @@ tasks:
     notes: 'v6.34.0; golden TSV; annotated tag; regular push; F-R006 stays pending'
 recent_work:
 - date: 2026-08-28
+  description: "audit-124 post-ship: CHANGELOG/wiki/badge; PR to mainline"
+  items:
+  - "✅ CHANGELOG distinguishes develop/tag v6.34.0 from unpublished mainline"
+  - "✅ architecture.md ADR-28; README badge 88 shipped"
+  - "F-124-02: regular PR develop → mainline; F-R006 still separate"
+- date: 2026-08-28
   description: "task-347 v6.34.0 closure after 346 proof"
   items:
   - "✅ identity/package/CHANGELOG/AGENT/README/AGENTS three-copy 6.34.0; golden TSV"
@@ -10022,15 +10028,16 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
+- "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline at 6.32.4 until that lands."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
-- "PR develop to mainline when asked (regular merge, no second force-push). Forks and GitHub caches may retain old objects."
+- "Forks/old clones: reclone or git fetch --prune; do not force-push again. GitHub caches may retain old objects."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 - "Optional: IG-17 allowlist for agent/scripts scanners (integrity FP noise)."
 current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2
   docs sync)'
-- 81 milestones shipped (incl. M81 CodeRabbit + M86 CI/PR); M74 policy/integration roadmap in research reports
+- 88 milestones shipped (incl. M88 instance-docs ADR-28 on develop/tags; PR to mainline pending)
 - 74 command docs (72 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
   cursor, claude)
 - 9 skills; 56 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.32.2
