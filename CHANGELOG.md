@@ -9,9 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [6.35.0] — 2026-08-28
+
 ### Added
-- **M89 proceed** — task-348 stamped audit-127 READY; Wave A implementation started.
-- **local.* slash wrappers** — cursor and claude sync emit `local-*` commands; skip if the wrapper already exists. Temp-dir E2E. Integrity-manifest restamped.
+- **`/acp-review --pr-diff`** — optional **agent** pass on `git diff <base>...HEAD`. **Not** Phase 1 `--diff` (`git diff --name-only`). The two flags are **combinable**. Probe `gh` in `bash -c 'command -v gh'`; if missing, use `origin/<default_working_branch>`. Report is gitignored (ADR-27). Confirm then **Stop**.
+- **CodeRabbit land policy** — wiki: do not add CR as a required check; rate-limit = skip; green check ≠ HEAD; `commit_id` is not a merge gate; buckets A/B; consumer overlay stub.
+- **local.* slash wrappers** — cursor and claude sync emit `local-*` when `agent/commands/local.*.md` exists; **skip if the wrapper already exists**. Temp-dir E2E.
+
+### Changed
+- **`/acp-audit`** — Purpose: not a PR review and not a CodeRabbit replacement.
+- **`AGENT.md`** — lists `/acp-review`; audit one-liner matches command Purpose.
+- **`/acp-version-update`** — documents `agent/commands/local.*.md` and `agent/wiki/local.*.md` as never overwritten; wiki `local.*` skipped if present in the upstream tree.
+- **Routing** — `/acp-review` and `/acp-pr` suggest optional `--pr-diff` (does **not** replace `/acp-ci`). Customized `routing.yml` / `coderabbit-integration.md` (Tier B) forks: merge these suggestions/land-policy or keep a `local.*` overlay.
+
+### Notes
+- No `/acp-smoke` and no exec-host in this version (M90/M91).
+- review-006 F-R006-01..03 remain pending (out of scope).
+- If you customized `agent/core/routing.yml` or `agent/wiki/coderabbit-integration.md`, merge the `--pr-diff` suggestion and land-policy section, or use `agent/wiki/local.*`.
 
 ---
 
