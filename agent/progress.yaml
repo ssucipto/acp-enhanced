@@ -953,9 +953,9 @@ milestones:
     file: agent/milestones/milestone-89-wave-a-pr-diff-coderabbit.md
     design: agent/design/local.field-feedback-waves-abc.md
     notes: >
-      PLANNED 2026-08-28 — audit-126. --pr-diff is not --diff. Pre-impl
-      task-348 before coding. F-R006 out of scope. current_milestone stays
-      M88 until /acp-proceed.
+      PLANNED 2026-08-28 — audit-127 READY for 349+ after plan amend.
+      --pr-diff is not --diff (D14 combinable). F-R006 out of scope.
+      current_milestone stays M88 until /acp-proceed.
   M90:
     name: Wave B — optional /acp-smoke stub (v6.36.0)
     priority: 4
@@ -969,8 +969,8 @@ milestones:
     file: agent/milestones/milestone-90-wave-b-acp-smoke.md
     design: agent/design/local.field-feedback-waves-abc.md
     notes: >
-      PLANNED 2026-08-28 — depends M89. Stub + exit 2 unconfigured. No
-      --host. Do not copy FIFOZ smoke 1.1.0. Do not wait in /acp-pr.
+      PLANNED 2026-08-28 — depends M89. Stub + exit 2. smoke.yml not
+      preferences. e2e-smoke ≠ /acp-smoke. Do not copy FIFOZ 1.1.0.
   M91:
     name: Wave C — exec-host and leftover PR/CR prefs (v6.37.0)
     priority: 4
@@ -985,7 +985,7 @@ milestones:
     design: agent/design/local.field-feedback-waves-abc.md
     notes: >
       PLANNED 2026-08-28 — depends M90. ACP_* env. git bundle not ssh -A.
-      012 OpenSSH rules. Optional local_gates. F-R006 out of scope.
+      012 rules. Extra gates in pr.yml not preference arrays. F-R006 out.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -7002,8 +7002,8 @@ tasks:
     started: null
     completed_date: null
     actual_hours: null
-    estimated_hours: 3
-    notes: 'HALT coding until READY; --diff vs --pr-diff'
+    estimated_hours: 1
+    notes: 'audit-127 READY after plan amend; stamp only'
   - id: task-349
     name: "Wiki, audit disclaimer, version-update local.* contract"
     priority: 5
@@ -7063,8 +7063,8 @@ tasks:
     started: null
     completed_date: null
     actual_hours: null
-    estimated_hours: 3
-    notes: 'Depends M89; step-id smoke collision check'
+    estimated_hours: 1
+    notes: 'Depends M89 ship; e2e-smoke vs /acp-smoke'
   - id: task-355
     name: "/acp-smoke command + fail-closed stub"
     priority: 5
@@ -7114,8 +7114,8 @@ tasks:
     started: null
     completed_date: null
     actual_hours: null
-    estimated_hours: 3
-    notes: 'Depends M90; 012 checklist'
+    estimated_hours: 1
+    notes: 'Depends M90 ship; pr.yml not arrays'
   - id: task-360
     name: "Generic exec-host scripts (ACP_*)"
     priority: 5
@@ -7147,7 +7147,7 @@ tasks:
     estimated_hours: 5
     notes: 'This repo stays exit 2 if unconfigured'
   - id: task-363
-    name: "Optional PR local_gates and CodeRabbit exclude_globs"
+    name: "Optional PR extra gates via pr.yml"
     priority: 3
     status: not_started
     file: agent/tasks/milestone-91-wave-c-exec-host/task-363-pr-cr-preferences.md
@@ -7155,7 +7155,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 3
-    notes: 'Empty default; ADR-24 no duplicate gates'
+    notes: 'pr.yml not preference arrays; ADR-24'
   - id: task-364
     name: "Exec-host E2E dry-run + v6.37.0"
     priority: 5
@@ -7167,6 +7167,12 @@ tasks:
     estimated_hours: 4
     notes: 'No KVM; F-R006 still pending'
 recent_work:
+- date: 2026-08-28
+  description: "audit-127 pre-impl M89–M91; plans amended"
+  items:
+  - "BLOCKED until files_affected, D11 pr.yml, e2e-smoke glossary, golden/domain/manifest"
+  - "Amended design v1.1.0 D14–D18; M89 READY for 349+"
+  - "F-R006 and F-124-02 still out of scope"
 - date: 2026-08-28
   description: "audit-126 + plan M89–M91 field-feedback waves A–C"
   items:
@@ -10253,7 +10259,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M89–M91 planned (audit-126). Start with /acp-proceed task-348. Do not set current_milestone until proceed."
+- "M89 READY to code (audit-127). /acp-proceed task-348 then 349. M90/M91 wait on prior ships."
 - "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline at 6.32.4 until that lands."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "Forks/old clones: reclone or git fetch --prune; do not force-push again. GitHub caches may retain old objects."

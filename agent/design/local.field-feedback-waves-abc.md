@@ -7,9 +7,9 @@ status: active
 updated: 2026-08-28
 @acp.meta.end -->
 
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Date**: 2026-08-28  
-**Source of truth**: `agent/reports/audit-126-field-feedback-second-round.md` (also audit-125)  
+**Source of truth**: `agent/reports/audit-127-m89-m90-m91-pre-impl.md` (also 125–126)  
 **Target releases**: M89 → v6.35.0, M90 → v6.36.0, M91 → v6.37.0  
 **Out of scope**: F-R006-01..03, F-124-02, Expo/Maestro/AimZero tests, visualizer, ADR-19 Aikido  
 
@@ -86,13 +86,33 @@ Never reuse an existing `/acp-ci` step id named `smoke`. New CI alias (if any) g
 LAN adb = `--host local` only.  
 E2E dry-run asserts `git bundle`; no secrets printed; no emulator.
 
-### D11: Preferences leftovers are last and optional
+### D11: PR extras live in `pr.yml`, not preference arrays
 
-`integrations.pr.local_gates[]` and `integrations.coderabbit.exclude_globs[]` only if they do not force CI to parse them as required. Wiki: consumers **may** path-filter `agent/**`. AE template may stay narrower so **this** repo still reviews command docs.
+`acp.configurables.yaml` supports string / number / boolean / object only (**no list type**). Do **not** add `integrations.pr.local_gates[]`. Use `agent/configurables/pr.yml` (same ownership as `ci.yml` / P-CI-1): optional `local_gates` and `coderabbit_exclude_globs` lists, default empty. Empty = today’s `/acp-pr` behavior. Wiki: consumers **may** path-filter `agent/**`. AE template may stay narrower so **this** repo still reviews command docs.
+
+### D14: `--diff` and `--pr-diff` may both be present
+
+They are **not** aliases. `--diff` still scopes Phase 1 to `git diff --name-only`. `--pr-diff` is an additional agent pass on `git diff base...HEAD`. If both appear, run both. Do not drop `--diff` semantics.
+
+### D15: `e2e-smoke` ≠ `/acp-smoke`
+
+AE `/acp-ci` already has step id **`e2e-smoke`** (full tier, `run-e2e-tests.sh`). Device preflight is the command `/acp-smoke`. Never create `--only smoke`. Never rename `e2e-smoke`. Docs must use both names in a glossary.
+
+### D16: Smoke runner config is `smoke.yml`
+
+`agent/configurables/smoke.yml` — runtime path to a project runner. **Not** a preference in `acp.configurables.yaml`. Missing file → exit 2.
+
+### D17: `--pr-diff` base without `gh`
+
+Probe `gh` in `bash -c 'command -v gh'` (FG-4), not the agent shell. If missing or no PR: `origin/` + `default_working_branch`. `--pr-diff` must not fail solely because `gh` is absent.
+
+### D18: Every version bump includes golden + counts + manifest
+
+Tasks 353 / 358 / 364 must: refresh yaml-parser golden TSV if `progress.yaml` diverges; restamp `agent/integrity-manifest.yaml` after script edits; bump `domain.yml` `commands.count` and README “72 commands” on **new command** (M90); run `e2e/acp.command-coverage-parity.test.sh`; run post-milestone-sweep.
 
 ### D12: Crosscut + wrappers for new commands
 
-New `acp.smoke` (and exec-host scripts) need: command doc, 5 wrapper surfaces (cursor, claude, opencode, github prompt, plus existing slash protocol), `package.yaml`, `command-e2e-coverage.yaml`, AGENT/README/CHANGELOG.  
+New `acp.smoke` needs: command doc, cursor+claude **sync**, opencode + GitHub prompts **committed by hand** (no generator — same as `/acp-pr`), `package.yaml`, `command-e2e-coverage.yaml`, AGENT/README/CHANGELOG, `domain.yml` count.  
 `--pr-diff` is **not** a new command file — only `acp.review.md` + E2E + wiki.
 
 ### D13: Independent tracks stay independent
@@ -101,7 +121,7 @@ F-R006, F-124-02, ADR-19, visualizer 003/004 — not these milestones.
 
 ## Binding rules (do not violate)
 
-1. audit-126 is source of truth for remaining gaps.  
+1. audit-127 (pre-impl) then 126/125 for remaining gaps.  
 2. Do not copy FIFOZ `acp.smoke.md` 1.1.0 or AimZero `local.pr-diff-review.md` bodies.  
 3. Do not change `--diff` semantics.  
 4. Do not fold device work into `--fast`.  
@@ -120,6 +140,9 @@ F-R006, F-124-02, ADR-19, visualizer 003/004 — not these milestones.
 - `FIFOZ_*` / product `applicationId` in core  
 - Starting M91 `--host` before M90 exit 2  
 - Blind-copying Windows `.ps1` that embed product paths  
+- Preference arrays  
+- Aliasing `/acp-smoke` to `--only smoke` or to `e2e-smoke`  
+- Skipping command-coverage-parity or golden TSV on release  
 
 ## Acceptance (program)
 
