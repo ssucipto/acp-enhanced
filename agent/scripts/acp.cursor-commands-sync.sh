@@ -7,6 +7,7 @@
 # skip-if-exists is mandatory. Do not add local.* to version-update copy-from-upstream.
 
 set -euo pipefail
+trap 'echo "Error: acp.cursor-commands-sync.sh failed at line $LINENO" >&2; exit 3' ERR
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 CMD_DIR="${ACP_SYNC_CMD_DIR:-$ROOT/agent/commands}"

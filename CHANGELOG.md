@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.35.2] — 2026-08-28
+
+### Fixed
+- **`/acp-version-update`** — reading `NEW_VERSION` from AGENTS.md no longer aborts under `set -euo pipefail` when the file uses `> vX.Y.Z` instead of `**Version**`. Cursor/claude sync stderr is no longer discarded.
+- **Manifest merge** — `acp_merge_manifest_acp_core` updates only the `acp-core` `package_version`, not every package.
+- **local.* sync scripts** — `trap ERR` on cursor and claude command generators (SH-01).
+- **Preserve E2E** — asserts version-update exit 0 and that `my-package` stays `1.0.0`.
+- **review-scan** — E2E harnesses skip SH-01 (assert_* returns 1) without being treated as sourced libraries for SH-04.
+
+---
+
 ## [6.35.1] — 2026-08-28
 
 ### Fixed

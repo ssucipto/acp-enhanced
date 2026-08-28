@@ -20,6 +20,7 @@ CURSOR_DIR="$PROJECT_ROOT/.cursor/commands"
 # ═══════════════════════════════════════════════════════════
 print_test_header "cursor-sync: script exists and executable"
 if [[ -f "$SYNC_SCRIPT" ]] && [[ -x "$SYNC_SCRIPT" ]]; then assert_true "script exists + executable" 0; else assert_true "script exists + executable" 1; fi
+assert_contains "$(head -20 "$SYNC_SCRIPT")" "exit 3" "trap ERR present (SH-01)"
 
 # ═══════════════════════════════════════════════════════════
 # 2. Sync runs without error

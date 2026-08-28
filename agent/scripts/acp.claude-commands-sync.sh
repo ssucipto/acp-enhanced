@@ -9,6 +9,7 @@
 # skip-if-exists is mandatory.
 
 set -euo pipefail
+trap 'echo "Error: acp.claude-commands-sync.sh failed at line $LINENO" >&2; exit 3' ERR
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 CMD_DIR="${ACP_SYNC_CMD_DIR:-$ROOT/agent/commands}"
