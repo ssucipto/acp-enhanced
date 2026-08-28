@@ -3,6 +3,25 @@
 # DO NOT edit manually — updated by /acp-commit
 
 
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-123]
+  done: [audit-123-m88-gaps, cb-4-paths-from-file, cb-3b-git-init, agent-commit-adr28, install-root-gitignore, validate-templates]
+  deferred:
+    - filter-repo-force-push → task-345-operator-confirm
+    - F-123-03-m87-phrase-not-consent → task-345
+    - F-122-04-no-reclone-until-347 → task-347
+    - F-122-07-v6340-golden-tag → task-347
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    audit-123: CB-4 must invert PURGE paths via --paths-from-file, never whole
+    dirs (templates would vanish from tags). M87 phrase is not M88 consent.
+    Type exactly force-push instance-docs develop mainline tags: yes.
+
+
 - date: 2026-08-27
   executor: cursor-grok
   branch: develop
