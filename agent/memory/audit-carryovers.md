@@ -3533,10 +3533,10 @@ carryovers:
     severity: high
     file: agent/design/local.instance-docs-privacy-purge.md
     finding: "M87 phrase is not M88 force-push consent"
-    description: "Operator typed force-push develop mainline tags: yes. M88 requires force-push instance-docs develop mainline tags: yes."
+    description: "Operator typed the M88 phrase 2026-08-28. Rewritten from /tmp/acp-rewrite-m88."
     fix_target: "Do not filter-repo or git push --force until the M88 phrase is typed exactly"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: null
   - audit_id: 123
