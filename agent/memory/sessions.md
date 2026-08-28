@@ -6,6 +6,20 @@
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop
+  tasks: [review-007]
+  done: [m89-review-007-patch-v6352]
+  deferred:
+    - M90-acp-smoke → task-354
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.35.2: version-update NEW_VERSION grep must not abort under pipefail;
+    manifest merge only touches acp-core. M90 not started.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-128]
   done: [m89-audit-128-patch-v6351]
   deferred:

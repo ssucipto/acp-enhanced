@@ -537,13 +537,25 @@ scan_unhandled_rejection_rule() {
 is_sh_allowlisted() {
   local file="$1"
   case "$file" in
-    */acp.common.sh|*/acp.yaml-parser.sh|*/acp.integrity-output.sh|*/acp.driver-yaml.sh|*/acp.coderabbit.sh|*/acp.preferences.sh|*/e2e/*)
+    */acp.common.sh|*/acp.yaml-parser.sh|*/acp.integrity-output.sh|*/acp.driver-yaml.sh|*/acp.coderabbit.sh|*/acp.preferences.sh)
       return 0
       ;;
   esac
   if head -40 "$file" | grep -qiE 'sourced function library|deliberately does NOT set `set -euo|when sourced'; then
     return 0
   fi
+  return 1
+}
+
+# E2E harness files omit set -euo because assert_* returns 1 on failure (must not abort).
+# They are not sourced libraries — do not run SH-04 on them.
+is_e2e_harness() {
+  local file="$1"
+  case "$file" in
+    */e2e/*|e2e/*)
+      return 0
+      ;;
+  esac
   return 1
 }
 
@@ -578,7 +590,8 @@ scan_sh() {
   local allowlisted=false
   # Sourced function libraries deliberately omit set -euo (would leak into callers).
   # F-M82-05: allowlist + honor explicit exemption comment in first 40 lines.
-  if is_sh_allowlisted "$file"; then
+  # E2E harnesses omit set -euo because assert_* returns 1 (CR-004 / F-R007-06).
+  if is_sh_allowlisted "$file" || is_e2e_harness "$file"; then
     allowlisted=true
   fi
   if [[ "$allowlisted" != "true" ]] && ! head -40 "$file" | grep -q 'set -euo pipefail'; then

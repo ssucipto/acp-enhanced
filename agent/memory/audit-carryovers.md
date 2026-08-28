@@ -4382,3 +4382,71 @@ carryovers:
     fix_applied_date: 2026-08-28
     verified_in_audit: "128"
     escalated_to: "M89"
+
+  # ── REVIEW-007 — M89 CODE QUALITY (2026-08-28) ────────────────────────────
+  - audit_id: review-007
+    finding_id: F-R007-01
+    severity: high
+    file: agent/scripts/acp.version-update.sh
+    finding: "NEW_VERSION grep **Version** aborts under pipefail on AGENTS.md `> v` format"
+    description: "CR-001; fallback never ran; update copied files then exit 1"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"
+  - audit_id: review-007
+    finding_id: F-R007-02
+    severity: high
+    file: e2e/acp.version-update-preserve.test.sh
+    finding: "Preserve E2E did not assert version-update exit 0 (false green)"
+    description: "CR-002 FG-3"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"
+  - audit_id: review-007
+    finding_id: F-R007-03
+    severity: high
+    file: agent/scripts/acp.cursor-commands-sync.sh
+    finding: "cursor/claude sync missing trap ERR"
+    description: "CR-003 SH-01"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"
+  - audit_id: review-007
+    finding_id: F-R007-04
+    severity: high
+    file: agent/scripts/acp.common.sh
+    finding: "acp_merge_manifest_acp_core _sed_i overwrote every package_version"
+    description: "CR-006; my-package 1.0.0 clobbered"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"
+  - audit_id: review-007
+    finding_id: F-R007-05
+    severity: medium
+    file: agent/scripts/acp.version-update.sh
+    finding: "cursor/claude sync invoked with 2>/dev/null"
+    description: "CR-005"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"
+  - audit_id: review-007
+    finding_id: F-R007-06
+    severity: low
+    file: agent/scripts/acp.review-scan.sh
+    finding: "SH-01 allowlist */e2e/* missed relative e2e/* and would enable SH-04 on harness trap EXIT"
+    description: "CR-004; skip SH-01 for e2e without sourced-library SH-04"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"

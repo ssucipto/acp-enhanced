@@ -2003,9 +2003,9 @@ EOF
     fi
 
     if grep -q '^  acp-core:' "$manifest" 2>/dev/null; then
-        _sed_i "s/^    package_version: .*/    package_version: ${version}/" "$manifest"
-        awk -v dt="$update_date" '
+        awk -v ver="$version" -v dt="$update_date" '
             /^  acp-core:/ { in_core=1 }
+            in_core && /^    package_version:/ { sub(/package_version: .*/, "package_version: " ver) }
             in_core && /^    updated_at:/ { sub(/updated_at: .*/, "updated_at: " dt); in_core=0 }
             { print }
         ' "$manifest" > "${manifest}.tmp" && mv "${manifest}.tmp" "$manifest"

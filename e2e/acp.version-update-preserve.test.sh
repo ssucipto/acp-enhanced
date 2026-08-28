@@ -92,6 +92,8 @@ print_test_header "V2 — default update preserves identity.yml"
     cd "${TMPDIR_ROOT}"
     ACP_UPSTREAM_ROOT="${PROJECT_ROOT}" bash agent/scripts/acp.version-update.sh --yes
 )
+_vu_rc=$?
+assert_true "version-update --yes exits 0" "${_vu_rc}"
 IDENTITY_AFTER=$(cat "${TMPDIR_ROOT}/agent/core/identity.yml")
 assert_equals "${IDENTITY_BEFORE}" "${IDENTITY_AFTER}" "identity.yml unchanged after update"
 
@@ -114,8 +116,9 @@ assert_equals "${DOMAIN_BEFORE}" "${DOMAIN_AFTER}" "domain.yml preserved"
 print_test_header "V7 — manifest retains my-package (tier D)"
 assert_contains "$(cat "${TMPDIR_ROOT}/agent/manifest.yaml")" "my-package:" "my-package entry retained"
 
-print_test_header "V8 — manifest acp-core version updated"
+print_test_header "V8 — manifest acp-core version updated; my-package version unchanged"
 assert_contains "$(cat "${TMPDIR_ROOT}/agent/manifest.yaml")" "package_version:" "manifest has package_version"
+assert_contains "$(cat "${TMPDIR_ROOT}/agent/manifest.yaml")" "    package_version: 1.0.0" "my-package version 1.0.0 not overwritten"
 
 print_test_header "V9 — framework command refreshed"
 assert_file_exists "${TMPDIR_ROOT}/agent/commands/acp.init.md" "acp.init.md installed from upstream"
@@ -127,6 +130,7 @@ echo "${DIFF_MARKER}" > "${TMPDIR_ROOT}/agent/core/identity.yml"
     cd "${TMPDIR_ROOT}"
     ACP_UPSTREAM_ROOT="${PROJECT_ROOT}" bash agent/scripts/acp.version-update.sh --diff
 )
+assert_true "version-update --diff exits 0" $?
 assert_contains "$(cat "${TMPDIR_ROOT}/agent/core/identity.yml")" "${DIFF_MARKER}" "--diff did not modify identity"
 
 print_test_header "V11 — --preserve-project-core skips tier B overwrite"
@@ -136,6 +140,7 @@ CONSTRAINTS_BEFORE=$(cat "${TMPDIR_ROOT}/agent/core/constraints.yml")
     cd "${TMPDIR_ROOT}"
     ACP_UPSTREAM_ROOT="${PROJECT_ROOT}" bash agent/scripts/acp.version-update.sh --preserve-project-core --yes
 )
+assert_true "version-update --preserve-project-core exits 0" $?
 assert_equals "${CONSTRAINTS_BEFORE}" "$(cat "${TMPDIR_ROOT}/agent/core/constraints.yml")" "constraints preserved with --preserve-project-core"
 
 print_test_header "V12 — AGENTS.md entry accepted (F-080-09)"
@@ -147,6 +152,7 @@ echo "force_overwrite_marker: true" > "${TMPDIR_ROOT}/agent/wiki/domain.yml"
     cd "${TMPDIR_ROOT}"
     ACP_UPSTREAM_ROOT="${PROJECT_ROOT}" bash agent/scripts/acp.version-update.sh --force --yes
 )
+assert_true "version-update --force exits 0" $?
 assert_not_contains "$(cat "${TMPDIR_ROOT}/agent/wiki/domain.yml")" "force_overwrite_marker" "domain.yml overwritten with --force"
 
 print_test_header "V14 — local.* command and wiki files survive version-update (D8)"
@@ -160,6 +166,7 @@ EOF
     cd "${TMPDIR_ROOT}"
     ACP_UPSTREAM_ROOT="${PROJECT_ROOT}" bash agent/scripts/acp.version-update.sh --yes
 )
+assert_true "version-update V14 exits 0" $?
 assert_contains "$(cat "${TMPDIR_ROOT}/agent/commands/local.overlay.md")" "CUSTOM_LOCAL_COMMAND" "local.overlay.md command preserved"
 assert_contains "$(cat "${TMPDIR_ROOT}/agent/wiki/local.overlay.md")" "CUSTOM_LOCAL_WIKI" "local.overlay.md wiki preserved"
 
