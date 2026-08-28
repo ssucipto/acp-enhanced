@@ -3505,6 +3505,52 @@ carryovers:
     verified_in_audit: "123"
     escalated_to: null
 
+  # ── AUDIT-124 — M88 POST-SHIP GAPS (2026-08-28) ────────────────────────────
+  - audit_id: 124
+    finding_id: F-124-01
+    severity: high
+    file: CHANGELOG.md
+    finding: "6.34.0 CHANGELOG claims mainline already has ADR-28 README keepers"
+    description: "origin/mainline is rewritten 7e538a3, identity 6.32.4, no sessions keepers"
+    fix_target: "Changelog must distinguish develop/tag v6.34.0 from unpublished mainline until PR merges"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 124
+    finding_id: F-124-02
+    severity: high
+    file: origin/mainline
+    finding: "GitHub default clone is mainline, 37 commits behind develop (M87+M88 unpublished)"
+    description: "Strangers cloning origin get 6.32.4 keepers, not v6.34.0"
+    fix_target: "Open regular PR develop → mainline; do not force-push"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 124
+    finding_id: F-124-03
+    severity: low
+    file: README.md
+    finding: "Milestone badge still 81 shipped after M88 closed"
+    description: "Badge was already stale at M87"
+    fix_target: "Update badge to 88 shipped"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 124
+    finding_id: F-124-04
+    severity: medium
+    file: agent/wiki/architecture.md
+    finding: "Framework Development Mode still says milestones stay tracked"
+    description: "Conflicts with ADR-28 instance milestone/task/session bodies"
+    fix_target: "Routing tasks + memory tracked; instance milestone/task/session bodies local"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+
   # ── AUDIT-123 — M88 IMPLEMENTATION GAPS (2026-08-28) ──────────────────────
   - audit_id: 123
     finding_id: F-123-01
