@@ -1001,7 +1001,8 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`/acp-report`](agent/commands/acp.report.md)** - Generate a completion report; deregisters session
 - **[`/acp-handoff`](agent/commands/acp.handoff.md)** - Prepare handoff documentation for another agent
 - **[`/acp-resume`](agent/commands/acp.resume.md)** - Resume a project — init + review recent progress + proceed in one step
-- **[`/acp-audit`](agent/commands/acp.audit.md)** - Audit ACP files for consistency and drift
+- **[`/acp-review`](agent/commands/acp.review.md)** - Standards-based code quality and security review (64 rules); optional `--pr-diff` agent pass on `git diff base...HEAD` (not Phase 1 `--diff`)
+- **[`/acp-audit`](agent/commands/acp.audit.md)** - Deep-dive investigation of a subject into `agent/reports/` (local; ADR-27). Not a PR review and not a CodeRabbit replacement
 
 > **⚡ Proactive Session Memory** *(ACP Enhanced v6.4.13+)*: `/acp-commit` runs proactively at **7 trigger events** — do NOT wait for session end. Triggers: milestone phase done, audit created, ADR made, new pattern found, correction given, context approaching overflow, any commit touching >5 files. See [Mid-Session Commit Triggers](AGENTS.md) in `AGENTS.md`. This prevents permanent knowledge loss from silent context overflow.
 

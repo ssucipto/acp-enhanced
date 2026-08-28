@@ -944,11 +944,11 @@ milestones:
     name: Wave A — PR-diff review and CodeRabbit land policy (v6.35.0)
     priority: 5
     status: in_progress
-    progress: 17
+    progress: 33
     started: 2026-08-28
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 6
     file: agent/milestones/milestone-89-wave-a-pr-diff-coderabbit.md
     design: agent/design/local.field-feedback-waves-abc.md
@@ -7006,13 +7006,13 @@ tasks:
   - id: task-349
     name: "Wiki, audit disclaimer, version-update local.* contract"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-89-wave-a-pr-diff-coderabbit/task-349-wiki-audit-upgrade-docs.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-28T13:20:00Z'
+    completed_date: '2026-08-28T13:45:00Z'
+    actual_hours: 0.4
     estimated_hours: 4
-    notes: 'D6 D7 D8; no product stack names'
+    notes: 'D6 D7 D8; AGENT.md review row; wiki local.* skip'
   - id: task-350
     name: "/acp-review --pr-diff flag and buckets"
     priority: 5
@@ -7166,6 +7166,12 @@ tasks:
     estimated_hours: 4
     notes: 'No KVM; F-R006 still pending'
 recent_work:
+- date: 2026-08-28
+  description: "M89 task-349: CR land policy, audit disclaimer, local.* survival"
+  items:
+  - "coderabbit-integration land policy + buckets; audit not a PR review"
+  - "version-update documents/skips local.* commands and wiki"
+  - "AGENT.md lists /acp-review; audit blurb matches Purpose"
 - date: 2026-08-28
   description: "M89 task-348: audit-127 READY stamp"
   items:
@@ -10262,7 +10268,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M89 in progress. /acp-proceed task-349 (wiki, audit disclaimer, local.*). Then 350–353."
+- "M89 in progress (2/6). Next: task-350 /acp-review --pr-diff."
 - "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline at 6.32.4 until that lands."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "Forks/old clones: reclone or git fetch --prune; do not force-push again. GitHub caches may retain old objects."

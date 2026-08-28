@@ -231,10 +231,14 @@ if [ -d "$TEMP_DIR/agent/skills" ]; then
     done
 fi
 
-# Tier B: wiki
+# Tier B: wiki — skip local.* (never overwrite consumer overlays; not in upstream glob)
 for _f in "$TEMP_DIR/agent/wiki/"*.yml "$TEMP_DIR/agent/wiki/"*.md; do
     [ -e "$_f" ] || continue
-    acp_copy_framework_file "agent/wiki/$(basename "$_f")" B
+    _base=$(basename "$_f")
+    case "$_base" in
+        local.*) echo "  ⊘ preserved: agent/wiki/${_base}"; continue ;;
+    esac
+    acp_copy_framework_file "agent/wiki/${_base}" B
 done
 
 # Tier B: routing config
