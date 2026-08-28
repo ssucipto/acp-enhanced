@@ -1,12 +1,13 @@
 project:
   name: agent-context-protocol
-  version: 6.34.0
+  version: 6.35.0
   started: 2026-02-16
   status: active
-  current_milestone: M89
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.34.0 on develop\n\
+  current_milestone: M90
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.35.0 on develop\n\
     \  (ADR-28: instance milestone/task/session bodies and one field-feedback\n\
     \  file local including history; templates and USAGE.md stay).\n\
+    \  M89 Wave A shipped (--pr-diff, CR land policy, local.* wrappers).\n\
     \  F-R006-01..03 still pending. Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/design/local.field-feedback-waves-abc.md
@@ -943,18 +944,18 @@ milestones:
   M89:
     name: Wave A — PR-diff review and CodeRabbit land policy (v6.35.0)
     priority: 5
-    status: in_progress
-    progress: 83
+    status: completed
+    progress: 100
     started: 2026-08-28
-    completed: null
+    completed: 2026-08-28
     estimated_weeks: 0.5
-    tasks_completed: 5
+    tasks_completed: 6
     tasks_total: 6
     file: agent/milestones/milestone-89-wave-a-pr-diff-coderabbit.md
     design: agent/design/local.field-feedback-waves-abc.md
     notes: >
-      IN PROGRESS 2026-08-28 — task-348 audit-127 READY. --pr-diff is
-      not --diff (D14 combinable). F-R006 out of scope.
+      COMPLETE 2026-08-28 v6.35.0. --pr-diff not --diff (D14). CR land
+      policy. local.* skip-if-exists. F-R006 out of scope.
   M90:
     name: Wave B — optional /acp-smoke stub (v6.36.0)
     priority: 4
@@ -7046,13 +7047,13 @@ tasks:
   - id: task-353
     name: "M89 crosscut release v6.35.0"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-89-wave-a-pr-diff-coderabbit/task-353-v6350-crosscut.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-28T14:40:00Z'
+    completed_date: '2026-08-28T15:10:00Z'
+    actual_hours: 0.5
     estimated_hours: 3
-    notes: 'After E2E green; F-R006 untouched'
+    notes: 'v6.35.0; --pr-diff vs --diff; F-R006 untouched'
   M90:
   - id: task-354
     name: "M90 pre-implementation audit"
@@ -7166,6 +7167,12 @@ tasks:
     estimated_hours: 4
     notes: 'No KVM; F-R006 still pending'
 recent_work:
+- date: 2026-08-28
+  description: "M89 COMPLETE v6.35.0 Wave A"
+  items:
+  - "✅ --pr-diff agent pass; --diff Phase 1 unchanged; review E2E 77/77"
+  - "✅ CR land policy; audit disclaimer; local.* skip-if-exists wrappers"
+  - "F-R006 still pending; M90 next (smoke stub)"
 - date: 2026-08-28
   description: "M89 task-352: local.* cursor/claude wrappers skip-if-exists"
   items:
@@ -10283,7 +10290,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M89 in progress (5/6). Next: task-353 v6.35.0 crosscut."
+- "M89 shipped v6.35.0. Next: /acp-proceed task-354 (M90 pre-impl) after this wave is accepted."
 - "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline at 6.32.4 until that lands."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "Forks/old clones: reclone or git fetch --prune; do not force-push again. GitHub caches may retain old objects."
@@ -10293,7 +10300,7 @@ current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2
   docs sync)'
-- 88 milestones shipped (incl. M88 instance-docs ADR-28 on develop/tags; PR to mainline pending); M89–M91 planned (field-feedback waves A–C, audit-126)
+- 89 milestones shipped (M89 Wave A v6.35.0 on develop; M88 ADR-28 on develop/tags; PR to mainline pending); M90–M91 planned
 - 74 command docs (72 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
   cursor, claude)
 - 9 skills; 56 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.32.2
