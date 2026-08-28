@@ -1547,7 +1547,7 @@
       31	scalar	test_coverage	every command must have an E2E test file	      30	
       32	scalar	fork_of	github.com/prmichaelsen/agent-context-protocol	0	
       33	scalar	repo	github.com/ssucipto/acp-enhanced	0	
-      34	scalar	version	6.35.0	0	
+      34	scalar	version	6.35.1	0	
       35	map	git_workflow		0	      36,      37,      38
       36	scalar	default_working_branch	develop	      35	
       37	scalar	production_branch	mainline	      35	

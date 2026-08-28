@@ -1,5 +1,5 @@
 ---
-description: "Enforce code quality, security, and consistency standards across a project's codebase using a structured **64-rule** ruleset (54 core + 10 Appendix A) aligned to OWASP Top 10:2025, OWASP MASVS v2.0, TypeScript strict mode, and industry best practices."
+description: "Enforce code quality, security, and consistency standards across a project's codebase using a structured **64-rule** ruleset (54 core + 10 Appendix A) aligned to OWASP Top 10:2025, OWASP MASVS v2.0, TypeScript strict mode, and industry best practices. Optional `--pr-diff` is an agent pass on `git diff <base>...HEAD`, not Phase 1 `--diff`."
 ---
 
 # ACP Command: /acp-review

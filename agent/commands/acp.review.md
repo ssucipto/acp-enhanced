@@ -5,14 +5,15 @@
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-06-07  
+**Last Updated**: 2026-08-28  
 **Status**: Active  
 **Scripts**: acp.review-scan.sh, acp.review-measure.sh, acp.entropy-scan.sh, acp.gitleaks.sh, acp.dupehound.sh  
 
 ---
 
-**Purpose**: Enforce code quality, security, and consistency standards across a project's codebase using a structured **64-rule** ruleset (54 core + 10 Appendix A) aligned to OWASP Top 10:2025, OWASP MASVS v2.0, TypeScript strict mode, and industry best practices.  
+**Purpose**: Enforce code quality, security, and consistency standards across a project's codebase using a structured **64-rule** ruleset (54 core + 10 Appendix A) aligned to OWASP Top 10:2025, OWASP MASVS v2.0, TypeScript strict mode, and industry best practices. Optional `--pr-diff` is an agent pass on `git diff <base>...HEAD`, not Phase 1 `--diff`.  
 **Category**: Code Quality / Security  
 **Frequency**: Per sprint, per PR, or pre-commit  
 
@@ -24,10 +25,11 @@
 
 **Command Positioning**:
 ```
-/acp-audit           → agent/reports/   → INVESTIGATE (deep dive)
-/acp-audit --pre-impl → agent/reports/  → PRE-IMPL GATE
-/acp-review          → agent/reports/   → ENFORCE (standards check)
-/acp-design-spec     → agent/reports/   → INVENTORY (interface spec)
+/acp-audit            → agent/reports/   → INVESTIGATE (deep dive; not a PR review)
+/acp-audit --pre-impl → agent/reports/   → PRE-IMPL GATE
+/acp-review           → agent/reports/   → ENFORCE (Phase 1 + Phase 2)
+/acp-review --pr-diff → agent/reports/   → ENFORCE on git diff base...HEAD (agent pass; not Phase 1 --diff)
+/acp-design-spec      → agent/reports/   → INVENTORY (interface spec)
 ```
 
 ## Language Scope

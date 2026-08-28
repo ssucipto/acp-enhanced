@@ -108,13 +108,18 @@ assert_contains "$(cat "${CMD_FILE}")" "AP-01" "API Response category (AP-01)"
 assert_contains "$(cat "${CMD_FILE}")" "CH-01" "Code Health category (CH-01)"
 assert_contains "$(cat "${CMD_FILE}")" "MASVS-STORAGE" "Mobile MASVS rules (MASVS-STORAGE)"
 
-# B8: --pr-diff is documented as a distinct agent pass (M89; keep B1 --diff byte-stable)
-print_test_header "B8 — --pr-diff documented as not Phase 1, combinable with --diff"
+# B21: --pr-diff is documented as a distinct agent pass (M89; keep B1 --diff byte-stable)
+# Numbered B21 so it does not collide with scanner B8 (EH-02). Do not use
+# assert_contains "... " "--pr-diff" — macOS grep treats --pr-diff as a flag.
+print_test_header "B21 — --pr-diff documented as not Phase 1, combinable with --diff (D14/D17)"
 assert_contains "$(cat "${CMD_FILE}")" "\`--pr-diff\`" "--pr-diff flag in backticks"
 assert_contains "$(cat "${CMD_FILE}")" "...HEAD" "triple-dot base...HEAD"
 assert_contains "$(cat "${CMD_FILE}")" "not Phase 1" "--pr-diff is not Phase 1"
 assert_contains "$(cat "${CMD_FILE}")" "/acp-audit" "mentions /acp-audit (not a substitute)"
 assert_contains "$(cat "${CMD_FILE}")" "combinable" "D14 combinable with --diff"
+assert_contains "$(cat "${CMD_FILE}")" "command -v gh" "D17 probes gh via command -v gh"
+assert_contains "$(cat "${CMD_FILE}")" "Confirm (--pr-diff)" "Confirm (--pr-diff) before the agent pass"
+assert_contains "$(cat "${CMD_FILE}")" "do not start unrelated refactors" "Stop after --pr-diff confirm (no unrelated refactors)"
 
 print_suite_summary
 
