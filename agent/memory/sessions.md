@@ -6,6 +6,21 @@
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop
+  tasks: [audit-127, plan-amend-m89-m91]
+  done: [audit-127-pre-impl, amend-plans-d14-d18]
+  deferred:
+    - M89-coding → task-348
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    audit-127 BLOCKED then plans amended (design 1.1.0 D14–D18). M89 READY
+    for 349+. --diff and --pr-diff combinable. pr.yml not arrays. e2e-smoke
+    ≠ /acp-smoke. F-127-13 ledger hole closed. F-R006 out.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-126, plan-m89-m91]
   done: [audit-126-second-round, plan-waves-a-b-c]
   deferred:

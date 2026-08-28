@@ -4026,3 +4026,258 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: "M90"
+  - audit_id: 126
+    finding_id: F-126-04
+    severity: medium
+    file: agent/commands/acp.review.md
+    finding: "--pr-diff default base prefers open PR then origin/default_working_branch"
+    description: "D17: probe gh in bash -c; missing gh must not fail the flag"
+    fix_target: "M89 task-350"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 126
+    finding_id: F-126-05
+    severity: medium
+    file: agent/scripts/acp.cursor-commands-sync.sh
+    finding: "local.* wrappers must skip if destination already exists"
+    description: "Do not overwrite custom overlays; version-update re-runs sync"
+    fix_target: "M89 task-352"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 126
+    finding_id: F-126-07
+    severity: medium
+    file: agent/scripts
+    finding: "Exec-host env names must be ACP_* not product prefixes"
+    description: "audit-126"
+    fix_target: "M91 task-360"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M91"
+  - audit_id: 126
+    finding_id: F-126-08
+    severity: medium
+    file: agent/commands/acp.smoke.md
+    finding: "LAN adb is --host local not windows"
+    description: "Otherwise Gradle stays on the editor"
+    fix_target: "M91 task-362"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M91"
+
+  # ── AUDIT-127 — PRE-IMPL M89–M91 (2026-08-28) ────────────────────────────
+  - audit_id: 127
+    finding_id: F-127-01
+    severity: high
+    file: agent/tasks
+    finding: "Tasks 348–364 lacked files_affected lists (plan amend added them)"
+    description: "Keep lists current when files change during proceed"
+    fix_target: "Verify during each task"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-03
+    severity: high
+    file: agent/configurables/acp.configurables.yaml
+    finding: "No array preference type; do not add local_gates[] to configurables"
+    description: "Amended to agent/configurables/pr.yml"
+    fix_target: "M91 task-363"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M91"
+  - audit_id: 127
+    finding_id: F-127-05
+    severity: high
+    file: agent/configurables/ci.yml
+    finding: "AE CI step id is e2e-smoke; must not collide with /acp-smoke"
+    description: "Glossary in task-356; never --only smoke"
+    fix_target: "M90 task-356"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M90"
+  - audit_id: 127
+    finding_id: F-127-02
+    severity: high
+    file: agent/commands/acp.review.md
+    finding: "--diff and --pr-diff together unspecified (must stay combinable)"
+    description: "D14; task-350/351. Keep B1 --diff assertions"
+    fix_target: "M89 task-350"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-04
+    severity: high
+    file: agent/wiki/domain.yml
+    finding: "domain.yml / README command count 72 omitted from M90"
+    description: "Bump 72→73 with acp.smoke"
+    fix_target: "M90 task-358"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M90"
+  - audit_id: 127
+    finding_id: F-127-06
+    severity: high
+    file: tests/fixtures
+    finding: "Golden TSV / yaml-parser not in version tasks"
+    description: "D18 on 353/358/364"
+    fix_target: "M89 task-353"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-07
+    severity: medium
+    file: agent/integrity-manifest.yaml
+    finding: "integrity-manifest restamp omitted from script-edit tasks"
+    description: "352/355/360/353"
+    fix_target: "M89 task-352"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-08
+    severity: medium
+    file: e2e/acp.claude-commands-sync.test.sh
+    finding: "Claude sync E2E omitted from local.* wrapper task"
+    description: "task-352 covers both cursor and claude"
+    fix_target: "M89 task-352"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-09
+    severity: medium
+    file: e2e/acp.pr.test.sh
+    finding: "opencode + GitHub prompts have no generator; commit wrappers by hand"
+    description: "Same as /acp-pr; task-357"
+    fix_target: "M90 task-357"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M90"
+  - audit_id: 127
+    finding_id: F-127-10
+    severity: medium
+    file: agent/commands/acp.review.md
+    finding: "D3 gh without FG-4; missing gh must not fail --pr-diff"
+    description: "D17 bash -c probe; task-350"
+    fix_target: "M89 task-350"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-11
+    severity: medium
+    file: agent/core/routing.yml
+    finding: "routing.yml is Tier B skip on customized forks"
+    description: "CHANGELOG merge note on 351/353"
+    fix_target: "M89 task-353"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-12
+    severity: medium
+    file: agent/wiki/coderabbit-integration.md
+    finding: "Customized coderabbit-integration.md skips wiki refresh"
+    description: "CHANGELOG; consumer overlay local.*"
+    fix_target: "M89 task-353"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-13
+    severity: medium
+    file: agent/memory/audit-carryovers.md
+    finding: "F-126-04/05/07/08 were missing from the ledger"
+    description: "Ledger appended 2026-08-28"
+    fix_target: "audit-127 plan amend"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: 127
+    escalated_to: null
+  - audit_id: 127
+    finding_id: F-127-14
+    severity: low
+    file: agent/scripts
+    finding: "post-milestone-sweep not scheduled on closure tasks"
+    description: "353/358/364"
+    fix_target: "M89 task-353"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-16
+    severity: medium
+    file: agent/scripts/acp.version-update.sh
+    finding: "version-update re-runs cursor/claude sync; skip-if-exists required"
+    description: "task-352"
+    fix_target: "M89 task-352"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-17
+    severity: medium
+    file: AGENT.md
+    finding: "AGENT.md missing /acp-review; audit blurb wrong"
+    description: "task-349/353"
+    fix_target: "M89 task-349"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-18
+    severity: medium
+    file: agent/configurables
+    finding: "smoke runner config must not enter acp.configurables.yaml"
+    description: "agent/configurables/smoke.yml P-CI-1"
+    fix_target: "M90 task-355"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M90"
+  - audit_id: 127
+    finding_id: F-127-19
+    severity: low
+    file: agent/scripts
+    finding: ".ps1 not scanned by bash portability"
+    description: "Document; Darwin orchestrator still SH-01"
+    fix_target: "M91 task-360"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M91"
+  - audit_id: 127
+    finding_id: F-127-20
+    severity: low
+    file: agent/schemas/command-e2e-coverage.yaml
+    finding: "command-e2e-coverage.yaml updated: + P3 count on new command"
+    description: "task-357"
+    fix_target: "M90 task-357"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M90"
