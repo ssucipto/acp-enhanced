@@ -6,6 +6,20 @@
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop
+  tasks: [task-348, task-349, task-350, task-351, task-352, task-353]
+  done: [m89-wave-a-v6350]
+  deferred:
+    - M90-acp-smoke → task-354
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.35.0: --pr-diff is not --diff (combinable). CR land policy. local.*
+    wrappers skip-if-exists. F-R006 out. Next M90 stub smoke.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
   tasks: [task-348]
   done: [m89-pre-impl-stamp]
   deferred:

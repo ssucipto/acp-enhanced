@@ -3910,8 +3910,8 @@ carryovers:
     finding: "No /acp-review --pr-diff (Phase 2.5) — CR-style pass on git diff then stop"
     description: "Safe-IQ feedback-001/002. Weekly Phase 2 and Phase 1 regex are not a per-PR semantic review."
     fix_target: "Add --pr-diff [--base] writing blocking vs deferred report; not Phase 1; not /acp-audit"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: null
   - audit_id: 125
@@ -3921,8 +3921,8 @@ carryovers:
     finding: "CR wiki lacks rate-limit=skip, green check≠HEAD, commit_id not a gate, finding buckets A/B"
     description: "ADR-21 is present; field operators still treat GitHub CR / commit_id as merge gates."
     fix_target: "Wiki + acp.review.md CodeRabbit section: buckets, onion stop, consumer local.wiki overlay stub"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: null
   - audit_id: 125
@@ -3932,8 +3932,8 @@ carryovers:
     finding: "Purpose does not say audit is not a PR review / not a CodeRabbit replacement"
     description: "Safe-IQ 001 §3.1.3 still missing on 6.34.0"
     fix_target: "One line in Purpose or Related"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: null
   - audit_id: 125
@@ -3943,8 +3943,8 @@ carryovers:
     finding: "Cursor sync skips local.*.md; version-update docs do not name local.* command/wiki survival"
     description: "Copy loop already skips local commands; consumers still hand-write wrappers"
     fix_target: "Document local.* Tier A; optionally emit local-* Cursor wrappers; wiki/local.* overlay note"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: null
   - audit_id: 125
@@ -3989,8 +3989,8 @@ carryovers:
     finding: "--diff already means file-list Phase 1; --pr-diff must be a distinct flag"
     description: "e2e/acp.review.test.sh B1 asserts --diff + git diff --name-only. Aliasing would regress."
     fix_target: "M89 task-350/351 keep --diff row and B1; add --pr-diff separately"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: "M89"
   - audit_id: 126
@@ -4000,8 +4000,8 @@ carryovers:
     finding: "--pr-diff is an agent pass; E2E must not add an LLM harness"
     description: "Docs and flag assertions only"
     fix_target: "M89 task-351"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: "M89"
   - audit_id: 126
@@ -4033,8 +4033,8 @@ carryovers:
     finding: "--pr-diff default base prefers open PR then origin/default_working_branch"
     description: "D17: probe gh in bash -c; missing gh must not fail the flag"
     fix_target: "M89 task-350"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: "M89"
   - audit_id: 126
@@ -4044,8 +4044,8 @@ carryovers:
     finding: "local.* wrappers must skip if destination already exists"
     description: "Do not overwrite custom overlays; version-update re-runs sync"
     fix_target: "M89 task-352"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: "M89"
   - audit_id: 126
