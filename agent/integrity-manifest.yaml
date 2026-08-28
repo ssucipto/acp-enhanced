@@ -246,7 +246,7 @@ files:
     sha256: "bbd7f468163d990d1890e966e07d685072e7c58ca37adb84dec57be58688080e"
     last_verified: "2026-08-28"
   - path: "agent/core/routing.yml"
-    sha256: "7e979905754fedb5aa0bdf4017ba0cba8023c22be8399df86068b472feef41ce"
+    sha256: "ae72d29d21bd8f4c9a29be7e1223862dc36c80645c2ad8f668b22dcd6e959e73"
     last_verified: "2026-08-28"
   - path: "agent/scripts/acp.atomic-write.sh"
     sha256: "153594577bb54c9410b6ac17e65b734bb91aef2548fc4df28f4969e250f1ced2"

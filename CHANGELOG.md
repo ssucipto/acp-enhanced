@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **`/acp-smoke`** — optional device-preflight dispatcher. Missing `smoke.yml` or empty `runner:` exits **2** (`not configured`), never PASS. Config is `agent/configurables/smoke.yml` (P-CI-1), not preferences. Not a CI step (`e2e-smoke` remains `/acp-ci --full` only). No `--host`.
 
+### Changed
+- **`/acp-ci` / `/acp-pr` / routing** — glossary: `e2e-smoke` is the full-tier CI E2E job; `/acp-smoke` is optional device preflight. `/acp-pr` may mention smoke; `acp.pr.sh` does not call it.
+
 ---
 
 ## [6.35.2] — 2026-08-28
