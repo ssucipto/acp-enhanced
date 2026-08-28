@@ -6,6 +6,25 @@
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop
+  tasks: [task-346]
+  done: [fresh-clone-keep-purge-proof]
+  deferred:
+    - v6340-closure → task-347
+    - F-122-04-reclone-daily → task-347
+    - F-122-07-v6340-golden-tag → task-347
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Full clone /tmp/acp-fresh-m88: develop dedd874 keepers+templates; PURGE
+    paths have empty git log --all --full-history. v6.33.0 still has templates.
+    Forks/caches may retain old objects. Daily .git is still unre-written —
+    347 commits must be made on the rewritten clone, not this worktree.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
   tasks: [task-345]
   done: [filter-repo-paths-from-file, force-push-develop-mainline-tags]
   deferred:
