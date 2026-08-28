@@ -345,7 +345,19 @@ else
   (cd "${REHEARSE}/scripts" && npm ci --ignore-scripts)
 fi
 test -d "${REHEARSE}/scripts/node_modules"
-(cd "${REHEARSE}" && npx tsx scripts/acp-validate.ts)
+# checkout-index has no .git. CI clones do. Without git, check-ignore --no-index
+# fail-closes and validateFilePointers ERRORs (F-123-02).
+(
+  cd "${REHEARSE}"
+  git init -q
+  git config user.email test@example.com
+  git config user.name "ACP rehearsal"
+  git add -A
+  git commit -q -m rehearsal
+  ident_ver="$(awk '/^version:/{print $2; exit}' agent/core/identity.yml)"
+  git tag -a "v${ident_ver}" -m rehearsal
+  node scripts/node_modules/ts-node/dist/bin-esm.js scripts/acp-validate.ts
+)
 ```
 
 Pass: validate ran in the rehearsal tree **and** KEEP files exist **and** PURGE files are absent. Fail: skipping because local validate was already green.
@@ -354,6 +366,9 @@ Pass: validate ran in the rehearsal tree **and** KEEP files exist **and** PURGE 
 
 **Never run `git filter-repo` in the daily worktree.** `filter-repo` strips `origin`.
 
+**Wrong:** `--invert-paths --path agent/milestones/` (and the other two dirs). That deletes **templates and keepers from every tag** (F-123-01 / F-119-10).  
+**Right:** invert **PURGE paths only** via `--paths-from-file`. Never invert `docs/`. Never list `agent/routing/tasks/`.
+
 Mirror immediately before rewrite — **from this clone**, not GitHub:
 
 ```bash
@@ -361,24 +376,34 @@ STAMP="$(date +%Y%m%dT%H%M%S)"
 git clone --mirror "$(pwd)" "${HOME}/acp-enhanced-private/acp-enhanced-m88-pre-rewrite-${STAMP}.git"
 ```
 
-Throwaway clone **must** use `--no-local`:
+Throwaway clone **must** use `--no-local`. Build the purge list from **history**, then filter-repo:
 
 ```bash
 MIRROR="${HOME}/acp-enhanced-private/acp-enhanced-m88-pre-rewrite-${STAMP}.git"
 DAILY="$(pwd)"
 git clone --no-local "${MIRROR}" /tmp/acp-rewrite-m88
 cd /tmp/acp-rewrite-m88
-git filter-repo --invert-paths \
-  --path agent/milestones/ \
-  --path agent/tasks/ \
-  --path agent/sessions/ \
-  --path docs/acp-enhanced-dev-team-feedback-consolidated.md
+git log --all --name-only --pretty=format: -- \
+  agent/milestones/ agent/tasks/ agent/sessions/ \
+  docs/acp-enhanced-dev-team-feedback-consolidated.md \
+| awk 'NF' | grep -v '^agent/routing/' | grep -vE \
+  '^(agent/milestones/\.gitkeep|agent/milestones/README\.md|agent/milestones/.*\.template\.md|agent/tasks/\.gitkeep|agent/tasks/README\.md|agent/tasks/.*\.template\.md|agent/sessions/\.gitkeep|agent/sessions/README\.md)$' \
+| sort -u > /tmp/m88-purge-paths.txt
+# Fail closed if KEEP files leaked into the purge list
+if grep -E 'USAGE\.md|routing/tasks|acp-fork-upgrade-checklist' /tmp/m88-purge-paths.txt; then
+  echo "FAIL: KEEP path in purge list" >&2
+  exit 1
+fi
+grep -F 'docs/acp-enhanced-dev-team-feedback-consolidated.md' /tmp/m88-purge-paths.txt
+git filter-repo --invert-paths --paths-from-file /tmp/m88-purge-paths.txt
 git remote add origin "$(git -C "${DAILY}" remote get-url origin)"
+test -f docs/USAGE.md
+test -f "agent/milestones/milestone-1-{title}.template.md"
+test -f "agent/tasks/task-1-{title}.template.md"
+test ! -f docs/acp-enhanced-dev-team-feedback-consolidated.md
 ```
 
-`--invert-paths` removes keepers/templates from every commit. Re-add keepers + **templates** on the rewritten tip (F-119-10), commit, then **STOP**.
-
-Confirm public docs still exist on the tip: `test -f docs/USAGE.md`.
+If a KEEP file is missing on the rewritten tip, restore it from the daily tree and commit `chore: restore instance-docs keepers and templates after filter-repo` (F-119-10 fallback). Then **STOP**.
 
 Operator must type exactly:
 
@@ -386,7 +411,9 @@ Operator must type exactly:
 force-push instance-docs develop mainline tags: yes
 ```
 
-Then (not `--force-with-lease`):
+Do **not** treat `force-push develop mainline tags: yes` (M87) as consent.
+
+Then (not `--force-with-lease`), from `/tmp/acp-rewrite-m88` only:
 
 ```bash
 git push --force origin develop
@@ -412,11 +439,12 @@ git log --all --full-history --oneline -- agent/milestones/milestone-87-public-r
 git log --all --full-history --oneline -- docs/acp-enhanced-dev-team-feedback-consolidated.md
 ```
 
-Pass: `ls-files` is keepers + templates only; history has no instance body paths (or only keepers). Repeat for `mainline` and a tag that previously contained bodies.
+Pass: `ls-files` is keepers + templates only; history has no instance body paths (or only keepers). Repeat KEEP+PURGE on `mainline` and on a tag that previously contained bodies (paths-from-file keeps templates on tags).
 
 ### CB-6 — Never
 
 - Start 338/339 before 335+336+337 restore tests pass
+- Invert whole `agent/milestones/`, `agent/tasks/`, or `agent/sessions/` directories (drops templates from tags)
 - Invert `docs/` or `agent/routing/tasks/` or `agent/memory/`
 - `git add -f` instance milestone/task/session bodies or the purge-target docs file
 - `git rm` without `--cached` on those trees

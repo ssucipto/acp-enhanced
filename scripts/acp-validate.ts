@@ -2070,7 +2070,9 @@ export function validateGitignoreConflicts(): ValidationError[] {
     "agent/reports/.gitkeep",
     "scripts/package-lock.json",
     "agent/milestones/.gitkeep",
+    "agent/milestones/milestone-1-{title}.template.md",
     "agent/tasks/.gitkeep",
+    "agent/tasks/task-1-{title}.template.md",
     "agent/sessions/.gitkeep",
     "docs/USAGE.md",
   ];
