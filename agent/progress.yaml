@@ -3,13 +3,13 @@ project:
   version: 6.34.0
   started: 2026-02-16
   status: active
-  current_milestone: M88
+  current_milestone: M89
   description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.34.0 on develop\n\
     \  (ADR-28: instance milestone/task/session bodies and one field-feedback\n\
     \  file local including history; templates and USAGE.md stay).\n\
     \  F-R006-01..03 still pending. Aikido track ADR-19 gated.\n"
 active_handoff:
-  path: agent/design/local.instance-docs-privacy-purge.md
+  path: agent/design/local.field-feedback-waves-abc.md
   date: '2026-07-31'
   to_executor: claude-opus
   from_executor: claude-opus
@@ -943,19 +943,18 @@ milestones:
   M89:
     name: Wave A — PR-diff review and CodeRabbit land policy (v6.35.0)
     priority: 5
-    status: planned
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 17
+    started: 2026-08-28
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 6
     file: agent/milestones/milestone-89-wave-a-pr-diff-coderabbit.md
     design: agent/design/local.field-feedback-waves-abc.md
     notes: >
-      PLANNED 2026-08-28 — audit-127 READY for 349+ after plan amend.
-      --pr-diff is not --diff (D14 combinable). F-R006 out of scope.
-      current_milestone stays M88 until /acp-proceed.
+      IN PROGRESS 2026-08-28 — task-348 audit-127 READY. --pr-diff is
+      not --diff (D14 combinable). F-R006 out of scope.
   M90:
     name: Wave B — optional /acp-smoke stub (v6.36.0)
     priority: 4
@@ -6997,13 +6996,13 @@ tasks:
   - id: task-348
     name: "M89 pre-implementation audit"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-89-wave-a-pr-diff-coderabbit/task-348-m89-pre-impl-audit.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-28T13:12:00Z'
+    completed_date: '2026-08-28T13:20:00Z'
+    actual_hours: 0.1
     estimated_hours: 1
-    notes: 'audit-127 READY after plan amend; stamp only'
+    notes: 'audit-127 READY; stamp only; no product edits'
   - id: task-349
     name: "Wiki, audit disclaimer, version-update local.* contract"
     priority: 5
@@ -7167,6 +7166,10 @@ tasks:
     estimated_hours: 4
     notes: 'No KVM; F-R006 still pending'
 recent_work:
+- date: 2026-08-28
+  description: "M89 task-348: audit-127 READY stamp"
+  items:
+  - "Pre-impl READY for 349+; design v1.1.0; no product file edits"
 - date: 2026-08-28
   description: "audit-127 pre-impl M89–M91; plans amended"
   items:
@@ -10259,7 +10262,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M89 READY to code (audit-127). /acp-proceed task-348 then 349. M90/M91 wait on prior ships."
+- "M89 in progress. /acp-proceed task-349 (wiki, audit disclaimer, local.*). Then 350–353."
 - "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline at 6.32.4 until that lands."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "Forks/old clones: reclone or git fetch --prune; do not force-push again. GitHub caches may retain old objects."
