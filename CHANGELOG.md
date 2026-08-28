@@ -9,11 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [6.34.0] — 2026-08-28
+
 ### Changed
-- **Validator ADR-28** — instance milestone/task/session bodies and one field-feedback file are gitignored. `validateFilePointers` skips missing paths that `git check-ignore --no-index` matches. Addability probe is `agent/memory` only.
+- **Public remotes (ADR-28)** — instance `agent/milestones/`, `agent/tasks/`, and `agent/sessions/` bodies plus `docs/acp-enhanced-dev-team-feedback-consolidated.md` are gone from `develop`, `mainline`, and tags (history rewrite). Clones keep templates, `.gitkeep`, short README keepers, and public docs (`USAGE.md`, upgrade checklist, Pages files).
+- **Validator** — `validateFilePointers` skips missing paths that `git check-ignore --no-index` matches. Addability probe is `agent/memory` only. KEEP templates are in `validateGitignoreConflicts`.
 - **E2E fixture** — cross-layer copy strips instance milestone/task/session bodies; still copies `docs/USAGE.md`.
 - **`acp.private-pack.sh`** — also packs `agent/milestones`, `agent/tasks`, `agent/sessions`. Never packs `docs/`.
-- **Tip index (ADR-28)** — instance milestone/task/session bodies and the field-feedback file are untracked (`git rm --cached`). Templates, keepers, and public docs stay. History rewrite is not done yet.
+- **`acp.install.sh`** — writes ADR-28 `agent/.gitignore` and appends the field-feedback path to the target root `.gitignore`.
+- **`/acp-commit`** — session markdown bodies stay local on this origin; `agent/memory/sessions.md` stays tracked.
+
+### Notes
+- Gitignore plus `git rm --cached` on the tip was not enough; history was rewritten in task-345.
+- Forks and GitHub caches may retain old objects until they refetch.
+- `identity.yml` team email unchanged.
+- review-006 F-R006-01..03 remain pending (out of scope).
 
 ---
 

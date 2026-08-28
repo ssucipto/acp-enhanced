@@ -3489,8 +3489,8 @@ carryovers:
     finding: "Closure omits yaml-parser golden, AGENTS.md/CLAUDE.md/copilot-instructions, annotated v6.34.0 tag"
     description: "validateGitTagsExist errors when identity version has no tag. Golden broke e2e-smoke after v6.33.0 bump."
     fix_target: "347: refresh golden TSV; sync instruction files; git tag -a v6.34.0; regular push tag"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: null
   - audit_id: 122
