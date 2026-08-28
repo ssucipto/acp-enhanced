@@ -6,6 +6,19 @@
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop
+  tasks: [task-348]
+  done: [m89-pre-impl-stamp]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    audit-127 READY. M89 current_milestone. Next 349 wiki/audit/local.*
+    then --pr-diff. F-R006 out.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-127, plan-amend-m89-m91]
   done: [audit-127-pre-impl, amend-plans-d14-d18]
   deferred:
