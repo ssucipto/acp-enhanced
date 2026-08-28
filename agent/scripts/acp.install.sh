@@ -164,13 +164,44 @@ cat > "$TARGET_DIR/agent/.gitignore" << 'EOF'
 # Agent Context Protocol - Local Files
 # These files are generated locally and should not be committed
 
-# Reports and feedback are tracked (D9) — audit evidence + carryover citations
 clarifications/
 drafts/**
 !drafts/.gitkeep
 !drafts/draft.template.md
 preferences/
+
+# ADR-27 — report/feedback bodies local; keepers tracked
+reports/**
+!reports/.gitkeep
+!reports/README.md
+feedback/**
+!feedback/.gitkeep
+!feedback/README.md
+
+# ADR-28 — instance milestone/task/session bodies local; templates + keepers tracked
+milestones/**
+!milestones/.gitkeep
+!milestones/README.md
+!milestones/*.template.md
+tasks/**
+!tasks/.gitkeep
+!tasks/README.md
+!tasks/*.template.md
+sessions/**
+!sessions/.gitkeep
+!sessions/README.md
 EOF
+
+# ADR-28 — field-feedback lives under docs/ (repo root), not agent/
+_FIELD_FB="docs/acp-enhanced-dev-team-feedback-consolidated.md"
+_ROOT_GI="$TARGET_DIR/.gitignore"
+if [ -f "$_ROOT_GI" ]; then
+    if ! grep -qxF -- "$_FIELD_FB" "$_ROOT_GI"; then
+        printf '\n# ADR-28 — field-feedback file local\n%s\n' "$_FIELD_FB" >> "$_ROOT_GI"
+    fi
+else
+    printf '# ADR-28 — field-feedback file local\n%s\n' "$_FIELD_FB" > "$_ROOT_GI"
+fi
 
 echo "${GREEN}✓${NC} Directory structure created"
 echo ""

@@ -1,8 +1,8 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.32.4-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.34.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
-[![Milestones](https://img.shields.io/badge/milestones-81%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
+[![Milestones](https://img.shields.io/badge/milestones-88%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-72%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Visualizer](https://img.shields.io/badge/visualizer-v1.5.0-6e47ff)](https://github.com/ssucipto/ACPEnhanced-Visual)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -355,7 +355,7 @@ Closed two feedback loops: internal dogfooding pain points (5) and external Wind
 #### M47 — Memory Integrity Release (v6.9.0, June 2026)
 Addressed feedback from FIFOZ production usage (64 audits, 14 milestones, 36 patterns). Core deliverable: dual-store architecture with commit-integrated auto-sync.
 
-- **Commit auto-sync** — `/acp-commit` steps 2b/3b/6b auto-generate `agent/sessions/*.md` and `agent/patterns/*.md` from registries on every commit. Idempotent, `--no-sync` opt-out.
+- **Commit auto-sync** — `/acp-commit` steps 2b/3b/6b auto-generate `agent/sessions/*.md` and `agent/patterns/*.md` from registries on every commit (local files). On this public ACP Enhanced origin, session **bodies** are gitignored (ADR-28); the compact registry `agent/memory/sessions.md` stays tracked. Idempotent, `--no-sync` opt-out.
 - **Repair tools** — `/acp-pattern-sync` and `/acp-session-sync` for manual reconciliation with `--dry-run` and `--all`.
 - **Memory YAML validation** — `/acp-validate --memory` YAML-lints registries with line numbers.
 - **Version update guard** — `--diff`, `--preserve-project-core`, `--force` flags.
@@ -1123,7 +1123,9 @@ project-root/
 │   ├── commands/                   # 74 command docs (72 acp.* + 2 git.*)
 │   ├── scripts/                    # 36 shell scripts + TypeScript tools
 │   ├── design/                     # Design documents
-│   ├── milestones/                 # Milestone definitions
+│   ├── milestones/                 # Keepers + template (instance bodies local, ADR-28)
+│   ├── tasks/                      # Keepers + template (instance bodies local, ADR-28)
+│   ├── sessions/                   # Keepers only (dated bodies local, ADR-28)
 │   ├── patterns/                   # Reusable code patterns
 │   ├── index/                      # Key file index
 │   ├── schemas/                    # YAML schemas
@@ -1178,7 +1180,8 @@ ACP Enhanced provides templates for each document type in `agent/*/`:
 | Directory | Template | Purpose |
 |-----------|----------|---------|
 | `agent/design/` | `*.template.md` | Design documents |
-| `agent/milestones/` | `*.template.md` | Milestone definitions |
+| `agent/milestones/` | `*.template.md` + keepers | Milestone template; instance bodies are local (ADR-28) |
+| `agent/tasks/` | `*.template.md` + keepers | Task template; instance bodies are local (ADR-28) |
 | `agent/patterns/` | `*.template.md` | Pattern documents |
 | `agent/commands/` | `command.template.md` | Command files |
 | `agent/clarifications/` | `clarification-{N}-{title}.template.md` | Clarification docs |

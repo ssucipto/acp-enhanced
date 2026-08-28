@@ -367,6 +367,7 @@ For each milestone to plan:
   - Success criteria
   - Estimated duration (calculate from task estimates)
 - Save to `agent/milestones/milestone-{N}-{name}.md`
+- Instance milestone/task bodies are gitignored on this public origin after ADR-28. Writing them locally is correct; do not `git add -f`.
 - Add to progress.yaml milestones section
 
 **Expected Outcome**: Milestone document(s) created  

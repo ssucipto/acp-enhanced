@@ -108,8 +108,8 @@ grep -c "finding_id: CO-725" agent/memory/audit-carryovers.md
 ## Related
 
 - [`local.false-green-contracts.md`](./local.false-green-contracts.md) — FG-3 output contract; FG-2/5/7 empty/SKIP
-- `agent/feedback/feedback-008-review-scan-rule-verification.md`
-- `agent/reports/m86-review-scan-merge-notes.md` (task-316 scanner merge)
+- Local scanner merge notes (gitignored under `agent/reports/` after ADR-27)
+- Finding IDs in `agent/memory/audit-carryovers.md`
 
 ---
 

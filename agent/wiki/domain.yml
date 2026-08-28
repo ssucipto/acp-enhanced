@@ -476,8 +476,8 @@ session_memory_protocol:
   command: "/acp-commit"
   command_doc: "agent/commands/acp.commit.md"
   version_introduced: "6.4.13"
-  related_feedback: "agent/feedback/feedback-001-proactive-commit-and-knowledge-preservation.md"
-  related_audit: "agent/reports/audit-008-feedback-001-knowledge-preservation.md"
+  related_feedback: "F-001 / feedback-001 (local agent/feedback/ — gitignored after ADR-27)"
+  related_audit: "F-008 / audit-008 (local agent/reports/ — gitignored after ADR-27)"
 
 git_branch_awareness:
   # Added: 2026-05-11 (v6.5.0, feedback-002 fixes, M39)
@@ -497,8 +497,8 @@ git_branch_awareness:
   commit_guard: "Step 0 in acp.commit.md v1.2.0 — Pre-commit Branch Guard"
   session_schema_field: "branch: (optional in sessions.md entry — omit if git_workflow not configured)"
   version_introduced: "6.5.0"
-  related_feedback: "agent/feedback/feedback-002-acp-git-branch-awareness.md"
-  related_audit: "agent/reports/audit-010-feedback-002-003-implementation-plan.md"
+  related_feedback: "F-002 / feedback-002 (local agent/feedback/ — gitignored after ADR-27)"
+  related_audit: "F-010 / audit-010 (local agent/reports/ — gitignored after ADR-27)"
 
 pre_impl_audit_protocol:
   # Added: 2026-05-11 (v6.6.0, feedback-003 fixes, M40)
@@ -515,8 +515,8 @@ pre_impl_audit_protocol:
     - "4 — Operational Completeness: version bump, wiki update, route file existence"
   verdict: "READY or BLOCKED — single-sentence summary"
   version_introduced: "6.6.0"
-  related_feedback: "agent/feedback/feedback-003-pre-implementation-audit.md"
-  related_audit: "agent/reports/audit-010-feedback-002-003-implementation-plan.md"
+  related_feedback: "F-003 / feedback-003 (local agent/feedback/ — gitignored after ADR-27)"
+  related_audit: "F-010 / audit-010 (local agent/reports/ — gitignored after ADR-27)"
 
 audit_carryovers:
   # Added: 2026-05-11 (v6.6.0, feedback-003 fixes, M40)
