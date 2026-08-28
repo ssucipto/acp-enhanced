@@ -1,5 +1,5 @@
 ---
-description: "ACP Enhanced /acp-pr command"
+description: "Open a feature PR to the default working branch with local CI gates"
 ---
 
 # ACP Command: /acp-pr

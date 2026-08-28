@@ -1,12 +1,16 @@
 #!/bin/bash
 # Generate Cursor slash commands (.cursor/commands/) from ACP command sources.
 # Maps agent/commands/acp.init.md -> .cursor/commands/acp-init.md (slash form).
+#
+# local.*.md: emit local-* wrappers. If the destination already exists, skip
+# (do not clobber custom overlays). version-update re-runs this sync (F-127-16);
+# skip-if-exists is mandatory. Do not add local.* to version-update copy-from-upstream.
 
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-CMD_DIR="$ROOT/agent/commands"
-OUT_DIR="$ROOT/.cursor/commands"
+CMD_DIR="${ACP_SYNC_CMD_DIR:-$ROOT/agent/commands}"
+OUT_DIR="${ACP_SYNC_OUT_DIR:-$ROOT/.cursor/commands}"
 
 mkdir -p "$OUT_DIR"
 
@@ -26,13 +30,20 @@ extract_purpose() {
   printf '%s' "$purpose" | sed 's/"/\\"/g'
 }
 
-count=0
-for cmd_file in "$CMD_DIR"/acp.*.md "$CMD_DIR"/git.*.md; do
-  [ -f "$cmd_file" ] || continue
+emit_wrapper() {
+  local cmd_file="$1"
+  local skip_if_exists="${2:-false}"
+  local base slash_name purpose out_file
+  [ -f "$cmd_file" ] || return 0
   base=$(basename "$cmd_file")
   slash_name=$(to_slash_name "$base")
   purpose=$(extract_purpose "$cmd_file")
   out_file="$OUT_DIR/${slash_name}.md"
+
+  if [ "$skip_if_exists" = true ] && [ -f "$out_file" ]; then
+    echo "  ⊘ skip existing: ${out_file}"
+    return 0
+  fi
 
   cat > "$out_file" <<EOF
 ---
@@ -50,8 +61,17 @@ Execute ACP Enhanced command \`/${slash_name}\`.
 **Canonical source**: \`agent/commands/${base}\`
 **Equivalent invocations**: \`/${slash_name}\`, \`@${slash_name}\`, \`@agent/commands/${base}\`
 EOF
-
   count=$((count + 1))
+}
+
+count=0
+for cmd_file in "$CMD_DIR"/acp.*.md "$CMD_DIR"/git.*.md; do
+  emit_wrapper "$cmd_file" false
 done
 
-echo "Generated ${count} Cursor slash commands in .cursor/commands/"
+for cmd_file in "$CMD_DIR"/local.*.md; do
+  [ -f "$cmd_file" ] || continue
+  emit_wrapper "$cmd_file" true
+done
+
+echo "Generated ${count} Cursor slash commands in ${OUT_DIR}/"
