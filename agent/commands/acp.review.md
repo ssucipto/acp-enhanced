@@ -158,8 +158,12 @@ bash agent/scripts/acp.review-scan.sh --include-tests tests/fixtures/review-corp
 | `--baseline <file>` | Suppress findings already present in a baseline file (`rule + file + normalized snippet hash`) |
 | `--write-baseline <file>` | Write the current findings to a reusable baseline file |
 | `--diff` | Review only files changed since last commit (or named ref) — uses `git diff --name-only` |
+| `--pr-diff` | Optional **agent** pass on `git diff <base>...HEAD` (not Phase 1; not `/acp-audit`; not weekly `--report --carryover`) |
+| `--base <ref>` | Explicit base for `--pr-diff`. If omitted: open PR `baseRefName` via `gh` when available, else `origin/` + `identity.yml` `default_working_branch` |
 | `--owasp` | Include OWASP Top 10:2025 / MASVS v2 mapping in output |
 | `--ignore <pattern>` | Exclude file pattern |
+
+`--diff` and `--pr-diff` are **not** aliases (D14). They are **combinable**: `--diff` still scopes **Phase 1** to `git diff --name-only`. `--pr-diff` is an **additional** agent pass on `git diff <base>...HEAD`. If both flags are present, run both. Do not drop `--diff` semantics.
 
 ---
 
@@ -423,6 +427,61 @@ full codebase, all rules           → Composer 2.5
 
 ---
 
+## Phase 2.5 — `--pr-diff` (optional)
+
+This is an **agent** pass. It is **not** Phase 1. It does **not** change `acp.review-scan.sh`. Do not invent an LLM harness in CI. `/acp-audit` is not this flag.
+
+### Base ref (D3 / D17)
+
+1. `--base <ref>` if given.
+2. Else, if an open PR exists: `baseRefName` from `gh`. Probe `gh` in a **subprocess**, not the agent interactive shell:
+
+```bash
+bash -c 'command -v gh'
+```
+
+If `gh` is missing, not authenticated, or there is no open PR: do **not** fail `--pr-diff`. Use `origin/` + `git_workflow.default_working_branch` from `agent/core/identity.yml`.
+
+3. Diff is **triple-dot only**: `git diff <base>...HEAD`.
+
+### Output
+
+Write `agent/reports/review-N-pr-diff.md` (local only; **ADR-27 — do not commit**; do not `git add -f`). This is **not** the weekly `/acp-review --report --carryover` report. Do not change that recurring command string.
+
+### Portable checklist (D5)
+
+Review the patch for: honesty of user-visible results; authorization/cache; parse-unknown; enqueue ≠ sync; dates/IDs; formatter; **then Stop**.
+
+Do not grow Phase 1 regex for these classes. Promote recurring misses into **project** convention tests.
+
+### Posted LLM comments (when acting on them)
+
+Bucket table (portable wording — no product stack names):
+
+| Bucket | Meaning | This pass |
+|--------|---------|-----------|
+| **A — production** | User-visible correctness, authz/cache, parse-unknown, enqueue ≠ sync, dates/IDs, formatter | Blocking until fixed or explicitly deferred |
+| **B — helper** | Helper/test/tooling nits, style onions | At most **one** architecture-level change; remainder non-blocking after one parser/compiler-level fix |
+
+Merge line: **CI green + this pass — not CodeRabbit HEAD**.
+
+### Confirm block (required before you stop)
+
+Emit a confirm block, then **Stop** (do not start unrelated refactors):
+
+```
+Confirm (--pr-diff)
+  Base: <ref>
+  Blocking: <list or none>
+  Bucket A: <list or none>
+  Bucket B architecture (≤1): <item or none>
+  Deferred nits: <list or none>
+  Merge: CI green + this pass — not CodeRabbit HEAD
+  Stop.
+```
+
+---
+
 ## Default Exclusions
 
 To avoid high-noise false positives from test data, the deterministic scanner skips these path patterns by default:
@@ -469,6 +528,8 @@ bash agent/scripts/acp.findings-import.sh --input tests/fixtures/coderabbit-find
 Phase 1 deterministic rules are **never** deferred to CodeRabbit (F-101-07). Weekly `progress.yaml` recurring task stays `command: /acp-review --report --carryover` — CodeRabbit behavior lives in this doc, not a step list (F-101-02). Do **not** invent `/acp-findings-import` (F-101-06).
 
 See `agent/wiki/coderabbit-policy-map-lite.md` and `agent/wiki/coderabbit-integration.md`.
+
+When CodeRabbit (or another LLM review) has **posted comments**, bucket them in this pass using the Phase 2.5 table. Do **not** wait for a silent or rate-limited CodeRabbit check to merge. Green CodeRabbit is not a review of HEAD.
 
 ---
 
@@ -557,7 +618,7 @@ Auto-activated when `agent/commands/` is detected in the project root.
 
 ## Related Commands
 
-- `/acp-audit` — Deep-dive investigation of a specific finding
+- `/acp-audit` — Deep-dive investigation of a specific finding. **Not** `--pr-diff` and **not** a CodeRabbit replacement.
 - `/acp-audit --pre-impl` — Pre-implementation check before building on reviewed code
 - `/acp-carryover-query` — Query pending review carryovers
 - `/acp-validate` — Check ACP framework structure (schemas, sessions, versions). Differs from `/acp-review` which checks user project code quality.
@@ -575,6 +636,7 @@ Auto-activated when `agent/commands/` is detected in the project root.
 - [ ] Executor selection guide with disqualification rationale
 - [ ] Appendix A: 10 ACP self-review rules with auto-activation logic
 - [ ] `--diff` flag documented
+- [ ] `--pr-diff` and `--base` documented as distinct from `--diff`; combinable (D14); `bash -c` `gh` probe (D17)
 - [ ] `--baseline` / `--write-baseline` and inline suppression reason requirement documented
 - [ ] Language Scope section present
 - [ ] Standards Coverage table lists all 10 OWASP 2025 categories
