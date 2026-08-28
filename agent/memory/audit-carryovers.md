@@ -3954,10 +3954,10 @@ carryovers:
     finding: "No optional /acp-smoke device preflight (distinct from /acp-ci)"
     description: "FIFOZ feedback-010. Must not reuse CI step id smoke; must not block /acp-pr"
     fix_target: "Stack-agnostic command delegating to project runner; E2E --help/--doctor only"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-08-28
     verified_in_audit: null
-    escalated_to: null
+    escalated_to: "M90"
   - audit_id: 125
     finding_id: F-125-06
     severity: high
@@ -4009,12 +4009,12 @@ carryovers:
     severity: high
     file: agent/commands
     finding: "FIFOZ smoke 1.1.0 already couples Maestro plus exec-host; AE v1 must not"
-    description: "Wave B stub; --host waits for M91"
+    description: "Wave B stub shipped in M90 without Maestro or --host; --host waits for M91"
     fix_target: "M90 D9 then M91 D10"
     status: pending
     fix_applied_date: null
     verified_in_audit: null
-    escalated_to: "M90"
+    escalated_to: "M91"
   - audit_id: 126
     finding_id: F-126-06
     severity: high
@@ -4022,8 +4022,8 @@ carryovers:
     finding: "Unconfigured /acp-smoke must exit 2, never SKIP-as-PASS"
     description: "FG-2 for device command"
     fix_target: "M90 task-355/357"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-08-28
     verified_in_audit: null
     escalated_to: "M90"
   - audit_id: 126
@@ -4101,8 +4101,8 @@ carryovers:
     finding: "AE CI step id is e2e-smoke; must not collide with /acp-smoke"
     description: "Glossary in task-356; never --only smoke"
     fix_target: "M90 task-356"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-08-28
     verified_in_audit: null
     escalated_to: "M90"
   - audit_id: 127
@@ -4123,8 +4123,8 @@ carryovers:
     finding: "domain.yml / README command count 72 omitted from M90"
     description: "Bump 72→73 with acp.smoke"
     fix_target: "M90 task-358"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-08-28
     verified_in_audit: null
     escalated_to: "M90"
   - audit_id: 127
@@ -4167,8 +4167,8 @@ carryovers:
     finding: "opencode + GitHub prompts have no generator; commit wrappers by hand"
     description: "Same as /acp-pr; task-357"
     fix_target: "M90 task-357"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-08-28
     verified_in_audit: null
     escalated_to: "M90"
   - audit_id: 127
@@ -4255,8 +4255,8 @@ carryovers:
     finding: "smoke runner config must not enter acp.configurables.yaml"
     description: "agent/configurables/smoke.yml P-CI-1"
     fix_target: "M90 task-355"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-08-28
     verified_in_audit: null
     escalated_to: "M90"
   - audit_id: 127
