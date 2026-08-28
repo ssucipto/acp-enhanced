@@ -132,6 +132,7 @@ command_suggestions:
     - acp-ci: "Local gates run via /acp-ci (no duplicate gate logic)"
     - acp-status: "Confirm branch/PR readiness"
     - acp-commit: "Session memory before PR"
+    - acp-review: "Optional /acp-review --pr-diff before merge (does not replace /acp-ci)"
 
   # Alias discoverability: historical stub name → real commands (M86 / F-114-08)
   ci-check:
@@ -180,6 +181,7 @@ command_suggestions:
     - acp-repair-tools: "Resolve carryover findings from reviews"
     - acp-commit: "Save session after fixing review findings"
     - acp-stakeholder-report: "Include review health in Friday update"
+    - acp-review: "Optional /acp-review --pr-diff agent pass before merge (not Phase 1 --diff; not a substitute for /acp-ci)"
 
   acp-carryover-query:
     - acp-review: "Re-run review after resolving carryovers"

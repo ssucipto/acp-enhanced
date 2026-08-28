@@ -53,6 +53,7 @@ assert_contains "$(cat "${TAXO_FILE}")" "file: agent/skills/code-review.md" "ski
 print_test_header "S6 — routing.yml has acp-review command suggestions"
 assert_contains "$(cat "${ROUTING_FILE}")" "acp-review:" "acp-review suggestion block"
 assert_contains "$(cat "${ROUTING_FILE}")" "acp-audit:" "audit referenced in review suggestions"
+assert_contains "$(cat "${ROUTING_FILE}")" "acp-review --pr-diff" "routing suggests --pr-diff"
 
 # S7: Cross-link to acp-validate in command doc
 print_test_header "S7 — acp.review.md cross-links to acp-validate"
@@ -106,6 +107,14 @@ assert_contains "$(cat "${CMD_FILE}")" "NC-01" "Naming Conventions category (NC-
 assert_contains "$(cat "${CMD_FILE}")" "AP-01" "API Response category (AP-01)"
 assert_contains "$(cat "${CMD_FILE}")" "CH-01" "Code Health category (CH-01)"
 assert_contains "$(cat "${CMD_FILE}")" "MASVS-STORAGE" "Mobile MASVS rules (MASVS-STORAGE)"
+
+# B8: --pr-diff is documented as a distinct agent pass (M89; keep B1 --diff byte-stable)
+print_test_header "B8 — --pr-diff documented as not Phase 1, combinable with --diff"
+assert_contains "$(cat "${CMD_FILE}")" "\`--pr-diff\`" "--pr-diff flag in backticks"
+assert_contains "$(cat "${CMD_FILE}")" "...HEAD" "triple-dot base...HEAD"
+assert_contains "$(cat "${CMD_FILE}")" "not Phase 1" "--pr-diff is not Phase 1"
+assert_contains "$(cat "${CMD_FILE}")" "/acp-audit" "mentions /acp-audit (not a substitute)"
+assert_contains "$(cat "${CMD_FILE}")" "combinable" "D14 combinable with --diff"
 
 print_suite_summary
 
