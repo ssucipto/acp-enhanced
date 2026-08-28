@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [6.34.0] — 2026-08-28
 
 ### Changed
-- **Public remotes (ADR-28)** — instance `agent/milestones/`, `agent/tasks/`, and `agent/sessions/` bodies plus `docs/acp-enhanced-dev-team-feedback-consolidated.md` are gone from `develop`, `mainline`, and tags (history rewrite). Clones keep templates, `.gitkeep`, short README keepers, and public docs (`USAGE.md`, upgrade checklist, Pages files).
+- **Public remotes (ADR-28)** — instance `agent/milestones/`, `agent/tasks/`, and `agent/sessions/` bodies plus `docs/acp-enhanced-dev-team-feedback-consolidated.md` are gone from **history on `develop`, `mainline`, and tags**. Clones of **`develop` or tag `v6.34.0`** keep templates, `.gitkeep`, short README keepers, and public docs (`USAGE.md`, upgrade checklist, Pages files). GitHub’s **default branch is still `mainline`** (rewritten keepers at 6.32.4) until that PR merges.
 - **Validator** — `validateFilePointers` skips missing paths that `git check-ignore --no-index` matches. Addability probe is `agent/memory` only. KEEP templates are in `validateGitignoreConflicts`.
 - **E2E fixture** — cross-layer copy strips instance milestone/task/session bodies; still copies `docs/USAGE.md`.
 - **`acp.private-pack.sh`** — also packs `agent/milestones`, `agent/tasks`, `agent/sessions`. Never packs `docs/`.
@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Notes
 - Gitignore plus `git rm --cached` on the tip was not enough; history was rewritten in task-345.
-- Forks and GitHub caches may retain old objects until they refetch.
+- Forks and GitHub caches may retain old objects until they **reclone or refetch and prune**. Another force-push will not flush them.
 - `identity.yml` team email unchanged.
 - review-006 F-R006-01..03 remain pending (out of scope).
 
