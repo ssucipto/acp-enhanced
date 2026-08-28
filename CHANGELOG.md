@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **M89 proceed** — task-348 stamped audit-127 READY; Wave A implementation started.
-- **Routing** — `/acp-review` and `/acp-pr` suggest optional `--pr-diff` (not a substitute for `/acp-ci`). Review E2E asserts `--pr-diff` without changing `--diff` B1.
+- **local.* slash wrappers** — cursor and claude sync emit `local-*` commands; skip if the wrapper already exists. Temp-dir E2E. Integrity-manifest restamped.
 
 ---
 

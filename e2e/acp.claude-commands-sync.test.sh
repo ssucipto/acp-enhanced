@@ -82,6 +82,24 @@ bash "$SYNC_SCRIPT" > /dev/null 2>&1
 _cl_after=$(find "$CLAUDE_DIR" -maxdepth 1 -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
 if [[ "$_cl_before" -eq "$_cl_after" ]]; then assert_true "idempotent (${_cl_before}→${_cl_after})" 0; else assert_true "idempotent (${_cl_before}→${_cl_after})" 1; fi
 
+# ═══════════════════════════════════════════════════════════
+# 11. local.* wrapper in temp dir; skip-if-exists (M89; do not pollute agent/commands)
+# ═══════════════════════════════════════════════════════════
+print_test_header "claude-sync: local.* wrapper + skip-if-exists (temp dir)"
+_tmp="$(mktemp -d)"
+_cmd_tmp="${_tmp}/commands"
+_out_tmp="${_tmp}/claude"
+mkdir -p "$_cmd_tmp" "$_out_tmp"
+cat > "${_cmd_tmp}/local.foo.md" << 'EOF'
+**Purpose**: Temp local overlay for sync E2E
+EOF
+ACP_SYNC_CMD_DIR="$_cmd_tmp" ACP_SYNC_OUT_DIR="$_out_tmp" bash "$SYNC_SCRIPT" > /dev/null 2>&1
+if [[ -f "${_out_tmp}/local-foo.md" ]]; then assert_true "creates local-foo.md when missing" 0; else assert_true "creates local-foo.md when missing" 1; fi
+printf 'CUSTOM_WRAPPER\n' > "${_out_tmp}/local-foo.md"
+ACP_SYNC_CMD_DIR="$_cmd_tmp" ACP_SYNC_OUT_DIR="$_out_tmp" bash "$SYNC_SCRIPT" > /dev/null 2>&1
+if grep -q 'CUSTOM_WRAPPER' "${_out_tmp}/local-foo.md"; then assert_true "does not overwrite existing local wrapper" 0; else assert_true "does not overwrite existing local wrapper" 1; fi
+rm -rf "$_tmp"
+
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  acp-claude-commands-sync Smoke Test Results"

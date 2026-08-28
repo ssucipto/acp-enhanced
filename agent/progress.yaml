@@ -944,11 +944,11 @@ milestones:
     name: Wave A — PR-diff review and CodeRabbit land policy (v6.35.0)
     priority: 5
     status: in_progress
-    progress: 67
+    progress: 83
     started: 2026-08-28
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 4
+    tasks_completed: 5
     tasks_total: 6
     file: agent/milestones/milestone-89-wave-a-pr-diff-coderabbit.md
     design: agent/design/local.field-feedback-waves-abc.md
@@ -7036,13 +7036,13 @@ tasks:
   - id: task-352
     name: "Optional local.* Cursor and Claude wrappers"
     priority: 4
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-89-wave-a-pr-diff-coderabbit/task-352-local-wrapper-sync.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-28T14:20:00Z'
+    completed_date: '2026-08-28T14:40:00Z'
+    actual_hours: 0.3
     estimated_hours: 4
-    notes: 'Skip if wrapper exists; temp-dir E2E'
+    notes: 'skip-if-exists; temp-dir E2E; manifest restamped'
   - id: task-353
     name: "M89 crosscut release v6.35.0"
     priority: 5
@@ -7166,6 +7166,11 @@ tasks:
     estimated_hours: 4
     notes: 'No KVM; F-R006 still pending'
 recent_work:
+- date: 2026-08-28
+  description: "M89 task-352: local.* cursor/claude wrappers skip-if-exists"
+  items:
+  - "ACP_SYNC_CMD_DIR/OUT_DIR for tests; do not clobber custom wrappers"
+  - "cursor + claude E2E 12/12; integrity-manifest restamped"
 - date: 2026-08-28
   description: "M89 task-351: routing + review E2E for --pr-diff"
   items:
@@ -10278,7 +10283,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M89 in progress (4/6). Next: task-352 local.* wrapper sync."
+- "M89 in progress (5/6). Next: task-353 v6.35.0 crosscut."
 - "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline at 6.32.4 until that lands."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "Forks/old clones: reclone or git fetch --prune; do not force-push again. GitHub caches may retain old objects."
