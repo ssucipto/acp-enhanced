@@ -3456,8 +3456,8 @@ carryovers:
     finding: "git rm --cached -r agent/tasks untracks remaining 344-347 task docs"
     description: "Files remain on disk if --cached. Reclone from GitHub after 343 loses 344-347 unless 335 backup restore."
     fix_target: "343 SOP: do not reclone daily until 347; restore task docs from worktree-m88 DEST"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: null
   - audit_id: 122
