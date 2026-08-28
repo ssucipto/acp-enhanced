@@ -405,7 +405,7 @@ Traceability rows...          ✓ 10 (code-verified)
 
 ✅ Design Spec Complete!
 
-Saved to: agent/reports/design-spec-{subject}-v{N}.md (exemplar: agent/feedback/design-spec-app-interfaces-m15-spine-v2.1.md)
+Saved to: agent/reports/design-spec-{subject}-v{N}.md (local only; ADR-27 — do not commit)
 
 Next: /acp-visualize --update  (view diagrams, if Visualizer installed)
       /acp-audit design-spec   (optional deeper verification)
@@ -542,7 +542,7 @@ Section numbers are **stable** across projects. Omit sections only when truly N/
 
 ### File Access
 - **Reads**: UI routes, state modules, server routes, `agent/milestones/`, `agent/memory/audit-carryovers.md`, `agent/progress.yaml`, optional `agent/wiki/domain.yml` (one section)
-- **Writes**: `agent/reports/design-spec-*.md`, optional `agent/reports/audit-*.md`, optional `audit-carryovers.md`
+- **Writes**: `agent/reports/design-spec-*.md` (local; ADR-27 — do not commit), optional `agent/reports/audit-*.md`, optional `audit-carryovers.md`
 - **Executes**: None
 
 ### Sensitive Data

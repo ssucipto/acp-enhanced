@@ -40,7 +40,7 @@
 | `--origin <model>` | Declare code origin: `deepseek`, `composer`, `sonnet`. Disqualifies same-model executor |
 | `--ci` | Compact output, exit 1 on CRITICAL or HIGH-confidence:HIGH findings |
 | `--carryover` | Write CRITICAL/HIGH findings to `agent/memory/audit-carryovers.md` |
-| `--report` | Save structured YAML to `agent/reports/integrity-NNN.md` |
+| `--report` | Save structured YAML to `agent/reports/integrity-NNN.md` (local only; ADR-27 — do not commit) |
 | `--diff` | Compare ACP files against SHA-256 hashes in `agent/integrity-manifest.yaml` |
 | `--phase1` | Run Phase 1 (pattern matching) only — scripts + literal grep |
 | `--phase2` | Run Phase 2 semantic analysis — taint flow (IG-45–50) + memory poisoning (IG-58–62) + semantic injection (IG-53/54/56/57). LLM reasoning required; all findings `verdict: REQUIRES_HUMAN_REVIEW` |

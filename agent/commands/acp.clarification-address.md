@@ -392,7 +392,7 @@ Mode: {--deep|--shallow}
 
 <!-- [Agent Analysis]
 **Tradeoff**: Output destination  
-- Disk (agent/reports/): Pro: persistent, shareable, version-controlled. Con: extra file to manage.
+- Disk (agent/reports/): Pro: persistent locally. Con: extra file to manage. Not version-controlled (ADR-27).
 - Chat: Pro: immediate, no file cleanup. Con: lost when context ends, can't be referenced later.
 
 **Recommendation**: Prompt user (as specified) — both options have clear use cases. The prompt should default to chat for quick handoffs and offer disk for complex ones.  

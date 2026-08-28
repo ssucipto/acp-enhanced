@@ -43,7 +43,7 @@ Usage: acp.ci.sh [tier] [options]
 
 Run the gates GitHub Actions runs, locally, before pushing.
 
-Tiers (wall-clock guidance from agent/reports/m86-ci-job-baseline.md):
+Tiers (wall-clock guidance; --static is cheapest, --full is CI-equivalent):
   --static            Cheapest syntax/unit gates (~seconds)
   --fast              DEFAULT — T0+T1 (~tens of seconds to ~1–2 min).
                       Does NOT run shellcheck or full e2e-smoke.
