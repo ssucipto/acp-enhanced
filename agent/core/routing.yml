@@ -125,14 +125,21 @@ command_suggestions:
 
   acp-ci:
     - acp-pr: "Open PR after /acp-ci is green"
+    - acp-smoke: "Optional device preflight when the slice touched device/UI launch paths (not a CI step; unconfigured exits 2)"
     - acp-validate: "Doc/schema validate when static gates fail"
     - acp-commit: "Commit fixes before re-running /acp-ci"
+
+  acp-smoke:
+    - acp-ci: "Run /acp-ci --fast after smoke (or skip smoke if unconfigured)"
+    - acp-pr: "Open PR after local gates; /acp-pr does not wait on /acp-smoke"
+    - acp-review: "Quality scan before a device/UI slice"
 
   acp-pr:
     - acp-ci: "Local gates run via /acp-ci (no duplicate gate logic)"
     - acp-status: "Confirm branch/PR readiness"
     - acp-commit: "Session memory before PR"
     - acp-review: "Optional /acp-review --pr-diff before merge (does not replace /acp-ci)"
+    - acp-smoke: "Optional device preflight; this command does not invoke it"
 
   # Alias discoverability: historical stub name → real commands (M86 / F-114-08)
   ci-check:
