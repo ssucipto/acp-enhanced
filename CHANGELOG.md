@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **M89 proceed** — task-348 stamped audit-127 READY; Wave A implementation started.
+
 ---
 
 ## [6.34.0] — 2026-08-28
