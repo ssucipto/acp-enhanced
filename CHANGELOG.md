@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **M89 proceed** — task-348 stamped audit-127 READY; Wave A implementation started.
-- **CodeRabbit land policy** — wiki: rate-limit skip, green check ≠ HEAD, `commit_id` not a gate, buckets A/B, consumer overlay stub. `/acp-audit` is not a PR review. `local.*` commands/wiki documented as preserved on `/acp-version-update`.
+- **`/acp-review --pr-diff`** — optional agent pass on `git diff <base>...HEAD`; not Phase 1 `--diff`; combinable with `--diff`.
 
 ---
 
