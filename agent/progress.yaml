@@ -937,7 +937,8 @@ milestones:
     design: agent/design/local.instance-docs-privacy-purge.md
     notes: >
       PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 10/13. CI rehearsal
-      green. Halt 345 until force-push phrase. Do not reclone until 347.
+      green. audit-123: CB-4 paths-from-file. Halt 345 until exact phrase.
+      Do not reclone until 347.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6923,7 +6924,7 @@ tasks:
     started: null
     actual_hours: null
     estimated_hours: 4
-    notes: phase 4; M88 phrase not M87 phrase; --no-local; blocked on 344
+    notes: phase 4; paths-from-file not dir invert; halt until exact phrase; --no-local
   - id: task-346
     name: "Fresh-clone proof: history + tags keepers and templates only"
     priority: 5
@@ -6943,6 +6944,12 @@ tasks:
     estimated_hours: 3
     notes: phase 4; F-R006 stays pending; no second force-push
 recent_work:
+- date: 2026-08-28
+  description: "audit-123 cookbook/docs/validator remediations (no force-push)"
+  items:
+  - "✅ CB-4 invert PURGE paths via --paths-from-file (not whole dirs); CB-3b git init"
+  - "✅ install.sh root gitignore field-feedback; validateGitignoreConflicts templates"
+  - "F-123-03: do not filter-repo until exact phrase; do not reuse M87 phrase"
 - date: 2026-08-27
   description: "task-344 CI-clone rehearsal (blocks filter-repo)"
   items:
@@ -9994,7 +10001,7 @@ recent_work:
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
 - "Halt: type exactly force-push instance-docs develop mainline tags: yes then /acp-proceed task-345. Do not reclone the daily worktree until 347."
-- "Force-push only after exact phrase: force-push instance-docs develop mainline tags: yes (not the M87 phrase). Stamp history-clean only after 346. Rehearse 344 before 345."
+- "Force-push only after exact phrase: force-push instance-docs develop mainline tags: yes (not the M87 phrase). Stamp history-clean only after 346. CB-4 inverts PURGE paths only (paths-from-file)."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 - "Optional: IG-17 allowlist for agent/scripts scanners (integrity FP noise)."

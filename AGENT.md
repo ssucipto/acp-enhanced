@@ -997,7 +997,7 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`/acp-plan`](agent/commands/acp.plan.md)** - Plan project milestones and tasks from requirements
 - **[`/acp-status`](agent/commands/acp.status.md)** - Display project status and active sessions
 - **[`/acp-visualize`](agent/commands/acp.visualize.md)** - Launch the browser-based ACP Progress Visualizer dashboard *(ACP Enhanced)*
-- **[`/acp-commit`](agent/commands/acp.commit.md)** - Write session memory entry + stamp routing task files + compact sessions *(ACP Enhanced)*
+- **[`/acp-commit`](agent/commands/acp.commit.md)** - Write session memory entry + stamp routing task files + compact sessions *(ACP Enhanced)*. On this public origin, `agent/sessions/{date}-{slug}.md` is local (ADR-28); `agent/memory/sessions.md` stays tracked.
 - **[`/acp-report`](agent/commands/acp.report.md)** - Generate a completion report; deregisters session
 - **[`/acp-handoff`](agent/commands/acp.handoff.md)** - Prepare handoff documentation for another agent
 - **[`/acp-resume`](agent/commands/acp.resume.md)** - Resume a project — init + review recent progress + proceed in one step

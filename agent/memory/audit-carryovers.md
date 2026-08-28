@@ -3423,9 +3423,9 @@ carryovers:
     finding: "CB-1 is a stub (test -f OUT with no tar/gpg); task-337 cannot execute"
     description: "M87 CB-1 had full tar+gpg+restore. M88 CB-1 commented private-pack-after-341 then tested a missing file."
     fix_target: "Write copy-paste tar of reports,feedback,milestones,tasks,sessions + the one docs file; gpg AES256; restore-test. Task-337 cites CB-1 only."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
     escalated_to: null
   - audit_id: 122
     finding_id: F-122-02
@@ -3434,9 +3434,9 @@ carryovers:
     finding: "active_handoff.path points at milestone-85 which 343/filter-repo remove; validateActiveHandoff ERRORs if missing"
     description: "scripts/acp-validate.ts:2196 existsSync on handoff path regardless of completed status."
     fix_target: "Retarget path to agent/design/local.instance-docs-privacy-purge.md (stays tracked)"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
     escalated_to: null
   - audit_id: 122
     finding_id: F-122-03
@@ -3445,9 +3445,9 @@ carryovers:
     finding: "current_milestone still M87; /acp-proceed without task id scans completed M87"
     description: "acp.proceed.md A1 uses current_milestone. next_steps[0] must not contain M88 after switch (validateNextStepsFreshness)."
     fix_target: "Set current_milestone M88; rewrite next_steps[0] to start at task-335 without the substring M88"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
     escalated_to: null
   - audit_id: 122
     finding_id: F-122-04
@@ -3467,9 +3467,9 @@ carryovers:
     finding: "CB-3b checkout-index omits scripts/node_modules; rehearsal validate cannot run"
     description: "node_modules is gitignored. Copy from daily or npm ci --ignore-scripts in rehearsal/scripts."
     fix_target: "CB-3b copy node_modules; 344 asserts validate ran in rehearsal tree"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
     escalated_to: null
   - audit_id: 122
     finding_id: F-122-06
@@ -3478,9 +3478,9 @@ carryovers:
     finding: "File-pointer skip must use git check-ignore --no-index so CI clones skip gitignored missing paths"
     description: "existsSync fails on CI after 343. Default check-ignore is index-sensitive."
     fix_target: "task-339: skip dangling if git check-ignore -q --no-index path; probeDirs memory only"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
     escalated_to: null
   - audit_id: 122
     finding_id: F-122-07
@@ -3500,8 +3500,87 @@ carryovers:
     finding: "PACK_REL_DIRS cannot pack the single docs purge-target file; never pack docs/"
     description: "337 tar must list the file. 341 adds agent/milestones|tasks|sessions dirs only."
     fix_target: "CB-1 tar includes docs/acp-enhanced-dev-team-feedback-consolidated.md; 341 forbids docs/ dir"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
+    escalated_to: null
+
+  # ── AUDIT-123 — M88 IMPLEMENTATION GAPS (2026-08-28) ──────────────────────
+  - audit_id: 123
+    finding_id: F-123-01
+    severity: high
+    file: agent/design/local.instance-docs-privacy-purge.md
+    finding: "CB-4 directory invert-paths drops templates from all tags; CB-5 KEEP on tags would fail"
+    description: "Same class as F-119-10 but on every ref. Invert PURGE paths only so keepers stay in history."
+    fix_target: "CB-4 --paths-from-file of PURGE paths; never invert docs/ or routing/tasks; sanity-grep USAGE.md"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-02
+    severity: high
+    file: agent/design/local.instance-docs-privacy-purge.md
+    finding: "CB-3b checkout-index has no .git; check-ignore --no-index fail-closes"
+    description: "344 rehearsal only passed after git init + identity tag. Cookbook omitted that."
+    fix_target: "CB-3b: git init, commit, annotated v{identity} tag, then validate"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-03
+    severity: high
+    file: agent/design/local.instance-docs-privacy-purge.md
+    finding: "M87 phrase is not M88 force-push consent"
+    description: "Operator typed force-push develop mainline tags: yes. M88 requires force-push instance-docs develop mainline tags: yes."
+    fix_target: "Do not filter-repo or git push --force until the M88 phrase is typed exactly"
     status: pending
     fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-04
+    severity: medium
+    file: AGENT.md
+    finding: "/acp-commit blurb omits ADR-28 local-only session bodies"
+    description: "340 updated README and wiki; AGENT.md is the primary human doc."
+    fix_target: "One sentence: session markdown is local on AE origin; memory/sessions.md stays tracked"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-05
+    severity: medium
+    file: agent/scripts/acp.install.sh
+    finding: "Install gitignore omits root docs field-feedback file"
+    description: "package-create has the line; install only writes agent/.gitignore"
+    fix_target: "Append docs/acp-enhanced-dev-team-feedback-consolidated.md to TARGET .gitignore"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-06
+    severity: medium
+    file: scripts/acp-validate.ts
+    finding: "validateGitignoreConflicts omits both templates"
+    description: "CI would not warn if gitignore started ignoring KEEP templates"
+    fix_target: "Add milestone and task template paths to trackedPaths"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-07
+    severity: low
+    file: agent/progress.yaml
+    finding: "next_steps[1] still says rehearse 344 before 345"
+    description: "344 completed 2026-08-27"
+    fix_target: "Rewrite next_steps[1] without claiming 344 is future work"
+    status: fixed
+    fix_applied_date: "2026-08-28"
     verified_in_audit: null
     escalated_to: null
 

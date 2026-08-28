@@ -192,6 +192,17 @@ sessions/**
 !sessions/README.md
 EOF
 
+# ADR-28 — field-feedback lives under docs/ (repo root), not agent/
+_FIELD_FB="docs/acp-enhanced-dev-team-feedback-consolidated.md"
+_ROOT_GI="$TARGET_DIR/.gitignore"
+if [ -f "$_ROOT_GI" ]; then
+    if ! grep -qxF -- "$_FIELD_FB" "$_ROOT_GI"; then
+        printf '\n# ADR-28 — field-feedback file local\n%s\n' "$_FIELD_FB" >> "$_ROOT_GI"
+    fi
+else
+    printf '# ADR-28 — field-feedback file local\n%s\n' "$_FIELD_FB" > "$_ROOT_GI"
+fi
+
 echo "${GREEN}✓${NC} Directory structure created"
 echo ""
 

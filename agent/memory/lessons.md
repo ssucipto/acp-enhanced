@@ -4,6 +4,13 @@
 #
 # Optional fields added in v6.8.0:
 
+- date: 2026-08-28
+  task_type: audit-run
+  mistake: "Treating force-push develop mainline tags: yes (M87) as consent for M88 history rewrite, and using directory --invert-paths which drops KEEP templates from every tag."
+  correction: "M88 requires the exact phrase force-push instance-docs develop mainline tags: yes. Invert PURGE paths only via --paths-from-file. CB-3b git init + identity tag before validate. Never filter-repo in the daily worktree."
+  priority: high
+  trigger: audit-123
+
 - date: 2026-08-27
   task_type: audit-run
   mistake: "M87 CB-4 used git clone of a local mirror without --no-local, hardcoded git@github.com origin, skipped D10 hashes, and left a consumer FS path plus dual rewrite clones."
