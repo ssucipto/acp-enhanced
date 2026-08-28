@@ -927,18 +927,18 @@ milestones:
     name: Instance-docs privacy purge (v6.34.0)
     priority: 5
     status: in_progress
-    progress: 85
+    progress: 92
     started: 2026-08-27
     completed: null
     estimated_weeks: 2
-    tasks_completed: 11
+    tasks_completed: 12
     tasks_total: 13
     file: agent/milestones/milestone-88-instance-docs-privacy-purge.md
     design: agent/design/local.instance-docs-privacy-purge.md
     notes: >
-      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 11/13. History rewrite
-      force-pushed from /tmp/acp-rewrite-m88. Next 346 fresh-clone proof.
-      Do not reclone daily until 347.
+      PLANNED 2026-08-27 — ADR-28 Option C. IN PROGRESS 12/13. Fresh-clone
+      proof green. Next 347 v6.34.0. Do not commit or push from the stale
+      daily .git.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6929,12 +6929,13 @@ tasks:
   - id: task-346
     name: "Fresh-clone proof: history + tags keepers and templates only"
     priority: 5
-    status: planned
+    status: completed
     file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-346-fresh-clone-proof.md
-    started: null
-    actual_hours: null
+    started: '2026-08-28T00:42:00Z'
+    completed_date: '2026-08-28T00:50:00Z'
+    actual_hours: 0.3
     estimated_hours: 2
-    notes: phase 4; CB-5 full clone not depth-1
+    notes: 'CB-5 full clone /tmp/acp-fresh-m88; develop keepers+templates; history empty for PURGE; mainline+v6.33.0 templates kept'
   - id: task-347
     name: "Closure: CHANGELOG v6.34.0 after clone proof"
     priority: 5
@@ -6945,6 +6946,12 @@ tasks:
     estimated_hours: 3
     notes: phase 4; F-R006 stays pending; no second force-push
 recent_work:
+- date: 2026-08-28
+  description: "task-346 fresh-clone KEEP/PURGE proof"
+  items:
+  - "✅ /tmp/acp-fresh-m88 full clone; develop keepers+templates; PURGE history empty"
+  - "✅ mainline + v6.33.0 templates kept; field-feedback absent on all checked refs"
+  - "Default clone checks out mainline; session README keepers are on develop until merge"
 - date: 2026-08-28
   description: "task-345 filter-repo + force-push develop mainline tags"
   items:
@@ -10007,7 +10014,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "Run /acp-proceed task-346: full clone to /tmp/acp-fresh-m88 (not depth-1). Do not reclone the daily worktree until 347."
+- "Run /acp-proceed task-347: bump 6.33.0 to 6.34.0, golden TSV, annotated tag, regular push. Do not commit from the unre-written daily .git."
 - "Stamp history-clean only after 346. Forks and GitHub caches may retain old objects. Then 347 golden TSV and annotated v6.34.0 tag (regular push)."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
