@@ -35,7 +35,7 @@
 Installs or upgrades ACP Enhanced by:
 1. Cloning the ACP Enhanced repository into a temporary directory
 2. Copying all static ACP files (`agent/core/`, `agent/commands/`, `agent/scripts/`, `agent/skills/`, `agent/wiki/`, `agent/schemas/`, `agent/configurables/`) into the current project
-3. Preserving user-state files (`agent/memory/`, `agent/routing/tasks/`, `agent/milestones/`, `agent/feedback/`, `agent/preferences/`, `agent/reports/`)
+3. Preserving user-state files **on disk** (`agent/memory/`, `agent/routing/tasks/`, `agent/milestones/`, `agent/feedback/`, `agent/preferences/`, `agent/reports/`). Reports/feedback bodies stay local (ADR-27); they are not tracked evidence.
 4. Migrating from legacy `.agent/` layout if detected (ACP < 6.x)
 5. Installing companion files (`.github/copilot-instructions.md`, `.opencode/commands/`, `AGENTS.md`, `CLAUDE.md`)
 

@@ -22,6 +22,30 @@ export function resolveProgressPointerPath(pointerPath: string): string {
   return path.isAbsolute(pointerPath) ? pointerPath : repoPath(pointerPath);
 }
 
+/** True when gitignore would ignore relPath even if it is missing from disk/index (CI clone). */
+export function isGitIgnoredNoIndex(relPath: string, root?: string): boolean {
+  const cwd = root ?? getRepoRoot();
+  try {
+    execFileSync("git", ["check-ignore", "-q", "--no-index", "--", relPath], {
+      cwd,
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+    return true;
+  } catch (err: unknown) {
+    const status = (err as { status?: number }).status;
+    if (status === 1) return false;
+    return false;
+  }
+}
+
+/** Dangling progress.yaml file: pointer is an error unless the path is gitignored (ADR-28). */
+export function shouldReportDanglingProgressPointer(relPath: string, root?: string): boolean {
+  const cwd = root ?? getRepoRoot();
+  const resolved = path.isAbsolute(relPath) ? relPath : path.join(cwd, relPath);
+  if (existsSync(resolved)) return false;
+  return !isGitIgnoredNoIndex(relPath, cwd);
+}
+
 // ── Shared types ─────────────────────────────────────────────
 export interface ValidationError {
   file: string;
@@ -538,7 +562,8 @@ export function validateScriptRegistration(root?: string): ValidationError[] {
 export function validateProtocolDirAddability(root?: string): ValidationError[] {
   const errors: ValidationError[] = [];
   const base = root ?? getRepoRoot();
-  const probeDirs = ["agent/reports", "agent/feedback", "agent/memory", "agent/tasks"];
+  // ADR-27/28: reports/feedback/instance tasks are local (ignored). Probe memory only.
+  const probeDirs = ["agent/memory"];
 
   for (const dir of probeDirs) {
     const probe = path.join(base, dir, "__acp_addability_probe__.md");
@@ -558,46 +583,8 @@ export function validateProtocolDirAddability(root?: string): ValidationError[] 
     }
   }
 
-  for (const dir of ["agent/reports", "agent/feedback"]) {
-    const absDir = path.join(base, dir);
-    if (!existsSync(absDir)) continue;
-    const walk = (sub: string) => {
-      for (const entry of readdirSync(sub, { withFileTypes: true })) {
-        const full = path.join(sub, entry.name);
-        if (entry.isDirectory()) walk(full);
-        else {
-          if (entry.name.startsWith(".") || entry.name === ".DS_Store") continue;
-          const rel = path.relative(base, full).replace(/\\/g, "/");
-          try {
-            const tracked = execSync(`git ls-files --error-unmatch "${rel}"`, {
-              cwd: base,
-              encoding: "utf8",
-              stdio: ["pipe", "pipe", "pipe"],
-            });
-            if (!tracked.trim()) {
-              errors.push({
-                file: rel,
-                line: 0,
-                message: `Untracked evidence file in ${dir}/ (D9)`,
-                severity: "error",
-              });
-            }
-          } catch {
-            errors.push({
-              file: rel,
-              line: 0,
-              message: `Untracked evidence file in ${dir}/ (D9)`,
-              severity: "error",
-            });
-          }
-        }
-      }
-    };
-    walk(absDir);
-  }
-
   if (errors.length === 0) {
-    console.log("✅ Protocol dirs: addability probe passed; evidence files tracked");
+    console.log("✅ Protocol dirs: addability probe passed (memory)");
   }
   return errors;
 }
@@ -2079,7 +2066,16 @@ export function validateGitTagsExist(): ValidationError[] {
 export function validateGitignoreConflicts(): ValidationError[] {
   const errors: ValidationError[] = [];
   // Check known tracked paths that have had .gitignore conflicts
-  const trackedPaths = ["agent/reports/", "scripts/package-lock.json"];
+  const trackedPaths = [
+    "agent/reports/.gitkeep",
+    "scripts/package-lock.json",
+    "agent/milestones/.gitkeep",
+    "agent/milestones/milestone-1-{title}.template.md",
+    "agent/tasks/.gitkeep",
+    "agent/tasks/task-1-{title}.template.md",
+    "agent/sessions/.gitkeep",
+    "docs/USAGE.md",
+  ];
 
   for (const tp of trackedPaths) {
     try {
@@ -2200,6 +2196,7 @@ function validateFilePointers(): boolean {
       seen.add(docFile);
       const resolvedDocFile = resolveProgressPointerPath(docFile);
       if (!existsSync(resolvedDocFile)) {
+        if (isGitIgnoredNoIndex(docFile)) continue;
         console.error(`❌ Dangling pointer: M${mid.replace(/^M/, "")} file: "${docFile}" does not exist`);
         allOk = false;
       }
@@ -2214,7 +2211,7 @@ function validateFilePointers(): boolean {
   }
 
   if (allOk) {
-    console.log(`✅ File pointers: all progress.yaml file: references exist`);
+    console.log(`✅ File pointers: all progress.yaml file: references exist or are gitignored`);
   }
   return allOk;
 }

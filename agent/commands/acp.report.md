@@ -165,7 +165,7 @@ Write report to file.
 
 **Actions**:
 - Generate filename with date (e.g., `report-2026-02-16.md`)
-- Save to `agent/reports/` directory (create if needed)
+- Save to `agent/reports/` directory (create if needed). Write locally; **do not commit** (ADR-27).
 - Confirm file written successfully
 - Display report location
 
@@ -388,7 +388,7 @@ Summary:
 
 ### File Access
 - **Reads**: All files in `agent/` directory, especially `agent/progress.yaml`
-- **Writes**: `agent/reports/report-YYYY-MM-DD.md` (creates report file)
+- **Writes**: `agent/reports/report-YYYY-MM-DD.md` (creates local report; do not `git add`)
 - **Executes**: None
 
 ### Network Access

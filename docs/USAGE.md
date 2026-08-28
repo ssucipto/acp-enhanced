@@ -190,6 +190,8 @@ The agent writes a session summary to `agent/memory/sessions.md` including:
 - What was deferred
 - The single most important fact learned this session
 
+On this public ACP Enhanced origin, dated files under `agent/sessions/` stay **local** (ADR-28). The compact registry `agent/memory/sessions.md` is what gets committed.
+
 This is how the agent "remembers" across sessions. **Don't skip this step.**
 
 ---

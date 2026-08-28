@@ -1,14 +1,15 @@
 project:
   name: agent-context-protocol
-  version: 6.32.4
+  version: 6.34.0
   started: 2026-02-16
   status: active
-  current_milestone: M81
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.32.4 on develop\n\
-    \  (M81 CodeRabbit integration + audit-117 remediations; M86 CI/PR/upgrade-guard at 6.31.x).\n\
-    \  F2-09 fixed. Aikido track ADR-19 gated.\n"
+  current_milestone: M88
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.34.0 on develop\n\
+    \  (ADR-28: instance milestone/task/session bodies and one field-feedback\n\
+    \  file local including history; templates and USAGE.md stay).\n\
+    \  F-R006-01..03 still pending. Aikido track ADR-19 gated.\n"
 active_handoff:
-  path: agent/reports/handoff-claude-m85-phase2-2026-07-31.md
+  path: agent/design/local.instance-docs-privacy-purge.md
   date: '2026-07-31'
   to_executor: claude-opus
   from_executor: claude-opus
@@ -905,6 +906,40 @@ milestones:
       COMPLETE 2026-08-14 — shipped v6.31.0. /acp-ci, /acp-pr, upgrade-guard,
       FG contracts, review-scan consumer-project↔M83 merge. BINDINGS: ADR-24/25/26 + P-UG-1,
       P-CI-1, P-PATH-1. current_milestone remains M81 (CodeRabbit fixture gate).
+  M87:
+    name: Public-repo privacy purge (v6.33.0)
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-08-27
+    completed: 2026-08-27
+    estimated_weeks: 2
+    tasks_completed: 13
+    tasks_total: 13
+    file: agent/milestones/milestone-87-public-repo-privacy-purge.md
+    design: agent/design/local.public-repo-privacy-purge.md
+    notes: >
+      PLANNED 2026-08-27 — ADR-27. Backup-first (audit-120): 333 rsync, 334 local
+      mirror, 323 gpg archive before any other task. Public remotes: keepers-only.
+      Force-push phrase `force-push develop mainline tags: yes`. Cookbook CB-0a..CB-6.
+      F-R006-01..03 out of scope. current_milestone is M87. COMPLETE 2026-08-27
+      v6.33.0; remotes keepers-only including tags. Re-clone daily done.
+  M88:
+    name: Instance-docs privacy purge (v6.34.0)
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-08-27
+    completed: 2026-08-28
+    estimated_weeks: 2
+    tasks_completed: 13
+    tasks_total: 13
+    file: agent/milestones/milestone-88-instance-docs-privacy-purge.md
+    design: agent/design/local.instance-docs-privacy-purge.md
+    notes: >
+      COMPLETE 2026-08-28 v6.34.0. ADR-28 Option C. Instance bodies + one
+      field-feedback file gone from origin history. Templates and USAGE.md
+      stay. F-R006-01..03 out of scope.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6650,7 +6685,397 @@ tasks:
     actual_hours:  2
     estimated_hours: 4
     notes: phase 4; depends 316-320; stamp 02-09+11 with evidence; keep current_milestone M81
+  M87:
+  - id: task-333
+    name: "GATE FIRST: local worktree rsync (including untracked)"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-333-local-worktree-rsync.md
+    started: '2026-08-27T12:28:00Z'
+    completed_date: '2026-08-27T12:30:00Z'
+    actual_hours: 0.1
+    estimated_hours: 2
+    notes: phase 0 START; CB-0a restore OK STAMP 20260827T202952
+  - id: task-334
+    name: "GATE FIRST: local git mirror + bundle from this clone"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-334-local-git-mirror-bundle.md
+    started: '2026-08-27T12:31:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.2
+    estimated_hours: 2
+    notes: 'CB-0b restore-tested; mirror ${HOME}/acp-enhanced-private/acp-enhanced-20260827T202952.git HEAD 1488312'
+  - id: task-322
+    name: Lock ADR-27 + citation map of tracked reports/feedback
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-322-adr27-citation-map.md
+    started: '2026-08-27T12:34:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.3
+    estimated_hours: 2
+    notes: 'citation map recorded; F-R006 not on map; 324-327 file list locked'
+  - id: task-323
+    name: "GATE: local encrypted archive of reports + feedback"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-323-local-encrypted-archive.md
+    started: '2026-08-27T12:32:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.2
+    estimated_hours: 3
+    notes: 'CB-1 gpg AES256 restore-tested; archive ${HOME}/acp-enhanced-private/acp-reports-feedback-20260827T203242.tar.gz.gpg; 171+37 tracked'
+  - id: task-324
+    name: Gitignore reports/feedback and reverse D9 validator
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-324-gitignore-reverse-d9-validator.md
+    started: '2026-08-27T12:38:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.4
+    estimated_hours: 3
+    notes: 'CB-2 ** glob; D9 walk removed; validate green with local audits'
+  - id: task-325
+    name: "Commands, E2E, and wiki: reports stay local"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-325-commands-e2e-local-reports.md
+    started: '2026-08-27T12:42:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.4
+    estimated_hours: 3
+    notes: 'commands/E2E/wiki ADR-27 local reports; ci.sh --help has no report path'
+  - id: task-326
+    name: Pattern, project-create, and install gitignores
+    priority: 4
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-326-pattern-project-create-gitignore.md
+    started: '2026-08-27T12:42:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.3
+    estimated_hours: 2
+    notes: 'CB-2 heredocs in install.sh + package-create.sh; pattern no AE force-add'
+  - id: task-327
+    name: Redact remaining tracked files ($HOME, consumer internals)
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-327-redact-remaining-tracked.md
+    started: '2026-08-27T12:42:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.2
+    estimated_hours: 3
+    notes: 'active_handoff retargeted to M85 milestone; Class A key_fact already ADR-27'
+  - id: task-328
+    name: git rm --cached report/feedback bodies; keepers
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-328-git-rm-tree-keepers.md
+    started: '2026-08-27T12:50:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.2
+    estimated_hours: 2
+    notes: 'CB-3 --cached; keepers only in index; bodies remain on disk'
+  - id: task-329
+    name: acp.private-pack.sh for machine transport
+    priority: 4
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-329-private-pack-script.md
+    started: '2026-08-27T12:55:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.5
+    estimated_hours: 3
+    notes: 'gpg/age pack+unpack; E2E fixture-only; refuse tracked output'
+  - id: task-330
+    name: filter-repo SOP + force-push develop mainline tags
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-330-filter-repo-force-push.md
+    started: '2026-08-27T13:00:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 2
+    estimated_hours: 4
+    notes: 'phrase confirmed; origin develop 4a7cef3 mainline d83cddc tags rewritten'
+  - id: task-331
+    name: "Fresh-clone proof: history + tags keepers-only"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-331-fresh-clone-verification.md
+    started: '2026-08-27T13:20:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 0.4
+    estimated_hours: 2
+    notes: 'fresh clone 0 bodies; v6.32.4 reports=0; F-118 stamps wait for 332'
+  - id: task-332
+    name: "Closure: validate, stamp F-118/F-119, CHANGELOG v6.33.0"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-332-v6330-closure.md
+    started: '2026-08-27T13:25:00Z'
+    completed_date: '2026-08-27'
+    actual_hours: 1
+    estimated_hours: 3
+    notes: 'v6.33.0; F-118-01..06 and F-119/F-120 stamped; F-R006 pending; daily re-cloned'
+  M88:
+  - id: task-335
+    name: "GATE FIRST: local worktree rsync (including untracked)"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-335-local-worktree-rsync.md
+    started: '2026-08-27T15:09:00Z'
+    completed_date: '2026-08-27T15:11:00Z'
+    actual_hours: 0.1
+    estimated_hours: 2
+    notes: 'phase 0 START; CB-0a restore OK STAMP 20260827T231053'
+  - id: task-336
+    name: "GATE FIRST: local git mirror + bundle from this clone"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-336-local-git-mirror-bundle.md
+    started: '2026-08-27T15:12:00Z'
+    completed_date: '2026-08-27T15:13:00Z'
+    actual_hours: 0.1
+    estimated_hours: 2
+    notes: 'CB-0b HEAD 8762b0c; mirror from $(pwd); bundle 11M'
+  - id: task-337
+    name: "GATE: encrypted archive of four trees plus reports/feedback"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-337-encrypted-four-tree-archive.md
+    started: '2026-08-27T15:14:00Z'
+    completed_date: '2026-08-27T15:14:00Z'
+    actual_hours: 0.1
+    estimated_hours: 3
+    notes: 'CB-1 gpg AES256 1.2M; restore USAGE.md absent; passphrase-file not argv'
+  - id: task-338
+    name: KEEP/PURGE inventory + citation + test/CI corpus
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-338-keep-purge-citation-corpus.md
+    started: '2026-08-27T15:16:00Z'
+    completed_date: '2026-08-27T15:20:00Z'
+    actual_hours: 0.1
+    estimated_hours: 3
+    notes: 'map in gitignored reports/; invert docs/ forbidden; keepers README missing'
+  - id: task-339
+    name: Gitignore instance docs and fix validators (one commit)
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-339-gitignore-validator.md
+    started: '2026-08-27T15:22:00Z'
+    completed_date: '2026-08-27T15:26:00Z'
+    actual_hours: 0.4
+    estimated_hours: 3
+    notes: 'CB-2 keepers not ignored; file-pointers skip --no-index; probeDirs memory only'
+  - id: task-340
+    name: "Commands, E2E, wiki: instance docs stay local"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-340-commands-e2e-wiki.md
+    started: '2026-08-27T15:28:00Z'
+    completed_date: '2026-08-27T15:32:00Z'
+    actual_hours: 0.1
+    estimated_hours: 3
+    notes: 'ADR-28 no git add session bodies; fixture strip keeps templates+USAGE'
+  - id: task-341
+    name: Pattern, install gitignores, and private-pack dirs
+    priority: 4
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-341-pattern-install-private-pack.md
+    started: '2026-08-27T15:32:00Z'
+    completed_date: '2026-08-27T15:34:00Z'
+    actual_hours: 0.1
+    estimated_hours: 2
+    notes: 'PACK_REL_DIRS +3 agent dirs; never docs/; integrity restamped; E2E 12/12'
+  - id: task-342
+    name: Redact leftovers in remaining tracked files
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-342-redact-remaining-tracked.md
+    started: '2026-08-27T15:35:00Z'
+    completed_date: '2026-08-27T15:36:00Z'
+    actual_hours: 0.1
+    estimated_hours: 3
+    notes: 'no passphrase-file in tracked grep; handoff is design; ${HOME} cookbook form'
+  - id: task-343
+    name: git rm --cached instance bodies; keep templates and public docs
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-343-git-rm-cached-keepers.md
+    started: '2026-08-27T15:37:00Z'
+    completed_date: '2026-08-27T15:38:00Z'
+    actual_hours: 0.1
+    estimated_hours: 2
+    notes: 'git rm --cached only; keepers+templates+USAGE tracked; no reclone until 347'
+  - id: task-344
+    name: "CI-clone rehearsal: validate the index without instance bodies"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-344-ci-clone-rehearsal.md
+    started: '2026-08-27T15:40:00Z'
+    completed_date: '2026-08-27T15:45:00Z'
+    actual_hours: 0.2
+    estimated_hours: 3
+    notes: 'CB-3b KEEP/PURGE counts 0 bodies; validate green after git init; cross-layer 5/5'
+  - id: task-345
+    name: filter-repo SOP + force-push instance-docs develop mainline tags
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-345-filter-repo-force-push.md
+    started: '2026-08-28T00:30:00Z'
+    completed_date: '2026-08-28T00:40:00Z'
+    actual_hours: 0.5
+    estimated_hours: 4
+    notes: 'CB-4 paths-from-file; --no-local /tmp/acp-rewrite-m88; phrase recorded; forks/caches may retain objects'
+  - id: task-346
+    name: "Fresh-clone proof: history + tags keepers and templates only"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-346-fresh-clone-proof.md
+    started: '2026-08-28T00:42:00Z'
+    completed_date: '2026-08-28T00:50:00Z'
+    actual_hours: 0.3
+    estimated_hours: 2
+    notes: 'CB-5 full clone /tmp/acp-fresh-m88; develop keepers+templates; history empty for PURGE; mainline+v6.33.0 templates kept'
+  - id: task-347
+    name: "Closure: CHANGELOG v6.34.0 after clone proof"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-347-v6340-closure.md
+    started: '2026-08-28T00:50:00Z'
+    completed_date: '2026-08-28T01:10:00Z'
+    actual_hours: 0.5
+    estimated_hours: 3
+    notes: 'v6.34.0; golden TSV; annotated tag; regular push; F-R006 stays pending'
 recent_work:
+- date: 2026-08-28
+  description: "audit-124 post-ship: CHANGELOG/wiki/badge; PR to mainline"
+  items:
+  - "✅ CHANGELOG distinguishes develop/tag v6.34.0 from unpublished mainline"
+  - "✅ architecture.md ADR-28; README badge 88 shipped"
+  - "F-124-02: regular PR develop → mainline; F-R006 still separate"
+- date: 2026-08-28
+  description: "task-347 v6.34.0 closure after 346 proof"
+  items:
+  - "✅ identity/package/CHANGELOG/AGENT/README/AGENTS three-copy 6.34.0; golden TSV"
+  - "✅ Annotated tag v6.34.0; regular push (no second force-push); F-R006 still pending"
+  - "Forks/caches may retain old objects; PR to mainline when asked"
+- date: 2026-08-28
+  description: "task-346 fresh-clone KEEP/PURGE proof"
+  items:
+  - "✅ /tmp/acp-fresh-m88 full clone; develop keepers+templates; PURGE history empty"
+  - "✅ mainline + v6.33.0 templates kept; field-feedback absent on all checked refs"
+  - "Default clone checks out mainline; session README keepers are on develop until merge"
+- date: 2026-08-28
+  description: "task-345 filter-repo + force-push develop mainline tags"
+  items:
+  - "✅ --no-local /tmp/acp-rewrite-m88; invert 454 PURGE paths; KEEP templates on tags"
+  - "✅ Phrase force-push instance-docs develop mainline tags: yes recorded"
+  - "Forks/caches may retain old objects; do not reclone daily until 347"
+- date: 2026-08-28
+  description: "audit-123 cookbook/docs/validator remediations (no force-push)"
+  items:
+  - "✅ CB-4 invert PURGE paths via --paths-from-file (not whole dirs); CB-3b git init"
+  - "✅ install.sh root gitignore field-feedback; validateGitignoreConflicts templates"
+  - "F-123-03: do not filter-repo until exact phrase; do not reuse M87 phrase"
+- date: 2026-08-27
+  description: "task-344 CI-clone rehearsal (blocks filter-repo)"
+  items:
+  - "✅ checkout-index: USAGE+templates present; instance body counts 0"
+  - "✅ validate green with gitignored missing pointers; file-pointer line recorded"
+  - "✅ cross-layer E2E 5/5 after V1/V3 KEEP-path fixtures"
+- date: 2026-08-27
+  description: "task-343 git rm --cached instance bodies; keepers remain"
+  items:
+  - "✅ Index: templates + keepers + four public docs; routing/tasks still 241"
+  - "✅ Bodies still on disk; no git add -f; history still dirty until 345"
+  - "F-122-04: do not reclone daily worktree until 347"
+- date: 2026-08-27
+  description: "task-342 redact leftovers in remaining tracked files"
+  items:
+  - "✅ No passphrase-file path in tracked grep; active_handoff is design (F-122-02)"
+  - "✅ Cookbook placeholders ${HOME}/acp-enhanced-private/ only"
+  - "identity.yml team email kept"
+- date: 2026-08-27
+  description: "task-341 install gitignore + private-pack dirs"
+  items:
+  - "✅ PACK_REL_DIRS adds milestones/tasks/sessions; never docs/"
+  - "✅ E2E dummy milestone packed; USAGE.md absent from archive; hashes restamped"
+  - "Do not pack agent/routing/tasks"
+- date: 2026-08-27
+  description: "task-340 commands/E2E/wiki dual-store"
+  items:
+  - "✅ commit/session-sync write locally; do not git add session bodies"
+  - "✅ cross-layer fixture strips instance bodies; USAGE.md copy stays"
+  - "commit-sync E2E unchanged (F-122-10)"
+- date: 2026-08-27
+  description: "task-339 gitignore + validator (one commit)"
+  items:
+  - "✅ CB-2: instance bodies ignored; templates, USAGE.md, routing/tasks, memory/sessions.md not ignored"
+  - "✅ validateFilePointers skips git check-ignore --no-index; probeDirs memory only"
+  - "Created missing keepers README/.gitkeep so 343 git add does not fail"
+- date: 2026-08-27
+  description: "task-338 KEEP/PURGE citation map (gitignored reports/)"
+  items:
+  - "✅ Invert docs/ forbidden; milestone-9-template-source-files.md PURGE; routing/tasks KEEP"
+  - "✅ Corpus: validateFilePointers, probeDirs, cross-layer E2E, commit/session-sync"
+  - "Do not git add the map; create missing keepers in 339/343"
+- date: 2026-08-27
+  description: "task-337 GATE CB-1 encrypted four-tree archive"
+  items:
+  - "✅ gpg AES256 1.2M; restore field-feedback present; USAGE.md absent from restore tree"
+  - "✅ Batch passphrase-file (not argv); age missing; ciphertext not in clone"
+  - "Do not call acp.private-pack.sh until 341"
+- date: 2026-08-27
+  description: "task-336 GATE CB-0b local git mirror + bundle"
+  items:
+  - "✅ Mirror from $(pwd) HEAD 8762b0c; clone-from-mirror HEAD match"
+  - "✅ Bundle 11M at ${HOME}/acp-enhanced-private/acp-enhanced-m88-20260827T231053.bundle"
+  - "345 takes a second mirror immediately before filter-repo"
+- date: 2026-08-27
+  description: "task-335 GATE CB-0a worktree rsync restore OK"
+  items:
+  - "✅ STAMP 20260827T231053 DEST ${HOME}/acp-enhanced-private/worktree-m88-20260827T231053"
+  - "✅ HEAD 0f325e1 match; USAGE.md + field-feedback + templates + tasks/ + sessions/"
+  - "Do not rsync back onto the live clone"
+- date: 2026-08-27
+  description: "/acp-audit --pre-impl M88 (audit-122) + plan amend — READY for task-335"
+  items:
+  - "✅ CB-1 is tar+gpg+restore (not a stub); CB-3b copies scripts/node_modules"
+  - "✅ current_milestone M88; next_steps[0] is task-335 without M88 substring; handoff path retargeted to design"
+  - "Do not commit audit-122; F-R006-01..03 still separate"
+- date: 2026-08-27
+  description: "/acp-plan M88 instance-docs privacy purge (ADR-28 Option C)"
+  items:
+  - "✅ ADR-28: KEEP public docs + templates; PURGE instance milestone/task/session bodies + one field-feedback file including history"
+  - "✅ Design + milestone-88 + tasks 335–347 (~35h); 344 CI rehearsal before 345; new force-push phrase"
+  - "Deferred: F-R006-01..03 — separate from M88; current_milestone remains M87 until proceed"
+- date: 2026-08-27
+  description: "/acp-audit --pre-impl round 2 (audit-120) — backup-first tasks 333+334"
+  items:
+  - "✅ GATE: 333 worktree rsync then 334 local git mirror then 323 gpg — before 322"
+  - "✅ CB-0a/0b; do not mirror from GitHub as the only backup; age missing → gpg"
+  - "Do not commit audit-118/119/120"
+- date: 2026-08-27
+  description: "/acp-audit --pre-impl M87 (audit-119) + plan amendments CB-1..CB-6"
+  items:
+  - "✅ READY after amend: git rm --cached, filter-repo+tags SOP, gitignore **"
+  - "✅ Tasks 322–332 rewritten to cite cookbook; progress.yaml status not_started"
+  - "Do not commit audit-119; F-R006-01..03 still separate"
+- date: 2026-08-27
+  description: "/acp-plan M87 public-repo privacy purge (ADR-27); reports/feedback off remotes including history"
+  items:
+  - "✅ ADR-27: public remotes keepers-only under agent/reports and agent/feedback"
+  - "✅ Design + milestone-87 + tasks 322–332 (~28h); history rewrite gated on backup + operator force-push confirm"
+  - "Deferred: F-R006-01..03 (js-yaml / bootstrap / dispatch) — separate from M87"
+- date: 2026-08-27
+  description: "/acp-resume after 13-day gap — overdue weekly/monthly scans completed"
+  items:
+  - "✓ Gap check: last sessions.md 2026-08-14; HEAD b0334bb v6.32.4; develop==mainline (push/PR next_steps were stale)"
+  - "✅ monthly-dependency-audit: IG-27–32 clean"
+  - "✅ weekly-integrity-scan → integrity-003; TRUSTWORTHY; 0 new carryovers (IG-17/24/33/34 = known FPs)"
+  - "✅ weekly-code-review → review-006; 3 HIGH carryovers F-R006-01..03 (js-yaml CVE, bootstrap SH-01, dispatch any)"
+  - "Deferred: IG-17 allowlist polish; ADR-19 Aikido gated; F-R006-01..03 remediations"
 - date: 2026-08-14
   description: "Backlog clear: F2-09 + integrity-002 + D-002-01…08; ready to push develop"
   items:
@@ -9603,14 +10028,16 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "Push develop (+ annotated tags v6.31.0–v6.32.2). Then merge origin/mainline into develop and open PR → mainline."
+- "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline at 6.32.4 until that lands."
+- "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
+- "Forks/old clones: reclone or git fetch --prune; do not force-push again. GitHub caches may retain old objects."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 - "Optional: IG-17 allowlist for agent/scripts scanners (integrity FP noise)."
 current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2
   docs sync)'
-- 81 milestones shipped (incl. M81 CodeRabbit + M86 CI/PR); M74 policy/integration roadmap in research reports
+- 88 milestones shipped (incl. M88 instance-docs ADR-28 on develop/tags; PR to mainline pending)
 - 74 command docs (72 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
   cursor, claude)
 - 9 skills; 56 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.32.2
@@ -9631,17 +10058,17 @@ recurring_tasks:
     command: /acp-review --report --carryover
     frequency: weekly
     executor: copilot
-    last_run: '2026-08-14'
-    next_due: '2026-08-21'
-    last_findings_count: 7
+    last_run: '2026-08-27'
+    next_due: '2026-09-03'
+    last_findings_count: 3
     status: current
     description: Weekly code quality review with carryover tracking
   - id: weekly-integrity-scan
     command: /acp-integrity --self --report --carryover
     frequency: weekly
     executor: copilot
-    last_run: '2026-08-14'
-    next_due: '2026-08-21'
+    last_run: '2026-08-27'
+    next_due: '2026-09-03'
     last_findings_count: 0
     status: current
     description: Weekly ACP framework integrity scan
@@ -9692,8 +10119,8 @@ recurring_tasks:
     command: /acp-integrity --rules dependencies
     frequency: monthly
     executor: deepseek-v4-pro
-    last_run: 2026-07-15
-    next_due: 2026-08-15
+    last_run: 2026-08-27
+    next_due: 2026-09-26
     last_findings_count: 0
     status: current
     description: Monthly dependency and supply chain audit

@@ -3379,3 +3379,525 @@ carryovers:
     fix_applied_date: 2026-08-14
     verified_in_audit: "117"
     escalated_to: null
+
+  # ── REVIEW-006 — WEEKLY SELF-REVIEW (2026-08-27) ───────────────────────────
+  - audit_id: review-006
+    finding_id: F-R006-01
+    severity: high
+    file: scripts/package.json
+    finding: "js-yaml 4.x (and nested 3.x via gray-matter) vulnerable to GHSA-5p4m-2wfm-xmqj !!omap quadratic CPU"
+    description: "npm audit --omit=dev reports 1 high (js-yaml). Patched versions are 4.3.1 and 3.15.1. Dev tree also has nanoid <3.3.18 (vitest)."
+    fix_target: "Bump js-yaml to 4.3.1; npm overrides for nested 3.x → 3.15.1; npm audit fix; re-run npm audit in scripts/"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: review-006
+    finding_id: F-R006-02
+    severity: high
+    file: scripts/acp-bootstrap.sh
+    finding: "Bootstrap entry point missing set -euo pipefail + trap ERR (has set -e and set -o pipefail only)"
+    description: "SH-01 HIGH. Scanner greps the exact euo string. Curl-pipe installer must keep nounset-safe argument parsing."
+    fix_target: "Add set -euo pipefail and trap ERR; verify --help / --yes still work under nounset"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: review-006
+    finding_id: F-R006-03
+    severity: high
+    file: scripts/acp-dispatch.ts
+    finding: "any types in buildContext/appendLedger; updateRoutingYml missing explicit return type"
+    description: "TS-01 HIGH at lines 117/131/177; TS-02 HIGH at line 191. Remaining dispatch tech debt after CR-003 typed validate.ts."
+    fix_target: "Replace Record<string, any> with a TaskMeta interface; drop as any on yaml.load; annotate updateRoutingYml(): void"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-122 — M88 PRE-IMPL READINESS (2026-08-27) ────────────────────────
+  - audit_id: 122
+    finding_id: F-122-01
+    severity: critical
+    file: agent/design/local.instance-docs-privacy-purge.md
+    finding: "CB-1 is a stub (test -f OUT with no tar/gpg); task-337 cannot execute"
+    description: "M87 CB-1 had full tar+gpg+restore. M88 CB-1 commented private-pack-after-341 then tested a missing file."
+    fix_target: "Write copy-paste tar of reports,feedback,milestones,tasks,sessions + the one docs file; gpg AES256; restore-test. Task-337 cites CB-1 only."
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-02
+    severity: high
+    file: agent/progress.yaml
+    finding: "active_handoff.path points at milestone-85 which 343/filter-repo remove; validateActiveHandoff ERRORs if missing"
+    description: "scripts/acp-validate.ts:2196 existsSync on handoff path regardless of completed status."
+    fix_target: "Retarget path to agent/design/local.instance-docs-privacy-purge.md (stays tracked)"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-03
+    severity: high
+    file: agent/progress.yaml
+    finding: "current_milestone still M87; /acp-proceed without task id scans completed M87"
+    description: "acp.proceed.md A1 uses current_milestone. next_steps[0] must not contain M88 after switch (validateNextStepsFreshness)."
+    fix_target: "Set current_milestone M88; rewrite next_steps[0] to start at task-335 without the substring M88"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-04
+    severity: high
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-343-git-rm-cached-keepers.md
+    finding: "git rm --cached -r agent/tasks untracks remaining 344-347 task docs"
+    description: "Files remain on disk if --cached. Reclone from GitHub after 343 loses 344-347 unless 335 backup restore."
+    fix_target: "343 SOP: do not reclone daily until 347; restore task docs from worktree-m88 DEST"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-05
+    severity: high
+    file: agent/design/local.instance-docs-privacy-purge.md
+    finding: "CB-3b checkout-index omits scripts/node_modules; rehearsal validate cannot run"
+    description: "node_modules is gitignored. Copy from daily or npm ci --ignore-scripts in rehearsal/scripts."
+    fix_target: "CB-3b copy node_modules; 344 asserts validate ran in rehearsal tree"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-06
+    severity: high
+    file: scripts/acp-validate.ts
+    finding: "File-pointer skip must use git check-ignore --no-index so CI clones skip gitignored missing paths"
+    description: "existsSync fails on CI after 343. Default check-ignore is index-sensitive."
+    fix_target: "task-339: skip dangling if git check-ignore -q --no-index path; probeDirs memory only"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-07
+    severity: medium
+    file: agent/tasks/milestone-88-instance-docs-privacy-purge/task-347-v6340-closure.md
+    finding: "Closure omits yaml-parser golden, AGENTS.md/CLAUDE.md/copilot-instructions, annotated v6.34.0 tag"
+    description: "validateGitTagsExist errors when identity version has no tag. Golden broke e2e-smoke after v6.33.0 bump."
+    fix_target: "347: refresh golden TSV; sync instruction files; git tag -a v6.34.0; regular push tag"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 122
+    finding_id: F-122-11
+    severity: medium
+    file: agent/scripts/acp.private-pack.sh
+    finding: "PACK_REL_DIRS cannot pack the single docs purge-target file; never pack docs/"
+    description: "337 tar must list the file. 341 adds agent/milestones|tasks|sessions dirs only."
+    fix_target: "CB-1 tar includes docs/acp-enhanced-dev-team-feedback-consolidated.md; 341 forbids docs/ dir"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "123"
+    escalated_to: null
+
+  # ── AUDIT-124 — M88 POST-SHIP GAPS (2026-08-28) ────────────────────────────
+  - audit_id: 124
+    finding_id: F-124-01
+    severity: high
+    file: CHANGELOG.md
+    finding: "6.34.0 CHANGELOG claims mainline already has ADR-28 README keepers"
+    description: "origin/mainline is rewritten 7e538a3, identity 6.32.4, no sessions keepers"
+    fix_target: "Changelog must distinguish develop/tag v6.34.0 from unpublished mainline until PR merges"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 124
+    finding_id: F-124-02
+    severity: high
+    file: origin/mainline
+    finding: "GitHub default clone is mainline, 37 commits behind develop (M87+M88 unpublished)"
+    description: "Strangers cloning origin get 6.32.4 keepers, not v6.34.0"
+    fix_target: "Open regular PR develop → mainline; do not force-push"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 124
+    finding_id: F-124-03
+    severity: low
+    file: README.md
+    finding: "Milestone badge still 81 shipped after M88 closed"
+    description: "Badge was already stale at M87"
+    fix_target: "Update badge to 88 shipped"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 124
+    finding_id: F-124-04
+    severity: medium
+    file: agent/wiki/architecture.md
+    finding: "Framework Development Mode still says milestones stay tracked"
+    description: "Conflicts with ADR-28 instance milestone/task/session bodies"
+    fix_target: "Routing tasks + memory tracked; instance milestone/task/session bodies local"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-123 — M88 IMPLEMENTATION GAPS (2026-08-28) ──────────────────────
+  - audit_id: 123
+    finding_id: F-123-01
+    severity: high
+    file: agent/design/local.instance-docs-privacy-purge.md
+    finding: "CB-4 directory invert-paths drops templates from all tags; CB-5 KEEP on tags would fail"
+    description: "Same class as F-119-10 but on every ref. Invert PURGE paths only so keepers stay in history."
+    fix_target: "CB-4 --paths-from-file of PURGE paths; never invert docs/ or routing/tasks; sanity-grep USAGE.md"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-02
+    severity: high
+    file: agent/design/local.instance-docs-privacy-purge.md
+    finding: "CB-3b checkout-index has no .git; check-ignore --no-index fail-closes"
+    description: "344 rehearsal only passed after git init + identity tag. Cookbook omitted that."
+    fix_target: "CB-3b: git init, commit, annotated v{identity} tag, then validate"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-03
+    severity: high
+    file: agent/design/local.instance-docs-privacy-purge.md
+    finding: "M87 phrase is not M88 force-push consent"
+    description: "Operator typed the M88 phrase 2026-08-28. Rewritten from /tmp/acp-rewrite-m88."
+    fix_target: "Do not filter-repo or git push --force until the M88 phrase is typed exactly"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-04
+    severity: medium
+    file: AGENT.md
+    finding: "/acp-commit blurb omits ADR-28 local-only session bodies"
+    description: "340 updated README and wiki; AGENT.md is the primary human doc."
+    fix_target: "One sentence: session markdown is local on AE origin; memory/sessions.md stays tracked"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-05
+    severity: medium
+    file: agent/scripts/acp.install.sh
+    finding: "Install gitignore omits root docs field-feedback file"
+    description: "package-create has the line; install only writes agent/.gitignore"
+    fix_target: "Append docs/acp-enhanced-dev-team-feedback-consolidated.md to TARGET .gitignore"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-06
+    severity: medium
+    file: scripts/acp-validate.ts
+    finding: "validateGitignoreConflicts omits both templates"
+    description: "CI would not warn if gitignore started ignoring KEEP templates"
+    fix_target: "Add milestone and task template paths to trackedPaths"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 123
+    finding_id: F-123-07
+    severity: low
+    file: agent/progress.yaml
+    finding: "next_steps[1] still says rehearse 344 before 345"
+    description: "344 completed 2026-08-27"
+    fix_target: "Rewrite next_steps[1] without claiming 344 is future work"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-118 — PUBLIC-REPO PRIVACY / FIELD ARTIFACTS (2026-08-27) ────────
+  - audit_id: 118
+    finding_id: F-118-01
+    severity: high
+    file: agent/reports/coderabbit-local-2026-07-24/chunk-e2e.attempt1.raw.txt
+    finding: "CodeRabbit CLI raw dumps on develop/mainline contain org billing UUID and isProUser"
+    description: "Rewritten off origin; task-331 fresh clone + v6.32.4 tag proof 2026-08-27. Do not paste orgId into new files."
+    fix_target: "Backup, then untrack + filter-repo path; never paste the orgId into new files"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
+    escalated_to: null
+  - audit_id: 118
+    finding_id: F-118-02
+    severity: high
+    file: agent/feedback/design-spec-app-interfaces-m15-spine-v2.1.md
+    finding: "Full consumer-project application design spec tracked in ACP Enhanced feedback/"
+    description: "Consumer product architecture (screens, stores, Firestore, billing entitlements) is not ACP protocol evidence. Protects the feedback provider only if this file is not redistributed."
+    fix_target: "Untrack + history rewrite (M87); do not paste spec body into AE files; pack locally"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
+    escalated_to: null
+  - audit_id: 118
+    finding_id: F-118-03
+    severity: high
+    file: agent/reports/consumer-project-port-inbox-2026-08-14/README.md
+    finding: "consumer-project port inbox + audit-114 leak absolute $HOME paths and consumer CI snapshots"
+    description: "README and diff headers name /Users/…/Project/consumer-project/consumer-project. ci.yml is consumer-project Expo/RevenueCat CI. Portable ideas already shipped as AE /acp-ci and /acp-pr."
+    fix_target: "Untrack inbox dir + history rewrite (M87); redact $HOME in remaining tracked files (task-327)"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
+    escalated_to: null
+  - audit_id: 118
+    finding_id: F-118-04
+    severity: medium
+    file: agent/design/m72-validation-truth-drift-hardening.md
+    finding: "D9 tracks all reports/feedback with no privacy class for consumer/field artifacts"
+    description: "Maintainer overrode Class A/B split (ADR-27): public remotes must not contain any reports/feedback bodies. D9 tracking is superseded for this public repo. Do not reopen D9 as a tracking requirement."
+    fix_target: "ADR-27 + reverse D9 validator; gitignore reports/feedback; history rewrite before stamp"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
+    escalated_to: null
+  - audit_id: 118
+    finding_id: F-118-05
+    severity: medium
+    file: agent/patterns/local.tracked-untracked-directories.md
+    finding: "Pattern still says reports/ and feedback/ are gitignored; AE D9 tracks them"
+    description: "Pattern still says reports/feedback are gitignored while D9 tracks them; after ADR-27 the pattern's ignore rule is correct again and the validator/install comments must match."
+    fix_target: "Update pattern + acp.project-create.md + install gitignores: reports/feedback local-only (ADR-27)"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
+    escalated_to: null
+  - audit_id: 118
+    finding_id: F-118-06
+    severity: medium
+    file: agent/feedback/feedback-007-cross-agent-handoff-protocol-consumer-project-2026-07-25.md
+    finding: "Named consumer orgs/repos in tracked feedback without a documented consent/attribution policy"
+    description: "consumer-project, consumer-project, consumer-project, consumer-project appear in feedback, README, CHANGELOG. Names may be OK if consented; pair with F-118-02/03 so internals are not published alongside names."
+    fix_target: "Document attribution policy (names OK vs internals not); confirm consent or generalize remaining field reports"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
+    escalated_to: null
+
+  # ── AUDIT-119 — M87 PRE-IMPL READINESS (2026-08-27) ────────────────────────
+  - audit_id: 119
+    finding_id: F-119-01
+    severity: high
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-328-git-rm-tree-keepers.md
+    finding: "git rm without --cached deletes working-tree report/feedback files"
+    description: "Plan amended to CB-3. Implement exactly git rm --cached -r. Restore from age archive if mistyped."
+    fix_target: "task-328 CB-3; verified when 328 complete"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
+    escalated_to: null
+  - audit_id: 119
+    finding_id: F-119-02
+    severity: high
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-330-filter-repo-force-push.md
+    finding: "filter-repo SOP omitted origin drop, tag leak (v6.32.4 still has 171 reports), diverged branches"
+    description: "Plan amended to CB-4. Force-push phrase includes tags. Do not use --force-with-lease after rewrite."
+    fix_target: "task-330 CB-4; verified in task-331 tag checkout"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
+    escalated_to: null
+  - audit_id: 119
+    finding_id: F-119-03
+    severity: high
+    file: agent/.gitignore
+    finding: "reports/* does not ignore nested files; package-create uses *.md"
+    description: "Plan amended to CB-2 ** + keeper exceptions. task-326 retargeted to acp.install.sh + package-create.sh."
+    fix_target: "task-324 CB-2 + task-326 package-create globs"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
+    escalated_to: null
+  - audit_id: 119
+    finding_id: F-119-04
+    severity: medium
+    file: agent/milestones/milestone-87-public-repo-privacy-purge.md
+    finding: "328 could land before 325; gitignore+validator must be one commit"
+    description: "328 now depends 325; 324 same-commit requirement written."
+    fix_target: "Honor DAG in /acp-proceed"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
+    escalated_to: null
+  - audit_id: 119
+    finding_id: F-119-08
+    severity: medium
+    file: agent/memory/sessions.md
+    finding: "Class A-in-git session key_fact would mislead the next agent; pattern documents git add -f"
+    description: "sessions.md audit-118 key_fact rewritten in plan-amend; pattern git add -f remains task-326."
+    fix_target: "task-326 pattern; task-327 leftover sweep"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "119"
+    escalated_to: null
+
+  # ── AUDIT-120 — M87 PRE-IMPL ROUND 2 BACKUP-FIRST (2026-08-27) ─────────────
+  - audit_id: 120
+    finding_id: F-120-01
+    severity: high
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-322-adr27-citation-map.md
+    finding: "M87 could start at 322/324/327 with no local backup restore"
+    description: "Plan amended: 333 rsync → 334 local mirror → 323 encrypt; 322 blocked on all three."
+    fix_target: "Honor DAG; first proceed is 333"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "120"
+    escalated_to: null
+  - audit_id: 120
+    finding_id: F-120-02
+    severity: high
+    file: agent/design/local.public-repo-privacy-purge.md
+    finding: "git clone --mirror from GitHub misses unpushed develop and untracked reports"
+    description: "CB-0b/CB-4 now mirror from this clone. task-334 + second mirror at 330."
+    fix_target: "task-334 CB-0b; task-330 CB-4 local path"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "120"
+    escalated_to: null
+  - audit_id: 120
+    finding_id: F-120-03
+    severity: high
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-333-local-worktree-rsync.md
+    finding: "No worktree copy; untracked audit reports exist only on this disk"
+    description: "task-333 CB-0a rsync including untracked agent/reports."
+    fix_target: "task-333 restore dry-run"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "120"
+    escalated_to: null
+  - audit_id: 120
+    finding_id: F-120-04
+    severity: medium
+    file: agent/design/local.public-repo-privacy-purge.md
+    finding: "CB-1 required age; this machine has gpg only"
+    description: "CB-1 now gpg --symmetric fallback; probe before pack."
+    fix_target: "task-323 CB-1"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "120"
+    escalated_to: null
+
+  # ── AUDIT-121 — M87 IMPLEMENTATION GAPS (2026-08-27) ──────────────────────
+  - audit_id: 121
+    finding_id: F-121-01
+    severity: high
+    file: agent/design/local.public-repo-privacy-purge.md
+    finding: "CB-4 clone omitted --no-local and hardcoded git@github.com origin"
+    description: "Default path clone hardlinks objects; filter-repo aborts. Origin must copy daily remote get-url (named SSH hosts)."
+    fix_target: "CB-4 --no-local + DAILY origin; CB-5 clone from DAILY origin; CB-6 never-list"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-02
+    severity: high
+    file: agent/tasks/milestone-87-public-repo-privacy-purge/task-330-filter-repo-force-push.md
+    finding: "Two rewritten clones with different tip SHAs"
+    description: "Canonical push clone is /tmp/acp-rewrite. rewrite-ready must not be force-pushed."
+    fix_target: "task-330 notes declare canonical clone"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-03
+    severity: high
+    file: .
+    finding: "Daily worktree history still contains report/feedback blobs"
+    description: "Daily .git replaced from origin/develop 344b84a 2026-08-27; rev-list report bodies=0. Local reports restored from Phase 0 worktree backup."
+    fix_target: "Keep working only on this re-cloned develop"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: "121"
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-04
+    severity: medium
+    file: agent/integrity-manifest.yaml
+    finding: "SHA drift for acp.install.sh, acp.package-create.sh, acp.ci.sh"
+    description: "D10 skipped after script edits. Hashes and last_verified restamped 2026-08-27."
+    fix_target: "integrity-manifest.yaml three script entries"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-05
+    severity: medium
+    file: agent/wiki/cross-agent-handoff.md
+    finding: "Wiki cited consumer filesystem path Project/consumer-project/consumer-project/agent/reports/"
+    description: "Redacted to generic local agent/reports/. consumer-project name retained (F-118-06)."
+    fix_target: "cross-agent-handoff.md exemplars path line"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-06
+    severity: medium
+    file: agent/wiki/domain.yml
+    finding: "related_audit/related_feedback pointed at report and feedback bodies"
+    description: "Retargeted to finding IDs + ADR-27 local gitignored note."
+    fix_target: "domain.yml related_audit and related_feedback fields"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-07
+    severity: low
+    file: agent/wiki/coderabbit-integration.md
+    finding: "Docs named tracked agent/reports/audit-*.md paths that vanish on fresh clone"
+    description: "Coderabbit wiki and stakeholder-report exemplar retargeted to local gitignored writers."
+    fix_target: "coderabbit-integration.md + acp.stakeholder-report.md notes"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-08
+    severity: low
+    file: agent/progress.yaml
+    finding: "M87 notes still said current_milestone remains M81 until /acp-proceed"
+    description: "Notes now say current_milestone is M87; HALT at task-330."
+    fix_target: "progress.yaml M87 notes"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 121
+    finding_id: F-121-09
+    severity: low
+    file: agent/milestones/milestone-87-public-repo-privacy-purge.md
+    finding: "@acp.meta status planned vs body in_progress"
+    description: "Meta status set to in_progress."
+    fix_target: "milestone-87 @acp.meta status"
+    status: fixed
+    fix_applied_date: "2026-08-27"
+    verified_in_audit: null
+    escalated_to: null

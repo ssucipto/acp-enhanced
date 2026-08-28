@@ -909,7 +909,7 @@ When `scripts/acp-validate.ts` runs (including via `/acp-validate`), these M70 c
 | package.yaml version | always | error | `validatePackageYamlVersion()` — must match `identity.yml` |
 | Script registration | always | warning | `validateScriptRegistration()` — on-disk `agent/scripts/*.sh` in package.yaml |
 | Five-surface parity | always | error | `validateParityCheck()` — 5 surfaces, zero-population fail, dot-stray detection |
-| Protocol dir addability | always | error | `validateProtocolDirAddability()` — D9 probe + untracked evidence files |
+| Protocol dir addability | always | error | `validateProtocolDirAddability()` — memory addability probe (ADR-27 reports/feedback local; ADR-28 instance tasks local) |
 
 **Usage**:
 ```bash

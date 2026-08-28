@@ -3,6 +3,273 @@
 # DO NOT edit manually — updated by /acp-commit
 
 
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-124]
+  done: [audit-124-post-ship, changelog-mainline-accuracy, wiki-adr28, badge-88]
+  deferred:
+    - merge-develop-to-mainline → maintainer
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    M88 rewrite is sound on develop and tags. GitHub default clone is still
+    mainline at 6.32.4. Completeness is a regular PR, not another force-push.
+    F-R006 and fork caches stay separate.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-347]
+  done: [v6340-bump, golden-tsv, annotated-tag]
+  deferred:
+    - pr-develop-to-mainline → maintainer
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    M88 closed as v6.34.0 after 346 proof. History rewrite already on origin.
+    Regular push of develop + annotated tag (no second force-push). F-R006
+    still pending. Forks/caches may retain old objects (F-119-09).
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-346]
+  done: [fresh-clone-keep-purge-proof]
+  deferred:
+    - v6340-closure → task-347
+    - F-122-04-reclone-daily → task-347
+    - F-122-07-v6340-golden-tag → task-347
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Full clone /tmp/acp-fresh-m88: develop dedd874 keepers+templates; PURGE
+    paths have empty git log --all --full-history. v6.33.0 still has templates.
+    Forks/caches may retain old objects. Daily .git is still unre-written —
+    347 commits must be made on the rewritten clone, not this worktree.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-345]
+  done: [filter-repo-paths-from-file, force-push-develop-mainline-tags]
+  deferred:
+    - fresh-clone-proof → task-346
+    - F-122-04-no-reclone-until-347 → task-347
+    - F-122-07-v6340-golden-tag → task-347
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Operator confirmed force-push instance-docs develop mainline tags: yes.
+    Rewrite clone /tmp/acp-rewrite-m88 (--no-local, 454 PURGE paths). Forks
+    and GitHub caches may retain old objects (F-119-09). Do not reclone daily
+    until 347. Do not force-push the daily worktree.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-123]
+  done: [audit-123-m88-gaps, cb-4-paths-from-file, cb-3b-git-init, agent-commit-adr28, install-root-gitignore, validate-templates]
+  deferred:
+    - filter-repo-force-push → task-345-operator-confirm
+    - F-123-03-m87-phrase-not-consent → task-345
+    - F-122-04-no-reclone-until-347 → task-347
+    - F-122-07-v6340-golden-tag → task-347
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    audit-123: CB-4 must invert PURGE paths via --paths-from-file, never whole
+    dirs (templates would vanish from tags). M87 phrase is not M88 consent.
+    Type exactly force-push instance-docs develop mainline tags: yes.
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-335, task-336, task-337, task-338, task-339, task-340, task-341, task-342, task-343, task-344]
+  done: [gate-backups, citation-map, gitignore-validator, dual-store-e2e, private-pack-dirs, tip-untrack, ci-rehearsal]
+  deferred:
+    - filter-repo-force-push → task-345-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    GATE STAMP 20260827T231053. Tip is keepers-only (git rm --cached). CI rehearsal
+    validate green. Halt until exact phrase force-push instance-docs develop
+    mainline tags: yes. Do not reclone daily until 347. Do not reuse the M87 phrase.
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-332]
+  done: [daily-reclone, v6330-bump, f-118-stamps]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+    - merge-develop-to-mainline → maintainer
+  key_fact: >
+    Daily worktree .git replaced from origin/develop 344b84a (0 report bodies).
+    Local reports restored from Phase 0 worktree backup. M87 closed as v6.33.0.
+    F-R006-* still pending. Forks/caches may retain old objects (F-119-09).
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-330, task-331]
+  done: [force-push-origin-rewrite, fresh-clone-history-proof]
+  deferred:
+    - reclone-daily-worktree → operator
+    - F-118-01-stamp → task-332
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    Operator confirmed `force-push develop mainline tags: yes`. Origin develop
+    4a7cef3, mainline d83cddc, v6.32.4 reports=0 on a new clone. Forks and GitHub
+    caches may retain objects (F-119-09). Re-clone the daily worktree before 332.
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-330]
+  done: [audit-121-m87-impl-gaps, f-121-cookbook-no-local, f-121-wiki-redact, f-121-integrity-hashes]
+  deferred:
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-121-03-daily-history-dirty → task-331
+    - F-118-01-history-rewrite → task-331
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    audit-121 fixed on tip except F-121-03. Canonical rewrite clone is /tmp/acp-rewrite
+    (--no-local). Readiness wording is not force-push consent. Type exactly
+    `force-push develop mainline tags: yes`. Forks and GitHub caches may retain objects (F-119-09).
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-328, task-329, task-330]
+  done: [tip-keepers-only, private-pack-script, local-filter-repo]
+  deferred:
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-118-01-history-rewrite → task-331
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    Local filter-repo succeeded on a throwaway clone; origin was NOT force-pushed.
+    /acp-proceed --yes is not consent. Type exactly `force-push develop mainline
+    tags: yes` to publish. Forks and GitHub caches may retain objects (F-119-09).
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-333, task-334, task-323, task-322]
+  done: [m87-phase-0-backups, citation-map]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Phase 0 restore-tested: worktree-20260827T202952, local git mirror HEAD
+    1488312 then 6e47fd9, gpg archive acp-reports-feedback-20260827T203242.
+    Passphrase is off-repo chmod 600. --yes is not force-push consent.
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-120, acp-plan, task-333, task-334]
+  done: [m87-pre-impl-round2, backup-first-tasks]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    audit-120 READY after amend. First proceed is task-333 (rsync worktree),
+    then 334 (local git mirror from pwd, not GitHub), then 323 (gpg). Do not
+    start 322 until those restores pass. This machine has gpg not age.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-119, acp-plan, M87]
+  done: [m87-pre-impl-audit, m87-plan-amend-cookbook]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    audit-119 READY after amend. Use design cookbook CB-1..CB-6. git rm must
+    be --cached. filter-repo on a throwaway clone; force-push phrase is
+    `force-push develop mainline tags: yes`. Do not commit audit-119.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [acp-plan, M87, task-322, ADR-27]
+  done: [m87-privacy-purge-plan]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Maintainer overrode audit-118 Class A-in-git. ADR-27: public remotes contain
+    zero agent/reports and agent/feedback bodies (keepers only). Secure removal
+    is filter-repo plus operator-confirmed force-push of develop and mainline.
+    HEAD git rm is not enough. Do not stamp F-118-01..03 until fresh-clone proof.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-118]
+  done: [audit-118-public-repo-privacy]
+  deferred:
+    - F-118-01-redact-coderabbit-raw → audit-118
+    - F-118-02-untrack-consumer-project-design-spec → audit-118
+    - F-118-03-untrack-port-inbox → audit-118
+    - F-118-04-d9-1-private-class → /acp-decide
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    Superseded by ADR-27: do not keep Class A protocol audits in git on this
+    public repo. Reports/feedback bodies are local-only; history rewrite required.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [acp-resume, weekly-code-review, weekly-integrity-scan, monthly-dependency-audit]
+  done:
+    - resumed-after-13-day-gap
+    - stale-push-next-step-cleared
+    - integrity-003-self-scan
+    - review-006-weekly-self
+    - monthly-dependency-audit-clean
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+    - ig17-scanner-allowlist → polish
+    - adr-19-aikido → gated
+  key_fact: >
+    After M81/M86 ship, develop==mainline at v6.32.4 with no coding task in_progress.
+    Overdue recurring scans are the next work. js-yaml GHSA-5p4m-2wfm-xmqj is SC-14
+    (review), not IG-27–32 (monthly dependency-diff).
+
 - date: 2026-08-14
   executor: cursor-composer
   branch: develop

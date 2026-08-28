@@ -26,6 +26,13 @@ assert_contains "${CMD_CONTENT}" "Namespace" "Namespace metadata present"
 print_test_header "S3 — Reports directory exists"
 assert_dir_exists "${REPORTS_DIR}" "agent/reports/ exists"
 
+print_test_header "S3b — New report bodies are gitignored (ADR-27)"
+DUMMY="${REPORTS_DIR}/audit-e2e-dummy.md"
+printf '%s\n' "e2e dummy" > "${DUMMY}"
+git -C "${PROJECT_ROOT}" check-ignore -q "${DUMMY}"
+assert_true "new report path is gitignored" $?
+rm -f "${DUMMY}"
+
 print_test_header "S4 — Carryovers file exists"
 assert_file_exists "${CARRYOVERS_FILE}" "audit-carryovers.md exists"
 
