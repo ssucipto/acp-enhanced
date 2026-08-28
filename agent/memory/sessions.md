@@ -6,6 +6,25 @@
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop
+  tasks: [task-345]
+  done: [filter-repo-paths-from-file, force-push-develop-mainline-tags]
+  deferred:
+    - fresh-clone-proof → task-346
+    - F-122-04-no-reclone-until-347 → task-347
+    - F-122-07-v6340-golden-tag → task-347
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Operator confirmed force-push instance-docs develop mainline tags: yes.
+    Rewrite clone /tmp/acp-rewrite-m88 (--no-local, 454 PURGE paths). Forks
+    and GitHub caches may retain old objects (F-119-09). Do not reclone daily
+    until 347. Do not force-push the daily worktree.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-123]
   done: [audit-123-m88-gaps, cb-4-paths-from-file, cb-3b-git-init, agent-commit-adr28, install-root-gitignore, validate-templates]
   deferred:
