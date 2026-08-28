@@ -6,6 +6,22 @@
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop
+  tasks: [task-347]
+  done: [v6340-bump, golden-tsv, annotated-tag]
+  deferred:
+    - pr-develop-to-mainline → maintainer
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    M88 closed as v6.34.0 after 346 proof. History rewrite already on origin.
+    Regular push of develop + annotated tag (no second force-push). F-R006
+    still pending. Forks/caches may retain old objects (F-119-09).
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
   tasks: [task-346]
   done: [fresh-clone-keep-purge-proof]
   deferred:

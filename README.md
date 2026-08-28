@@ -1,6 +1,6 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.33.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.34.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
 [![Milestones](https://img.shields.io/badge/milestones-81%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-72%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
@@ -1123,7 +1123,9 @@ project-root/
 │   ├── commands/                   # 74 command docs (72 acp.* + 2 git.*)
 │   ├── scripts/                    # 36 shell scripts + TypeScript tools
 │   ├── design/                     # Design documents
-│   ├── milestones/                 # Milestone definitions
+│   ├── milestones/                 # Keepers + template (instance bodies local, ADR-28)
+│   ├── tasks/                      # Keepers + template (instance bodies local, ADR-28)
+│   ├── sessions/                   # Keepers only (dated bodies local, ADR-28)
 │   ├── patterns/                   # Reusable code patterns
 │   ├── index/                      # Key file index
 │   ├── schemas/                    # YAML schemas
@@ -1178,7 +1180,8 @@ ACP Enhanced provides templates for each document type in `agent/*/`:
 | Directory | Template | Purpose |
 |-----------|----------|---------|
 | `agent/design/` | `*.template.md` | Design documents |
-| `agent/milestones/` | `*.template.md` | Milestone definitions |
+| `agent/milestones/` | `*.template.md` + keepers | Milestone template; instance bodies are local (ADR-28) |
+| `agent/tasks/` | `*.template.md` + keepers | Task template; instance bodies are local (ADR-28) |
 | `agent/patterns/` | `*.template.md` | Pattern documents |
 | `agent/commands/` | `command.template.md` | Command files |
 | `agent/clarifications/` | `clarification-{N}-{title}.template.md` | Clarification docs |
