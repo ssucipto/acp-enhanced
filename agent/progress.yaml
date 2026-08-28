@@ -960,11 +960,11 @@ milestones:
     name: Wave B — optional /acp-smoke stub (v6.36.0)
     priority: 4
     status: in_progress
-    progress: 60
+    progress: 80
     started: 2026-08-28
     completed: null
     estimated_weeks: 0.4
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 5
     file: agent/milestones/milestone-90-wave-b-acp-smoke.md
     design: agent/design/local.field-feedback-waves-abc.md
@@ -7088,13 +7088,13 @@ tasks:
   - id: task-357
     name: "Smoke E2E, wrappers, command-e2e-coverage"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-90-wave-b-acp-smoke/task-357-smoke-e2e-wrappers.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-28T14:38:00Z'
+    completed_date: '2026-08-28T14:45:00Z'
+    actual_hours: 0.2
     estimated_hours: 4
-    notes: 'No device in E2E'
+    notes: 'help/doctor/unconfigured E2E; 4 wrappers; no device'
   - id: task-358
     name: "M90 crosscut release v6.36.0"
     priority: 5

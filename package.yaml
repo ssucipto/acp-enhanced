@@ -277,6 +277,11 @@ contents:
         - acp.common.sh
         - acp.yaml-parser.sh
 
+    - name: acp.smoke.md
+      description: Optional device preflight; unconfigured exits 2
+      scripts:
+        - acp.smoke.sh
+
     - name: acp.commit.md
       description: End-of-session memory commit and route stamping
       scripts: []
@@ -629,6 +634,10 @@ contents:
 
     - name: acp.pr.sh
       description: PR prep with gates delegated to acp.ci.sh
+      type: internal
+
+    - name: acp.smoke.sh
+      description: Device preflight dispatcher for /acp-smoke (fail-closed)
       type: internal
 
     - name: acp.private-pack.sh
