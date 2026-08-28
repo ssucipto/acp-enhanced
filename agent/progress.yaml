@@ -944,11 +944,11 @@ milestones:
     name: Wave A — PR-diff review and CodeRabbit land policy (v6.35.0)
     priority: 5
     status: in_progress
-    progress: 33
+    progress: 50
     started: 2026-08-28
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 6
     file: agent/milestones/milestone-89-wave-a-pr-diff-coderabbit.md
     design: agent/design/local.field-feedback-waves-abc.md
@@ -7016,13 +7016,13 @@ tasks:
   - id: task-350
     name: "/acp-review --pr-diff flag and buckets"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-89-wave-a-pr-diff-coderabbit/task-350-review-pr-diff-flag.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-28T13:45:00Z'
+    completed_date: '2026-08-28T14:05:00Z'
+    actual_hours: 0.3
     estimated_hours: 5
-    notes: 'Must not change --diff row'
+    notes: '--diff row unchanged; D14 combinable; D17 gh probe'
   - id: task-351
     name: "Routing + review E2E for --pr-diff"
     priority: 5
@@ -7166,6 +7166,11 @@ tasks:
     estimated_hours: 4
     notes: 'No KVM; F-R006 still pending'
 recent_work:
+- date: 2026-08-28
+  description: "M89 task-350: /acp-review --pr-diff agent pass"
+  items:
+  - "--pr-diff distinct from --diff; combinable; gh probed in bash -c"
+  - "Phase 2.5 checklist, buckets, confirm+stop; reports gitignored"
 - date: 2026-08-28
   description: "M89 task-349: CR land policy, audit disclaimer, local.* survival"
   items:
@@ -10268,7 +10273,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M89 in progress (2/6). Next: task-350 /acp-review --pr-diff."
+- "M89 in progress (3/6). Next: task-351 routing + review E2E."
 - "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline at 6.32.4 until that lands."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "Forks/old clones: reclone or git fetch --prune; do not force-push again. GitHub caches may retain old objects."
