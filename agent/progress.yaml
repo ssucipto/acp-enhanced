@@ -1,10 +1,10 @@
 project:
   name: agent-context-protocol
-  version: 6.35.1
+  version: 6.35.2
   started: 2026-02-16
   status: active
   current_milestone: M90
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.35.1 on develop\n\
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.35.2 on develop\n\
     \  (ADR-28: instance milestone/task/session bodies and one field-feedback\n\
     \  file local including history; templates and USAGE.md stay).\n\
     \  M89 Wave A shipped (--pr-diff, CR land policy, local.* wrappers).\n\
@@ -10290,7 +10290,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M89 leftovers patched v6.35.1 (audit-128). Next: /acp-proceed task-354 (M90 pre-impl) after this wave is accepted."
+- "M89 review-007 patched v6.35.2. Next: /acp-proceed task-354 (M90 pre-impl) after this wave is accepted."
 - "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline at 6.32.4 until that lands."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "Forks/old clones: reclone or git fetch --prune; do not force-push again. GitHub caches may retain old objects."
@@ -10303,7 +10303,7 @@ notes:
 - 89 milestones shipped (M89 Wave A v6.35.0 on develop; M88 ADR-28 on develop/tags; PR to mainline pending); M90–M91 planned
 - 74 command docs (72 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
   cursor, claude)
-- 9 skills; 57 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.35.1
+- 9 skills; 57 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.35.2
 - 128+ audit reports (thru audit-128 M89 post-ship leftovers)
 - M73 COMPLETE v6.27.1 — carryover integrity, D4 ERROR, sweep 6/6, audit-095 independent
   closure
