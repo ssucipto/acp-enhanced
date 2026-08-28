@@ -149,5 +149,19 @@ echo "force_overwrite_marker: true" > "${TMPDIR_ROOT}/agent/wiki/domain.yml"
 )
 assert_not_contains "$(cat "${TMPDIR_ROOT}/agent/wiki/domain.yml")" "force_overwrite_marker" "domain.yml overwritten with --force"
 
+print_test_header "V14 — local.* command and wiki files survive version-update (D8)"
+cat > "${TMPDIR_ROOT}/agent/commands/local.overlay.md" << 'EOF'
+# CUSTOM_LOCAL_COMMAND — must survive update
+EOF
+cat > "${TMPDIR_ROOT}/agent/wiki/local.overlay.md" << 'EOF'
+# CUSTOM_LOCAL_WIKI — must survive update
+EOF
+(
+    cd "${TMPDIR_ROOT}"
+    ACP_UPSTREAM_ROOT="${PROJECT_ROOT}" bash agent/scripts/acp.version-update.sh --yes
+)
+assert_contains "$(cat "${TMPDIR_ROOT}/agent/commands/local.overlay.md")" "CUSTOM_LOCAL_COMMAND" "local.overlay.md command preserved"
+assert_contains "$(cat "${TMPDIR_ROOT}/agent/wiki/local.overlay.md")" "CUSTOM_LOCAL_WIKI" "local.overlay.md wiki preserved"
+
 print_test_summary "acp.version-update-preserve.test.sh"
 exit $?

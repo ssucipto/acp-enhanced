@@ -1,6 +1,6 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.35.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.35.1-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
 [![Milestones](https://img.shields.io/badge/milestones-89%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-72%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
@@ -856,8 +856,8 @@ This will:
 - **`/acp-ci`** - Local CI parity (`--fast` default; `--full` for multi-minute CI equivalence)
 - **`/acp-pr`** - Feature PR prep (gates via `/acp-ci` only)
 - **`acp.findings-import.sh`** - Import CodeRabbit findings JSON → carryovers when `coderabbit_active` (script; no slash command)
-- **`/acp-audit`** - Audit task completion status, bugs, and improvement opportunities
-- **`/acp-review`** - Standards-based code quality and security review (64 rules)
+- **`/acp-audit`** - Deep-dive investigation into `agent/reports/` (local; ADR-27). Not a PR review and not a CodeRabbit replacement
+- **`/acp-review`** - Standards-based code quality and security review (64 rules); optional `--pr-diff` agent pass (not Phase 1 `--diff`)
 - **`/acp-integrity`** - AI code integrity scan — Unicode, entropy, supply chain (55 rules v1.0)
 - **`/acp-report`** - Generate session report
 - **`/acp-index`** - Manage the key file index (list, add, remove, explore, show)

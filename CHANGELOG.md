@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.35.1] — 2026-08-28
+
+### Fixed
+- **README Workflow** — `/acp-audit` is a deep-dive into `agent/reports/` (not task-completion status); `/acp-review` documents optional `--pr-diff`.
+- **Audit wrappers** — `.opencode/commands/acp-audit.md` and `.github/prompts/acp-audit.prompt.md` match the command Purpose.
+- **`--pr-diff` E2E** — D17 `command -v gh` and Confirm/Stop needles; pr-diff docs block renamed B21 so it no longer collides with scanner B8.
+- **D8 E2E** — `local.*` command and wiki files survive `/acp-version-update` (V14).
+- **Carryovers** — F-127 M89-owned items and audit-128 findings stamped fixed.
+
+### Changed
+- **`/acp-review`** — command Version 1.1.0; Overview table includes `--pr-diff`.
+
+---
+
 ## [6.35.0] — 2026-08-28
 
 ### Added

@@ -4079,9 +4079,9 @@ carryovers:
     finding: "Tasks 348–364 lacked files_affected lists (plan amend added them)"
     description: "Keep lists current when files change during proceed"
     fix_target: "Verify during each task"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
     escalated_to: "M89"
   - audit_id: 127
     finding_id: F-127-03
@@ -4112,9 +4112,9 @@ carryovers:
     finding: "--diff and --pr-diff together unspecified (must stay combinable)"
     description: "D14; task-350/351. Keep B1 --diff assertions"
     fix_target: "M89 task-350"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
     escalated_to: "M89"
   - audit_id: 127
     finding_id: F-127-04
@@ -4134,9 +4134,9 @@ carryovers:
     finding: "Golden TSV / yaml-parser not in version tasks"
     description: "D18 on 353/358/364"
     fix_target: "M89 task-353"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
     escalated_to: "M89"
   - audit_id: 127
     finding_id: F-127-07
@@ -4145,9 +4145,9 @@ carryovers:
     finding: "integrity-manifest restamp omitted from script-edit tasks"
     description: "352/355/360/353"
     fix_target: "M89 task-352"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
     escalated_to: "M89"
   - audit_id: 127
     finding_id: F-127-08
@@ -4156,9 +4156,9 @@ carryovers:
     finding: "Claude sync E2E omitted from local.* wrapper task"
     description: "task-352 covers both cursor and claude"
     fix_target: "M89 task-352"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
     escalated_to: "M89"
   - audit_id: 127
     finding_id: F-127-09
@@ -4178,9 +4178,9 @@ carryovers:
     finding: "D3 gh without FG-4; missing gh must not fail --pr-diff"
     description: "D17 bash -c probe; task-350"
     fix_target: "M89 task-350"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
     escalated_to: "M89"
   - audit_id: 127
     finding_id: F-127-11
@@ -4189,9 +4189,9 @@ carryovers:
     finding: "routing.yml is Tier B skip on customized forks"
     description: "CHANGELOG merge note on 351/353"
     fix_target: "M89 task-353"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
     escalated_to: "M89"
   - audit_id: 127
     finding_id: F-127-12
@@ -4200,9 +4200,9 @@ carryovers:
     finding: "Customized coderabbit-integration.md skips wiki refresh"
     description: "CHANGELOG; consumer overlay local.*"
     fix_target: "M89 task-353"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
     escalated_to: "M89"
   - audit_id: 127
     finding_id: F-127-13
@@ -4222,9 +4222,9 @@ carryovers:
     finding: "post-milestone-sweep not scheduled on closure tasks"
     description: "353/358/364"
     fix_target: "M89 task-353"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
     escalated_to: "M89"
   - audit_id: 127
     finding_id: F-127-16
@@ -4233,9 +4233,9 @@ carryovers:
     finding: "version-update re-runs cursor/claude sync; skip-if-exists required"
     description: "task-352"
     fix_target: "M89 task-352"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
     escalated_to: "M89"
   - audit_id: 127
     finding_id: F-127-17
@@ -4244,9 +4244,9 @@ carryovers:
     finding: "AGENT.md missing /acp-review; audit blurb wrong"
     description: "task-349/353"
     fix_target: "M89 task-349"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
     escalated_to: "M89"
   - audit_id: 127
     finding_id: F-127-18
@@ -4281,3 +4281,104 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: "M90"
+
+  # ── AUDIT-128 — M89 POST-SHIP (2026-08-28) ────────────────────────────────
+  - audit_id: 128
+    finding_id: F-128-01
+    severity: high
+    file: README.md
+    finding: "README Workflow /acp-audit still task-completion blurb; /acp-review omits --pr-diff"
+    description: "Contradicts AGENT.md and acp.audit.md Purpose"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-02
+    severity: medium
+    file: .opencode/commands/acp-audit.md
+    finding: "opencode + GitHub audit wrappers stale vs cursor Purpose"
+    description: "Hand-maintained surfaces not regenerated"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-03
+    severity: medium
+    file: e2e/acp.review.test.sh
+    finding: "B8 omits D17 gh probe and Confirm/Stop"
+    description: "Docs-only gap in E2E"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-04
+    severity: medium
+    file: e2e/acp.version-update-preserve.test.sh
+    finding: "No E2E that local.* command/wiki files survive version-update"
+    description: "D8 untested"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-05
+    severity: low
+    file: e2e/acp.review.test.sh
+    finding: "Duplicate B8 test headers (pr-diff vs EH-02 scanner)"
+    description: "Rename pr-diff block"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-06
+    severity: low
+    file: agent/commands/acp.review.md
+    finding: "No Last Updated; command Version still 1.0.0 after --pr-diff"
+    description: "Stamp 1.1.0"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-07
+    severity: medium
+    file: agent/memory/audit-carryovers.md
+    finding: "F-127 M89-owned items still pending after v6.35.0"
+    description: "Stamp 02/06/07/08/10/11/12/14/16/17/01"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-08
+    severity: low
+    file: agent/progress.yaml
+    finding: "notes still 56 bash scripts and 117+ audits"
+    description: "Refresh counts"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-09
+    severity: low
+    file: agent/commands/acp.review.md
+    finding: "Overview positioning table omits --pr-diff"
+    description: "Add row"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
