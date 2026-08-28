@@ -960,11 +960,11 @@ milestones:
     name: Wave B — optional /acp-smoke stub (v6.36.0)
     priority: 4
     status: in_progress
-    progress: 20
+    progress: 40
     started: 2026-08-28
     completed: null
     estimated_weeks: 0.4
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 5
     file: agent/milestones/milestone-90-wave-b-acp-smoke.md
     design: agent/design/local.field-feedback-waves-abc.md
@@ -7068,13 +7068,13 @@ tasks:
   - id: task-355
     name: "/acp-smoke command + fail-closed stub"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-90-wave-b-acp-smoke/task-355-smoke-command-stub.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-28T14:20:00Z'
+    completed_date: '2026-08-28T14:30:00Z'
+    actual_hours: 0.3
     estimated_hours: 5
-    notes: 'Exit 2 unconfigured; no --host'
+    notes: 'Exit 2 unconfigured; no --host; smoke.yml empty runner; not in ci.yml'
   - id: task-356
     name: "Routing and CI/PR docs for smoke vs CI"
     priority: 5
