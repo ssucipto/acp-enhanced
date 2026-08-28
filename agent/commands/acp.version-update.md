@@ -33,9 +33,9 @@
 
 | Tier | Behavior | Examples |
 |------|----------|----------|
-| **A — Never overwrite** | Create-if-absent only | `agent/progress.yaml`, `agent/memory/*`, `agent/routing/tasks/route-*.md`, third-party `agent/commands/{ns}.*.md` (ns ≠ acp, git) |
+| **A — Never overwrite** | Create-if-absent only | `agent/progress.yaml`, `agent/memory/*`, `agent/routing/tasks/route-*.md`, third-party `agent/commands/{ns}.*.md` (ns ≠ acp, git), `agent/commands/local.*.md`, `agent/wiki/local.*.md` |
 | **B — Preserve if customized** | Skip when local ≠ upstream SHA | `agent/core/identity.yml`, `agent/wiki/domain.yml`, `agent/routing/taxonomy.yml`, `agent/skills/local.*.md` |
-| **C — Always refresh** | Framework artifacts | `agent/commands/acp.*.md`, `agent/scripts/*.sh`, `AGENTS.md`, `agent/schemas/*` |
+| **C — Always refresh** | Framework artifacts | `agent/commands/acp.*.md`, `agent/scripts/*.sh`, `AGENTS.md`, `agent/schemas/*` — **not** `local.*` commands or wiki |
 | **D — Merge only** | acp-core block in manifest | `agent/manifest.yaml` — other packages untouched |
 
 > **Pre-v6.24.0**: Commit before updating. Older scripts blind-overwrote core files.
@@ -201,6 +201,7 @@ Provide recommendations after update.
 - `agent/progress.yaml`, `agent/memory/*`, `agent/design/*`
 - Customized `agent/core/*.yml`, `agent/wiki/*`, `agent/routing/taxonomy.yml`
 - Third-party `agent/commands/{ns}.*.md` (ns ≠ acp, git)
+- `agent/commands/local.*.md`, `agent/wiki/local.*.md` (never copied from upstream; wiki `local.*` skipped if present in TEMP)
 - `agent/manifest.yaml` — acp-core block merged only (Tier D)
 
 ### Console Output (representative)
