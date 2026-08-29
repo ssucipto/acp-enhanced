@@ -3965,10 +3965,10 @@ carryovers:
     finding: "No ACP_EXEC_HOST / OpenSSH exec-host contract for heavy device work"
     description: "FIFOZ 011+012. Later wave; include 012 Win32-OpenSSH rules; do not port Expo gradle"
     fix_target: "Portable env + generic ssh/bundle scripts; E2E boots no device"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
+    escalated_to: "M91"
   - audit_id: 125
     finding_id: F-125-07
     severity: low
@@ -3976,9 +3976,9 @@ carryovers:
     finding: "No integrations.pr.local_gates[] or integrations.coderabbit.exclude_globs[]"
     description: "FIFOZ feedback-001 acp-pr leftover after M86 command ship"
     fix_target: "Optional preference schema + wiki note consumers may path-filter agent/**"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
     escalated_to: "M91"
 
   # ── AUDIT-126 — FIELD FEEDBACK SECOND ROUND (2026-08-28) ─────────────────
@@ -4011,9 +4011,9 @@ carryovers:
     finding: "FIFOZ smoke 1.1.0 already couples Maestro plus exec-host; AE v1 must not"
     description: "Wave B stub shipped in M90 without Maestro or --host; --host waits for M91"
     fix_target: "M90 D9 then M91 D10"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
     escalated_to: "M91"
   - audit_id: 126
     finding_id: F-126-06
@@ -4055,9 +4055,9 @@ carryovers:
     finding: "Exec-host env names must be ACP_* not product prefixes"
     description: "audit-126"
     fix_target: "M91 task-360"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
     escalated_to: "M91"
   - audit_id: 126
     finding_id: F-126-08
@@ -4066,9 +4066,9 @@ carryovers:
     finding: "LAN adb is --host local not windows"
     description: "Otherwise Gradle stays on the editor"
     fix_target: "M91 task-362"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
     escalated_to: "M91"
 
   # ── AUDIT-127 — PRE-IMPL M89–M91 (2026-08-28) ────────────────────────────
@@ -4090,9 +4090,9 @@ carryovers:
     finding: "No array preference type; do not add local_gates[] to configurables"
     description: "Amended to agent/configurables/pr.yml"
     fix_target: "M91 task-363"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
     escalated_to: "M91"
   - audit_id: 127
     finding_id: F-127-05
@@ -4266,9 +4266,9 @@ carryovers:
     finding: ".ps1 not scanned by bash portability"
     description: "Document; Darwin orchestrator still SH-01"
     fix_target: "M91 task-360"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
     escalated_to: "M91"
   - audit_id: 127
     finding_id: F-127-20

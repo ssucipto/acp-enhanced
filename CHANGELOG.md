@@ -9,12 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [6.37.0] — 2026-08-29
+
 ### Added
-- **`pr.yml` (M91)** — optional `local_gates` after `/acp-ci` (empty = no-op). Not preference arrays. Consumers may CodeRabbit-filter `agent/**`.
-- **`/acp-smoke --host` (M91)** — `github|windows|local` overrides `ACP_EXEC_HOST`. Unconfigured still exit 2. Dry-run windows prints `git bundle`, not Darwin `assembleDebug`. `--remote` requires `--host local`.
-- **Exec-host wiki (M91)** — `agent/wiki/exec-host.md` documents nine Win32-OpenSSH inner-loop rules (012).
-- **Exec-host (M91)** — `acp.exec-host-ssh.sh` (`ACP_*`, git bundle + scp; not `ssh -A` clone) plus generic Windows prepare/run/install scripts. Not a `--fast` CI step.
-- **M91 started** — task-359 pre-impl READY (audit-130). Coding 360+ unblocked. F-R006 untouched.
+- **Exec-host** — `acp.exec-host-ssh.sh` (`ACP_*`, git bundle + scp; not `ssh -A` clone) plus generic Windows prepare/run/install scripts. Not a `--fast` CI step.
+- **`/acp-smoke --host`** — `github|windows|local` overrides `ACP_EXEC_HOST`. Unconfigured still exit 2. Dry-run windows prints `git bundle`, not Darwin `assembleDebug`. `--remote` requires `--host local`.
+- **`pr.yml`** — optional `local_gates` after `/acp-ci` (empty = no-op). Not preference arrays. Consumers may CodeRabbit-filter `agent/**`.
+- **Wiki** — `agent/wiki/exec-host.md` nine Win32-OpenSSH inner-loop rules (012).
+
+### Notes
+- Field-feedback waves A–C complete on develop (M89–M91). F-R006-01..03 still pending. F-124-02 (PR develop → mainline) still pending. No second force-push. No KVM in core E2E.
 
 ---
 
