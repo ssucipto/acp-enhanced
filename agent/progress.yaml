@@ -974,12 +974,12 @@ milestones:
   M91:
     name: Wave C — exec-host and leftover PR/CR prefs (v6.37.0)
     priority: 4
-    status: planned
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 16
+    started: 2026-08-29
     completed: null
     estimated_weeks: 0.8
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 6
     file: agent/milestones/milestone-91-wave-c-exec-host.md
     design: agent/design/local.field-feedback-waves-abc.md
@@ -7109,13 +7109,13 @@ tasks:
   - id: task-359
     name: "M91 pre-implementation audit"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-91-wave-c-exec-host/task-359-m91-pre-impl-audit.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T03:50:00Z'
+    completed_date: '2026-08-29T03:55:00Z'
+    actual_hours: 0.1
     estimated_hours: 1
-    notes: 'Depends M90 ship; pr.yml not arrays'
+    notes: 'audit-130 READY; M90 exit 2 holds; pr.yml not arrays; ACP_* names'
   - id: task-360
     name: "Generic exec-host scripts (ACP_*)"
     priority: 5
@@ -7167,6 +7167,11 @@ tasks:
     estimated_hours: 4
     notes: 'No KVM; F-R006 still pending'
 recent_work:
+- date: 2026-08-29
+  description: "M91 task-359: pre-impl READY"
+  items:
+  - "audit-130: M90 exit 2 holds; D11 pr.yml; ACP_* names; coding 360+ unblocked"
+  - "F-R006 and F-124-02 still out of scope"
 - date: 2026-08-28
   description: "M89 COMPLETE v6.35.0 Wave A"
   items:
