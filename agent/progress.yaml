@@ -975,11 +975,11 @@ milestones:
     name: Wave C — exec-host and leftover PR/CR prefs (v6.37.0)
     priority: 4
     status: in_progress
-    progress: 50
+    progress: 66
     started: 2026-08-29
     completed: null
     estimated_weeks: 0.8
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 6
     file: agent/milestones/milestone-91-wave-c-exec-host.md
     design: agent/design/local.field-feedback-waves-abc.md
@@ -7139,13 +7139,13 @@ tasks:
   - id: task-362
     name: "Wire /acp-smoke --host to exec-host"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-91-wave-c-exec-host/task-362-smoke-host-flags.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T04:32:00Z'
+    completed_date: '2026-08-29T04:50:00Z'
+    actual_hours: 0.3
     estimated_hours: 5
-    notes: 'This repo stays exit 2 if unconfigured'
+    notes: 'This repo stays exit 2 if unconfigured; --host windows dry-run prints bundle'
   - id: task-363
     name: "Optional PR extra gates via pr.yml"
     priority: 3
@@ -7167,6 +7167,11 @@ tasks:
     estimated_hours: 4
     notes: 'No KVM; F-R006 still pending'
 recent_work:
+- date: 2026-08-29
+  description: "M91 task-362: /acp-smoke --host"
+  items:
+  - "--host overrides ACP_EXEC_HOST; unconfigured still exit 2"
+  - "dry-run windows prints git bundle, not assembleDebug"
 - date: 2026-08-29
   description: "M91 task-361: OpenSSH 012 wiki"
   items:

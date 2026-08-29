@@ -69,12 +69,8 @@ rm -f "${CFG}"
 assert_equals "1" "${MISS_RC}" "configured-missing doctor exit 1"
 assert_contains "${MISS_OUT}" "runner exists: no" "doctor reports missing runner"
 
-print_test_header "B6 — help does not list --host"
-if echo "${HELP_OUT}" | grep -E '(^|[[:space:]])--host([[:space:]]|$)' >/dev/null; then
-  assert_true "must not list --host" 1
-else
-  assert_true "no --host flag in help" 0
-fi
+print_test_header "B6 — help documents host values (M91)"
+assert_contains "${HELP_OUT}" "github|windows|local" "help documents host values"
 
 print_test_header "B7 — missing smoke.yml is not configured (D16)"
 MISSFILE_OUT="$(ACP_SMOKE_CONFIG="/tmp/acp-smoke-missing-$$.yml" bash "${SMOKE_SH}" 2>&1)"
@@ -114,5 +110,22 @@ rm -f "${CFG_DRY}" "${RUNNER}" "${SENTINEL}"
 
 print_test_header "B10 — catalog lists /acp-smoke"
 assert_contains "$(sed -n '/Workflow \/ Quality/,/Task \& Project/p' "${PROJECT_ROOT}/agent/scripts/acp.common.sh")" "/acp-smoke" "common.sh lists /acp-smoke"
+
+print_test_header "B11 — dry-run host windows prints bundle, not assembleDebug"
+if bash "${SMOKE_SH}" --dry-run --host windows >/tmp/acp-smoke-host.out 2>&1; then HOST_RC=0; else HOST_RC=$?; fi
+HOST_OUT="$(cat /tmp/acp-smoke-host.out)"
+assert_equals "2" "${HOST_RC}" "unconfigured host dry-run still exit 2"
+assert_contains "${HOST_OUT}" "git bundle" "prints git bundle plan"
+assert_contains "${HOST_OUT}" "not configured" "still unconfigured"
+if echo "${HOST_OUT}" | grep -q 'assembleDebug'; then
+  assert_true "must not plan assembleDebug" 1
+else
+  assert_true "no assembleDebug on Darwin dry-run" 0
+fi
+
+print_test_header "B12 — remote requires host local"
+if bash "${SMOKE_SH}" --remote >/tmp/acp-smoke-remote.out 2>&1; then REM_RC=0; else REM_RC=$?; fi
+assert_equals "2" "${REM_RC}" "remote without local fail-closed"
+assert_contains "$(cat /tmp/acp-smoke-remote.out)" "requires" "remote requires local host"
 
 print_suite_summary
