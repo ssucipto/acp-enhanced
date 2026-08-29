@@ -4799,9 +4799,9 @@ carryovers:
     finding: "Legal IP register tracked on origin despite root .gitignore exclusion"
     description: "git ls-files shows IP_REGISTER.md on develop/mainline. .gitignore line 4 is ineffective for tracked files. History contains founder IP schedule."
     fix_target: "git rm --cached IP_REGISTER.md; filter-repo path IP_REGISTER.md; operator force-push tags; validate soft-check expects absent on public clone"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 135
     finding_id: F-135-02
@@ -4810,9 +4810,9 @@ carryovers:
     finding: "22 agent/design/local.* dogfood plans remain on public remote"
     description: "ADR-28 excluded design/local.* from purge. Files name FIFOZ, M92 arcs, operator backup cookbooks. User-requested privacy review."
     fix_target: "ADR-29: gitignore + git rm --cached + filter-repo paths-from-file for agent/design/local.* and m70-m73; keep design.template + protocol acp-*-design.md"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 135
     finding_id: F-135-03
@@ -4821,9 +4821,9 @@ carryovers:
     finding: "Instance milestone designs m70-m73 tracked without local. prefix"
     description: "Same privacy class as purged milestone bodies; still in agent/design/"
     fix_target: "Include agent/design/m[0-9]*.md in ADR-29 purge list or rename/move to local-only tree"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 135
     finding_id: F-135-04
@@ -4832,9 +4832,9 @@ carryovers:
     finding: "11 agent/patterns/local.* files tracked on public remote"
     description: "ADR-28 left patterns/local.* on origin. Documents privacy rules while being public."
     fix_target: "ADR-29: gitignore patterns/local.* except pattern.template.md; private-pack; filter-repo"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 135
     finding_id: F-135-06
@@ -4843,9 +4843,9 @@ carryovers:
     finding: "FIFOZ codenames in compact public ledgers"
     description: "audit-135 low; upgraded to mandatory redaction in M94 v1.1.0 (task 377)."
     fix_target: "task-377 mandatory ledger redaction before tip purge"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 135
     finding_id: F-135-05
@@ -4854,9 +4854,9 @@ carryovers:
     finding: "241 agent/routing/tasks/route-*.md instance route files on public remote"
     description: "Full dogfood work history with file lists and milestone context. Not in ADR-28 scope."
     fix_target: "ADR-29: evaluate purge vs keep taxonomy-only; if purge, paths-from-file filter-repo + route template keeper"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
 
   # ── AUDIT-136 — M94 PRE-IMPL (2026-08-29) ───────────────────────────────────
@@ -4867,9 +4867,9 @@ carryovers:
     finding: "route-*.md gitignore glob matches route-template.md KEEP file"
     description: "audit-136 pre-impl. Bare routing/tasks/route-*.md would ignore route-template.md."
     fix_target: "task-374 m94-purge-paths KEEP test; task-375 negation !route-template.md"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 136
     finding_id: F-136-02
@@ -4878,9 +4878,9 @@ carryovers:
     finding: "active_handoff pointed to PURGE design local.post-m91-remediation.md"
     description: "Retargeted in plan amend to local.github-privacy-adr29.md; task 384 completes validator work."
     fix_target: "task-384"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 136
     finding_id: F-136-03
@@ -4889,9 +4889,9 @@ carryovers:
     finding: "F-135-06 ledger redaction marked P3 optional in M94 v1.0"
     description: "Upgraded to mandatory priority 5 in v1.1.0 amend."
     fix_target: "task-377"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 136
     finding_id: F-136-04
@@ -4900,9 +4900,9 @@ carryovers:
     finding: "Tracked docs hard-link agent/design/local.* and patterns/local.*"
     description: "Public clone broken post-purge without link remediation."
     fix_target: "task-385"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 136
     finding_id: F-136-05
@@ -4911,9 +4911,9 @@ carryovers:
     finding: "validateActiveHandoff lacks gitignore skip for PURGE handoff paths"
     description: "Regression risk after ADR-29 gitignore."
     fix_target: "task-384 + task-375"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 136
     finding_id: F-136-08
@@ -4922,9 +4922,9 @@ carryovers:
     finding: "Install gitignore template missing ADR-29 blocks"
     description: "New consumer projects would not inherit design/pattern/route privacy rules."
     fix_target: "task-386"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
 
   # ── AUDIT-137 — M94 PRE-IMPL PASS 2 (2026-08-29) ─────────────────────────────
@@ -4946,9 +4946,9 @@ carryovers:
     finding: "next_steps / anti-shortcuts forbade tag force-push while filter-repo requires rewriting tag SHAs"
     description: "Skipping --tags leaves IP_REGISTER.md in v6.38.0 history. Inventing v6.38.1 is not a substitute."
     fix_target: "task-382 must git push --force origin --tags after D11 phrase; next_steps updated in v1.2.0"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 137
     finding_id: F-137-02
@@ -4957,9 +4957,9 @@ carryovers:
     finding: "Nested patterns/**/local.* not matched by patterns/local.*"
     description: "Would remain on public remote after ADR-29 gitignore if only top-level local.* is ignored."
     fix_target: "task-374 purge list + task-375 gitignore patterns/**/local.*"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 137
     finding_id: F-137-03
@@ -4968,9 +4968,9 @@ carryovers:
     finding: "CB-2 dummy local-dummy.md does not match gitignore local.*"
     description: "False-green syntax check (FG-3). v1.2.0 uses local.dummy.md + nested typescript dummy."
     fix_target: "task-375 run design CB-2 exactly"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 137
     finding_id: F-137-04
@@ -4979,9 +4979,9 @@ carryovers:
     finding: "ADR-29 was deferred to task 375 despite write_adr_at_decision"
     description: "Written in audit-137 plan amend. Task 375 cites it; does not rewrite."
     fix_target: "ADR-29 present; task-375 cite only"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 137
     finding_id: F-137-05
@@ -4990,9 +4990,9 @@ carryovers:
     finding: "visualizer.requirements.md unclassified in D1 KEEP/PURGE"
     description: "Instance dashboard spec. PURGE in v1.2.0 D1."
     fix_target: "task-374 include in purge list; task-375 gitignore"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 137
     finding_id: F-137-07
@@ -5001,9 +5001,9 @@ carryovers:
     finding: "Task 375 omitted integrity-manifest restamp after new/changed scripts"
     description: "audit-121: restamp after tracked script edit."
     fix_target: "task-375 step 6"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 137
     finding_id: F-137-08
@@ -5012,9 +5012,9 @@ carryovers:
     finding: "Task 383 identity bump omitted progress.yaml project.version and golden TSV"
     description: "F-099-02 class. v1.2.0 task-383 enumerates all version fields."
     fix_target: "task-383"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
 
   # ── AUDIT-138 — M94 POST-IMPL LEFTOVERS (2026-08-29) ─────────────────────────
@@ -5027,7 +5027,7 @@ carryovers:
     fix_target: "task-387 gitignore + rm --cached + purge-list + re-filter"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: null
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 138
     finding_id: F-138-02
@@ -5038,7 +5038,7 @@ carryovers:
     fix_target: "task-387 PURGE + gitignore + rm --cached"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: null
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 138
     finding_id: F-138-03
@@ -5049,7 +5049,7 @@ carryovers:
     fix_target: "task-387 re-run filter-repo in new throwaway clone"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: null
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 138
     finding_id: F-138-04
@@ -5058,9 +5058,9 @@ carryovers:
     finding: "origin/develop still contains IP_REGISTER.md and original ADR-29 PURGE set"
     description: "Expected until task-382. Not a substitute for leftover expansion."
     fix_target: "task-382 after D11 phrase including --tags"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 138
     finding_id: F-138-05
@@ -5071,7 +5071,7 @@ carryovers:
     fix_target: "task-387 update milestone text"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: null
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 138
     finding_id: F-138-06
@@ -5082,7 +5082,7 @@ carryovers:
     fix_target: "task-387 remap to KEEP wiki/schema/constraints"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: null
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 138
     finding_id: F-138-07
@@ -5093,7 +5093,7 @@ carryovers:
     fix_target: "task-387"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: null
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 138
     finding_id: F-138-08
@@ -5104,7 +5104,7 @@ carryovers:
     fix_target: "task-387 restamp after leftover commit"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: null
+    verified_in_audit: "138"
     escalated_to: null
   - audit_id: 138
     finding_id: F-138-09
@@ -5115,5 +5115,5 @@ carryovers:
     fix_target: "task-387 reword README consumer-project"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: null
+    verified_in_audit: "138"
     escalated_to: null

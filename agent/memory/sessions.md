@@ -1,6 +1,21 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [task-383]
+  done:
+    - m94-carryover-stamps-138
+    - m94-v6390-version-fields
+  deferred:
+    - F-135-07-progress-yaml-split → future-adr
+  key_fact: >
+    M94 15/15. F-135-01..06 and F-136/137/138 (not F-135-07) stamped
+    verified_in_audit 138 after fresh-clone proof. v6.39.0 is a new tag
+    after mainline merge; v6.38.0 name stays on rewritten SHA 84e7388.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [task-382, task-381]
   done:
     - m94-d11-force-push-develop-mainline-tags

@@ -9,15 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [6.39.0] — 2026-08-29
+
 ### Added
-- **`acp.m94-purge-paths.sh`** — fail-closed KEEP/PURGE path list for the ADR-29 history rewrite (M94).
-- **ADR-29 gitignore** — instance `design/local.*`, `design/m[0-9]*`, `visualizer.requirements.md`, `patterns/**/local.*`, and `routing/tasks/route-*.md` with keeper negations (`route-template.md`, protocol `acp-*.md`).
+- **ADR-29 / M94** — public remotes no longer carry instance designs, nested `patterns/**/local.*`, instance routes, instance specs/index, `.claude/settings.local.json`, or `IP_REGISTER.md` in tree **or history** (including rewritten `v6.38.0`).
+- **`acp.m94-purge-paths.sh`** — KEEP/PURGE path list for `filter-repo`; `--require-nonempty` only before rewrite. Empty list is success after history is clean.
 
 ### Changed
-- **`acp.private-pack.sh`** — also packs `agent/design`, `agent/patterns`, and `agent/routing/tasks` for maintainer transport.
-- **`validateActiveHandoff`** — skip missing gitignored handoff paths (CI clone).
-- **`validateVersionConsistency`** — missing `IP_REGISTER.md` is expected on public clones (ADR-29; not an error).
-- **Tracked docs** — AGENT/commands/wiki no longer hard-link instance `local.*` designs; `acp.project-create` gitignore includes ADR-28/29 keepers.
+- **`acp.private-pack.sh`** — packs design, patterns, routes, specs, index, and proposals for maintainer transport.
+- **`validateActiveHandoff`** — skip missing gitignored handoff paths on public clones.
+- **Install gitignore** — ADR-29 leftovers (`specs/local.*`, exact `index/local.main.yaml` with template negation).
+- **Tracked docs** — skills/templates no longer hard-link purged `local.*` paths.
+
+### Notes
+- Existing tag **names** were rewritten (SHAs changed). Do not invent `v6.38.1` as a substitute. New tag is **`v6.39.0`**.
+- F-135-07 (split public/private `progress.yaml`) remains deferred.
 
 ---
 

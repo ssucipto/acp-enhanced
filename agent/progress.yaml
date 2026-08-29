@@ -1,22 +1,22 @@
 project:
   name: agent-context-protocol
-  version: 6.38.0
+  version: 6.39.0
   started: 2026-02-16
   status: active
   current_milestone: M94
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.38.0 on develop\n\
-    \  (ADR-28: instance milestone/task/session bodies and one field-feedback\n\
-    \  file local including history; templates and USAGE.md stay).\n\
-    \  M92 COMPLETE — F-R006 + release hygiene; PR #12 merged to mainline (v6.38.0).\n\
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.39.0 on develop\n\
+    \  (ADR-29: instance designs/patterns/routes/specs/index and IP_REGISTER\n\
+    \  local including history; protocol keepers stay).\n\
+    \  M94 COMPLETE — GitHub privacy rewrite; regular PR to mainline.\n\
     \  Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/design/local.github-privacy-adr29.md
   date: '2026-08-29'
   to_executor: cursor-grok
   from_executor: cursor-grok
-  git_commit: 24045e49a3746c469953854c2479c7cfd55de5ec
-  status: in_progress
-  completed_date: null
+  git_commit: 05f59c193228dbab320488198aa72b36c9ac6e46
+  status: completed
+  completed_date: '2026-08-29'
 milestones:
   M44:
     name: Feedback-Driven Improvements (v6.9.0)
@@ -1020,20 +1020,20 @@ milestones:
   M94:
     name: GitHub privacy extension (ADR-29)
     priority: 5
-    status: in_progress
-    progress: 93
+    status: completed
+    progress: 100
     started: 2026-08-29
-    completed: null
+    completed: 2026-08-29
     estimated_weeks: 1.5
-    tasks_completed: 14
+    tasks_completed: 15
     tasks_total: 15
     file: agent/milestones/milestone-94-github-privacy-adr29.md
     design: agent/design/local.github-privacy-adr29.md
     notes: >
       audit-135/136/137/138. 15 tasks (373-387). ADR-29 written + leftover
       specs/index/proposals/settings.local. F-135-06 mandatory. Tag rewrite
-      REQUIRED (F-137-01). Nested patterns PURGE. Block 382 until D11 phrase.
-      No v6.38.1 shortcut. Do not stamp F-135 until 381.
+      REQUIRED (F-137-01). Nested patterns PURGE. D11 force-push done (382).
+      Fresh-clone proof done (381). COMPLETE 2026-08-29 v6.39.0. F-135-07 deferred.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -7440,13 +7440,13 @@ tasks:
   - id: task-383
     name: "Stamp F-135-* + M94 closure + mainline PR"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-383-closure-mainline-pr.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T13:58:00Z'
+    completed_date: '2026-08-29T14:10:00Z'
+    actual_hours: 0.4
     estimated_hours: 2
-    notes: 'Stamp F-135-01..06 + F-136/137 after 381; 15/15; version fields if 6.39.0'
+    notes: 'Stamps verified_in_audit 138; v6.39.0 all version fields; regular PR not force-push'
 recent_work:
 - date: 2026-08-29
   description: "M94 task-375: ADR-29 gitignore + validator + private-pack"
@@ -10646,8 +10646,6 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "task-383: stamp F-135/136/137 (not F-135-07); v6.39.0 all version fields; regular PR develop→mainline"
-- "CI: purge-paths test must allow empty list after rewrite (--require-nonempty only for filter-repo)"
 - "F-135-07 deferred (progress.yaml split — future ADR)"
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 current_blockers: []
@@ -10657,7 +10655,7 @@ notes:
 - M92 COMPLETE 7/7 — PR #12 merged to mainline (F-124-02); M93 leftover honesty; M91 v6.37.0; M90 v6.36.0; M89 v6.35.0
 - 75 command docs (73 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
   cursor, claude)
-- 9 skills; 59 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.38.0
+- 9 skills; 59 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.39.0
 - 131+ audit reports (thru audit-131 M91 post-ship leftovers)
 - M73 COMPLETE v6.27.1 — carryover integrity, D4 ERROR, sweep 6/6, audit-095 independent
   closure
