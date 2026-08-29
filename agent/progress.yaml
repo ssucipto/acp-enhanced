@@ -1,21 +1,22 @@
 project:
   name: agent-context-protocol
-  version: 6.34.0
+  version: 6.38.0
   started: 2026-02-16
   status: active
-  current_milestone: M88
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.34.0 on develop\n\
+  current_milestone: M92
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.38.0 on develop\n\
     \  (ADR-28: instance milestone/task/session bodies and one field-feedback\n\
     \  file local including history; templates and USAGE.md stay).\n\
-    \  F-R006-01..03 still pending. Aikido track ADR-19 gated.\n"
+    \  M92 Track A shipped (F-R006). Track B PR still open (F-124-02, task-369).\n\
+    \  Aikido track ADR-19 gated.\n"
 active_handoff:
-  path: agent/design/local.instance-docs-privacy-purge.md
-  date: '2026-07-31'
-  to_executor: claude-opus
-  from_executor: claude-opus
-  git_commit: 9489e1c5612432f758f059caa1525811114b0f9f
-  status: completed
-  completed_date: '2026-08-02'
+  path: agent/design/local.post-m91-remediation.md
+  date: '2026-08-29'
+  to_executor: cursor-grok
+  from_executor: cursor-grok
+  git_commit: f20c382ae3964ee0aa3e1ee8e6be9011f5dfd59b
+  status: planned
+  completed_date: null
 milestones:
   M44:
     name: Feedback-Driven Improvements (v6.9.0)
@@ -940,6 +941,83 @@ milestones:
       COMPLETE 2026-08-28 v6.34.0. ADR-28 Option C. Instance bodies + one
       field-feedback file gone from origin history. Templates and USAGE.md
       stay. F-R006-01..03 out of scope.
+  M89:
+    name: Wave A — PR-diff review and CodeRabbit land policy (v6.35.0)
+    priority: 5
+    status: completed
+    progress: 100
+    started: 2026-08-28
+    completed: 2026-08-28
+    estimated_weeks: 0.5
+    tasks_completed: 6
+    tasks_total: 6
+    file: agent/milestones/milestone-89-wave-a-pr-diff-coderabbit.md
+    design: agent/design/local.field-feedback-waves-abc.md
+    notes: >
+      COMPLETE 2026-08-28 v6.35.0. --pr-diff not --diff (D14). CR land
+      policy. local.* skip-if-exists. F-R006 out of scope.
+  M90:
+    name: Wave B — optional /acp-smoke stub (v6.36.0)
+    priority: 4
+    status: completed
+    progress: 100
+    started: 2026-08-28
+    completed: 2026-08-28
+    estimated_weeks: 0.4
+    tasks_completed: 5
+    tasks_total: 5
+    file: agent/milestones/milestone-90-wave-b-acp-smoke.md
+    design: agent/design/local.field-feedback-waves-abc.md
+    notes: >
+      COMPLETE 2026-08-28 — /acp-smoke stub, exit 2 unconfigured,
+      e2e-smoke ≠ /acp-smoke, no --host. Next M91 exec-host.
+  M91:
+    name: Wave C — exec-host and leftover PR/CR prefs (v6.37.0)
+    priority: 4
+    status: completed
+    progress: 100
+    started: 2026-08-29
+    completed: 2026-08-29
+    estimated_weeks: 0.8
+    tasks_completed: 6
+    tasks_total: 6
+    file: agent/milestones/milestone-91-wave-c-exec-host.md
+    design: agent/design/local.field-feedback-waves-abc.md
+    notes: >
+      COMPLETE 2026-08-29 — exec-host, --host, pr.yml, v6.37.0 + v6.37.1 leftover.
+      F-R006 and F-124-02 deferred to M92.
+  M92:
+    name: Post-M91 remediation (F-R006 + release hygiene)
+    priority: 4
+    status: in_progress
+    progress: 86
+    started: 2026-08-29
+    completed: null
+    estimated_weeks: 0.5
+    tasks_completed: 6
+    tasks_total: 7
+    file: agent/milestones/milestone-92-post-m91-remediation.md
+    design: agent/design/local.post-m91-remediation.md
+    notes: >
+      IN PROGRESS — F-R006-01..03 closed in code; v6.38.0 on f20c382;
+      develop pushed. task-369 unstamped (audit-134): no PR yet; F-124-02 pending.
+      v6.37.0/v6.37.1 not moved. ADR-19 gated.
+  M93:
+    name: M92 post-impl leftover (honesty stamps)
+    priority: 4
+    status: completed
+    progress: 100
+    started: 2026-08-29
+    completed: 2026-08-29
+    estimated_weeks: 0.1
+    tasks_completed: 1
+    tasks_total: 1
+    file: agent/milestones/milestone-93-m92-leftover-honesty.md
+    design: agent/design/local.post-m91-remediation.md
+    notes: >
+      audit-134 / review-010 leftover. Unstamp task-369; restamp verified_in_audit 134.
+      Do not open the mainline PR (Track B). Do not retag v6.38.0. No identity bump.
+      COMPLETE 2026-08-29.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -6947,7 +7025,345 @@ tasks:
     actual_hours: 0.5
     estimated_hours: 3
     notes: 'v6.34.0; golden TSV; annotated tag; regular push; F-R006 stays pending'
+  M89:
+  - id: task-348
+    name: "M89 pre-implementation audit"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-89-wave-a-pr-diff-coderabbit/task-348-m89-pre-impl-audit.md
+    started: '2026-08-28T13:12:00Z'
+    completed_date: '2026-08-28T13:20:00Z'
+    actual_hours: 0.1
+    estimated_hours: 1
+    notes: 'audit-127 READY; stamp only; no product edits'
+  - id: task-349
+    name: "Wiki, audit disclaimer, version-update local.* contract"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-89-wave-a-pr-diff-coderabbit/task-349-wiki-audit-upgrade-docs.md
+    started: '2026-08-28T13:20:00Z'
+    completed_date: '2026-08-28T13:45:00Z'
+    actual_hours: 0.4
+    estimated_hours: 4
+    notes: 'D6 D7 D8; AGENT.md review row; wiki local.* skip'
+  - id: task-350
+    name: "/acp-review --pr-diff flag and buckets"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-89-wave-a-pr-diff-coderabbit/task-350-review-pr-diff-flag.md
+    started: '2026-08-28T13:45:00Z'
+    completed_date: '2026-08-28T14:05:00Z'
+    actual_hours: 0.3
+    estimated_hours: 5
+    notes: '--diff row unchanged; D14 combinable; D17 gh probe'
+  - id: task-351
+    name: "Routing + review E2E for --pr-diff"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-89-wave-a-pr-diff-coderabbit/task-351-routing-review-e2e.md
+    started: '2026-08-28T14:05:00Z'
+    completed_date: '2026-08-28T14:20:00Z'
+    actual_hours: 0.3
+    estimated_hours: 3
+    notes: 'B1 --diff kept; B8 --pr-diff; grep-safe needle'
+  - id: task-352
+    name: "Optional local.* Cursor and Claude wrappers"
+    priority: 4
+    status: completed
+    file: agent/tasks/milestone-89-wave-a-pr-diff-coderabbit/task-352-local-wrapper-sync.md
+    started: '2026-08-28T14:20:00Z'
+    completed_date: '2026-08-28T14:40:00Z'
+    actual_hours: 0.3
+    estimated_hours: 4
+    notes: 'skip-if-exists; temp-dir E2E; manifest restamped'
+  - id: task-353
+    name: "M89 crosscut release v6.35.0"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-89-wave-a-pr-diff-coderabbit/task-353-v6350-crosscut.md
+    started: '2026-08-28T14:40:00Z'
+    completed_date: '2026-08-28T15:10:00Z'
+    actual_hours: 0.5
+    estimated_hours: 3
+    notes: 'v6.35.0; --pr-diff vs --diff; F-R006 untouched'
+  M90:
+  - id: task-354
+    name: "M90 pre-implementation audit"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-90-wave-b-acp-smoke/task-354-m90-pre-impl-audit.md
+    started: '2026-08-28T14:15:00Z'
+    completed_date: '2026-08-28T14:18:00Z'
+    actual_hours: 0.1
+    estimated_hours: 1
+    notes: 'audit-127 READY; e2e-smoke in ci.yml full only; no step id smoke; M89 v6.35.2 shipped; --diff E2E still asserts git diff --name-only'
+  - id: task-355
+    name: "/acp-smoke command + fail-closed stub"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-90-wave-b-acp-smoke/task-355-smoke-command-stub.md
+    started: '2026-08-28T14:20:00Z'
+    completed_date: '2026-08-28T14:30:00Z'
+    actual_hours: 0.3
+    estimated_hours: 5
+    notes: 'Exit 2 unconfigured; no --host; smoke.yml empty runner; not in ci.yml'
+  - id: task-356
+    name: "Routing and CI/PR docs for smoke vs CI"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-90-wave-b-acp-smoke/task-356-routing-ci-pr-docs.md
+    started: '2026-08-28T14:32:00Z'
+    completed_date: '2026-08-28T14:36:00Z'
+    actual_hours: 0.1
+    estimated_hours: 2
+    notes: 'D15 glossary; acp.pr.sh does not call smoke; e2e-smoke still full-only'
+  - id: task-357
+    name: "Smoke E2E, wrappers, command-e2e-coverage"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-90-wave-b-acp-smoke/task-357-smoke-e2e-wrappers.md
+    started: '2026-08-28T14:38:00Z'
+    completed_date: '2026-08-28T14:45:00Z'
+    actual_hours: 0.2
+    estimated_hours: 4
+    notes: 'help/doctor/unconfigured E2E; 4 wrappers; no device'
+  - id: task-358
+    name: "M90 crosscut release v6.36.0"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-90-wave-b-acp-smoke/task-358-v6360-crosscut.md
+    started: '2026-08-28T14:46:00Z'
+    completed_date: '2026-08-28T14:55:00Z'
+    actual_hours: 0.3
+    estimated_hours: 2
+    notes: 'v6.36.0; no exec-host; F-R006 untouched'
+  M91:
+  - id: task-359
+    name: "M91 pre-implementation audit"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-91-wave-c-exec-host/task-359-m91-pre-impl-audit.md
+    started: '2026-08-29T03:50:00Z'
+    completed_date: '2026-08-29T03:55:00Z'
+    actual_hours: 0.1
+    estimated_hours: 1
+    notes: 'audit-130 READY; M90 exit 2 holds; pr.yml not arrays; ACP_* names'
+  - id: task-360
+    name: "Generic exec-host scripts (ACP_*)"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-91-wave-c-exec-host/task-360-exec-host-scripts.md
+    started: '2026-08-29T04:00:00Z'
+    completed_date: '2026-08-29T04:20:00Z'
+    actual_hours: 0.3
+    estimated_hours: 8
+    notes: 'git bundle; ACP_*; no product paths; not in --fast'
+  - id: task-361
+    name: "Windows OpenSSH inner-loop documentation"
+    priority: 4
+    status: completed
+    file: agent/tasks/milestone-91-wave-c-exec-host/task-361-openssh-inner-loop-docs.md
+    started: '2026-08-29T04:22:00Z'
+    completed_date: '2026-08-29T04:30:00Z'
+    actual_hours: 0.1
+    estimated_hours: 3
+    notes: 'Nine 012 rules in agent/wiki/exec-host.md'
+  - id: task-362
+    name: "Wire /acp-smoke --host to exec-host"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-91-wave-c-exec-host/task-362-smoke-host-flags.md
+    started: '2026-08-29T04:32:00Z'
+    completed_date: '2026-08-29T04:50:00Z'
+    actual_hours: 0.3
+    estimated_hours: 5
+    notes: 'This repo stays exit 2 if unconfigured; --host windows dry-run prints bundle'
+  - id: task-363
+    name: "Optional PR extra gates via pr.yml"
+    priority: 3
+    status: completed
+    file: agent/tasks/milestone-91-wave-c-exec-host/task-363-pr-cr-preferences.md
+    started: '2026-08-29T04:52:00Z'
+    completed_date: '2026-08-29T05:05:00Z'
+    actual_hours: 0.2
+    estimated_hours: 3
+    notes: 'pr.yml not preference arrays; ADR-24; empty = no-op'
+  - id: task-364
+    name: "Exec-host E2E dry-run + v6.37.0"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-91-wave-c-exec-host/task-364-e2e-v6370.md
+    started: '2026-08-29T05:06:00Z'
+    completed_date: '2026-08-29T05:25:00Z'
+    actual_hours: 0.3
+    estimated_hours: 4
+    notes: 'No KVM; F-R006 still pending; v6.37.0'
+  M92:
+  - id: task-365
+    name: "F-R006-01 js-yaml pin + npm audit clean"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-92-post-m91-remediation/task-365-js-yaml-pin.md
+    started: '2026-08-29T07:42:00Z'
+    completed_date: '2026-08-29T07:50:00Z'
+    actual_hours: 0.2
+    estimated_hours: 2
+    notes: 'js-yaml 4.3.1; nested 3.15.1; nanoid if still HIGH; npm audit --audit-level=high (no omit=dev)'
+  - id: task-366
+    name: "F-R006-02 bootstrap set -euo + trap ERR"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-92-post-m91-remediation/task-366-bootstrap-sh01.md
+    started: '2026-08-29T07:50:00Z'
+    completed_date: '2026-08-29T08:00:00Z'
+    actual_hours: 0.3
+    estimated_hours: 2
+    notes: 'SH-01 euo string; TEAM_SIZE $2 guard; required bootstrap E2E; no invented --help'
+  - id: task-367
+    name: "F-R006-03 dispatch.ts typing"
+    priority: 4
+    status: completed
+    file: agent/tasks/milestone-92-post-m91-remediation/task-367-dispatch-typing.md
+    started: '2026-08-29T08:00:00Z'
+    completed_date: '2026-08-29T08:15:00Z'
+    actual_hours: 0.3
+    estimated_hours: 3
+    notes: 'TaskMeta; no as any; vitest; then identity 6.38.0 + golden TSV + manifest'
+  - id: task-368
+    name: "Tag + push release hygiene"
+    priority: 3
+    status: completed
+    file: agent/tasks/milestone-92-post-m91-remediation/task-368-tag-push-hygiene.md
+    started: '2026-08-29T08:20:00Z'
+    completed_date: '2026-08-29T08:25:00Z'
+    actual_hours: 0.1
+    estimated_hours: 1
+    notes: 'Tag v6.38.0 only; never move v6.37.0/v6.37.1; push develop when approved'
+  - id: task-369
+    name: "F-124-02 PR develop to mainline"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-92-post-m91-remediation/task-369-mainline-pr.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 1
+    notes: 'Maintainer Track B. Regular merge only; no force-push. gh pr create failed (must be a collaborator). Do not stamp completed without an open or merged PR.'
+  - id: task-370
+    name: "Progress handoff + milestone hygiene"
+    priority: 2
+    status: completed
+    file: agent/tasks/milestone-92-post-m91-remediation/task-370-handoff-hygiene.md
+    started: '2026-08-29T08:30:00Z'
+    completed_date: '2026-08-29T08:32:00Z'
+    actual_hours: 0.1
+    estimated_hours: 0.5
+    notes: 'Stamp F-132-03 after verify; do not skip if handoff already retargeted'
+  - id: task-371
+    name: "M91 regression + test package refresh"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-92-post-m91-remediation/task-371-test-package-regression.md
+    started: '2026-08-29T08:15:00Z'
+    completed_date: '2026-08-29T08:20:00Z'
+    actual_hours: 0.2
+    estimated_hours: 2
+    notes: 'Required after 365-367: bootstrap E2E, vitest, smoke/exec-host/pr/ci, coverage, golden'
+  M93:
+  - id: task-372
+    name: "audit-134 honesty leftover (unstamp 369, restamp 134)"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-93-m92-leftover-honesty/task-372-honesty-stamps.md
+    started: '2026-08-29T09:50:00Z'
+    completed_date: '2026-08-29T09:55:00Z'
+    actual_hours: 0.2
+    estimated_hours: 1
+    notes: 'No PR; no tag-move; no identity bump; verified_in_audit 134'
 recent_work:
+- date: 2026-08-29
+  description: "audit-133 M92 pre-impl amend (design v1.1.0)"
+  items:
+  - "F-133-01..08: CI-identical npm audit; nanoid; required bootstrap E2E; no tag-move"
+  - "task-371 added; tasks_total 7; shortcuts refused"
+- date: 2026-08-29
+  description: "audit-132 + M92 plan: F-R006 and release hygiene"
+  items:
+  - "audit-132: 4 pending carryovers + 3 new hygiene findings"
+  - "M92 tasks 365-370 planned; design local.post-m91-remediation.md"
+  - "F-131 verified fixed; ADR-19 still gated"
+- date: 2026-08-29
+  description: "M91 COMPLETE v6.37.0 Wave C"
+  items:
+  - "exec-host dry-run E2E (git bundle, no secrets, no emulator)"
+  - "--host + pr.yml; F-R006 still pending; no force-push"
+- date: 2026-08-29
+  description: "M91 task-363: pr.yml extra gates"
+  items:
+  - "agent/configurables/pr.yml empty local_gates; not in acp.configurables.yaml"
+  - "Wiki: consumers may !agent/**; AE template keeps command docs"
+- date: 2026-08-29
+  description: "M91 task-362: /acp-smoke --host"
+  items:
+  - "--host overrides ACP_EXEC_HOST; unconfigured still exit 2"
+  - "dry-run windows prints git bundle, not assembleDebug"
+- date: 2026-08-29
+  description: "M91 task-361: OpenSSH 012 wiki"
+  items:
+  - "agent/wiki/exec-host.md — nine 012 rules; no staging applicationId"
+- date: 2026-08-29
+  description: "M91 task-360: generic ACP_* exec-host scripts"
+  items:
+  - "acp.exec-host-ssh.sh git bundle + scp plan; Windows prepare/run/install PS1"
+  - "No FIFOZ paths; not added to /acp-ci --fast"
+- date: 2026-08-29
+  description: "M91 task-359: pre-impl READY"
+  items:
+  - "audit-130: M90 exit 2 holds; D11 pr.yml; ACP_* names; coding 360+ unblocked"
+  - "F-R006 and F-124-02 still out of scope"
+- date: 2026-08-28
+  description: "M89 COMPLETE v6.35.0 Wave A"
+  items:
+  - "✅ --pr-diff agent pass; --diff Phase 1 unchanged; review E2E 77/77"
+  - "✅ CR land policy; audit disclaimer; local.* skip-if-exists wrappers"
+  - "F-R006 still pending; M90 next (smoke stub)"
+- date: 2026-08-28
+  description: "M89 task-352: local.* cursor/claude wrappers skip-if-exists"
+  items:
+  - "ACP_SYNC_CMD_DIR/OUT_DIR for tests; do not clobber custom wrappers"
+  - "cursor + claude E2E 12/12; integrity-manifest restamped"
+- date: 2026-08-28
+  description: "M89 task-351: routing + review E2E for --pr-diff"
+  items:
+  - "routing suggests --pr-diff under acp-review and acp-pr"
+  - "e2e/acp.review.test.sh B1 unchanged; B8/S6 green (77/77)"
+- date: 2026-08-28
+  description: "M89 task-350: /acp-review --pr-diff agent pass"
+  items:
+  - "--pr-diff distinct from --diff; combinable; gh probed in bash -c"
+  - "Phase 2.5 checklist, buckets, confirm+stop; reports gitignored"
+- date: 2026-08-28
+  description: "M89 task-349: CR land policy, audit disclaimer, local.* survival"
+  items:
+  - "coderabbit-integration land policy + buckets; audit not a PR review"
+  - "version-update documents/skips local.* commands and wiki"
+  - "AGENT.md lists /acp-review; audit blurb matches Purpose"
+- date: 2026-08-28
+  description: "M89 task-348: audit-127 READY stamp"
+  items:
+  - "Pre-impl READY for 349+; design v1.1.0; no product file edits"
+- date: 2026-08-28
+  description: "audit-127 pre-impl M89–M91; plans amended"
+  items:
+  - "BLOCKED until files_affected, D11 pr.yml, e2e-smoke glossary, golden/domain/manifest"
+  - "Amended design v1.1.0 D14–D18; M89 READY for 349+"
+  - "F-R006 and F-124-02 still out of scope"
+- date: 2026-08-28
+  description: "audit-126 + plan M89–M91 field-feedback waves A–C"
+  items:
+  - "Second-round audit: --pr-diff must not collide with --diff; do not copy FIFOZ smoke 1.1.0"
+  - "M89 v6.35.0 / M90 v6.36.0 / M91 v6.37.0 planned; tasks 348–364; current_milestone stays M88"
+  - "F-R006 and F-124-02 stay separate tracks"
 - date: 2026-08-28
   description: "audit-124 post-ship: CHANGELOG/wiki/badge; PR to mainline"
   items:
@@ -10028,20 +10444,20 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline at 6.32.4 until that lands."
-- "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
-- "Forks/old clones: reclone or git fetch --prune; do not force-push again. GitHub caches may retain old objects."
+- "Maintainer: open regular PR develop → mainline (F-124-02). gh pr create failed: must be a collaborator. No force-push."
+- "Do not move tags v6.37.0 (7ab6a7f) / v6.37.1 (91f1dd5). v6.38.0 is on f20c382."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
+- "Forks/old clones: reclone or git fetch --prune; do not force-push again."
 - "Optional: IG-17 allowlist for agent/scripts scanners (integrity FP noise)."
 current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2
   docs sync)'
-- 88 milestones shipped (incl. M88 instance-docs ADR-28 on develop/tags; PR to mainline pending)
-- 74 command docs (72 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
+- M93 leftover honesty shipped; M92 6/7 on develop (Track B PR / F-124-02 remaining); M91 Wave C v6.37.0; M90 Wave B v6.36.0; M89 Wave A v6.35.0
+- 75 command docs (73 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
   cursor, claude)
-- 9 skills; 56 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.32.2
-- 117+ audit reports (thru audit-117 M81 post-ship; audit-116 M86 post-ship)
+- 9 skills; 59 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.38.0
+- 131+ audit reports (thru audit-131 M91 post-ship leftovers)
 - M73 COMPLETE v6.27.1 — carryover integrity, D4 ERROR, sweep 6/6, audit-095 independent
   closure
 - M67 COMPLETE v6.23.0 — cross-agent handoff + /acp-receive

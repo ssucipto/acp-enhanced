@@ -8,8 +8,7 @@
 #    This script will create files in $(pwd) and cannot be undone automatically.
 # =============================================================================
 
-set -e
-set -o pipefail
+set -euo pipefail
 
 # ── Argument Parsing (must be before pre-flight checks) ─────────
 TEAM_SIZE="small"
@@ -20,6 +19,10 @@ SKIP_WARNING=false
 while [[ $# -gt 0 ]]; do
     case $1 in
         --team-size)
+            if [[ -z "${2-}" || "${2-}" == -* ]]; then
+                echo "[acp-bootstrap] ERROR: --team-size requires a value" >&2
+                exit 2
+            fi
             TEAM_SIZE="$2"
             shift 2
             ;;
@@ -1305,13 +1308,14 @@ fi
 # --- 6b. Generate opencode commands (independent of prompt generation) ---
 if [ "$GENERATE_OPENCODE" = "true" ]; then
 echo -e "${YELLOW}[6b/8] Generating opencode slash commands...${NC}"
-if ls .github/prompts/*.prompt.md >/dev/null 2>&1; then
+# BUG-045-02: directory must exist even when no prompt files are present
 mkdir -p .opencode/commands
+if ls .github/prompts/*.prompt.md >/dev/null 2>&1; then
 _oc_count=0
 for _oc_src in .github/prompts/*.prompt.md; do
   _oc_base="$(basename "$_oc_src" .prompt.md)"
   _oc_dst=".opencode/commands/${_oc_base}.md"
-  _oc_desc=$(grep "^description:" "$_oc_src" | sed 's/^description: //')
+  _oc_desc=$(grep "^description:" "$_oc_src" | sed 's/^description: //' || true)
   _oc_body=$(awk 'BEGIN{fm=0} /^---/{fm++; next} fm>=2{print}' "$_oc_src")
   {
     echo "---"
@@ -1346,11 +1350,11 @@ else
   INSTALL_TMP=$(mktemp)
   if command -v curl >/dev/null 2>&1; then
     curl -fsSL -o "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (curl)"; rm -f "$INSTALL_TMP"; exit 1; }
-    bash "$INSTALL_TMP"
+    bash "$INSTALL_TMP" || { echo "ERROR: Installer failed"; rm -f "$INSTALL_TMP"; exit 1; }
     rm -f "$INSTALL_TMP"
   elif command -v wget >/dev/null 2>&1; then
     wget -q -O "$INSTALL_TMP" "$INSTALL_URL" || { echo "ERROR: Failed to download installer (wget)"; rm -f "$INSTALL_TMP"; exit 1; }
-    bash "$INSTALL_TMP"
+    bash "$INSTALL_TMP" || { echo "ERROR: Installer failed"; rm -f "$INSTALL_TMP"; exit 1; }
     rm -f "$INSTALL_TMP"
   else
     echo -e "${RED}ERROR: Neither curl nor wget available. Cannot download installer.${NC}"

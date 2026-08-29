@@ -3388,9 +3388,9 @@ carryovers:
     finding: "js-yaml 4.x (and nested 3.x via gray-matter) vulnerable to GHSA-5p4m-2wfm-xmqj !!omap quadratic CPU"
     description: "npm audit --omit=dev reports 1 high (js-yaml). Patched versions are 4.3.1 and 3.15.1. Dev tree also has nanoid <3.3.18 (vitest)."
     fix_target: "Bump js-yaml to 4.3.1; npm overrides for nested 3.x → 3.15.1; npm audit fix; re-run npm audit in scripts/"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
     escalated_to: null
   - audit_id: review-006
     finding_id: F-R006-02
@@ -3399,9 +3399,9 @@ carryovers:
     finding: "Bootstrap entry point missing set -euo pipefail + trap ERR (has set -e and set -o pipefail only)"
     description: "SH-01 HIGH. Scanner greps the exact euo string. Curl-pipe installer must keep nounset-safe argument parsing."
     fix_target: "Add set -euo pipefail and trap ERR; verify --help / --yes still work under nounset"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
     escalated_to: null
   - audit_id: review-006
     finding_id: F-R006-03
@@ -3410,9 +3410,9 @@ carryovers:
     finding: "any types in buildContext/appendLedger; updateRoutingYml missing explicit return type"
     description: "TS-01 HIGH at lines 117/131/177; TS-02 HIGH at line 191. Remaining dispatch tech debt after CR-003 typed validate.ts."
     fix_target: "Replace Record<string, any> with a TaskMeta interface; drop as any on yaml.load; annotate updateRoutingYml(): void"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
     escalated_to: null
 
   # ── AUDIT-122 — M88 PRE-IMPL READINESS (2026-08-27) ────────────────────────
@@ -3521,8 +3521,8 @@ carryovers:
     finding_id: F-124-02
     severity: high
     file: origin/mainline
-    finding: "GitHub default clone is mainline, 37 commits behind develop (M87+M88 unpublished)"
-    description: "Strangers cloning origin get 6.32.4 keepers, not v6.34.0"
+    finding: "GitHub default clone is mainline, 33 commits behind develop (M89–M92 / v6.38.0 unpublished)"
+    description: "Strangers cloning origin get post-PR#11 / v6.34.0 keepers, not v6.38.0. No open develop→mainline PR."
     fix_target: "Open regular PR develop → mainline; do not force-push"
     status: pending
     fix_applied_date: null
@@ -3901,3 +3901,892 @@ carryovers:
     fix_applied_date: "2026-08-27"
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-125 — FIFOZ + SAFE-IQ FIELD FEEDBACK GAPS (2026-08-28) ──────────
+  - audit_id: 125
+    finding_id: F-125-01
+    severity: high
+    file: agent/commands/acp.review.md
+    finding: "No /acp-review --pr-diff (Phase 2.5) — CR-style pass on git diff then stop"
+    description: "Safe-IQ feedback-001/002. Weekly Phase 2 and Phase 1 regex are not a per-PR semantic review."
+    fix_target: "Add --pr-diff [--base] writing blocking vs deferred report; not Phase 1; not /acp-audit"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 125
+    finding_id: F-125-02
+    severity: high
+    file: agent/wiki/coderabbit-integration.md
+    finding: "CR wiki lacks rate-limit=skip, green check≠HEAD, commit_id not a gate, finding buckets A/B"
+    description: "ADR-21 is present; field operators still treat GitHub CR / commit_id as merge gates."
+    fix_target: "Wiki + acp.review.md CodeRabbit section: buckets, onion stop, consumer local.wiki overlay stub"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 125
+    finding_id: F-125-03
+    severity: medium
+    file: agent/commands/acp.audit.md
+    finding: "Purpose does not say audit is not a PR review / not a CodeRabbit replacement"
+    description: "Safe-IQ 001 §3.1.3 still missing on 6.34.0"
+    fix_target: "One line in Purpose or Related"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 125
+    finding_id: F-125-04
+    severity: medium
+    file: agent/scripts/acp.cursor-commands-sync.sh
+    finding: "Cursor sync skips local.*.md; version-update docs do not name local.* command/wiki survival"
+    description: "Copy loop already skips local commands; consumers still hand-write wrappers"
+    fix_target: "Document local.* Tier A; optionally emit local-* Cursor wrappers; wiki/local.* overlay note"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 125
+    finding_id: F-125-05
+    severity: medium
+    file: agent/commands
+    finding: "No optional /acp-smoke device preflight (distinct from /acp-ci)"
+    description: "FIFOZ feedback-010. Must not reuse CI step id smoke; must not block /acp-pr"
+    fix_target: "Stack-agnostic command delegating to project runner; E2E --help/--doctor only"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: null
+    escalated_to: "M90"
+  - audit_id: 125
+    finding_id: F-125-06
+    severity: high
+    file: agent/scripts
+    finding: "No ACP_EXEC_HOST / OpenSSH exec-host contract for heavy device work"
+    description: "FIFOZ 011+012. Later wave; include 012 Win32-OpenSSH rules; do not port Expo gradle"
+    fix_target: "Portable env + generic ssh/bundle scripts; E2E boots no device"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
+    escalated_to: "M91"
+  - audit_id: 125
+    finding_id: F-125-07
+    severity: low
+    file: agent/commands/acp.pr.md
+    finding: "No integrations.pr.local_gates[] or integrations.coderabbit.exclude_globs[]"
+    description: "FIFOZ feedback-001 acp-pr leftover after M86 command ship"
+    fix_target: "Optional preference schema + wiki note consumers may path-filter agent/**"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
+    escalated_to: "M91"
+
+  # ── AUDIT-126 — FIELD FEEDBACK SECOND ROUND (2026-08-28) ─────────────────
+  - audit_id: 126
+    finding_id: F-126-01
+    severity: high
+    file: agent/commands/acp.review.md
+    finding: "--diff already means file-list Phase 1; --pr-diff must be a distinct flag"
+    description: "e2e/acp.review.test.sh B1 asserts --diff + git diff --name-only. Aliasing would regress."
+    fix_target: "M89 task-350/351 keep --diff row and B1; add --pr-diff separately"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 126
+    finding_id: F-126-02
+    severity: high
+    file: e2e/acp.review.test.sh
+    finding: "--pr-diff is an agent pass; E2E must not add an LLM harness"
+    description: "Docs and flag assertions only"
+    fix_target: "M89 task-351"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 126
+    finding_id: F-126-03
+    severity: high
+    file: agent/commands
+    finding: "FIFOZ smoke 1.1.0 already couples Maestro plus exec-host; AE v1 must not"
+    description: "Wave B stub shipped in M90 without Maestro or --host; --host waits for M91"
+    fix_target: "M90 D9 then M91 D10"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
+    escalated_to: "M91"
+  - audit_id: 126
+    finding_id: F-126-06
+    severity: high
+    file: agent/scripts
+    finding: "Unconfigured /acp-smoke must exit 2, never SKIP-as-PASS"
+    description: "FG-2 for device command"
+    fix_target: "M90 task-355/357"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: null
+    escalated_to: "M90"
+  - audit_id: 126
+    finding_id: F-126-04
+    severity: medium
+    file: agent/commands/acp.review.md
+    finding: "--pr-diff default base prefers open PR then origin/default_working_branch"
+    description: "D17: probe gh in bash -c; missing gh must not fail the flag"
+    fix_target: "M89 task-350"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 126
+    finding_id: F-126-05
+    severity: medium
+    file: agent/scripts/acp.cursor-commands-sync.sh
+    finding: "local.* wrappers must skip if destination already exists"
+    description: "Do not overwrite custom overlays; version-update re-runs sync"
+    fix_target: "M89 task-352"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: null
+    escalated_to: "M89"
+  - audit_id: 126
+    finding_id: F-126-07
+    severity: medium
+    file: agent/scripts
+    finding: "Exec-host env names must be ACP_* not product prefixes"
+    description: "audit-126"
+    fix_target: "M91 task-360"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
+    escalated_to: "M91"
+  - audit_id: 126
+    finding_id: F-126-08
+    severity: medium
+    file: agent/commands/acp.smoke.md
+    finding: "LAN adb is --host local not windows"
+    description: "Otherwise Gradle stays on the editor"
+    fix_target: "M91 task-362"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
+    escalated_to: "M91"
+
+  # ── AUDIT-127 — PRE-IMPL M89–M91 (2026-08-28) ────────────────────────────
+  - audit_id: 127
+    finding_id: F-127-01
+    severity: high
+    file: agent/tasks
+    finding: "Tasks 348–364 lacked files_affected lists (plan amend added them)"
+    description: "Keep lists current when files change during proceed"
+    fix_target: "Verify during each task"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-03
+    severity: high
+    file: agent/configurables/acp.configurables.yaml
+    finding: "No array preference type; do not add local_gates[] to configurables"
+    description: "Amended to agent/configurables/pr.yml"
+    fix_target: "M91 task-363"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
+    escalated_to: "M91"
+  - audit_id: 127
+    finding_id: F-127-05
+    severity: high
+    file: agent/configurables/ci.yml
+    finding: "AE CI step id is e2e-smoke; must not collide with /acp-smoke"
+    description: "Glossary in task-356; never --only smoke"
+    fix_target: "M90 task-356"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: null
+    escalated_to: "M90"
+  - audit_id: 127
+    finding_id: F-127-02
+    severity: high
+    file: agent/commands/acp.review.md
+    finding: "--diff and --pr-diff together unspecified (must stay combinable)"
+    description: "D14; task-350/351. Keep B1 --diff assertions"
+    fix_target: "M89 task-350"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-04
+    severity: high
+    file: agent/wiki/domain.yml
+    finding: "domain.yml / README command count 72 omitted from M90"
+    description: "Bump 72→73 with acp.smoke"
+    fix_target: "M90 task-358"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: null
+    escalated_to: "M90"
+  - audit_id: 127
+    finding_id: F-127-06
+    severity: high
+    file: tests/fixtures
+    finding: "Golden TSV / yaml-parser not in version tasks"
+    description: "D18 on 353/358/364"
+    fix_target: "M89 task-353"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-07
+    severity: medium
+    file: agent/integrity-manifest.yaml
+    finding: "integrity-manifest restamp omitted from script-edit tasks"
+    description: "352/355/360/353"
+    fix_target: "M89 task-352"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-08
+    severity: medium
+    file: e2e/acp.claude-commands-sync.test.sh
+    finding: "Claude sync E2E omitted from local.* wrapper task"
+    description: "task-352 covers both cursor and claude"
+    fix_target: "M89 task-352"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-09
+    severity: medium
+    file: e2e/acp.pr.test.sh
+    finding: "opencode + GitHub prompts have no generator; commit wrappers by hand"
+    description: "Same as /acp-pr; task-357"
+    fix_target: "M90 task-357"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: null
+    escalated_to: "M90"
+  - audit_id: 127
+    finding_id: F-127-10
+    severity: medium
+    file: agent/commands/acp.review.md
+    finding: "D3 gh without FG-4; missing gh must not fail --pr-diff"
+    description: "D17 bash -c probe; task-350"
+    fix_target: "M89 task-350"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-11
+    severity: medium
+    file: agent/core/routing.yml
+    finding: "routing.yml is Tier B skip on customized forks"
+    description: "CHANGELOG merge note on 351/353"
+    fix_target: "M89 task-353"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-12
+    severity: medium
+    file: agent/wiki/coderabbit-integration.md
+    finding: "Customized coderabbit-integration.md skips wiki refresh"
+    description: "CHANGELOG; consumer overlay local.*"
+    fix_target: "M89 task-353"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-13
+    severity: medium
+    file: agent/memory/audit-carryovers.md
+    finding: "F-126-04/05/07/08 were missing from the ledger"
+    description: "Ledger appended 2026-08-28"
+    fix_target: "audit-127 plan amend"
+    status: fixed
+    fix_applied_date: "2026-08-28"
+    verified_in_audit: 127
+    escalated_to: null
+  - audit_id: 127
+    finding_id: F-127-14
+    severity: low
+    file: agent/scripts
+    finding: "post-milestone-sweep not scheduled on closure tasks"
+    description: "353/358/364"
+    fix_target: "M89 task-353"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-16
+    severity: medium
+    file: agent/scripts/acp.version-update.sh
+    finding: "version-update re-runs cursor/claude sync; skip-if-exists required"
+    description: "task-352"
+    fix_target: "M89 task-352"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-17
+    severity: medium
+    file: AGENT.md
+    finding: "AGENT.md missing /acp-review; audit blurb wrong"
+    description: "task-349/353"
+    fix_target: "M89 task-349"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 127
+    finding_id: F-127-18
+    severity: medium
+    file: agent/configurables
+    finding: "smoke runner config must not enter acp.configurables.yaml"
+    description: "agent/configurables/smoke.yml P-CI-1"
+    fix_target: "M90 task-355"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: null
+    escalated_to: "M90"
+  - audit_id: 127
+    finding_id: F-127-19
+    severity: low
+    file: agent/scripts
+    finding: ".ps1 not scanned by bash portability"
+    description: "Document; Darwin orchestrator still SH-01"
+    fix_target: "M91 task-360"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "130"
+    escalated_to: "M91"
+  - audit_id: 127
+    finding_id: F-127-20
+    severity: low
+    file: agent/schemas/command-e2e-coverage.yaml
+    finding: "command-e2e-coverage.yaml updated: + P3 count on new command"
+    description: "task-357"
+    fix_target: "M90 task-357"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "129"
+    escalated_to: "M90"
+
+  # ── AUDIT-128 — M89 POST-SHIP (2026-08-28) ────────────────────────────────
+  - audit_id: 128
+    finding_id: F-128-01
+    severity: high
+    file: README.md
+    finding: "README Workflow /acp-audit still task-completion blurb; /acp-review omits --pr-diff"
+    description: "Contradicts AGENT.md and acp.audit.md Purpose"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-02
+    severity: medium
+    file: .opencode/commands/acp-audit.md
+    finding: "opencode + GitHub audit wrappers stale vs cursor Purpose"
+    description: "Hand-maintained surfaces not regenerated"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-03
+    severity: medium
+    file: e2e/acp.review.test.sh
+    finding: "B8 omits D17 gh probe and Confirm/Stop"
+    description: "Docs-only gap in E2E"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-04
+    severity: medium
+    file: e2e/acp.version-update-preserve.test.sh
+    finding: "No E2E that local.* command/wiki files survive version-update"
+    description: "D8 untested"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-05
+    severity: low
+    file: e2e/acp.review.test.sh
+    finding: "Duplicate B8 test headers (pr-diff vs EH-02 scanner)"
+    description: "Rename pr-diff block"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-06
+    severity: low
+    file: agent/commands/acp.review.md
+    finding: "No Last Updated; command Version still 1.0.0 after --pr-diff"
+    description: "Stamp 1.1.0"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-07
+    severity: medium
+    file: agent/memory/audit-carryovers.md
+    finding: "F-127 M89-owned items still pending after v6.35.0"
+    description: "Stamp 02/06/07/08/10/11/12/14/16/17/01"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-08
+    severity: low
+    file: agent/progress.yaml
+    finding: "notes still 56 bash scripts and 117+ audits"
+    description: "Refresh counts"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+  - audit_id: 128
+    finding_id: F-128-09
+    severity: low
+    file: agent/commands/acp.review.md
+    finding: "Overview positioning table omits --pr-diff"
+    description: "Add row"
+    fix_target: "6.35.1"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "128"
+    escalated_to: "M89"
+
+  # ── REVIEW-007 — M89 CODE QUALITY (2026-08-28) ────────────────────────────
+  - audit_id: review-007
+    finding_id: F-R007-01
+    severity: high
+    file: agent/scripts/acp.version-update.sh
+    finding: "NEW_VERSION grep **Version** aborts under pipefail on AGENTS.md `> v` format"
+    description: "CR-001; fallback never ran; update copied files then exit 1"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"
+  - audit_id: review-007
+    finding_id: F-R007-02
+    severity: high
+    file: e2e/acp.version-update-preserve.test.sh
+    finding: "Preserve E2E did not assert version-update exit 0 (false green)"
+    description: "CR-002 FG-3"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"
+  - audit_id: review-007
+    finding_id: F-R007-03
+    severity: high
+    file: agent/scripts/acp.cursor-commands-sync.sh
+    finding: "cursor/claude sync missing trap ERR"
+    description: "CR-003 SH-01"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"
+  - audit_id: review-007
+    finding_id: F-R007-04
+    severity: high
+    file: agent/scripts/acp.common.sh
+    finding: "acp_merge_manifest_acp_core _sed_i overwrote every package_version"
+    description: "CR-006; my-package 1.0.0 clobbered"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"
+  - audit_id: review-007
+    finding_id: F-R007-05
+    severity: medium
+    file: agent/scripts/acp.version-update.sh
+    finding: "cursor/claude sync invoked with 2>/dev/null"
+    description: "CR-005"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"
+  - audit_id: review-007
+    finding_id: F-R007-06
+    severity: low
+    file: agent/scripts/acp.review-scan.sh
+    finding: "SH-01 allowlist */e2e/* missed relative e2e/* and would enable SH-04 on harness trap EXIT"
+    description: "CR-004; skip SH-01 for e2e without sourced-library SH-04"
+    fix_target: "6.35.2"
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "review-007"
+    escalated_to: "M89"
+
+  # ── AUDIT-129 / REVIEW-008 — M90 POST-SHIP (2026-08-29) ────────────────────
+  - audit_id: 129
+    finding_id: F-129-01
+    severity: high
+    file: agent/scripts/acp.common.sh
+    finding: "display_available_commands omitted /acp-smoke next to /acp-ci / /acp-pr"
+    description: "CR-008-03"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-02
+    severity: medium
+    file: agent/memory/audit-carryovers.md
+    finding: "F-127-20 still pending after command-e2e-coverage P3=73 shipped"
+    description: "Stamp miss after task-357"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-03
+    severity: medium
+    file: AGENT.md
+    finding: "AGENT.md still 89 milestones complete after M90"
+    description: "Also README milestones badge"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-04
+    severity: medium
+    file: README.md
+    finding: "README comparison table and tree still 70 slash commands (badge is 73)"
+    description: "Stale current-state copy"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-05
+    severity: medium
+    file: e2e/acp.smoke.test.sh
+    finding: "E2E never asserted missing smoke.yml (D16); only empty runner"
+    description: "B7 missing-file path"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-06
+    severity: medium
+    file: e2e/acp.pr.test.sh
+    finding: "No E2E that acp.pr.sh omits smoke or that --only smoke fails closed"
+    description: "S3 + ci B9 D15"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-07
+    severity: high
+    file: agent/scripts/acp.smoke.sh
+    finding: "Unknown-option stderr contained substring not configured (FG-3)"
+    description: "CR-008-01"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-08
+    severity: low
+    file: agent/scripts/acp.smoke.sh
+    finding: "Configured dry-run used PASSTHROUGH[*]- instead of :- idiom"
+    description: "CR-008-02"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: review-008
+    finding_id: CR-008-01
+    severity: high
+    file: agent/scripts/acp.smoke.sh
+    finding: "Unknown option printed not configured substring"
+    description: "Same as F-129-07"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-008"
+    escalated_to: "M90"
+  - audit_id: review-008
+    finding_id: CR-008-02
+    severity: medium
+    file: agent/scripts/acp.smoke.sh
+    finding: "PASSTHROUGH[*]- on configured dry-run"
+    description: "Same as F-129-08"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-008"
+    escalated_to: "M90"
+  - audit_id: review-008
+    finding_id: CR-008-03
+    severity: medium
+    file: agent/scripts/acp.common.sh
+    finding: "display_available_commands omitted /acp-smoke"
+    description: "Same as F-129-01"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-008"
+    escalated_to: "M90"
+
+  # ── AUDIT-131 / REVIEW-009 — M91 POST-SHIP (2026-08-29) ────────────────────
+  - audit_id: 131
+    finding_id: F-131-01
+    severity: high
+    file: agent/scripts/acp.exec-host-ssh.sh
+    finding: "Empty --dry-run defaulted HOST to windows and exited 0"
+    description: "FG-7 / D10; CR-009-01"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "131"
+    escalated_to: "M91"
+  - audit_id: 131
+    finding_id: F-131-02
+    severity: medium
+    file: agent/scripts/acp.smoke.sh
+    finding: "dispatch_exec_host_dry_run || true swallowed exec-host failures"
+    description: "FG-1; CR-009-02"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "131"
+    escalated_to: "M91"
+  - audit_id: 131
+    finding_id: F-131-03
+    severity: medium
+    file: e2e/acp.exec-host.test.sh
+    finding: "No E2E for empty-host fail-closed or ACP_EXEC_HOST without --host"
+    description: "B5 + smoke B13"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "131"
+    escalated_to: "M91"
+  - audit_id: 131
+    finding_id: F-131-04
+    severity: medium
+    file: e2e/acp.pr.test.sh
+    finding: "Extra local_gates path untested (only empty no-op)"
+    description: "S5 inline fail-closed; S6 dry-run extra step"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "131"
+    escalated_to: "M91"
+  - audit_id: 131
+    finding_id: F-131-05
+    severity: low
+    file: agent/scripts/acp.common.sh
+    finding: "Catalog / README / AGENT omitted --host after Wave C"
+    description: "CR-009-04"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "131"
+    escalated_to: "M91"
+  - audit_id: review-009
+    finding_id: CR-009-01
+    severity: high
+    file: agent/scripts/acp.exec-host-ssh.sh
+    finding: "Empty --dry-run defaulted to windows"
+    description: "Same as F-131-01"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-009"
+    escalated_to: "M91"
+  - audit_id: review-009
+    finding_id: CR-009-02
+    severity: medium
+    file: agent/scripts/acp.smoke.sh
+    finding: "|| true on exec-host dry-run under trap ERR"
+    description: "Same as F-131-02"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-009"
+    escalated_to: "M91"
+  - audit_id: review-009
+    finding_id: CR-009-03
+    severity: medium
+    file: e2e/acp.pr.test.sh
+    finding: "Extra gates and empty-host paths had no executed E2E"
+    description: "Same as F-131-03/04"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-009"
+    escalated_to: "M91"
+  - audit_id: review-009
+    finding_id: CR-009-04
+    severity: low
+    file: agent/scripts/acp.common.sh
+    finding: "Catalog omitted --host"
+    description: "Same as F-131-05"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-009"
+    escalated_to: "M91"
+
+  # ── AUDIT-132 — POST-M91 LEFTOVERS (2026-08-29) ────────────────────────────
+  - audit_id: 132
+    finding_id: F-132-01
+    severity: medium
+    file: git
+    finding: "Tag v6.37.1 on 91f1dd5; docs commit 9ef93fc untagged"
+    description: "Release honesty drift; validate passes on tag existence only"
+    fix_target: "M92 task-368"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M92"
+  - audit_id: 132
+    finding_id: F-132-02
+    severity: medium
+    file: origin/develop
+    finding: "develop 25 commits ahead of origin/develop (unpushed)"
+    description: "Local-only release work including M89–M91 and v6.37.1"
+    fix_target: "M92 task-368"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M92"
+  - audit_id: 132
+    finding_id: F-132-03
+    severity: low
+    file: agent/progress.yaml
+    finding: "active_handoff pointed at completed waves-abc design with stale git_commit"
+    description: "Handoff hygiene — addressed in plan task-370"
+    fix_target: "M92 task-370"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M92"
+
+  # ── AUDIT-133 — M92 PRE-IMPL (2026-08-29) ──────────────────────────────────
+  - audit_id: 133
+    finding_id: F-133-01
+    severity: high
+    file: agent/design/local.post-m91-remediation.md
+    finding: "Task-365 used npm audit --omit=dev; CI runs --audit-level=high without omit=dev"
+    description: "Plan amended v1.1.0; implement in task-365"
+    fix_target: "M92 task-365"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M92"
+  - audit_id: 133
+    finding_id: F-133-02
+    severity: high
+    file: scripts/package-lock.json
+    finding: "nanoid 3.3.16 omitted from task-365; --omit=dev would hide it"
+    description: "Plan amended; pin if full npm audit still HIGH"
+    fix_target: "M92 task-365"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M92"
+  - audit_id: 133
+    finding_id: F-133-03
+    severity: high
+    file: scripts/acp-bootstrap.sh
+    finding: "Bootstrap E2E marked optional; --help does not exist; TEAM_SIZE=$2 unbound-unsafe"
+    description: "Plan amended; required E2E plus dollar-2 guard; no invented --help"
+    fix_target: "M92 task-366"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M92"
+  - audit_id: 133
+    finding_id: F-133-04
+    severity: medium
+    file: git
+    finding: "Task-368 allowed moving v6.37.1 or tagging v6.37.2"
+    description: "Plan amended; next tag is v6.38.0 only"
+    fix_target: "M92 task-368"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M92"
+  - audit_id: 133
+    finding_id: F-133-05
+    severity: medium
+    file: agent/design/local.post-m91-remediation.md
+    finding: "Verification matrix omitted bootstrap E2E, vitest, npm-audit, golden, coverage"
+    description: "Plan amended; task-371 required after 365-367"
+    fix_target: "M92 task-371"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M92"
+
+  # ── AUDIT-134 — M92 POST-IMPL (2026-08-29) ──────────────────────────────────
+  - audit_id: 134
+    finding_id: F-134-01
+    severity: high
+    file: agent/progress.yaml
+    finding: "task-369 marked completed after gh pr create failed; no open develop→mainline PR"
+    description: "Deferral recorded as done. F-124-02 stayed pending. Unstamped in task-372."
+    fix_target: "M93 task-372"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M93"
+  - audit_id: 134
+    finding_id: F-134-02
+    severity: medium
+    file: agent/memory/audit-carryovers.md
+    finding: "Post-impl rows stamped verified_in_audit 133 (pre-impl BLOCKED audit)"
+    description: "Restamped to 134 after post-impl evidence"
+    fix_target: "M93 task-372"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M93"

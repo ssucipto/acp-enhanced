@@ -1,5 +1,5 @@
 ---
-description: "Deep-dive investigation of a subject, producing a structured report in `agent/reports/`"
+description: "Deep-dive investigation of a subject, producing a structured report in `agent/reports/` (local only; **do not commit** — ADR-27). This is **not** a PR review and **not** a CodeRabbit replacement — use `/acp-review` (optionally `--pr-diff`) for standards enforcement on a diff."
 ---
 
 # ACP Command: /acp-audit

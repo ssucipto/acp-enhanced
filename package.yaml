@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.34.0
+version: 6.38.0
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
@@ -276,6 +276,12 @@ contents:
         - acp.ci.sh
         - acp.common.sh
         - acp.yaml-parser.sh
+
+    - name: acp.smoke.md
+      description: Optional device preflight; unconfigured exits 2
+      scripts:
+        - acp.smoke.sh
+        - acp.exec-host-ssh.sh
 
     - name: acp.commit.md
       description: End-of-session memory commit and route stamping
@@ -629,6 +635,14 @@ contents:
 
     - name: acp.pr.sh
       description: PR prep with gates delegated to acp.ci.sh
+      type: internal
+
+    - name: acp.smoke.sh
+      description: Device preflight dispatcher for /acp-smoke (fail-closed)
+      type: internal
+
+    - name: acp.exec-host-ssh.sh
+      description: Portable exec-host orchestrator (git bundle + scp, ACP_* env)
       type: internal
 
     - name: acp.private-pack.sh

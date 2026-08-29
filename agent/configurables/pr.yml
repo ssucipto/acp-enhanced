@@ -1,0 +1,16 @@
+# agent/configurables/pr.yml — optional extra PR gates (M91 / D11)
+#
+# OWNERSHIP (P-CI-1 / D11):
+#   Runtime file consumed by agent/scripts/acp.pr.sh AFTER acp.ci.sh.
+#   It is NOT a preference registry. Do NOT register keys here in
+#   agent/configurables/acp.configurables.yaml (that schema has no list type).
+#
+# Empty lists = today's /acp-pr behavior (no extra gates).
+# Extra gates must not reimplement /acp-ci (ADR-24): they run only when
+# local_gates is non-empty, and each item is an acp.ci.sh step id.
+#
+# coderabbit_exclude_globs is documentation for consumers; AE does not
+# rewrite .coderabbit.yaml from this file.
+
+local_gates: []
+coderabbit_exclude_globs: []

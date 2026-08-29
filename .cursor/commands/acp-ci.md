@@ -1,5 +1,5 @@
 ---
-description: "ACP Enhanced /acp-ci command"
+description: "Run the gates GitHub Actions runs, locally, before pushing"
 ---
 
 # ACP Command: /acp-ci
