@@ -22,6 +22,7 @@ CMD_CONTENT="$(cat "${CMD_FILE}")"
 assert_contains "${CMD_CONTENT}" "## Steps" "Steps section present"
 assert_contains "${CMD_CONTENT}" "## Verification" "Verification section present"
 assert_contains "${CMD_CONTENT}" "Namespace" "Namespace metadata present"
+assert_contains "${CMD_CONTENT}" "not a CodeRabbit replacement" "Purpose: not a CodeRabbit replacement"
 
 print_test_header "S3 — Reports directory exists"
 assert_dir_exists "${REPORTS_DIR}" "agent/reports/ exists"

@@ -8,7 +8,7 @@
 **Namespace**: acp  
 **Version**: 1.2.0  
 **Created**: 2026-08-14  
-**Last Updated**: 2026-08-14  
+**Last Updated**: 2026-08-29  
 **Status**: Active  
 **Scripts**: `agent/scripts/acp.pr.sh`, `agent/scripts/acp.ci.sh`  
 
@@ -70,6 +70,7 @@ Default base = `develop` (AE gitflow-lite). Production branch = `mainline`. Neve
 - [ ] On `default_working_branch` (`develop`), `feature/*`, or `fix/*` — **not** `production_branch` (`mainline`)
 - [ ] Commits ready (do not bundle unrelated WIP)
 - [ ] Prefer `/acp-ci --fast` already green — this command re-runs it
+- [ ] Optional: `/acp-smoke` if the slice touched device/UI launch paths — this command does **not** wait and **must not** call `acp.smoke.sh`
 - [ ] `gh` authenticated only if `--create-pr`
 
 ---
@@ -90,6 +91,7 @@ Default base = `develop` (AE gitflow-lite). Production branch = `mainline`. Neve
 
   Related:
     /acp-ci          Local CI predictor (gates live here)
+    /acp-smoke       Optional device preflight; this command does not invoke it
     /acp-review      Local ACP rule scan before PR
     /acp-commit      Session memory for the slice
 ```
@@ -105,6 +107,12 @@ Read `agent/core/identity.yml → git_workflow`.
 
 If `agent/scripts/acp.coderabbit.sh` exists **and** CodeRabbit preferences/config are present, run the path-filter check.  
 If **not** configured → emit **SKIP** with an install/config hint (never silent pass). Do **not** invent fixtures.
+
+Consumers may path-filter `!agent/**` (see `agent/wiki/coderabbit-integration.md`). AE template keeps command docs in scope.
+
+### 2.5 Optional extra gates (`pr.yml`)
+
+`agent/configurables/pr.yml` is a **runtime** file (P-CI-1), not a preference. Empty `local_gates: []` (or a missing file) does not change `/acp-pr`. When the list is non-empty, each item is an **`acp.ci.sh --only <step-id>`** run **after** the delegated `/acp-ci` tier — do not duplicate gate bodies (ADR-24). Zero extra items must not PASS as extra work (FG-2).
 
 ### 3. Infer PR metadata (`--auto`)
 
@@ -148,6 +156,7 @@ Only when not `--dry-run` / not `--skip-push`. Use `gh pr create` when `--create
 ## Related Commands
 
 - [`acp.ci.md`](acp.ci.md) — local CI gates (required dependency)
+- [`acp.smoke.md`](acp.smoke.md) — optional device preflight; **do not** call from `acp.pr.sh`
 - [`acp.commit.md`](acp.commit.md) — session memory
 - [`acp.review.md`](acp.review.md) — quality scan before PR
 - [`acp.stakeholder-report.md`](acp.stakeholder-report.md) — PR summary material

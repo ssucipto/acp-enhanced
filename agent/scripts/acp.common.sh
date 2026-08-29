@@ -1490,6 +1490,7 @@ display_available_commands() {
     echo ""
     echo "  ${GREEN}/acp-ci${NC}                           - Run GitHub Actions gates locally (predictor)"
     echo "  ${GREEN}/acp-pr${NC}                           - Feature PR with gates via /acp-ci"
+    echo "  ${GREEN}/acp-smoke${NC}                        - Optional device preflight (--host; not e2e-smoke)"
     echo ""
     echo "${BLUE}Task & Project Commands:${NC}"
     echo ""
@@ -2003,9 +2004,9 @@ EOF
     fi
 
     if grep -q '^  acp-core:' "$manifest" 2>/dev/null; then
-        _sed_i "s/^    package_version: .*/    package_version: ${version}/" "$manifest"
-        awk -v dt="$update_date" '
+        awk -v ver="$version" -v dt="$update_date" '
             /^  acp-core:/ { in_core=1 }
+            in_core && /^    package_version:/ { sub(/package_version: .*/, "package_version: " ver) }
             in_core && /^    updated_at:/ { sub(/updated_at: .*/, "updated_at: " dt); in_core=0 }
             { print }
         ' "$manifest" > "${manifest}.tmp" && mv "${manifest}.tmp" "$manifest"
