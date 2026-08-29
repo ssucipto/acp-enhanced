@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Exec-host (M91)** — `acp.exec-host-ssh.sh` (`ACP_*`, git bundle + scp; not `ssh -A` clone) plus generic Windows prepare/run/install scripts. Not a `--fast` CI step.
 - **M91 started** — task-359 pre-impl READY (audit-130). Coding 360+ unblocked. F-R006 untouched.
 
 ---
