@@ -67,4 +67,15 @@ else
   assert_true "no secret bytes in output" 0
 fi
 
+print_test_header "B5 — empty host dry-run fail-closed (not windows)"
+if env -u ACP_EXEC_HOST bash "${EH_SH}" --dry-run >/tmp/acp-eh-empty.out 2>&1; then EMPTY_RC=0; else EMPTY_RC=$?; fi
+EMPTY_OUT="$(cat /tmp/acp-eh-empty.out)"
+assert_equals "2" "${EMPTY_RC}" "empty host dry-run exit 2"
+assert_contains "${EMPTY_OUT}" "ACP_EXEC_HOST required" "requires host or env"
+if echo "${EMPTY_OUT}" | grep -q 'plan host=windows'; then
+  assert_true "must not default empty host to windows" 1
+else
+  assert_true "empty host is not windows" 0
+fi
+
 print_suite_summary

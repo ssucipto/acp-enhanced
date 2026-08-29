@@ -208,14 +208,18 @@ fi
 if [[ -z "$RUNNER" ]]; then
   if [[ "$DRY_RUN" == true ]]; then
     echo "[acp.smoke] dry-run: would fail closed (unconfigured)"
-    dispatch_exec_host_dry_run || true
+    if ! dispatch_exec_host_dry_run; then
+      exit $?
+    fi
   fi
   emit_unconfigured
   exit 2
 fi
 
 if [[ "$DRY_RUN" == true ]]; then
-  dispatch_exec_host_dry_run || true
+  if ! dispatch_exec_host_dry_run; then
+    exit $?
+  fi
   echo "[acp.smoke] dry-run: would exec: ${RUNNER} ${PASSTHROUGH[*]:-}"
   echo "[acp.smoke] dry-run is not verification (FG-6)"
   exit 0

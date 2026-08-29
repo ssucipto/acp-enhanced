@@ -4,6 +4,13 @@
 #
 # Optional fields added in v6.8.0:
 
+- date: 2026-08-29
+  task_type: scripts
+  mistake: "acp.exec-host-ssh.sh --dry-run with empty HOST used HOST:-windows and exited 0, so missing host looked like a successful windows plan."
+  correction: "Empty host selection must fail-closed (FG-7). --dry-run requires --host or ACP_EXEC_HOST. Never default to windows or github."
+  priority: high
+  trigger: audit-131
+
 - date: 2026-08-28
   task_type: audit-run
   mistake: "Treating force-push develop mainline tags: yes (M87) as consent for M88 history rewrite, and using directory --invert-paths which drops KEEP templates from every tag."

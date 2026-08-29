@@ -6,6 +6,20 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [audit-131, review-009]
+  done: [m91-leftover-patch-v6371]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.37.1 leftover: empty exec-host --dry-run fails closed (not windows);
+    smoke no longer swallows exec-host dry-run failures; extra local_gates E2E.
+    Tag v6.37.0 stays on 7ab6a7f. Did not start M92.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [task-359, task-360, task-361, task-362, task-363, task-364]
   done: [m91-wave-c-v6370]
   deferred:

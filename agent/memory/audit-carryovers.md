@@ -4573,3 +4573,104 @@ carryovers:
     fix_applied_date: 2026-08-29
     verified_in_audit: "review-008"
     escalated_to: "M90"
+
+  # ── AUDIT-131 / REVIEW-009 — M91 POST-SHIP (2026-08-29) ────────────────────
+  - audit_id: 131
+    finding_id: F-131-01
+    severity: high
+    file: agent/scripts/acp.exec-host-ssh.sh
+    finding: "Empty --dry-run defaulted HOST to windows and exited 0"
+    description: "FG-7 / D10; CR-009-01"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "131"
+    escalated_to: "M91"
+  - audit_id: 131
+    finding_id: F-131-02
+    severity: medium
+    file: agent/scripts/acp.smoke.sh
+    finding: "dispatch_exec_host_dry_run || true swallowed exec-host failures"
+    description: "FG-1; CR-009-02"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "131"
+    escalated_to: "M91"
+  - audit_id: 131
+    finding_id: F-131-03
+    severity: medium
+    file: e2e/acp.exec-host.test.sh
+    finding: "No E2E for empty-host fail-closed or ACP_EXEC_HOST without --host"
+    description: "B5 + smoke B13"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "131"
+    escalated_to: "M91"
+  - audit_id: 131
+    finding_id: F-131-04
+    severity: medium
+    file: e2e/acp.pr.test.sh
+    finding: "Extra local_gates path untested (only empty no-op)"
+    description: "S5 inline fail-closed; S6 dry-run extra step"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "131"
+    escalated_to: "M91"
+  - audit_id: 131
+    finding_id: F-131-05
+    severity: low
+    file: agent/scripts/acp.common.sh
+    finding: "Catalog / README / AGENT omitted --host after Wave C"
+    description: "CR-009-04"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "131"
+    escalated_to: "M91"
+  - audit_id: review-009
+    finding_id: CR-009-01
+    severity: high
+    file: agent/scripts/acp.exec-host-ssh.sh
+    finding: "Empty --dry-run defaulted to windows"
+    description: "Same as F-131-01"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-009"
+    escalated_to: "M91"
+  - audit_id: review-009
+    finding_id: CR-009-02
+    severity: medium
+    file: agent/scripts/acp.smoke.sh
+    finding: "|| true on exec-host dry-run under trap ERR"
+    description: "Same as F-131-02"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-009"
+    escalated_to: "M91"
+  - audit_id: review-009
+    finding_id: CR-009-03
+    severity: medium
+    file: e2e/acp.pr.test.sh
+    finding: "Extra gates and empty-host paths had no executed E2E"
+    description: "Same as F-131-03/04"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-009"
+    escalated_to: "M91"
+  - audit_id: review-009
+    finding_id: CR-009-04
+    severity: low
+    file: agent/scripts/acp.common.sh
+    finding: "Catalog omitted --host"
+    description: "Same as F-131-05"
+    fix_target: "6.37.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-009"
+    escalated_to: "M91"

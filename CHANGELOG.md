@@ -11,6 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.37.1] — 2026-08-29
+
+### Fixed
+- **Exec-host** — `--dry-run` with no `--host` and no `ACP_EXEC_HOST` exits 2 (does not default to `windows`).
+- **`/acp-smoke`** — exec-host dry-run failures are no longer swallowed with `|| true` (FG-1).
+- **E2E** — empty-host fail-closed; `ACP_EXEC_HOST` without `--host`; extra `local_gates` block list dry-run + inline-array fail-closed.
+- **Docs** — catalog / README / AGENT smoke lines mention `--host`.
+
+### Notes
+- Leftover patch for audit-131 / review-009. Tag `v6.37.0` remains on `7ab6a7f`. Did not start M92. F-R006 and F-124-02 still pending.
+
+---
+
 ## [6.37.0] — 2026-08-29
 
 ### Added
