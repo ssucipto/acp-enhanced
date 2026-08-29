@@ -59,7 +59,7 @@ commands:
       purpose: Plan milestones or tasks for undefined items in progress.yaml or new requirements.
     - command: acp.pr
       category: core
-      purpose: Prepare a pull request with local CI gates delegated to /acp-ci (single gate owner; no duplicated checks).
+      purpose: Prepare a pull request with local CI gates delegated to /acp-ci (single gate owner). Optional extra gates from pr.yml run after acp.ci.sh when configured.
     - command: acp.proceed
       category: core
       purpose: Immediately implement the current or next task, with support for autonomous and parallel execution modes.
@@ -77,7 +77,7 @@ commands:
       purpose: Manage and view active agent sessions across projects.
     - command: acp.smoke
       category: core
-      purpose: Optional device preflight via a project runner; missing or empty runner exits 2 (never PASS). Not a CI step (e2e-smoke is /acp-ci --full).
+      purpose: Optional device preflight via smoke.yml runner; --host overrides ACP_EXEC_HOST. Missing or empty runner exits 2 (never PASS). Not a CI step (e2e-smoke is /acp-ci --full).
     - command: acp.spec
       category: core
       purpose: Generate a specification document from a clarification, design, draft, requirements doc, or interactive input.
@@ -230,7 +230,7 @@ commands:
       purpose: Initialize a git repository with an intelligent .gitignore based on detected project type.
 
 scripts:
-  count: 51
+  count: 59
   location: agent/scripts/
   naming: "acp.{feature}.sh"
   key_scripts:
@@ -246,6 +246,20 @@ scripts:
       implements: Optional CodeRabbit detection helpers (available/active/hint) — M78 optionality foundation.
     - script: acp.findings-import.sh
       implements: Imports CodeRabbit findings JSON/NDJSON into audit-carryovers when coderabbit_active (M81; --input only).
+    - script: acp.ci.sh
+      implements: Local CI parity predictor (--fast default; --full for multi-minute CI equivalence). Step ids from ci.yml.
+    - script: acp.ci-steps.sh
+      implements: Shared CI step runner invoked by acp.ci.sh (--only, dry-run, output contracts).
+    - script: acp.pr.sh
+      implements: Feature PR prep; delegates gates to acp.ci.sh; optional extra local_gates from pr.yml after CI.
+    - script: acp.smoke.sh
+      implements: Optional device preflight dispatcher; --host overrides ACP_EXEC_HOST; unconfigured exits 2.
+    - script: acp.exec-host-ssh.sh
+      implements: Portable exec-host orchestrator (ACP_* env, git bundle + scp; not a CI step).
+    - script: acp.upgrade-guard.sh
+      implements: HARD-fail version-update when upstream-delta.yml present (M86 / P-UG-1).
+    - script: acp.private-pack.sh
+      implements: Pack/unpack gitignored ACP dirs for another machine (M87 / ADR-27).
     - script: acp.install.sh
       implements: Sets up the ACP directory structure and copies template files into a target project, bootstrapping a new ACP installation.
     - script: acp.meta-scan.sh

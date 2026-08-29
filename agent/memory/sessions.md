@@ -6,6 +6,19 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [acp-validate, acp-sync, acp-update]
+  done: [docs-sync-v6371, validate-tag-v6371]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    /acp-validate only gap was missing v6.37.1 tag. README now documents
+    field-feedback waves A–C and 59 scripts; domain.yml synced.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-131, review-009]
   done: [m91-leftover-patch-v6371]
   deferred:
