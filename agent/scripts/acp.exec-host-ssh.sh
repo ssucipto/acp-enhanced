@@ -44,7 +44,7 @@ Env:
 Options:
   --host github|windows|local   Override ACP_EXEC_HOST
   --prepare                     git bundle create; scp when SSH target is set
-  --dry-run                     Print the plan; do not bundle, scp, or ssh
+  --dry-run                     Print the plan; requires --host or ACP_EXEC_HOST
   --doctor                      Print env presence (yes/no), not secret bytes
   -h, --help                    Help
 
@@ -166,7 +166,11 @@ plan_local() {
 }
 
 if [[ "$DRY_RUN" == true ]]; then
-  case "${HOST:-windows}" in
+  if [[ -z "${HOST}" ]]; then
+    echo "[acp.exec-host] ERROR: --host or ACP_EXEC_HOST required (github|windows|local)" >&2
+    exit 2
+  fi
+  case "${HOST}" in
     windows) plan_windows ;;
     github) plan_github ;;
     local) plan_local ;;
