@@ -7,7 +7,7 @@ project:
   description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.38.0 on develop\n\
     \  (ADR-28: instance milestone/task/session bodies and one field-feedback\n\
     \  file local including history; templates and USAGE.md stay).\n\
-    \  M92 closed F-R006-01..03. Mainline PR deferred (F-124-02, gh collaborator).\n\
+    \  M92 Track A shipped (F-R006). Track B PR still open (F-124-02, task-369).\n\
     \  Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/design/local.post-m91-remediation.md
@@ -15,8 +15,8 @@ active_handoff:
   to_executor: cursor-grok
   from_executor: cursor-grok
   git_commit: f20c382ae3964ee0aa3e1ee8e6be9011f5dfd59b
-  status: completed
-  completed_date: '2026-08-29'
+  status: planned
+  completed_date: null
 milestones:
   M44:
     name: Feedback-Driven Improvements (v6.9.0)
@@ -989,19 +989,35 @@ milestones:
   M92:
     name: Post-M91 remediation (F-R006 + release hygiene)
     priority: 4
-    status: completed
-    progress: 100
+    status: in_progress
+    progress: 86
     started: 2026-08-29
-    completed: 2026-08-29
+    completed: null
     estimated_weeks: 0.5
-    tasks_completed: 7
+    tasks_completed: 6
     tasks_total: 7
     file: agent/milestones/milestone-92-post-m91-remediation.md
     design: agent/design/local.post-m91-remediation.md
     notes: >
-      COMPLETE 2026-08-29 — F-R006-01..03 closed; v6.38.0 on f20c382;
-      develop pushed. Mainline PR deferred (gh: must be a collaborator; F-124-02).
+      IN PROGRESS — F-R006-01..03 closed in code; v6.38.0 on f20c382;
+      develop pushed. task-369 unstamped (audit-134): no PR yet; F-124-02 pending.
       v6.37.0/v6.37.1 not moved. ADR-19 gated.
+  M93:
+    name: M92 post-impl leftover (honesty stamps)
+    priority: 4
+    status: completed
+    progress: 100
+    started: 2026-08-29
+    completed: 2026-08-29
+    estimated_weeks: 0.1
+    tasks_completed: 1
+    tasks_total: 1
+    file: agent/milestones/milestone-93-m92-leftover-honesty.md
+    design: agent/design/local.post-m91-remediation.md
+    notes: >
+      audit-134 / review-010 leftover. Unstamp task-369; restamp verified_in_audit 134.
+      Do not open the mainline PR (Track B). Do not retag v6.38.0. No identity bump.
+      COMPLETE 2026-08-29.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -7226,13 +7242,13 @@ tasks:
   - id: task-369
     name: "F-124-02 PR develop to mainline"
     priority: 5
-    status: completed
+    status: not_started
     file: agent/tasks/milestone-92-post-m91-remediation/task-369-mainline-pr.md
-    started: '2026-08-29T08:25:00Z'
-    completed_date: '2026-08-29T08:30:00Z'
-    actual_hours: 0.1
+    started: null
+    completed_date: null
+    actual_hours: null
     estimated_hours: 1
-    notes: 'gh pr create failed: must be a collaborator. Deferred to maintainer. F-124-02 remains pending. No force-push.'
+    notes: 'Maintainer Track B. Regular merge only; no force-push. gh pr create failed (must be a collaborator). Do not stamp completed without an open or merged PR.'
   - id: task-370
     name: "Progress handoff + milestone hygiene"
     priority: 2
@@ -7253,6 +7269,17 @@ tasks:
     actual_hours: 0.2
     estimated_hours: 2
     notes: 'Required after 365-367: bootstrap E2E, vitest, smoke/exec-host/pr/ci, coverage, golden'
+  M93:
+  - id: task-372
+    name: "audit-134 honesty leftover (unstamp 369, restamp 134)"
+    priority: 5
+    status: completed
+    file: agent/tasks/milestone-93-m92-leftover-honesty/task-372-honesty-stamps.md
+    started: '2026-08-29T09:50:00Z'
+    completed_date: '2026-08-29T09:55:00Z'
+    actual_hours: 0.2
+    estimated_hours: 1
+    notes: 'No PR; no tag-move; no identity bump; verified_in_audit 134'
 recent_work:
 - date: 2026-08-29
   description: "audit-133 M92 pre-impl amend (design v1.1.0)"
@@ -10426,7 +10453,7 @@ current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2
   docs sync)'
-- 92 milestones shipped (M92 F-R006 v6.38.0 on develop; M91 Wave C v6.37.0; M90 Wave B v6.36.0; M89 Wave A v6.35.0; PR to mainline pending F-124-02)
+- M93 leftover honesty shipped; M92 6/7 on develop (Track B PR / F-124-02 remaining); M91 Wave C v6.37.0; M90 Wave B v6.36.0; M89 Wave A v6.35.0
 - 75 command docs (73 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
   cursor, claude)
 - 9 skills; 59 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.38.0
