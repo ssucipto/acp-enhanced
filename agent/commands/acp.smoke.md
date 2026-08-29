@@ -125,5 +125,6 @@ On ACP Enhanced (empty `runner:`): `bash agent/scripts/acp.smoke.sh` exits **2**
 
 - [`acp.ci.md`](acp.ci.md) — local CI predictor (`e2e-smoke` is a **full-tier** step, not this command)
 - [`acp.pr.md`](acp.pr.md) — feature PR; optional mention of `/acp-smoke`; does not invoke it
+- [`../wiki/exec-host.md`](../wiki/exec-host.md) — Windows OpenSSH inner-loop (012) rules
 - [`acp.review.md`](acp.review.md) — code quality before a slice
 - [`acp.integrity.md`](acp.integrity.md) — trust scan; distinct from device preflight
