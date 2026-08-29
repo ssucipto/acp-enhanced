@@ -1021,11 +1021,11 @@ milestones:
     name: GitHub privacy extension (ADR-29)
     priority: 5
     status: in_progress
-    progress: 64
+    progress: 71
     started: 2026-08-29
     completed: null
     estimated_weeks: 1.5
-    tasks_completed: 9
+    tasks_completed: 10
     tasks_total: 14
     file: agent/milestones/milestone-94-github-privacy-adr29.md
     design: agent/design/local.github-privacy-adr29.md
@@ -7379,21 +7379,21 @@ tasks:
   - id: task-378
     name: "Tip purge git rm --cached"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-378-tip-purge-cached.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T13:10:00Z'
+    completed_date: '2026-08-29T13:15:00Z'
+    actual_hours: 0.1
     estimated_hours: 2
     notes: 'After 373+375-377+384-386; includes IP_REGISTER --cached'
   - id: task-379
     name: "CI-clone rehearsal"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-379-ci-clone-rehearsal.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T13:15:00Z'
+    completed_date: '2026-08-29T13:20:00Z'
+    actual_hours: 0.1
     estimated_hours: 3
     notes: 'Blocks filter-repo until green'
   - id: task-380
