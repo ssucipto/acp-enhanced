@@ -8,7 +8,7 @@
 **Namespace**: acp  
 **Version**: 1.2.0  
 **Created**: 2026-08-14  
-**Last Updated**: 2026-08-28  
+**Last Updated**: 2026-08-29  
 **Status**: Active  
 **Scripts**: `agent/scripts/acp.pr.sh`, `agent/scripts/acp.ci.sh`  
 
@@ -107,6 +107,12 @@ Read `agent/core/identity.yml → git_workflow`.
 
 If `agent/scripts/acp.coderabbit.sh` exists **and** CodeRabbit preferences/config are present, run the path-filter check.  
 If **not** configured → emit **SKIP** with an install/config hint (never silent pass). Do **not** invent fixtures.
+
+Consumers may path-filter `!agent/**` (see `agent/wiki/coderabbit-integration.md`). AE template keeps command docs in scope.
+
+### 2.5 Optional extra gates (`pr.yml`)
+
+`agent/configurables/pr.yml` is a **runtime** file (P-CI-1), not a preference. Empty `local_gates: []` (or a missing file) does not change `/acp-pr`. When the list is non-empty, each item is an **`acp.ci.sh --only <step-id>`** run **after** the delegated `/acp-ci` tier — do not duplicate gate bodies (ADR-24). Zero extra items must not PASS as extra work (FG-2).
 
 ### 3. Infer PR metadata (`--auto`)
 
