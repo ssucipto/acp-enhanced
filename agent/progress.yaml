@@ -14,7 +14,7 @@ active_handoff:
   date: '2026-08-29'
   to_executor: cursor-grok
   from_executor: cursor-grok
-  git_commit: b21d0af6eed8b58d892b028ee2b436efca2dce4d
+  git_commit: c8e53daea34c423c8b120940d5e562c4913de37d
   status: planned
   completed_date: null
 milestones:
