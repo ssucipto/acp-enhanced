@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`acp.m94-purge-paths.sh`** — fail-closed KEEP/PURGE path list for the ADR-29 history rewrite (M94).
+
 ---
 
 ## [6.38.0] — 2026-08-29

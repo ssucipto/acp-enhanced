@@ -649,6 +649,10 @@ contents:
       description: Pack/unpack gitignored ACP dirs for machine transport (ADR-27)
       type: utility
 
+    - name: acp.m94-purge-paths.sh
+      description: Fail-closed KEEP/PURGE path list for M94/ADR-29 filter-repo
+      type: utility
+
     - name: acp.upgrade-guard.sh
       description: Assert upstream-delta sentinels survived version-update (P-UG-1)
       type: internal
