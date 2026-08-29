@@ -640,6 +640,10 @@ contents:
       description: Device preflight dispatcher for /acp-smoke (fail-closed)
       type: internal
 
+    - name: acp.exec-host-ssh.sh
+      description: Portable exec-host orchestrator (git bundle + scp, ACP_* env)
+      type: internal
+
     - name: acp.private-pack.sh
       description: Pack/unpack gitignored ACP dirs for machine transport (ADR-27)
       type: utility
