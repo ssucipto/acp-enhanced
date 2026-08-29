@@ -6,11 +6,11 @@
 > **This is an ACTION command** — run the project smoke runner or fail closed. Do not invent a device path. Do not treat `/acp-ci` as smoke.
 
 **Namespace**: acp  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-08-28  
-**Last Updated**: 2026-08-28  
+**Last Updated**: 2026-08-29  
 **Status**: Active  
-**Scripts**: `agent/scripts/acp.smoke.sh`  
+**Scripts**: `agent/scripts/acp.smoke.sh`, `agent/scripts/acp.exec-host-ssh.sh`  
 
 ---
 
@@ -36,7 +36,9 @@ Consumer repos that already have a CI step named `smoke` keep it. AE does not st
 | Flag | Aliases | Description |
 |------|---------|-------------|
 | `--doctor` | | Print whether `smoke.yml` names a runner and whether it exists. Exit 2 unconfigured; exit 1 configured-but-missing; exit 0 if the runner exists. |
-| `--dry-run` | | Print the plan. Do not execute the runner. Unconfigured still exits 2. |
+| `--dry-run` | | Print the plan. Do not execute the runner. Unconfigured still exits 2. With `--host`, also prints the exec-host bundle plan. |
+| `--host` | | `github` \| `windows` \| `local`. Overrides `ACP_EXEC_HOST`. Default is **unset** (not github). LAN adb is `local` only. |
+| `--remote` | | Requires `--host local` (012/011). |
 | `--android` | | Passthrough to the **project** runner — not AE Gradle. |
 | `--ios` | | Passthrough to the **project** runner. |
 | `-h`, `--help` | | Help (exit 0 even when unconfigured) |
@@ -48,7 +50,7 @@ Consumer repos that already have a CI step named `smoke` keep it. AE does not st
 
 ### Argument Parsing
 
-`--android` / `--ios` are **forwarded**, not implemented here. Do not add `--host` (M91). Do not boot an emulator in this command.
+`--android` / `--ios` are **forwarded**, not implemented here. `--host` overrides `ACP_EXEC_HOST`. `--remote` without `--host local` fails closed. Do not boot an emulator in this command. This protocol repo does **not** default to github device runs.
 
 ---
 
@@ -84,10 +86,12 @@ Consumer repos that already have a CI step named `smoke` keep it. AE does not st
     /acp-smoke                 Run project runner or exit 2
     /acp-smoke --doctor        Probe config (no device)
     /acp-smoke --dry-run       Print plan; do not exec
+    /acp-smoke --host windows  Exec-host plan (bundle); unconfigured still exit 2
 
   Related:
     /acp-ci --fast    Local CI predictor (does not run this command)
     /acp-pr           Feature PR; does not wait on smoke
+    agent/wiki/exec-host.md
 ```
 
 ### 1. Probe configuration
@@ -96,9 +100,9 @@ Read `ACP_SMOKE_CONFIG` or `agent/configurables/smoke.yml`. If the file is missi
 
 ### 2. Doctor / dry-run / run
 
-- `--doctor`: print config path and whether the runner exists; do not exec.
-- `--dry-run`: print `would exec: …`; do not exec. Unconfigured still exit 2 (FG-2).
-- Default: exec the runner with any `--android` / `--ios` / extra args. Do not invent Gradle or emulator flags.
+- `--doctor`: print config path, host (unset ≠ github), and whether the runner exists; do not exec.
+- `--dry-run`: print `would exec: …`; do not exec. Unconfigured still exit 2 (FG-2). With `--host windows|github|local`, also print the exec-host `git bundle` plan (not Darwin `assembleDebug`).
+- Default: exec the runner with any `--android` / `--ios` / extra args. Do not invent Gradle or emulator flags. Unconfigured `--host` does **not** ssh.
 
 ### 3. Do not confuse with CI
 
@@ -112,8 +116,9 @@ Never tell the operator that `/acp-ci --fast` “covers smoke”. Fast tier has 
 - [ ] Unconfigured `bash agent/scripts/acp.smoke.sh` exits 2 and prints `not configured`
 - [ ] `--doctor` on this repo exits 2
 - [ ] `grep acp.smoke.sh agent/scripts/acp.pr.sh` is empty
-- [ ] No `--host` in this command or script
+- [ ] Help documents `github|windows|local`; `--remote` requires `--host local`
 - [ ] `grep -E '^  smoke:' agent/configurables/ci.yml` is empty
+- [ ] `/acp-ci --fast` still has no smoke/host step
 
 ## User-Observable Acceptance
 
