@@ -1,12 +1,12 @@
 # Agent Context Protocol Enhanced (ACP Enhanced)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.36.1
+**Version**: 6.37.0
 **Fork of**: [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol)
 **Maintained by**: [ssucipto/acp-enhanced](https://github.com/ssucipto/acp-enhanced)
 **Created**: 2026-02-11
 **Updated**: 2026-07-28
-**Status**: Production Pattern — 90 milestones complete (M74–M77 gated per ADR-19)
+**Status**: Production Pattern — 91 milestones complete (M74–M77 gated per ADR-19)
 
 > **Canonical protocol file**: `AGENTS.md` (auto-loaded by Cursor/Copilot/Claude). This `AGENT.md` is the legacy comprehensive reference; keep its `**Version**` in sync with `agent/core/identity.yml` via `/acp-sync`.
 

@@ -1405,6 +1405,11 @@
      106	scalar	tools	[bash]	     100	
      107	array	output_contains		     100	
 @@COUNT 108
+@@FILE agent/configurables/pr.yml
+0	map		root	-1	       1,       2
+       1	array	local_gates		0	
+       2	array	coderabbit_exclude_globs		0	
+@@COUNT 3
 @@FILE agent/configurables/smoke.yml
 0	map		root	-1	       1
        1	scalar	runner	""	0	
@@ -1551,7 +1556,7 @@
       31	scalar	test_coverage	every command must have an E2E test file	      30	
       32	scalar	fork_of	github.com/prmichaelsen/agent-context-protocol	0	
       33	scalar	repo	github.com/ssucipto/acp-enhanced	0	
-      34	scalar	version	6.36.1	0	
+      34	scalar	version	6.37.0	0	
       35	map	git_workflow		0	      36,      37,      38
       36	scalar	default_working_branch	develop	      35	
       37	scalar	production_branch	mainline	      35	
