@@ -7,7 +7,7 @@ project:
   description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.38.0 on develop\n\
     \  (ADR-28: instance milestone/task/session bodies and one field-feedback\n\
     \  file local including history; templates and USAGE.md stay).\n\
-    \  M92 Track A shipped (F-R006). Track B PR still open (F-124-02, task-369).\n\
+    \  M92 COMPLETE — F-R006 + release hygiene; PR #12 merged to mainline (v6.38.0).\n\
     \  Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/design/local.post-m91-remediation.md
@@ -989,19 +989,18 @@ milestones:
   M92:
     name: Post-M91 remediation (F-R006 + release hygiene)
     priority: 4
-    status: in_progress
-    progress: 86
+    status: completed
+    progress: 100
     started: 2026-08-29
-    completed: null
+    completed: 2026-08-29
     estimated_weeks: 0.5
-    tasks_completed: 6
+    tasks_completed: 7
     tasks_total: 7
     file: agent/milestones/milestone-92-post-m91-remediation.md
     design: agent/design/local.post-m91-remediation.md
     notes: >
-      IN PROGRESS — F-R006-01..03 closed in code; v6.38.0 on f20c382;
-      develop pushed. task-369 unstamped (audit-134): no PR yet; F-124-02 pending.
-      v6.37.0/v6.37.1 not moved. ADR-19 gated.
+      COMPLETE 2026-08-29 — F-R006-01..03 closed; v6.38.0 on develop; PR #12 merged
+      to mainline (bee6cec); F-124-02 fixed. tier3 E2E count 61 (acp.smoke). v6.37.x tags unmoved.
   M93:
     name: M92 post-impl leftover (honesty stamps)
     priority: 4
@@ -7242,13 +7241,13 @@ tasks:
   - id: task-369
     name: "F-124-02 PR develop to mainline"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-92-post-m91-remediation/task-369-mainline-pr.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T10:20:00Z'
+    completed_date: '2026-08-29T10:33:42Z'
+    actual_hours: 0.2
     estimated_hours: 1
-    notes: 'Maintainer Track B. Regular merge only; no force-push. gh pr create failed (must be a collaborator). Do not stamp completed without an open or merged PR.'
+    notes: 'PR #12 merged (bee6cec) develop→mainline regular merge. F-124-02 closed.'
   - id: task-370
     name: "Progress handoff + milestone hygiene"
     priority: 2
@@ -10444,7 +10443,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "Maintainer: open regular PR develop → mainline (F-124-02). gh pr create failed: must be a collaborator. No force-push."
+- "M92 closed — mainline published via PR #12 (v6.38.0). Do not move tags v6.37.0 / v6.37.1."
 - "Do not move tags v6.37.0 (7ab6a7f) / v6.37.1 (91f1dd5). v6.38.0 is on f20c382."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 - "Forks/old clones: reclone or git fetch --prune; do not force-push again."
@@ -10453,7 +10452,7 @@ current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2
   docs sync)'
-- M93 leftover honesty shipped; M92 6/7 on develop (Track B PR / F-124-02 remaining); M91 Wave C v6.37.0; M90 Wave B v6.36.0; M89 Wave A v6.35.0
+- M92 COMPLETE 7/7 — PR #12 merged to mainline (F-124-02); M93 leftover honesty; M91 v6.37.0; M90 v6.36.0; M89 v6.35.0
 - 75 command docs (73 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
   cursor, claude)
 - 9 skills; 59 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.38.0
