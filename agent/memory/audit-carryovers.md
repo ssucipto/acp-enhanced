@@ -3388,9 +3388,9 @@ carryovers:
     finding: "js-yaml 4.x (and nested 3.x via gray-matter) vulnerable to GHSA-5p4m-2wfm-xmqj !!omap quadratic CPU"
     description: "npm audit --omit=dev reports 1 high (js-yaml). Patched versions are 4.3.1 and 3.15.1. Dev tree also has nanoid <3.3.18 (vitest)."
     fix_target: "Bump js-yaml to 4.3.1; npm overrides for nested 3.x → 3.15.1; npm audit fix; re-run npm audit in scripts/"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "133"
     escalated_to: null
   - audit_id: review-006
     finding_id: F-R006-02
@@ -4718,9 +4718,9 @@ carryovers:
     finding: "Task-365 used npm audit --omit=dev; CI runs --audit-level=high without omit=dev"
     description: "Plan amended v1.1.0; implement in task-365"
     fix_target: "M92 task-365"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "133"
     escalated_to: "M92"
   - audit_id: 133
     finding_id: F-133-02
@@ -4729,9 +4729,9 @@ carryovers:
     finding: "nanoid 3.3.16 omitted from task-365; --omit=dev would hide it"
     description: "Plan amended; pin if full npm audit still HIGH"
     fix_target: "M92 task-365"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "133"
     escalated_to: "M92"
   - audit_id: 133
     finding_id: F-133-03
