@@ -4790,3 +4790,60 @@ carryovers:
     fix_applied_date: 2026-08-29
     verified_in_audit: "134"
     escalated_to: "M93"
+
+  # ── AUDIT-135 — GITHUB PRIVACY EXPOSURE (2026-08-29) ────────────────────────
+  - audit_id: 135
+    finding_id: F-135-01
+    severity: critical
+    file: IP_REGISTER.md
+    finding: "Legal IP register tracked on origin despite root .gitignore exclusion"
+    description: "git ls-files shows IP_REGISTER.md on develop/mainline. .gitignore line 4 is ineffective for tracked files. History contains founder IP schedule."
+    fix_target: "git rm --cached IP_REGISTER.md; filter-repo path IP_REGISTER.md; operator force-push tags; validate soft-check expects absent on public clone"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 135
+    finding_id: F-135-02
+    severity: high
+    file: agent/design/local.post-m91-remediation.md
+    finding: "22 agent/design/local.* dogfood plans remain on public remote"
+    description: "ADR-28 excluded design/local.* from purge. Files name consumer-project, M92 arcs, operator backup cookbooks. User-requested privacy review."
+    fix_target: "ADR-29: gitignore + git rm --cached + filter-repo paths-from-file for agent/design/local.* and m70-m73; keep design.template + protocol acp-*-design.md"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 135
+    finding_id: F-135-03
+    severity: medium
+    file: agent/design/m70-tech-debt-gate-hardening.md
+    finding: "Instance milestone designs m70-m73 tracked without local. prefix"
+    description: "Same privacy class as purged milestone bodies; still in agent/design/"
+    fix_target: "Include agent/design/m[0-9]*.md in ADR-29 purge list or rename/move to local-only tree"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 135
+    finding_id: F-135-04
+    severity: medium
+    file: agent/patterns/local.tracked-untracked-directories.md
+    finding: "11 agent/patterns/local.* files tracked on public remote"
+    description: "ADR-28 left patterns/local.* on origin. Documents privacy rules while being public."
+    fix_target: "ADR-29: gitignore patterns/local.* except pattern.template.md; private-pack; filter-repo"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 135
+    finding_id: F-135-05
+    severity: medium
+    file: agent/routing/tasks/route-206.md
+    finding: "241 agent/routing/tasks/route-*.md instance route files on public remote"
+    description: "Full dogfood work history with file lists and milestone context. Not in ADR-28 scope."
+    fix_target: "ADR-29: evaluate purge vs keep taxonomy-only; if purge, paths-from-file filter-repo + route template keeper"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
