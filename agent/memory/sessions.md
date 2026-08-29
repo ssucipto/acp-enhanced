@@ -6,6 +6,26 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [task-365, task-366, task-367, task-371, task-368, task-369, task-370]
+  done:
+    - f-r006-01-js-yaml-4-3-1
+    - f-r006-02-bootstrap-sh01
+    - f-r006-03-dispatch-taskmeta
+    - v6380-tag-on-f20c382
+    - develop-pushed
+    - m92-complete
+  deferred:
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    M92 v6.38.0 tagged on f20c382; v6.37.0/v6.37.1 not moved.
+    npm audit --audit-level=high (no omit=dev). gh pr create failed
+    (must be a collaborator); F-124-02 stays pending.
+
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-133]
   done: [m92-pre-impl-amend-v11]
   deferred:
