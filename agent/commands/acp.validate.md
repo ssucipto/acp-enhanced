@@ -673,7 +673,7 @@ Self-Containment (incomplete tasks only):
        → Inline from agent/specs/local.freshness.md under Spec Coverage
 
   ⚠️ agent/tasks/milestone-10/task-4-character-grading.md  (in_progress)
-     - Probe 2 (design): Design agent/design/local.gamification.md has D1..D8
+     - Probe 2 (design): Design agent/design/acp-commands-design.md has D1..D8
        but task marker has no `incorporates:` field.
        → Add `incorporates:` for relevant D-IDs or justify the omission
      - Probe 3 (clarification): clarification-12-grading.md resolved

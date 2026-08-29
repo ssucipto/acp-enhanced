@@ -244,7 +244,7 @@ design_elements:
 design_gaps: []
 
 design_paths:
-  - agent/design/local.design-reference-system.md
+  - agent/design/acp-commands-design.md
 
 design_names:
   - Design Reference System

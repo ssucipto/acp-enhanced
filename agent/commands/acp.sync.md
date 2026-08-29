@@ -146,7 +146,7 @@ Designs created before v5.41.0 don't have D-IDs. Tasks can't claim `incorporates
   3. For each candidate, propose a D-ID label and a short title derived from the content (e.g. `D2: user_study_list table` for a SQL block following a "Data Model" heading).
   4. Display a list of proposed D-ID additions:
      ```
-     Design: agent/design/local.gamification.md
+     Design: agent/design/acp-commands-design.md (instance designs are local-only — ADR-29)
        D1: Use SM-2 for vocab scheduling (from ### heading)
        D2: user_study_list table (from SQL block)
        D3: Attention score formula (from code paragraph)

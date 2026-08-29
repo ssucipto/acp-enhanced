@@ -300,7 +300,7 @@ If yes:
 
 **Invocation**: `/acp-design-create`  
 
-**Result**: Uses "local" namespace, creates `agent/design/local.my-design.md`, no package updates  
+**Result**: Uses "local" namespace, creates a gitignored instance design (`local.*` under `agent/design/`; ADR-29), no package updates  
 
 ---
 

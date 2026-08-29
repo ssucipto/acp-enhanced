@@ -78,7 +78,7 @@ This command manages the ACP Key File Index system. The key file index is a weig
 
 Use this when you want to see what files are indexed, add newly created files, remove stale entries, or discover files that should be indexed based on codebase analysis.
 
-See also: `agent/design/local.key-file-index-system.md`
+See also: `agent/index/local.main.template.yaml` (ADR-29: instance designs are local-only)
 
 ---
 
@@ -153,8 +153,8 @@ List all indexed key files across all namespaces in a compact table.
 
 local (4 entries):
   1.0  requirements  agent/design/requirements.md
-  0.8  pattern       agent/patterns/local.e2e-testing.md
-  0.7  design        agent/design/local.architecture.md
+  0.8  pattern       agent/patterns/bootstrap.template.md
+  0.7  design        agent/design/acp-commands-design.md
   0.6  design        src/core/state-machine.ts
 
 core-sdk (3 entries):
@@ -196,7 +196,7 @@ Add a file to `agent/index/local.main.yaml`.
 ```
 ✅ Added to key file index:
 
-  path: agent/patterns/local.my-pattern.md
+  path: agent/patterns/bootstrap.template.md
   weight: 0.8
   kind: pattern
   applies: acp.proceed, acp.task-create
@@ -222,7 +222,7 @@ Remove a file from `agent/index/local.main.yaml`.
 ```
 ✅ Removed from key file index:
 
-  path: agent/patterns/local.old-pattern.md
+  path: agent/patterns/bootstrap.template.md
   was: weight 0.8, pattern
 
   Local namespace: 3 entries remaining
@@ -251,7 +251,7 @@ Found 4 un-indexed files:
      Suggested: weight 1.0, kind: requirements
      Applies: acp.init, acp.design-create, acp.task-create, acp.plan, acp.proceed
 
-  2. agent/patterns/local.library-services.md
+  2. agent/patterns/bootstrap.template.md
      Suggested: weight 0.7, kind: pattern
      Applies: acp.proceed, acp.task-create
 
@@ -298,7 +298,7 @@ Show full metadata for all index entries across all namespaces.
 
   ─────────────────────────────────────────
 
-  path:        agent/patterns/local.e2e-testing.md
+  path:        agent/patterns/bootstrap.template.md
   weight:      0.8
   kind:        pattern
   description: E2E testing pattern used across all test suites.
@@ -352,7 +352,7 @@ See display formats for each subcommand above.
 
 **Context**: Just created a new pattern and want to index it  
 
-**Invocation**: `/acp-index add agent/patterns/local.api-conventions.md`  
+**Invocation**: `/acp-index add agent/patterns/bootstrap.template.md`  
 
 **Result**: Prompts for weight/kind/description/rationale/applies, adds to local.main.yaml  
 
@@ -370,7 +370,7 @@ See display formats for each subcommand above.
 
 **Invocation**: `/acp-index add the e2e testing pattern`  
 
-**Result**: Agent searches for matching file, finds `agent/patterns/local.e2e-testing.md`, proceeds with add flow  
+**Result**: Agent searches for matching file, finds `agent/patterns/bootstrap.template.md`, proceeds with add flow  
 
 ### Example 5: Removing a Stale Entry
 

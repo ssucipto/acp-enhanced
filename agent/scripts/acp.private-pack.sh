@@ -46,6 +46,7 @@ Usage: acp.private-pack.sh <pack|unpack> [options]
 
 Never pass the passphrase on argv. Use AGE_PASSPHRASE or ACP_PACK_PASSPHRASE, or an interactive prompt.
 Output must not be inside .git/ or a tracked (non-ignored) path under the clone.
+Default output is an encrypted file under a directory outside the clone (ADR-27/29).
 EOF
 }
 

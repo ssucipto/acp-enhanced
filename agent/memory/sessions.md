@@ -6,6 +6,22 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [task-373, task-374, task-375, M94]
+  done:
+    - m94-backup-gate
+    - m94-purge-paths-generator
+    - m94-gitignore-private-pack
+  deferred:
+    - F-135-07-progress-yaml-split → future-adr
+    - m94-force-push → D11-phrase
+  key_fact: >
+    M94 Wave 0–1 landed. Backups under the private pack dir (not in clone).
+    Tag rewrite still required; /acp-proceed --yes is not D11 consent.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-137, M94]
   done:
     - m94-pre-impl-audit-137
@@ -1228,160 +1244,16 @@
     - aikido-m74-m77 → deferred-cost
   key_fact: "M81 READY WITH AMENDMENTS (audit-101): carve ADR-22 out of ADR-19 (never supersede); fixture-first --input import only; weekly-code-review is a single command string; Phase 1 rules never defer to CodeRabbit; ungate task-269 for ADR writing."
 
-- date: 2026-07-24
-  executor: cursor
-  branch: develop
-  tasks: []
-  done:
-    - acp-validate-clean-post-m80
-    - acp-sync-handoff-completed-progress-notes-refreshed
-  deferred:
-    - m74-m77-coderabbit-pr-check → adr-19-gate
-  key_fact: "ADR-19 gates M74–M77 integration milestones (not tool install) until CodeRabbit + Aikido run on a consumer-project repo with 2+ weeks of real findings; M78 optionality foundation shipped separately per ADR-21."
-
-- date: 2026-07-24
-  executor: cursor
-  branch: develop
-  tasks: [task-265, task-266, task-268]
-  done:
-    - m80-e2e-debt-remediation-shipped-v6-28-2
-    - f-m78-01-closed-68-68-e2e-suite
-    - audit-100-carryovers-f-100-01-through-05-settled
-    - test-side-fixes-workflow-cross-layer-validate-ts
-    - behavior-reconcile-version-package-info-project-update-sweep
-  deferred:
-    - m74-m77-coderabbit-pr-check → adr-19-gate
-    - crit-065-002-merge-pr3 → mainline
-  key_fact: "F-M78-01 closed with honest code-vs-test triage (no blind greening): validate-cross-layer needed conditional package.yaml copy + milestone awk; validate-ts needed isolated 5-surface parity dirs; version-check-for-updates needed ${1:-} under set -u; project-update needed current_tags init before ADD_TAGS block."
-
-- date: 2026-07-24
-  executor: claude-opus-4-8
-  branch: develop
-  tasks: [task-255, task-256, task-257, task-258, task-259, task-260, task-261, task-262, task-263, task-264]
-  done:
-    - m78-coderabbit-optionality-foundation-shipped-v6-28-0
-    - m79-closure-integrity-remediation-shipped-v6-28-1
-    - audit-099-caught-own-version-regression-honest-correction
-    - audit-100-m80-preimpl-5-findings-folded
-    - m80-planned-3-tasks-after-task-267-removed
-  deferred:
-    - m80-implementation → cursor-executor-handoff (tasks 265,266,268)
-    - m74-m77-coderabbit-pr-check → adr-19-gate
-    - crit-065-002-merge-pr3 → mainline
-  key_fact: "Regression comparison MUST be assertion-level, not file-level — audit-098 declared M78 'zero regression' by file-count but audit-099 found the v6.28.0 bump missed agent/progress.yaml's version: field, adding 2 assertion failures inside already-failing test files. Fix incl. a validator gap: acp-validate.ts now checks progress.yaml version (it caught a YAML corruption I introduced mid-fix). M80 = 7 pre-existing E2E failures (root-caused audit-099) + F-100-03 auto-sync trap (copilot-instructions.md regenerated from AGENTS.md)."
-
-- date: 2026-07-23
-  executor: claude-opus-4-8
-  branch: develop
-  tasks: []
-  done:
-    - audit-097-optional-coderabbit-distributed-framework-lens
-    - plan-m78-optionality-foundation-6-tasks-255-260
-    - adr-21-coderabbit-optionality-carved-out-of-adr-19-gate
-    - adr-20-backfill-hooks-task_id-array-format
-    - audit-098-preimpl-7-findings-folded-into-m78
-  deferred:
-    - m78-implementation → acp-proceed-complete (this session, next)
-    - m74-m77-pr-check-findings-import → adr-19-adoption-gate
-    - crit-065-002-merge-pr3 → mainline
-    - f-086-02-consumer-project-consumer → task-239
-  key_fact: "acp.preferences.sh sources acp.common.sh, so optional-tool detection helpers that call get_preference must live in a dedicated script (acp.coderabbit.sh) sourcing preferences.sh — never in common.sh (circular source). Caught in pre-impl audit-098 before any code was written. Also: ADR-19 gates CodeRabbit *integration* (PR-check/findings-import); the *optionality foundation* (toggle+detection+docs) is a separate non-gated concern (ADR-21)."
-
-- date: 2026-07-17
-  executor: copilot
-  branch: develop
-  tasks: []
-  done:
-    - validate-all-clean-v6-27-2
-    - agent-md-legacy-version-sync
-    - adr-19-m74-gate-documented
-  deferred:
-    - m74-plan → adr-19-adoption-gate
-    - crit-065-002-merge-pr3 → mainline
-    - f-086-02-consumer-project-consumer → task-239
-  key_fact: "AGENT.md legacy header was 15 minors stale (6.12.1) while AGENTS.md/identity were 6.27.2 — hard validators only check AGENTS.md, not AGENT.md."
-
-- date: 2026-07-17
-  executor: copilot
-  branch: develop
-  tasks: []
-  done:
-    - validate-sync-update-chain-clean
-    - readme-badge-drift-fixed-v6-27-2
-    - research-direction-docs-on-develop
-  deferred:
-    - crit-065-002-merge-pr3 → mainline
-    - f-086-02-consumer-project-consumer → task-239
-  key_fact: "README version badge was soft drift (6.21.1) invisible to hard validators — acp-validate.ts only checks AGENTS/identity/package/CHANGELOG, not README shields.io URL."
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [task-248, task-249, task-250, task-251, task-252, task-253, task-254]
-  done:
-    - m73-autonomous-complete-v6-27-1
-    - carryover-integrity-restored-audit-095-closure
-    - manifest-scripts-tracked-validate-clean
-  deferred:
-    - crit-065-002-branch-protection → github-admin
-    - f-086-02-consumer-project-consumer → task-239
-  key_fact: M73 v6.27.1 closed audit-094 gaps; integrity-manifest now tracks agent/scripts; validate 0 errors (branch protection warn only).
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [task-240, task-241, task-242, task-243, task-244, task-246, task-247]
-  done:
-    - m72-autonomous-complete-audit-093
-    - validator-hardening-5-surface-parity
-    - v6-27-0-tagged
-  deferred:
-    - crit-065-002-branch-protection → admin-ops
-  key_fact: M72 shipped v6.27.0 with ROOT-anchored validator; CRIT-065-002 remains pending (gh api 404).
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [task-245]
-  done:
-    - claude-integration-committed-adr-18-2b92528
-    - sessions-compaction-f-091-08
-    - monthly-dependency-audit-refreshed-f-091-09
-    - task-245-hygiene-phase-complete
-  deferred:
-    - m72-validator-tasks → task-240-241
-    - crit-065-002-branch-protection → task-246
-  key_fact: "task-245 guardrail #9 satisfied — Claude tree committed (2b92528) before validator edits; acp.dependency-diff.sh 0 findings; sessions compacted to ≤8 entries."
-
-- date: 2026-07-15
-  executor: claude-code
-  branch: develop
-  tasks: [audit-091, plan-m72, audit-092, plan-m72-amendment]
-  done:
-    - audit-091-whole-system-gaps-standards-14-findings
-    - m72-milestone-planned-design-8-tasks-8-routes-committed
-    - audit-092-pre-impl-m72-readiness-ready-with-4-amendments
-    - discovered-f-091-14-agent-reports-gitignore-blackhole-mid-report-commit
-    - m72-amended-per-audit-092-d9-d10-guardrails-10-11-closure-renumbered-093
-    - f-092-01-02-03-04-carryovers-stamped-fixed-plan-level-audit-093-verifies
-  deferred:
-    - m72-validator-implementation → task-240-247
-    - crit-065-002-branch-protection → task-246
-    - f-086-02-consumer-project-consumer → task-239
-  key_fact: "F-091-14: agent/.gitignore bare reports/ blocked 61 audit reports from git; sessions prepend protocol violation fixed; task-245 hygiene unblocks M72 validator work."
-  commits: [1a1dc70 "plan(M72)", 57c0464 "audit(092)", ad29c3c "plan(M72) amend", 2b92528 "feat(claude)"]
-
-# === Compacted Block: 2026-07-15 (10 sessions) ===
+# === Compacted Block: 2026-07-15 – 2026-07-24 (10 sessions, M94 task-377) ===
 - type: weekly-summary
-  week: 2026-07-15
+  week: 2026-07-24
   key_facts:
-    - "M71 remediation shipped v6.26.0 — memory schema enforcement, 8-rule review scanner, atomic-write (audit-090)."
-    - "audit-086 stamped 21 stale carryovers; acp.recurring-complete.sh added."
-    - "v6.25.2 review/integrity remediation — acp.review-scan.sh Phase 1, integrity-manifest split."
-    - "M63 amendment v6.25.1 — tier3 E2E dynamic loop; audit-083/084 closed."
-    - "M68 safe install/update v6.24.1; M67 handoff v6.23.0."
-    - "progress.yaml 191 duplicate YAML keys fixed — js-yaml parse restored."
-  tasks_completed: [task-231..238, audit-086, review-001, route-207, route-206, route-198..205, route-190..197, validate-sync-update]
+    - "M73–M78 era: validator hardening, CodeRabbit optionality (ADR-21), integrity-manifest tracks scripts."
+    - "Consumer-project follow-ups stay as finding IDs in carryovers (not restated here)."
+    - "CRIT-065-002 branch protection remained pending GitHub admin."
+  tasks_completed: 10
+  compacted: true
+
 
 # === Compacted Block: 2026-06-08 – 2026-06-15 (6 sessions) ===
 - type: weekly-summary

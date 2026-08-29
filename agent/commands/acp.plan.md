@@ -176,7 +176,7 @@ Before planning, load relevant key files from the index and resolve active prefe
 ```
 📑 Reading Key Files & Context (acp.plan)...
   ✓ agent/design/acp-commands-design.md (weight: 0.9, design)
-  ✓ agent/design/local.key-file-index-system.md (weight: 0.7, design)
+  ✓ agent/index/local.main.template.yaml (weight: 0.7, index)
   📝 "Migration files MUST be numbered sequentia..." (weight: 1.0, note)
 
   2 files read, 1 inline entry loaded

@@ -315,7 +315,7 @@ Three sequenced milestones closed consumer-project / consumer-project remainder 
 - Smoke runner matrix: `agent/configurables/smoke.yml` (P-CI-1), not preference arrays
 - Extra PR gates: `agent/configurables/pr.yml` block list (D11), after `/acp-ci` only
 
-See [`agent/design/local.field-feedback-waves-abc.md`](agent/design/local.field-feedback-waves-abc.md) and [`agent/wiki/exec-host.md`](agent/wiki/exec-host.md).
+See [`agent/wiki/exec-host.md`](agent/wiki/exec-host.md) (ADR-29: instance design files are local-only).
 
 ### Recent Protocol Enhancements (v6.10–v6.12.1)
 
