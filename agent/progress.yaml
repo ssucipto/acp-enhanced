@@ -1,13 +1,13 @@
 project:
   name: agent-context-protocol
-  version: 6.36.1
+  version: 6.37.0
   started: 2026-02-16
   status: active
   current_milestone: M91
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.36.1 on develop\n\
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.37.0 on develop\n\
     \  (ADR-28: instance milestone/task/session bodies and one field-feedback\n\
     \  file local including history; templates and USAGE.md stay).\n\
-    \  M90 Wave B shipped (/acp-smoke stub, unconfigured exit 2).\n\
+    \  M91 Wave C shipped (exec-host, --host, pr.yml). M90 Wave B /acp-smoke stub.\n\
     \  F-R006-01..03 still pending. Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/design/local.field-feedback-waves-abc.md
@@ -974,12 +974,12 @@ milestones:
   M91:
     name: Wave C — exec-host and leftover PR/CR prefs (v6.37.0)
     priority: 4
-    status: in_progress
-    progress: 83
+    status: completed
+    progress: 100
     started: 2026-08-29
-    completed: null
+    completed: 2026-08-29
     estimated_weeks: 0.8
-    tasks_completed: 5
+    tasks_completed: 6
     tasks_total: 6
     file: agent/milestones/milestone-91-wave-c-exec-host.md
     design: agent/design/local.field-feedback-waves-abc.md
@@ -7159,14 +7159,19 @@ tasks:
   - id: task-364
     name: "Exec-host E2E dry-run + v6.37.0"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-91-wave-c-exec-host/task-364-e2e-v6370.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T05:06:00Z'
+    completed_date: '2026-08-29T05:25:00Z'
+    actual_hours: 0.3
     estimated_hours: 4
-    notes: 'No KVM; F-R006 still pending'
+    notes: 'No KVM; F-R006 still pending; v6.37.0'
 recent_work:
+- date: 2026-08-29
+  description: "M91 COMPLETE v6.37.0 Wave C"
+  items:
+  - "exec-host dry-run E2E (git bundle, no secrets, no emulator)"
+  - "--host + pr.yml; F-R006 still pending; no force-push"
 - date: 2026-08-29
   description: "M91 task-363: pr.yml extra gates"
   items:
@@ -10314,8 +10319,8 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M90 shipped v6.36.0 (/acp-smoke stub). Next: /acp-proceed task-359 (M91 pre-impl) after this wave is accepted."
-- "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline at 6.32.4 until that lands."
+- "M91 shipped v6.37.0 (exec-host, --host, pr.yml). Field-feedback waves A–C complete on develop."
+- "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline until that lands (F-124-02)."
 - "Separate track: review-006 HIGH F-R006-01 js-yaml pin, F-R006-02 bootstrap set -euo, F-R006-03 dispatch any types."
 - "Forks/old clones: reclone or git fetch --prune; do not force-push again. GitHub caches may retain old objects."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
@@ -10324,11 +10329,11 @@ current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2
   docs sync)'
-- 90 milestones shipped (M90 Wave B v6.36.0 on develop; M89 Wave A v6.35.0; M88 ADR-28 on develop/tags; PR to mainline pending); M91 planned
+- 91 milestones shipped (M91 Wave C v6.37.0 on develop; M90 Wave B v6.36.0; M89 Wave A v6.35.0; M88 ADR-28 on develop/tags; PR to mainline pending)
 - 75 command docs (73 acp.* + 2 git.*); wrappers across 5 surfaces (prompts, opencode,
   cursor, claude)
-- 9 skills; 58 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.36.0
-- 128+ audit reports (thru audit-128 M89 post-ship leftovers)
+- 9 skills; 59 bash scripts; review E2E green; coderabbit-integration 31/31; suite green at v6.37.0
+- 130+ audit reports (thru audit-130 M91 pre-impl)
 - M73 COMPLETE v6.27.1 — carryover integrity, D4 ERROR, sweep 6/6, audit-095 independent
   closure
 - M67 COMPLETE v6.23.0 — cross-agent handoff + /acp-receive

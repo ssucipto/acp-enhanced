@@ -6,6 +6,20 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [task-359, task-360, task-361, task-362, task-363, task-364]
+  done: [m91-wave-c-v6370]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.37.0: ACP_EXEC_HOST + git bundle exec-host; /acp-smoke --host;
+    pr.yml extra gates empty no-op. Unconfigured smoke still exit 2.
+    No Maestro in core E2E. F-R006 untouched.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-129, review-008]
   done: [m90-leftover-patch-v6361]
   deferred:
