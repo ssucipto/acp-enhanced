@@ -1,6 +1,6 @@
 project:
   name: agent-context-protocol
-  version: 6.37.1
+  version: 6.38.0
   started: 2026-02-16
   status: active
   current_milestone: M92
@@ -990,11 +990,11 @@ milestones:
     name: Post-M91 remediation (F-R006 + release hygiene)
     priority: 4
     status: in_progress
-    progress: 29
+    progress: 43
     started: 2026-08-29
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 7
     file: agent/milestones/milestone-92-post-m91-remediation.md
     design: agent/design/local.post-m91-remediation.md
@@ -7206,11 +7206,11 @@ tasks:
   - id: task-367
     name: "F-R006-03 dispatch.ts typing"
     priority: 4
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-92-post-m91-remediation/task-367-dispatch-typing.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T08:00:00Z'
+    completed_date: '2026-08-29T08:15:00Z'
+    actual_hours: 0.3
     estimated_hours: 3
     notes: 'TaskMeta; no as any; vitest; then identity 6.38.0 + golden TSV + manifest'
   - id: task-368

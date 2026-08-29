@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.38.0] — 2026-08-29
+
+### Fixed
+- **js-yaml** — pin **4.3.1** and nested gray-matter **3.15.1**; nanoid override **3.3.18**. `npm audit --audit-level=high` (CI-identical, no `--omit=dev`) is clean of HIGH findings (F-R006-01).
+- **Bootstrap** — exact `set -euo pipefail` (SH-01); `--team-size` without a value exits 2 (F-R006-02). No invented `--help`.
+- **Dispatch** — `TaskMeta` replaces `Record<string, any>`; typed taxonomy load; `updateRoutingYml(): void` (F-R006-03).
+
+### Notes
+- M92 Track A. Tag `v6.37.0` stays on `7ab6a7f`; `v6.37.1` stays on `91f1dd5`. Do not retag 6.37.x.
+
+---
+
 ## [6.37.1] — 2026-08-29
 
 ### Fixed
