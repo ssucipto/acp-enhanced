@@ -27,13 +27,18 @@ trap 'echo "[acp.m94-purge-paths] Error on line ${LINENO}" >&2; exit 1' ERR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 OUTPUT="${ACP_M94_PURGE_PATHS:-/tmp/m94-purge-paths.txt}"
+REQUIRE_NONEMPTY="${ACP_M94_REQUIRE_NONEMPTY:-0}"
 
 usage() {
   cat <<'EOF'
-Usage: acp.m94-purge-paths.sh [--output PATH]
+Usage: acp.m94-purge-paths.sh [--output PATH] [--require-nonempty]
 
-Build a fail-closed PURGE path list for git filter-repo --invert-paths.
+Build a PURGE path list for git filter-repo --invert-paths.
 Default output: /tmp/m94-purge-paths.txt (override with --output or ACP_M94_PURGE_PATHS).
+
+After a successful rewrite, the list is empty (history already clean) and exit 0.
+Pass --require-nonempty (or ACP_M94_REQUIRE_NONEMPTY=1) before filter-repo so an
+empty list cannot silently invert nothing.
 EOF
 }
 
@@ -43,6 +48,10 @@ while [[ $# -gt 0 ]]; do
       [[ $# -ge 2 ]] || { echo "[acp.m94-purge-paths] ERROR: --output needs PATH" >&2; exit 2; }
       OUTPUT="$2"
       shift 2
+      ;;
+    --require-nonempty)
+      REQUIRE_NONEMPTY=1
+      shift
       ;;
     -h|--help)
       usage
@@ -181,13 +190,17 @@ if [[ "${fail}" -ne 0 ]]; then
   exit 1
 fi
 
-if [[ ! -s "${TMP_OUT}" ]]; then
-  echo "[acp.m94-purge-paths] ERROR: empty purge list (fail-closed)" >&2
-  exit 1
-fi
-
 mkdir -p "$(dirname "${OUTPUT}")"
 cp "${TMP_OUT}" "${OUTPUT}"
 count="$(wc -l < "${OUTPUT}" | tr -d ' ')"
+if [[ ! -s "${TMP_OUT}" ]]; then
+  if [[ "${REQUIRE_NONEMPTY}" == "1" ]]; then
+    echo "[acp.m94-purge-paths] ERROR: empty purge list (fail-closed --require-nonempty)" >&2
+    exit 1
+  fi
+  echo "wrote: ${OUTPUT}"
+  echo "paths: 0 (history already clean)"
+  exit 0
+fi
 echo "wrote: ${OUTPUT}"
 echo "paths: ${count}"

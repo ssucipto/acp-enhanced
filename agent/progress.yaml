@@ -1021,11 +1021,11 @@ milestones:
     name: GitHub privacy extension (ADR-29)
     priority: 5
     status: in_progress
-    progress: 80
+    progress: 93
     started: 2026-08-29
     completed: null
     estimated_weeks: 1.5
-    tasks_completed: 12
+    tasks_completed: 14
     tasks_total: 15
     file: agent/milestones/milestone-94-github-privacy-adr29.md
     design: agent/design/local.github-privacy-adr29.md
@@ -7420,23 +7420,23 @@ tasks:
   - id: task-381
     name: "Fresh-clone + tag proof"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-381-fresh-clone-proof.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T13:16:00Z'
+    completed_date: '2026-08-29T13:25:00Z'
+    actual_hours: 0.2
     estimated_hours: 2
-    notes: 'After force-push; verified_in_audit 138; before stamping carryovers'
+    notes: 'Fresh clone /tmp/acp-fresh-m94; IP_REGISTER history 0; v6.38.0 SHA 84e7388 not f20c382; validate green'
   - id: task-382
     name: "Operator force-push + develop sync"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-382-operator-force-push.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T13:14:00Z'
+    completed_date: '2026-08-29T13:16:00Z'
+    actual_hours: 0.1
     estimated_hours: 1
-    notes: 'D11 phrase; MUST force-push --tags; no v6.38.1 substitute; not --force-with-lease'
+    notes: 'D11; force develop 8c025ce, mainline dcae105, --tags v6.38.0→84e7388; not --force-with-lease'
   - id: task-383
     name: "Stamp F-135-* + M94 closure + mainline PR"
     priority: 5
@@ -10646,10 +10646,8 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "HALT at task-382: type exactly: force-push adr-29 design patterns routes ip-register develop mainline tags: yes"
-- "Then from /tmp/acp-rewrite-m94: git push --force origin develop; git push --force origin mainline; git push --force origin --tags"
-- "Do not skip tags. Do not invent v6.38.1. Do not --force-with-lease. /acp-proceed --yes is not consent."
-- "After push: task-381 fresh-clone proof, then 383 stamps + regular mainline PR"
+- "task-383: stamp F-135/136/137 (not F-135-07); v6.39.0 all version fields; regular PR develop→mainline"
+- "CI: purge-paths test must allow empty list after rewrite (--require-nonempty only for filter-repo)"
 - "F-135-07 deferred (progress.yaml split — future ADR)"
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 current_blockers: []

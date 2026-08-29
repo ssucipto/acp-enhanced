@@ -1,6 +1,18 @@
-# Session Memory
-# Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
-# DO NOT edit manually — updated by /acp-commit
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-382, task-381]
+  done:
+    - m94-d11-force-push-develop-mainline-tags
+    - m94-fresh-clone-proof
+  deferred:
+    - m94-closure-pr-v6390 → task-383
+    - F-135-07-progress-yaml-split → future-adr
+  key_fact: >
+    Force-push from /tmp/acp-rewrite-m94 only: develop 8c025ce, mainline
+    dcae105, v6.38.0 tag 84e7388 (was a377b50). Fresh clone history empty
+    for IP_REGISTER. Post-rewrite CI failed until purge-paths allows empty list.
+
 
 
 - date: 2026-08-29

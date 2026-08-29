@@ -19,17 +19,29 @@ assert_true "bash -n m94-purge-paths" $?
 print_test_header "S2 — generate list"
 bash "${SCRIPT}" --output "${OUT}"
 assert_file_exists "${OUT}" "purge list written"
-test -s "${OUT}"
-assert_true "purge list non-empty" $?
 
-print_test_header "S3 — required PURGE paths present"
-assert_contains "$(cat "${OUT}")" "IP_REGISTER.md" "IP_REGISTER.md in purge list"
-assert_contains "$(cat "${OUT}")" "agent/patterns/typescript/local.library-services.md" "nested local pattern in purge list"
-assert_contains "$(cat "${OUT}")" "agent/design/visualizer.requirements.md" "visualizer.requirements.md in purge list"
-assert_contains "$(cat "${OUT}")" ".claude/settings.local.json" "settings.local.json in purge list"
-assert_contains "$(cat "${OUT}")" "agent/index/local.main.yaml" "instance index in purge list"
-assert_contains "$(cat "${OUT}")" "agent/specs/local.acp-code-plugin-api.md" "instance spec in purge list"
-assert_contains "$(cat "${OUT}")" "agent/proposals/acp-enhanced-cross-agent-handoff-v1.md" "instance proposal in purge list"
+HISTORY_HAS_PURGE=0
+if git -C "${PROJECT_ROOT}" log --all --full-history --oneline -- IP_REGISTER.md | grep -q .; then
+  HISTORY_HAS_PURGE=1
+fi
+
+if [[ "${HISTORY_HAS_PURGE}" -eq 1 ]]; then
+  test -s "${OUT}"
+  assert_true "purge list non-empty (pre-rewrite history)" $?
+  print_test_header "S3 — required PURGE paths present"
+  assert_contains "$(cat "${OUT}")" "IP_REGISTER.md" "IP_REGISTER.md in purge list"
+  assert_contains "$(cat "${OUT}")" "agent/patterns/typescript/local.library-services.md" "nested local pattern in purge list"
+  assert_contains "$(cat "${OUT}")" "agent/design/visualizer.requirements.md" "visualizer.requirements.md in purge list"
+  assert_contains "$(cat "${OUT}")" ".claude/settings.local.json" "settings.local.json in purge list"
+  assert_contains "$(cat "${OUT}")" "agent/index/local.main.yaml" "instance index in purge list"
+  assert_contains "$(cat "${OUT}")" "agent/specs/local.acp-code-plugin-api.md" "instance spec in purge list"
+  assert_contains "$(cat "${OUT}")" "agent/proposals/acp-enhanced-cross-agent-handoff-v1.md" "instance proposal in purge list"
+else
+  assert_true "post-rewrite empty list is allowed" 0
+  print_test_header "S3 — post-rewrite history has no PURGE paths"
+  n="$(git -C "${PROJECT_ROOT}" log --all --full-history --oneline -- IP_REGISTER.md | wc -l | tr -d ' ')"
+  assert_equals "0" "${n}" "IP_REGISTER.md absent from history"
+fi
 
 print_test_header "S4 — KEEP paths absent (F-136-01 / D16)"
 if grep -Fxq "agent/routing/tasks/route-template.md" "${OUT}"; then
