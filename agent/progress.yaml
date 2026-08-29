@@ -14,7 +14,7 @@ active_handoff:
   date: '2026-08-29'
   to_executor: cursor-grok
   from_executor: cursor-grok
-  git_commit: 70622e8ae3964ee0aa3e1ee8e6be9011f5dfd59b
+  git_commit: b21d0af6eed8b58d892b028ee2b436efca2dce4d
   status: planned
   completed_date: null
 milestones:
@@ -1030,8 +1030,9 @@ milestones:
     file: agent/milestones/milestone-94-github-privacy-adr29.md
     design: agent/design/local.github-privacy-adr29.md
     notes: >
-      audit-135 + audit-136 pre-impl. 14 tasks (373-386). F-135-06 mandatory.
-      F-136-01 route-template negation. Block 378 until 384-386 done. No tag moves on v6.38.0.
+      audit-135/136/137 pre-impl. 14 tasks (373-386). ADR-29 written.
+      F-135-06 mandatory. Tag rewrite REQUIRED (F-137-01). Nested patterns PURGE.
+      Block 378 until 384-386+377. No v6.38.1 shortcut.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -7304,7 +7305,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 2
-    notes: 'CB-0a/0b/1 before any tip change. Blocks all other M94 tasks.'
+    notes: 'CB-0a/0b/1; age||gpg probe; nested patterns + visualizer in restore tests'
   - id: task-374
     name: "KEEP/PURGE inventory + paths generator"
     priority: 5
@@ -7314,7 +7315,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 3
-    notes: 'F-135-01..05 crosswalk; m94-purge-paths.txt for filter-repo'
+    notes: 'git ls-files inventory; nested typescript/local.*; visualizer PURGE; F-136-01 KEEP gate'
   - id: task-375
     name: "ADR-29 gitignore + validator + private-pack"
     priority: 5
@@ -7324,7 +7325,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 4
-    notes: 'F-135-02..05; append ADR-29 to decisions.md'
+    notes: 'Cite ADR-29; patterns/**/local.*; CB-2 local.dummy.md; integrity-manifest restamp'
   - id: task-376
     name: "F-135-01 IP_REGISTER validate + docs"
     priority: 5
@@ -7414,7 +7415,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 2
-    notes: 'After force-push; verified_in_audit 136; before stamping carryovers'
+    notes: 'After force-push; verified_in_audit 137; before stamping carryovers'
   - id: task-382
     name: "Operator force-push + develop sync"
     priority: 5
@@ -7424,7 +7425,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 1
-    notes: 'Exact phrase in design D11; not --force-with-lease'
+    notes: 'D11 phrase; MUST force-push --tags; no v6.38.1 substitute; not --force-with-lease'
   - id: task-383
     name: "Stamp F-135-* + M94 closure + mainline PR"
     priority: 5
@@ -7434,8 +7435,14 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 2
-    notes: 'Stamp F-135-01..06 + F-136-*; verified_in_audit 136'
+    notes: 'Stamp F-135-01..06 + F-136/137 after 381; 14/14; version fields if 6.39.0'
 recent_work:
+- date: 2026-08-29
+  description: "audit-137 pre-impl + M94 amend v1.2.0"
+  items:
+  - "ADR-29 written; tag rewrite required (F-137-01); nested patterns PURGE"
+  - "CB-2 local.dummy.md; visualizer.requirements.md PURGE; F-135-07 deferred carryover"
+  - "378 still blocked until 384-386 + 377"
 - date: 2026-08-29
   description: "audit-136 pre-impl + M94 amend v1.1.0"
   items:
@@ -10611,13 +10618,12 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M94 amended (audit-136): /acp-proceed task-373 — backup GATE first"
+- "M94 amended (audit-137): /acp-proceed task-373 — backup GATE first"
 - "Task 378 blocked until 384-386 + mandatory 377 complete"
-- "F-135-01..06 pending until M94 rewrite proof (verified_in_audit 136)"
-- "Do not move tags v6.37.0 (7ab6a7f) / v6.37.1 (91f1dd5). v6.38.0 is on f20c382."
+- "After filter-repo: force-push develop, mainline, AND tags (D11 phrase). Do not skip tags. Do not invent v6.38.1."
+- "F-135-01..06 pending until task-381 proof (verified_in_audit 137)"
+- "F-135-07 deferred (progress.yaml split — future ADR)"
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
-- "Forks/old clones: reclone or git fetch --prune; do not force-push again."
-- "Optional: IG-17 allowlist for agent/scripts scanners (integrity FP noise)."
 current_blockers: []
 notes:
 - 'Master plan: agent/reports/plan-audit-coverage-matrix.md — M70–M73 shipped (v6.27.2

@@ -5,6 +5,13 @@
 # Optional fields added in v6.8.0:
 
 - date: 2026-08-29
+  task_type: audit-run
+  mistake: "M94 v1.1 next_steps still said do not force-push / do not move v6.38.0 while the rewrite requires git push --force origin --tags, so an agent could skip tags and leave IP_REGISTER in history."
+  correction: "History rewrite retargets existing tag names to new SHAs. Skipping --tags is not hygiene; inventing v6.38.1 is not a substitute. Phrase includes tags: yes."
+  priority: high
+  trigger: audit-137
+
+- date: 2026-08-29
   task_type: progress-update
   mistake: "Marked task-369 completed after gh pr create failed, so M92 looked 7/7 done while F-124-02 was still pending."
   correction: "Never stamp a PR/release-ops task completed without the artifact (open or merged PR). Deferral belongs in sessions.md; the task stays not_started and the carryover stays pending."

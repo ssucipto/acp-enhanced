@@ -4926,3 +4926,93 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-137 — M94 PRE-IMPL PASS 2 (2026-08-29) ─────────────────────────────
+  - audit_id: 135
+    finding_id: F-135-07
+    severity: low
+    file: agent/progress.yaml
+    finding: "Entire dogfood progress.yaml (~10.5k lines) stays on public remote"
+    description: "audit-135 optional split public/private. Out of M94. Recorded so it is not silently dropped."
+    fix_target: "Future ADR — not M94. Do not treat as in-scope shortcut."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "future-adr-progress-split"
+  - audit_id: 137
+    finding_id: F-137-01
+    severity: critical
+    file: agent/progress.yaml
+    finding: "next_steps / anti-shortcuts forbade tag force-push while filter-repo requires rewriting tag SHAs"
+    description: "Skipping --tags leaves IP_REGISTER.md in v6.38.0 history. Inventing v6.38.1 is not a substitute."
+    fix_target: "task-382 must git push --force origin --tags after D11 phrase; next_steps updated in v1.2.0"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 137
+    finding_id: F-137-02
+    severity: high
+    file: agent/patterns/typescript/local.library-services.md
+    finding: "Nested patterns/**/local.* not matched by patterns/local.*"
+    description: "Would remain on public remote after ADR-29 gitignore if only top-level local.* is ignored."
+    fix_target: "task-374 purge list + task-375 gitignore patterns/**/local.*"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 137
+    finding_id: F-137-03
+    severity: high
+    file: agent/design/local.github-privacy-adr29.md
+    finding: "CB-2 dummy local-dummy.md does not match gitignore local.*"
+    description: "False-green syntax check (FG-3). v1.2.0 uses local.dummy.md + nested typescript dummy."
+    fix_target: "task-375 run design CB-2 exactly"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 137
+    finding_id: F-137-04
+    severity: high
+    file: agent/memory/decisions.md
+    finding: "ADR-29 was deferred to task 375 despite write_adr_at_decision"
+    description: "Written in audit-137 plan amend. Task 375 cites it; does not rewrite."
+    fix_target: "ADR-29 present; task-375 cite only"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 137
+    finding_id: F-137-05
+    severity: medium
+    file: agent/design/visualizer.requirements.md
+    finding: "visualizer.requirements.md unclassified in D1 KEEP/PURGE"
+    description: "Instance dashboard spec. PURGE in v1.2.0 D1."
+    fix_target: "task-374 include in purge list; task-375 gitignore"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 137
+    finding_id: F-137-07
+    severity: medium
+    file: agent/integrity-manifest.yaml
+    finding: "Task 375 omitted integrity-manifest restamp after new/changed scripts"
+    description: "audit-121: restamp after tracked script edit."
+    fix_target: "task-375 step 6"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 137
+    finding_id: F-137-08
+    severity: medium
+    file: agent/progress.yaml
+    finding: "Task 383 identity bump omitted progress.yaml project.version and golden TSV"
+    description: "F-099-02 class. v1.2.0 task-383 enumerates all version fields."
+    fix_target: "task-383"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
