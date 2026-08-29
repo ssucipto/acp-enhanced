@@ -2228,6 +2228,10 @@ export function validateActiveHandoff(strict = false): ValidationError[] {
   const handoffPath = String(activeHandoff.path);
   const resolvedHandoffPath = resolveProgressPointerPath(handoffPath);
   if (!existsSync(resolvedHandoffPath)) {
+    // ADR-29: instance design handoff paths are gitignored; CI clones omit them.
+    if (isGitIgnoredNoIndex(handoffPath)) {
+      return errors;
+    }
     errors.push({
       file: PROGRESS_PATH,
       line: 0,
@@ -2463,7 +2467,7 @@ function runActiveHandoffValidation(): boolean {
         (progressYaml.active_handoff as Record<string, unknown> | undefined)?.path
     );
     if (hasHandoff) {
-      console.log("✅ Active handoff: path exists");
+      console.log("✅ Active handoff: path exists or is gitignored (ADR-29)");
     } else {
       console.log("✅ Active handoff: none configured — skipped");
     }

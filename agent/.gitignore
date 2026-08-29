@@ -29,4 +29,24 @@ sessions/**
 !sessions/.gitkeep
 !sessions/README.md
 
+# ADR-29 — instance designs, local patterns, instance routes local;
+# protocol keepers stay tracked (last-match-wins). See ADR-29 / M94.
+design/local.*
+design/m[0-9]*.md
+design/visualizer.requirements.md
+!design/design.template.md
+!design/requirements.template.md
+!design/acp-*.md
+!design/global-*.md
+!design/.gitkeep
+
+patterns/local.*
+patterns/**/local.*
+!patterns/pattern.template.md
+!patterns/bootstrap.template.md
+!patterns/.gitkeep
+
+routing/tasks/route-*.md
+!routing/tasks/route-template.md
+
 

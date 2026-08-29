@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **`acp.m94-purge-paths.sh`** — fail-closed KEEP/PURGE path list for the ADR-29 history rewrite (M94).
+- **ADR-29 gitignore** — instance `design/local.*`, `design/m[0-9]*`, `visualizer.requirements.md`, `patterns/**/local.*`, and `routing/tasks/route-*.md` with keeper negations (`route-template.md`, protocol `acp-*.md`).
+
+### Changed
+- **`acp.private-pack.sh`** — also packs `agent/design`, `agent/patterns`, and `agent/routing/tasks` for maintainer transport.
+- **`validateActiveHandoff`** — skip missing gitignored handoff paths (CI clone).
 
 ---
 
