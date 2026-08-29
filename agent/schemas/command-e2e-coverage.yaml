@@ -1,5 +1,5 @@
 schema_version: 1.0.0
-updated: '2026-08-14'
+updated: '2026-08-29'
 milestone: M63
 description: Maps each acp.* command to one or more E2E suites — enforced by validateCommandE2eCoverage()
 commands:
@@ -43,6 +43,7 @@ commands:
       - e2e/acp.command-docs.test.sh
     executed_steps:
       - acp.ci-delegation
+      - extra-gates-dry-run
   acp.clarification-address:
     tier: 3
     suites:
@@ -341,6 +342,19 @@ commands:
       - e2e/acp.sessions.test.sh
       - e2e/acp.tier3-memory-knowledge.test.sh
       - e2e/acp.command-docs.test.sh
+  acp.smoke:
+    tier: 2
+    suites:
+      - e2e/acp.smoke.test.sh
+      - e2e/acp.exec-host.test.sh
+      - e2e/acp.command-docs.test.sh
+    executed_steps:
+      - help
+      - doctor
+      - unconfigured
+      - host-dry-run
+      - empty-host-fail-closed
+      - acp-exec-host-env
   acp.spec:
     tier: 3
     suites:

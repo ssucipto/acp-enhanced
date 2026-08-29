@@ -1,9 +1,9 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.34.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.38.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
-[![Milestones](https://img.shields.io/badge/milestones-88%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
-[![Commands](https://img.shields.io/badge/commands-72%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
+[![Milestones](https://img.shields.io/badge/milestones-92%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
+[![Commands](https://img.shields.io/badge/commands-73%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Visualizer](https://img.shields.io/badge/visualizer-v1.5.0-6e47ff)](https://github.com/ssucipto/ACPEnhanced-Visual)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Fork](https://img.shields.io/badge/fork%20of-prmichaelsen%2Facp-orange)](https://github.com/prmichaelsen/agent-context-protocol)
@@ -32,8 +32,8 @@ The framework layer solves a specific problem: as your project grows, the AI age
 | `agent/routing/` | Task taxonomy, routing rules, cost ledger, task files |
 | `agent/memory/` | Session log, lessons learned, patterns, architectural decisions |
 | `agent/wiki/` | Reference docs loaded section-by-section (never all at once) |
-| `agent/commands/` | 72 self-documenting slash commands (`/acp-init`, `/acp-ci`, `/acp-pr`, `/acp-review`, `/acp-integrity`, `/acp-audit`, etc.) |
-| `agent/scripts/` | 56 bash scripts + TypeScript tooling for dispatch and validation |
+| `agent/commands/` | 73 self-documenting slash commands (`/acp-init`, `/acp-ci`, `/acp-pr`, `/acp-smoke`, `/acp-review`, `/acp-integrity`, `/acp-audit`, etc.) |
+| `agent/scripts/` | 59 bash scripts + TypeScript tooling for dispatch and validation |
 
 > 🖥️ **Companion Tool**: [**ACP Enhanced Visualizer**](https://github.com/ssucipto/ACPEnhanced-Visual) (v1.5.0) — a full-featured local web dashboard that brings your `agent/progress.yaml` to life. Monitors milestones, tasks, sessions, ADRs, lessons, patterns, packages, and audit reports — all from a single interactive UI. **Multi-project tab support, GitHub remote read, and zero-config `npx acp-visualizer` CLI.** [See full feature list below →](#visualize-your-project)
 
@@ -118,28 +118,28 @@ This catches the most common AI coding mistake: letting the agent commit directl
 
 ## Slash Commands
 
-ACP Enhanced registers **72 slash commands** across two tools — available after bootstrapping:
+ACP Enhanced registers **73 slash commands** across two tools — available after bootstrapping:
 
 | Tool | How to invoke | Source files |
 |---|---|---|
 | VS Code Copilot | `/acp-*` — autocomplete in Copilot Chat | `.github/prompts/*.prompt.md` |
 | opencode | `/acp-*` — autocomplete in opencode TUI | `.opencode/commands/*.md` |
-| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (72 acp.* commands) |
+| Any other agent | Tell your agent: *"Read and execute `agent/commands/acp.init.md`"* | `agent/commands/*.md` (73 acp.* commands) |
 
 ```text
 /acp-init          /acp-proceed       /acp-plan          /acp-status
 /acp-resume        /acp-report        /acp-audit         /acp-handoff       /acp-receive
-/acp-ci            /acp-pr            /acp-review        /acp-integrity
-/acp-package-*     /acp-project-*     /acp-preferences-* /acp-clarification-*
-/acp-design-*      /acp-artifact-*    /git-commit        /git-init
+/acp-ci            /acp-pr            /acp-smoke         /acp-review
+/acp-integrity     /acp-package-*     /acp-project-*     /acp-preferences-*
+/acp-clarification-* /acp-design-*    /acp-artifact-*    /git-commit        /git-init
 ```
 
 > VS Code Copilot requires agent/chat mode enabled. The `.github/prompts/` directory is created by `acp-bootstrap.sh` automatically.  
 > opencode requires the `.opencode/commands/` directory, also created by `acp-bootstrap.sh` automatically.  
-> **Note**: All 72 `acp.*` commands (plus 2 `git.*`) are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`, `/acp-ci`, `/acp-pr`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.  
+> **Note**: All 73 `acp.*` commands (plus 2 `git.*`) are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`, `/acp-ci`, `/acp-pr`, `/acp-smoke`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.  
 > **Cross-agent handoff**: See [`agent/wiki/cross-agent-handoff.md`](agent/wiki/cross-agent-handoff.md) for executor vs cross-repo modes, `/acp-receive`, and git drift checks.  
 > **CodeRabbit (optional)**: See [`agent/wiki/coderabbit-integration.md`](agent/wiki/coderabbit-integration.md) — off by default; ACP is fully functional without it. **M81 (ADR-22)** ships findings-import (`bash agent/scripts/acp.findings-import.sh --input …`) + starter `.coderabbit.yaml` template. Aikido / M76 / M77 remain gated (ADR-19).  
-> **Local CI / PR (M86)**: `/acp-ci` predicts GitHub Actions locally; `/acp-pr` opens PRs only after those gates. Fork upgrades: `agent/upstream-delta.yml` + upgrade-guard HARD-fail on version-update.
+> **Local CI / PR (M86)**: `/acp-ci` predicts GitHub Actions locally; `/acp-pr` opens PRs only after those gates. Optional `/acp-smoke` is device preflight (`--host`; unconfigured exits 2) — not a CI step. Fork upgrades: `agent/upstream-delta.yml` + upgrade-guard HARD-fail on version-update.
 
 ---
 
@@ -255,8 +255,8 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Memory | None — every session starts cold | sessions.md + lessons.md + ADRs + patterns |
 | Task routing | None | Taxonomy-based routing to skill files |
 | Mistake learning | None | Correction log appended per task type |
-| VS Code commands | Manual file reference | 70 slash commands with autocomplete |
-| opencode support | None | 70 slash commands in `.opencode/commands/` |
+| VS Code commands | Manual file reference | 73 slash commands with autocomplete |
+| opencode support | None | 73 slash commands in `.opencode/commands/` |
 | Preferences | None | 4-level hierarchy (project > workspace > user > default) |
 | Project registry | None | Global `~/.acp/projects.yaml` for multi-project tracking |
 | Cost tracking | None | Per-task token + USD ledger via dispatch |
@@ -267,7 +267,8 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Install | `curl \| bash` from original repo | Single bootstrap script from this fork |
 | Light mode | Full protocol every session | Default ~200-token light mode; full mode for architecture sessions |
 | Skill invocation | None | 9 skills invocable via `@{skill-name}` in chat |
-| Code review | None | `/acp-review` — 77-rule quality + security enforcement (OWASP, MASVS) |
+| Code review | None | `/acp-review` — 64-rule quality + security enforcement (OWASP, MASVS); `--diff` vs `--pr-diff` are distinct |
+| Local CI / PR / device | None | `/acp-ci` local gate predictor; `/acp-pr` delegates gates only; optional `/acp-smoke --host` exec-host preflight (unconfigured exits 2) |
 | Code integrity | None | `/acp-integrity` v1.0 — 55-rule trust scan with 6 deterministic bash scripts |
 | Scheduled audits | None | `recurring_tasks` in progress.yaml + Step 4.5 session-start due check |
 | Parallel tasks | None | `task_type: parallel` with DAG sub-tasks + orchestrator-workers |
@@ -295,6 +296,26 @@ ACP Enhanced provides five report types, each for a different audience:
 - `report-YYYY-MM-DD.md` — full archive (`/acp-report`)
 - `design-spec-{subject}-v{N}.md` — interface spec (`/acp-design-spec`)
 - `roadmap-brief-{subject}-{date}.md` — one-off planning (not recurring)
+
+### Field-feedback waves A–C (v6.35.0–v6.37.1, Aug 2026)
+
+Three sequenced milestones closed consumer-project / consumer-project remainder without regressing `--diff`, CI step ids, or ADR-27 report privacy:
+
+| Wave | Version | Shipped |
+|------|---------|---------|
+| **A (M89)** | v6.35.0 | `/acp-review --pr-diff` agent pass; CodeRabbit optionality (ADR-21); `local.*` survival docs |
+| **B (M90)** | v6.36.0–v6.36.1 | `/acp-smoke` fail-closed stub; D15/D16 glossary; catalog + E2E regression holes closed |
+| **C (M91)** | v6.37.0–v6.37.1 | Portable `ACP_*` exec-host; `/acp-smoke --host`; `pr.yml` optional extra gates; empty-host fail-closed |
+
+**Contracts that must not regress:**
+
+- Unconfigured `/acp-smoke` → **exit 2**, message `not configured`, never PASS
+- `--diff` = Phase 1 `git diff --name-only` — **not** `--pr-diff`
+- `/acp-ci` step id is **`e2e-smoke`** — `/acp-ci --only smoke` is unknown
+- Smoke runner matrix: `agent/configurables/smoke.yml` (P-CI-1), not preference arrays
+- Extra PR gates: `agent/configurables/pr.yml` block list (D11), after `/acp-ci` only
+
+See [`agent/design/local.field-feedback-waves-abc.md`](agent/design/local.field-feedback-waves-abc.md) and [`agent/wiki/exec-host.md`](agent/wiki/exec-host.md).
 
 ### Recent Protocol Enhancements (v6.10–v6.12.1)
 
@@ -855,9 +876,10 @@ This will:
 - **`/acp-validate`** - Validate ACP structure
 - **`/acp-ci`** - Local CI parity (`--fast` default; `--full` for multi-minute CI equivalence)
 - **`/acp-pr`** - Feature PR prep (gates via `/acp-ci` only)
+- **`/acp-smoke`** - Optional device preflight (`--host` overrides `ACP_EXEC_HOST`; unconfigured exits 2; not a CI step)
 - **`acp.findings-import.sh`** - Import CodeRabbit findings JSON → carryovers when `coderabbit_active` (script; no slash command)
-- **`/acp-audit`** - Audit task completion status, bugs, and improvement opportunities
-- **`/acp-review`** - Standards-based code quality and security review (64 rules)
+- **`/acp-audit`** - Deep-dive investigation into `agent/reports/` (local; ADR-27). Not a PR review and not a CodeRabbit replacement
+- **`/acp-review`** - Standards-based code quality and security review (64 rules); optional `--pr-diff` agent pass (not Phase 1 `--diff`)
 - **`/acp-integrity`** - AI code integrity scan — Unicode, entropy, supply chain (55 rules v1.0)
 - **`/acp-report`** - Generate session report
 - **`/acp-index`** - Manage the key file index (list, add, remove, explore, show)
@@ -1087,9 +1109,9 @@ project-root/
 ├── CLAUDE.md                       # Symlink → AGENT.md (Claude Code)
 ├── .github/
 │   ├── copilot-instructions.md     # Symlink → AGENT.md (GitHub Copilot)
-│   └── prompts/                    # 70 slash command prompts (*.prompt.md)
-├── .opencode/commands/             # 70 slash commands for opencode TUI
-├── .cursor/commands/               # 70 slash commands for Cursor Agent (auto-generated)
+│   └── prompts/                    # 73 slash command prompts (*.prompt.md)
+├── .opencode/commands/             # 73 slash commands for opencode TUI
+├── .cursor/commands/               # 73 slash commands for Cursor Agent (auto-generated)
 ├── agent/                          # Agent context directory
 │   ├── core/                       # Layer 1: always loaded, cached
 │   │   ├── identity.yml            # Project identity + stack
@@ -1113,6 +1135,7 @@ project-root/
 │   │   └── audit-carryovers.md     # Unresolved audit findings
 │   ├── wiki/                       # Layer 3: reference (section-loaded)
 │   │   ├── domain.yml              # Domain taxonomy
+│   │   ├── exec-host.md            # Win32-OpenSSH inner loop (M91)
 │   │   └── architecture.md         # Integration patterns
 │   ├── routing/                    # Task routing system
 │   │   ├── taxonomy.yml            # Task type → executor mapping
@@ -1120,8 +1143,8 @@ project-root/
 │   │   ├── rules.md                # Routing rules + conventions
 │   │   ├── ledger.md               # Cost + token tracking
 │   │   └── tasks/                  # Generated route files
-│   ├── commands/                   # 74 command docs (72 acp.* + 2 git.*)
-│   ├── scripts/                    # 36 shell scripts + TypeScript tools
+│   ├── commands/                   # 75 command docs (73 acp.* + 2 git.*)
+│   ├── scripts/                    # 59 bash scripts + TypeScript tools
 │   ├── design/                     # Design documents
 │   ├── milestones/                 # Keepers + template (instance bodies local, ADR-28)
 │   ├── tasks/                      # Keepers + template (instance bodies local, ADR-28)
@@ -1134,7 +1157,10 @@ project-root/
 │   ├── reports/                    # Audit reports (gitignored)
 │   ├── feedback/                   # User feedback (gitignored)
 │   ├── preferences/                # Preference overrides
-│   ├── configurables/              # Configurable definitions
+│   ├── configurables/              # Runtime matrices (P-CI-1)
+│   │   ├── ci.yml                  # /acp-ci step registry (e2e-smoke)
+│   │   ├── smoke.yml               # /acp-smoke runner (D16)
+│   │   └── pr.yml                  # Optional extra local_gates (D11)
 │   ├── artifacts/                  # Research, glossary, reference
 │   ├── benchmarks/                 # ACP vs baseline benchmark suite
 │   ├── specs/                      # Feature specifications

@@ -135,4 +135,9 @@ else
 fi
 rm -f "${TMPCFG2}" "${TMPSTEPS2}"
 
+print_test_header "B9 — --only smoke is unknown (D15, not e2e-smoke)"
+if bash "${CI_SH}" --only smoke >/tmp/acp-ci-only-smoke.out 2>&1; then SMOKEONLY_RC=0; else SMOKEONLY_RC=$?; fi
+assert_true "--only smoke exits non-zero" "$([ "${SMOKEONLY_RC}" -ne 0 ] && echo 0 || echo 1)"
+assert_contains "$(cat /tmp/acp-ci-only-smoke.out)" "unknown step" "smoke is not a ci step id"
+
 print_suite_summary

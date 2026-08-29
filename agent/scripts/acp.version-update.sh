@@ -231,10 +231,14 @@ if [ -d "$TEMP_DIR/agent/skills" ]; then
     done
 fi
 
-# Tier B: wiki
+# Tier B: wiki — skip local.* (never overwrite consumer overlays; not in upstream glob)
 for _f in "$TEMP_DIR/agent/wiki/"*.yml "$TEMP_DIR/agent/wiki/"*.md; do
     [ -e "$_f" ] || continue
-    acp_copy_framework_file "agent/wiki/$(basename "$_f")" B
+    _base=$(basename "$_f")
+    case "$_base" in
+        local.*) echo "  ⊘ preserved: agent/wiki/${_base}"; continue ;;
+    esac
+    acp_copy_framework_file "agent/wiki/${_base}" B
 done
 
 # Tier B: routing config
@@ -262,11 +266,11 @@ if [ "$ACP_DIFF_ONLY" = false ]; then
     fi
     if [ -f "agent/scripts/acp.cursor-commands-sync.sh" ]; then
         echo "Regenerating Cursor slash commands..."
-        bash agent/scripts/acp.cursor-commands-sync.sh 2>/dev/null || echo "${YELLOW}Note: Cursor slash command sync skipped${NC}"
+        bash agent/scripts/acp.cursor-commands-sync.sh || echo "${YELLOW}Note: Cursor slash command sync skipped${NC}"
     fi
     if [ -f "agent/scripts/acp.claude-commands-sync.sh" ]; then
         echo "Regenerating Claude Code slash commands..."
-        bash agent/scripts/acp.claude-commands-sync.sh 2>/dev/null || echo "${YELLOW}Note: Claude Code slash command sync skipped${NC}"
+        bash agent/scripts/acp.claude-commands-sync.sh || echo "${YELLOW}Note: Claude Code slash command sync skipped${NC}"
     fi
 fi
 
@@ -277,9 +281,15 @@ echo ""
 if [ -f "agent/manifest.yaml" ]; then
     _ver_file="AGENTS.md"
     [ -f "$_ver_file" ] || _ver_file="AGENT.md"
-    NEW_VERSION=$(grep -m1 "^\*\*Version\*\*:" "$_ver_file" 2>/dev/null | sed 's/.*: *//' | tr -d '\r')
+    NEW_VERSION=""
+    # FG-1: grep-not-found must not abort under pipefail. AGENTS.md uses `> vX.Y.Z`.
+    if _ver_line=$(grep -m1 "^\*\*Version\*\*:" "$_ver_file" 2>/dev/null); then
+        NEW_VERSION=$(printf '%s' "$_ver_line" | sed 's/.*: *//' | tr -d '\r')
+    fi
     if [ -z "$NEW_VERSION" ]; then
-        NEW_VERSION=$(grep -m1 '^> v' "$_ver_file" 2>/dev/null | sed 's/^> v//' | cut -d' ' -f1 | tr -d '\r')
+        if _ver_line=$(grep -m1 '^> v' "$_ver_file" 2>/dev/null); then
+            NEW_VERSION=$(printf '%s' "$_ver_line" | sed 's/^> v//' | cut -d' ' -f1 | tr -d '\r')
+        fi
     fi
     [ -n "$NEW_VERSION" ] || NEW_VERSION="unknown"
     if [ "$ACP_DIFF_ONLY" = true ]; then

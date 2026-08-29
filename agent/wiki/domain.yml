@@ -3,11 +3,11 @@
 # last_verified: 2026-08-14 (acp-sync — README/progress aligned to v6.32.1; M81+M86 shipped)
 
 commands:
-  count: 72  # 72 acp.* commands (M86 +acp.ci +acp.pr); plus 2 git.* + 1 command.template.md
+  count: 73  # 73 acp.* commands (M90 +acp.smoke); plus 2 git.* + 1 command.template.md
   location: agent/commands/
   naming: "acp.{command-name}.md — dot notation, acp namespace for core; git.{command}.md for git namespace"
   categories:
-    core: [acp.audit, acp.carryover-query, acp.ci, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.integrity, acp.memory-sync, acp.plan, acp.pr, acp.proceed, acp.receive, acp.repair-tools, acp.report, acp.resume, acp.review, acp.route, acp.sessions, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
+    core: [acp.audit, acp.carryover-query, acp.ci, acp.commit, acp.decide, acp.dispatch, acp.feedback, acp.handoff, acp.index, acp.init, acp.install, acp.integrity, acp.memory-sync, acp.plan, acp.pr, acp.proceed, acp.receive, acp.repair-tools, acp.report, acp.resume, acp.review, acp.route, acp.sessions, acp.smoke, acp.spec, acp.status, acp.sync, acp.task, acp.task-create, acp.update, acp.validate, acp.wiki-update]
     artifact: [acp.artifact-glossary, acp.artifact-reference, acp.artifact-research]
     clarification: [acp.clarification-address, acp.clarification-capture, acp.clarification-create]
     design: [acp.command-create, acp.design-create, acp.design-reference, acp.pattern-create]
@@ -59,7 +59,7 @@ commands:
       purpose: Plan milestones or tasks for undefined items in progress.yaml or new requirements.
     - command: acp.pr
       category: core
-      purpose: Prepare a pull request with local CI gates delegated to /acp-ci (single gate owner; no duplicated checks).
+      purpose: Prepare a pull request with local CI gates delegated to /acp-ci (single gate owner). Optional extra gates from pr.yml run after acp.ci.sh when configured.
     - command: acp.proceed
       category: core
       purpose: Immediately implement the current or next task, with support for autonomous and parallel execution modes.
@@ -75,6 +75,9 @@ commands:
     - command: acp.sessions
       category: core
       purpose: Manage and view active agent sessions across projects.
+    - command: acp.smoke
+      category: core
+      purpose: Optional device preflight via smoke.yml runner; --host overrides ACP_EXEC_HOST. Missing or empty runner exits 2 (never PASS). Not a CI step (e2e-smoke is /acp-ci --full).
     - command: acp.spec
       category: core
       purpose: Generate a specification document from a clarification, design, draft, requirements doc, or interactive input.
@@ -227,7 +230,7 @@ commands:
       purpose: Initialize a git repository with an intelligent .gitignore based on detected project type.
 
 scripts:
-  count: 51
+  count: 59
   location: agent/scripts/
   naming: "acp.{feature}.sh"
   key_scripts:
@@ -243,6 +246,20 @@ scripts:
       implements: Optional CodeRabbit detection helpers (available/active/hint) — M78 optionality foundation.
     - script: acp.findings-import.sh
       implements: Imports CodeRabbit findings JSON/NDJSON into audit-carryovers when coderabbit_active (M81; --input only).
+    - script: acp.ci.sh
+      implements: Local CI parity predictor (--fast default; --full for multi-minute CI equivalence). Step ids from ci.yml.
+    - script: acp.ci-steps.sh
+      implements: Shared CI step runner invoked by acp.ci.sh (--only, dry-run, output contracts).
+    - script: acp.pr.sh
+      implements: Feature PR prep; delegates gates to acp.ci.sh; optional extra local_gates from pr.yml after CI.
+    - script: acp.smoke.sh
+      implements: Optional device preflight dispatcher; --host overrides ACP_EXEC_HOST; unconfigured exits 2.
+    - script: acp.exec-host-ssh.sh
+      implements: Portable exec-host orchestrator (ACP_* env, git bundle + scp; not a CI step).
+    - script: acp.upgrade-guard.sh
+      implements: HARD-fail version-update when upstream-delta.yml present (M86 / P-UG-1).
+    - script: acp.private-pack.sh
+      implements: Pack/unpack gitignored ACP dirs for another machine (M87 / ADR-27).
     - script: acp.install.sh
       implements: Sets up the ACP directory structure and copies template files into a target project, bootstrapping a new ACP installation.
     - script: acp.meta-scan.sh

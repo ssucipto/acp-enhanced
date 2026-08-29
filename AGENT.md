@@ -1,12 +1,12 @@
 # Agent Context Protocol Enhanced (ACP Enhanced)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.34.0
+**Version**: 6.38.0
 **Fork of**: [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol)
 **Maintained by**: [ssucipto/acp-enhanced](https://github.com/ssucipto/acp-enhanced)
 **Created**: 2026-02-11
 **Updated**: 2026-07-28
-**Status**: Production Pattern — 73 milestones complete (M74–M77 gated per ADR-19)
+**Status**: Production Pattern — 92 milestones complete (M74–M77 gated per ADR-19)
 
 > **Canonical protocol file**: `AGENTS.md` (auto-loaded by Cursor/Copilot/Claude). This `AGENT.md` is the legacy comprehensive reference; keep its `**Version**` in sync with `agent/core/identity.yml` via `/acp-sync`.
 
@@ -1001,7 +1001,8 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`/acp-report`](agent/commands/acp.report.md)** - Generate a completion report; deregisters session
 - **[`/acp-handoff`](agent/commands/acp.handoff.md)** - Prepare handoff documentation for another agent
 - **[`/acp-resume`](agent/commands/acp.resume.md)** - Resume a project — init + review recent progress + proceed in one step
-- **[`/acp-audit`](agent/commands/acp.audit.md)** - Audit ACP files for consistency and drift
+- **[`/acp-review`](agent/commands/acp.review.md)** - Standards-based code quality and security review (64 rules); optional `--pr-diff` agent pass on `git diff base...HEAD` (not Phase 1 `--diff`)
+- **[`/acp-audit`](agent/commands/acp.audit.md)** - Deep-dive investigation of a subject into `agent/reports/` (local; ADR-27). Not a PR review and not a CodeRabbit replacement
 
 > **⚡ Proactive Session Memory** *(ACP Enhanced v6.4.13+)*: `/acp-commit` runs proactively at **7 trigger events** — do NOT wait for session end. Triggers: milestone phase done, audit created, ADR made, new pattern found, correction given, context approaching overflow, any commit touching >5 files. See [Mid-Session Commit Triggers](AGENTS.md) in `AGENTS.md`. This prevents permanent knowledge loss from silent context overflow.
 
@@ -1066,6 +1067,7 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`/acp-validate`](agent/commands/acp.validate.md)** - Validate ACP file health and index consistency
 - **[`/acp-ci`](agent/commands/acp.ci.md)** - Local CI parity predictor (`--fast` default; `--full` ≈ multi-minute CI)
 - **[`/acp-pr`](agent/commands/acp.pr.md)** - Feature PR prep; gates delegated only to `/acp-ci`
+- **[`/acp-smoke`](agent/commands/acp.smoke.md)** - Optional device preflight (`--host`); unconfigured exits 2 (not a CI step)
 - **[`acp.findings-import.sh`](agent/scripts/acp.findings-import.sh)** - Import CodeRabbit findings → carryovers when active (M81; `--input` only)
 - **[`acp.upgrade-guard.sh`](agent/scripts/acp.upgrade-guard.sh)** - HARD-fail version-update when `upstream-delta.yml` present (M86 / P-UG-1)
 - **[`acp.private-pack.sh`](agent/scripts/acp.private-pack.sh)** - Pack/unpack gitignored ACP dirs for another machine (M87 / ADR-27)

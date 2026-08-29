@@ -23,6 +23,33 @@ How to use ACP's **optional** CodeRabbit integration — and what it does (and d
 
 The binding design rule (ADR-21): **CodeRabbit augments, never gates, an ACP code path.**
 
+## Land policy (do not treat CodeRabbit as a merge gate)
+
+Do **not** add CodeRabbit as a required GitHub status check. Merge on **CI green** plus an ACP review pass (`/acp-review`, optionally `--pr-diff`). CodeRabbit comments are advisory.
+
+| Situation | Operator action |
+|-----------|-----------------|
+| Check named `Review rate limited` | **Skip** — not a pass and not a fail. Do not wait. |
+| Green CodeRabbit check on the PR | **Not** a review of `HEAD`. The check can lag the tip. |
+| `commit_id` in a review payload | Identifies **which SHA was reviewed**. Matching HEAD is useful; it is **not** a merge requirement. |
+| Finding in the review **body** but not on a diff hunk | Still counts. Bucket it. Do not dismiss because it is “outside the diff.” |
+| Multiple LLM-review layers (CodeRabbit, Copilot, a second model) | **One** architecture-level change per layer. After one parser/compiler-level fix, residual helper-style comments are non-blocking. |
+
+### Buckets (portable)
+
+| Bucket | Meaning | Merge impact |
+|--------|---------|--------------|
+| **A — production** | Honesty of user-visible results, authorization/cache, parse-unknown, enqueue ≠ sync, dates/IDs, formatter, authz | Blocking until fixed or explicitly deferred with reason |
+| **B — helper** | Test/helper/tooling nits, style onions, drive-by refactors | At most **one** architecture change this pass; remainder non-blocking after one parser-level fix |
+
+Promote recurring **classes** of Bucket A misses into **project** convention tests. Do not grow Phase 1 regex for honesty/authz.
+
+### Consumer overlay
+
+Projects may add `agent/wiki/local.coderabbit-land-policy.md` (never shipped by Enhanced). Put org-specific merge rules there. Framework wiki stays stack-agnostic.
+
+Consumers **may** add `!agent/**` to CodeRabbit `reviews.path_filters` so protocol files are out of product review. The AE template stays narrower (`!agent/memory/**`, `!agent/reports/**`) so **this** repo still reviews command docs. Optional extra globs may be listed in `agent/configurables/pr.yml` (`coderabbit_exclude_globs`) — documentation only; ACP does not rewrite `.coderabbit.yaml` from that file.
+
 ## Enabling it
 
 The integration is governed by two preferences (both off/inert by default):

@@ -11,6 +11,119 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.38.0] — 2026-08-29
+
+### Fixed
+- **js-yaml** — pin **4.3.1** and nested gray-matter **3.15.1**; nanoid override **3.3.18**. `npm audit --audit-level=high` (CI-identical, no `--omit=dev`) is clean of HIGH findings (F-R006-01).
+- **Bootstrap** — exact `set -euo pipefail` (SH-01); `--team-size` without a value exits 2 (F-R006-02). No invented `--help`.
+- **Dispatch** — `TaskMeta` replaces `Record<string, any>`; typed taxonomy load; `updateRoutingYml(): void` (F-R006-03).
+
+### Notes
+- M92 Track A. Tag `v6.37.0` stays on `7ab6a7f`; `v6.37.1` stays on `91f1dd5`. Do not retag 6.37.x.
+
+---
+
+## [6.37.1] — 2026-08-29
+
+### Fixed
+- **Exec-host** — `--dry-run` with no `--host` and no `ACP_EXEC_HOST` exits 2 (does not default to `windows`).
+- **`/acp-smoke`** — exec-host dry-run failures are no longer swallowed with `|| true` (FG-1).
+- **E2E** — empty-host fail-closed; `ACP_EXEC_HOST` without `--host`; extra `local_gates` block list dry-run + inline-array fail-closed.
+- **Docs** — catalog / README / AGENT smoke lines mention `--host`; README field-feedback waves A–C section; domain.yml script count 59.
+
+### Notes
+- Leftover patch for audit-131 / review-009. Tag `v6.37.0` remains on `7ab6a7f`. Did not start M92. F-R006 and F-124-02 still pending.
+
+---
+
+## [6.37.0] — 2026-08-29
+
+### Added
+- **Exec-host** — `acp.exec-host-ssh.sh` (`ACP_*`, git bundle + scp; not `ssh -A` clone) plus generic Windows prepare/run/install scripts. Not a `--fast` CI step.
+- **`/acp-smoke --host`** — `github|windows|local` overrides `ACP_EXEC_HOST`. Unconfigured still exit 2. Dry-run windows prints `git bundle`, not Darwin `assembleDebug`. `--remote` requires `--host local`.
+- **`pr.yml`** — optional `local_gates` after `/acp-ci` (empty = no-op). Not preference arrays. Consumers may CodeRabbit-filter `agent/**`.
+- **Wiki** — `agent/wiki/exec-host.md` nine Win32-OpenSSH inner-loop rules (012).
+
+### Notes
+- Field-feedback waves A–C complete on develop (M89–M91). F-R006-01..03 still pending. F-124-02 (PR develop → mainline) still pending. No second force-push. No KVM in core E2E.
+
+---
+
+## [6.36.1] — 2026-08-29
+
+### Fixed
+- **`/acp-smoke`** — unknown options no longer print the substring `not configured` (FG-3). Configured `--dry-run` uses `${PASSTHROUGH[*]:-}`.
+- **Command catalog** — `display_available_commands` lists `/acp-smoke` next to `/acp-ci` / `/acp-pr`.
+- **E2E** — missing `smoke.yml` (D16); unknown-option needle isolation; configured `--dry-run` does not exec the runner; `acp.pr.sh` must not call `acp.smoke.sh`; `/acp-ci --only smoke` is an unknown step (D15).
+- **Docs** — AGENT.md milestone count 90; README comparison/tree 73 slash commands (was 70).
+- **Carryovers** — F-127-20 stamped after command-e2e-coverage P3=73.
+
+### Notes
+- Leftover patch for audit-129 / review-008. Tag `v6.36.0` remains on `7fa4c0f`. No `--host`, no M91.
+
+---
+
+## [6.36.0] — 2026-08-28
+
+### Added
+- **`/acp-smoke`** — optional device-preflight dispatcher. Missing `smoke.yml` or empty `runner:` exits **2** (`not configured`), never PASS. Config is `agent/configurables/smoke.yml` (P-CI-1), not preferences. Not a CI step (`e2e-smoke` remains `/acp-ci --full` only). `--host` is **not** in this version.
+
+### Changed
+- **Glossary** — `e2e-smoke` is the `/acp-ci --full` AE CI E2E job; `/acp-smoke` is optional device preflight. Never `--only smoke`. `/acp-pr` may mention smoke; `acp.pr.sh` does not call it.
+- **Command count** — 72 → 73 `acp.*` commands (75 docs with 2 `git.*`).
+
+### Notes
+- No exec-host, no Windows OpenSSH, no Maestro pin in core E2E.
+- F-R006-01..03 remain pending (out of scope).
+- F-126-03 partial: stub shipped; `--host` waits for M91.
+
+---
+
+## [6.35.2] — 2026-08-28
+
+### Fixed
+- **`/acp-version-update`** — reading `NEW_VERSION` from AGENTS.md no longer aborts under `set -euo pipefail` when the file uses `> vX.Y.Z` instead of `**Version**`. Cursor/claude sync stderr is no longer discarded.
+- **Manifest merge** — `acp_merge_manifest_acp_core` updates only the `acp-core` `package_version`, not every package.
+- **local.* sync scripts** — `trap ERR` on cursor and claude command generators (SH-01).
+- **Preserve E2E** — asserts version-update exit 0 and that `my-package` stays `1.0.0`.
+- **review-scan** — E2E harnesses skip SH-01 (assert_* returns 1) without being treated as sourced libraries for SH-04.
+
+---
+
+## [6.35.1] — 2026-08-28
+
+### Fixed
+- **README Workflow** — `/acp-audit` is a deep-dive into `agent/reports/` (not task-completion status); `/acp-review` documents optional `--pr-diff`.
+- **Audit wrappers** — `.opencode/commands/acp-audit.md` and `.github/prompts/acp-audit.prompt.md` match the command Purpose.
+- **`--pr-diff` E2E** — D17 `command -v gh` and Confirm/Stop needles; pr-diff docs block renamed B21 so it no longer collides with scanner B8.
+- **D8 E2E** — `local.*` command and wiki files survive `/acp-version-update` (V14).
+- **Carryovers** — F-127 M89-owned items and audit-128 findings stamped fixed.
+
+### Changed
+- **`/acp-review`** — command Version 1.1.0; Overview table includes `--pr-diff`.
+
+---
+
+## [6.35.0] — 2026-08-28
+
+### Added
+- **`/acp-review --pr-diff`** — optional **agent** pass on `git diff <base>...HEAD`. **Not** Phase 1 `--diff` (`git diff --name-only`). The two flags are **combinable**. Probe `gh` in `bash -c 'command -v gh'`; if missing, use `origin/<default_working_branch>`. Report is gitignored (ADR-27). Confirm then **Stop**.
+- **CodeRabbit land policy** — wiki: do not add CR as a required check; rate-limit = skip; green check ≠ HEAD; `commit_id` is not a merge gate; buckets A/B; consumer overlay stub.
+- **local.* slash wrappers** — cursor and claude sync emit `local-*` when `agent/commands/local.*.md` exists; **skip if the wrapper already exists**. Temp-dir E2E.
+
+### Changed
+- **`/acp-audit`** — Purpose: not a PR review and not a CodeRabbit replacement.
+- **`AGENT.md`** — lists `/acp-review`; audit one-liner matches command Purpose.
+- **`/acp-version-update`** — documents `agent/commands/local.*.md` and `agent/wiki/local.*.md` as never overwritten; wiki `local.*` skipped if present in the upstream tree.
+- **Routing** — `/acp-review` and `/acp-pr` suggest optional `--pr-diff` (does **not** replace `/acp-ci`). Customized `routing.yml` / `coderabbit-integration.md` (Tier B) forks: merge these suggestions/land-policy or keep a `local.*` overlay.
+
+### Notes
+- No `/acp-smoke` and no exec-host in this version (M90/M91).
+- review-006 F-R006-01..03 remain pending (out of scope).
+- If you customized `agent/core/routing.yml` or `agent/wiki/coderabbit-integration.md`, merge the `--pr-diff` suggestion and land-policy section, or use `agent/wiki/local.*`.
+
+---
+
 ## [6.34.0] — 2026-08-28
 
 ### Changed

@@ -3,6 +3,234 @@
 # DO NOT edit manually — updated by /acp-commit
 
 
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-134, review-010, task-372]
+  done: [m92-post-impl-audit, honesty-unstamp-369, restamp-verified-134]
+  deferred:
+    - F-124-02-pr-mainline → task-369
+  key_fact: >
+    audit-134: F-R006 code is real; task-369 complete was a shortcut.
+    Track B is still the regular develop→mainline PR. Do not retag v6.38.0.
+
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-365, task-366, task-367, task-371, task-368, task-369, task-370]
+  done:
+    - f-r006-01-js-yaml-4-3-1
+    - f-r006-02-bootstrap-sh01
+    - f-r006-03-dispatch-taskmeta
+    - v6380-tag-on-f20c382
+    - develop-pushed
+    - m92-complete
+  deferred:
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    M92 v6.38.0 tagged on f20c382; v6.37.0/v6.37.1 not moved.
+    npm audit --audit-level=high (no omit=dev). gh pr create failed
+    (must be a collaborator); F-124-02 stays pending.
+
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-133]
+  done: [m92-pre-impl-amend-v11]
+  deferred:
+    - F-R006-01-js-yaml-cve → task-365
+    - F-R006-02-bootstrap-sh01 → task-366
+    - F-R006-03-dispatch-any → task-367
+    - F-124-02-pr-mainline → task-369
+  key_fact: >
+    audit-133 BLOCKED design v1.0.0: do not use npm audit --omit=dev;
+    do not move v6.37.1; bootstrap E2E is required; task-371 added.
+    Implement only after design v1.1.0.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [acp-validate, acp-sync, acp-update]
+  done: [docs-sync-v6371, validate-tag-v6371]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    /acp-validate only gap was missing v6.37.1 tag. README now documents
+    field-feedback waves A–C and 59 scripts; domain.yml synced.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-131, review-009]
+  done: [m91-leftover-patch-v6371]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.37.1 leftover: empty exec-host --dry-run fails closed (not windows);
+    smoke no longer swallows exec-host dry-run failures; extra local_gates E2E.
+    Tag v6.37.0 stays on 7ab6a7f. Did not start M92.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-359, task-360, task-361, task-362, task-363, task-364]
+  done: [m91-wave-c-v6370]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.37.0: ACP_EXEC_HOST + git bundle exec-host; /acp-smoke --host;
+    pr.yml extra gates empty no-op. Unconfigured smoke still exit 2.
+    No Maestro in core E2E. F-R006 untouched.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-129, review-008]
+  done: [m90-leftover-patch-v6361]
+  deferred:
+    - M91-exec-host → task-359
+    - F-126-03-host-flag → task-360
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.36.1 leftover patch for M90: unknown-option no longer says
+    not configured; catalog lists /acp-smoke; D15/D16 E2E holes closed.
+    Did not start M91. Tag v6.36.0 stays on 7fa4c0f.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-354, task-355, task-356, task-357, task-358]
+  done: [m90-wave-b-v6360]
+  deferred:
+    - M91-exec-host → task-359
+    - F-126-03-host-flag → task-360
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.36.0: /acp-smoke is optional and fail-closed (exit 2 unconfigured).
+    e2e-smoke is the /acp-ci --full step, not this command. No --host.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [review-007]
+  done: [m89-review-007-patch-v6352]
+  deferred:
+    - M90-acp-smoke → task-354
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.35.2: version-update NEW_VERSION grep must not abort under pipefail;
+    manifest merge only touches acp-core. M90 not started.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-128]
+  done: [m89-audit-128-patch-v6351]
+  deferred:
+    - M90-acp-smoke → task-354
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.35.1 patches audit-128 leftovers (README, wrappers, D17/D8 E2E,
+    F-127 M89 stamps). Did not start M90.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-348, task-349, task-350, task-351, task-352, task-353]
+  done: [m89-wave-a-v6350]
+  deferred:
+    - M90-acp-smoke → task-354
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.35.0: --pr-diff is not --diff (combinable). CR land policy. local.*
+    wrappers skip-if-exists. F-R006 out. Next M90 stub smoke.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-348]
+  done: [m89-pre-impl-stamp]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    audit-127 READY. M89 current_milestone. Next 349 wiki/audit/local.*
+    then --pr-diff. F-R006 out.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-127, plan-amend-m89-m91]
+  done: [audit-127-pre-impl, amend-plans-d14-d18]
+  deferred:
+    - M89-coding → task-348
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    audit-127 BLOCKED then plans amended (design 1.1.0 D14–D18). M89 READY
+    for 349+. --diff and --pr-diff combinable. pr.yml not arrays. e2e-smoke
+    ≠ /acp-smoke. F-127-13 ledger hole closed. F-R006 out.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-126, plan-m89-m91]
+  done: [audit-126-second-round, plan-waves-a-b-c]
+  deferred:
+    - F-125-01-pr-diff → M89
+    - F-125-05-acp-smoke → M90
+    - F-125-06-exec-host → M91
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    --pr-diff must not collide with existing --diff. Do not copy consumer-project smoke
+    1.1.0 into AE v1. M89–M91 planned (6.35–6.37); proceed starts at task-348.
+    current_milestone stays M88 until proceed.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-125]
+  done: [audit-125-consumer-project-safeiq-feedback]
+  deferred:
+    - F-125-01-pr-diff → plan
+    - F-125-02-cr-buckets → plan
+    - F-125-05-acp-smoke → later-wave
+    - F-125-06-exec-host → later-wave
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    consumer-project 001+002 still fully open on 6.34.0 (--pr-diff, CR buckets, audit≠CR).
+    consumer-project 2026-08-14 command wave is shipped; remaining value is smoke + exec-host.
+    Do not port Expo/Maestro/consumer-project tests or visualizer bugs.
+
+
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop
