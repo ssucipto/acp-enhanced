@@ -1021,11 +1021,11 @@ milestones:
     name: GitHub privacy extension (ADR-29)
     priority: 5
     status: in_progress
-    progress: 57
+    progress: 64
     started: 2026-08-29
     completed: null
     estimated_weeks: 1.5
-    tasks_completed: 8
+    tasks_completed: 9
     tasks_total: 14
     file: agent/milestones/milestone-94-github-privacy-adr29.md
     design: agent/design/local.github-privacy-adr29.md
