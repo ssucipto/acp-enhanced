@@ -76,4 +76,43 @@ else
   assert_true "no --host flag in help" 0
 fi
 
+print_test_header "B7 — missing smoke.yml is not configured (D16)"
+MISSFILE_OUT="$(ACP_SMOKE_CONFIG="/tmp/acp-smoke-missing-$$.yml" bash "${SMOKE_SH}" 2>&1)"
+MISSFILE_RC=$?
+assert_equals "2" "${MISSFILE_RC}" "missing file exit 2"
+assert_contains "${MISSFILE_OUT}" "not configured" "missing file prints not configured"
+
+print_test_header "B8 — unknown option is not the unconfigured contract (FG-3)"
+if bash "${SMOKE_SH}" --bogus >/tmp/acp-smoke-unk.out 2>&1; then UNK_RC=0; else UNK_RC=$?; fi
+UNK_OUT="$(cat /tmp/acp-smoke-unk.out)"
+assert_equals "2" "${UNK_RC}" "unknown option fail-closed"
+assert_contains "${UNK_OUT}" "unknown option" "prints unknown option"
+if echo "${UNK_OUT}" | grep -q 'not configured'; then
+  assert_true "unknown option must not print not configured" 1
+else
+  assert_true "unknown option does not collide with not configured" 0
+fi
+
+print_test_header "B9 — configured dry-run does not exec runner (FG-6)"
+SENTINEL="$(mktemp "${TMPDIR:-/tmp}/acp-smoke-sent.XXXXXX")"
+rm -f "${SENTINEL}"
+RUNNER="$(mktemp "${TMPDIR:-/tmp}/acp-smoke-runner.XXXXXX.sh")"
+printf '#!/bin/sh\ntouch "%s"\n' "${SENTINEL}" > "${RUNNER}"
+chmod +x "${RUNNER}"
+CFG_DRY="$(mktemp "${TMPDIR:-/tmp}/acp-smoke-cfg.XXXXXX.yml")"
+printf 'runner: "%s"\n' "${RUNNER}" > "${CFG_DRY}"
+DRYCFG_OUT="$(ACP_SMOKE_CONFIG="${CFG_DRY}" bash "${SMOKE_SH}" --dry-run 2>&1)"
+DRYCFG_RC=$?
+if [[ -f "${SENTINEL}" ]]; then
+  assert_true "dry-run must not exec runner" 1
+else
+  assert_true "dry-run did not create sentinel" 0
+fi
+assert_equals "0" "${DRYCFG_RC}" "configured dry-run exit 0"
+assert_contains "${DRYCFG_OUT}" "not verification" "FG-6 banner"
+rm -f "${CFG_DRY}" "${RUNNER}" "${SENTINEL}"
+
+print_test_header "B10 — catalog lists /acp-smoke"
+assert_contains "$(sed -n '/Workflow \/ Quality/,/Task \& Project/p' "${PROJECT_ROOT}/agent/scripts/acp.common.sh")" "/acp-smoke" "common.sh lists /acp-smoke"
+
 print_suite_summary

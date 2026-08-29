@@ -55,7 +55,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     -*)
       echo "[acp.smoke] ERROR: unknown option: $1" >&2
-      echo "[acp.smoke] not configured is not this error — see --help" >&2
+      echo "[acp.smoke] see --help" >&2
       exit 2
       ;;
     *)
@@ -164,7 +164,7 @@ if [[ -z "$RUNNER" ]]; then
 fi
 
 if [[ "$DRY_RUN" == true ]]; then
-  echo "[acp.smoke] dry-run: would exec: ${RUNNER} ${PASSTHROUGH[*]-}"
+  echo "[acp.smoke] dry-run: would exec: ${RUNNER} ${PASSTHROUGH[*]:-}"
   echo "[acp.smoke] dry-run is not verification (FG-6)"
   exit 0
 fi

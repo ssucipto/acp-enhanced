@@ -4277,9 +4277,9 @@ carryovers:
     finding: "command-e2e-coverage.yaml updated: + P3 count on new command"
     description: "task-357"
     fix_target: "M90 task-357"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-28
+    verified_in_audit: "129"
     escalated_to: "M90"
 
   # ── AUDIT-128 — M89 POST-SHIP (2026-08-28) ────────────────────────────────
@@ -4450,3 +4450,126 @@ carryovers:
     fix_applied_date: 2026-08-28
     verified_in_audit: "review-007"
     escalated_to: "M89"
+
+  # ── AUDIT-129 / REVIEW-008 — M90 POST-SHIP (2026-08-29) ────────────────────
+  - audit_id: 129
+    finding_id: F-129-01
+    severity: high
+    file: agent/scripts/acp.common.sh
+    finding: "display_available_commands omitted /acp-smoke next to /acp-ci / /acp-pr"
+    description: "CR-008-03"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-02
+    severity: medium
+    file: agent/memory/audit-carryovers.md
+    finding: "F-127-20 still pending after command-e2e-coverage P3=73 shipped"
+    description: "Stamp miss after task-357"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-03
+    severity: medium
+    file: AGENT.md
+    finding: "AGENT.md still 89 milestones complete after M90"
+    description: "Also README milestones badge"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-04
+    severity: medium
+    file: README.md
+    finding: "README comparison table and tree still 70 slash commands (badge is 73)"
+    description: "Stale current-state copy"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-05
+    severity: medium
+    file: e2e/acp.smoke.test.sh
+    finding: "E2E never asserted missing smoke.yml (D16); only empty runner"
+    description: "B7 missing-file path"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-06
+    severity: medium
+    file: e2e/acp.pr.test.sh
+    finding: "No E2E that acp.pr.sh omits smoke or that --only smoke fails closed"
+    description: "S3 + ci B9 D15"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-07
+    severity: high
+    file: agent/scripts/acp.smoke.sh
+    finding: "Unknown-option stderr contained substring not configured (FG-3)"
+    description: "CR-008-01"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: 129
+    finding_id: F-129-08
+    severity: low
+    file: agent/scripts/acp.smoke.sh
+    finding: "Configured dry-run used PASSTHROUGH[*]- instead of :- idiom"
+    description: "CR-008-02"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "129"
+    escalated_to: "M90"
+  - audit_id: review-008
+    finding_id: CR-008-01
+    severity: high
+    file: agent/scripts/acp.smoke.sh
+    finding: "Unknown option printed not configured substring"
+    description: "Same as F-129-07"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-008"
+    escalated_to: "M90"
+  - audit_id: review-008
+    finding_id: CR-008-02
+    severity: medium
+    file: agent/scripts/acp.smoke.sh
+    finding: "PASSTHROUGH[*]- on configured dry-run"
+    description: "Same as F-129-08"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-008"
+    escalated_to: "M90"
+  - audit_id: review-008
+    finding_id: CR-008-03
+    severity: medium
+    file: agent/scripts/acp.common.sh
+    finding: "display_available_commands omitted /acp-smoke"
+    description: "Same as F-129-01"
+    fix_target: "6.36.1"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "review-008"
+    escalated_to: "M90"
