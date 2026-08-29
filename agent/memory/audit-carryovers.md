@@ -4694,9 +4694,9 @@ carryovers:
     finding: "develop 25 commits ahead of origin/develop (unpushed)"
     description: "Local-only release work including M89–M91 and v6.37.1"
     fix_target: "M92 task-368"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "133"
     escalated_to: "M92"
   - audit_id: 132
     finding_id: F-132-03
@@ -4705,9 +4705,9 @@ carryovers:
     finding: "active_handoff pointed at completed waves-abc design with stale git_commit"
     description: "Handoff hygiene — addressed in plan task-370"
     fix_target: "M92 task-370"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "133"
     escalated_to: "M92"
 
   # ── AUDIT-133 — M92 PRE-IMPL (2026-08-29) ──────────────────────────────────
