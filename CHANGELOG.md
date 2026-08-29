@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **M91 started** — task-359 pre-impl READY (audit-130). Coding 360+ unblocked. F-R006 untouched.
+
 ---
 
 ## [6.36.1] — 2026-08-29
