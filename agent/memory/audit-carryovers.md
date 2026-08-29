@@ -4762,7 +4762,7 @@ carryovers:
     finding: "Verification matrix omitted bootstrap E2E, vitest, npm-audit, golden, coverage"
     description: "Plan amended; task-371 required after 365-367"
     fix_target: "M92 task-371"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "133"
     escalated_to: "M92"

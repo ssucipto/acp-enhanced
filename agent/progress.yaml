@@ -990,11 +990,11 @@ milestones:
     name: Post-M91 remediation (F-R006 + release hygiene)
     priority: 4
     status: in_progress
-    progress: 43
+    progress: 57
     started: 2026-08-29
     completed: null
     estimated_weeks: 0.5
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 7
     file: agent/milestones/milestone-92-post-m91-remediation.md
     design: agent/design/local.post-m91-remediation.md
@@ -7246,11 +7246,11 @@ tasks:
   - id: task-371
     name: "M91 regression + test package refresh"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-92-post-m91-remediation/task-371-test-package-regression.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T08:15:00Z'
+    completed_date: '2026-08-29T08:20:00Z'
+    actual_hours: 0.2
     estimated_hours: 2
     notes: 'Required after 365-367: bootstrap E2E, vitest, smoke/exec-host/pr/ci, coverage, golden'
 recent_work:
