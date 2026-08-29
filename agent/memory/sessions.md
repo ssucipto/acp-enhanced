@@ -6,6 +6,19 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [audit-134, review-010, task-372]
+  done: [m92-post-impl-audit, honesty-unstamp-369, restamp-verified-134]
+  deferred:
+    - F-124-02-pr-mainline → task-369
+  key_fact: >
+    audit-134: F-R006 code is real; task-369 complete was a shortcut.
+    Track B is still the regular develop→mainline PR. Do not retag v6.38.0.
+
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [task-365, task-366, task-367, task-371, task-368, task-369, task-370]
   done:
     - f-r006-01-js-yaml-4-3-1
