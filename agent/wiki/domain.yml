@@ -230,7 +230,7 @@ commands:
       purpose: Initialize a git repository with an intelligent .gitignore based on detected project type.
 
 scripts:
-  count: 59
+  count: 60
   location: agent/scripts/
   naming: "acp.{feature}.sh"
   key_scripts:
@@ -260,6 +260,8 @@ scripts:
       implements: HARD-fail version-update when upstream-delta.yml present (M86 / P-UG-1).
     - script: acp.private-pack.sh
       implements: Pack/unpack gitignored ACP dirs for another machine (M87 / ADR-27).
+    - script: acp.m94-purge-paths.sh
+      implements: Fail-closed KEEP/PURGE path list for git filter-repo (M94 / ADR-29).
     - script: acp.install.sh
       implements: Sets up the ACP directory structure and copies template files into a target project, bootstrapping a new ACP installation.
     - script: acp.meta-scan.sh
