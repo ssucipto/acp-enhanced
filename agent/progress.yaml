@@ -1021,11 +1021,11 @@ milestones:
     name: GitHub privacy extension (ADR-29)
     priority: 5
     status: in_progress
-    progress: 14
+    progress: 21
     started: 2026-08-29
     completed: null
     estimated_weeks: 1.5
-    tasks_completed: 2
+    tasks_completed: 3
     tasks_total: 14
     file: agent/milestones/milestone-94-github-privacy-adr29.md
     design: agent/design/local.github-privacy-adr29.md
@@ -7319,11 +7319,11 @@ tasks:
   - id: task-375
     name: "ADR-29 gitignore + validator + private-pack"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-375-gitignore-validator-pack.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T12:40:00Z'
+    completed_date: '2026-08-29T12:50:00Z'
+    actual_hours: 0.2
     estimated_hours: 4
     notes: 'Cite ADR-29; patterns/**/local.*; CB-2 local.dummy.md; integrity-manifest restamp'
   - id: task-376
@@ -7437,6 +7437,12 @@ tasks:
     estimated_hours: 2
     notes: 'Stamp F-135-01..06 + F-136/137 after 381; 14/14; version fields if 6.39.0'
 recent_work:
+- date: 2026-08-29
+  description: "M94 task-375: ADR-29 gitignore + validator + private-pack"
+  items:
+  - "CB-2 local.dummy.md + nested typescript dummy; route-template not ignored"
+  - "private-pack includes design/patterns/routes; validateActiveHandoff gitignore skip"
+  - "ADR-29 cited in validate.md; integrity-manifest restamped"
 - date: 2026-08-29
   description: "M94 task-374: KEEP/PURGE inventory + paths generator"
   items:

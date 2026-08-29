@@ -34,10 +34,15 @@ FIXTURE="$(mktemp -d /tmp/acp-pack-fix.XXXXXX)"
 DEST="$(mktemp -d /tmp/acp-pack-dest.XXXXXX)"
 OUT="/tmp/acp-pack-out-$$.tar.gz.gpg"
 mkdir -p "${FIXTURE}/agent/reports" "${FIXTURE}/agent/feedback" \
-  "${FIXTURE}/agent/milestones" "${FIXTURE}/docs"
+  "${FIXTURE}/agent/milestones" "${FIXTURE}/agent/design" \
+  "${FIXTURE}/agent/patterns" "${FIXTURE}/agent/routing/tasks" \
+  "${FIXTURE}/docs"
 printf 'r1\n' > "${FIXTURE}/agent/reports/a.md"
 printf 'f1\n' > "${FIXTURE}/agent/feedback/b.md"
 printf 'ms1\n' > "${FIXTURE}/agent/milestones/milestone-dummy.md"
+printf 'd1\n' > "${FIXTURE}/agent/design/local.sample.md"
+printf 'p1\n' > "${FIXTURE}/agent/patterns/local.sample.md"
+printf 'rt1\n' > "${FIXTURE}/agent/routing/tasks/route-1.md"
 printf 'keep-me\n' > "${FIXTURE}/docs/USAGE.md"
 export ACP_PRIVATE_PACK_ROOT="${FIXTURE}"
 export ACP_PACK_PASSPHRASE="e2e-m87-pack-pass-not-a-secret"
@@ -54,6 +59,12 @@ test -d "${DEST}/agent/feedback"
 assert_true "unpacked feedback dir" $?
 test -f "${DEST}/agent/milestones/milestone-dummy.md"
 assert_true "unpacked dummy ignored milestone" $?
+test -f "${DEST}/agent/design/local.sample.md"
+assert_true "unpacked design sample (ADR-29)" $?
+test -f "${DEST}/agent/patterns/local.sample.md"
+assert_true "unpacked pattern sample (ADR-29)" $?
+test -f "${DEST}/agent/routing/tasks/route-1.md"
+assert_true "unpacked route sample (ADR-29)" $?
 test ! -f "${DEST}/docs/USAGE.md"
 assert_true "USAGE.md not packed (never pack docs/)" $?
 R_LIVE="$(find "${FIXTURE}/agent/reports" | wc -l | tr -d ' ')"

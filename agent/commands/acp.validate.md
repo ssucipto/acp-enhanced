@@ -150,7 +150,7 @@ Compare the canonical version in `agent/core/identity.yml` against all other ver
    - `README.md` → version badge in shields.io URL
    - `CHANGELOG.md` → latest `## [X.Y.Z]` entry
    - `scripts/PRD-MAIN.md` → `**Version:** X.Y`
-   - `IP_REGISTER.md` → `**Current Version** | X.Y.Z` (if file exists)
+- **`IP_REGISTER.md`** → `**Current Version** | X.Y.Z` **only if the file exists** (public clones omit it — ADR-29; missing is not an error)
 4. **Report**:
 
 ```
@@ -236,7 +236,8 @@ Verify every `file:` pointer in `progress.yaml` references an existing file. Thi
 
 **Actions**:
 - For every `file:` path in progress.yaml (milestones), assert the file exists on disk
-- FAIL listing each dangling pointer (ERROR, exit 1)
+- Skip gitignored pointers (ADR-28 instance milestone bodies; ADR-29 instance designs) — CI clones omit those files
+- FAIL listing each dangling pointer that is not gitignored (ERROR, exit 1)
 - Flag `tasks_total: 0` combined with `status: active|in_progress` as an inconsistency
 
 **Expected Outcome**: No dangling file pointers; no contradictory task counts
@@ -909,7 +910,7 @@ When `scripts/acp-validate.ts` runs (including via `/acp-validate`), these M70 c
 | package.yaml version | always | error | `validatePackageYamlVersion()` — must match `identity.yml` |
 | Script registration | always | warning | `validateScriptRegistration()` — on-disk `agent/scripts/*.sh` in package.yaml |
 | Five-surface parity | always | error | `validateParityCheck()` — 5 surfaces, zero-population fail, dot-stray detection |
-| Protocol dir addability | always | error | `validateProtocolDirAddability()` — memory addability probe (ADR-27 reports/feedback local; ADR-28 instance tasks local) |
+| Protocol dir addability | always | error | `validateProtocolDirAddability()` — memory addability probe (ADR-27 reports/feedback local; ADR-28 instance tasks local; ADR-29 designs/patterns/instance routes local) |
 
 **Usage**:
 ```bash

@@ -1,6 +1,8 @@
 # Agent Context Protocol - Root .gitignore
 
 # Legal documents (sensitive — not for version control)
+# Tracked-file trap: this line does not untrack a file already in the index.
+# M94 task-378 still requires `git rm --cached IP_REGISTER.md` plus history rewrite.
 IP_REGISTER.md
 
 # Debug files (created during development/debugging)

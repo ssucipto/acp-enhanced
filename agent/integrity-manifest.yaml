@@ -381,7 +381,7 @@ files:
     sha256: "445f612fcfc6926f3edff44084fce4c1293f9a7845b165a4ef49d77409ff98ff"
     last_verified: "2026-08-29"
   - path: "agent/scripts/acp.private-pack.sh"
-    sha256: "d2ad1db6bc5739ee61fc3bd1f6292439641ad88db5f22b8b3d2e798445592737"
+    sha256: "c8bd5c728460e55d05349b039e91abe6cde5b16466951d8b7043799cec8da618"
     last_verified: "2026-08-29"
   - path: "agent/scripts/acp.project-info.sh"
     sha256: "abbdc28e6eec041ca983a9e9b88c51830a4036d0abd069eb87ef3397272d75d8"
