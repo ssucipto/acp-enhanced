@@ -6,6 +6,20 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [task-380, task-382]
+  done:
+    - m94-filter-repo-throwaway-clone
+  deferred:
+    - m94-force-push → D11-phrase
+    - F-135-07-progress-yaml-split → future-adr
+  key_fact: >
+    filter-repo completed in /tmp/acp-rewrite-m94 only. Origin restored,
+    not pushed. Task 382 waits for the D11 phrase including tags: yes.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [task-373, task-374, task-375, M94]
   done:
     - m94-backup-gate

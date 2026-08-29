@@ -1021,11 +1021,11 @@ milestones:
     name: GitHub privacy extension (ADR-29)
     priority: 5
     status: in_progress
-    progress: 71
+    progress: 79
     started: 2026-08-29
     completed: null
     estimated_weeks: 1.5
-    tasks_completed: 10
+    tasks_completed: 11
     tasks_total: 14
     file: agent/milestones/milestone-94-github-privacy-adr29.md
     design: agent/design/local.github-privacy-adr29.md
@@ -7399,11 +7399,11 @@ tasks:
   - id: task-380
     name: "filter-repo paths-from-file"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-380-filter-repo-rewrite.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T13:20:00Z'
+    completed_date: '2026-08-29T13:25:00Z'
+    actual_hours: 0.1
     estimated_hours: 3
     notes: 'Throwaway clone only; keeper restore on tip'
   - id: task-381
@@ -10635,10 +10635,10 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M94 amended (audit-137): /acp-proceed task-373 — backup GATE first"
-- "Task 378 blocked until 384-386 + mandatory 377 complete"
-- "After filter-repo: force-push develop, mainline, AND tags (D11 phrase). Do not skip tags. Do not invent v6.38.1."
-- "F-135-01..06 pending until task-381 proof (verified_in_audit 137)"
+- "HALT at task-382: type exactly: force-push adr-29 design patterns routes ip-register develop mainline tags: yes"
+- "Then from /tmp/acp-rewrite-m94: git push --force origin develop; git push --force origin mainline; git push --force origin --tags"
+- "Do not skip tags. Do not invent v6.38.1. Do not --force-with-lease. /acp-proceed --yes is not consent."
+- "After push: task-381 fresh-clone proof, then 383 stamps + regular mainline PR"
 - "F-135-07 deferred (progress.yaml split — future ADR)"
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 current_blockers: []
