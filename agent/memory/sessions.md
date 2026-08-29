@@ -6,6 +6,22 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [audit-133]
+  done: [m92-pre-impl-amend-v11]
+  deferred:
+    - F-R006-01-js-yaml-cve → task-365
+    - F-R006-02-bootstrap-sh01 → task-366
+    - F-R006-03-dispatch-any → task-367
+    - F-124-02-pr-mainline → task-369
+  key_fact: >
+    audit-133 BLOCKED design v1.0.0: do not use npm audit --omit=dev;
+    do not move v6.37.1; bootstrap E2E is required; task-371 added.
+    Implement only after design v1.1.0.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [acp-validate, acp-sync, acp-update]
   done: [docs-sync-v6371, validate-tag-v6371]
   deferred:

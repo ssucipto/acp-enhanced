@@ -995,12 +995,13 @@ milestones:
     completed: null
     estimated_weeks: 0.5
     tasks_completed: 0
-    tasks_total: 6
+    tasks_total: 7
     file: agent/milestones/milestone-92-post-m91-remediation.md
     design: agent/design/local.post-m91-remediation.md
     notes: >
-      PLANNED 2026-08-29 — audit-132. Close F-R006-01..03 (v6.38.0),
-      tag/push hygiene, F-124-02 mainline PR. ADR-19 still gated.
+      PLANNED 2026-08-29 — audit-132; AMENDED audit-133 (v1.1.0).
+      CI-identical npm audit (no omit=dev); required bootstrap E2E;
+      task-371 regression; tag v6.38.0 only (never move 6.37.x). ADR-19 gated.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -7191,7 +7192,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 2
-    notes: 'scripts/package.json 4.3.1; overrides 3.15.1; npm audit --omit=dev 0 high'
+    notes: 'js-yaml 4.3.1; nested 3.15.1; nanoid if still HIGH; npm audit --audit-level=high (no omit=dev)'
   - id: task-366
     name: "F-R006-02 bootstrap set -euo + trap ERR"
     priority: 5
@@ -7201,7 +7202,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 2
-    notes: 'SH-01 on scripts/acp-bootstrap.sh; --help/--yes under nounset'
+    notes: 'SH-01 euo string; TEAM_SIZE $2 guard; required bootstrap E2E; no invented --help'
   - id: task-367
     name: "F-R006-03 dispatch.ts typing"
     priority: 4
@@ -7211,7 +7212,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 3
-    notes: 'TaskMeta interface; no as any on yaml.load; v6.38.0 release'
+    notes: 'TaskMeta; no as any; vitest; then identity 6.38.0 + golden TSV + manifest'
   - id: task-368
     name: "Tag + push release hygiene"
     priority: 3
@@ -7221,7 +7222,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 1
-    notes: 'F-132-01 tag vs HEAD; push develop (25 commits); validate git-tags'
+    notes: 'Tag v6.38.0 only; never move v6.37.0/v6.37.1; push develop when approved'
   - id: task-369
     name: "F-124-02 PR develop to mainline"
     priority: 5
@@ -7241,8 +7242,23 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 0.5
-    notes: 'Refresh active_handoff; next_steps; audit-132 plan linked'
+    notes: 'Stamp F-132-03 after verify; do not skip if handoff already retargeted'
+  - id: task-371
+    name: "M91 regression + test package refresh"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-92-post-m91-remediation/task-371-test-package-regression.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: 'Required after 365-367: bootstrap E2E, vitest, smoke/exec-host/pr/ci, coverage, golden'
 recent_work:
+- date: 2026-08-29
+  description: "audit-133 M92 pre-impl amend (design v1.1.0)"
+  items:
+  - "F-133-01..08: CI-identical npm audit; nanoid; required bootstrap E2E; no tag-move"
+  - "task-371 added; tasks_total 7; shortcuts refused"
 - date: 2026-08-29
   description: "audit-132 + M92 plan: F-R006 and release hygiene"
   items:
@@ -10401,8 +10417,9 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M92 planned (audit-132): task-365..370 — F-R006 → v6.38.0; tag/push; mainline PR."
-- "Start with /acp-proceed on task-365 (js-yaml) — do not start ADR-19 or visualizer."
+- "M92 amended (audit-133 v1.1.0): 365→366→367→371 then 368 tag v6.38.0. Do not implement against design v1.0.0."
+- "Start /acp-proceed on task-365 (js-yaml). Gate is npm audit --audit-level=high (no omit=dev)."
+- "Do not move tags v6.37.0/v6.37.1. Do not invent bootstrap --help. ADR-19 still gated."
 - "Docs synced: README waves A–C, domain.yml 59 scripts, validate tag v6.37.1."
 - "v6.37.1 leftover patch closed audit-131 / review-009 (empty-host fail-closed, extra gates E2E). Tag v6.37.0 stays on 7ab6a7f."
 - "M91 shipped v6.37.0 (exec-host, --host, pr.yml). Field-feedback waves A–C complete on develop."

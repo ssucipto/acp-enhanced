@@ -4709,3 +4709,60 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: "M92"
+
+  # ── AUDIT-133 — M92 PRE-IMPL (2026-08-29) ──────────────────────────────────
+  - audit_id: 133
+    finding_id: F-133-01
+    severity: high
+    file: agent/design/local.post-m91-remediation.md
+    finding: "Task-365 used npm audit --omit=dev; CI runs --audit-level=high without omit=dev"
+    description: "Plan amended v1.1.0; implement in task-365"
+    fix_target: "M92 task-365"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M92"
+  - audit_id: 133
+    finding_id: F-133-02
+    severity: high
+    file: scripts/package-lock.json
+    finding: "nanoid 3.3.16 omitted from task-365; --omit=dev would hide it"
+    description: "Plan amended; pin if full npm audit still HIGH"
+    fix_target: "M92 task-365"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M92"
+  - audit_id: 133
+    finding_id: F-133-03
+    severity: high
+    file: scripts/acp-bootstrap.sh
+    finding: "Bootstrap E2E marked optional; --help does not exist; TEAM_SIZE=$2 unbound-unsafe"
+    description: "Plan amended; required E2E plus dollar-2 guard; no invented --help"
+    fix_target: "M92 task-366"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M92"
+  - audit_id: 133
+    finding_id: F-133-04
+    severity: medium
+    file: git
+    finding: "Task-368 allowed moving v6.37.1 or tagging v6.37.2"
+    description: "Plan amended; next tag is v6.38.0 only"
+    fix_target: "M92 task-368"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M92"
+  - audit_id: 133
+    finding_id: F-133-05
+    severity: medium
+    file: agent/design/local.post-m91-remediation.md
+    finding: "Verification matrix omitted bootstrap E2E, vitest, npm-audit, golden, coverage"
+    description: "Plan amended; task-371 required after 365-367"
+    fix_target: "M92 task-371"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M92"
