@@ -42,4 +42,11 @@ OUT2="$(bash "${PR_SH}" --dry-run --skip-push 2>&1)"
 assert_contains "${OUT2}" "delegating to: acp.ci.sh" "delegates"
 assert_contains "${OUT2}" "dry-run" "ci dry-run"
 
+print_test_header "S3 — does not call acp.smoke.sh (D15)"
+if grep -E 'acp\.smoke\.sh' "${PR_SH}" >/dev/null; then
+  assert_true "acp.pr.sh must not call acp.smoke.sh" 1
+else
+  assert_true "no acp.smoke.sh in acp.pr.sh" 0
+fi
+
 print_suite_summary

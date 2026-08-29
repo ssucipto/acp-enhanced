@@ -3,6 +3,22 @@
 # DO NOT edit manually — updated by /acp-commit
 
 
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-129, review-008]
+  done: [m90-leftover-patch-v6361]
+  deferred:
+    - M91-exec-host → task-359
+    - F-126-03-host-flag → task-360
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.36.1 leftover patch for M90: unknown-option no longer says
+    not configured; catalog lists /acp-smoke; D15/D16 E2E holes closed.
+    Did not start M91. Tag v6.36.0 stays on 7fa4c0f.
+
+
 - date: 2026-08-28
   executor: cursor-grok
   branch: develop

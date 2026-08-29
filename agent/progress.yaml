@@ -1,10 +1,10 @@
 project:
   name: agent-context-protocol
-  version: 6.36.0
+  version: 6.36.1
   started: 2026-02-16
   status: active
   current_milestone: M91
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.36.0 on develop\n\
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.36.1 on develop\n\
     \  (ADR-28: instance milestone/task/session bodies and one field-feedback\n\
     \  file local including history; templates and USAGE.md stay).\n\
     \  M90 Wave B shipped (/acp-smoke stub, unconfigured exit 2).\n\

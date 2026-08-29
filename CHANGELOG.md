@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.36.1] — 2026-08-29
+
+### Fixed
+- **`/acp-smoke`** — unknown options no longer print the substring `not configured` (FG-3). Configured `--dry-run` uses `${PASSTHROUGH[*]:-}`.
+- **Command catalog** — `display_available_commands` lists `/acp-smoke` next to `/acp-ci` / `/acp-pr`.
+- **E2E** — missing `smoke.yml` (D16); unknown-option needle isolation; configured `--dry-run` does not exec the runner; `acp.pr.sh` must not call `acp.smoke.sh`; `/acp-ci --only smoke` is an unknown step (D15).
+- **Docs** — AGENT.md milestone count 90; README comparison/tree 73 slash commands (was 70).
+- **Carryovers** — F-127-20 stamped after command-e2e-coverage P3=73.
+
+### Notes
+- Leftover patch for audit-129 / review-008. Tag `v6.36.0` remains on `7fa4c0f`. No `--host`, no M91.
+
+---
+
 ## [6.36.0] — 2026-08-28
 
 ### Added
