@@ -3524,9 +3524,9 @@ carryovers:
     finding: "GitHub default clone is mainline, 33 commits behind develop (M89–M92 / v6.38.0 unpublished)"
     description: "Strangers cloning origin get post-PR#11 / v6.34.0 keepers, not v6.38.0. No open develop→mainline PR."
     fix_target: "Open regular PR develop → mainline; do not force-push"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: "2026-08-29"
+    verified_in_audit: "134"
     escalated_to: null
   - audit_id: 124
     finding_id: F-124-03
