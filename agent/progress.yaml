@@ -10,13 +10,13 @@ project:
     \  M91 Wave C shipped (exec-host, --host, pr.yml). M90 Wave B /acp-smoke stub.\n\
     \  F-R006-01..03 still pending. Aikido track ADR-19 gated.\n"
 active_handoff:
-  path: agent/design/local.field-feedback-waves-abc.md
-  date: '2026-07-31'
-  to_executor: claude-opus
-  from_executor: claude-opus
-  git_commit: 9489e1c5612432f758f059caa1525811114b0f9f
-  status: completed
-  completed_date: '2026-08-02'
+  path: agent/design/local.post-m91-remediation.md
+  date: '2026-08-29'
+  to_executor: cursor-grok
+  from_executor: cursor-grok
+  git_commit: 9ef93fc4d9a0f983d8ec82a5686bdd4d4617c5c3
+  status: planned
+  completed_date: null
 milestones:
   M44:
     name: Feedback-Driven Improvements (v6.9.0)
@@ -984,8 +984,23 @@ milestones:
     file: agent/milestones/milestone-91-wave-c-exec-host.md
     design: agent/design/local.field-feedback-waves-abc.md
     notes: >
-      PLANNED 2026-08-28 — depends M90. ACP_* env. git bundle not ssh -A.
-      012 rules. Extra gates in pr.yml not preference arrays. F-R006 out.
+      COMPLETE 2026-08-29 — exec-host, --host, pr.yml, v6.37.0 + v6.37.1 leftover.
+      F-R006 and F-124-02 deferred to M92.
+  M92:
+    name: Post-M91 remediation (F-R006 + release hygiene)
+    priority: 4
+    status: not_started
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 0.5
+    tasks_completed: 0
+    tasks_total: 6
+    file: agent/milestones/milestone-92-post-m91-remediation.md
+    design: agent/design/local.post-m91-remediation.md
+    notes: >
+      PLANNED 2026-08-29 — audit-132. Close F-R006-01..03 (v6.38.0),
+      tag/push hygiene, F-124-02 mainline PR. ADR-19 still gated.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -7166,7 +7181,74 @@ tasks:
     actual_hours: 0.3
     estimated_hours: 4
     notes: 'No KVM; F-R006 still pending; v6.37.0'
+  M92:
+  - id: task-365
+    name: "F-R006-01 js-yaml pin + npm audit clean"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-92-post-m91-remediation/task-365-js-yaml-pin.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: 'scripts/package.json 4.3.1; overrides 3.15.1; npm audit --omit=dev 0 high'
+  - id: task-366
+    name: "F-R006-02 bootstrap set -euo + trap ERR"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-92-post-m91-remediation/task-366-bootstrap-sh01.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: 'SH-01 on scripts/acp-bootstrap.sh; --help/--yes under nounset'
+  - id: task-367
+    name: "F-R006-03 dispatch.ts typing"
+    priority: 4
+    status: not_started
+    file: agent/tasks/milestone-92-post-m91-remediation/task-367-dispatch-typing.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: 'TaskMeta interface; no as any on yaml.load; v6.38.0 release'
+  - id: task-368
+    name: "Tag + push release hygiene"
+    priority: 3
+    status: not_started
+    file: agent/tasks/milestone-92-post-m91-remediation/task-368-tag-push-hygiene.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 1
+    notes: 'F-132-01 tag vs HEAD; push develop (25 commits); validate git-tags'
+  - id: task-369
+    name: "F-124-02 PR develop to mainline"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-92-post-m91-remediation/task-369-mainline-pr.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 1
+    notes: 'Maintainer; regular merge only; no force-push'
+  - id: task-370
+    name: "Progress handoff + milestone hygiene"
+    priority: 2
+    status: not_started
+    file: agent/tasks/milestone-92-post-m91-remediation/task-370-handoff-hygiene.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 0.5
+    notes: 'Refresh active_handoff; next_steps; audit-132 plan linked'
 recent_work:
+- date: 2026-08-29
+  description: "audit-132 + M92 plan: F-R006 and release hygiene"
+  items:
+  - "audit-132: 4 pending carryovers + 3 new hygiene findings"
+  - "M92 tasks 365-370 planned; design local.post-m91-remediation.md"
+  - "F-131 verified fixed; ADR-19 still gated"
 - date: 2026-08-29
   description: "M91 COMPLETE v6.37.0 Wave C"
   items:
@@ -10319,6 +10401,8 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
+- "M92 planned (audit-132): task-365..370 — F-R006 → v6.38.0; tag/push; mainline PR."
+- "Start with /acp-proceed on task-365 (js-yaml) — do not start ADR-19 or visualizer."
 - "Docs synced: README waves A–C, domain.yml 59 scripts, validate tag v6.37.1."
 - "v6.37.1 leftover patch closed audit-131 / review-009 (empty-host fail-closed, extra gates E2E). Tag v6.37.0 stays on 7ab6a7f."
 - "M91 shipped v6.37.0 (exec-host, --host, pr.yml). Field-feedback waves A–C complete on develop."
