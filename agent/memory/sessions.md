@@ -6,6 +6,21 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [task-369, F-124-02]
+  done:
+    - tier3-e2e-count-61
+    - pr-12-merged-mainline
+    - m92-track-b-complete
+    - f-124-02-closed
+  deferred: []
+  key_fact: >
+    Track B done: PR #12 merged (bee6cec). Fixed tier3 meta-assertion 60→61 for acp.smoke.
+    M92 7/7 complete. Do not retag v6.38.0.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-134, review-010, task-372]
   done: [m92-post-impl-audit, honesty-unstamp-369, restamp-verified-134]
   deferred:
