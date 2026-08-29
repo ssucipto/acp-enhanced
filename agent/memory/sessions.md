@@ -17,8 +17,9 @@
     - F-138-04-origin-still-leaked → task-382
   key_fact: >
     audit-138 leftover classes: settings.local.json, specs/local.*,
-    index/local.main.yaml, consumer-project proposal. Do not push /tmp/acp-rewrite-m94
-    until re-filter. F-135-* stay pending until 381 after D11 including --tags.
+    index/local.main.yaml, consumer-project proposal. Re-filter done in /tmp/acp-rewrite-m94
+    HEAD f56a62a (not pushed). Origin still leaked until D11 including --tags.
+    Do not stamp F-135-* until 381. Do not push the incomplete-380 clone.
 
 
 
