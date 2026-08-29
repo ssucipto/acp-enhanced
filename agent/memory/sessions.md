@@ -1,3 +1,39 @@
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-140, M95]
+  done:
+    - audit-140-privacy-security-deep-dive
+    - plan-m95-adr-30-31-fifteen-tasks
+  deferred:
+    - m95-force-push → D11-phrase-adr-30
+    - F-135-07 → task-392 (in-scope, not future-adr)
+    - F-139-01 → task-390/391
+    - F-139-02 → task-397/398
+  key_fact: >
+    Path-class and live-secrets remain closed on identical remotes. Name-class
+    and F-135-07 are M95. New phrase only: force-push adr-30 names replace-text
+    develop mainline tags: yes. Do not reuse adr-29. Encoded deny-list so CI
+    does not re-publish names.
+
+
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-139]
+  done:
+    - post-m94-public-privacy-audit-139
+  deferred:
+    - F-139-01-consumer-names-in-tracked-docs → pending
+    - F-139-02-keep-file-history-names → pending
+    - F-135-07-progress-yaml-split → future-adr
+  key_fact: >
+    origin/develop equals origin/mainline ddfed0ce. ADR-29 path-class
+    purge is clean (IP_REGISTER and leftover instance files history 0).
+    Name-class is not: 127 consumer-project hits in 24 files; README still consumer-project
+    and consumer-project. Do not force-push. Do not stamp F-135-07.
+
+
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop

@@ -5116,4 +5116,74 @@ carryovers:
     status: fixed
     fix_applied_date: 2026-08-29
     verified_in_audit: "138"
+    escalated_to: "F-139-01 (consumer-project/consumer-project still in README after consumer-project remap)"
+
+  # ── AUDIT-139 — POST-M94 PUBLIC PRIVACY / CONSUMER NAMES (2026-08-30) ────
+  - audit_id: 139
+    finding_id: F-139-01
+    severity: high
+    file: README.md
+    finding: "Consumer-project names still tracked on public develop and mainline"
+    description: "Path-class M94 purge is clean (same SHA ddfed0ce both remotes). Name-class is not: 127 consumer-project hits in 24 tracked files; README still names consumer-project and consumer-project; wiki names consumer-project and cites consumer-project handoff filenames; commands/CHANGELOG/lessons/progress.yaml name consumer-project. Conflicts with F-118-06 'names OK if consented' vs maintainer ask for no feedback-project mentions."
+    fix_target: "Reword current-facing README/wiki/command exemplar lines to generic field-evidence; drop consumer-repo filenames from wiki exemplars; align e2e titles. Do not force-push. Do not treat as ADR-29 path leftover."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 139
+    finding_id: F-139-02
+    severity: medium
+    file: CHANGELOG.md
+    finding: "KEEP-file git history still contains consumer-project names after path rewrite"
+    description: "M94 used filter-repo --paths, not --replace-text. git log -S consumer-project -- CHANGELOG.md still lists commits. HEAD-only reword does not scrub GitHub blame. F-138-09 already deferred CHANGELOG blob replace."
+    fix_target: "Maintainer decision: accept historical ledgers, or a separate replace-text rewrite + new D11-class consent for develop/mainline/tags. Not implied by audit-139."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M95 ADR-30 replace-text (do not reuse adr-29 phrase)"
+
+  # ── AUDIT-140 — PRIVACY/SECURITY DEEP-DIVE (2026-08-30) ──────────────────
+  - audit_id: 140
+    finding_id: F-140-01
+    severity: medium
+    file: agent/core/network_whitelist.yml
+    finding: "Protocol repo network_whitelist still lists Firebase hosts (dogfood stack leftover)"
+    description: "approved_hosts includes *.firebase.google.com and *.firebaseio.com. ACP Enhanced is not a Firebase app. Consumers should add those hosts themselves."
+    fix_target: "Slim default whitelist to github/npm (and documented generics). Do not copy consumer Firebase into protocol core."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 140
+    finding_id: F-140-02
+    severity: medium
+    file: tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv
+    finding: "Golden TSV and coderabbit fixture still couple CI to consumer names / fat progress.yaml"
+    description: "pre-m85-ast.golden.tsv is ~900KB snapshot including consumer-project notes. coderabbit-findings-sample.json description names consumer-project consumer inventory. HEAD redact without regen fails CI (audit-138 incomplete-inventory class)."
+    fix_target: "Regenerate golden TSV after progress split/redact; reword fixture metadata without consumer names."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 140
+    finding_id: F-140-03
+    severity: low
+    file: agent/memory/sessions.md
+    finding: "consumer-project token missed by audit-139 name inventory"
+    description: "sessions.md still says Do not port Expo/Maestro/consumer-project tests. Deny-list must include consumer-project. Encode tokens in CI so the deny-list is not itself a plaintext mention."
+    fix_target: "Add consumer-project to M95 encoded deny-list; redact the sessions line."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 140
+    finding_id: F-140-04
+    severity: medium
+    file: agent/memory/decisions.md
+    finding: "F-135-07 conflicts with ADR-28 compact-ledger unless a later ADR amends it"
+    description: "ADR-28 kept progress.yaml public. Closing F-135-07 without ADR-31 is a silent reopen. M94 deferred this; audit-140 puts it in-scope."
+    fix_target: "ADR-31: public progress.yaml keeps status; long notes → gitignored progress.local.yaml; history name replace-text, not file deletion."
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
     escalated_to: null

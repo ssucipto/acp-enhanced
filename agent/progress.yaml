@@ -1033,7 +1033,24 @@ milestones:
       audit-135/136/137/138. 15 tasks (373-387). ADR-29 written + leftover
       specs/index/proposals/settings.local. F-135-06 mandatory. Tag rewrite
       REQUIRED (F-137-01). Nested patterns PURGE. D11 force-push done (382).
-      Fresh-clone proof done (381). COMPLETE 2026-08-29 v6.39.0. F-135-07 deferred.
+      Fresh-clone proof done (381). COMPLETE 2026-08-29 v6.39.0. F-135-07 deferred
+      to M95 (ADR-31) — do not treat as closed.
+  M95:
+    name: Public name privacy + progress.yaml split (ADR-30/31)
+    priority: 5
+    status: not_started
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: 1.5
+    tasks_completed: 0
+    tasks_total: 15
+    file: agent/milestones/milestone-95-public-name-privacy.md
+    design: agent/design/acp-public-name-privacy.md
+    notes: >
+      audit-139/140. 15 tasks (388-402). ADR-30 names including history;
+      ADR-31 progress.yaml status-only. F-135-07 in-scope (not deferred).
+      Replace-text + new D11 phrase (not adr-29). Target v6.40.0 after proof.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -7447,6 +7464,142 @@ tasks:
     actual_hours: 0.4
     estimated_hours: 2
     notes: 'Stamps verified_in_audit 138; v6.39.0 all version fields; regular PR not force-push'
+  M95:
+  - id: task-388
+    name: "Encoded deny-list + name-token tests"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-388-encoded-deny-list-tests.md
+    started: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: 'Must fail on current HEAD; empty match after rewrite is success'
+  - id: task-389
+    name: "ADR-31 gitignore + pack + validator scaffolding"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-389-progress-local-scaffolding.md
+    started: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: 'progress.local.yaml gitignored; stranger clone OK without it'
+  - id: task-390
+    name: "HEAD redact current-facing docs/commands/wiki/designs"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-390-head-redact-docs.md
+    started: null
+    actual_hours: null
+    estimated_hours: 4
+    notes: 'Includes wiki consumer-repo filenames'
+  - id: task-391
+    name: "HEAD redact CHANGELOG, sessions, carryovers, ADRs, lessons"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-391-head-redact-ledgers.md
+    started: null
+    actual_hours: null
+    estimated_hours: 4
+    notes: 'Do not defer CHANGELOG (F-138-09 leftover)'
+  - id: task-392
+    name: "Split progress.yaml status vs progress.local.yaml notes"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-392-progress-yaml-split.md
+    started: null
+    actual_hours: null
+    estimated_hours: 5
+    notes: 'F-135-07 in-scope; never git add -f local file'
+  - id: task-393
+    name: "Fixtures, network_whitelist, QUICKSTART/PRD fingerprint"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-393-fixtures-whitelist-quickstart.md
+    started: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: 'F-140-01/02/06'
+  - id: task-394
+    name: "Regenerate golden TSV + HEAD CI green"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-394-golden-tsv-ci-head.md
+    started: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: 'Must be green before filter-repo'
+  - id: task-395
+    name: "Leftover name/path/secret re-scan before rewrite"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-395-leftover-name-audit.md
+    started: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: 'audit-138 class; halt Wave 3 if leftovers'
+  - id: task-396
+    name: "M95 backup GATE trio before filter-repo"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-396-backup-gate-trio.md
+    started: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: 'M87 lesson; mirror from daily clone not GitHub-only'
+  - id: task-397
+    name: "Throwaway clone filter-repo --replace-text"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-397-filter-repo-replace-text.md
+    started: null
+    actual_hours: null
+    estimated_hours: 4
+    notes: 'Never daily worktree; halt for D11'
+  - id: task-398
+    name: "Operator force-push develop mainline tags (ADR-30 phrase)"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-398-operator-force-push.md
+    started: null
+    actual_hours: null
+    estimated_hours: 1
+    notes: 'Phrase: force-push adr-30 names replace-text develop mainline tags: yes'
+  - id: task-399
+    name: "Fresh-clone history proof"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-399-fresh-clone-proof.md
+    started: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: 'History grep not tip-only; path-class still 0'
+  - id: task-400
+    name: "Stamp F-135-07 F-139-* F-140-* after proof"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-400-stamp-carryovers.md
+    started: null
+    actual_hours: null
+    estimated_hours: 1
+    notes: 'Do not stamp on HEAD-only grep'
+  - id: task-401
+    name: "v6.40.0 version fields + regular mainline PR"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-401-v6400-mainline-pr.md
+    started: null
+    actual_hours: null
+    estimated_hours: 2
+    notes: 'Merge commit not squash if tag would detach'
+  - id: task-402
+    name: "Post-merge sync mainline into develop"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-95-public-name-privacy/task-402-post-merge-sync.md
+    started: null
+    actual_hours: null
+    estimated_hours: 1
+    notes: 'Remotes identical; v6.40.0 reachable'
 recent_work:
 - date: 2026-08-29
   description: "M94 task-375: ADR-29 gitignore + validator + private-pack"
@@ -10646,7 +10799,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "F-135-07 deferred (progress.yaml split — future ADR)"
+- "M95: /acp-proceed task-388 (encoded deny-list). Do not skip Waves 0–4. D11 phrase is ADR-30 not ADR-29. /acp-proceed --yes is not force-push consent."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 current_blockers: []
 notes:
