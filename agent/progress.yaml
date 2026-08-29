@@ -10,11 +10,11 @@ project:
     \  M92 COMPLETE — F-R006 + release hygiene; PR #12 merged to mainline (v6.38.0).\n\
     \  Aikido track ADR-19 gated.\n"
 active_handoff:
-  path: agent/design/local.post-m91-remediation.md
+  path: agent/design/local.github-privacy-adr29.md
   date: '2026-08-29'
   to_executor: cursor-grok
   from_executor: cursor-grok
-  git_commit: f20c382ae3964ee0aa3e1ee8e6be9011f5dfd59b
+  git_commit: 70622e8ae3964ee0aa3e1ee8e6be9011f5dfd59b
   status: planned
   completed_date: null
 milestones:
@@ -1026,12 +1026,12 @@ milestones:
     completed: null
     estimated_weeks: 1.5
     tasks_completed: 0
-    tasks_total: 11
+    tasks_total: 14
     file: agent/milestones/milestone-94-github-privacy-adr29.md
     design: agent/design/local.github-privacy-adr29.md
     notes: >
-      audit-135 remediation. F-135-01 IP_REGISTER + F-135-02..05 design/patterns/routes
-      purge with history rewrite. M87/M88 gates. First task: 373 backup GATE. No tag moves on v6.38.0.
+      audit-135 + audit-136 pre-impl. 14 tasks (373-386). F-135-06 mandatory.
+      F-136-01 route-template negation. Block 378 until 384-386 done. No tag moves on v6.38.0.
   M82:
     name: Local Thorough Review Campaign — CodeRabbit CLI + ACP (ops)
     priority: 4
@@ -7337,14 +7337,44 @@ tasks:
     notes: 'Soft-check absent OK on public clone'
   - id: task-377
     name: "Ledger redaction F-135-06/08"
-    priority: 3
+    priority: 5
     status: not_started
     file: agent/tasks/milestone-94-github-privacy-adr29/task-377-ledger-redaction.md
     started: null
     completed_date: null
     actual_hours: null
+    estimated_hours: 3
+    notes: 'MANDATORY before 378; F-135-06 not optional; redact HOME paths + compact sessions'
+  - id: task-384
+    name: "Handoff + progress pointer hygiene"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-94-github-privacy-adr29/task-384-handoff-pointer-hygiene.md
+    started: null
+    completed_date: null
+    actual_hours: null
     estimated_hours: 2
-    notes: 'P3 optional codename compaction; no progress.yaml split'
+    notes: 'F-136-02/05; retarget active_handoff; validateActiveHandoff gitignore skip; blocks 378'
+  - id: task-385
+    name: "Tracked doc link remediation"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-94-github-privacy-adr29/task-385-tracked-doc-link-remediation.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 4
+    notes: 'F-136-04; AGENT/commands/wiki/index; blocks 378'
+  - id: task-386
+    name: "Install template + E2E regression"
+    priority: 5
+    status: not_started
+    file: agent/tasks/milestone-94-github-privacy-adr29/task-386-install-e2e-regression.md
+    started: null
+    completed_date: null
+    actual_hours: null
+    estimated_hours: 3
+    notes: 'F-136-08; project-create gitignore; route-template-only E2E; blocks 378'
   - id: task-378
     name: "Tip purge git rm --cached"
     priority: 5
@@ -7354,7 +7384,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 2
-    notes: 'After 373+375-377; includes IP_REGISTER --cached'
+    notes: 'After 373+375-377+384-386; includes IP_REGISTER --cached'
   - id: task-379
     name: "CI-clone rehearsal"
     priority: 5
@@ -7384,7 +7414,7 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 2
-    notes: 'After force-push; before stamping carryovers'
+    notes: 'After force-push; verified_in_audit 136; before stamping carryovers'
   - id: task-382
     name: "Operator force-push + develop sync"
     priority: 5
@@ -7404,8 +7434,14 @@ tasks:
     completed_date: null
     actual_hours: null
     estimated_hours: 2
-    notes: 'Regular merge only; v6.39.0 if identity bump warranted'
+    notes: 'Stamp F-135-01..06 + F-136-*; verified_in_audit 136'
 recent_work:
+- date: 2026-08-29
+  description: "audit-136 pre-impl + M94 amend v1.1.0"
+  items:
+  - "BLOCKED→READY after amend: tasks 384-386; F-135-06 mandatory"
+  - "F-136-01 route-template gitignore trap; handoff retargeted"
+  - "378 blocked until 384-386 + 377 complete"
 - date: 2026-08-29
   description: "audit-135 + /acp-plan M94 ADR-29"
   items:
@@ -10575,8 +10611,9 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M94 planned (audit-135): /acp-proceed task-373 — backup GATE before any ADR-29 tip change"
-- "F-135-01..05 pending until M94 rewrite proof; do not stamp early"
+- "M94 amended (audit-136): /acp-proceed task-373 — backup GATE first"
+- "Task 378 blocked until 384-386 + mandatory 377 complete"
+- "F-135-01..06 pending until M94 rewrite proof (verified_in_audit 136)"
 - "Do not move tags v6.37.0 (7ab6a7f) / v6.37.1 (91f1dd5). v6.38.0 is on f20c382."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 - "Forks/old clones: reclone or git fetch --prune; do not force-push again."
