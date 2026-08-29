@@ -369,7 +369,7 @@ files:
     sha256: "464ebe8174b608bc66a695e32eb4fafddbe9882bd9dbb8796cd00afb9c3df97d"
     last_verified: "2026-08-29"
   - path: "agent/scripts/acp.pr.sh"
-    sha256: "9fe17b0dafa951a0c0f600334c34ecb923c8d8197056f0d659ea982846ad03f3"
+    sha256: "e59e7ba10ffbac8c24359a298e40680ae710938b84348821c9e3cffa6de9b614"
     last_verified: "2026-08-29"
   - path: "agent/scripts/acp.pref-resolve.py"
     sha256: "2a46e973f61b3226cc4b13cbe964bc14d04c6234143ef2c6c7a982959e306c70"

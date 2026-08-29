@@ -975,11 +975,11 @@ milestones:
     name: Wave C — exec-host and leftover PR/CR prefs (v6.37.0)
     priority: 4
     status: in_progress
-    progress: 66
+    progress: 83
     started: 2026-08-29
     completed: null
     estimated_weeks: 0.8
-    tasks_completed: 4
+    tasks_completed: 5
     tasks_total: 6
     file: agent/milestones/milestone-91-wave-c-exec-host.md
     design: agent/design/local.field-feedback-waves-abc.md
@@ -7149,13 +7149,13 @@ tasks:
   - id: task-363
     name: "Optional PR extra gates via pr.yml"
     priority: 3
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-91-wave-c-exec-host/task-363-pr-cr-preferences.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T04:52:00Z'
+    completed_date: '2026-08-29T05:05:00Z'
+    actual_hours: 0.2
     estimated_hours: 3
-    notes: 'pr.yml not preference arrays; ADR-24'
+    notes: 'pr.yml not preference arrays; ADR-24; empty = no-op'
   - id: task-364
     name: "Exec-host E2E dry-run + v6.37.0"
     priority: 5
@@ -7167,6 +7167,11 @@ tasks:
     estimated_hours: 4
     notes: 'No KVM; F-R006 still pending'
 recent_work:
+- date: 2026-08-29
+  description: "M91 task-363: pr.yml extra gates"
+  items:
+  - "agent/configurables/pr.yml empty local_gates; not in acp.configurables.yaml"
+  - "Wiki: consumers may !agent/**; AE template keeps command docs"
 - date: 2026-08-29
   description: "M91 task-362: /acp-smoke --host"
   items:

@@ -49,4 +49,14 @@ else
   assert_true "no acp.smoke.sh in acp.pr.sh" 0
 fi
 
+print_test_header "S4 — pr.yml extras are empty no-ops (D11)"
+if grep -E 'local_gates' "${PROJECT_ROOT}/agent/configurables/acp.configurables.yaml" >/dev/null; then
+  assert_true "must not register local_gates in configurables" 1
+else
+  assert_true "no local_gates in acp.configurables.yaml" 0
+fi
+assert_file_exists "${PROJECT_ROOT}/agent/configurables/pr.yml" "pr.yml exists"
+assert_contains "$(cat "${PROJECT_ROOT}/agent/templates/coderabbit.yaml.template")" "agent/memory/" "template memory filter"
+assert_contains "$(cat "${PROJECT_ROOT}/agent/templates/coderabbit.yaml.template")" "agent/reports/" "template reports filter"
+
 print_suite_summary
