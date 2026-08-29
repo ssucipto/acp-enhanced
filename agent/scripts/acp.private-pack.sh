@@ -35,6 +35,9 @@ PACK_REL_DIRS=(
   agent/design
   agent/patterns
   agent/routing/tasks
+  agent/specs
+  agent/index
+  agent/proposals
 )
 
 usage() {

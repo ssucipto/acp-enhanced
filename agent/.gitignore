@@ -49,4 +49,17 @@ patterns/**/local.*
 routing/tasks/route-*.md
 !routing/tasks/route-template.md
 
+# ADR-29 leftovers (audit-138): instance specs, instance index, instance proposals.
+# Do NOT use a bare index/local.* glob — it matches local.main.template.yaml (F-136-01 class).
+specs/local.*
+!specs/spec.template.md
+
+index/local.main.yaml
+!index/local.main.template.yaml
+!index/acp.core.yaml
+!index/.gitkeep
+
+proposals/**
+!proposals/.gitkeep
+
 

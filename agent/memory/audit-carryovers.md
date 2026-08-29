@@ -5016,3 +5016,104 @@ carryovers:
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+
+  # ── AUDIT-138 — M94 POST-IMPL LEFTOVERS (2026-08-29) ─────────────────────────
+  - audit_id: 138
+    finding_id: F-138-01
+    severity: critical
+    file: .claude/settings.local.json
+    finding: "Instance files still tracked: settings.local.json, specs/local.*, index/local.main.yaml"
+    description: "safe-install-update-policy already classifies specs and index/local as instance-local. Not in ADR-29 gitignore/purge. On origin, daily index, and rewrite clone history."
+    fix_target: "task-387 gitignore + rm --cached + purge-list + re-filter"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 138
+    finding_id: F-138-02
+    severity: high
+    file: agent/proposals/acp-enhanced-cross-agent-handoff-v1.md
+    finding: "consumer-project-authored handoff proposal still tracked on public remote"
+    description: "Protocol KEEP is cross-agent-handoff-protocol.md. Proposal is instance field evidence."
+    fix_target: "task-387 PURGE + gitignore + rm --cached"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 138
+    finding_id: F-138-03
+    severity: high
+    file: /tmp/acp-rewrite-m94
+    finding: "Task-380 filter-repo incomplete — leftover F-138-01/02 still in rewrite history"
+    description: "Do not force-push the 47b3dcc rewrite clone. Re-run from daily with expanded paths-from-file."
+    fix_target: "task-387 re-run filter-repo in new throwaway clone"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 138
+    finding_id: F-138-04
+    severity: high
+    file: IP_REGISTER.md
+    finding: "origin/develop still contains IP_REGISTER.md and original ADR-29 PURGE set"
+    description: "Expected until task-382. Not a substitute for leftover expansion."
+    fix_target: "task-382 after D11 phrase including --tags"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 138
+    finding_id: F-138-05
+    severity: medium
+    file: agent/milestones/milestone-94-github-privacy-adr29.md
+    finding: "Success criteria still forbid tag moves; deliverable still calls F-135-06 optional"
+    description: "Contradicts v1.2.0 / F-137-01. Tag SHAs must rewrite."
+    fix_target: "task-387 update milestone text"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 138
+    finding_id: F-138-06
+    severity: medium
+    file: agent/skills/commands.md
+    finding: "Tracked skills/templates still hard-link PURGE agent/design/local.* and patterns/local.*"
+    description: "Task-385 leftover. Public clone 404s."
+    fix_target: "task-387 remap to KEEP wiki/schema/constraints"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 138
+    finding_id: F-138-07
+    severity: medium
+    file: agent/.gitignore
+    finding: "Gitignore/pack/generator omit leftover classes; index/local.* would trap template"
+    description: "Must negate local.main.template.yaml (F-136-01 class)."
+    fix_target: "task-387"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 138
+    finding_id: F-138-08
+    severity: low
+    file: agent/progress.yaml
+    finding: "active_handoff.git_commit stale vs daily HEAD"
+    description: "67528b6 vs 24045e4 at audit time."
+    fix_target: "task-387 restamp after leftover commit"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 138
+    finding_id: F-138-09
+    severity: low
+    file: README.md
+    finding: "README still names consumer-project in current-facing wave/M47/M50 copy"
+    description: "Task-377 residual. CHANGELOG historical mentions deferred (not blob replace-text)."
+    fix_target: "task-387 reword README consumer-project"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: null
+    escalated_to: null

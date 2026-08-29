@@ -327,6 +327,17 @@ agent/patterns/**/local.*
 agent/routing/tasks/route-*.md
 !agent/routing/tasks/route-template.md
 
+# ADR-29 leftovers (audit-138)
+.claude/settings.local.json
+agent/specs/local.*
+!agent/specs/spec.template.md
+agent/index/local.main.yaml
+!agent/index/local.main.template.yaml
+!agent/index/acp.core.yaml
+!agent/index/.gitkeep
+agent/proposals/**
+!agent/proposals/.gitkeep
+
 # Legal register (ADR-29) — gitignore does not untrack an already-indexed file
 IP_REGISTER.md
 

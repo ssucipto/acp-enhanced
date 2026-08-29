@@ -26,6 +26,10 @@ print_test_header "S3 — required PURGE paths present"
 assert_contains "$(cat "${OUT}")" "IP_REGISTER.md" "IP_REGISTER.md in purge list"
 assert_contains "$(cat "${OUT}")" "agent/patterns/typescript/local.library-services.md" "nested local pattern in purge list"
 assert_contains "$(cat "${OUT}")" "agent/design/visualizer.requirements.md" "visualizer.requirements.md in purge list"
+assert_contains "$(cat "${OUT}")" ".claude/settings.local.json" "settings.local.json in purge list"
+assert_contains "$(cat "${OUT}")" "agent/index/local.main.yaml" "instance index in purge list"
+assert_contains "$(cat "${OUT}")" "agent/specs/local.acp-code-plugin-api.md" "instance spec in purge list"
+assert_contains "$(cat "${OUT}")" "agent/proposals/acp-enhanced-cross-agent-handoff-v1.md" "instance proposal in purge list"
 
 print_test_header "S4 — KEEP paths absent (F-136-01 / D16)"
 if grep -Fxq "agent/routing/tasks/route-template.md" "${OUT}"; then
@@ -52,6 +56,16 @@ if grep -Fxq "agent/design/acp-commands-design.md" "${OUT}"; then
   assert_true "protocol acp-commands-design.md must not be purged" 1
 else
   assert_true "acp-commands-design.md kept" 0
+fi
+if grep -Fxq "agent/index/local.main.template.yaml" "${OUT}"; then
+  assert_true "local.main.template.yaml must not be purged" 1
+else
+  assert_true "local.main.template.yaml kept" 0
+fi
+if grep -Fxq "agent/specs/spec.template.md" "${OUT}"; then
+  assert_true "spec.template.md must not be purged" 1
+else
+  assert_true "spec.template.md kept" 0
 fi
 
 rm -f "${OUT}"
