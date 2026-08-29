@@ -2,81 +2,113 @@
 
 <!-- @acp.meta.design
 topic: F-R006, F-124-02, release-hygiene, carryover-closure
-description: M92 plan to close review-006 carryovers and release drift without starting ADR-19 or visualizer work
+description: M92 plan v1.1.0 — close review-006 carryovers without audit-133 shortcuts (omit=dev, tag-move, optional E2E)
 status: active
 updated: 2026-08-29
 @acp.meta.end -->
 
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Date**: 2026-08-29  
-**Source**: `agent/reports/audit-132-leftovers-carryovers-shortcuts.md`  
-**Target release**: v6.38.0 (F-R006 track) + ops (F-124-02 / tag hygiene)  
-**Out of scope**: ADR-19 M74–M77, visualizer, Maestro/KVM E2E, force-push, F-R006 bundled into unrelated features  
+**Source**: `agent/reports/audit-132-leftovers-carryovers-shortcuts.md` + `agent/reports/audit-133-m92-pre-impl.md`  
+**Target release**: **v6.38.0** after Track A + task-371  
+**Out of scope**: ADR-19 M74–M77, visualizer, Maestro/KVM E2E, force-push, moving tags, `--only smoke` alias, inventing bootstrap `--help`, F-R006 bundled into unrelated features  
 
 ---
 
 ## Problem statement
 
-M91 Wave C and v6.37.1 leftover patch are **done**. Four carryovers remain **pending**:
+M91 Wave C and v6.37.1 leftover patch are **done**. Pending:
 
-1. **F-R006-01** — `js-yaml` CVE in `scripts/`
-2. **F-R006-02** — bootstrap SH-01 (`set -euo pipefail` + `trap ERR`)
+1. **F-R006-01** — `js-yaml` GHSA (direct **4.3.0** still vulnerable; need **4.3.1**; nested 3.x via gray-matter; **nanoid** 3.3.16 in dev tree)
+2. **F-R006-02** — bootstrap missing exact `set -euo pipefail` (trap ERR already present)
 3. **F-R006-03** — dispatch TypeScript `any` debt
-4. **F-124-02** — `develop` unpublished to `origin` and `mainline` stale for strangers
+4. **F-124-02** — `mainline` / `origin` unpublished
+5. **F-132-01/02** — tag/push hygiene (close 01 by **v6.38.0**, not retagging 6.37.1)
+6. **F-133-*** — plan holes from pre-impl (CI audit flags, required tests)
 
-Additionally, **release hygiene**: tag `v6.37.1` predates the docs-sync commit; `active_handoff` is stale.
+F-M82-07 already claimed js-yaml fixed at 4.3.0. **Do not** re-stamp that row; F-R006-01 is the remaining pin.
 
-## Proposed solution — Milestone M92
-
-Three tracks. **Track A** is agent-implementable. **Track B** is maintainer-heavy. **Track C** is hygiene.
+## Proposed solution — Milestone M92 (amended)
 
 ```
 M92 Post-M91 remediation
-├── Track A — F-R006 (v6.38.0)     tasks 365–367
-├── Track B — Release ops            tasks 368–369
-└── Track C — Progress hygiene       task 370
+├── Track A — F-R006                    tasks 365–367
+├── Track A2 — Test package + regression  task-371
+├── Track B — Release ops                 tasks 368–369
+└── Track C — Progress hygiene            task-370
 ```
 
-Do **not** set `current_milestone: M92` until `/acp-proceed` starts task-365.
+Do **not** set `current_milestone: M92` until `/acp-proceed` starts task-365.  
+Do **not** bump `identity.yml` on 365 or 366.
 
 ---
 
-## Track A — F-R006 remediation (v6.38.0)
+## Track A — F-R006
 
-### Task-365 — F-R006-01 js-yaml pin
+### Task-365 — F-R006-01 js-yaml pin (CI-identical audit)
 
 **Acceptance**
 
-- `scripts/package.json`: `js-yaml` → **4.3.1**; npm overrides for nested 3.x → **3.15.1**
-- `cd scripts && npm audit --omit=dev` → **0 high**
-- Lockfile updated; CI `npm-audit` step still passes
-- Carryover F-R006-01 → `status: fixed`, `verified_in_audit: 132`
+- `scripts/package.json`: `js-yaml` **4.3.1** (not `^4.1.0` resolving 4.3.0)
+- `overrides` (or equivalent) so nested 3.x is **3.15.1** (gray-matter currently 3.15.0)
+- If `npm audit --audit-level=high` (no `--omit=dev`) still reports nanoid: override/bump to **≥3.3.18**
+- Update `scripts/package-lock.json`
+- **Gate**: `cd scripts && npm audit --audit-level=high` → **0 high** (same command as `acp.ci-steps.sh`). **Forbidden**: `--omit=dev` as the pass criterion
+- `cd scripts && npm test` (vitest) still green
+- Carryover F-R006-01 → `status: fixed` after that gate
+- **No** identity/CHANGELOG bump in this task
 
-**Files**: `scripts/package.json`, `scripts/package-lock.json` (if present)
+**Files**: `scripts/package.json`, `scripts/package-lock.json`
 
 ### Task-366 — F-R006-02 bootstrap SH-01
 
 **Acceptance**
 
-- `scripts/acp-bootstrap.sh`: `set -euo pipefail` + `trap '…' ERR` at top (after shebang/comments)
-- `--help` and `--yes` paths work under `nounset` (no unbound variable explosions)
-- `bash -n` passes; optional: extend bootstrap E2E if harness exists
-- `acp.review-scan.sh` SH-01 clean on bootstrap
-- Carryover F-R006-02 → fixed in audit-132 verification
+- First 40 lines contain the exact string `set -euo pipefail` (SH-01 scanner)
+- Keep `trap ERR` (already present); do not add `set +e` under that trap
+- `--team-size` without a value fail-closed (do not assign unbound `$2` under `-u`)
+- `--yes` still works under nounset
+- **Do not** add `--help` unless a separate scoped task exists — bootstrap has no `--help` today
+- `bash -n scripts/acp-bootstrap.sh`
+- `bash agent/scripts/acp.review-scan.sh scripts/acp-bootstrap.sh` → no SH-01
+- **Required**: `e2e/acp.bootstrap.test.sh` and `e2e/acp.bootstrap-preserve.test.sh` still pass (keep BUG-045-01 assertions)
+- Extend bootstrap E2E with: SH-01 string present; `--team-size` missing arg exits non-zero
+- Carryover F-R006-02 → fixed
+- **No** identity bump
 
-**Risk**: curl-pipe users — test unbound `$1` patterns; use `${var:-}` idioms.
+**Files**: `scripts/acp-bootstrap.sh`, `e2e/acp.bootstrap.test.sh`
 
-### Task-367 — F-R006-03 dispatch typing
+### Task-367 — F-R006-03 dispatch typing + v6.38.0
 
 **Acceptance**
 
-- `scripts/acp-dispatch.ts`: replace `Record<string, any>` with `TaskMeta` (or equivalent)
-- Remove `as any` on `yaml.load`; type `updateRoutingYml(): void`
-- `npx tsc --noEmit` in `scripts/` clean
-- review-006 TS-01/TS-02 findings addressed on dispatch file
+- `TaskMeta` (or equivalent) replaces `Record<string, any>` on `buildContext` / `appendLedger`
+- Drop `as any` on `yaml.load`; type taxonomy
+- `updateRoutingYml(...): void`
+- `cd scripts && npx tsc --noEmit` and `npm test` green (`acp-dispatch.test.ts` must still assert **behavior**, not only types)
 - Carryover F-R006-03 → fixed
+- **Then** version bump **6.37.1 → 6.38.0**: identity, package.yaml, AGENTS/CLAUDE/copilot, AGENT.md, README badge, CHANGELOG, golden TSV identity node, integrity-manifest restamp
 
-**Version bump**: identity, package.yaml, AGENTS/CLAUDE/copilot, AGENT.md, README badge, CHANGELOG, golden TSV identity node, integrity-manifest restamp → **6.38.0**
+**Files**: `scripts/acp-dispatch.ts`, `scripts/acp-dispatch.test.ts`, version-bearing files listed above
+
+---
+
+## Track A2 — Test package (audit-133; not optional)
+
+### Task-371 — M91 regression + test package refresh
+
+**Acceptance** (run **after** 365–367)
+
+- M91 contracts (must not regress):
+  - `e2e/acp.smoke.test.sh`
+  - `e2e/acp.exec-host.test.sh`
+  - `e2e/acp.pr.test.sh`
+  - `e2e/acp.ci.test.sh` (includes `--only smoke` unknown)
+- Track A suites: bootstrap E2E pair; `cd scripts && npm test`; `bash agent/scripts/acp.ci.sh --only npm-audit` **or** the same `npm audit --audit-level=high` in `scripts/`
+- `e2e/acp.command-coverage-parity.test.sh` (73 commands)
+- yaml-parser equivalence (identity **6.38.0** in golden)
+- Do **not** delete or weaken BUG-045-01 bootstrap assertions
+- Do **not** add bootstrap `--help` tests
 
 ---
 
@@ -86,20 +118,22 @@ Do **not** set `current_milestone: M92` until `/acp-proceed` starts task-365.
 
 **Acceptance**
 
-- Resolve F-132-01: either **move** annotated `v6.37.1` to `9ef93fc` (only if not pushed) **or** ship **v6.37.2** docs-only tag on HEAD — **do not** move `v6.37.0`
-- Push `develop` to `origin` when maintainer approves (F-132-02)
-- `/acp-validate` green including git-tags check
+- **Forbidden**: `git tag -f` / move `v6.37.0` or `v6.37.1`; **forbidden**: extra `v6.37.2` docs-only tag
+- Annotated tag **`v6.38.0`** on the Track A + 371 commit
+- Push `develop` when maintainer approves (F-132-02)
+- `/acp-validate` green including git-tags
+- F-132-01 → fixed when `v6.38.0` matches HEAD of the release commit
 
 ### Task-369 — F-124-02 regular PR develop → mainline
 
 **Acceptance**
 
-- `gh pr create` base `mainline` head `develop` (regular merge, no force-push)
-- PR description cites F-124-02 + audit-132
-- After merge: strangers cloning `mainline` get v6.37.x+ keepers
-- Carryover F-124-02 → fixed (maintainer stamps)
+- `gh pr create` base `mainline` head `develop` (regular merge, **no force-push**)
+- PR cites F-124-02 + audit-132/133
+- After merge: default clone is not stuck on pre-M89 keepers
+- F-124-02 → fixed (maintainer stamps)
 
-**Blocker**: requires GitHub access + review; not autonomous without user approval.
+**Blocker**: GitHub access; not autonomous without user approval.
 
 ---
 
@@ -109,10 +143,10 @@ Do **not** set `current_milestone: M92` until `/acp-proceed` starts task-365.
 
 **Acceptance**
 
-- `active_handoff` → this design doc or `completed` with date 2026-08-29
-- `next_steps` top entry → M92 Track A first
-- `project.description` mentions M92 planned, F-R006 in flight
-- Optional: weekly `review-006` carryover re-verify entry in `sessions.md`
+- Confirm `active_handoff.path` is this design (already retargeted in `5c8400b`; stamp F-132-03 after verify)
+- `next_steps` reflect remaining M92 work or completion
+- `project.description` mentions v6.38.0 / F-R006 closed when true
+- Do not leave F-132-03 pending if already done — stamp with `verified_in_audit: 133`
 
 ---
 
@@ -120,15 +154,15 @@ Do **not** set `current_milestone: M92` until `/acp-proceed` starts task-365.
 
 | Order | Task | Depends |
 |-------|------|---------|
-| 1 | 365 js-yaml | — |
-| 2 | 366 bootstrap | — |
-| 3 | 367 dispatch | — |
-| 4 | release v6.38.0 | 365–367 |
-| 5 | 368 tag/push | release or parallel if docs-only tag |
+| 1 | 365 js-yaml + full npm audit | — |
+| 2 | 366 bootstrap SH-01 + required E2E | — |
+| 3 | 367 dispatch types + **v6.38.0 bump** | 365–366 preferred (same tree OK) |
+| 4 | **371** regression + test package | **365–367** |
+| 5 | 368 tag v6.38.0 + push | 371 |
 | 6 | 369 mainline PR | 368 push |
-| 7 | 370 hygiene | anytime |
+| 7 | 370 hygiene stamps | anytime after handoff verify |
 
-**Parallel**: 365–367 can run in one session with per-task commits.
+365–366 may be sequential in one session with per-task commits. **371 is not optional.**
 
 ---
 
@@ -136,29 +170,38 @@ Do **not** set `current_milestone: M92` until `/acp-proceed` starts task-365.
 
 | Gate | Command |
 |------|---------|
+| CI-identical audit | `cd scripts && npm audit --audit-level=high` |
+| Vitest | `cd scripts && npm test` |
+| SH-01 | `bash agent/scripts/acp.review-scan.sh scripts/acp-bootstrap.sh scripts/acp-dispatch.ts` |
+| Bootstrap E2E | `e2e/acp.bootstrap.test.sh`, `e2e/acp.bootstrap-preserve.test.sh` |
+| M91 regression | smoke, exec-host, pr, ci E2E |
 | Validate | `npx tsx scripts/acp-validate.ts` |
-| Review Phase 1 | `bash agent/scripts/acp.review-scan.sh scripts/` |
-| Bootstrap | `bash -n scripts/acp-bootstrap.sh` |
-| Audit scripts | `cd scripts && npm audit --omit=dev` |
-| E2E smoke | `e2e/acp.smoke.test.sh`, `e2e/acp.exec-host.test.sh`, `e2e/acp.pr.test.sh` |
 | Coverage | `e2e/acp.command-coverage-parity.test.sh` |
+| Parser golden | `tests/acp.yaml-parser-equivalence.test.sh` (after 6.38.0) |
 
 ---
 
 ## Shortcuts refused (M92 scope boundary)
 
-- No visualizer, no ADR-19 Aikido milestones
-- No `--only smoke` alias
-- No real `--prepare` bundle E2E
-- No `git add -f` for `agent/reports/`
-- No force-push to `mainline` or tags
+- `npm audit --omit=dev` as the HIGH gate
+- Claiming F-R006-01 fixed at js-yaml **4.3.0**
+- Optional bootstrap E2E
+- Inventing bootstrap `--help`
+- Moving or deleting `v6.37.0` / `v6.37.1`
+- Tagging v6.37.2 then v6.38.0
+- Identity bump on 365/366
+- ADR-19 / visualizer / Maestro / `--only smoke` alias
+- `git add -f` for `agent/reports/`
+- Treating CI `allow_skip` npm-audit as pass
+- Force-push to `mainline` or tags
 
 ---
 
 ## Success criteria
 
-- [ ] All four pending carryovers **fixed** or **documented blocked** with owner
-- [ ] v6.38.0 tagged after F-R006 track
-- [ ] `develop` pushed; `mainline` PR opened or explicitly deferred with reason in `sessions.md`
-- [ ] audit-132 findings F-132-01..04 closed
-- [ ] M92 milestone `status: completed` in `progress.yaml`
+- [ ] F-R006-01..03 **fixed** with CI-identical audit + SH-01 + vitest evidence
+- [ ] Task-371 green (M91 + bootstrap + coverage + golden)
+- [ ] **v6.38.0** tagged; `v6.37.1` still on `91f1dd5`
+- [ ] `develop` pushed; `mainline` PR opened **or** deferred in `sessions.md` with owner
+- [ ] F-132-01..03 closed or explicitly owned
+- [ ] M92 `status: completed` in `progress.yaml`
