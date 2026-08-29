@@ -4674,3 +4674,38 @@ carryovers:
     fix_applied_date: 2026-08-29
     verified_in_audit: "review-009"
     escalated_to: "M91"
+
+  # ── AUDIT-132 — POST-M91 LEFTOVERS (2026-08-29) ────────────────────────────
+  - audit_id: 132
+    finding_id: F-132-01
+    severity: medium
+    file: git
+    finding: "Tag v6.37.1 on 91f1dd5; docs commit 9ef93fc untagged"
+    description: "Release honesty drift; validate passes on tag existence only"
+    fix_target: "M92 task-368"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M92"
+  - audit_id: 132
+    finding_id: F-132-02
+    severity: medium
+    file: origin/develop
+    finding: "develop 25 commits ahead of origin/develop (unpushed)"
+    description: "Local-only release work including M89–M91 and v6.37.1"
+    fix_target: "M92 task-368"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M92"
+  - audit_id: 132
+    finding_id: F-132-03
+    severity: low
+    file: agent/progress.yaml
+    finding: "active_handoff pointed at completed waves-abc design with stale git_commit"
+    description: "Handoff hygiene — addressed in plan task-370"
+    fix_target: "M92 task-370"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "M92"
