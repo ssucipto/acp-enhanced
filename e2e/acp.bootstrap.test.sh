@@ -156,6 +156,19 @@ else
   assert_true ".opencode/commands/ exists" 1
 fi
 
+print_test_header "bootstrap: SH-01 set -euo pipefail in first 40 lines"
+if head -40 "$BOOTSTRAP_SCRIPT" | grep -q 'set -euo pipefail'; then
+  assert_true "bootstrap has set -euo pipefail" 0
+else
+  assert_true "bootstrap has set -euo pipefail" 1
+fi
+
+print_test_header "bootstrap: --team-size without value fail-closed"
+_TS_RC=0
+bash "$BOOTSTRAP_SCRIPT" --team-size >/tmp/acp-bootstrap-team-size.out 2>&1 || _TS_RC=$?
+assert_equals "2" "${_TS_RC}" "--team-size missing value exits 2"
+assert_contains "$(cat /tmp/acp-bootstrap-team-size.out)" "requires a value" "missing --team-size value message"
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # Summary
 # ═══════════════════════════════════════════════════════════════════════════════

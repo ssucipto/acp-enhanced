@@ -3399,9 +3399,9 @@ carryovers:
     finding: "Bootstrap entry point missing set -euo pipefail + trap ERR (has set -e and set -o pipefail only)"
     description: "SH-01 HIGH. Scanner greps the exact euo string. Curl-pipe installer must keep nounset-safe argument parsing."
     fix_target: "Add set -euo pipefail and trap ERR; verify --help / --yes still work under nounset"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "133"
     escalated_to: null
   - audit_id: review-006
     finding_id: F-R006-03
@@ -4740,9 +4740,9 @@ carryovers:
     finding: "Bootstrap E2E marked optional; --help does not exist; TEAM_SIZE=$2 unbound-unsafe"
     description: "Plan amended; required E2E plus dollar-2 guard; no invented --help"
     fix_target: "M92 task-366"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "133"
     escalated_to: "M92"
   - audit_id: 133
     finding_id: F-133-04
