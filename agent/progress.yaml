@@ -10319,6 +10319,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
+- "Docs synced: README waves A–C, domain.yml 59 scripts, validate tag v6.37.1."
 - "v6.37.1 leftover patch closed audit-131 / review-009 (empty-host fail-closed, extra gates E2E). Tag v6.37.0 stays on 7ab6a7f."
 - "M91 shipped v6.37.0 (exec-host, --host, pr.yml). Field-feedback waves A–C complete on develop."
 - "PR develop → mainline (regular merge, no second force-push). Default GitHub clone is still mainline until that lands (F-124-02)."
