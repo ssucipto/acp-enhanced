@@ -3390,7 +3390,7 @@ carryovers:
     fix_target: "Bump js-yaml to 4.3.1; npm overrides for nested 3.x → 3.15.1; npm audit fix; re-run npm audit in scripts/"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: "133"
+    verified_in_audit: "134"
     escalated_to: null
   - audit_id: review-006
     finding_id: F-R006-02
@@ -3401,7 +3401,7 @@ carryovers:
     fix_target: "Add set -euo pipefail and trap ERR; verify --help / --yes still work under nounset"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: "133"
+    verified_in_audit: "134"
     escalated_to: null
   - audit_id: review-006
     finding_id: F-R006-03
@@ -3412,7 +3412,7 @@ carryovers:
     fix_target: "Replace Record<string, any> with a TaskMeta interface; drop as any on yaml.load; annotate updateRoutingYml(): void"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: "133"
+    verified_in_audit: "134"
     escalated_to: null
 
   # ── AUDIT-122 — M88 PRE-IMPL READINESS (2026-08-27) ────────────────────────
@@ -3521,8 +3521,8 @@ carryovers:
     finding_id: F-124-02
     severity: high
     file: origin/mainline
-    finding: "GitHub default clone is mainline, 37 commits behind develop (M87+M88 unpublished)"
-    description: "Strangers cloning origin get 6.32.4 keepers, not v6.34.0"
+    finding: "GitHub default clone is mainline, 33 commits behind develop (M89–M92 / v6.38.0 unpublished)"
+    description: "Strangers cloning origin get post-PR#11 / v6.34.0 keepers, not v6.38.0. No open develop→mainline PR."
     fix_target: "Open regular PR develop → mainline; do not force-push"
     status: pending
     fix_applied_date: null
@@ -4685,7 +4685,7 @@ carryovers:
     fix_target: "M92 task-368"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: "133"
+    verified_in_audit: "134"
     escalated_to: "M92"
   - audit_id: 132
     finding_id: F-132-02
@@ -4696,7 +4696,7 @@ carryovers:
     fix_target: "M92 task-368"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: "133"
+    verified_in_audit: "134"
     escalated_to: "M92"
   - audit_id: 132
     finding_id: F-132-03
@@ -4707,7 +4707,7 @@ carryovers:
     fix_target: "M92 task-370"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: "133"
+    verified_in_audit: "134"
     escalated_to: "M92"
 
   # ── AUDIT-133 — M92 PRE-IMPL (2026-08-29) ──────────────────────────────────
@@ -4720,7 +4720,7 @@ carryovers:
     fix_target: "M92 task-365"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: "133"
+    verified_in_audit: "134"
     escalated_to: "M92"
   - audit_id: 133
     finding_id: F-133-02
@@ -4731,7 +4731,7 @@ carryovers:
     fix_target: "M92 task-365"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: "133"
+    verified_in_audit: "134"
     escalated_to: "M92"
   - audit_id: 133
     finding_id: F-133-03
@@ -4742,7 +4742,7 @@ carryovers:
     fix_target: "M92 task-366"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: "133"
+    verified_in_audit: "134"
     escalated_to: "M92"
   - audit_id: 133
     finding_id: F-133-04
@@ -4753,7 +4753,7 @@ carryovers:
     fix_target: "M92 task-368"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: "133"
+    verified_in_audit: "134"
     escalated_to: "M92"
   - audit_id: 133
     finding_id: F-133-05
@@ -4764,5 +4764,29 @@ carryovers:
     fix_target: "M92 task-371"
     status: fixed
     fix_applied_date: 2026-08-29
-    verified_in_audit: "133"
+    verified_in_audit: "134"
     escalated_to: "M92"
+
+  # ── AUDIT-134 — M92 POST-IMPL (2026-08-29) ──────────────────────────────────
+  - audit_id: 134
+    finding_id: F-134-01
+    severity: high
+    file: agent/progress.yaml
+    finding: "task-369 marked completed after gh pr create failed; no open develop→mainline PR"
+    description: "Deferral recorded as done. F-124-02 stayed pending. Unstamped in task-372."
+    fix_target: "M93 task-372"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M93"
+  - audit_id: 134
+    finding_id: F-134-02
+    severity: medium
+    file: agent/memory/audit-carryovers.md
+    finding: "Post-impl rows stamped verified_in_audit 133 (pre-impl BLOCKED audit)"
+    description: "Restamped to 134 after post-impl evidence"
+    fix_target: "M93 task-372"
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "134"
+    escalated_to: "M93"

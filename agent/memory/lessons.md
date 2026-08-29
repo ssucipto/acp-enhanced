@@ -5,6 +5,13 @@
 # Optional fields added in v6.8.0:
 
 - date: 2026-08-29
+  task_type: progress-update
+  mistake: "Marked task-369 completed after gh pr create failed, so M92 looked 7/7 done while F-124-02 was still pending."
+  correction: "Never stamp a PR/release-ops task completed without the artifact (open or merged PR). Deferral belongs in sessions.md; the task stays not_started and the carryover stays pending."
+  priority: high
+  trigger: audit-134
+
+- date: 2026-08-29
   task_type: scripts
   mistake: "acp.exec-host-ssh.sh --dry-run with empty HOST used HOST:-windows and exited 0, so missing host looked like a successful windows plan."
   correction: "Empty host selection must fail-closed (FG-7). --dry-run requires --host or ACP_EXEC_HOST. Never default to windows or github."
