@@ -16,6 +16,8 @@
 #   F-137-02 nested typescript/local.* → this list
 #   F-137-05 visualizer.requirements.md → this list
 #   F-136-01 route-template.md KEEP    → fail-closed gate
+#   F-138-01 settings.local / specs/local / index/local.main.yaml
+#   F-138-02 instance proposals/*.md   → this list
 #
 # agent/benchmarks/** is never in this list (D16).
 
@@ -74,6 +76,10 @@ is_keep() {
     agent/patterns/.gitkeep|agent/patterns/pattern.template.md|agent/patterns/bootstrap.template.md) return 0 ;;
     agent/patterns/*/pattern.template.md|agent/patterns/*/bootstrap.template.md) return 0 ;;
     agent/routing/tasks/route-template.md) return 0 ;;
+    agent/specs/spec.template.md) return 0 ;;
+    agent/index/.gitkeep|agent/index/acp.core.yaml|agent/index/local.main.template.yaml) return 0 ;;
+    agent/proposals/.gitkeep) return 0 ;;
+    .claude/commands/*) return 0 ;;
     *) return 1 ;;
   esac
 }
@@ -89,6 +95,10 @@ is_purge() {
     agent/design/m[0-9]*.md) return 0 ;;
     agent/design/visualizer.requirements.md) return 0 ;;
     agent/routing/tasks/route-[0-9]*.md) return 0 ;;
+    .claude/settings.local.json) return 0 ;;
+    agent/specs/local.*) return 0 ;;
+    agent/index/local.main.yaml) return 0 ;;
+    agent/proposals/*.md) return 0 ;;
   esac
   # Nested or top-level patterns/**/local.* (F-137-02). * in [[ == ]] is glob (bash 3.2).
   if [[ "$p" == agent/patterns/local.* ]] || [[ "$p" == agent/patterns/*/local.* ]] || [[ "$p" == agent/patterns/*/*/local.* ]]; then
@@ -131,6 +141,9 @@ KEEP_FORBIDDEN=(
   agent/design/.gitkeep
   agent/patterns/pattern.template.md
   agent/patterns/bootstrap.template.md
+  agent/specs/spec.template.md
+  agent/index/local.main.template.yaml
+  agent/index/acp.core.yaml
 )
 
 fail=0
@@ -150,6 +163,10 @@ REQUIRED=(
   IP_REGISTER.md
   agent/patterns/typescript/local.library-services.md
   agent/design/visualizer.requirements.md
+  .claude/settings.local.json
+  agent/index/local.main.yaml
+  agent/specs/local.acp-code-plugin-api.md
+  agent/proposals/acp-enhanced-cross-agent-handoff-v1.md
 )
 for r in "${REQUIRED[@]}"; do
   if grep -Fxq "$r" "${TMP_ALL}"; then

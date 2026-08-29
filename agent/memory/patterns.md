@@ -5,7 +5,7 @@
 - date: 2026-07-23
   name: optional-external-tool
   task_type: bash-scripting
-  code_ref: agent/scripts/acp.coderabbit.sh + agent/patterns/local.optional-external-tool.md (M78, ADR-21)
+  code_ref: agent/scripts/acp.coderabbit.sh + agent/wiki/coderabbit-integration.md (M78, ADR-21)
   description: |
     Three-gate contract for integrating a tool ACP consumers may not have:
     (1) opt-in preference default false; (2) output-free detection

@@ -6,6 +6,25 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [audit-138, review-011, task-387]
+  done:
+    - m94-post-impl-audit-138
+    - m94-review-011
+    - m94-leftover-privacy-close
+  deferred:
+    - m94-force-push → D11-phrase
+    - F-135-07-progress-yaml-split → future-adr
+    - F-138-04-origin-still-leaked → task-382
+  key_fact: >
+    audit-138 leftover classes: settings.local.json, specs/local.*,
+    index/local.main.yaml, FIFOZ proposal. Do not push /tmp/acp-rewrite-m94
+    until re-filter. F-135-* stay pending until 381 after D11 including --tags.
+
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [task-380, task-382]
   done:
     - m94-filter-repo-throwaway-clone

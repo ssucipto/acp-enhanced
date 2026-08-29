@@ -1,8 +1,8 @@
 <skill name="commands" mention="@{commands}">
 
 > **Naming convention**: Before writing any command references, read  
-> `agent/patterns/local.command-naming-convention.md` for the canonical  
-> naming table, invocation format, and upstream porting rules.
+> `agent/wiki/domain.yml` (command catalog) and AGENT.md for naming,
+> invocation format, and upstream porting rules.
 
 <rules>
 - Every command file MUST begin with the 🤖 Agent Directive block (see pattern below)

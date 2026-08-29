@@ -299,7 +299,7 @@ ACP Enhanced provides five report types, each for a different audience:
 
 ### Field-feedback waves A–C (v6.35.0–v6.37.1, Aug 2026)
 
-Three sequenced milestones closed Safe-IQ / FIFOZ remainder without regressing `--diff`, CI step ids, or ADR-27 report privacy:
+Three sequenced milestones closed Safe-IQ / consumer-project remainder without regressing `--diff`, CI step ids, or ADR-27 report privacy:
 
 | Wave | Version | Shipped |
 |------|---------|---------|
@@ -359,7 +359,7 @@ Fixed a critical bug where `acp-bootstrap.sh` silently produced broken installs 
 - **E2E test** — `e2e/acp.bootstrap.test.sh` with 8 assertions, all passing.
 
 #### M50 — Design-Spec Command (v6.9.3, June 2026)
-Integrated `/acp-design-spec` from FIFOZ production use — generates structured Application Interface & Data-Flow Design Specifications from the live codebase.
+Integrated `/acp-design-spec` from consumer-project production use — generates structured Application Interface & Data-Flow Design Specifications from the live codebase.
 
 - **19-section template** — Based on arc42, C4 Model, IEEE 1016, and ISO/IEC/IEEE 42010. Stable across projects with Mermaid diagram support.
 - **Stack-agnostic** — Auto-detects UI routes, state stores, API endpoints, and persistence layers regardless of framework.
@@ -374,7 +374,7 @@ Closed two feedback loops: internal dogfooding pain points (5) and external Wind
 - **AGENTS.md clarity** — Version visible in header for Copilot, Cursor, and Claude Code.
 
 #### M47 — Memory Integrity Release (v6.9.0, June 2026)
-Addressed feedback from FIFOZ production usage (64 audits, 14 milestones, 36 patterns). Core deliverable: dual-store architecture with commit-integrated auto-sync.
+Addressed feedback from consumer-project production usage (64 audits, 14 milestones, 36 patterns). Core deliverable: dual-store architecture with commit-integrated auto-sync.
 
 - **Commit auto-sync** — `/acp-commit` steps 2b/3b/6b auto-generate `agent/sessions/*.md` and `agent/patterns/*.md` from registries on every commit (local files). On this public ACP Enhanced origin, session **bodies** are gitignored (ADR-28); the compact registry `agent/memory/sessions.md` stays tracked. Idempotent, `--no-sync` opt-out.
 - **Repair tools** — `/acp-pattern-sync` and `/acp-session-sync` for manual reconciliation with `--dry-run` and `--all`.

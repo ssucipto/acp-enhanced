@@ -12,7 +12,6 @@
 # This is a sourced function library: it deliberately does NOT set `set -euo
 # pipefail`, which would leak into the caller's shell. Callers own their shell
 # options. See:
-#   - agent/patterns/local.optional-external-tool.md (the 3-gate contract)
 #   - agent/wiki/coderabbit-integration.md (user guide)
 #   - agent/scripts/acp.branch-protection-setup.sh:27 (the command -v exemplar)
 

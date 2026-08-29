@@ -22,6 +22,9 @@ Thumbs.db
 .cursor-gh-runs.json
 *~
 
+# Claude Code / Cursor machine-local permissions (audit-138 F-138-01)
+.claude/settings.local.json
+
 # Generated reports (audit findings, cost reports, etc.)
 reports/
 !agent/reports/

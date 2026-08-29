@@ -80,6 +80,7 @@ ACP Enhanced separates files into two categories:
 - `agent/routing/tasks/route-[0-9]*.md` — instance routes (ADR-29); `route-template.md` stays tracked
 - `agent/design/local.*`, `agent/design/m[0-9]*.md`, `visualizer.requirements.md` — instance designs (ADR-29); protocol `acp-*.md` / templates stay tracked
 - `agent/patterns/**/local.*` — instance patterns (ADR-29); `pattern.template.md` / `bootstrap.template.md` stay tracked
+- `agent/specs/local.*`, `agent/index/local.main.yaml`, `agent/proposals/*.md`, `.claude/settings.local.json` — instance leftovers (ADR-29 / audit-138); templates stay tracked
 - `IP_REGISTER.md` — legal register (ADR-29; gitignored; never on public remotes including history)
 - `agent/memory/` — compact protocol memory (tracked)
 - `agent/reports/` — local audit bodies (gitignored; finding IDs live in carryovers/CHANGELOG)

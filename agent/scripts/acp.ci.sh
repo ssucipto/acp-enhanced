@@ -12,7 +12,7 @@
 #   bash agent/scripts/acp.ci.sh --only shellcheck,validate-ts
 #   bash agent/scripts/acp.ci.sh --dry-run
 #
-# False-green contracts: agent/patterns/local.false-green-contracts.md (FG-1…FG-7)
+# False-green contracts: agent/core/constraints.yml FG-1…FG-7 (inlined)
 # P-PATH-1: bodies live only in agent/scripts/acp.ci-steps.sh
 # P-CI-1: ci.yml is runtime matrix, not a preference registry
 

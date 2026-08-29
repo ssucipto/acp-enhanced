@@ -24,6 +24,13 @@ git check-ignore -q agent/patterns/local.dummy.md
 assert_true "patterns/local.dummy.md ignored" $?
 git check-ignore -q agent/patterns/typescript/local.dummy.md
 assert_true "nested typescript/local.dummy.md ignored" $?
+git check-ignore -q .claude/settings.local.json
+assert_true ".claude/settings.local.json ignored" $?
+touch agent/specs/local.dummy.md agent/index/local.main.yaml
+git check-ignore -q agent/specs/local.dummy.md
+assert_true "specs/local.dummy.md ignored" $?
+git check-ignore -q agent/index/local.main.yaml
+assert_true "index/local.main.yaml ignored" $?
 
 print_test_header "S2 — KEEP files not ignored"
 if git check-ignore -q agent/routing/tasks/route-template.md; then
@@ -41,6 +48,16 @@ if git check-ignore -q agent/design/acp-commands-design.md; then
 else
   assert_true "acp-commands-design.md not ignored" 0
 fi
+if git check-ignore -q agent/index/local.main.template.yaml; then
+  assert_true "local.main.template.yaml must NOT be ignored" 1
+else
+  assert_true "local.main.template.yaml not ignored" 0
+fi
+if git check-ignore -q agent/specs/spec.template.md; then
+  assert_true "spec.template.md must NOT be ignored" 1
+else
+  assert_true "spec.template.md not ignored" 0
+fi
 
 print_test_header "S3 — F-137-03 local-dummy.md must NOT be treated as proof"
 touch agent/design/local-dummy.md
@@ -57,6 +74,7 @@ rm -f agent/routing/tasks/route-999.md \
   agent/design/local.dummy.md \
   agent/patterns/local.dummy.md \
   agent/patterns/typescript/local.dummy.md \
-  agent/design/local-dummy.md
+  agent/design/local-dummy.md \
+  agent/specs/local.dummy.md
 
 print_test_summary
