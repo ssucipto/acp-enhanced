@@ -3410,9 +3410,9 @@ carryovers:
     finding: "any types in buildContext/appendLedger; updateRoutingYml missing explicit return type"
     description: "TS-01 HIGH at lines 117/131/177; TS-02 HIGH at line 191. Remaining dispatch tech debt after CR-003 typed validate.ts."
     fix_target: "Replace Record<string, any> with a TaskMeta interface; drop as any on yaml.load; annotate updateRoutingYml(): void"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-29
+    verified_in_audit: "133"
     escalated_to: null
 
   # ── AUDIT-122 — M88 PRE-IMPL READINESS (2026-08-27) ────────────────────────
