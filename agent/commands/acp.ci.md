@@ -6,9 +6,9 @@
 > **This is an ACTION command** — run the gates locally and report the result. Do not stop at a checklist summary.
 
 **Namespace**: acp  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-08-14  
-**Last Updated**: 2026-08-14  
+**Last Updated**: 2026-08-28  
 **Status**: Active  
 **Scripts**: `agent/scripts/acp.ci.sh`, `agent/scripts/acp.ci-steps.sh`  
 
@@ -33,10 +33,19 @@
 | `--doctor` | | Probe dependencies, print the matrix, run no gates |
 | `-h`, `--help` | | Help |
 
-**Cost guidance** (see `agent/reports/m86-ci-job-baseline.md`): default `/acp-ci` stays interactive; `--full` matches multi-minute CI e2e-smoke.
+**Cost guidance**: default `/acp-ci` stays interactive; `--full` matches multi-minute CI e2e-smoke.
 
 **Step ids** (from `agent/configurables/ci.yml`):  
 `validate-ts` `review-measure` `npm-test` `ci-validate` `shellcheck` `integrity-e2e` `integrity-v2-e2e` `e2e-smoke` `npm-audit` `e2e-matrix`
+
+---
+
+## Glossary (D15)
+
+| Name | What it is | What it is not |
+|------|------------|----------------|
+| **`e2e-smoke`** | This command's **full-tier** step id — AE CI E2E job (`run-e2e-tests.sh`) | Not `/acp-smoke`. Never `--only smoke`. |
+| **`/acp-smoke`** | Optional device preflight (`agent/commands/acp.smoke.md`) | Not a GitHub Actions job. Not this predictor. Consumer repos that already have a CI step named `smoke` keep it. |
 
 **Natural language examples**:
 - `/acp-ci` — default fast tier
@@ -109,9 +118,9 @@ Run `/acp-ci --doctor` to see what is present and what will SKIP.
 
   Related:
     /acp-pr        Open the PR once gates are green
+    /acp-smoke     Optional device preflight (not a step here; unconfigured exits 2)
     /acp-review    Code quality — different concern
     /acp-validate  ACP document validation — not a CI predictor
-    /acp-integrity Provenance scan — not a CI predictor
 ```
 
 This step is informational only — do not wait for user input.
@@ -154,7 +163,7 @@ Never present a SKIP as green. Never claim PASS when `executed_steps` is 0 (FG-2
 
 ## False-green contracts (mandatory)
 
-See `agent/patterns/local.false-green-contracts.md` and `constraints.yml` bash_rules:
+See `agent/wiki/architecture.md` (false-green contracts; ADR-29 local patterns are maintainer-only) and `constraints.yml` bash_rules:
 
 | ID | Rule |
 |----|------|
@@ -187,6 +196,7 @@ See `agent/patterns/local.false-green-contracts.md` and `constraints.yml` bash_r
 ## Related Commands
 
 - [`acp.pr.md`](acp.pr.md) — PR prep; delegates gates here
+- [`acp.smoke.md`](acp.smoke.md) — optional device preflight; **not** `e2e-smoke`; `/acp-ci` does not run it
 - [`acp.validate.md`](acp.validate.md) — ACP document validation (not CI)
 - [`acp.review.md`](acp.review.md) — code quality
 - [`acp.integrity.md`](acp.integrity.md) — trustworthiness / provenance

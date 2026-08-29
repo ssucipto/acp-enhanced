@@ -152,6 +152,10 @@ the corresponding markdown document in `agent/sessions/`:
    content, skip it. If the registry entry has changed since the last sync,
    update the file to match. Track this by comparing the file's content hash
    against the registry entry's content.
+6. **Do not `git add` instance session documents** on this public ACP Enhanced
+   origin (ADR-28). The registry `agent/memory/sessions.md` stays tracked.
+   `agent/sessions/{date}-{slug}.md` is local (gitignored). `--no-sync` still
+   skips this step.
 
 ### 3. Check for Reusable Patterns
 
@@ -212,9 +216,8 @@ the corresponding markdown document in `agent/patterns/`:
 ### 5. Stamp Completed Route Files
 
 - For each route ID in `tasks_completed:` above:
-  - Read `agent/routing/tasks/route-[NNN].md`
-  - If `completed:` field is blank → set `completed: [today]`
-  - If already set → skip (never overwrite)
+  - Prefer stamping `progress.yaml` task entries (instance `route-[NNN].md` bodies are local — ADR-29)
+  - If `agent/routing/tasks/route-[NNN].md` exists on disk, set blank `completed:` to today; never overwrite
   - If file does not exist → skip silently
 
 ### 6. Compact Sessions (if needed)
@@ -273,7 +276,7 @@ entries are now orphaned. Clean them up:
 ## Verification
 
 - [ ] sessions.md has a new entry at top with today's date
-- [ ] `agent/sessions/{date}-{slug}.md` exists and matches registry entry (unless `--no-sync`)
+- [ ] `agent/sessions/{date}-{slug}.md` exists on disk and matches registry entry (unless `--no-sync`). Do **not** `git add` it on AE origin (ADR-28).
 - [ ] Re-running commit without registry changes does not rewrite session documents (idempotent)
 - [ ] `--no-sync` skips step 2b and shows `sync: skipped` in confirmation
 - [ ] All route files from `tasks_completed:` list are stamped with `completed:` date

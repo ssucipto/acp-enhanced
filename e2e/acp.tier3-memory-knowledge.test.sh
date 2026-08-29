@@ -78,8 +78,8 @@ for _doc in "${COMMANDS_DIR}"/acp.*.md; do
   assert_tier3_command_doc "${cmd}"
 done
 
-print_test_header "T3-meta: all tier-3 commands exercised (expect 58)"
-assert_equals "58" "${TIER3_COUNT}" "tier-3 command doc count"
+print_test_header "T3-meta: all tier-3 commands exercised (expect 61)"
+assert_equals "61" "${TIER3_COUNT}" "tier-3 command doc count"
 
 print_test_header "T3-memory: agent/memory files exist"
 assert_file_exists "${PROJECT_ROOT}/agent/memory/sessions.md" "sessions.md"

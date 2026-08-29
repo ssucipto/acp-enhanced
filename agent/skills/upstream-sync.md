@@ -47,7 +47,7 @@ CHANGELOG (cross-reference only):
 | Feature | Upstream Source File | Upstream Version | ACP Enhanced Status | Decision | Rationale |
 |---|---|---|---|---|---|
 | @acp.meta-scan.sh | agent/scripts/acp.meta-scan.sh | v5.38.0 | acp.meta-scan.sh (full POSIX awk) | HAVE | Identical POSIX awk implementation |
-| Pluggable driver system | agent/design/local.pluggable-driver-system.md | v7.0.0 | Not present | DEFER | Requires MCP runtime; out of ACP Enhanced scope |
+| Pluggable driver system | agent/design/acp-package-management-system.md | v7.0.0 | Not present as MCP runtime | DEFER | Requires MCP runtime; out of ACP Enhanced scope |
 ```
 
 ## macOS compat verdict table format

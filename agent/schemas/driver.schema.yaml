@@ -1,6 +1,6 @@
 # driver.schema.yaml — validation schema for agent/driver.yaml
 # Validate with: acp.driver-yaml.sh validate
-# See: agent/patterns/local.driver-dispatch-directive.md
+# See: agent/driver.template.yaml
 ---
 required:
   - drivers

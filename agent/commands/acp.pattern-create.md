@@ -372,7 +372,7 @@ Version: 1.0.0
 
 **Invocation**: `/acp-pattern-create`  
 
-**Result**: Uses "local" namespace, creates `agent/patterns/local.my-pattern.md`, no package updates  
+**Result**: Uses "local" namespace, creates a gitignored instance pattern (`local.*` under `agent/patterns/`; ADR-29), no package updates  
 
 ---
 

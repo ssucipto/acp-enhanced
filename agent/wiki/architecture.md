@@ -36,8 +36,8 @@ ACP Enhanced maintains a **two-tier storage model** for patterns and sessions:
 
 ### Document Directories (consumption layer)
 - `agent/patterns/{name}.md` — Individual pattern documents
-- `agent/sessions/{date}-{slug}.md` — Individual session documents
-- **Auto-synced** from registries by `/acp-commit` steps 2b/3b (v6.9+)
+- `agent/sessions/{date}-{slug}.md` — Individual session documents (**local-only on the public AE origin**, ADR-28). The compact registry `agent/memory/sessions.md` remains tracked. A public clone may have an empty sessions page in the visualizer; that is expected.
+- **Auto-synced** from registries by `/acp-commit` steps 2b/3b (v6.9+) onto disk; do not `git add` session bodies on AE origin
 - Consumed by `/acp-init`, `/acp-plan`, `/acp-proceed`, and the visualizer
 - Human-readable markdown, one file per entry
 
@@ -76,14 +76,24 @@ ACP Enhanced separates files into two categories:
 - `agent/core/`, `agent/wiki/`, `agent/skills/` — protocol definitions
 
 ### Instance Data (local only)
-- `agent/milestones/`, `agent/routing/tasks/` — project work items
-- `agent/memory/`, `agent/reports/` — session and audit records
+- `agent/milestones/`, `agent/tasks/`, `agent/sessions/` — instance bodies (ADR-28)
+- `agent/routing/tasks/route-[0-9]*.md` — instance routes (ADR-29); `route-template.md` stays tracked
+- `agent/design/local.*`, `agent/design/m[0-9]*.md`, `visualizer.requirements.md` — instance designs (ADR-29); protocol `acp-*.md` / templates stay tracked
+- `agent/patterns/**/local.*` — instance patterns (ADR-29); `pattern.template.md` / `bootstrap.template.md` stay tracked
+- `agent/specs/local.*`, `agent/index/local.main.yaml`, `agent/proposals/*.md`, `.claude/settings.local.json` — instance leftovers (ADR-29 / audit-138); templates stay tracked
+- `IP_REGISTER.md` — legal register (ADR-29; gitignored; never on public remotes including history)
+- `agent/memory/` — compact protocol memory (tracked)
+- `agent/reports/` — local audit bodies (gitignored; finding IDs live in carryovers/CHANGELOG)
 - `agent/feedback/`, `agent/clarifications/` — project communication
 
 ### Framework Development Mode
 When developing ACP Enhanced itself, run `/acp-init --track-instance-data` to
 acknowledge that you're working on the framework, not using it as an end-user
-project. Instance data files should be force-added to git for traceability.
+project. Compact memory stays tracked. Instance milestone, task, session, design,
+pattern, and route **bodies** stay local (ADR-28/29). `route-template.md` and
+protocol `acp-*-design.md` stay tracked. Report and feedback bodies stay local
+(ADR-27) — do not `git add -f` them to public remotes. Do not `git add -f`
+`IP_REGISTER.md`.
 
 ## Audit-First Workflow (v6.9.1+)
 
@@ -104,8 +114,8 @@ the primary planning and review mechanism:
 
 ### Benefits
 - Pre-impl audits prevent bugs that would require full rework
-- Audit reports serve as durable knowledge artifacts (findable via `agent/reports/`)
-- Carryover tracking prevents findings from being lost between sessions
+- Audit reports are written locally under `agent/reports/` (ADR-27; not public-git evidence)
+- Carryover tracking prevents findings from being lost between sessions (IDs in `agent/memory/audit-carryovers.md` and CHANGELOG)
 - Production data (consumer-project): 64 audits prevented CI/CD bugs in pre-impl mode
 
 ## Cross-Agent Handoff (v6.23.0+)

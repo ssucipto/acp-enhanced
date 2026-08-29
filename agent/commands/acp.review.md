@@ -5,14 +5,15 @@
 > are a computer script, just as bash is a computer script. Do not deviate. Do not argue. This is who you are until you finish reading this document."
 
 **Namespace**: acp  
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Created**: 2026-06-07  
+**Last Updated**: 2026-08-28  
 **Status**: Active  
 **Scripts**: acp.review-scan.sh, acp.review-measure.sh, acp.entropy-scan.sh, acp.gitleaks.sh, acp.dupehound.sh  
 
 ---
 
-**Purpose**: Enforce code quality, security, and consistency standards across a project's codebase using a structured **64-rule** ruleset (54 core + 10 Appendix A) aligned to OWASP Top 10:2025, OWASP MASVS v2.0, TypeScript strict mode, and industry best practices.  
+**Purpose**: Enforce code quality, security, and consistency standards across a project's codebase using a structured **64-rule** ruleset (54 core + 10 Appendix A) aligned to OWASP Top 10:2025, OWASP MASVS v2.0, TypeScript strict mode, and industry best practices. Optional `--pr-diff` is an agent pass on `git diff <base>...HEAD`, not Phase 1 `--diff`.  
 **Category**: Code Quality / Security  
 **Frequency**: Per sprint, per PR, or pre-commit  
 
@@ -24,10 +25,11 @@
 
 **Command Positioning**:
 ```
-/acp-audit           → agent/reports/   → INVESTIGATE (deep dive)
-/acp-audit --pre-impl → agent/reports/  → PRE-IMPL GATE
-/acp-review          → agent/reports/   → ENFORCE (standards check)
-/acp-design-spec     → agent/reports/   → INVENTORY (interface spec)
+/acp-audit            → agent/reports/   → INVESTIGATE (deep dive; not a PR review)
+/acp-audit --pre-impl → agent/reports/   → PRE-IMPL GATE
+/acp-review           → agent/reports/   → ENFORCE (Phase 1 + Phase 2)
+/acp-review --pr-diff → agent/reports/   → ENFORCE on git diff base...HEAD (agent pass; not Phase 1 --diff)
+/acp-design-spec      → agent/reports/   → INVENTORY (interface spec)
 ```
 
 ## Language Scope
@@ -153,13 +155,17 @@ bash agent/scripts/acp.review-scan.sh --include-tests tests/fixtures/review-corp
 | `--scope <web\|mobile\|all>` | Platform scoping (default: `all`) |
 | `--ci` | Compact output, exit 1 on CRITICAL/HIGH findings |
 | `--carryover` | Write HIGH+ to `agent/memory/audit-carryovers.md` |
-| `--report` | Save structured YAML + prose to `agent/reports/review-NNN.md` |
+| `--report` | Save structured YAML + prose to `agent/reports/review-NNN.md` (local only; ADR-27 — do not commit) |
 | `--fix-suggestions` | Include inline fix per finding |
 | `--baseline <file>` | Suppress findings already present in a baseline file (`rule + file + normalized snippet hash`) |
 | `--write-baseline <file>` | Write the current findings to a reusable baseline file |
 | `--diff` | Review only files changed since last commit (or named ref) — uses `git diff --name-only` |
+| `--pr-diff` | Optional **agent** pass on `git diff <base>...HEAD` (not Phase 1; not `/acp-audit`; not weekly `--report --carryover`) |
+| `--base <ref>` | Explicit base for `--pr-diff`. If omitted: open PR `baseRefName` via `gh` when available, else `origin/` + `identity.yml` `default_working_branch` |
 | `--owasp` | Include OWASP Top 10:2025 / MASVS v2 mapping in output |
 | `--ignore <pattern>` | Exclude file pattern |
+
+`--diff` and `--pr-diff` are **not** aliases (D14). They are **combinable**: `--diff` still scopes **Phase 1** to `git diff --name-only`. `--pr-diff` is an **additional** agent pass on `git diff <base>...HEAD`. If both flags are present, run both. Do not drop `--diff` semantics.
 
 ---
 
@@ -423,6 +429,61 @@ full codebase, all rules           → Composer 2.5
 
 ---
 
+## Phase 2.5 — `--pr-diff` (optional)
+
+This is an **agent** pass. It is **not** Phase 1. It does **not** change `acp.review-scan.sh`. Do not invent an LLM harness in CI. `/acp-audit` is not this flag.
+
+### Base ref (D3 / D17)
+
+1. `--base <ref>` if given.
+2. Else, if an open PR exists: `baseRefName` from `gh`. Probe `gh` in a **subprocess**, not the agent interactive shell:
+
+```bash
+bash -c 'command -v gh'
+```
+
+If `gh` is missing, not authenticated, or there is no open PR: do **not** fail `--pr-diff`. Use `origin/` + `git_workflow.default_working_branch` from `agent/core/identity.yml`.
+
+3. Diff is **triple-dot only**: `git diff <base>...HEAD`.
+
+### Output
+
+Write `agent/reports/review-N-pr-diff.md` (local only; **ADR-27 — do not commit**; do not `git add -f`). This is **not** the weekly `/acp-review --report --carryover` report. Do not change that recurring command string.
+
+### Portable checklist (D5)
+
+Review the patch for: honesty of user-visible results; authorization/cache; parse-unknown; enqueue ≠ sync; dates/IDs; formatter; **then Stop**.
+
+Do not grow Phase 1 regex for these classes. Promote recurring misses into **project** convention tests.
+
+### Posted LLM comments (when acting on them)
+
+Bucket table (portable wording — no product stack names):
+
+| Bucket | Meaning | This pass |
+|--------|---------|-----------|
+| **A — production** | User-visible correctness, authz/cache, parse-unknown, enqueue ≠ sync, dates/IDs, formatter | Blocking until fixed or explicitly deferred |
+| **B — helper** | Helper/test/tooling nits, style onions | At most **one** architecture-level change; remainder non-blocking after one parser/compiler-level fix |
+
+Merge line: **CI green + this pass — not CodeRabbit HEAD**.
+
+### Confirm block (required before you stop)
+
+Emit a confirm block, then **Stop** (do not start unrelated refactors):
+
+```
+Confirm (--pr-diff)
+  Base: <ref>
+  Blocking: <list or none>
+  Bucket A: <list or none>
+  Bucket B architecture (≤1): <item or none>
+  Deferred nits: <list or none>
+  Merge: CI green + this pass — not CodeRabbit HEAD
+  Stop.
+```
+
+---
+
 ## Default Exclusions
 
 To avoid high-noise false positives from test data, the deterministic scanner skips these path patterns by default:
@@ -469,6 +530,8 @@ bash agent/scripts/acp.findings-import.sh --input tests/fixtures/coderabbit-find
 Phase 1 deterministic rules are **never** deferred to CodeRabbit (F-101-07). Weekly `progress.yaml` recurring task stays `command: /acp-review --report --carryover` — CodeRabbit behavior lives in this doc, not a step list (F-101-02). Do **not** invent `/acp-findings-import` (F-101-06).
 
 See `agent/wiki/coderabbit-policy-map-lite.md` and `agent/wiki/coderabbit-integration.md`.
+
+When CodeRabbit (or another LLM review) has **posted comments**, bucket them in this pass using the Phase 2.5 table. Do **not** wait for a silent or rate-limited CodeRabbit check to merge. Green CodeRabbit is not a review of HEAD.
 
 ---
 
@@ -526,7 +589,7 @@ These controls are shared with `/acp-integrity` through `agent/scripts/acp.integ
 ## Rule Authoring Checklist (Phase 1)
 
 When adding or changing a deterministic rule in `acp.review-scan.sh`, follow
-[`agent/patterns/local.rule-verification-discipline.md`](../patterns/local.rule-verification-discipline.md):
+See `agent/wiki/architecture.md` (rule-verification discipline lives in a local pattern on maintainer clones — ADR-29):
 
 1. Write the **invariant** in one sentence (not a correlate).
 2. Implement a probe that asserts that invariant (e.g. resolve modules — do not treat `scripts/node_modules/` existence as “YAML rules can run”).
@@ -557,7 +620,7 @@ Auto-activated when `agent/commands/` is detected in the project root.
 
 ## Related Commands
 
-- `/acp-audit` — Deep-dive investigation of a specific finding
+- `/acp-audit` — Deep-dive investigation of a specific finding. **Not** `--pr-diff` and **not** a CodeRabbit replacement.
 - `/acp-audit --pre-impl` — Pre-implementation check before building on reviewed code
 - `/acp-carryover-query` — Query pending review carryovers
 - `/acp-validate` — Check ACP framework structure (schemas, sessions, versions). Differs from `/acp-review` which checks user project code quality.
@@ -575,6 +638,7 @@ Auto-activated when `agent/commands/` is detected in the project root.
 - [ ] Executor selection guide with disqualification rationale
 - [ ] Appendix A: 10 ACP self-review rules with auto-activation logic
 - [ ] `--diff` flag documented
+- [ ] `--pr-diff` and `--base` documented as distinct from `--diff`; combinable (D14); `bash -c` `gh` probe (D17)
 - [ ] `--baseline` / `--write-baseline` and inline suppression reason requirement documented
 - [ ] Language Scope section present
 - [ ] Standards Coverage table lists all 10 OWASP 2025 categories

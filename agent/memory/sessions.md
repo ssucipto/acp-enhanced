@@ -1,7 +1,610 @@
-# Session Memory
-# Format: YAML blocks, last 3 loaded per session, auto-compacted at 15 entries
-# DO NOT edit manually — updated by /acp-commit
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-383]
+  done:
+    - m94-carryover-stamps-138
+    - m94-v6390-version-fields
+  deferred:
+    - F-135-07-progress-yaml-split → future-adr
+  key_fact: >
+    M94 15/15. F-135-01..06 and F-136/137/138 (not F-135-07) stamped
+    verified_in_audit 138 after fresh-clone proof. v6.39.0 is a new tag
+    after mainline merge; v6.38.0 name stays on rewritten SHA 84e7388.
 
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-382, task-381]
+  done:
+    - m94-d11-force-push-develop-mainline-tags
+    - m94-fresh-clone-proof
+  deferred:
+    - m94-closure-pr-v6390 → task-383
+    - F-135-07-progress-yaml-split → future-adr
+  key_fact: >
+    Force-push from /tmp/acp-rewrite-m94 only: develop 8c025ce, mainline
+    dcae105, v6.38.0 tag 84e7388 (was a377b50). Fresh clone history empty
+    for IP_REGISTER. Post-rewrite CI failed until purge-paths allows empty list.
+
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-138, review-011, task-387]
+  done:
+    - m94-post-impl-audit-138
+    - m94-review-011
+    - m94-leftover-privacy-close
+  deferred:
+    - m94-force-push → D11-phrase
+    - F-135-07-progress-yaml-split → future-adr
+    - F-138-04-origin-still-leaked → task-382
+  key_fact: >
+    audit-138 leftover classes: settings.local.json, specs/local.*,
+    index/local.main.yaml, consumer-project proposal. Re-filter done in /tmp/acp-rewrite-m94
+    HEAD f56a62a (not pushed). Origin still leaked until D11 including --tags.
+    Do not stamp F-135-* until 381. Do not push the incomplete-380 clone.
+
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-380, task-382]
+  done:
+    - m94-filter-repo-throwaway-clone
+  deferred:
+    - m94-force-push → D11-phrase
+    - F-135-07-progress-yaml-split → future-adr
+  key_fact: >
+    filter-repo completed in /tmp/acp-rewrite-m94 only. Origin restored,
+    not pushed. Task 382 waits for the D11 phrase including tags: yes.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-373, task-374, task-375, M94]
+  done:
+    - m94-backup-gate
+    - m94-purge-paths-generator
+    - m94-gitignore-private-pack
+  deferred:
+    - F-135-07-progress-yaml-split → future-adr
+    - m94-force-push → D11-phrase
+  key_fact: >
+    M94 Wave 0–1 landed. Backups under the private pack dir (not in clone).
+    Tag rewrite still required; /acp-proceed --yes is not D11 consent.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-137, M94]
+  done:
+    - m94-pre-impl-audit-137
+    - adr-29-written
+    - m94-amend-v120
+  deferred:
+    - F-135-07-progress-yaml-split → future-adr
+  key_fact: >
+    audit-137: tag rewrite is required (F-137-01). Nested patterns/**/local.*
+    and visualizer.requirements.md are PURGE. CB-2 must use local.dummy.md.
+    First impl task remains 373. Do not skip --tags.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-369, F-124-02]
+  done:
+    - tier3-e2e-count-61
+    - pr-12-merged-mainline
+    - m92-track-b-complete
+    - f-124-02-closed
+  deferred: []
+  key_fact: >
+    Track B done: PR #12 merged (bee6cec). Fixed tier3 meta-assertion 60→61 for acp.smoke.
+    M92 7/7 complete. Do not retag v6.38.0.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-134, review-010, task-372]
+  done: [m92-post-impl-audit, honesty-unstamp-369, restamp-verified-134]
+  deferred:
+    - F-124-02-pr-mainline → task-369
+  key_fact: >
+    audit-134: F-R006 code is real; task-369 complete was a shortcut.
+    Track B is still the regular develop→mainline PR. Do not retag v6.38.0.
+
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-365, task-366, task-367, task-371, task-368, task-369, task-370]
+  done:
+    - f-r006-01-js-yaml-4-3-1
+    - f-r006-02-bootstrap-sh01
+    - f-r006-03-dispatch-taskmeta
+    - v6380-tag-on-f20c382
+    - develop-pushed
+    - m92-complete
+  deferred:
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    M92 v6.38.0 tagged on f20c382; v6.37.0/v6.37.1 not moved.
+    npm audit --audit-level=high (no omit=dev). gh pr create failed
+    (must be a collaborator); F-124-02 stays pending.
+
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-133]
+  done: [m92-pre-impl-amend-v11]
+  deferred:
+    - F-R006-01-js-yaml-cve → task-365
+    - F-R006-02-bootstrap-sh01 → task-366
+    - F-R006-03-dispatch-any → task-367
+    - F-124-02-pr-mainline → task-369
+  key_fact: >
+    audit-133 BLOCKED design v1.0.0: do not use npm audit --omit=dev;
+    do not move v6.37.1; bootstrap E2E is required; task-371 added.
+    Implement only after design v1.1.0.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [acp-validate, acp-sync, acp-update]
+  done: [docs-sync-v6371, validate-tag-v6371]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    /acp-validate only gap was missing v6.37.1 tag. README now documents
+    field-feedback waves A–C and 59 scripts; domain.yml synced.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-131, review-009]
+  done: [m91-leftover-patch-v6371]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.37.1 leftover: empty exec-host --dry-run fails closed (not windows);
+    smoke no longer swallows exec-host dry-run failures; extra local_gates E2E.
+    Tag v6.37.0 stays on 7ab6a7f. Did not start M92.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-359, task-360, task-361, task-362, task-363, task-364]
+  done: [m91-wave-c-v6370]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.37.0: ACP_EXEC_HOST + git bundle exec-host; /acp-smoke --host;
+    pr.yml extra gates empty no-op. Unconfigured smoke still exit 2.
+    No Maestro in core E2E. F-R006 untouched.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-129, review-008]
+  done: [m90-leftover-patch-v6361]
+  deferred:
+    - M91-exec-host → task-359
+    - F-126-03-host-flag → task-360
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.36.1 leftover patch for M90: unknown-option no longer says
+    not configured; catalog lists /acp-smoke; D15/D16 E2E holes closed.
+    Did not start M91. Tag v6.36.0 stays on 7fa4c0f.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-354, task-355, task-356, task-357, task-358]
+  done: [m90-wave-b-v6360]
+  deferred:
+    - M91-exec-host → task-359
+    - F-126-03-host-flag → task-360
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.36.0: /acp-smoke is optional and fail-closed (exit 2 unconfigured).
+    e2e-smoke is the /acp-ci --full step, not this command. No --host.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [review-007]
+  done: [m89-review-007-patch-v6352]
+  deferred:
+    - M90-acp-smoke → task-354
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.35.2: version-update NEW_VERSION grep must not abort under pipefail;
+    manifest merge only touches acp-core. M90 not started.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-128]
+  done: [m89-audit-128-patch-v6351]
+  deferred:
+    - M90-acp-smoke → task-354
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.35.1 patches audit-128 leftovers (README, wrappers, D17/D8 E2E,
+    F-127 M89 stamps). Did not start M90.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-348, task-349, task-350, task-351, task-352, task-353]
+  done: [m89-wave-a-v6350]
+  deferred:
+    - M90-acp-smoke → task-354
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    v6.35.0: --pr-diff is not --diff (combinable). CR land policy. local.*
+    wrappers skip-if-exists. F-R006 out. Next M90 stub smoke.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-348]
+  done: [m89-pre-impl-stamp]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    audit-127 READY. M89 current_milestone. Next 349 wiki/audit/local.*
+    then --pr-diff. F-R006 out.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-127, plan-amend-m89-m91]
+  done: [audit-127-pre-impl, amend-plans-d14-d18]
+  deferred:
+    - M89-coding → task-348
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    audit-127 BLOCKED then plans amended (design 1.1.0 D14–D18). M89 READY
+    for 349+. --diff and --pr-diff combinable. pr.yml not arrays. e2e-smoke
+    ≠ /acp-smoke. F-127-13 ledger hole closed. F-R006 out.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-126, plan-m89-m91]
+  done: [audit-126-second-round, plan-waves-a-b-c]
+  deferred:
+    - F-125-01-pr-diff → M89
+    - F-125-05-acp-smoke → M90
+    - F-125-06-exec-host → M91
+    - F-R006-01-js-yaml-cve → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    --pr-diff must not collide with existing --diff. Do not copy consumer-project smoke
+    1.1.0 into AE v1. M89–M91 planned (6.35–6.37); proceed starts at task-348.
+    current_milestone stays M88 until proceed.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-125]
+  done: [audit-125-consumer-project-safeiq-feedback]
+  deferred:
+    - F-125-01-pr-diff → plan
+    - F-125-02-cr-buckets → plan
+    - F-125-05-acp-smoke → later-wave
+    - F-125-06-exec-host → later-wave
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+    - F-124-02-pr-mainline → maintainer
+  key_fact: >
+    consumer-project 001+002 still fully open on 6.34.0 (--pr-diff, CR buckets, audit≠CR).
+    consumer-project 2026-08-14 command wave is shipped; remaining value is smoke + exec-host.
+    Do not port Expo/Maestro/consumer-project tests or visualizer bugs.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-124]
+  done: [audit-124-post-ship, changelog-mainline-accuracy, wiki-adr28, badge-88]
+  deferred:
+    - merge-develop-to-mainline → maintainer
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    M88 rewrite is sound on develop and tags. GitHub default clone is still
+    mainline at 6.32.4. Completeness is a regular PR, not another force-push.
+    F-R006 and fork caches stay separate.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-347]
+  done: [v6340-bump, golden-tsv, annotated-tag]
+  deferred:
+    - pr-develop-to-mainline → maintainer
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    M88 closed as v6.34.0 after 346 proof. History rewrite already on origin.
+    Regular push of develop + annotated tag (no second force-push). F-R006
+    still pending. Forks/caches may retain old objects (F-119-09).
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-346]
+  done: [fresh-clone-keep-purge-proof]
+  deferred:
+    - v6340-closure → task-347
+    - F-122-04-reclone-daily → task-347
+    - F-122-07-v6340-golden-tag → task-347
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Full clone /tmp/acp-fresh-m88: develop dedd874 keepers+templates; PURGE
+    paths have empty git log --all --full-history. v6.33.0 still has templates.
+    Forks/caches may retain old objects. Daily .git is still unre-written —
+    347 commits must be made on the rewritten clone, not this worktree.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-345]
+  done: [filter-repo-paths-from-file, force-push-develop-mainline-tags]
+  deferred:
+    - fresh-clone-proof → task-346
+    - F-122-04-no-reclone-until-347 → task-347
+    - F-122-07-v6340-golden-tag → task-347
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Operator confirmed force-push instance-docs develop mainline tags: yes.
+    Rewrite clone /tmp/acp-rewrite-m88 (--no-local, 454 PURGE paths). Forks
+    and GitHub caches may retain old objects (F-119-09). Do not reclone daily
+    until 347. Do not force-push the daily worktree.
+
+
+- date: 2026-08-28
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-123]
+  done: [audit-123-m88-gaps, cb-4-paths-from-file, cb-3b-git-init, agent-commit-adr28, install-root-gitignore, validate-templates]
+  deferred:
+    - filter-repo-force-push → task-345-operator-confirm
+    - F-123-03-m87-phrase-not-consent → task-345
+    - F-122-04-no-reclone-until-347 → task-347
+    - F-122-07-v6340-golden-tag → task-347
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    audit-123: CB-4 must invert PURGE paths via --paths-from-file, never whole
+    dirs (templates would vanish from tags). M87 phrase is not M88 consent.
+    Type exactly force-push instance-docs develop mainline tags: yes.
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-335, task-336, task-337, task-338, task-339, task-340, task-341, task-342, task-343, task-344]
+  done: [gate-backups, citation-map, gitignore-validator, dual-store-e2e, private-pack-dirs, tip-untrack, ci-rehearsal]
+  deferred:
+    - filter-repo-force-push → task-345-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    GATE STAMP 20260827T231053. Tip is keepers-only (git rm --cached). CI rehearsal
+    validate green. Halt until exact phrase force-push instance-docs develop
+    mainline tags: yes. Do not reclone daily until 347. Do not reuse the M87 phrase.
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-332]
+  done: [daily-reclone, v6330-bump, f-118-stamps]
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+    - merge-develop-to-mainline → maintainer
+  key_fact: >
+    Daily worktree .git replaced from origin/develop 344b84a (0 report bodies).
+    Local reports restored from Phase 0 worktree backup. M87 closed as v6.33.0.
+    F-R006-* still pending. Forks/caches may retain old objects (F-119-09).
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-330, task-331]
+  done: [force-push-origin-rewrite, fresh-clone-history-proof]
+  deferred:
+    - reclone-daily-worktree → operator
+    - F-118-01-stamp → task-332
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    Operator confirmed `force-push develop mainline tags: yes`. Origin develop
+    4a7cef3, mainline d83cddc, v6.32.4 reports=0 on a new clone. Forks and GitHub
+    caches may retain objects (F-119-09). Re-clone the daily worktree before 332.
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-330]
+  done: [audit-121-m87-impl-gaps, f-121-cookbook-no-local, f-121-wiki-redact, f-121-integrity-hashes]
+  deferred:
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-121-03-daily-history-dirty → task-331
+    - F-118-01-history-rewrite → task-331
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    audit-121 fixed on tip except F-121-03. Canonical rewrite clone is /tmp/acp-rewrite
+    (--no-local). Readiness wording is not force-push consent. Type exactly
+    `force-push develop mainline tags: yes`. Forks and GitHub caches may retain objects (F-119-09).
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-328, task-329, task-330]
+  done: [tip-keepers-only, private-pack-script, local-filter-repo]
+  deferred:
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-118-01-history-rewrite → task-331
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    Local filter-repo succeeded on a throwaway clone; origin was NOT force-pushed.
+    /acp-proceed --yes is not consent. Type exactly `force-push develop mainline
+    tags: yes` to publish. Forks and GitHub caches may retain objects (F-119-09).
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-333, task-334, task-323, task-322]
+  done: [m87-phase-0-backups, citation-map]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Phase 0 restore-tested: worktree-20260827T202952, local git mirror HEAD
+    1488312 then 6e47fd9, gpg archive acp-reports-feedback-20260827T203242.
+    Passphrase is off-repo chmod 600. --yes is not force-push consent.
+
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-120, acp-plan, task-333, task-334]
+  done: [m87-pre-impl-round2, backup-first-tasks]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    audit-120 READY after amend. First proceed is task-333 (rsync worktree),
+    then 334 (local git mirror from pwd, not GitHub), then 323 (gpg). Do not
+    start 322 until those restores pass. This machine has gpg not age.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-119, acp-plan, M87]
+  done: [m87-pre-impl-audit, m87-plan-amend-cookbook]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline-tags → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    audit-119 READY after amend. Use design cookbook CB-1..CB-6. git rm must
+    be --cached. filter-repo on a throwaway clone; force-push phrase is
+    `force-push develop mainline tags: yes`. Do not commit audit-119.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [acp-plan, M87, task-322, ADR-27]
+  done: [m87-privacy-purge-plan]
+  deferred:
+    - F-118-01-history-rewrite → task-330
+    - force-push-develop-mainline → task-330-operator-confirm
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+  key_fact: >
+    Maintainer overrode audit-118 Class A-in-git. ADR-27: public remotes contain
+    zero agent/reports and agent/feedback bodies (keepers only). Secure removal
+    is filter-repo plus operator-confirmed force-push of develop and mainline.
+    HEAD git rm is not enough. Do not stamp F-118-01..03 until fresh-clone proof.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-118]
+  done: [audit-118-public-repo-privacy]
+  deferred:
+    - F-118-01-redact-coderabbit-raw → audit-118
+    - F-118-02-untrack-consumer-project-design-spec → audit-118
+    - F-118-03-untrack-port-inbox → audit-118
+    - F-118-04-d9-1-private-class → /acp-decide
+    - F-R006-01-js-yaml-cve → review-006
+  key_fact: >
+    Superseded by ADR-27: do not keep Class A protocol audits in git on this
+    public repo. Reports/feedback bodies are local-only; history rewrite required.
+
+- date: 2026-08-27
+  executor: cursor-grok
+  branch: develop
+  tasks: [acp-resume, weekly-code-review, weekly-integrity-scan, monthly-dependency-audit]
+  done:
+    - resumed-after-13-day-gap
+    - stale-push-next-step-cleared
+    - integrity-003-self-scan
+    - review-006-weekly-self
+    - monthly-dependency-audit-clean
+  deferred:
+    - F-R006-01-js-yaml-cve → review-006
+    - F-R006-02-bootstrap-euo → review-006
+    - F-R006-03-dispatch-any → review-006
+    - ig17-scanner-allowlist → polish
+    - adr-19-aikido → gated
+  key_fact: >
+    After M81/M86 ship, develop==mainline at v6.32.4 with no coding task in_progress.
+    Overdue recurring scans are the next work. js-yaml GHSA-5p4m-2wfm-xmqj is SC-14
+    (review), not IG-27–32 (monthly dependency-diff).
 
 - date: 2026-08-14
   executor: cursor-composer
@@ -702,160 +1305,16 @@
     - aikido-m74-m77 → deferred-cost
   key_fact: "M81 READY WITH AMENDMENTS (audit-101): carve ADR-22 out of ADR-19 (never supersede); fixture-first --input import only; weekly-code-review is a single command string; Phase 1 rules never defer to CodeRabbit; ungate task-269 for ADR writing."
 
-- date: 2026-07-24
-  executor: cursor
-  branch: develop
-  tasks: []
-  done:
-    - acp-validate-clean-post-m80
-    - acp-sync-handoff-completed-progress-notes-refreshed
-  deferred:
-    - m74-m77-coderabbit-pr-check → adr-19-gate
-  key_fact: "ADR-19 gates M74–M77 integration milestones (not tool install) until CodeRabbit + Aikido run on a consumer-project repo with 2+ weeks of real findings; M78 optionality foundation shipped separately per ADR-21."
-
-- date: 2026-07-24
-  executor: cursor
-  branch: develop
-  tasks: [task-265, task-266, task-268]
-  done:
-    - m80-e2e-debt-remediation-shipped-v6-28-2
-    - f-m78-01-closed-68-68-e2e-suite
-    - audit-100-carryovers-f-100-01-through-05-settled
-    - test-side-fixes-workflow-cross-layer-validate-ts
-    - behavior-reconcile-version-package-info-project-update-sweep
-  deferred:
-    - m74-m77-coderabbit-pr-check → adr-19-gate
-    - crit-065-002-merge-pr3 → mainline
-  key_fact: "F-M78-01 closed with honest code-vs-test triage (no blind greening): validate-cross-layer needed conditional package.yaml copy + milestone awk; validate-ts needed isolated 5-surface parity dirs; version-check-for-updates needed ${1:-} under set -u; project-update needed current_tags init before ADD_TAGS block."
-
-- date: 2026-07-24
-  executor: claude-opus-4-8
-  branch: develop
-  tasks: [task-255, task-256, task-257, task-258, task-259, task-260, task-261, task-262, task-263, task-264]
-  done:
-    - m78-coderabbit-optionality-foundation-shipped-v6-28-0
-    - m79-closure-integrity-remediation-shipped-v6-28-1
-    - audit-099-caught-own-version-regression-honest-correction
-    - audit-100-m80-preimpl-5-findings-folded
-    - m80-planned-3-tasks-after-task-267-removed
-  deferred:
-    - m80-implementation → cursor-executor-handoff (tasks 265,266,268)
-    - m74-m77-coderabbit-pr-check → adr-19-gate
-    - crit-065-002-merge-pr3 → mainline
-  key_fact: "Regression comparison MUST be assertion-level, not file-level — audit-098 declared M78 'zero regression' by file-count but audit-099 found the v6.28.0 bump missed agent/progress.yaml's version: field, adding 2 assertion failures inside already-failing test files. Fix incl. a validator gap: acp-validate.ts now checks progress.yaml version (it caught a YAML corruption I introduced mid-fix). M80 = 7 pre-existing E2E failures (root-caused audit-099) + F-100-03 auto-sync trap (copilot-instructions.md regenerated from AGENTS.md)."
-
-- date: 2026-07-23
-  executor: claude-opus-4-8
-  branch: develop
-  tasks: []
-  done:
-    - audit-097-optional-coderabbit-distributed-framework-lens
-    - plan-m78-optionality-foundation-6-tasks-255-260
-    - adr-21-coderabbit-optionality-carved-out-of-adr-19-gate
-    - adr-20-backfill-hooks-task_id-array-format
-    - audit-098-preimpl-7-findings-folded-into-m78
-  deferred:
-    - m78-implementation → acp-proceed-complete (this session, next)
-    - m74-m77-pr-check-findings-import → adr-19-adoption-gate
-    - crit-065-002-merge-pr3 → mainline
-    - f-086-02-consumer-project-consumer → task-239
-  key_fact: "acp.preferences.sh sources acp.common.sh, so optional-tool detection helpers that call get_preference must live in a dedicated script (acp.coderabbit.sh) sourcing preferences.sh — never in common.sh (circular source). Caught in pre-impl audit-098 before any code was written. Also: ADR-19 gates CodeRabbit *integration* (PR-check/findings-import); the *optionality foundation* (toggle+detection+docs) is a separate non-gated concern (ADR-21)."
-
-- date: 2026-07-17
-  executor: copilot
-  branch: develop
-  tasks: []
-  done:
-    - validate-all-clean-v6-27-2
-    - agent-md-legacy-version-sync
-    - adr-19-m74-gate-documented
-  deferred:
-    - m74-plan → adr-19-adoption-gate
-    - crit-065-002-merge-pr3 → mainline
-    - f-086-02-consumer-project-consumer → task-239
-  key_fact: "AGENT.md legacy header was 15 minors stale (6.12.1) while AGENTS.md/identity were 6.27.2 — hard validators only check AGENTS.md, not AGENT.md."
-
-- date: 2026-07-17
-  executor: copilot
-  branch: develop
-  tasks: []
-  done:
-    - validate-sync-update-chain-clean
-    - readme-badge-drift-fixed-v6-27-2
-    - research-direction-docs-on-develop
-  deferred:
-    - crit-065-002-merge-pr3 → mainline
-    - f-086-02-consumer-project-consumer → task-239
-  key_fact: "README version badge was soft drift (6.21.1) invisible to hard validators — acp-validate.ts only checks AGENTS/identity/package/CHANGELOG, not README shields.io URL."
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [task-248, task-249, task-250, task-251, task-252, task-253, task-254]
-  done:
-    - m73-autonomous-complete-v6-27-1
-    - carryover-integrity-restored-audit-095-closure
-    - manifest-scripts-tracked-validate-clean
-  deferred:
-    - crit-065-002-branch-protection → github-admin
-    - f-086-02-consumer-project-consumer → task-239
-  key_fact: M73 v6.27.1 closed audit-094 gaps; integrity-manifest now tracks agent/scripts; validate 0 errors (branch protection warn only).
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [task-240, task-241, task-242, task-243, task-244, task-246, task-247]
-  done:
-    - m72-autonomous-complete-audit-093
-    - validator-hardening-5-surface-parity
-    - v6-27-0-tagged
-  deferred:
-    - crit-065-002-branch-protection → admin-ops
-  key_fact: M72 shipped v6.27.0 with ROOT-anchored validator; CRIT-065-002 remains pending (gh api 404).
-
-- date: 2026-07-15
-  executor: copilot
-  branch: develop
-  tasks: [task-245]
-  done:
-    - claude-integration-committed-adr-18-2b92528
-    - sessions-compaction-f-091-08
-    - monthly-dependency-audit-refreshed-f-091-09
-    - task-245-hygiene-phase-complete
-  deferred:
-    - m72-validator-tasks → task-240-241
-    - crit-065-002-branch-protection → task-246
-  key_fact: "task-245 guardrail #9 satisfied — Claude tree committed (2b92528) before validator edits; acp.dependency-diff.sh 0 findings; sessions compacted to ≤8 entries."
-
-- date: 2026-07-15
-  executor: claude-code
-  branch: develop
-  tasks: [audit-091, plan-m72, audit-092, plan-m72-amendment]
-  done:
-    - audit-091-whole-system-gaps-standards-14-findings
-    - m72-milestone-planned-design-8-tasks-8-routes-committed
-    - audit-092-pre-impl-m72-readiness-ready-with-4-amendments
-    - discovered-f-091-14-agent-reports-gitignore-blackhole-mid-report-commit
-    - m72-amended-per-audit-092-d9-d10-guardrails-10-11-closure-renumbered-093
-    - f-092-01-02-03-04-carryovers-stamped-fixed-plan-level-audit-093-verifies
-  deferred:
-    - m72-validator-implementation → task-240-247
-    - crit-065-002-branch-protection → task-246
-    - f-086-02-consumer-project-consumer → task-239
-  key_fact: "F-091-14: agent/.gitignore bare reports/ blocked 61 audit reports from git; sessions prepend protocol violation fixed; task-245 hygiene unblocks M72 validator work."
-  commits: [1a1dc70 "plan(M72)", 57c0464 "audit(092)", ad29c3c "plan(M72) amend", 2b92528 "feat(claude)"]
-
-# === Compacted Block: 2026-07-15 (10 sessions) ===
+# === Compacted Block: 2026-07-15 – 2026-07-24 (10 sessions, M94 task-377) ===
 - type: weekly-summary
-  week: 2026-07-15
+  week: 2026-07-24
   key_facts:
-    - "M71 remediation shipped v6.26.0 — memory schema enforcement, 8-rule review scanner, atomic-write (audit-090)."
-    - "audit-086 stamped 21 stale carryovers; acp.recurring-complete.sh added."
-    - "v6.25.2 review/integrity remediation — acp.review-scan.sh Phase 1, integrity-manifest split."
-    - "M63 amendment v6.25.1 — tier3 E2E dynamic loop; audit-083/084 closed."
-    - "M68 safe install/update v6.24.1; M67 handoff v6.23.0."
-    - "progress.yaml 191 duplicate YAML keys fixed — js-yaml parse restored."
-  tasks_completed: [task-231..238, audit-086, review-001, route-207, route-206, route-198..205, route-190..197, validate-sync-update]
+    - "M73–M78 era: validator hardening, CodeRabbit optionality (ADR-21), integrity-manifest tracks scripts."
+    - "Consumer-project follow-ups stay as finding IDs in carryovers (not restated here)."
+    - "CRIT-065-002 branch protection remained pending GitHub admin."
+  tasks_completed: 10
+  compacted: true
+
 
 # === Compacted Block: 2026-06-08 – 2026-06-15 (6 sessions) ===
 - type: weekly-summary

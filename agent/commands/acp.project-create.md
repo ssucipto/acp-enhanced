@@ -285,11 +285,61 @@ out/
 Thumbs.db
 desktop.ini
 
-# ACP local files (not committed — D9: reports/ and feedback/ are tracked)
+# ACP local files (not committed — ADR-27: report/feedback bodies local)
 agent/clarifications/
 agent/drafts/**
 !agent/drafts/.gitkeep
 !agent/drafts/draft.template.md
+agent/reports/**
+!agent/reports/.gitkeep
+!agent/reports/README.md
+agent/feedback/**
+!agent/feedback/.gitkeep
+!agent/feedback/README.md
+
+# ADR-28 — instance milestone/task/session bodies local; templates + keepers tracked
+agent/milestones/**
+!agent/milestones/.gitkeep
+!agent/milestones/README.md
+!agent/milestones/*.template.md
+agent/tasks/**
+!agent/tasks/.gitkeep
+!agent/tasks/README.md
+!agent/tasks/*.template.md
+agent/sessions/**
+!agent/sessions/.gitkeep
+!agent/sessions/README.md
+
+# ADR-29 — instance designs, local patterns, instance routes; keepers tracked
+agent/design/local.*
+agent/design/m[0-9]*.md
+agent/design/visualizer.requirements.md
+!agent/design/design.template.md
+!agent/design/requirements.template.md
+!agent/design/acp-*.md
+!agent/design/global-*.md
+!agent/design/.gitkeep
+agent/patterns/local.*
+agent/patterns/**/local.*
+!agent/patterns/pattern.template.md
+!agent/patterns/bootstrap.template.md
+!agent/patterns/.gitkeep
+agent/routing/tasks/route-*.md
+!agent/routing/tasks/route-template.md
+
+# ADR-29 leftovers (audit-138)
+.claude/settings.local.json
+agent/specs/local.*
+!agent/specs/spec.template.md
+agent/index/local.main.yaml
+!agent/index/local.main.template.yaml
+!agent/index/acp.core.yaml
+!agent/index/.gitkeep
+agent/proposals/**
+!agent/proposals/.gitkeep
+
+# Legal register (ADR-29) — gitignore does not untrack an already-indexed file
+IP_REGISTER.md
 
 # Logs
 *.log

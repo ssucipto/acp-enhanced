@@ -8,7 +8,7 @@
 - Use `local` for all function-scoped variables
 - Never use `grep` exit code directly with `set -e` — use `grep ... || true`
 - Never use `set -e` exit from array operations — wrap with `|| true`
-- False-green contracts (M86): `set +e` does **not** suppress `trap ERR` — capture status with `if cmd; then rc=0; else rc=$?; fi`. Never PASS with zero units executed; assert output contracts not exit codes alone; probe deps in the script’s execution context. Full FG-1…FG-7: `agent/patterns/local.false-green-contracts.md`
+- False-green contracts (M86): `set +e` does **not** suppress `trap ERR` — capture status with `if cmd; then rc=0; else rc=$?; fi`. Never PASS with zero units executed; assert output contracts not exit codes alone; probe deps in the script’s execution context. Full FG-1…FG-7: `agent/core/constraints.yml` (`set_plus_e_does_not_suppress_err_trap` and following)
 - macOS BSD sed: use `sed -i ''` (not `sed -i`) — detect with `uname -s`
 - macOS date: `date +%N` is unavailable — use `$RANDOM$RANDOM` or python fallback
 - Use `yaml_get`, `yaml_set`, `yaml_get_array` from acp.yaml-parser.sh for YAML ops

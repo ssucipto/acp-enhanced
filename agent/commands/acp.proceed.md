@@ -289,8 +289,8 @@ Before implementing, load relevant key files from the index.
 **Display format**:
 ```
 📑 Reading Key Files & Context (acp.proceed)...
-  ✓ agent/patterns/local.e2e-testing.md (weight: 0.8, pattern)
-  ✓ agent/patterns/local.tracked-untracked-directories.md (weight: 0.7, pattern)
+  ✓ agent/patterns/bootstrap.template.md (weight: 0.8, pattern)
+  ✓ agent/design/acp-commands-design.md (weight: 0.7, design)
   📝 "Migration files MUST be numbered sequentia..." (weight: 1.0, note)
   ⚡ "Never modify files in src/legacy/ without..." (weight: 0.9, directive)
 

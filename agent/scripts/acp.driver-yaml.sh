@@ -12,7 +12,6 @@
 #
 # See: agent/schemas/driver.schema.yaml (validation schema)
 # See: agent/driver.template.yaml (starter config)
-# See: agent/patterns/local.driver-dispatch-directive.md
 
 # Prevent duplicate sourcing
 if [ -n "${ACP_DRIVER_YAML_LOADED:-}" ]; then

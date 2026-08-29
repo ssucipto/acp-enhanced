@@ -1,10 +1,65 @@
 # Agent Context Protocol - Local Files
 # These files are generated locally and should not be committed
 
-# Local-only protocol dirs (D9 — reports/ and feedback/ are tracked)
+# Local-only protocol dirs (clarifications/drafts/preferences)
 clarifications/
 drafts/**
 !drafts/.gitkeep
 !drafts/draft.template.md
 preferences/
+
+# ADR-27 — report/feedback bodies local; keepers tracked
+reports/**
+!reports/.gitkeep
+!reports/README.md
+feedback/**
+!feedback/.gitkeep
+!feedback/README.md
+
+# ADR-28 — instance milestone/task/session bodies local; templates + keepers tracked
+milestones/**
+!milestones/.gitkeep
+!milestones/README.md
+!milestones/*.template.md
+tasks/**
+!tasks/.gitkeep
+!tasks/README.md
+!tasks/*.template.md
+sessions/**
+!sessions/.gitkeep
+!sessions/README.md
+
+# ADR-29 — instance designs, local patterns, instance routes local;
+# protocol keepers stay tracked (last-match-wins). See ADR-29 / M94.
+design/local.*
+design/m[0-9]*.md
+design/visualizer.requirements.md
+!design/design.template.md
+!design/requirements.template.md
+!design/acp-*.md
+!design/global-*.md
+!design/.gitkeep
+
+patterns/local.*
+patterns/**/local.*
+!patterns/pattern.template.md
+!patterns/bootstrap.template.md
+!patterns/.gitkeep
+
+routing/tasks/route-*.md
+!routing/tasks/route-template.md
+
+# ADR-29 leftovers (audit-138): instance specs, instance index, instance proposals.
+# Do NOT use a bare index/local.* glob — it matches local.main.template.yaml (F-136-01 class).
+specs/local.*
+!specs/spec.template.md
+
+index/local.main.yaml
+!index/local.main.template.yaml
+!index/acp.core.yaml
+!index/.gitkeep
+
+proposals/**
+!proposals/.gitkeep
+
 

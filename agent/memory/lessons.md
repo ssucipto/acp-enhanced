@@ -4,6 +4,69 @@
 #
 # Optional fields added in v6.8.0:
 
+- date: 2026-08-29
+  task_type: audit-run
+  mistake: "M94 v1.1 next_steps still said do not force-push / do not move v6.38.0 while the rewrite requires git push --force origin --tags, so an agent could skip tags and leave IP_REGISTER in history."
+  correction: "History rewrite retargets existing tag names to new SHAs. Skipping --tags is not hygiene; inventing v6.38.1 is not a substitute. Phrase includes tags: yes."
+  priority: high
+  trigger: audit-137
+
+- date: 2026-08-29
+  task_type: progress-update
+  mistake: "Marked task-369 completed after gh pr create failed, so M92 looked 7/7 done while F-124-02 was still pending."
+  correction: "Never stamp a PR/release-ops task completed without the artifact (open or merged PR). Deferral belongs in sessions.md; the task stays not_started and the carryover stays pending."
+  priority: high
+  trigger: audit-134
+
+- date: 2026-08-29
+  task_type: scripts
+  mistake: "acp.exec-host-ssh.sh --dry-run with empty HOST used HOST:-windows and exited 0, so missing host looked like a successful windows plan."
+  correction: "Empty host selection must fail-closed (FG-7). --dry-run requires --host or ACP_EXEC_HOST. Never default to windows or github."
+  priority: high
+  trigger: audit-131
+
+- date: 2026-08-28
+  task_type: audit-run
+  mistake: "Treating force-push develop mainline tags: yes (M87) as consent for M88 history rewrite, and using directory --invert-paths which drops KEEP templates from every tag."
+  correction: "M88 requires the exact phrase force-push instance-docs develop mainline tags: yes. Invert PURGE paths only via --paths-from-file. CB-3b git init + identity tag before validate. Never filter-repo in the daily worktree."
+  priority: high
+  trigger: audit-123
+
+- date: 2026-08-27
+  task_type: audit-run
+  mistake: "M87 CB-4 used git clone of a local mirror without --no-local, hardcoded git@github.com origin, skipped D10 hashes, and left a consumer FS path plus dual rewrite clones."
+  correction: "Clone rewrite with --no-local. Restore origin from daily git remote get-url. Canonical push clone is /tmp/acp-rewrite only. Restamp integrity-manifest after any tracked script edit. Do not treat readiness wording as force-push consent."
+  priority: high
+  trigger: audit-121
+
+- date: 2026-08-27
+  task_type: milestone-planning
+  mistake: "After audit-119, M87 still allowed 322/324 to start with no worktree backup, and CB-4 mirrored GitHub instead of this clone (missing untracked audits). CB-1 required age which is not installed."
+  correction: "Start with 333 rsync + 334 local --mirror from $(pwd) + 323 gpg. Never treat origin as the only backup. Probe age||gpg before encrypt."
+  priority: high
+  trigger: audit-120
+
+- date: 2026-08-27
+  task_type: milestone-planning
+  mistake: "M87 first plan said git rm of reports/feedback without --cached, used reports/* (misses nested files), omitted tag rewrite, and pointed install gitignore at bootstrap.sh."
+  correction: "Use design cookbook CB-1..CB-6. git rm --cached only. Gitignore ** with keeper exceptions. filter-repo on a throwaway clone; force-push develop, mainline, and tags only after the exact phrase. Install gitignore lives in acp.install.sh."
+  priority: high
+  trigger: audit-119
+
+- date: 2026-08-27
+  task_type: milestone-planning
+  mistake: "audit-118 recommended keeping Class A protocol audits tracked on develop/mainline; that still publishes session internals on a public clone and is hard to police."
+  correction: "ADR-27: this public repo must contain zero agent/reports and agent/feedback bodies (keepers only). Local writers stay. Encrypted pack for machine moves. History rewrite + operator-confirmed force-push of develop and mainline is required before calling F-118-01..03 fixed. Do not follow the Class A/B git split."
+  priority: high
+  trigger: acp-plan-m87
+
+- date: 2026-08-27
+  task_type: audit-run
+  mistake: "D9 'track all reports/feedback' plus M86 port-inbox practice published consumer product specs, $HOME paths, and CodeRabbit org billing JSON onto develop and mainline."
+  correction: "Superseded by ADR-27 for this public repo: do not keep Class A audits in git either. Gitignore reports/feedback; ledger finding IDs in audit-carryovers.md + CHANGELOG. Scrub vendor raw JSON before any git add (M82)."
+  priority: high
+  trigger: audit-118
+
 - date: 2026-08-14
   task_type: bash-script-refactor
   mistake: "Guards certified correlates (node_modules dir exists, status-string agreement, finding_id-only ledger grep) instead of the invariants they were named for — fabricating findings or retracting real carryovers."

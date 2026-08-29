@@ -1,6 +1,6 @@
 # agent/index/local.main.yaml
 # Key file index for project-local files
-# See: agent/design/local.key-file-index-system.md
+# See: agent/index/local.main.template.yaml (instance designs are local-only — ADR-29)
 #
 # Naming convention: {namespace}.{qualifier}.yaml
 #   - namespace: "local" for project files, package name for packages

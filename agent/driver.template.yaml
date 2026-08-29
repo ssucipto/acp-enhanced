@@ -3,8 +3,6 @@
 # Leave type: native (or omit the driver entirely) to use local tools — the default.
 #
 # This file is optional. Delete it if you do not need MCP or custom backend routing.
-# See: agent/patterns/local.driver-dispatch-directive.md
-# See: agent/patterns/local.workflow-override-directive.md
 # See: agent/schemas/driver.schema.yaml (validation schema)
 ---
 drivers:

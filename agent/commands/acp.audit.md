@@ -7,13 +7,13 @@
 **Namespace**: acp  
 **Version**: 1.1.0  
 **Created**: 2026-03-15  
-**Last Updated**: 2026-05-11  
+**Last Updated**: 2026-08-28  
 **Status**: Active  
 **Scripts**: None  
 
 ---
 
-**Purpose**: Deep-dive investigation of a subject, producing a structured report in `agent/reports/`  
+**Purpose**: Deep-dive investigation of a subject, producing a structured report in `agent/reports/` (local only; **do not commit** — ADR-27). This is **not** a PR review and **not** a CodeRabbit replacement — use `/acp-review` (optionally `--pr-diff`) for standards enforcement on a diff.  
 **Category**: Workflow  
 **Frequency**: As Needed  
 
@@ -78,6 +78,7 @@ Use this when you need a thorough understanding of a subject before acting — r
     /acp-init      Broad context loading (not deep dives)
     /acp-status    Quick status snapshot
     /acp-validate  Schema and consistency validation
+    /acp-review    Standards enforcement (not this command; not a CodeRabbit replacement)
 ```
 
 This step is informational only — do not wait for user input.
@@ -399,7 +400,7 @@ Code pointers: 15
 
 ### File Access
 - **Reads**: Any file in the project (scoped by subject relevance)
-- **Writes**: `agent/reports/audit-{N}-{subject-slug}.md` only
+- **Writes**: `agent/reports/audit-{N}-{subject-slug}.md` only (gitignored; do not `git add`)
 - **Executes**: `git log` for history analysis
 
 ### Network Access
