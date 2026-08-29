@@ -33,7 +33,7 @@ The framework layer solves a specific problem: as your project grows, the AI age
 | `agent/memory/` | Session log, lessons learned, patterns, architectural decisions |
 | `agent/wiki/` | Reference docs loaded section-by-section (never all at once) |
 | `agent/commands/` | 73 self-documenting slash commands (`/acp-init`, `/acp-ci`, `/acp-pr`, `/acp-smoke`, `/acp-review`, `/acp-integrity`, `/acp-audit`, etc.) |
-| `agent/scripts/` | 56 bash scripts + TypeScript tooling for dispatch and validation |
+| `agent/scripts/` | 59 bash scripts + TypeScript tooling for dispatch and validation |
 
 > 🖥️ **Companion Tool**: [**ACP Enhanced Visualizer**](https://github.com/ssucipto/ACPEnhanced-Visual) (v1.5.0) — a full-featured local web dashboard that brings your `agent/progress.yaml` to life. Monitors milestones, tasks, sessions, ADRs, lessons, patterns, packages, and audit reports — all from a single interactive UI. **Multi-project tab support, GitHub remote read, and zero-config `npx acp-visualizer` CLI.** [See full feature list below →](#visualize-your-project)
 
@@ -267,7 +267,8 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Install | `curl \| bash` from original repo | Single bootstrap script from this fork |
 | Light mode | Full protocol every session | Default ~200-token light mode; full mode for architecture sessions |
 | Skill invocation | None | 9 skills invocable via `@{skill-name}` in chat |
-| Code review | None | `/acp-review` — 77-rule quality + security enforcement (OWASP, MASVS) |
+| Code review | None | `/acp-review` — 64-rule quality + security enforcement (OWASP, MASVS); `--diff` vs `--pr-diff` are distinct |
+| Local CI / PR / device | None | `/acp-ci` local gate predictor; `/acp-pr` delegates gates only; optional `/acp-smoke --host` exec-host preflight (unconfigured exits 2) |
 | Code integrity | None | `/acp-integrity` v1.0 — 55-rule trust scan with 6 deterministic bash scripts |
 | Scheduled audits | None | `recurring_tasks` in progress.yaml + Step 4.5 session-start due check |
 | Parallel tasks | None | `task_type: parallel` with DAG sub-tasks + orchestrator-workers |
@@ -295,6 +296,26 @@ ACP Enhanced provides five report types, each for a different audience:
 - `report-YYYY-MM-DD.md` — full archive (`/acp-report`)
 - `design-spec-{subject}-v{N}.md` — interface spec (`/acp-design-spec`)
 - `roadmap-brief-{subject}-{date}.md` — one-off planning (not recurring)
+
+### Field-feedback waves A–C (v6.35.0–v6.37.1, Aug 2026)
+
+Three sequenced milestones closed Safe-IQ / FIFOZ remainder without regressing `--diff`, CI step ids, or ADR-27 report privacy:
+
+| Wave | Version | Shipped |
+|------|---------|---------|
+| **A (M89)** | v6.35.0 | `/acp-review --pr-diff` agent pass; CodeRabbit optionality (ADR-21); `local.*` survival docs |
+| **B (M90)** | v6.36.0–v6.36.1 | `/acp-smoke` fail-closed stub; D15/D16 glossary; catalog + E2E regression holes closed |
+| **C (M91)** | v6.37.0–v6.37.1 | Portable `ACP_*` exec-host; `/acp-smoke --host`; `pr.yml` optional extra gates; empty-host fail-closed |
+
+**Contracts that must not regress:**
+
+- Unconfigured `/acp-smoke` → **exit 2**, message `not configured`, never PASS
+- `--diff` = Phase 1 `git diff --name-only` — **not** `--pr-diff`
+- `/acp-ci` step id is **`e2e-smoke`** — `/acp-ci --only smoke` is unknown
+- Smoke runner matrix: `agent/configurables/smoke.yml` (P-CI-1), not preference arrays
+- Extra PR gates: `agent/configurables/pr.yml` block list (D11), after `/acp-ci` only
+
+See [`agent/design/local.field-feedback-waves-abc.md`](agent/design/local.field-feedback-waves-abc.md) and [`agent/wiki/exec-host.md`](agent/wiki/exec-host.md).
 
 ### Recent Protocol Enhancements (v6.10–v6.12.1)
 
@@ -1114,6 +1135,7 @@ project-root/
 │   │   └── audit-carryovers.md     # Unresolved audit findings
 │   ├── wiki/                       # Layer 3: reference (section-loaded)
 │   │   ├── domain.yml              # Domain taxonomy
+│   │   ├── exec-host.md            # Win32-OpenSSH inner loop (M91)
 │   │   └── architecture.md         # Integration patterns
 │   ├── routing/                    # Task routing system
 │   │   ├── taxonomy.yml            # Task type → executor mapping
@@ -1122,7 +1144,7 @@ project-root/
 │   │   ├── ledger.md               # Cost + token tracking
 │   │   └── tasks/                  # Generated route files
 │   ├── commands/                   # 75 command docs (73 acp.* + 2 git.*)
-│   ├── scripts/                    # 36 shell scripts + TypeScript tools
+│   ├── scripts/                    # 59 bash scripts + TypeScript tools
 │   ├── design/                     # Design documents
 │   ├── milestones/                 # Keepers + template (instance bodies local, ADR-28)
 │   ├── tasks/                      # Keepers + template (instance bodies local, ADR-28)
@@ -1135,7 +1157,10 @@ project-root/
 │   ├── reports/                    # Audit reports (gitignored)
 │   ├── feedback/                   # User feedback (gitignored)
 │   ├── preferences/                # Preference overrides
-│   ├── configurables/              # Configurable definitions
+│   ├── configurables/              # Runtime matrices (P-CI-1)
+│   │   ├── ci.yml                  # /acp-ci step registry (e2e-smoke)
+│   │   ├── smoke.yml               # /acp-smoke runner (D16)
+│   │   └── pr.yml                  # Optional extra local_gates (D11)
 │   ├── artifacts/                  # Research, glossary, reference
 │   ├── benchmarks/                 # ACP vs baseline benchmark suite
 │   ├── specs/                      # Feature specifications
