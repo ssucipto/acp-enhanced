@@ -6,6 +6,22 @@
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop
+  tasks: [audit-137, M94]
+  done:
+    - m94-pre-impl-audit-137
+    - adr-29-written
+    - m94-amend-v120
+  deferred:
+    - F-135-07-progress-yaml-split → future-adr
+  key_fact: >
+    audit-137: tag rewrite is required (F-137-01). Nested patterns/**/local.*
+    and visualizer.requirements.md are PURGE. CB-2 must use local.dummy.md.
+    First impl task remains 373. Do not skip --tags.
+
+
+- date: 2026-08-29
+  executor: cursor-grok
+  branch: develop
   tasks: [task-369, F-124-02]
   done:
     - tier3-e2e-count-61
