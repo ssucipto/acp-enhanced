@@ -281,6 +281,7 @@ contents:
       description: Optional device preflight; unconfigured exits 2
       scripts:
         - acp.smoke.sh
+        - acp.exec-host-ssh.sh
 
     - name: acp.commit.md
       description: End-of-session memory commit and route stamping

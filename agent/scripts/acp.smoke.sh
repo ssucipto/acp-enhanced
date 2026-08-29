@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# acp.smoke.sh — optional device preflight dispatcher (M90 / D9 / D16)
+# acp.smoke.sh — optional device preflight dispatcher (M90 stub / M91 --host)
 #
 # Delegates to a project runner from agent/configurables/smoke.yml.
 # Missing file or empty runner → exit 2, message "not configured", never PASS.
-# Do not add --host. Do not vendor Maestro. Zero git/gh mutations.
+# --host overrides ACP_EXEC_HOST (github|windows|local). LAN adb = --host local.
+# --remote requires --host local. Do not vendor Maestro. Zero git/gh mutations.
 #
 # False-green: FG-1 (no set +e under trap), FG-2 (never PASS with zero work).
 
@@ -15,9 +16,12 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 cd "${REPO_ROOT}"
 
 SMOKE_CONFIG="${ACP_SMOKE_CONFIG:-${REPO_ROOT}/agent/configurables/smoke.yml}"
+EXEC_HOST_SH="${SCRIPT_DIR}/acp.exec-host-ssh.sh"
 
 DRY_RUN=false
 DOCTOR=false
+REMOTE=false
+HOST="${ACP_EXEC_HOST:-}"
 PASSTHROUGH=()
 
 usage() {
@@ -33,12 +37,16 @@ Options:
                       exit 1 if configured but the runner is missing;
                       exit 0 if the runner exists.
   --dry-run           Print the plan; do not execute the runner.
+  --host github|windows|local
+                      Override ACP_EXEC_HOST. LAN adb is local only.
+  --remote            Requires --host local (012/011).
   --android           Passthrough to the project runner (not AE Gradle).
   --ios               Passthrough to the project runner.
   -h, --help          Help
 
 Unconfigured (missing smoke.yml or empty runner): exit 2, no PASS.
 Agent command: /acp-smoke — see agent/commands/acp.smoke.md
+See also: agent/wiki/exec-host.md
 EOF
 }
 
@@ -46,6 +54,15 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --doctor) DOCTOR=true; shift ;;
     --dry-run) DRY_RUN=true; shift ;;
+    --remote) REMOTE=true; shift ;;
+    --host)
+      if [[ -z "${2-}" ]]; then
+        echo "[acp.smoke] ERROR: --host requires github|windows|local" >&2
+        exit 2
+      fi
+      HOST="$2"
+      shift 2
+      ;;
     --android|--ios) PASSTHROUGH+=("$1"); shift ;;
     -h|--help) usage; exit 0 ;;
     --)
@@ -64,6 +81,34 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+valid_host() {
+  case "$1" in
+    github|windows|local) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+if [[ -n "${HOST}" ]] && ! valid_host "${HOST}"; then
+  echo "[acp.smoke] ERROR: unknown host: ${HOST} (want github|windows|local)" >&2
+  exit 2
+fi
+
+if [[ "$REMOTE" == true && "${HOST}" != "local" ]]; then
+  echo "[acp.smoke] ERROR: --remote requires --host local" >&2
+  exit 2
+fi
+
+dispatch_exec_host_dry_run() {
+  if [[ -z "${HOST}" ]]; then
+    return 0
+  fi
+  if [[ ! -f "${EXEC_HOST_SH}" ]]; then
+    echo "[acp.smoke] ERROR: exec-host orchestrator missing" >&2
+    return 1
+  fi
+  bash "${EXEC_HOST_SH}" --dry-run --host "${HOST}"
+}
 
 # Strip quotes from a YAML scalar (runner: "path" or runner: path).
 _smoke_unquote() {
@@ -140,6 +185,11 @@ fi
 
 if [[ "$DOCTOR" == true ]]; then
   echo "[acp.smoke] config: ${SMOKE_CONFIG}"
+  if [[ -n "${HOST}" ]]; then
+    echo "[acp.smoke] host: ${HOST}"
+  else
+    echo "[acp.smoke] host: (unset — not defaulted to github)"
+  fi
   if [[ -z "$RUNNER" ]]; then
     echo "[acp.smoke] runner: (empty)"
     emit_unconfigured
@@ -158,12 +208,14 @@ fi
 if [[ -z "$RUNNER" ]]; then
   if [[ "$DRY_RUN" == true ]]; then
     echo "[acp.smoke] dry-run: would fail closed (unconfigured)"
+    dispatch_exec_host_dry_run || true
   fi
   emit_unconfigured
   exit 2
 fi
 
 if [[ "$DRY_RUN" == true ]]; then
+  dispatch_exec_host_dry_run || true
   echo "[acp.smoke] dry-run: would exec: ${RUNNER} ${PASSTHROUGH[*]:-}"
   echo "[acp.smoke] dry-run is not verification (FG-6)"
   exit 0

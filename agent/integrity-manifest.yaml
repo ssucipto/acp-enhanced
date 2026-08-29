@@ -420,7 +420,7 @@ files:
     sha256: "0b84d134c3e42f3cd42ff607a6dbdcfec8a478f143948a17631c39fed30b6a0e"
     last_verified: "2026-08-29"
   - path: "agent/scripts/acp.smoke.sh"
-    sha256: "5be21a8d3dd9e80dc994234f9bc408334aac61dbc137f8428fd195d856a67ac7"
+    sha256: "c597a6360eeb75aa09d6b8a0c6a12e2527f583b2687d9a7ada53fc0e75dad181"
     last_verified: "2026-08-29"
   - path: "agent/scripts/acp.taint-scan.py"
     sha256: "f93a2406c7df5ac3d023847bff54c7195910ca6d6b02d235b22e837e0903d05a"
