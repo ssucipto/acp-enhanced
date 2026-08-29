@@ -128,4 +128,11 @@ if bash "${SMOKE_SH}" --remote >/tmp/acp-smoke-remote.out 2>&1; then REM_RC=0; e
 assert_equals "2" "${REM_RC}" "remote without local fail-closed"
 assert_contains "$(cat /tmp/acp-smoke-remote.out)" "requires" "remote requires local host"
 
+print_test_header "B13 — ACP_EXEC_HOST without --host still plans that host"
+if ACP_EXEC_HOST=local bash "${SMOKE_SH}" --dry-run >/tmp/acp-smoke-envhost.out 2>&1; then ENVH_RC=0; else ENVH_RC=$?; fi
+ENVH_OUT="$(cat /tmp/acp-smoke-envhost.out)"
+assert_equals "2" "${ENVH_RC}" "unconfigured env-host dry-run still exit 2"
+assert_contains "${ENVH_OUT}" "plan host=local" "ACP_EXEC_HOST selects local"
+assert_contains "${ENVH_OUT}" "not configured" "still unconfigured"
+
 print_suite_summary

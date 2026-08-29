@@ -56,7 +56,7 @@ USB/LAN adb against a device on the editor network is `--host local` only. Do no
 
 | Variable | Role |
 |----------|------|
-| `ACP_EXEC_HOST` | `github` \| `windows` \| `local` |
+| `ACP_EXEC_HOST` | `github` \| `windows` \| `local`. Required for `--dry-run` (empty is not windows). |
 | `ACP_WINDOWS_SSH` | `user@host` for OpenSSH |
 | `ACP_WINDOWS_REPO` | Remote path that receives the bundle |
 | `ACP_SECRET_FILES` | Comma-separated **relative** paths; missing → exit 1; never print bytes |

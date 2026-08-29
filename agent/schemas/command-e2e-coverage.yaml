@@ -43,6 +43,7 @@ commands:
       - e2e/acp.command-docs.test.sh
     executed_steps:
       - acp.ci-delegation
+      - extra-gates-dry-run
   acp.clarification-address:
     tier: 3
     suites:
@@ -352,6 +353,8 @@ commands:
       - doctor
       - unconfigured
       - host-dry-run
+      - empty-host-fail-closed
+      - acp-exec-host-env
   acp.spec:
     tier: 3
     suites:

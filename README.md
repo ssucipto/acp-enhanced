@@ -1,6 +1,6 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.37.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.37.1-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
 [![Milestones](https://img.shields.io/badge/milestones-91%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-73%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
@@ -139,7 +139,7 @@ ACP Enhanced registers **73 slash commands** across two tools — available afte
 > **Note**: All 73 `acp.*` commands (plus 2 `git.*`) are available in `agent/commands/*.md`, `.github/prompts/*.prompt.md`, and `.opencode/commands/*.md`. Framework-layer commands (`/acp-route`, `/acp-commit`, `/acp-decide`, `/acp-cost-report`, `/acp-memory-sync`, `/acp-wiki-update`, `/acp-review`, `/acp-integrity`, `/acp-ci`, `/acp-pr`, `/acp-smoke`) are fully documented command files — invoke them via VS Code Copilot, opencode, or by asking any agent to read the corresponding `agent/commands/acp.*.md` file.  
 > **Cross-agent handoff**: See [`agent/wiki/cross-agent-handoff.md`](agent/wiki/cross-agent-handoff.md) for executor vs cross-repo modes, `/acp-receive`, and git drift checks.  
 > **CodeRabbit (optional)**: See [`agent/wiki/coderabbit-integration.md`](agent/wiki/coderabbit-integration.md) — off by default; ACP is fully functional without it. **M81 (ADR-22)** ships findings-import (`bash agent/scripts/acp.findings-import.sh --input …`) + starter `.coderabbit.yaml` template. Aikido / M76 / M77 remain gated (ADR-19).  
-> **Local CI / PR (M86)**: `/acp-ci` predicts GitHub Actions locally; `/acp-pr` opens PRs only after those gates. Optional `/acp-smoke` is device preflight (unconfigured exits 2) — not a CI step. Fork upgrades: `agent/upstream-delta.yml` + upgrade-guard HARD-fail on version-update.
+> **Local CI / PR (M86)**: `/acp-ci` predicts GitHub Actions locally; `/acp-pr` opens PRs only after those gates. Optional `/acp-smoke` is device preflight (`--host`; unconfigured exits 2) — not a CI step. Fork upgrades: `agent/upstream-delta.yml` + upgrade-guard HARD-fail on version-update.
 
 ---
 
@@ -855,7 +855,7 @@ This will:
 - **`/acp-validate`** - Validate ACP structure
 - **`/acp-ci`** - Local CI parity (`--fast` default; `--full` for multi-minute CI equivalence)
 - **`/acp-pr`** - Feature PR prep (gates via `/acp-ci` only)
-- **`/acp-smoke`** - Optional device preflight (unconfigured exits 2; not a CI step)
+- **`/acp-smoke`** - Optional device preflight (`--host` overrides `ACP_EXEC_HOST`; unconfigured exits 2; not a CI step)
 - **`acp.findings-import.sh`** - Import CodeRabbit findings JSON → carryovers when `coderabbit_active` (script; no slash command)
 - **`/acp-audit`** - Deep-dive investigation into `agent/reports/` (local; ADR-27). Not a PR review and not a CodeRabbit replacement
 - **`/acp-review`** - Standards-based code quality and security review (64 rules); optional `--pr-diff` agent pass (not Phase 1 `--diff`)
