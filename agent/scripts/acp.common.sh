@@ -1490,6 +1490,7 @@ display_available_commands() {
     echo ""
     echo "  ${GREEN}/acp-ci${NC}                           - Run GitHub Actions gates locally (predictor)"
     echo "  ${GREEN}/acp-pr${NC}                           - Feature PR with gates via /acp-ci"
+    echo "  ${GREEN}/acp-smoke${NC}                        - Optional device preflight (not e2e-smoke)"
     echo ""
     echo "${BLUE}Task & Project Commands:${NC}"
     echo ""

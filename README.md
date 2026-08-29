@@ -1,8 +1,8 @@
 # ACP Enhanced — Agent Context Protocol
 
-[![Version](https://img.shields.io/badge/version-6.36.0-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-6.36.1-blue)](https://github.com/ssucipto/acp-enhanced/blob/mainline/CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-production%20pattern-brightgreen)](https://github.com/ssucipto/acp-enhanced)
-[![Milestones](https://img.shields.io/badge/milestones-89%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
+[![Milestones](https://img.shields.io/badge/milestones-90%20shipped-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Commands](https://img.shields.io/badge/commands-73%20slash%20commands-blue)](https://github.com/ssucipto/acp-enhanced)
 [![Visualizer](https://img.shields.io/badge/visualizer-v1.5.0-6e47ff)](https://github.com/ssucipto/ACPEnhanced-Visual)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -255,8 +255,8 @@ Weekly: `/acp-cost-report` — reviews ledger, suggests taxonomy corrections, re
 | Memory | None — every session starts cold | sessions.md + lessons.md + ADRs + patterns |
 | Task routing | None | Taxonomy-based routing to skill files |
 | Mistake learning | None | Correction log appended per task type |
-| VS Code commands | Manual file reference | 70 slash commands with autocomplete |
-| opencode support | None | 70 slash commands in `.opencode/commands/` |
+| VS Code commands | Manual file reference | 73 slash commands with autocomplete |
+| opencode support | None | 73 slash commands in `.opencode/commands/` |
 | Preferences | None | 4-level hierarchy (project > workspace > user > default) |
 | Project registry | None | Global `~/.acp/projects.yaml` for multi-project tracking |
 | Cost tracking | None | Per-task token + USD ledger via dispatch |
@@ -1088,9 +1088,9 @@ project-root/
 ├── CLAUDE.md                       # Symlink → AGENT.md (Claude Code)
 ├── .github/
 │   ├── copilot-instructions.md     # Symlink → AGENT.md (GitHub Copilot)
-│   └── prompts/                    # 70 slash command prompts (*.prompt.md)
-├── .opencode/commands/             # 70 slash commands for opencode TUI
-├── .cursor/commands/               # 70 slash commands for Cursor Agent (auto-generated)
+│   └── prompts/                    # 73 slash command prompts (*.prompt.md)
+├── .opencode/commands/             # 73 slash commands for opencode TUI
+├── .cursor/commands/               # 73 slash commands for Cursor Agent (auto-generated)
 ├── agent/                          # Agent context directory
 │   ├── core/                       # Layer 1: always loaded, cached
 │   │   ├── identity.yml            # Project identity + stack
