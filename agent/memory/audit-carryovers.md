@@ -5047,8 +5047,8 @@ carryovers:
     finding: "Task-380 filter-repo incomplete — leftover F-138-01/02 still in rewrite history"
     description: "Do not force-push the 47b3dcc rewrite clone. Re-run from daily with expanded paths-from-file."
     fix_target: "task-387 re-run filter-repo in new throwaway clone"
-    status: pending
-    fix_applied_date: null
+    status: fixed
+    fix_applied_date: 2026-08-29
     verified_in_audit: null
     escalated_to: null
   - audit_id: 138
