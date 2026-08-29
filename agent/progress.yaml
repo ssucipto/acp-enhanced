@@ -3,7 +3,7 @@ project:
   version: 6.37.1
   started: 2026-02-16
   status: active
-  current_milestone: M91
+  current_milestone: M92
   description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.37.1 on develop\n\
     \  (ADR-28: instance milestone/task/session bodies and one field-feedback\n\
     \  file local including history; templates and USAGE.md stay).\n\
@@ -989,9 +989,9 @@ milestones:
   M92:
     name: Post-M91 remediation (F-R006 + release hygiene)
     priority: 4
-    status: not_started
+    status: in_progress
     progress: 0
-    started: null
+    started: 2026-08-29
     completed: null
     estimated_weeks: 0.5
     tasks_completed: 0
@@ -7186,11 +7186,11 @@ tasks:
   - id: task-365
     name: "F-R006-01 js-yaml pin + npm audit clean"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-92-post-m91-remediation/task-365-js-yaml-pin.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T07:42:00Z'
+    completed_date: '2026-08-29T07:50:00Z'
+    actual_hours: 0.2
     estimated_hours: 2
     notes: 'js-yaml 4.3.1; nested 3.15.1; nanoid if still HIGH; npm audit --audit-level=high (no omit=dev)'
   - id: task-366
