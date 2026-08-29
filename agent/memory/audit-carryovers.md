@@ -4837,12 +4837,91 @@ carryovers:
     verified_in_audit: null
     escalated_to: null
   - audit_id: 135
+    finding_id: F-135-06
+    severity: low
+    file: agent/memory/sessions.md
+    finding: "FIFOZ codenames in compact public ledgers"
+    description: "audit-135 low; upgraded to mandatory redaction in M94 v1.1.0 (task 377)."
+    fix_target: "task-377 mandatory ledger redaction before tip purge"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 135
     finding_id: F-135-05
     severity: medium
     file: agent/routing/tasks/route-206.md
     finding: "241 agent/routing/tasks/route-*.md instance route files on public remote"
     description: "Full dogfood work history with file lists and milestone context. Not in ADR-28 scope."
     fix_target: "ADR-29: evaluate purge vs keep taxonomy-only; if purge, paths-from-file filter-repo + route template keeper"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+
+  # ── AUDIT-136 — M94 PRE-IMPL (2026-08-29) ───────────────────────────────────
+  - audit_id: 136
+    finding_id: F-136-01
+    severity: critical
+    file: agent/.gitignore
+    finding: "route-*.md gitignore glob matches route-template.md KEEP file"
+    description: "audit-136 pre-impl. Bare routing/tasks/route-*.md would ignore route-template.md."
+    fix_target: "task-374 m94-purge-paths KEEP test; task-375 negation !route-template.md"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 136
+    finding_id: F-136-02
+    severity: high
+    file: agent/progress.yaml
+    finding: "active_handoff pointed to PURGE design local.post-m91-remediation.md"
+    description: "Retargeted in plan amend to local.github-privacy-adr29.md; task 384 completes validator work."
+    fix_target: "task-384"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 136
+    finding_id: F-136-03
+    severity: high
+    file: agent/tasks/milestone-94-github-privacy-adr29/task-377-ledger-redaction.md
+    finding: "F-135-06 ledger redaction marked P3 optional in M94 v1.0"
+    description: "Upgraded to mandatory priority 5 in v1.1.0 amend."
+    fix_target: "task-377"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 136
+    finding_id: F-136-04
+    severity: high
+    file: AGENT.md
+    finding: "Tracked docs hard-link agent/design/local.* and patterns/local.*"
+    description: "Public clone broken post-purge without link remediation."
+    fix_target: "task-385"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 136
+    finding_id: F-136-05
+    severity: medium
+    file: scripts/acp-validate.ts
+    finding: "validateActiveHandoff lacks gitignore skip for PURGE handoff paths"
+    description: "Regression risk after ADR-29 gitignore."
+    fix_target: "task-384 + task-375"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 136
+    finding_id: F-136-08
+    severity: medium
+    file: agent/commands/acp.project-create.md
+    finding: "Install gitignore template missing ADR-29 blocks"
+    description: "New consumer projects would not inherit design/pattern/route privacy rules."
+    fix_target: "task-386"
     status: pending
     fix_applied_date: null
     verified_in_audit: null
