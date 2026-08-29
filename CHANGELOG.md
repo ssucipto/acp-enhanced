@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **`pr.yml` (M91)** — optional `local_gates` after `/acp-ci` (empty = no-op). Not preference arrays. Consumers may CodeRabbit-filter `agent/**`.
 - **`/acp-smoke --host` (M91)** — `github|windows|local` overrides `ACP_EXEC_HOST`. Unconfigured still exit 2. Dry-run windows prints `git bundle`, not Darwin `assembleDebug`. `--remote` requires `--host local`.
 - **Exec-host wiki (M91)** — `agent/wiki/exec-host.md` documents nine Win32-OpenSSH inner-loop rules (012).
 - **Exec-host (M91)** — `acp.exec-host-ssh.sh` (`ACP_*`, git bundle + scp; not `ssh -A` clone) plus generic Windows prepare/run/install scripts. Not a `--fast` CI step.

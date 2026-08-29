@@ -48,6 +48,8 @@ Promote recurring **classes** of Bucket A misses into **project** convention tes
 
 Projects may add `agent/wiki/local.coderabbit-land-policy.md` (never shipped by Enhanced). Put org-specific merge rules there. Framework wiki stays stack-agnostic.
 
+Consumers **may** add `!agent/**` to CodeRabbit `reviews.path_filters` so protocol files are out of product review. The AE template stays narrower (`!agent/memory/**`, `!agent/reports/**`) so **this** repo still reviews command docs. Optional extra globs may be listed in `agent/configurables/pr.yml` (`coderabbit_exclude_globs`) — documentation only; ACP does not rewrite `.coderabbit.yaml` from that file.
+
 ## Enabling it
 
 The integration is governed by two preferences (both off/inert by default):

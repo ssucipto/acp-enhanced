@@ -211,6 +211,81 @@ else
   echo ""
 fi
 
+# --- Extra local_gates from pr.yml (D11 / P-CI-1; after acp.ci.sh only) ---
+PR_CONFIG="${ACP_PR_CONFIG:-${REPO_ROOT}/agent/configurables/pr.yml}"
+PR_LOCAL_GATES=()
+
+_pr_read_local_gates() {
+  local cfg="$1"
+  local in_list=false line item rest
+  PR_LOCAL_GATES=()
+  [[ -f "$cfg" ]] || return 0
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    [[ "$line" =~ ^[[:space:]]*# ]] && continue
+    [[ -z "${line// }" ]] && continue
+    if [[ "$line" =~ ^[[:space:]]*local_gates: ]]; then
+      rest="${line#*:}"
+      rest="${rest#"${rest%%[![:space:]]*}"}"
+      rest="${rest%"${rest##*[![:space:]]}"}"
+      if [[ "$rest" == "[]" ]]; then
+        return 0
+      fi
+      if [[ -n "$rest" ]]; then
+        echo "[acp.pr] ERROR: local_gates must be [] or a block list (D11)" >&2
+        return 2
+      fi
+      in_list=true
+      continue
+    fi
+    if [[ "$in_list" == true ]]; then
+      if [[ "$line" =~ ^[[:space:]]*-[[:space:]] ]]; then
+        item="${line#*-}"
+        item="${item#"${item%%[![:space:]]*}"}"
+        item="${item%"${item##*[![:space:]]}"}"
+        item="${item#\"}"
+        item="${item%\"}"
+        [[ -n "$item" ]] && PR_LOCAL_GATES+=("$item")
+      elif [[ "$line" =~ ^[[:space:]]*[a-zA-Z_] ]]; then
+        in_list=false
+      fi
+    fi
+  done < "$cfg"
+  return 0
+}
+
+if ! _pr_read_local_gates "${PR_CONFIG}"; then
+  exit 2
+fi
+
+if [[ "${SKIP_LOCAL}" == "false" && ${#PR_LOCAL_GATES[@]} -gt 0 ]]; then
+  echo ">>> Extra local_gates (pr.yml, after acp.ci.sh)"
+  extra_ran=0
+  for g in "${PR_LOCAL_GATES[@]}"; do
+    echo "  extra step: acp.ci.sh --only ${g}"
+    if [[ "${DRY_RUN}" == "true" ]]; then
+      echo "  (dry-run) extra gates are not verification (FG-6)"
+      extra_ran=1
+    else
+      extra_rc=0
+      if bash "${CI_SCRIPT}" --only "${g}"; then
+        extra_rc=0
+      else
+        extra_rc=$?
+      fi
+      if [[ "${extra_rc}" -ne 0 ]]; then
+        echo "[acp.pr] extra local_gate failed: ${g} (exit ${extra_rc})" >&2
+        exit "${extra_rc}"
+      fi
+      extra_ran=1
+    fi
+  done
+  if [[ "${DRY_RUN}" == "false" && "${extra_ran}" -eq 0 ]]; then
+    echo "[acp.pr] ERROR: local_gates listed but none executed (FG-2)" >&2
+    exit 1
+  fi
+  echo ""
+fi
+
 # --- Branch ---
 if [[ "${CURRENT_BRANCH}" != "${BRANCH}" ]]; then
   echo ">>> git checkout ${BRANCH}"
