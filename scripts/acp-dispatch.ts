@@ -112,9 +112,55 @@ export function estimateTokens(text: string): number {
   return Math.ceil(text.length / 4);
 }
 
+/** Frontmatter fields dispatch reads. Extra keys from gray-matter are ignored. */
+export interface TaskMeta {
+  id?: string;
+  task_type?: string;
+  executor?: string;
+}
+
+interface TaxonomyTaskDef {
+  context_required?: string[];
+}
+
+interface TaxonomyFile {
+  task_types?: Record<string, TaxonomyTaskDef>;
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function loadTaxonomy(): TaxonomyFile {
+  const loaded: unknown = yaml.load(readAgent("routing/taxonomy.yml"));
+  if (!isPlainObject(loaded)) return {};
+  const rawTypes = loaded.task_types;
+  if (!isPlainObject(rawTypes)) return {};
+  const task_types: Record<string, TaxonomyTaskDef> = {};
+  for (const [key, val] of Object.entries(rawTypes)) {
+    if (!isPlainObject(val)) continue;
+    const cr = val.context_required;
+    task_types[key] = {
+      context_required: Array.isArray(cr)
+        ? cr.filter((item): item is string => typeof item === "string")
+        : undefined,
+    };
+  }
+  return { task_types };
+}
+
+export function toTaskMeta(data: unknown): TaskMeta {
+  if (!isPlainObject(data)) return {};
+  const meta: TaskMeta = {};
+  if (typeof data.id === "string") meta.id = data.id;
+  if (typeof data.task_type === "string") meta.task_type = data.task_type;
+  if (typeof data.executor === "string") meta.executor = data.executor;
+  return meta;
+}
+
 // ── Context Assembly (cache-optimised) ───────────────────────
 export function buildContext(
-  meta: Record<string, any>,
+  meta: TaskMeta,
   taskContent: string
 ): { system: string; user: string } {
   // STATIC SYSTEM PREFIX — identical bytes = cache hit
@@ -128,8 +174,8 @@ export function buildContext(
     .join("\n\n");
 
   // DYNAMIC USER MESSAGE — fresh every call
-  const taxonomy = yaml.load(readAgent("routing/taxonomy.yml")) as any;
-  const taskDef = taxonomy?.task_types?.[meta.task_type] ?? {};
+  const taxonomy = loadTaxonomy();
+  const taskDef = taxonomy.task_types?.[meta.task_type ?? ""] ?? {};
   const contextRequired: string[] = taskDef.context_required ?? [];
 
   const dynamicParts: string[] = [
@@ -174,11 +220,11 @@ export function buildContext(
 
 // ── Ledger Logging ────────────────────────────────────────────
 function appendLedger(
-  meta: Record<string, any>,
+  meta: TaskMeta,
   inputTokens: number,
   outputTokens: number,
   costUsd: number
-) {
+): void {
   const date = new Date().toISOString().slice(0, 10);
   const row =
     `| ${date} | ${meta.id ?? "?"} | ${meta.task_type ?? "?"} | ` +
@@ -192,7 +238,7 @@ export function updateRoutingYml(
   executor: string,
   modelId: string,
   routingPath?: string
-) {
+): void {
   const filePath =
     routingPath ?? path.join(AGENT_DIR, "core", "routing.yml");
   const original = readFileSync(filePath, "utf-8");
@@ -213,9 +259,9 @@ async function dispatch(taskPath: string) {
     process.exit(1);
   }
 
-  const { data: meta, content: taskContent } = matter(
-    readFileSync(taskPath, "utf-8")
-  );
+  const parsed = matter(readFileSync(taskPath, "utf-8"));
+  const meta = toTaskMeta(parsed.data);
+  const taskContent = parsed.content;
   const executor: string = meta.executor ?? "claude-sonnet";
 
   if (executor === "local-script") {
