@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **`acp.private-pack.sh`** — also packs `agent/design`, `agent/patterns`, and `agent/routing/tasks` for maintainer transport.
 - **`validateActiveHandoff`** — skip missing gitignored handoff paths (CI clone).
+- **`validateVersionConsistency`** — missing `IP_REGISTER.md` is expected on public clones (ADR-29; not an error).
+- **Tracked docs** — AGENT/commands/wiki no longer hard-link instance `local.*` designs; `acp.project-create` gitignore includes ADR-28/29 keepers.
 
 ---
 

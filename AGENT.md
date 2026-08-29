@@ -1522,7 +1522,7 @@ bash agent/benchmarks/runner/serve-reports.sh
 
 ### Design Document
 
-See [agent/design/local.benchmark-suite.md](agent/design/local.benchmark-suite.md) for the full design specification.
+See `agent/wiki/architecture.md` (Instance Data / ADR-29) for where benchmark design lives locally. Protocol keepers stay under `agent/design/` (`acp-*.md`, templates).
 
 ---
 
@@ -1657,7 +1657,7 @@ Run `/acp-validate` to check index health: valid schema, existing paths, reasona
 
 ### Design Document
 
-See `agent/design/local.key-file-index-system.md` for the complete design specification.
+See `agent/wiki/architecture.md` (Instance Data / ADR-29). Index design is local-only on the maintainer clone; `agent/index/local.main.template.yaml` is the tracked template.
 
 ---
 

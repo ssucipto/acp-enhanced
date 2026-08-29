@@ -589,7 +589,7 @@ These controls are shared with `/acp-integrity` through `agent/scripts/acp.integ
 ## Rule Authoring Checklist (Phase 1)
 
 When adding or changing a deterministic rule in `acp.review-scan.sh`, follow
-[`agent/patterns/local.rule-verification-discipline.md`](../patterns/local.rule-verification-discipline.md):
+See `agent/wiki/architecture.md` (rule-verification discipline lives in a local pattern on maintainer clones — ADR-29):
 
 1. Write the **invariant** in one sentence (not a correlate).
 2. Implement a probe that asserts that invariant (e.g. resolve modules — do not treat `scripts/node_modules/` existence as “YAML rules can run”).

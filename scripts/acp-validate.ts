@@ -1102,6 +1102,19 @@ export function validateVersionConsistency(root?: string): ValidationError[] {
     console.log(`✅ Version header: AGENTS.md v${files["AGENTS.md"] || "?"} matches identity.yml`);
   }
 
+  // ADR-29: IP_REGISTER.md is local-only. Missing on a public clone is expected (not an error).
+  const ipPath = path.join(base, "IP_REGISTER.md");
+  if (existsSync(ipPath)) {
+    const ipRaw = readFileSync(ipPath, "utf8");
+    const ipMatch = ipRaw.match(/\*\*Current Version\*\*\s*\|\s*([\d.]+)/);
+    const ref = files["identity.yml"];
+    if (ipMatch && ref && ipMatch[1] !== ref) {
+      console.log(
+        `⚠️  IP_REGISTER.md: ${ipMatch[1]} → expected ${ref} (local-only file; not a validate error)`,
+      );
+    }
+  }
+
   return errors;
 }
 

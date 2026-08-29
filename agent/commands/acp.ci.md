@@ -163,7 +163,7 @@ Never present a SKIP as green. Never claim PASS when `executed_steps` is 0 (FG-2
 
 ## False-green contracts (mandatory)
 
-See `agent/patterns/local.false-green-contracts.md` and `constraints.yml` bash_rules:
+See `agent/wiki/architecture.md` (false-green contracts; ADR-29 local patterns are maintainer-only) and `constraints.yml` bash_rules:
 
 | ID | Rule |
 |----|------|

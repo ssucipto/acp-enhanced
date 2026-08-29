@@ -14,8 +14,8 @@ active_handoff:
   date: '2026-08-29'
   to_executor: cursor-grok
   from_executor: cursor-grok
-  git_commit: c8e53daea34c423c8b120940d5e562c4913de37d
-  status: planned
+  git_commit: 67528b6f87fb0a26c8c5bc4be74740a14f81e7bf
+  status: in_progress
   completed_date: null
 milestones:
   M44:
@@ -1021,11 +1021,11 @@ milestones:
     name: GitHub privacy extension (ADR-29)
     priority: 5
     status: in_progress
-    progress: 21
+    progress: 57
     started: 2026-08-29
     completed: null
     estimated_weeks: 1.5
-    tasks_completed: 3
+    tasks_completed: 8
     tasks_total: 14
     file: agent/milestones/milestone-94-github-privacy-adr29.md
     design: agent/design/local.github-privacy-adr29.md
@@ -7329,51 +7329,51 @@ tasks:
   - id: task-376
     name: "F-135-01 IP_REGISTER validate + docs"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-376-ip-register-validate-docs.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T12:50:00Z'
+    completed_date: '2026-08-29T13:05:00Z'
+    actual_hours: 0.3
     estimated_hours: 2
     notes: 'Soft-check absent OK on public clone'
   - id: task-377
     name: "Ledger redaction F-135-06/08"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-377-ledger-redaction.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T13:05:00Z'
+    completed_date: '2026-08-29T13:10:00Z'
+    actual_hours: 0.1
     estimated_hours: 3
     notes: 'MANDATORY before 378; F-135-06 not optional; redact HOME paths + compact sessions'
   - id: task-384
     name: "Handoff + progress pointer hygiene"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-384-handoff-pointer-hygiene.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T12:50:00Z'
+    completed_date: '2026-08-29T13:05:00Z'
+    actual_hours: 0.2
     estimated_hours: 2
     notes: 'F-136-02/05; retarget active_handoff; validateActiveHandoff gitignore skip; blocks 378'
   - id: task-385
     name: "Tracked doc link remediation"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-385-tracked-doc-link-remediation.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T12:50:00Z'
+    completed_date: '2026-08-29T13:05:00Z'
+    actual_hours: 0.3
     estimated_hours: 4
     notes: 'F-136-04; AGENT/commands/wiki/index; blocks 378'
   - id: task-386
     name: "Install template + E2E regression"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-94-github-privacy-adr29/task-386-install-e2e-regression.md
-    started: null
-    completed_date: null
-    actual_hours: null
+    started: '2026-08-29T12:50:00Z'
+    completed_date: '2026-08-29T13:05:00Z'
+    actual_hours: 0.2
     estimated_hours: 3
     notes: 'F-136-08; project-create gitignore; route-template-only E2E; blocks 378'
   - id: task-378

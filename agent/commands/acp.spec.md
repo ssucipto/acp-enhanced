@@ -785,9 +785,9 @@ Next steps:
 
 ### Example 2: Spec From a Design
 
-**Context**: `agent/design/local.payment-processor.md` is settled; time to build.  
+**Context**: An instance design (gitignored `local.*` under `agent/design/`; ADR-29) is settled; time to build.  
 
-**Invocation**: `/acp-spec --from-design agent/design/local.payment-processor.md`  
+**Invocation**: `/acp-spec --from-design <instance-design>`  
 
 **Result**: Creates `agent/specs/local.payment-processor.md` with concrete interfaces, data shapes, and acceptance criteria extracted from the design's implementation sections.
 

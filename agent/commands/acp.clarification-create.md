@@ -420,7 +420,7 @@ Questions: 12 questions across 4 topics
 
 **Context**: Analyzing existing design document  
 
-**Invocation**: `/acp-clarification-create --file agent/design/local.api-design.md --title api-endpoint-details`  
+**Invocation**: `/acp-clarification-create --file agent/design/acp-commands-design.md --title api-endpoint-details`  
 
 **Result**: Creates clarification-9-api-endpoint-details.md with questions about API design gaps  
 

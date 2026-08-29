@@ -76,17 +76,23 @@ ACP Enhanced separates files into two categories:
 - `agent/core/`, `agent/wiki/`, `agent/skills/` — protocol definitions
 
 ### Instance Data (local only)
-- `agent/milestones/`, `agent/routing/tasks/` — project work items
-- `agent/memory/` — session records (tracked protocol memory)
+- `agent/milestones/`, `agent/tasks/`, `agent/sessions/` — instance bodies (ADR-28)
+- `agent/routing/tasks/route-[0-9]*.md` — instance routes (ADR-29); `route-template.md` stays tracked
+- `agent/design/local.*`, `agent/design/m[0-9]*.md`, `visualizer.requirements.md` — instance designs (ADR-29); protocol `acp-*.md` / templates stay tracked
+- `agent/patterns/**/local.*` — instance patterns (ADR-29); `pattern.template.md` / `bootstrap.template.md` stay tracked
+- `IP_REGISTER.md` — legal register (ADR-29; gitignored; never on public remotes including history)
+- `agent/memory/` — compact protocol memory (tracked)
 - `agent/reports/` — local audit bodies (gitignored; finding IDs live in carryovers/CHANGELOG)
 - `agent/feedback/`, `agent/clarifications/` — project communication
 
 ### Framework Development Mode
 When developing ACP Enhanced itself, run `/acp-init --track-instance-data` to
 acknowledge that you're working on the framework, not using it as an end-user
-project. Routing tasks and compact memory stay tracked. Instance milestone, task,
-and session **bodies** stay local (ADR-28). Report and feedback bodies stay local
-(ADR-27) — do not `git add -f` them to public remotes.
+project. Compact memory stays tracked. Instance milestone, task, session, design,
+pattern, and route **bodies** stay local (ADR-28/29). `route-template.md` and
+protocol `acp-*-design.md` stay tracked. Report and feedback bodies stay local
+(ADR-27) — do not `git add -f` them to public remotes. Do not `git add -f`
+`IP_REGISTER.md`.
 
 ## Audit-First Workflow (v6.9.1+)
 

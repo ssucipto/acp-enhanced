@@ -107,7 +107,7 @@ bash agent/scripts/acp.findings-import.sh --dry-run --input path/to/export.json
 v1 is **`--input` file only** (no `--pr` / network). Silent no-op when CodeRabbit is inactive.
 ## How ACP behaves — on vs off
 
-Detection lives in `agent/scripts/acp.coderabbit.sh` (`coderabbit_available` / `coderabbit_active`). The three-gate contract is: **opt-in → detection → silent degradation** (see the pattern `agent/patterns/local.optional-external-tool.md`).
+Detection lives in `agent/scripts/acp.coderabbit.sh` (`coderabbit_available` / `coderabbit_active`). The three-gate contract is: **opt-in → detection → silent degradation** (see ADR-29: optional-tool pattern is local-only on maintainer clones).
 
 | State | `enabled` | `.coderabbit.yaml` | ACP behavior |
 |-------|-----------|--------------------|--------------|
@@ -158,5 +158,5 @@ Aikido is **deferred for current user-base cost**, not abandoned.
 - [ADR-19](../memory/decisions.md) — Aikido / M76 / M77 remain gated
 - [Policy map lite](coderabbit-policy-map-lite.md)
 - [Local thorough review playbook](coderabbit-local-thorough-review.md) (M82 — CLI chunked + ACP weeklies)
-- `agent/patterns/local.optional-external-tool.md`
+- Optional-tool pattern (local-only on maintainer clones — ADR-29)
 - Finding IDs F-097 / F-101 (full audit bodies live in local gitignored `agent/reports/` after ADR-27)

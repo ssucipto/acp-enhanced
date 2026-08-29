@@ -216,9 +216,8 @@ the corresponding markdown document in `agent/patterns/`:
 ### 5. Stamp Completed Route Files
 
 - For each route ID in `tasks_completed:` above:
-  - Read `agent/routing/tasks/route-[NNN].md`
-  - If `completed:` field is blank → set `completed: [today]`
-  - If already set → skip (never overwrite)
+  - Prefer stamping `progress.yaml` task entries (instance `route-[NNN].md` bodies are local — ADR-29)
+  - If `agent/routing/tasks/route-[NNN].md` exists on disk, set blank `completed:` to today; never overwrite
   - If file does not exist → skip silently
 
 ### 6. Compact Sessions (if needed)

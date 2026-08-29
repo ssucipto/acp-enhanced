@@ -280,9 +280,9 @@ Load architectural patterns and coding standards before reviewing source files.
 **Display format**:
 ```
 📐 Reviewing Project Patterns...
-  ✓ agent/patterns/local.e2e-testing.md
-  ✓ agent/patterns/local.script-structure.md
-  ○ agent/patterns/local.typescript-modules.md (skipped — not relevant)
+  ✓ agent/patterns/bootstrap.template.md
+  ✓ agent/design/acp-commands-design.md
+  ○ agent/wiki/architecture.md (skipped — not relevant)
 
   2 patterns read
 ```
@@ -309,10 +309,10 @@ Load critical project files from the key file index.
 ```
 📑 Reading Key Files & Context...
   ✓ agent/design/acp-commands-design.md (weight: 0.9, design)
-  ✓ agent/patterns/local.e2e-testing.md (weight: 0.8, pattern)
+  ✓ agent/patterns/bootstrap.template.md (weight: 0.8, pattern)
   📝 "Migration files MUST be numbered sequentia..." (weight: 1.0, note)
   ⚡ "Never modify files in src/legacy/ without..." (weight: 0.9, directive)
-  ○ agent/patterns/local.tracked-untracked-directories.md (weight: 0.7, skipped — below threshold)
+  ○ agent/wiki/architecture.md (weight: 0.7, skipped — below threshold)
 
   2 index files scanned, 2 files read, 2 inline entries loaded, 1 skipped
 ```
