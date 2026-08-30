@@ -2,7 +2,7 @@
 # acp.m95-name-scan.sh — encoded deny-list scanner (M95 / ADR-30)
 #
 # Tokens are stored base64 so tracked sources do not re-publish plaintext names.
-# Default: scan git ls-files (HEAD blob contents). Empty match is success (D8).
+# Default: scan HEAD blobs via git grep. Empty match is success (D8).
 #
 # Usage:
 #   bash agent/scripts/acp.m95-name-scan.sh              # scan current repo HEAD
@@ -11,15 +11,21 @@
 #
 # Default --repo mode is a CI job after HEAD redact (audit-142 F-142-05 / D13).
 # Fixture tests (--dir) stay the unit coverage; they do not require a clean HEAD.
+# One git-grep / grep -F -f pass (not per-file per-token) so windows-latest
+# stays under the 180s e2e timeout.
 
 set -euo pipefail
-trap 'echo "[acp.m95-name-scan] Error on line ${LINENO}" >&2; exit 1' ERR
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 TOKENS_FILE="${SCRIPT_DIR}/../configurables/m95-name-deny.b64"
 SCAN_DIR=""
 MODE="repo"
+TMP_TOKENS=""
+
+cleanup_tokens() { rm -f "${TMP_TOKENS}"; }
+trap 'cleanup_tokens; echo "[acp.m95-name-scan] Error on line ${LINENO}" >&2; exit 1' ERR
+trap cleanup_tokens EXIT
 
 usage() {
   cat <<'EOF'
@@ -69,47 +75,42 @@ decode_b64() {
   fi
 }
 
-TOKENS=()
+TOKEN_COUNT=0
+TMP_TOKENS="$(mktemp "${TMPDIR:-/tmp}/m95-tokens.XXXXXX")"
+: > "${TMP_TOKENS}"
 while IFS= read -r line || [[ -n "${line}" ]]; do
   [[ -z "${line}" || "${line}" =~ ^# ]] && continue
-  TOKENS+=("$(printf '%s' "${line}" | decode_b64)")
+  printf '%s\n' "$(printf '%s' "${line}" | decode_b64)" >> "${TMP_TOKENS}"
+  TOKEN_COUNT=$((TOKEN_COUNT + 1))
 done < "${TOKENS_FILE}"
 
-if [[ ${#TOKENS[@]} -eq 0 ]]; then
+if [[ "${TOKEN_COUNT}" -eq 0 ]]; then
   echo "[acp.m95-name-scan] ERROR: deny-list decoded to zero tokens" >&2
   exit 2
 fi
 
 HITS=0
-scan_file() {
-  local f="$1"
-  [[ -f "$f" ]] || return 0
-  local t
-  for t in "${TOKENS[@]}"; do
-    if grep -F -I -q -- "${t}" "${f}"; then
-      echo "HIT ${f}"
-      HITS=$((HITS + 1))
-      return 0
-    fi
-  done
-}
-
+# Process substitution (not a pipe) so HITS updates in this shell. Do not print
+# matching lines — filenames only (never re-publish deny-list tokens).
 if [[ "${MODE}" == "dir" ]]; then
   [[ -d "${SCAN_DIR}" ]] || { echo "[acp.m95-name-scan] ERROR: not a directory: ${SCAN_DIR}" >&2; exit 2; }
-  while IFS= read -r -d '' f; do
-    scan_file "${f}"
-  done < <(find "${SCAN_DIR}" -type f -print0)
+  while IFS= read -r f; do
+    [[ -z "${f}" ]] && continue
+    echo "HIT ${f}"
+    HITS=$((HITS + 1))
+  done < <(grep -R -F -I -l -f "${TMP_TOKENS}" -- "${SCAN_DIR}" 2>/dev/null || true)
 else
   cd "${REPO_ROOT}"
   while IFS= read -r f; do
     [[ -z "${f}" ]] && continue
-    scan_file "${f}"
-  done < <(git ls-files)
+    echo "HIT ${f}"
+    HITS=$((HITS + 1))
+  done < <(git --no-pager grep -F -I -l -f "${TMP_TOKENS}" HEAD -- 2>/dev/null | sed 's/^HEAD://' || true)
 fi
 
 if [[ "${HITS}" -gt 0 ]]; then
   echo "[acp.m95-name-scan] ${HITS} file(s) with deny-list hits" >&2
   exit 1
 fi
-echo "[acp.m95-name-scan] clean (${#TOKENS[@]} tokens)"
+echo "[acp.m95-name-scan] clean (${TOKEN_COUNT} tokens)"
 exit 0

@@ -321,7 +321,7 @@ files:
     sha256: "f3b4c18791550a7c55c3af8d38395beaa86e65fe0b636b881c6c584c23213cef"
     last_verified: "2026-08-30"
   - path: "agent/scripts/acp.m95-name-scan.sh"
-    sha256: "09c63ff629799878a0f47de598486fa1c5b70604f36b5b9859aaa13e26773ab7"
+    sha256: "3e24fa2f0141c6dc9fc49e58f1d4d9957250bb2a7f65f658aeed76e2d2b663a3"
     last_verified: "2026-08-30"
   - path: "agent/scripts/acp.manifest-hash.sh"
     sha256: "854d5789e9bd445ac821298915538ce91eb2134a9a7de45d5c656144aeee4dcc"
