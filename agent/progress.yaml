@@ -1,13 +1,13 @@
 project:
   name: agent-context-protocol
-  version: 6.39.0
+  version: 6.40.0
   started: 2026-02-16
   status: active
   current_milestone: M95
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.39.0 on develop\n\
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.40.0 on develop\n\
     \  (ADR-29: instance designs/patterns/routes/specs/index and IP_REGISTER\n\
     \  local including history; protocol keepers stay).\n\
-    \  M94 COMPLETE — GitHub privacy rewrite; regular PR to mainline.\n\
+    \  M95 ADR-30/31 name privacy + progress split; regular PR to mainline.\n\
     \  Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/design/local.github-privacy-adr29.md
@@ -574,7 +574,7 @@ milestones:
     name: Public name privacy + progress.yaml split (ADR-30/31)
     priority: 5
     status: in_progress
-    progress: 87
+    progress: 93
     started: 2026-08-30
     completed: null
     estimated_weeks: 1.5
@@ -4745,9 +4745,9 @@ tasks:
   - id: task-401
     name: "v6.40.0 version fields + regular mainline PR"
     priority: 5
-    status: not_started
+    status: in_progress
     file: agent/tasks/milestone-95-public-name-privacy/task-401-v6400-mainline-pr.md
-    started: null
+    started: '2026-08-30T12:52:00Z'
     actual_hours: null
     estimated_hours: 2
     notes: ''

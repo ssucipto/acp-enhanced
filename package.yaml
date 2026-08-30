@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.39.0
+version: 6.40.0
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
