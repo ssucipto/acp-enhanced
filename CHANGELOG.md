@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- **ADR-30 / ADR-31 / M95 (in progress)** — encoded deny-list scanner (`acp.m95-name-scan.sh`); `progress.local.yaml` overlay (gitignored) + status-only tracked `progress.yaml`. HEAD name-scan is a CI validate step. History rewrite and `v6.40.0` wait on the ADR-30 force-push phrase (not `/acp-proceed --yes`).
+- **ADR-30 / ADR-31 / M95 (in progress)** — encoded deny-list scanner; status-only `progress.yaml`. History rewrite force-pushed `develop`, `mainline`, and tags after D11 phrase. Fresh-clone `git log -S` is empty for deny-list tokens. `v6.40.0` PR is task-401.
 
 ### Changed
 - **`network_whitelist.yml`** — protocol default no longer lists Firebase hosts.

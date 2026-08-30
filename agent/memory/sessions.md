@@ -1,7 +1,22 @@
 - date: 2026-08-30
   executor: cursor-grok
   branch: develop
-  tasks: [task-396]
+  tasks: [task-397, task-398, task-399, task-400]
+  done:
+    - m95-filter-repo-replace-text-throwaway
+    - m95-d11-force-push-develop-mainline-tags
+    - m95-fresh-clone-history-proof
+    - m95-stamp-f135-07-f139-f140
+  deferred:
+    - task-401-v6400-pr → next
+    - task-402-post-merge-sync → after-pr
+  key_fact: >
+    D11 phrase used. origin/develop 55c29a72, origin/mainline a51b191a.
+    v6.38.0→024e325, v6.39.0→d23ada0. Fresh clone git log -S all tokens 0;
+    IP_REGISTER history 0. Daily reset to origin/develop. --yes was not D11.
+
+
+
   done:
     - m95-backup-gate-home-rsync-mirror-pack-stamp
   deferred:
