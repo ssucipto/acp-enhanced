@@ -574,11 +574,11 @@ milestones:
     name: Public name privacy + progress.yaml split (ADR-30/31)
     priority: 5
     status: in_progress
-    progress: 53
+    progress: 60
     started: 2026-08-30
     completed: null
     estimated_weeks: 1.5
-    tasks_completed: 8
+    tasks_completed: 9
     tasks_total: 15
     file: agent/milestones/milestone-95-public-name-privacy.md
     design: agent/design/acp-public-name-privacy.md
@@ -4695,10 +4695,11 @@ tasks:
   - id: task-396
     name: "M95 backup GATE trio before filter-repo"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-95-public-name-privacy/task-396-backup-gate-trio.md
-    started: null
-    actual_hours: null
+    started: '2026-08-30T10:13:00Z'
+    completed_date: '2026-08-30T10:14:00Z'
+    actual_hours: 0.2
     estimated_hours: 2
     notes: ''
   - id: task-397
@@ -7954,7 +7955,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M95 HALT at D11: say force-push adr-30 names replace-text develop mainline tags: yes — /acp-proceed --yes is not consent. Then task-397/398."
+- "M95 HALT at D11: say force-push adr-30 names replace-text develop mainline tags: yes — /acp-proceed --yes is not consent. Backup stamp exists. Then task-397/398."
 - "M95 next: task-396 backup GATE, then 397 local replace-text only. Do not stamp F-139/F-135-07 until 399."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 current_blockers: []

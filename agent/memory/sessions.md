@@ -1,7 +1,18 @@
 - date: 2026-08-30
   executor: cursor-grok
   branch: develop
-  tasks: [audit-142, review-012, task-392]
+  tasks: [task-396]
+  done:
+    - m95-backup-gate-home-rsync-mirror-pack-stamp
+  deferred:
+    - m95-force-push → D11-phrase-adr-30
+    - task-397-402 → after-D11
+  key_fact: >
+    M95_LAST_STAMP.txt is in ${HOME}/acp-enhanced-private/ (HEAD 70933619).
+    Pack includes progress.local.yaml. --yes is still not D11.
+
+
+
   done:
     - audit-142-m95-implementation
     - review-012-m95-quality

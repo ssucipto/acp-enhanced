@@ -5350,9 +5350,9 @@ carryovers:
     finding: "HOME backup GATE not completed (F-141-04 still open)"
     description: "Prior rsync blocked; D15 stamp required before 397."
     fix_target: "task-396"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
     escalated_to: "F-141-04"
   - audit_id: 142
     finding_id: F-142-10
