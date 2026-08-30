@@ -4,10 +4,10 @@ project:
   started: 2026-02-16
   status: active
   current_milestone: M95
-  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.40.0 on develop\n\
+  description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.40.0 on mainline\n\
     \  (ADR-29: instance designs/patterns/routes/specs/index and IP_REGISTER\n\
     \  local including history; protocol keepers stay).\n\
-    \  M95 ADR-30/31 name privacy + progress split; regular PR to mainline.\n\
+    \  M95 COMPLETE — ADR-30/31 name privacy + progress split (PR #15).\n\
     \  Aikido track ADR-19 gated.\n"
 active_handoff:
   path: agent/design/local.github-privacy-adr29.md
@@ -573,12 +573,12 @@ milestones:
   M95:
     name: Public name privacy + progress.yaml split (ADR-30/31)
     priority: 5
-    status: in_progress
-    progress: 93
+    status: completed
+    progress: 100
     started: 2026-08-30
-    completed: null
+    completed: 2026-08-30
     estimated_weeks: 1.5
-    tasks_completed: 13
+    tasks_completed: 15
     tasks_total: 15
     file: agent/milestones/milestone-95-public-name-privacy.md
     design: agent/design/acp-public-name-privacy.md
@@ -4745,19 +4745,21 @@ tasks:
   - id: task-401
     name: "v6.40.0 version fields + regular mainline PR"
     priority: 5
-    status: in_progress
+    status: completed
     file: agent/tasks/milestone-95-public-name-privacy/task-401-v6400-mainline-pr.md
     started: '2026-08-30T12:52:00Z'
-    actual_hours: null
+    completed_date: '2026-08-30T05:16:50Z'
+    actual_hours: 1.5
     estimated_hours: 2
     notes: ''
   - id: task-402
     name: "Post-merge sync mainline into develop"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-95-public-name-privacy/task-402-post-merge-sync.md
-    started: null
-    actual_hours: null
+    started: '2026-08-30T05:16:50Z'
+    completed_date: '2026-08-30T05:17:30Z'
+    actual_hours: 0.1
     estimated_hours: 1
     notes: ''
 recent_work:
@@ -7959,7 +7961,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M95 next: task-401 v6.40.0 version fields + regular develop→mainline PR (merge commit). Tag v6.40.0 after identity bump. D11 rewrite is done."
+- "M95 COMPLETE v6.40.0 (PR #15 merge commit). origin/develop == origin/mainline. F-142-08 (bundled 388-395 commit) and F-142-10 (large golden TSV) remain process leftovers."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 current_blockers: []
 notes: []
