@@ -1,6 +1,23 @@
 - date: 2026-08-30
   executor: cursor-grok
   branch: develop
+  tasks: [task-401, task-402]
+  done:
+    - m95-v6400-tag-and-pr-15-merge-commit
+    - m95-post-merge-ff-develop-equals-mainline
+    - m95-stamp-f-141-05
+  deferred:
+    - F-142-08-bundled-commit → do-not-rewrite
+    - F-142-10-progress-golden-large → large-suite-only
+  key_fact: >
+    PR #15 merged (7b8a3e8b). origin/develop == origin/mainline. v6.40.0
+    annotated tag reachable. Stamp commit needs a follow-up merge so remotes
+    match again. --yes is not D11.
+
+
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
   tasks: [task-397, task-398, task-399, task-400]
   done:
     - m95-filter-repo-replace-text-throwaway

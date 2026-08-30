@@ -5238,9 +5238,9 @@ carryovers:
     finding: "Per-task identity bumps fight tag validator"
     description: "Bump once at 401 with annotated v6.40.0 tag (D16)."
     fix_target: "task-401 only"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "143"
     escalated_to: null
   - audit_id: 141
     finding_id: F-141-07
