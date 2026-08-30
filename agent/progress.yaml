@@ -7961,7 +7961,7 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M95 COMPLETE v6.40.0 (PR #15 merge commit). origin/develop == origin/mainline. F-142-08 (bundled 388-395 commit) and F-142-10 (large golden TSV) remain process leftovers."
+- "M95 COMPLETE v6.40.0 (PR #15/#16). No pending M95 carryovers. F-142-08/10 accepted as process (do not rewrite; large golden regen blocked after ADR-30)."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 current_blockers: []
 notes: []

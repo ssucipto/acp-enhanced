@@ -5337,11 +5337,11 @@ carryovers:
     severity: medium
     file: git
     finding: "Tasks 388-395 bundled in one commit (process shortcut)"
-    description: "Do not rewrite 6941bf06. Remaining work gets its own commits."
+    description: "Accepted/wontfix: do not rewrite that commit (SHA retargeted by ADR-30). Tasks 396-402 already have their own commits."
     fix_target: "process"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
     escalated_to: null
   - audit_id: 142
     finding_id: F-142-09
@@ -5359,9 +5359,9 @@ carryovers:
     severity: low
     file: tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv
     finding: "Golden TSV string-replaced rather than parser-regenerated"
-    description: "progress.yaml excluded from fast suite (LARGE_FILE_LINES=200). Regen if large job runs."
+    description: "Accepted/wontfix: honest regen needs pre-M85 parser blob 75ea1a0c, which is gone after ADR-30 rewrite. Fast suite still excludes files >=200 lines; large job remains manual."
     fix_target: "task-394 leftover"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
     escalated_to: "F-140-02"
