@@ -3,6 +3,23 @@
   branch: develop
   tasks: [task-401, task-402]
   done:
+    - m95-session-close
+    - stamp-f-142-08-accepted-process
+    - stamp-f-142-10-regen-blocked-after-rewrite
+  deferred:
+    - weekly-review-integrity → due-2026-09-03
+    - aikido-m76-m77 → adr-19
+  key_fact: >
+    M95 session closed. F-142-08/10 stamped fixed as accepted/wontfix
+    (do not rewrite bundled commit; pre-M85 parser SHA gone so large
+    golden cannot be honestly regenerated). Weeklies current until 2026-09-03.
+
+
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-401, task-402]
+  done:
     - m95-v6400-tag-and-pr-15-merge-commit
     - m95-post-merge-ff-develop-equals-mainline
     - m95-stamp-f-141-05
@@ -1294,144 +1311,18 @@
     on exactly those 6 at HEAD). 59 review-scan E2E assertions
     passed throughout because every one passed an explicit path.
 
-- date: 2026-07-28
-  executor: cursor
-  branch: develop
-  tasks: [audit-106, release-prep-v6.29.2]
-  done:
-    - validate-sync-update-release-prep
-    - prd-main-domain-progress-version-sync
-    - mainline-pr-readiness-confirmed
-  deferred:
-    - m81-implementation → coderabbit-fixture-gate
-  key_fact: "v6.29.2 ready for develop→mainline PR: M83+M84 shipped, zero pending carryovers, validate clean after tag."
+# === Compacted Block: 2026-07-24 – 2026-07-28 (10 sessions, /acp-commit M95 close) ===
+- type: weekly-summary
+  week: 2026-07-24-to-2026-07-28
+  key_facts:
+    - "M83 COMPLETE: review scanner to 100% corpus recall/precision; v6.29.0; ADR-23 local analyzers."
+    - "M82 closed with F-M82-01..07; CLI chunks do not satisfy ADR-22 fixture."
+    - "M81: ADR-22 carve-out (never supersede ADR-19); task-269 ungated; 270-274 fixture-first."
+    - "v6.29.2 ready after audit-106; M81 script work still blocked on real CodeRabbit fixture at the time."
+    - "Phase 1 review-scan measured ~8% recall before M83; multi-path bug scanned only the last path."
+  tasks_completed: 10
+  compacted: true
 
-- date: 2026-07-28
-  executor: cursor
-  branch: develop
-  tasks: [audit-106, M84, F-105-01, F-106-01, F-105-02, F-101-02, F-101-03, F-101-05, F-101-06]
-  done:
-    - audit-106-m84-remediation-committed
-    - v6-29-2-patch
-    - rule-override-preload-all-emitters
-    - e2e-b32-b33-override-paths
-    - review-doc-scanner-limitations-coderabbit-augmentation
-    - all-actionable-carryovers-closed
-  deferred:
-    - m81-implementation → coderabbit-fixture-gate
-  key_fact: "audit-106 closed M84 shortcuts: ig_parse_common_args + manifest-hash preload overrides; B32/B33 E2E; PyYAML stderr warning; F-101 doc-level carryovers fixed. M81 script implementation still blocked on real fixture."
-
-- date: 2026-07-27
-  executor: cursor
-  branch: develop
-  tasks: [task-283, task-284, task-285, task-286, task-287, task-288, task-289, task-290, task-291, task-292, task-293, task-294, task-295, task-296]
-  done:
-    - m83-complete-17-of-17-tasks
-    - v6-29-0-shipped
-    - tier-c-rules-expansion-38-deterministic
-    - gitleaks-dupehound-optional-helpers
-    - review-corpus-100-percent-recall-precision
-    - adr-23-local-analyzer-carve-out
-  deferred:
-    - m81-270-274 → coderabbit-fixture-gate
-  key_fact: "M83 COMPLETE: /acp-review scanner from ~8% recall to measured 100% on 30-case corpus; ~38 deterministic rules; optional gitleaks/dupehound/shellcheck; baseline+inline suppression. v6.29.0 shipped. current_milestone remains M81 (fixture gate)."
-
-- date: 2026-07-27
-  executor: cursor
-  branch: develop
-  tasks: [task-280, task-281, task-282]
-  done:
-    - m83-phase1-scanner-scope-and-executing-e2e
-    - m83-phase1b-lexing-and-eh01-token-match
-    - f-102-01-02-03-08-fixed
-    - f-103-01-02-fixed
-    - f-104-03-04-06-07-fixed
-    - review-scan-fixtures-committed
-  deferred:
-    - m83-283-284 → finish-phase-1b-1c-before-phase-3
-    - m81-270-274 → coderabbit-fixture-gate
-  key_fact: "Phase 1+1b.282: TARGETS[]/--self/.mjs + executing E2E (28 asserts); lexing via acp.review-scan-ts.py (SC-01 comment-only so secrets still match); EH-01 uses \\btry\\b. Next: task-283 then 284 measure. Do not start Phase 3 until 283+284 land."
-
-- date: 2026-07-27
-  executor: claude
-  branch: develop
-  tasks: []
-  done:
-    - audit-102-deterministic-review-gap-analysis
-    - audit-103-measured-precision-recall-and-standards
-    - m83-planned-17-tasks-6-phases
-    - audit-104-pre-impl-readiness-with-amendments
-    - f-104-01-through-07-amendments-applied
-  deferred:
-    - m83-implementation → handoff-cursor
-    - m81-270-274 → coderabbit-fixture-gate
-  key_fact: "/acp-review Phase 1 measured at ~8% recall / 0% precision on seeded fixtures; multi-path arg bug silently scanned only the last path, masking 2 HIGH findings in scripts/. EH-01 substring test 'try' not in body is disabled by retry/telemetry/entry. M83 (17 tasks) fixes correctness then precision then measures BEFORE expanding — phase 3 gated on 1b+1c. audit-104 found _index: array omission would silently drop new preference keys (no validator covers it)."
-
-- date: 2026-07-24
-  executor: cursor
-  branch: develop
-  tasks: []
-  done:
-    - f-m82-01-through-07-remediated
-    - e2e-cross-layer-and-optionality-hardening
-    - js-yaml-4-3-0-audit-clean
-  deferred:
-    - m81-270-274 → fixture-gate
-    - coderabbit-workflows-cli-chunk → optional-rate-limit
-  key_fact: "M82 findings F-M82-01..07 fixed: SCHEMAS_DIR+gh execFileSync, project-update tags loop, sweep token message, SH-01 allowlist, js-yaml 4.3.0; e2e CLI chunk done; workflows still rate-limited."
-
-- date: 2026-07-24
-  executor: cursor
-  branch: develop
-  tasks: [task-275, task-276, task-277, task-278, task-279]
-  done:
-    - m82-local-thorough-review-campaign
-    - review-002-coderabbit-cli-chunks
-    - f-m82-01-through-07-carryovers
-  deferred:
-    - m82-e2e-workflows-cli-chunks → F-M82-06
-    - m81-270-274 → fixture-gate
-  key_fact: "M82 closed: Phase1+CodeRabbit CLI (2/4 chunks; rate-limited remainder). 7 carryovers F-M82-01..07. CLI does not satisfy ADR-22 M81 fixture. current_milestone remains M81."
-
-- date: 2026-07-24
-  executor: cursor
-  branch: develop
-  tasks: [task-269]
-  done:
-    - task-269-adr22-policy-map-lite
-    - acp-validate-clean
-    - m81-status-synced-in-progress-1-of-6
-    - changelog-unreleased-m81-wip
-  deferred:
-    - m81-270-274 → fixture-gate
-    - aikido-m76-m77 → adr-19
-  key_fact: "M81 halted after task-269: need tests/fixtures/coderabbit-findings-sample.json before 270+; ADR-22 carve-out live; F-101-01/04/07/08 fixed; pending F-101-02/03/05/06 for import/wiring tasks."
-
-- date: 2026-07-24
-  executor: cursor
-  branch: develop
-  tasks: [task-269, task-270, task-271, task-272, task-273, task-274]
-  done:
-    - audit-101-f101-findings-folded-into-m81-plan
-    - task-269-ungated-for-adr22
-    - m81-ready-for-implementation-after-fixture
-  deferred:
-    - m81-270-274 → fixture-gate
-    - aikido-m76-m77 → adr-19
-  key_fact: "M81 plan amended per audit-101: ADR-22 carve-out (not supersede); task-269 ungated; findings-import v1 is --input fixture only; weekly-code-review is single command:/optional wrapper; Phase 1 never deferred to CodeRabbit."
-
-- date: 2026-07-24
-  executor: cursor
-  branch: develop
-  tasks: []
-  done:
-    - audit-101-m81-pre-impl-readiness
-    - f-101-01-through-08-carryovers-written
-  deferred:
-    - m81-plan-amend-f101 → before-acp-proceed
-    - m81-gate-artifact-findings-fixture → consumer-export
-    - aikido-m74-m77 → deferred-cost
-  key_fact: "M81 READY WITH AMENDMENTS (audit-101): carve ADR-22 out of ADR-19 (never supersede); fixture-first --input import only; weekly-code-review is a single command string; Phase 1 rules never defer to CodeRabbit; ungate task-269 for ADR writing."
 
 # === Compacted Block: 2026-07-15 – 2026-07-24 (10 sessions, M94 task-377) ===
 - type: weekly-summary
