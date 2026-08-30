@@ -1,7 +1,27 @@
 - date: 2026-08-30
   executor: cursor-grok
   branch: develop
-  tasks: [audit-141, task-388, task-389, task-390, task-391, task-393, task-394, task-395]
+  tasks: [audit-142, review-012, task-392]
+  done:
+    - audit-142-m95-implementation
+    - review-012-m95-quality
+    - m95-progress-yaml-status-only
+    - m95-overlay-restored
+    - m95-name-scan-ci-and-openssl-fallback
+  deferred:
+    - m95-force-push → D11-phrase-adr-30
+    - task-396-backup-gate → in-progress-this-session
+    - task-397-402 → after-D11
+    - F-139-01-02-F-135-07 → after-399
+    - F-142-08-bundled-commit → do-not-rewrite
+    - F-142-10-progress-golden-large → large-suite-only
+  key_fact: >
+    Gitignore S1b had deleted progress.local.yaml. Overlay restored from
+    e718190a (gitignored). Tracked progress.yaml notes stripped (383 tasks,
+    90 milestones, js-yaml parse OK). --yes is not D11.
+
+
+
   done:
     - m95-pre-impl-audit-141
     - m95-encoded-name-scan

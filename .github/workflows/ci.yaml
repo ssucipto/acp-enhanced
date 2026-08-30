@@ -40,6 +40,9 @@ jobs:
       - name: Run acp-validate.ts (command structure + parity)
         run: cd scripts && npx tsx acp-validate.ts
 
+      - name: M95 encoded name-scan (HEAD, ADR-30)
+        run: bash agent/scripts/acp.m95-name-scan.sh
+
       - name: Run review corpus measurement + perf gate (M83, M85 task-303)
         run: bash agent/scripts/acp.review-measure.sh --ci
 

@@ -9,7 +9,8 @@
 #   bash agent/scripts/acp.m95-name-scan.sh --dir DIR    # scan files under DIR (tests)
 #   bash agent/scripts/acp.m95-name-scan.sh --tokens-file PATH
 #
-# Do NOT add this to CI until HEAD is clean (audit-141 F-141-01 / D13).
+# Default --repo mode is a CI job after HEAD redact (audit-142 F-142-05 / D13).
+# Fixture tests (--dir) stay the unit coverage; they do not require a clean HEAD.
 
 set -euo pipefail
 trap 'echo "[acp.m95-name-scan] Error on line ${LINENO}" >&2; exit 1' ERR
@@ -57,7 +58,15 @@ done
 [[ -f "${TOKENS_FILE}" ]] || { echo "[acp.m95-name-scan] ERROR: missing tokens file ${TOKENS_FILE}" >&2; exit 2; }
 
 decode_b64() {
-  python3 -c 'import base64,sys; sys.stdout.write(base64.b64decode(sys.stdin.read().strip()).decode("utf-8"))'
+  # python3 first (same as other ACP tools); openssl is the no-python fallback (FG-4).
+  if command -v python3 >/dev/null 2>&1; then
+    python3 -c 'import base64,sys; sys.stdout.write(base64.b64decode(sys.stdin.read().strip()).decode("utf-8"))'
+  elif command -v openssl >/dev/null 2>&1; then
+    openssl base64 -d -A
+  else
+    echo "[acp.m95-name-scan] ERROR: need python3 or openssl to decode deny-list" >&2
+    exit 2
+  fi
 }
 
 TOKENS=()
@@ -77,7 +86,7 @@ scan_file() {
   [[ -f "$f" ]] || return 0
   local t
   for t in "${TOKENS[@]}"; do
-    if grep -F -q -- "${t}" "${f}" 2>/dev/null; then
+    if grep -F -I -q -- "${t}" "${f}"; then
       echo "HIT ${f}"
       HITS=$((HITS + 1))
       return 0

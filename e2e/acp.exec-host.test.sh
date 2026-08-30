@@ -24,10 +24,11 @@ cp "${PROJECT_ROOT}/agent/scripts/acp.exec-host-ssh.sh" \
   "${PROJECT_ROOT}/agent/scripts/acp.exec-host.windows.ps1" \
   "${PROJECT_ROOT}/agent/scripts/acp.exec-host.windows-install.ps1" \
   "${HOST_SCAN_DIR}/"
-set +e
-bash "${PROJECT_ROOT}/agent/scripts/acp.m95-name-scan.sh" --dir "${HOST_SCAN_DIR}" >/dev/null 2>&1
-eh_scan=$?
-set -e
+if bash "${PROJECT_ROOT}/agent/scripts/acp.m95-name-scan.sh" --dir "${HOST_SCAN_DIR}" >/dev/null 2>&1; then
+  eh_scan=0
+else
+  eh_scan=$?
+fi
 rm -rf "${HOST_SCAN_DIR}"
 if [[ "${eh_scan}" -eq 0 ]]; then
   assert_true "exec-host scripts have no encoded deny-list hits" 0

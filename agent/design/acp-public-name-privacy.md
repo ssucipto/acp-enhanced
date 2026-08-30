@@ -39,7 +39,7 @@ M95 Public name privacy + progress split
 |----|----------|
 | D1 | Deny-list tokens are **encoded** in tracked tests/scripts. Plaintext names live only in gitignored local cookbook / replace-text expressions. |
 | D2 | HEAD redact includes CHANGELOG, sessions, carryovers, ADR prose, lessons — not README-only. |
-| D3 | `progress.local.yaml` is gitignored; tracked `progress.yaml` keeps schema-required status. |
+| D3 | `progress.local.yaml` is gitignored; it is a **full snapshot copy** of `progress.yaml` (operator notes). Tracked `progress.yaml` keeps schema-required status; mapping `notes:` are empty scalars and the top-level `notes:` list is `[]`. Tests must not `touch`/`rm` the overlay path. |
 | D4 | History rewrite uses `--replace-text` on a **throwaway** clone (`git clone --no-local`). Never the daily worktree. |
 | D5 | Force-push phrase is **only**: `force-push adr-30 names replace-text develop mainline tags: yes`. `/acp-proceed --yes` is not consent. Do not reuse the ADR-29 phrase. |
 | D6 | Do not invent `v6.39.1` as a substitute for tag rewrite. Existing tag **names** retarget new SHAs. |

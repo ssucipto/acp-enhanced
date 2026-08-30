@@ -5194,9 +5194,9 @@ carryovers:
     finding: "Name-scan as CI job in task-388 would fail CI while HEAD still has names"
     description: "Tests must use temp fixtures. --repo not in ci.yaml until HEAD clean (D13)."
     fix_target: "task-388 fixture tests only"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
     escalated_to: null
   - audit_id: 141
     finding_id: F-141-02
@@ -5205,9 +5205,9 @@ carryovers:
     finding: "current_milestone still M94 while M95 is the work"
     description: "Proceed --complete M95 must switch current_milestone immediately."
     fix_target: "Set current_milestone M95 at proceed start"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
     escalated_to: null
   - audit_id: 141
     finding_id: F-141-03
@@ -5216,9 +5216,9 @@ carryovers:
     finding: "PACK_REL_DIRS cannot pack agent/progress.local.yaml"
     description: "Need PACK_REL_FILES extra list."
     fix_target: "task-389"
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
     escalated_to: null
   - audit_id: 141
     finding_id: F-141-04
@@ -5249,7 +5249,119 @@ carryovers:
     finding: "New m95 script must be in package.yaml, AGENT.md, integrity-manifest"
     description: "M94 leftover class (integrity restamp)."
     fix_target: "task-388"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: null
+
+  # ── AUDIT-142 — M95 IMPLEMENTATION (2026-08-30) ────────────────────────────
+  - audit_id: 142
+    finding_id: F-142-01
+    severity: high
+    file: tests/acp.m94-gitignore.test.sh
+    finding: "Gitignore S1b rm -f deleted live agent/progress.local.yaml"
+    description: "touch/rm on the real overlay path. Overlay missing on disk after unit tests."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: "F-142-04"
+  - audit_id: 142
+    finding_id: F-142-02
+    severity: high
+    file: agent/progress.yaml
+    finding: "ADR-31 incomplete: instance notes still on tracked progress.yaml"
+    description: "Overlay was a copy then deleted; public file still ~10k lines of notes."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: "F-135-07"
+  - audit_id: 142
+    finding_id: F-142-03
+    severity: medium
+    file: agent/scripts/acp.m95-name-scan.sh
+    finding: "decode_b64 requires python3 with no fallback"
+    description: "identity.yml prefers no_external_deps; openssl base64 is on macOS and Linux CI."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: null
+  - audit_id: 142
+    finding_id: F-142-04
+    severity: medium
+    file: tests/acp.m94-gitignore.test.sh
+    finding: "S1b mutates the live overlay path"
+    description: "git check-ignore does not need the file to exist."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: null
+  - audit_id: 142
+    finding_id: F-142-05
+    severity: medium
+    file: .github/workflows/ci.yaml
+    finding: "HEAD is name-scan clean locally but --repo is not a CI job"
+    description: "D13 forbade wiring while dirty; leftover after 394."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: "F-141-01"
+  - audit_id: 142
+    finding_id: F-142-06
+    severity: low
+    file: agent/core/network_whitelist.yml
+    finding: "last_reviewed / reviewed_by stale after firebase host removal"
+    description: "Header 2026-06-15 vs last_reviewed 2026-06-07; reviewed_by empty."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: "F-140-01"
+  - audit_id: 142
+    finding_id: F-142-07
+    severity: low
+    file: tests/acp.m95-name-scan.test.sh
+    finding: "No unit test for default --repo mode"
+    description: "Fixture tests only; S5 should assert HEAD scan exit 0 after redact."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: null
+  - audit_id: 142
+    finding_id: F-142-08
+    severity: medium
+    file: git
+    finding: "Tasks 388-395 bundled in one commit (process shortcut)"
+    description: "Do not rewrite 6941bf06. Remaining work gets its own commits."
+    fix_target: "process"
     status: pending
     fix_applied_date: null
     verified_in_audit: null
     escalated_to: null
+  - audit_id: 142
+    finding_id: F-142-09
+    severity: medium
+    file: agent/design/acp-public-name-privacy.md
+    finding: "HOME backup GATE not completed (F-141-04 still open)"
+    description: "Prior rsync blocked; D15 stamp required before 397."
+    fix_target: "task-396"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "F-141-04"
+  - audit_id: 142
+    finding_id: F-142-10
+    severity: low
+    file: tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv
+    finding: "Golden TSV string-replaced rather than parser-regenerated"
+    description: "progress.yaml excluded from fast suite (LARGE_FILE_LINES=200). Regen if large job runs."
+    fix_target: "task-394 leftover"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "F-140-02"
