@@ -131,11 +131,11 @@ fi
 print_test_header "acp.design-spec.md: no hardcoded consumer-project paths"
 # The command should not contain literal consumer-project project paths as the ONLY option
 # (it may mention them in stack detection examples)
-consumer-project_paths=$(grep -c "frontend/store/\|backend/server.py" "$CMD_FILE" 2>/dev/null || echo 0)
-if [[ "$consumer-project_paths" -le 2 ]]; then
-  assert_true "consumer-project paths are examples only (found $consumer-project_paths refs)" 0
+consumer_project_paths=$(grep -c "frontend/store/\|backend/server.py" "$CMD_FILE" 2>/dev/null || echo 0)
+if [[ "$consumer_project_paths" -le 2 ]]; then
+  assert_true "consumer-project paths are examples only (found $consumer_project_paths refs)" 0
 else
-  assert_true "consumer-project paths are examples only (found $consumer-project_paths refs)" 1
+  assert_true "consumer-project paths are examples only (found $consumer_project_paths refs)" 1
 fi
 
 # ═══════════════════════════════════════════════════════════════════════════════
