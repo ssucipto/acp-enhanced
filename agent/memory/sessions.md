@@ -1,3 +1,114 @@
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-397, task-398, task-399, task-400]
+  done:
+    - m95-filter-repo-replace-text-throwaway
+    - m95-d11-force-push-develop-mainline-tags
+    - m95-fresh-clone-history-proof
+    - m95-stamp-f135-07-f139-f140
+  deferred:
+    - task-401-v6400-pr → next
+    - task-402-post-merge-sync → after-pr
+  key_fact: >
+    D11 phrase used. origin/develop 55c29a72, origin/mainline a51b191a.
+    v6.38.0→024e325, v6.39.0→d23ada0. Fresh clone git log -S all tokens 0;
+    IP_REGISTER history 0. Daily reset to origin/develop. --yes was not D11.
+
+
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-396]
+  done:
+    - m95-backup-gate-home-rsync-mirror-pack-stamp
+  deferred:
+    - m95-force-push → D11-phrase-adr-30
+    - task-397-402 → after-D11
+  key_fact: >
+    M95_LAST_STAMP.txt is in ${HOME}/acp-enhanced-private/ (HEAD 70933619).
+    Pack includes progress.local.yaml. --yes is still not D11.
+
+
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-142, review-012, task-392]
+  done:
+    - audit-142-m95-implementation
+    - review-012-m95-quality
+    - m95-progress-yaml-status-only
+    - m95-overlay-restored
+    - m95-name-scan-ci-and-openssl-fallback
+  deferred:
+    - m95-force-push → D11-phrase-adr-30
+    - task-396-backup-gate → in-progress-this-session
+    - task-397-402 → after-D11
+    - F-139-01-02-F-135-07 → after-399
+    - F-142-08-bundled-commit → do-not-rewrite
+    - F-142-10-progress-golden-large → large-suite-only
+  key_fact: >
+    Gitignore S1b had deleted progress.local.yaml. Overlay restored from
+    e718190a (gitignored). Tracked progress.yaml notes stripped (383 tasks,
+    90 milestones, js-yaml parse OK). --yes is not D11.
+
+
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-141, task-388, task-389, task-390, task-391, task-393, task-394, task-395]
+  done:
+    - m95-pre-impl-audit-141
+    - m95-encoded-name-scan
+    - m95-head-redact-tracked-files
+    - m95-progress-local-copy
+  deferred:
+    - m95-force-push → D11-phrase-adr-30
+    - task-392-notes-strip → still-in-tracked-progress.yaml
+    - task-396-home-rsync → sandbox-blocked-use-tmp-mirror
+    - task-397-398-402 → after-D11
+  key_fact: >
+    HEAD name-scan is clean (11 encoded tokens). History still has names
+    until replace-text + ADR-30 phrase. --yes is not D11. progress.local.yaml
+    is a gitignored full copy; public progress.yaml notes not yet stripped.
+
+
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-140, M95]
+  done:
+    - audit-140-privacy-security-deep-dive
+    - plan-m95-adr-30-31-fifteen-tasks
+  deferred:
+    - m95-force-push → D11-phrase-adr-30
+    - F-135-07 → task-392 (in-scope, not future-adr)
+    - F-139-01 → task-390/391
+    - F-139-02 → task-397/398
+  key_fact: >
+    Path-class and live-secrets remain closed on identical remotes. Name-class
+    and F-135-07 are M95. New phrase only: force-push adr-30 names replace-text
+    develop mainline tags: yes. Do not reuse adr-29. Encoded deny-list so CI
+    does not re-publish names.
+
+
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-139]
+  done:
+    - post-m94-public-privacy-audit-139
+  deferred:
+    - F-139-01-consumer-names-in-tracked-docs → pending
+    - F-139-02-keep-file-history-names → pending
+    - F-135-07-progress-yaml-split → future-adr
+  key_fact: >
+    origin/develop equals origin/mainline ddfed0ce. ADR-29 path-class
+    purge is clean (IP_REGISTER and leftover instance files history 0).
+    Name-class is not: 127 consumer-project hits in 24 files; README still consumer-project
+    and consumer-project. Do not force-push. Do not stamp F-135-07.
+
+
 - date: 2026-08-29
   executor: cursor-grok
   branch: develop

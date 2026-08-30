@@ -62,9 +62,9 @@ project: YourProject
 type: mobile-app
 stack:
   - language: TypeScript
-  - framework: React Native + Expo EAS
-  - backend: Firebase Auth + Firestore + Cloud Run
-  - deployment: Expo EAS + Google Cloud Run
+  - framework: TypeScript
+  - backend: your backend
+  - deployment: your host
 team: solo-developer
 priorities: [code-quality, cost-efficiency, mobile-performance]
 repo: github.com/your-handle/yourproject
@@ -89,7 +89,7 @@ In Copilot chat or Claude Code:
 ```
 AI reads your src/ directory and populates:
 - `agent/wiki/domain.yml` (entities, screens, operations)
-- `agent/wiki/integrations.md` (Firebase, Expo, Cloud Run config)
+- `agent/wiki/integrations.md` (integrations config)
 
 Review the output. Fix any obvious errors. That's it.
 
@@ -99,8 +99,8 @@ Review the output. Fix any obvious errors. That's it.
 
 Your most important decisions that you never want the AI to re-debate:
 ```
-/acp-decide Use Firebase over Supabase for backend
-/acp-decide Use React Native + Expo over Flutter
+/acp-decide Use the backend already in identity.yml
+/acp-decide Use the UI stack already in identity.yml
 /acp-decide Use Zustand for local state management
 ```
 Each takes 3–5 minutes. The AI drafts the ADR; you confirm.

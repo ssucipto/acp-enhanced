@@ -39,6 +39,10 @@ PACK_REL_DIRS=(
   agent/index
   agent/proposals
 )
+# ADR-31: single-file overlay (dirs-only tar would miss it — F-141-03)
+PACK_REL_FILES=(
+  agent/progress.local.yaml
+)
 
 usage() {
   cat <<'EOF'
@@ -152,14 +156,19 @@ cmd_pack() {
   refuse_bad_output "${output}"
 
   local existing=()
-  local d
+  local d f
   for d in "${PACK_REL_DIRS[@]}"; do
     if [[ -d "${PACK_ROOT}/${d}" ]]; then
       existing+=("${d}")
     fi
   done
+  for f in "${PACK_REL_FILES[@]}"; do
+    if [[ -f "${PACK_ROOT}/${f}" ]]; then
+      existing+=("${f}")
+    fi
+  done
   if [[ ${#existing[@]} -eq 0 ]]; then
-    echo "[acp.private-pack] ERROR: no pack directories present" >&2
+    echo "[acp.private-pack] ERROR: no pack directories or files present" >&2
     exit 1
   fi
 

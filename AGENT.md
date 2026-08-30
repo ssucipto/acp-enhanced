@@ -1,7 +1,7 @@
 # Agent Context Protocol Enhanced (ACP Enhanced)
 
 **Also Known As**: The Agent Directory Pattern
-**Version**: 6.39.0
+**Version**: 6.40.0
 **Fork of**: [prmichaelsen/agent-context-protocol](https://github.com/prmichaelsen/agent-context-protocol)
 **Maintained by**: [ssucipto/acp-enhanced](https://github.com/ssucipto/acp-enhanced)
 **Created**: 2026-02-11
@@ -1072,6 +1072,7 @@ Core ACP commands use the `acp.` prefix and are available in [`agent/commands/`]
 - **[`acp.upgrade-guard.sh`](agent/scripts/acp.upgrade-guard.sh)** - HARD-fail version-update when `upstream-delta.yml` present (M86 / P-UG-1)
 - **[`acp.private-pack.sh`](agent/scripts/acp.private-pack.sh)** - Pack/unpack gitignored ACP dirs for another machine (M87 / ADR-27)
 - **[`acp.m94-purge-paths.sh`](agent/scripts/acp.m94-purge-paths.sh)** - Fail-closed KEEP/PURGE list for M94/ADR-29 history rewrite
+- **[`acp.m95-name-scan.sh`](agent/scripts/acp.m95-name-scan.sh)** - Encoded deny-list scanner for public remotes (ADR-30)
 
 **Git Namespace** *(separate from `acp.*`)*
 - **[`@git.commit`](agent/commands/git.commit.md)** - Version-aware commit with CHANGELOG validation and progress.yaml update

@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [6.40.0] — 2026-08-30
+
+### Added
+- **ADR-30 / ADR-31 / M95** — encoded deny-list scanner (`acp.m95-name-scan.sh`); public remotes must not contain field-feedback project names in tree **or history**. Status-only tracked `progress.yaml`; instance notes in gitignored `progress.local.yaml`.
+
+### Changed
+- **`network_whitelist.yml`** — protocol default no longer lists Firebase hosts.
+- **CI** — HEAD encoded name-scan on the validate job.
+
+### Notes
+- History rewrite retargeted existing tag **names** (including `v6.38.0` / `v6.39.0`). Do not invent `v6.39.1`. New tag is **`v6.40.0`**.
+- F-135-07 (progress split) closed after stranger-clone proof (audit-143).
+
+---
+
 ## [6.39.0] — 2026-08-29
 
 ### Added

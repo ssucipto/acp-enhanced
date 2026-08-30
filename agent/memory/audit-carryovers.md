@@ -4935,10 +4935,10 @@ carryovers:
     finding: "Entire dogfood progress.yaml (~10.5k lines) stays on public remote"
     description: "audit-135 optional split public/private. Out of M94. Recorded so it is not silently dropped."
     fix_target: "Future ADR — not M94. Do not treat as in-scope shortcut."
-    status: pending
-    fix_applied_date: null
-    verified_in_audit: null
-    escalated_to: "future-adr-progress-split"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "143"
+    escalated_to: "ADR-31 / M95 task-392+399"
   - audit_id: 137
     finding_id: F-137-01
     severity: critical
@@ -5116,4 +5116,252 @@ carryovers:
     status: fixed
     fix_applied_date: 2026-08-29
     verified_in_audit: "138"
+    escalated_to: "F-139-01 (consumer-project/consumer-project still in README after consumer-project remap)"
+
+  # ── AUDIT-139 — POST-M94 PUBLIC PRIVACY / CONSUMER NAMES (2026-08-30) ────
+  - audit_id: 139
+    finding_id: F-139-01
+    severity: high
+    file: README.md
+    finding: "Consumer-project names still tracked on public develop and mainline"
+    description: "Path-class M94 purge is clean (same SHA ddfed0ce both remotes). Name-class is not: 127 consumer-project hits in 24 tracked files; README still names consumer-project and consumer-project; wiki names consumer-project and cites consumer-project handoff filenames; commands/CHANGELOG/lessons/progress.yaml name consumer-project. Conflicts with F-118-06 'names OK if consented' vs maintainer ask for no feedback-project mentions."
+    fix_target: "Reword current-facing README/wiki/command exemplar lines to generic field-evidence; drop consumer-repo filenames from wiki exemplars; align e2e titles. Do not force-push. Do not treat as ADR-29 path leftover."
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "143"
     escalated_to: null
+  - audit_id: 139
+    finding_id: F-139-02
+    severity: medium
+    file: CHANGELOG.md
+    finding: "KEEP-file git history still contains consumer-project names after path rewrite"
+    description: "M94 used filter-repo --paths, not --replace-text. git log -S consumer-project -- CHANGELOG.md still lists commits. HEAD-only reword does not scrub GitHub blame. F-138-09 already deferred CHANGELOG blob replace."
+    fix_target: "Maintainer decision: accept historical ledgers, or a separate replace-text rewrite + new D11-class consent for develop/mainline/tags. Not implied by audit-139."
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "143"
+    escalated_to: "M95 ADR-30 replace-text (do not reuse adr-29 phrase)"
+
+  # ── AUDIT-140 — PRIVACY/SECURITY DEEP-DIVE (2026-08-30) ──────────────────
+  - audit_id: 140
+    finding_id: F-140-01
+    severity: medium
+    file: agent/core/network_whitelist.yml
+    finding: "Protocol repo network_whitelist still lists Firebase hosts (dogfood stack leftover)"
+    description: "approved_hosts includes *.firebase.google.com and *.firebaseio.com. ACP Enhanced is not a Firebase app. Consumers should add those hosts themselves."
+    fix_target: "Slim default whitelist to github/npm (and documented generics). Do not copy consumer Firebase into protocol core."
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "143"
+    escalated_to: null
+  - audit_id: 140
+    finding_id: F-140-02
+    severity: medium
+    file: tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv
+    finding: "Golden TSV and coderabbit fixture still couple CI to consumer names / fat progress.yaml"
+    description: "pre-m85-ast.golden.tsv is ~900KB snapshot including consumer-project notes. coderabbit-findings-sample.json description names consumer-project consumer inventory. HEAD redact without regen fails CI (audit-138 incomplete-inventory class)."
+    fix_target: "Regenerate golden TSV after progress split/redact; reword fixture metadata without consumer names."
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "143"
+    escalated_to: null
+  - audit_id: 140
+    finding_id: F-140-03
+    severity: low
+    file: agent/memory/sessions.md
+    finding: "consumer-project token missed by audit-139 name inventory"
+    description: "sessions.md still says Do not port Expo/Maestro/consumer-project tests. Deny-list must include consumer-project. Encode tokens in CI so the deny-list is not itself a plaintext mention."
+    fix_target: "Add consumer-project to M95 encoded deny-list; redact the sessions line."
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "143"
+    escalated_to: null
+  - audit_id: 140
+    finding_id: F-140-04
+    severity: medium
+    file: agent/memory/decisions.md
+    finding: "F-135-07 conflicts with ADR-28 compact-ledger unless a later ADR amends it"
+    description: "ADR-28 kept progress.yaml public. Closing F-135-07 without ADR-31 is a silent reopen. M94 deferred this; audit-140 puts it in-scope."
+    fix_target: "ADR-31: public progress.yaml keeps status; long notes → gitignored progress.local.yaml; history name replace-text, not file deletion."
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "143"
+    escalated_to: "ADR-31 / M95 task-392"
+  - audit_id: 141
+    finding_id: F-141-01
+    severity: high
+    file: agent/scripts/acp.m95-name-scan.sh
+    finding: "Name-scan as CI job in task-388 would fail CI while HEAD still has names"
+    description: "Tests must use temp fixtures. --repo not in ci.yaml until HEAD clean (D13)."
+    fix_target: "task-388 fixture tests only"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: null
+  - audit_id: 141
+    finding_id: F-141-02
+    severity: high
+    file: agent/progress.yaml
+    finding: "current_milestone still M94 while M95 is the work"
+    description: "Proceed --complete M95 must switch current_milestone immediately."
+    fix_target: "Set current_milestone M95 at proceed start"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: null
+  - audit_id: 141
+    finding_id: F-141-03
+    severity: medium
+    file: agent/scripts/acp.private-pack.sh
+    finding: "PACK_REL_DIRS cannot pack agent/progress.local.yaml"
+    description: "Need PACK_REL_FILES extra list."
+    fix_target: "task-389"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: null
+  - audit_id: 141
+    finding_id: F-141-04
+    severity: medium
+    file: agent/design/acp-public-name-privacy.md
+    finding: "397 can start without backup GATE stamp"
+    description: "Refuse filter-repo unless M95_LAST_STAMP.txt exists (D15)."
+    fix_target: "task-396 writes stamp; 397 checks it"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "143"
+    escalated_to: null
+  - audit_id: 141
+    finding_id: F-141-05
+    severity: medium
+    file: agent/core/identity.yml
+    finding: "Per-task identity bumps fight tag validator"
+    description: "Bump once at 401 with annotated v6.40.0 tag (D16)."
+    fix_target: "task-401 only"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 141
+    finding_id: F-141-07
+    severity: low
+    file: package.yaml
+    finding: "New m95 script must be in package.yaml, AGENT.md, integrity-manifest"
+    description: "M94 leftover class (integrity restamp)."
+    fix_target: "task-388"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: null
+
+  # ── AUDIT-142 — M95 IMPLEMENTATION (2026-08-30) ────────────────────────────
+  - audit_id: 142
+    finding_id: F-142-01
+    severity: high
+    file: tests/acp.m94-gitignore.test.sh
+    finding: "Gitignore S1b rm -f deleted live agent/progress.local.yaml"
+    description: "touch/rm on the real overlay path. Overlay missing on disk after unit tests."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: "F-142-04"
+  - audit_id: 142
+    finding_id: F-142-02
+    severity: high
+    file: agent/progress.yaml
+    finding: "ADR-31 incomplete: instance notes still on tracked progress.yaml"
+    description: "Overlay was a copy then deleted; public file still ~10k lines of notes."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: "F-135-07"
+  - audit_id: 142
+    finding_id: F-142-03
+    severity: medium
+    file: agent/scripts/acp.m95-name-scan.sh
+    finding: "decode_b64 requires python3 with no fallback"
+    description: "identity.yml prefers no_external_deps; openssl base64 is on macOS and Linux CI."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: null
+  - audit_id: 142
+    finding_id: F-142-04
+    severity: medium
+    file: tests/acp.m94-gitignore.test.sh
+    finding: "S1b mutates the live overlay path"
+    description: "git check-ignore does not need the file to exist."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: null
+  - audit_id: 142
+    finding_id: F-142-05
+    severity: medium
+    file: .github/workflows/ci.yaml
+    finding: "HEAD is name-scan clean locally but --repo is not a CI job"
+    description: "D13 forbade wiring while dirty; leftover after 394."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: "F-141-01"
+  - audit_id: 142
+    finding_id: F-142-06
+    severity: low
+    file: agent/core/network_whitelist.yml
+    finding: "last_reviewed / reviewed_by stale after firebase host removal"
+    description: "Header 2026-06-15 vs last_reviewed 2026-06-07; reviewed_by empty."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: "F-140-01"
+  - audit_id: 142
+    finding_id: F-142-07
+    severity: low
+    file: tests/acp.m95-name-scan.test.sh
+    finding: "No unit test for default --repo mode"
+    description: "Fixture tests only; S5 should assert HEAD scan exit 0 after redact."
+    fix_target: "task-392"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: null
+  - audit_id: 142
+    finding_id: F-142-08
+    severity: medium
+    file: git
+    finding: "Tasks 388-395 bundled in one commit (process shortcut)"
+    description: "Do not rewrite 6941bf06. Remaining work gets its own commits."
+    fix_target: "process"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 142
+    finding_id: F-142-09
+    severity: medium
+    file: agent/design/acp-public-name-privacy.md
+    finding: "HOME backup GATE not completed (F-141-04 still open)"
+    description: "Prior rsync blocked; D15 stamp required before 397."
+    fix_target: "task-396"
+    status: fixed
+    fix_applied_date: 2026-08-30
+    verified_in_audit: "142"
+    escalated_to: "F-141-04"
+  - audit_id: 142
+    finding_id: F-142-10
+    severity: low
+    file: tests/fixtures/yaml-parser-equivalence/pre-m85-ast.golden.tsv
+    finding: "Golden TSV string-replaced rather than parser-regenerated"
+    description: "progress.yaml excluded from fast suite (LARGE_FILE_LINES=200). Regen if large job runs."
+    fix_target: "task-394 leftover"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: "F-140-02"

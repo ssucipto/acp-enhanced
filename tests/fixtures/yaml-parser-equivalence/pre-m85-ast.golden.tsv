@@ -129,11 +129,11 @@
       10	map	concurrency		0	      11,      12
       11	scalar	group	${{ github.workflow }}-${{ github.ref }}	      10	
       12	scalar	cancel-in-progress	true	      10	
-      13	map	jobs		0	      14,      46,      58,      85
+      13	map	jobs		0	      14,      49,      61,      88
       14	map	validate		      13	      15,      16,      17
       15	scalar	runs-on	ubuntu-latest	      14	
       16	scalar	timeout-minutes	10	      14	
-      17	array	steps		      14	      18,      20,      23,      26,      31,      34,      37,      40,      43
+      17	array	steps		      14	      18,      20,      23,      26,      31,      34,      37,      40,      43,      46
       18	map			      17	      19
       19	scalar	uses	actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 	      18	
       20	map			      17	      21,      22
@@ -141,7 +141,7 @@
       22	scalar	run	git fetch --tags --force origin	      20	
       23	map			      17	      24,      25
       24	scalar	name	Install Python yaml parser	      23	
-      25	scalar	run			      23
+      25	scalar	run	|	      23	
       26	map			      17	      27,      28,      29
       27	scalar	name	Setup Node.js	      26	
       28	scalar	uses	actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 	      26	
@@ -149,74 +149,77 @@
       30	scalar	node-version	'20'	      29	
       31	map			      17	      32,      33
       32	scalar	name	Install TypeScript tooling	      31	
-      33	scalar	run			      31
+      33	scalar	run	|	      31	
       34	map			      17	      35,      36
       35	scalar	name	Run acp-validate.ts (command structure + parity)	      34	
       36	scalar	run	cd scripts && npx tsx acp-validate.ts	      34	
       37	map			      17	      38,      39
-      38	scalar	name	Run review corpus measurement + perf gate (M83, M85 task-303)	      37	
-      39	scalar	run	bash agent/scripts/acp.review-measure.sh --ci	      37	
+      38	scalar	name	M95 encoded name-scan (HEAD, ADR-30)	      37	
+      39	scalar	run	bash agent/scripts/acp.m95-name-scan.sh	      37	
       40	map			      17	      41,      42
-      41	scalar	name	Run TS unit tests (vitest — M59 dispatch + M61 validate)	      40	
-      42	scalar	run	cd scripts && npm test	      40	
+      41	scalar	name	Run review corpus measurement + perf gate (M83, M85 task-303)	      40	
+      42	scalar	run	bash agent/scripts/acp.review-measure.sh --ci	      40	
       43	map			      17	      44,      45
-      44	scalar	name	Validate YAML syntax and command docs	      43	
-      45	scalar	run	bash scripts/ci-validate.sh	      43	
-      46	map	shellcheck		      13	      47,      48,      49
-      47	scalar	runs-on	ubuntu-latest	      46	
-      48	scalar	timeout-minutes	5	      46	
-      49	array	steps		      46	      50,      52,      55
-      50	map			      49	      51
-      51	scalar	uses	actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 	      50	
-      52	map			      49	      53,      54
-      53	scalar	name	Install shellcheck	      52	
-      54	scalar	run	sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck	      52	
-      55	map			      49	      56,      57
-      56	scalar	name	Run shellcheck on scoped shell scripts (M72 D7)	      55	
-      57	scalar	run			      55
-      58	map	e2e-smoke		      13	      59,      60,      61
-      59	scalar	runs-on	ubuntu-latest	      58	
-      60	scalar	timeout-minutes	15	      58	
-      61	array	steps		      58	      62,      64,      67,      70,      73,      76,      79,      82
-      62	map			      61	      63
-      63	scalar	uses	actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 	      62	
-      64	map			      61	      65,      66
-      65	scalar	name	Configure git for tests	      64	
-      66	scalar	run			      64
-      67	map			      61	      68,      69
-      68	scalar	name	Generate manifest.yaml from template	      67	
-      69	scalar	run			      67
-      70	map			      61	      71,      72
-      71	scalar	name	Install Python yaml parser	      70	
-      72	scalar	run	python3 -m pip install --quiet pyyaml	      70	
-      73	map			      61	      74,      75
-      74	scalar	name	Install Node.js dependencies	      73	
-      75	scalar	run			      73
-      76	map			      61	      77,      78
-      77	scalar	name	Run integrity gateway E2E (M64 route-184)	      76	
-      78	scalar	run	bash e2e/acp.integrity.test.sh	      76	
-      79	map			      61	      80,      81
-      80	scalar	name	Run integrity Phase 2 E2E (M58 route-158)	      79	
-      81	scalar	run	bash e2e/acp.integrity-v2.test.sh	      79	
-      82	map			      61	      83,      84
-      83	scalar	name	Run E2E smoke tests	      82	
-      84	scalar	run	bash run-e2e-tests.sh --skip-network	      82	
-      85	map	supply-chain		      13	      86,      87,      88
-      86	scalar	runs-on	ubuntu-latest	      85	
-      87	scalar	timeout-minutes	10	      85	
-      88	array	steps		      85	      89,      91,      95
-      89	map			      88	      90
-      90	scalar	uses	actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 	      89	
-      91	map			      88	      92,      93,      94
-      92	scalar	name	Run npm audit	      91	
-      93	scalar	run			      91
-      94	scalar	continue-on-error	true	      91	
-      95	map			      88	      96,      97,      98
-      96	scalar	name	Run secret scan (trufflehog)	      95	
-      97	scalar	uses	trufflesecurity/trufflehog@84a2b33c9f891494db6ebe02f2a55b19cdf38f25 	      95	
-      98	map	with		      95	      99
-      99	scalar	extra_args	--only-verified	      98	
-@@COUNT 100
+      44	scalar	name	Run TS unit tests (vitest — M59 dispatch + M61 validate)	      43	
+      45	scalar	run	cd scripts && npm test	      43	
+      46	map			      17	      47,      48
+      47	scalar	name	Validate YAML syntax and command docs	      46	
+      48	scalar	run	bash scripts/ci-validate.sh	      46	
+      49	map	shellcheck		      13	      50,      51,      52
+      50	scalar	runs-on	ubuntu-latest	      49	
+      51	scalar	timeout-minutes	5	      49	
+      52	array	steps		      49	      53,      55,      58
+      53	map			      52	      54
+      54	scalar	uses	actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 	      53	
+      55	map			      52	      56,      57
+      56	scalar	name	Install shellcheck	      55	
+      57	scalar	run	sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck	      55	
+      58	map			      52	      59,      60
+      59	scalar	name	Run shellcheck on scoped shell scripts (M72 D7)	      58	
+      60	scalar	run	|	      58	
+      61	map	e2e-smoke		      13	      62,      63,      64
+      62	scalar	runs-on	ubuntu-latest	      61	
+      63	scalar	timeout-minutes	15	      61	
+      64	array	steps		      61	      65,      67,      70,      73,      76,      79,      82,      85
+      65	map			      64	      66
+      66	scalar	uses	actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 	      65	
+      67	map			      64	      68,      69
+      68	scalar	name	Configure git for tests	      67	
+      69	scalar	run	|	      67	
+      70	map			      64	      71,      72
+      71	scalar	name	Generate manifest.yaml from template	      70	
+      72	scalar	run	|	      70	
+      73	map			      64	      74,      75
+      74	scalar	name	Install Python yaml parser	      73	
+      75	scalar	run	python3 -m pip install --quiet pyyaml	      73	
+      76	map			      64	      77,      78
+      77	scalar	name	Install Node.js dependencies	      76	
+      78	scalar	run	|	      76	
+      79	map			      64	      80,      81
+      80	scalar	name	Run integrity gateway E2E (M64 route-184)	      79	
+      81	scalar	run	bash e2e/acp.integrity.test.sh	      79	
+      82	map			      64	      83,      84
+      83	scalar	name	Run integrity Phase 2 E2E (M58 route-158)	      82	
+      84	scalar	run	bash e2e/acp.integrity-v2.test.sh	      82	
+      85	map			      64	      86,      87
+      86	scalar	name	Run E2E smoke tests	      85	
+      87	scalar	run	bash run-e2e-tests.sh --skip-network	      85	
+      88	map	supply-chain		      13	      89,      90,      91
+      89	scalar	runs-on	ubuntu-latest	      88	
+      90	scalar	timeout-minutes	10	      88	
+      91	array	steps		      88	      92,      94,      98
+      92	map			      91	      93
+      93	scalar	uses	actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 	      92	
+      94	map			      91	      95,      96,      97
+      95	scalar	name	Run npm audit	      94	
+      96	scalar	run	|	      94	
+      97	scalar	continue-on-error	true	      94	
+      98	map			      91	      99,     100,     101
+      99	scalar	name	Run secret scan (trufflehog)	      98	
+     100	scalar	uses	trufflesecurity/trufflehog@84a2b33c9f891494db6ebe02f2a55b19cdf38f25 	      98	
+     101	map	with		      98	     102
+     102	scalar	extra_args	--only-verified	     101	
+@@COUNT 103
 @@FILE .github/workflows/e2e-tests.yaml
 0	map		root	-1	       1,       2,      11,      14
        1	scalar	name	E2E Tests	0	
@@ -1556,28 +1559,26 @@
       31	scalar	test_coverage	every command must have an E2E test file	      30	
       32	scalar	fork_of	github.com/prmichaelsen/agent-context-protocol	0	
       33	scalar	repo	github.com/ssucipto/acp-enhanced	0	
-      34	scalar	version	6.39.0	0	
+      34	scalar	version	6.40.0	0	
       35	map	git_workflow		0	      36,      37,      38
       36	scalar	default_working_branch	develop	      35	
       37	scalar	production_branch	mainline	      35	
       38	scalar	branch_model	gitflow-lite	      35	
 @@COUNT 39
 @@FILE agent/core/network_whitelist.yml
-0	map		root	-1	       1,       2,      10,      11,      12,      13
+0	map		root	-1	       1,       2,       8,       9,      10,      11
        1	scalar	version	"1.0"	0	
-       2	array	approved_hosts		0	       3,       4,       5,       6,       7,       8,       9
+       2	array	approved_hosts		0	       3,       4,       5,       6,       7
        3	scalar		"*.googleapis.com"	       2	
-       4	scalar		"*.firebase.google.com"	       2	
-       5	scalar		"*.firebaseio.com"	       2	
-       6	scalar		"*.github.com"	       2	
-       7	scalar		"*.githubusercontent.com"	       2	
-       8	scalar		"registry.npmjs.org"	       2	
-       9	scalar		"registry.yarnpkg.com"	       2	
-      10	array	approved_ip_ranges		0	
-      11	scalar	dynamic_hosts_allowed	false	0	
-      12	scalar	last_reviewed	"2026-06-07"	0	
-      13	scalar	reviewed_by	""	0	
-@@COUNT 14
+       4	scalar		"*.github.com"	       2	
+       5	scalar		"*.githubusercontent.com"	       2	
+       6	scalar		"registry.npmjs.org"	       2	
+       7	scalar		"registry.yarnpkg.com"	       2	
+       8	array	approved_ip_ranges		0	
+       9	scalar	dynamic_hosts_allowed	false	0	
+      10	scalar	last_reviewed	"2026-08-30"	0	
+      11	scalar	reviewed_by	"suryo.sucipto@gmail.com"	0	
+@@COUNT 12
 @@FILE agent/core/routing.yml
 0	map		root	-1	       1,       5,      41,      50
        1	map	session		0	       2,       3,       4

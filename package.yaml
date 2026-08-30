@@ -2,7 +2,7 @@
 # This file defines the Agent Context Protocol core package
 
 name: acp-enhanced
-version: 6.39.0
+version: 6.40.0
 description: ACP Enhanced - Agent Context Protocol with structured context management layer (agent/ framework)
 author: Suryo Sucipto
 license: MIT
@@ -651,6 +651,10 @@ contents:
 
     - name: acp.m94-purge-paths.sh
       description: Fail-closed KEEP/PURGE path list for M94/ADR-29 filter-repo
+      type: utility
+
+    - name: acp.m95-name-scan.sh
+      description: Encoded deny-list scanner for public-remote field-feedback names (ADR-30)
       type: utility
 
     - name: acp.upgrade-guard.sh

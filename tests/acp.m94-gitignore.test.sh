@@ -32,6 +32,11 @@ assert_true "specs/local.dummy.md ignored" $?
 git check-ignore -q agent/index/local.main.yaml
 assert_true "index/local.main.yaml ignored" $?
 
+print_test_header "S1b — ADR-31 progress.local.yaml ignored"
+# Do not touch/rm this path — it is the live overlay (audit-142 F-142-01).
+git check-ignore -q agent/progress.local.yaml
+assert_true "progress.local.yaml ignored" $?
+
 print_test_header "S2 — KEEP files not ignored"
 if git check-ignore -q agent/routing/tasks/route-template.md; then
   assert_true "route-template.md must NOT be ignored" 1

@@ -62,4 +62,8 @@ index/local.main.yaml
 proposals/**
 !proposals/.gitkeep
 
+# ADR-31 — instance progress notes local; tracked progress.yaml stays
+progress.local.yaml
+progress.local.yml
+
 
