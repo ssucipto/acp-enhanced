@@ -8,8 +8,9 @@ updated: 2026-08-30
 decisions: D1..D12
 @acp.meta.end -->
 
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Date**: 2026-08-30  
+**Pre-impl**: audit-141 (READY waves 0–2; 398 D11 blocked)  
 **Source**: audit-139, audit-140  
 **ADR**: ADR-30 (names including history), ADR-31 (progress.yaml split)  
 **Does not reopen**: ADR-27, ADR-28, ADR-29  
@@ -48,6 +49,10 @@ M95 Public name privacy + progress split
 | D10 | Private-pack includes `progress.local.yaml`. Restore tests must not unpack onto the live clone. |
 | D11 | Path-class PURGE globs are **closed** — this milestone does not add design/local paths. |
 | D12 | QUICKSTART/PRD worked examples become generic (no Expo-as-the-only-stack, no chore-list screen name). |
+| D13 | Name-scan **tests** use temp fixtures. `--repo` is not a CI job until HEAD is clean (task-394). Do not fail the default test suite on a dirty HEAD. |
+| D14 | `acp.private-pack.sh` packs `agent/progress.local.yaml` via extra **files** list (dirs-only tar misses it). |
+| D15 | Task-397 refuses to run unless `${HOME}/acp-enhanced-private/M95_LAST_STAMP.txt` exists (backup GATE). |
+| D16 | Version bump **once** at task-401 (`v6.40.0` + annotated tag). Per-task identity bumps reopen the tag-validator trap. |
 
 ## Anti-shortcuts
 
@@ -57,6 +62,8 @@ M95 Public name privacy + progress split
 - Do not stamp complete when `gh pr create` failed.
 - Do not treat HEAD `git grep` as history proof.
 - Do not filter-repo with directory `--invert-paths`.
+- Do not add name-scan to `.github/workflows/ci.yaml` before task-394.
+- Do not start 397 without `M95_LAST_STAMP.txt`.
 
 ## KEEP vs local
 

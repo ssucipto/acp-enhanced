@@ -17,14 +17,22 @@ assert_file_exists "${PROJECT_ROOT}/agent/scripts/acp.exec-host.windows-prepare.
 assert_file_exists "${PROJECT_ROOT}/agent/wiki/exec-host.md" "exec-host wiki"
 bash -n "${EH_SH}"
 assert_true "acp.exec-host-ssh.sh bash -n" $?
-if grep -E 'CONSUMER_|consumer-project' \
-  "${PROJECT_ROOT}/agent/scripts/acp.exec-host-ssh.sh" \
+print_test_header "S1b — exec-host scripts have no encoded deny-list hits"
+HOST_SCAN_DIR="$(mktemp -d /tmp/m95-eh-XXXXXX)"
+cp "${PROJECT_ROOT}/agent/scripts/acp.exec-host-ssh.sh" \
   "${PROJECT_ROOT}/agent/scripts/acp.exec-host.windows-prepare.ps1" \
   "${PROJECT_ROOT}/agent/scripts/acp.exec-host.windows.ps1" \
-  "${PROJECT_ROOT}/agent/scripts/acp.exec-host.windows-install.ps1" >/dev/null; then
-  assert_true "must not embed consumer-project prefixes" 1
+  "${PROJECT_ROOT}/agent/scripts/acp.exec-host.windows-install.ps1" \
+  "${HOST_SCAN_DIR}/"
+set +e
+bash "${PROJECT_ROOT}/agent/scripts/acp.m95-name-scan.sh" --dir "${HOST_SCAN_DIR}" >/dev/null 2>&1
+eh_scan=$?
+set -e
+rm -rf "${HOST_SCAN_DIR}"
+if [[ "${eh_scan}" -eq 0 ]]; then
+  assert_true "exec-host scripts have no encoded deny-list hits" 0
 else
-  assert_true "no consumer-project prefixes" 0
+  assert_true "exec-host scripts have no encoded deny-list hits" 1
 fi
 
 print_test_header "B1 — help exit 0 + git bundle in usage"

@@ -11,8 +11,6 @@ version: "1.0"
 # All outbound calls to domains NOT on this list trigger IG-01 (CRITICAL finding).
 approved_hosts:
   - "*.googleapis.com"
-  - "*.firebase.google.com"
-  - "*.firebaseio.com"
   - "*.github.com"
   - "*.githubusercontent.com"
   - "registry.npmjs.org"

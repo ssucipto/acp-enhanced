@@ -653,6 +653,10 @@ contents:
       description: Fail-closed KEEP/PURGE path list for M94/ADR-29 filter-repo
       type: utility
 
+    - name: acp.m95-name-scan.sh
+      description: Encoded deny-list scanner for public-remote field-feedback names (ADR-30)
+      type: utility
+
     - name: acp.upgrade-guard.sh
       description: Assert upstream-delta sentinels survived version-update (P-UG-1)
       type: internal

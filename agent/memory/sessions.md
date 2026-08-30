@@ -1,6 +1,26 @@
 - date: 2026-08-30
   executor: cursor-grok
   branch: develop
+  tasks: [audit-141, task-388, task-389, task-390, task-391, task-393, task-394, task-395]
+  done:
+    - m95-pre-impl-audit-141
+    - m95-encoded-name-scan
+    - m95-head-redact-tracked-files
+    - m95-progress-local-copy
+  deferred:
+    - m95-force-push → D11-phrase-adr-30
+    - task-392-notes-strip → still-in-tracked-progress.yaml
+    - task-396-home-rsync → sandbox-blocked-use-tmp-mirror
+    - task-397-398-402 → after-D11
+  key_fact: >
+    HEAD name-scan is clean (11 encoded tokens). History still has names
+    until replace-text + ADR-30 phrase. --yes is not D11. progress.local.yaml
+    is a gitignored full copy; public progress.yaml notes not yet stripped.
+
+
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
   tasks: [audit-140, M95]
   done:
     - audit-140-privacy-security-deep-dive

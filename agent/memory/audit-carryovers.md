@@ -5186,4 +5186,70 @@ carryovers:
     status: pending
     fix_applied_date: null
     verified_in_audit: null
+    escalated_to: "ADR-31 / M95 task-392"
+  - audit_id: 141
+    finding_id: F-141-01
+    severity: high
+    file: agent/scripts/acp.m95-name-scan.sh
+    finding: "Name-scan as CI job in task-388 would fail CI while HEAD still has names"
+    description: "Tests must use temp fixtures. --repo not in ci.yaml until HEAD clean (D13)."
+    fix_target: "task-388 fixture tests only"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 141
+    finding_id: F-141-02
+    severity: high
+    file: agent/progress.yaml
+    finding: "current_milestone still M94 while M95 is the work"
+    description: "Proceed --complete M95 must switch current_milestone immediately."
+    fix_target: "Set current_milestone M95 at proceed start"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 141
+    finding_id: F-141-03
+    severity: medium
+    file: agent/scripts/acp.private-pack.sh
+    finding: "PACK_REL_DIRS cannot pack agent/progress.local.yaml"
+    description: "Need PACK_REL_FILES extra list."
+    fix_target: "task-389"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 141
+    finding_id: F-141-04
+    severity: medium
+    file: agent/design/acp-public-name-privacy.md
+    finding: "397 can start without backup GATE stamp"
+    description: "Refuse filter-repo unless M95_LAST_STAMP.txt exists (D15)."
+    fix_target: "task-396 writes stamp; 397 checks it"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 141
+    finding_id: F-141-05
+    severity: medium
+    file: agent/core/identity.yml
+    finding: "Per-task identity bumps fight tag validator"
+    description: "Bump once at 401 with annotated v6.40.0 tag (D16)."
+    fix_target: "task-401 only"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
+    escalated_to: null
+  - audit_id: 141
+    finding_id: F-141-07
+    severity: low
+    file: package.yaml
+    finding: "New m95 script must be in package.yaml, AGENT.md, integrity-manifest"
+    description: "M94 leftover class (integrity restamp)."
+    fix_target: "task-388"
+    status: pending
+    fix_applied_date: null
+    verified_in_audit: null
     escalated_to: null

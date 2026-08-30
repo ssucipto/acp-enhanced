@@ -3,7 +3,7 @@ project:
   version: 6.39.0
   started: 2026-02-16
   status: active
-  current_milestone: M94
+  current_milestone: M95
   description: "Agent Context Protocol Enhanced (ACP Enhanced) — v6.39.0 on develop\n\
     \  (ADR-29: instance designs/patterns/routes/specs/index and IP_REGISTER\n\
     \  local including history; protocol keepers stay).\n\
@@ -1038,12 +1038,12 @@ milestones:
   M95:
     name: Public name privacy + progress.yaml split (ADR-30/31)
     priority: 5
-    status: not_started
-    progress: 0
-    started: null
+    status: in_progress
+    progress: 47
+    started: 2026-08-30
     completed: null
     estimated_weeks: 1.5
-    tasks_completed: 0
+    tasks_completed: 7
     tasks_total: 15
     file: agent/milestones/milestone-95-public-name-privacy.md
     design: agent/design/acp-public-name-privacy.md
@@ -7468,73 +7468,80 @@ tasks:
   - id: task-388
     name: "Encoded deny-list + name-token tests"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-95-public-name-privacy/task-388-encoded-deny-list-tests.md
-    started: null
-    actual_hours: null
+    started: '2026-08-30T09:40:00Z'
+    completed_date: '2026-08-30T09:50:00Z'
+    actual_hours: 0.3
     estimated_hours: 2
-    notes: 'Must fail on current HEAD; empty match after rewrite is success'
+    notes: 'Fixture tests only (F-141-01); --repo not in CI yet'
   - id: task-389
     name: "ADR-31 gitignore + pack + validator scaffolding"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-95-public-name-privacy/task-389-progress-local-scaffolding.md
-    started: null
-    actual_hours: null
+    started: '2026-08-30T09:46:00Z'
+    completed_date: '2026-08-30T09:50:00Z'
+    actual_hours: 0.1
     estimated_hours: 3
-    notes: 'progress.local.yaml gitignored; stranger clone OK without it'
+    notes: 'PACK_REL_FILES; progress.local.yaml ignored'
   - id: task-390
     name: "HEAD redact current-facing docs/commands/wiki/designs"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-95-public-name-privacy/task-390-head-redact-docs.md
-    started: null
-    actual_hours: null
+    started: '2026-08-30T09:50:00Z'
+    completed_date: '2026-08-30T09:52:00Z'
+    actual_hours: 0.2
     estimated_hours: 4
     notes: 'Includes wiki consumer-repo filenames'
   - id: task-391
     name: "HEAD redact CHANGELOG, sessions, carryovers, ADRs, lessons"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-95-public-name-privacy/task-391-head-redact-ledgers.md
-    started: null
-    actual_hours: null
+    started: '2026-08-30T09:50:00Z'
+    completed_date: '2026-08-30T09:52:00Z'
+    actual_hours: 0.2
     estimated_hours: 4
     notes: 'Do not defer CHANGELOG (F-138-09 leftover)'
   - id: task-392
     name: "Split progress.yaml status vs progress.local.yaml notes"
     priority: 5
-    status: not_started
+    status: in_progress
     file: agent/tasks/milestone-95-public-name-privacy/task-392-progress-yaml-split.md
-    started: null
+    started: '2026-08-30T09:50:00Z'
     actual_hours: null
     estimated_hours: 5
     notes: 'F-135-07 in-scope; never git add -f local file'
   - id: task-393
     name: "Fixtures, network_whitelist, QUICKSTART/PRD fingerprint"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-95-public-name-privacy/task-393-fixtures-whitelist-quickstart.md
-    started: null
-    actual_hours: null
+    started: '2026-08-30T09:50:00Z'
+    completed_date: '2026-08-30T09:52:00Z'
+    actual_hours: 0.1
     estimated_hours: 3
     notes: 'F-140-01/02/06'
   - id: task-394
     name: "Regenerate golden TSV + HEAD CI green"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-95-public-name-privacy/task-394-golden-tsv-ci-head.md
-    started: null
-    actual_hours: null
+    started: '2026-08-30T09:52:00Z'
+    completed_date: '2026-08-30T09:53:00Z'
+    actual_hours: 0.1
     estimated_hours: 3
     notes: 'Must be green before filter-repo'
   - id: task-395
     name: "Leftover name/path/secret re-scan before rewrite"
     priority: 5
-    status: not_started
+    status: completed
     file: agent/tasks/milestone-95-public-name-privacy/task-395-leftover-name-audit.md
-    started: null
-    actual_hours: null
+    started: '2026-08-30T09:53:00Z'
+    completed_date: '2026-08-30T09:53:00Z'
+    actual_hours: 0.1
     estimated_hours: 2
     notes: 'audit-138 class; halt Wave 3 if leftovers'
   - id: task-396
@@ -10799,7 +10806,8 @@ recent_work:
   - '✅ Total: 11 commands implemented and documented'
   - 🎊 ACP Commands v1.1.0 fully complete!
 next_steps:
-- "M95: /acp-proceed task-388 (encoded deny-list). Do not skip Waves 0–4. D11 phrase is ADR-30 not ADR-29. /acp-proceed --yes is not force-push consent."
+- "M95 HALT at D11: say force-push adr-30 names replace-text develop mainline tags: yes — /acp-proceed --yes is not consent. Then task-397/398."
+- "M95 leftover: task-392 note-strip (progress.local.yaml is full copy; tracked notes still present but nameless)."
 - "ADR-19 gated: Aikido + M76/M77 stay plan-only until operational CR+Aikido gate clears."
 current_blockers: []
 notes:

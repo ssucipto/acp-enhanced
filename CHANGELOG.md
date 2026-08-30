@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **ADR-30 / ADR-31 / M95 (in progress)** — encoded deny-list scanner (`acp.m95-name-scan.sh`); public `progress.local.yaml` gitignore + private-pack file list. Field-feedback project names removed from **HEAD** of tracked files. History rewrite and `v6.40.0` wait on the ADR-30 force-push phrase (not `/acp-proceed --yes`).
+
+### Changed
+- **`network_whitelist.yml`** — protocol default no longer lists Firebase hosts.
+- **CHANGELOG F-135-07 note in 6.39.0** — split is in-scope for M95 (see Unreleased).
+
 ---
 
 ## [6.39.0] — 2026-08-29
