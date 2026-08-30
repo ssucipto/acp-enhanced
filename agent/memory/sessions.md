@@ -16,7 +16,10 @@
     IP_REGISTER history 0. Daily reset to origin/develop. --yes was not D11.
 
 
-
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [task-396]
   done:
     - m95-backup-gate-home-rsync-mirror-pack-stamp
   deferred:
@@ -27,7 +30,10 @@
     Pack includes progress.local.yaml. --yes is still not D11.
 
 
-
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-142, review-012, task-392]
   done:
     - audit-142-m95-implementation
     - review-012-m95-quality
@@ -47,7 +53,10 @@
     90 milestones, js-yaml parse OK). --yes is not D11.
 
 
-
+- date: 2026-08-30
+  executor: cursor-grok
+  branch: develop
+  tasks: [audit-141, task-388, task-389, task-390, task-391, task-393, task-394, task-395]
   done:
     - m95-pre-impl-audit-141
     - m95-encoded-name-scan
