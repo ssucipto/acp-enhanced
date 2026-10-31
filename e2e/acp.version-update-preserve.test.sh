@@ -170,5 +170,10 @@ assert_true "version-update V14 exits 0" $?
 assert_contains "$(cat "${TMPDIR_ROOT}/agent/commands/local.overlay.md")" "CUSTOM_LOCAL_COMMAND" "local.overlay.md command preserved"
 assert_contains "$(cat "${TMPDIR_ROOT}/agent/wiki/local.overlay.md")" "CUSTOM_LOCAL_WIKI" "local.overlay.md wiki preserved"
 
+print_test_header "V15 — python and PowerShell companions are delivered"
+assert_file_exists "${TMPDIR_ROOT}/agent/scripts/acp.pattern-scan.py" "pattern-scan back-end delivered"
+assert_file_exists "${TMPDIR_ROOT}/agent/scripts/acp.taint-scan.py" "taint-scan back-end delivered"
+assert_file_exists "${TMPDIR_ROOT}/agent/scripts/acp.review-rule-overrides.py" "rule override loader delivered"
+
 print_test_summary "acp.version-update-preserve.test.sh"
 exit $?

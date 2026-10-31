@@ -198,11 +198,11 @@ fi
 # Tier C: scripts (self-update — copy after helpers loaded)
 if [ -d "$TEMP_DIR/agent/scripts" ]; then
     if [ "$ACP_DIFF_ONLY" = true ]; then
-        echo "  ↻ would update (tier C): agent/scripts/*.sh"
+        echo "  ↻ would update (tier C): agent/scripts/*.sh, *.py, *.ps1"
     else
-        find "$TEMP_DIR/agent/scripts" -maxdepth 1 -name "*.sh" -exec cp {} "agent/scripts/" \;
+        find "$TEMP_DIR/agent/scripts" -maxdepth 1 \( -name "*.sh" -o -name "*.py" -o -name "*.ps1" \) -exec cp {} "agent/scripts/" \;
         chmod +x agent/scripts/*.sh 2>/dev/null || true
-        echo "  ↻ updated: agent/scripts/*.sh"
+        echo "  ↻ updated: agent/scripts/*.sh, *.py, *.ps1"
     fi
 fi
 

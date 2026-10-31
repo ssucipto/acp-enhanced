@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **`acp.version-update.sh`**: deliver `*.py` and `*.ps1` from `agent/scripts/`, not only `*.sh`. Projects on 6.40.0 reported that version while `acp.pattern-scan.py`, `acp.taint-scan.py` and `acp.review-rule-overrides.py` were missing.
+- **`package.yaml`**: list the three Python back-ends under `/acp-integrity`, so a fresh install delivers them.
+- **`acp.integrity-output.sh`**: strip the carriage return from Python output on Windows. `--baseline` matched nothing and `rule_overrides` were silently ignored.
+- **`acp.pattern-scan.sh`, `acp.taint-scan.sh`, `acp.entropy-scan.sh`, `acp.unicode-scan.sh`, `acp.integrity-output.sh`**: accept a Windows path in scanner output. The `C:` colon made the wrappers drop every finding on an absolute path, which reported a false clean.
+- **`acp.memory-scan.sh`**: read the project root from the environment, print UTF-8 and use POSIX paths. The scan failed on Git Bash, where a `/c/...` path reached Python.
+- **`acp.dependency-diff.sh`**: IG-31 and IG-32 now recognise `bun.lock`, `bun.lockb` and `pnpm-lock.yaml`. Dependency names and paths are passed through the environment, not pasted into Python source.
+
+### Changed
+
+- **`/acp-audit`**: state that ADR-27 applies to the ACP Enhanced repo; a consumer project may track its own reports.
+
 ---
 
 ## [6.40.0] — 2026-08-30

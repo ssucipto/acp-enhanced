@@ -196,8 +196,11 @@ contents:
         - acp.git-provenance.sh
         - acp.dependency-diff.sh
         - acp.pattern-scan.sh
+        - acp.pattern-scan.py
         - acp.integrity-output.sh
+        - acp.review-rule-overrides.py
         - acp.taint-scan.sh
+        - acp.taint-scan.py
         - acp.memory-scan.sh
     
     - name: acp.design-reference.md
@@ -617,6 +620,10 @@ contents:
       description: Pattern registry scan for integrity command
       type: internal
 
+    - name: acp.pattern-scan.py
+      description: Python back-end for acp.pattern-scan.sh
+      type: internal
+
     - name: acp.review-scan.sh
       description: Review scan utilities for /acp-review command
       type: internal
@@ -667,6 +674,10 @@ contents:
 
     - name: acp.taint-scan.sh
       description: Taint analysis scan for integrity command
+      type: internal
+
+    - name: acp.taint-scan.py
+      description: Python back-end for acp.taint-scan.sh
       type: internal
 
     - name: acp.unicode-scan.sh
