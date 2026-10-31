@@ -146,6 +146,7 @@ ig_load_baseline() {
     exit 2
   fi
   while IFS= read -r key; do
+    key="${key%$'\r'}"
     [[ -z "$key" ]] && continue
     IG_BASELINE_KEYS+="${key}"$'\n'
   done < <(python3 - "$IG_BASELINE_FILE" <<'PY'
@@ -219,6 +220,7 @@ ig_load_rule_overrides() {
   fi
 
   while IFS= read -r line <&3; do
+    line="${line%$'\r'}"
     [[ -z "$line" ]] && continue
     case "$line" in
       DISABLED:*)
@@ -466,7 +468,7 @@ ig_emit_from_legacy_line() {
     return 0
   fi
 
-  if [[ "$line" =~ ^([^:]+):([0-9]+)\ (IG-[0-9]+)\ —\ (.+)$ ]]; then
+  if [[ "$line" =~ ^(.+):([0-9]+)\ (IG-[0-9]+)\ —\ (.+)$ ]]; then
     file="${BASH_REMATCH[1]}"
     line_num="${BASH_REMATCH[2]}"
     rule="${BASH_REMATCH[3]}"
@@ -475,14 +477,14 @@ ig_emit_from_legacy_line() {
     return 0
   fi
 
-  if [[ "$line" =~ ^([^:]+):([0-9]+)\ entropy= ]]; then
+  if [[ "$line" =~ ^(.+):([0-9]+)\ entropy= ]]; then
     file="${BASH_REMATCH[1]}"
     line_num="${BASH_REMATCH[2]}"
     ig_emit_finding "$file" "$line_num" "IG-17" "high Shannon entropy string literal"
     return 0
   fi
 
-  if [[ "$line" =~ ^([^:]+):([0-9]+):([0-9]+)\ U\+([0-9A-F]+) ]]; then
+  if [[ "$line" =~ ^(.+):([0-9]+):([0-9]+)\ U\+([0-9A-F]+) ]]; then
     file="${BASH_REMATCH[1]}"
     line_num="${BASH_REMATCH[2]}"
     ig_emit_finding "$file" "$line_num" "IG-14" "hidden Unicode character U+${BASH_REMATCH[4]}"

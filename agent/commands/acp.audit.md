@@ -13,7 +13,7 @@
 
 ---
 
-**Purpose**: Deep-dive investigation of a subject, producing a structured report in `agent/reports/` (local only; **do not commit** — ADR-27). This is **not** a PR review and **not** a CodeRabbit replacement — use `/acp-review` (optionally `--pr-diff`) for standards enforcement on a diff.  
+**Purpose**: Deep-dive investigation of a subject, producing a structured report in `agent/reports/` (local only in the ACP Enhanced repo, ADR-27; a consumer project may track its own reports). This is **not** a PR review and **not** a CodeRabbit replacement — use `/acp-review` (optionally `--pr-diff`) for standards enforcement on a diff.  
 **Category**: Workflow  
 **Frequency**: As Needed  
 

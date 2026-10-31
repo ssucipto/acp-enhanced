@@ -22,11 +22,15 @@ if [[ ! -d "$MEMORY_DIR" ]]; then
   exit 2
 fi
 
-python3 -c "
+# Git Bash does not convert every path for native Python, so convert it here when cygpath exists.
+ACP_PROJECT_ROOT="$(cygpath -m "$PROJECT_ROOT" 2>/dev/null || echo "$PROJECT_ROOT")" python3 -c "
+import os
+import sys
 import yaml
 from pathlib import Path
 
-root = Path('${PROJECT_ROOT}')
+sys.stdout.reconfigure(encoding='utf-8')
+root = Path(os.environ['ACP_PROJECT_ROOT'])
 constraints_path = root / 'agent/core/constraints.yml'
 memory_dir = root / 'agent/memory'
 
@@ -43,7 +47,7 @@ entries = []
 for path in sorted(memory_dir.glob('*.md')):
     text = path.read_text(encoding='utf-8', errors='replace')
     entries.append({
-        'file': str(path.relative_to(root)).replace('\\\\', '/'),
+        'file': path.relative_to(root).as_posix(),
         'bytes': len(text.encode('utf-8')),
         'preview': text[:500].replace('\\n', ' ')[:200],
     })

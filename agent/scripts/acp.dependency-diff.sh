@@ -43,6 +43,15 @@ LOCK_FILE=""
 [[ -f "${PROJECT_ROOT}/package-lock.json" ]] && LOCK_FILE="${PROJECT_ROOT}/package-lock.json"
 [[ -f "${PROJECT_ROOT}/yarn.lock" ]] && LOCK_FILE="${PROJECT_ROOT}/yarn.lock"
 
+# IG-31 only. bun.lock stays out of LOCK_FILE so IG-27/IG-29 stay off until they understand workspaces.
+STALE_LOCK_FILE=""
+for candidate in bun.lock bun.lockb pnpm-lock.yaml yarn.lock package-lock.json; do
+  if [[ -f "${PROJECT_ROOT}/${candidate}" ]]; then
+    STALE_LOCK_FILE="${PROJECT_ROOT}/${candidate}"
+    break
+  fi
+done
+
 if [[ -f "$PACKAGE_JSON" ]]; then
   if grep -q '"postinstall"' "$PACKAGE_JSON" 2>/dev/null || grep -q '"preinstall"' "$PACKAGE_JSON" 2>/dev/null; then
     postinstall_content=$(ACP_PACKAGE_JSON="$PACKAGE_JSON" python3 -c "
@@ -72,8 +81,9 @@ for key in ['postinstall', 'preinstall']:
       [[ -z "$dep" ]] && continue
       for top in "${TOP_PACKAGES[@]}"; do
         if [[ "$dep" != "$top" && ${#dep} -le $((${#top} + 2)) ]]; then
-          if python3 -c "
-a,b='${dep}','${top}'
+          if ACP_DEP="$dep" ACP_TOP="$top" python3 -c "
+import os
+a,b=os.environ['ACP_DEP'],os.environ['ACP_TOP']
 # Levenshtein distance <= 2
 if a==b: exit(1)
 m,n=len(a),len(b)
@@ -90,10 +100,9 @@ exit(0 if dp[m][n]<=2 else 1)
           fi
         fi
       done
-    done < <(python3 -c "
+    done < <(ACP_PACKAGE_JSON="$PACKAGE_JSON" python3 -c "
 import json, re, os
-pj='${PACKAGE_JSON}'
-lock='${LOCK_FILE}'
+pj=os.environ['ACP_PACKAGE_JSON']
 deps=set()
 try:
     with open(pj) as f: data=json.load(f)
@@ -142,13 +151,14 @@ for s in sorted(imports):
 fi
 
 # IG-31: stale lockfile via git commit dates (route-183 — not mtime)
-if [[ -f "$LOCK_FILE" && -f "$PACKAGE_JSON" ]] && git -C "$PROJECT_ROOT" rev-parse --git-dir >/dev/null 2>&1; then
-  lock_ts=$(git -C "$PROJECT_ROOT" log -1 --format=%ct -- "$(basename "$LOCK_FILE")" 2>/dev/null || echo "0")
+if [[ -f "$STALE_LOCK_FILE" && -f "$PACKAGE_JSON" ]] && git -C "$PROJECT_ROOT" rev-parse --git-dir >/dev/null 2>&1; then
+  rel_lock="${STALE_LOCK_FILE#"${PROJECT_ROOT}"/}"
+  lock_ts=$(git -C "$PROJECT_ROOT" log -1 --format=%ct -- "$rel_lock" 2>/dev/null || echo "0")
   pkg_ts=$(git -C "$PROJECT_ROOT" log -1 --format=%ct -- "package.json" 2>/dev/null || echo "0")
   if [[ "$lock_ts" != "0" && "$pkg_ts" != "0" ]]; then
     diff_days=$(( (pkg_ts - lock_ts) / 86400 ))
     if [[ $diff_days -gt 30 ]]; then
-      ig_emit_finding "$LOCK_FILE" "0" "IG-31" "lockfile commit is ${diff_days}d older than package.json changes"
+      ig_emit_finding "$STALE_LOCK_FILE" "0" "IG-31" "lockfile commit is ${diff_days}d older than package.json changes"
     fi
   fi
 fi
@@ -158,7 +168,7 @@ if git -C "$PROJECT_ROOT" rev-parse --git-dir >/dev/null 2>&1; then
   while IFS= read -r line; do
     hash="${line%% *}"
     msg="${line#* }"
-    if git -C "$PROJECT_ROOT" diff-tree --no-commit-id --name-only -r "$hash" 2>/dev/null | grep -qE 'package(-lock)?\.json$'; then
+    if git -C "$PROJECT_ROOT" diff-tree --no-commit-id --name-only -r "$hash" 2>/dev/null | grep -qE '(package(-lock)?\.json|bun\.lockb?|pnpm-lock\.yaml|yarn\.lock)$'; then
       if ! echo "$msg" | grep -qE 'route-[0-9]+|task-[0-9]+|M[0-9]+' 2>/dev/null; then
         ig_emit_finding "$PACKAGE_JSON" "0" "IG-32" "dependency change in ${hash:0:7} without task ID in message"
       fi

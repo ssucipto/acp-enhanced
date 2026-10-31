@@ -93,7 +93,7 @@ sys.exit(0)
 
 while IFS= read -r line; do
   [[ -z "$line" || "$line" == ACP_FINDING_COUNT=* ]] && continue
-  if [[ "$line" =~ ^([^:]+):([0-9]+):(IG-[0-9]+):(.+)$ ]]; then
+  if [[ "$line" =~ ^(.+):([0-9]+):(IG-[0-9]+):(.+)$ ]]; then
     ig_emit_finding "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}" "${BASH_REMATCH[4]}"
   fi
 done <<< "$(echo "$combined" | grep -v '^ACP_FINDING_COUNT=' || true)"
