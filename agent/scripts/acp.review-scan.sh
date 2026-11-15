@@ -203,10 +203,26 @@ scan_ts_js() {
     return 0
   fi
 
+  # MSYS/Git-Bash: native python.exe cannot read /d/... argv paths (a bash
+  # python3 shim forwards them unconverted; observed 2026-11-15). cygpath is
+  # Windows-only, so the conversion no-ops on Linux/macOS. Output goes through
+  # a temp file and the exit status is checked explicitly: process-substitution
+  # failures are invisible to the ERR trap, and '|| true' alone made a dead
+  # companion print "✓ No findings".
+  ts_py="${SCRIPT_DIR}/acp.review-scan-ts.py"
+  command -v cygpath &>/dev/null && ts_py="$(cygpath -w "$ts_py")"
+  _rs_out="/tmp/.acp-rs-$$.tsv"
+  if ! ACP_REVIEW_FILE="$file" python3 "$ts_py" >"$_rs_out" 2>&1; then
+    echo "Error: acp.review-scan-ts.py failed on $file:" >&2
+    sed 's/^/  /' "$_rs_out" >&2
+    rm -f "$_rs_out"
+    exit 2
+  fi
   while IFS=$'\t' read -r line_num rule message severity || [[ -n "${line_num:-}" ]]; do
     [[ -z "${line_num:-}" ]] && continue
     emit_review_finding "$file" "$line_num" "$rule" "$message" "$severity"
-  done < <(ACP_REVIEW_FILE="$file" python3 "${SCRIPT_DIR}/acp.review-scan-ts.py" 2>/dev/null || true)
+  done < "$_rs_out"
+  rm -f "$_rs_out"
 
   while IFS=$'\t' read -r out_file line_num rule message severity || [[ -n "${out_file:-}" ]]; do
     [[ -z "${out_file:-}" ]] && continue

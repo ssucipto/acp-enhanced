@@ -45,7 +45,12 @@ if [[ ! -e "$TARGET" ]]; then
   exit 2
 fi
 
-combined=$(ACP_TARGET="$TARGET" python3 "${SCRIPT_DIR}/acp.taint-scan.py" 2>&1)
+# MSYS/Git-Bash: native python.exe cannot read /d/... argv paths (a bash
+# python3 shim forwards them unconverted; observed 2026-11-15). cygpath is
+# Windows-only, so the conversion no-ops on Linux/macOS.
+py_script="${SCRIPT_DIR}/acp.taint-scan.py"
+command -v cygpath &>/dev/null && py_script="$(cygpath -w "$py_script")"
+combined=$(ACP_TARGET="$TARGET" python3 "$py_script" 2>&1)
 
 while IFS= read -r line; do
   [[ -z "$line" || "$line" == ACP_FINDING_COUNT=* || "$line" == ACP_MARKER_COUNT=* ]] && continue
